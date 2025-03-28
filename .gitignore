@@ -36,6 +36,7 @@ env/.env.local
 !.yarn/versions/
 .yarnrc.yml
 .pnp.loader.cjs
+.pnp.loader.mjs
 
 **/.prettiercache
 **/.vite
