@@ -14,9 +14,14 @@ headers {
   Content-Type: application/json
 }
 
+script:pre-request {
+  const currentDateTime = new Date().toISOString();
+  bru.setEnvVar('currentTime', currentDateTime);
+}
+
 body:json {
   {
-    "time": "2025-03-27 23:27:52.561",
-    "score": "100"
+    "time": "{{currentTime}}",
+    "score": 100
   }
 }
