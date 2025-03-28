@@ -1,0 +1,19 @@
+// This is your Prisma schema file, learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider   = "prisma-client-js"
+  output     = "../.prisma/client"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+// Example table used in the express router example
+model Score {
+  id    Int      @id @default(autoincrement())
+  time  DateTime
+  score Int
+}

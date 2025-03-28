@@ -1,5 +1,5 @@
 # Stage to copy filesystem and install node packages
-FROM node:18.12.0-alpine AS base
+FROM node:20.18.0-alpine AS base
 # Root folder that we will actually use
 ENV WORKDIR=app
 

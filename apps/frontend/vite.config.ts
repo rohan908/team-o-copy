@@ -1,25 +1,35 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import eslint from "vite-plugin-eslint";
-import * as process from "process";
-console.log(process.env.FRONTEND_PORT);
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import eslint from 'vite-plugin-eslint';
+import tailwindcss from '@tailwindcss/vite';
+import * as process from 'process';
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  resolve: {
-    preserveSymlinks: true,
-  },
-  server: {
-    host: "0.0.0.0",
-    port: parseInt(process.env.FRONTEND_PORT),
-    proxy: {
-      "/api": process.env.BACKEND_SOURCE + ":" + process.env.BACKEND_PORT,
+    resolve: {
+        preserveSymlinks: true,
     },
-    watch: {
-      usePolling: true,
+    server: {
+        host: 'localhost',
+        port: parseInt(process.env.FRONTEND_PORT),
+        proxy: {
+            '/api': process.env.BACKEND_SOURCE + ':' + process.env.BACKEND_PORT,
+        },
+        watch: {
+            usePolling: true,
+        },
     },
-  },
-  build: {
-    outDir: "build",
-  },
-  plugins: [react(), eslint()],
+    build: {
+        outDir: 'build',
+    },
+    cacheDir: '.vite',
+    plugins: [
+        tailwindcss(),
+        react(),
+        eslint({
+            exclude: ['**/node_modules/**', '**/.*/**', '**/.vite/**'],
+            failOnWarning: false,
+            failOnError: false,
+        }),
+    ],
 });

@@ -3,21 +3,21 @@
 <!-- TOC -->
 
 - [Frontend](#frontend)
-  - [Imports](#imports)
-  - [Package Overview](#package-overview)
-    - [Vite](#vite)
-    - [React](#react)
-    - [React-Router](#react-router)
-    - [Serve](#serve)
-    - [Axios](#axios)
-    - [Bootstrap](#bootstrap)
-    - [React-Bootstrap](#react-bootstrap)
-    - [Miscellaneous](#miscellaneous)
-    - [Code Structure](#code-structure)
-    - [Public and Assets Folders](#public-and-assets-folders)
-    - [routes](#routes)
-    - [main.tsx](#maintsx)
-    <!-- TOC -->
+    - [Imports](#imports)
+    - [Package Overview](#package-overview)
+        - [Vite](#vite)
+        - [React](#react)
+        - [React-Router](#react-router)
+        - [Serve](#serve)
+        - [Axios](#axios)
+        - [Bootstrap](#bootstrap)
+        - [React-Bootstrap](#react-bootstrap)
+        - [Miscellaneous](#miscellaneous)
+        - [Code Structure](#code-structure)
+        - [Public and Assets Folders](#public-and-assets-folders)
+        - [routes](#routes)
+        - [main.tsx](#maintsx)
+            <!-- TOC -->
 
 This package defines the backend server, and the RESTful API it
 represents. It also includes the packages used.

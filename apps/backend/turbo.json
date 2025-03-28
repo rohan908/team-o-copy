@@ -1,12 +1,9 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "extends": ["//"],
-  "tasks": {
-    "dev": {
-      "dependsOn": ["^build:dev"]
-    },
-    "deploy": {
-      "env": ["PORT"]
+    "$schema": "https://turbo.build/schema.json",
+    "extends": ["//"],
+    "tasks": {
+        "deploy": {
+            "env": ["PORT"]
+        }
     }
-  }
 }

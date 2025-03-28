@@ -1,13 +1,12 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "extends": ["//"],
-  "globalDependencies": [".env"],
-  "tasks": {
-    "dev": {
-      "env": ["PORT", "BACKEND_PORT", "BACKEND_SOURCE"]
-    },
-    "deploy": {
-      "env": ["PORT"]
+    "$schema": "https://turbo.build/schema.json",
+    "extends": ["//"],
+    "tasks": {
+        "dev": {
+            "env": ["PORT", "BACKEND_PORT", "BACKEND_SOURCE"]
+        },
+        "deploy": {
+            "env": ["PORT"]
+        }
     }
-  }
 }

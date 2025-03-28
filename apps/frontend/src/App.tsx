@@ -1,30 +1,17 @@
-import React from "react";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import ExampleRoute from "./routes/ExampleRoute.tsx";
-function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      errorElement: <div />,
-      element: <Root />,
-      children: [
-        {
-          path: "",
-          element: <ExampleRoute />,
-        },
-      ],
-    },
-  ]);
+import React from 'react';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import ExamplePage from './routes/ExamplePage.tsx';
 
-  return <RouterProvider router={router} />;
-  function Root() {
-    return (
-      <div className="w-full flex flex-col px-20 gap-5">
-        <h1>Welcome to your starter code.</h1>
-        <Outlet />
-      </div>
-    );
-  }
+function App() {
+    const router = createBrowserRouter([
+        {
+            path: '/',
+            errorElement: <div />,
+            element: <ExamplePage />,
+        },
+    ]);
+
+    return <RouterProvider router={router} />;
 }
 
 export default App;

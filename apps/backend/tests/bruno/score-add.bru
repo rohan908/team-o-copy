@@ -1,0 +1,22 @@
+meta {
+  name: score-add
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:3001/api/score
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "time": "2025-03-27 23:27:52.561",
+    "score": "100"
+  }
+}
