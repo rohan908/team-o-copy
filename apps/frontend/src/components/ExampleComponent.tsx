@@ -33,6 +33,11 @@ const ExampleComponent = () => {
                 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors#bracket_notation
                 setScore(res.data.score);
             }
+            // HTTP 204 = No data (sent by the backend when the DB is empty)
+            else if (res.status === 204) {
+                // Set loading to false and use default value of score
+                setLoading(false);
+            }
         } catch (error) {
             console.log('Error fetching score, retrying:', error);
 

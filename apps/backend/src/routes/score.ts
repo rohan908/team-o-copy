@@ -30,11 +30,11 @@ router.get('/', async function (req: Request, res: Response) {
         },
     });
 
-    // If the high score doesn't exist
+    // If the score doesn't exist
     if (score == null) {
         // Log that (it's a problem)
-        console.error('No high score found in database!');
-        res.sendStatus(204); // and send 204, no data
+        console.error('No score found in database!');
+        res.sendStatus(204); // Send HTTP code 204 (no data)
     } else {
         // Otherwise, send the score
         res.send(score);
