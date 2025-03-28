@@ -13,7 +13,7 @@ const ExampleComponent = () => {
     useEffect(() => {
         fetchScore();
     }, []);
-    
+
     async function fetchScore() {
         try {
             const res = await axios.get(API_ROUTES.SCORE);
@@ -58,10 +58,18 @@ const ExampleComponent = () => {
                 {loading ? 'Connecting...' : `Score: ${score}`}
             </div>
             <div className="flex flex-row gap-2">
-                <ExampleButton onClick={() => setScore(score - 1)} variant="secondary" disabled={loading}>
+                <ExampleButton
+                    onClick={() => setScore(score - 1)}
+                    variant="secondary"
+                    disabled={loading}
+                >
                     -
                 </ExampleButton>
-                <ExampleButton onClick={() => setScore(score + 1)} variant="secondary" disabled={loading}>
+                <ExampleButton
+                    onClick={() => setScore(score + 1)}
+                    variant="secondary"
+                    disabled={loading}
+                >
                     +
                 </ExampleButton>
                 <ExampleButton onClick={() => submitScore()} variant="primary" disabled={loading}>
