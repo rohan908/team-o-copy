@@ -5,26 +5,40 @@ import ExampleButton from './ExampleButton.tsx';
 
 // Component definition
 const ExampleComponent = () => {
-    // Saves the score
+    // React useState hook — read more here: https://react.dev/reference/react/useState
     const [score, setScore] = useState(0);
     const [loading, setLoading] = useState(true);
 
+    // React useEffect hook — read more here: https://react.dev/reference/react/useEffect
     // This will run on page load
     useEffect(() => {
         fetchScore();
     }, []);
 
+    // Fetches the current score from the backend and updates the corresponding useStates
     async function fetchScore() {
         try {
+            // Send a GET request to the backend at API_ROUTES.SCORE
             const res = await axios.get(API_ROUTES.SCORE);
 
-            // This will output in your browser console
+            // HTTP 200 = OK (the request was successful)
             if (res.status === 200) {
+                setLoading(false);
+
+                // res.data holds a JSON object with a property called score
+                // This object is created in the backend route (score.ts)
+                // It's a good idea to define the property keys in a common constants file
+                // To avoid potential runtime errors due to typos or missing properties
+                // You can then use bracket notation to access these properties dynamically
+                // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors#bracket_notation
                 setScore(res.data.score);
             }
         } catch (error) {
-            console.log('Error fetching score:', error);
-            throw error; // Rethrow to trigger retry
+            console.log('Error fetching score, retrying:', error);
+
+            // Retry the request after a short delay
+            // During development, if the frontend loads before the backend, the request will fail
+            setTimeout(() => fetchScore(), 1500);
         }
     }
 
