@@ -12,8 +12,7 @@ and the reasoning for the tooling it has.
 <!-- TOC -->
 
 - [Getting Started](#getting-started)
-- [WebStorm Run Configurations](#webstorm-run-configurations)
-- [Installation and Useful Scripts](#installation-and-useful-scripts)
+- [Useful Scripts](#useful-scripts)
 - [Design Pattern](#design-pattern)
 - [Frontend vs Backend (A Web-Development Overview)](#frontend-vs-backend-a-web-development-overview)
     - [The Hyper-Text Transfer Protocol (HTTP)](#the-hyper-text-transfer-protocol-http)
@@ -31,52 +30,48 @@ and the reasoning for the tooling it has.
     - [Traefik](#traefik)
     - [Vitest](#vitest)
 - [Miscellaneous](#miscellaneous)
-  _ [.run](#run)
-  _ [deploy.sh](#deploysh)
-  _ [.turbo](#turbo)
-  _ [.gitignore](#gitignore)
-  _ [Apps](#apps)
-  _ [Configs](#configs)
-  _ [node_modules](#node_modules)
-  _ [Packages](#packages)
+  - [.run](#run)
+  - [deploy.sh](#deploysh)
+  - [.turbo](#turbo)
+  - [.gitignore](#gitignore)
+  - [Apps](#apps)
+  - [Configs](#configs)
+  - [node_modules](#node_modules)
+  - [Packages](#packages)
       <!-- TOC -->
 
 ## Getting Started
 
-This project uses the yarn package manager,
-and assumes you already have installed Node.js 18.12.0 or later on your system.
+This project uses the Yarn package manager,
+and assumes you already have installed npm on your system.
 
+- Clone the repo using Git
+    - *Ensure the path to the repo does not contain any spaces 
+      (e.g. C:\Users\JohnDoe\Soft Eng\startercode would be invalid)* 
+    - *If using Windows, ensure the repo is not in your OneDrive folder.*
+- Open the repo in WebStorm, and open the Terminal from the bottom left.    
 - Run `npm install --g corepack` to install corepack.
-- Run `corepack enable` to enable corepack.
-- Run `corepack prepare yarn@4.5.0 --activate` to set the Yarn version.
-- Run `yarn --version` and verify the Yarn version is 4.5.0
+- Run `corepack enable` to enable corepack. This will install Yarn based on the version defined in `/package.json`
+- Run `yarn --version` and verify the Yarn version is 4.7.0
+- Now that yarn is installed, you can use all the scripts defined in [Useful Scripts](#useful-scripts). 
+  You'll want to run `yarn install` to install all packages used in the project, and you can run `yarn dev` to try out the starter project.
 
-## WebStorm Run Configurations
-
-Use the provided run configurations - `Start Dev`, `Start Prod`, and
-`Debug` (use Debug after `Start Dev`) - to interact with the repo via WebStorm. These configurations
-are customized to properly connect the repo to WebStorm. Running files directly,
-or outside of these configurations, will have unexpected results.
-
-Using the `Dev` configuration, the development servers will automatically restart when a file change occurs.
-If a restart is not occurring, use `CMD + S`/`CTRL + S` to manually save the
-file and trigger the restart.
-
-## Installation and Useful Scripts
+## Useful Scripts
 
 - Run `yarn install` to install all packages
-- Run `yarn build:dev` to build the development environment
+- Run `yarn dev` to run the development environment
 - Run `yarn setup` runs the above two commands
-- Run `yarn run lint:fix` to validate your code content and style
-- Run `yarn run dev` to start the development server
-- Run `yarn run deploy` to run the production server
-- Run `yarn run dev:stop` to stop the development server
-- Run `yarn run deploy:stop` to stop the production server
-- Run `yarn sync` commits you current branch, merges the latest main into it, and pushes the result
+- Run `yarn lint:fix` to validate your code content and style
+- Run `yarn dev` to start the development server
+- Run `yarn deploy` to run the production server
+- Run `yarn dev:stop` to stop the development server
+- Run `yar deploy:stop` to stop the production server
 - Run `yarn fix` to clean the Yarn cache, Turbo cache, and rebuild the development environment which can fix some issues
 
-If your commits are failing, run `yarn run lint` and examine the output to
-find the error(s). Address them, and your commit will proceed
+If your commits are failing, run `yarn lint` and examine the output to
+find the error(s). Address them, and your commit will proceed.
+
+Running `yarn workspace [workspace_name] [script_name]` will run scripts from any of the workspaces in the project.
 
 ## Design Pattern
 
@@ -435,11 +430,3 @@ slowing things down temporarily.
 
 Packages contains packages that the front/back end rely on, including code
 they share. Changes to `Packages` will automatically be reflected in both the front and back ends
-
-### scripts
-
-This folder contains utility scripts used by the Yarn scripts:
-
-- `commandRunner.mjs` exports a function to execute an array of shell commands in sequence.
-- `fix.mjs` cleans the Yarn cache, removes `node_modules`, reinstalls dependencies, and rebuilds the development environment.
-- `sync.mjs` automatically syncs the current branch with the latest `main` branch by committing, pushing, fetching `main`, merging it in, and pushing the result.
