@@ -114,13 +114,13 @@ and takes advantage of all the workspaces/projects in the repo and features of Y
 
 ## Useful Scripts
 
-- Run `yarn install` to install all packages
-- Run `yarn run dev` to run the development environment
-- Run `yarn run docker` to build and run a local Docker container with your application
-- Run `yarn run lint` to check for linting and styling issues
-- Run `yarn run lint:fix` to fix linting and styling issues
-- Run `yarn run deploy` to push your app to AWS ECR (Elastic Container Registry)
-- Run `yarn run fix` to clean the Yarn cache, Turbo cache, and rebuild the development environment which can fix some issues. If you have lint issues in WebStorm, run 
+- Run `yarn install` to install all packages.
+- Run `yarn run dev` to run the development environment.
+- Run `yarn run docker` to build and run a local Docker container with your application (using the settings from `/docker/docker-compose.yml`).
+- Run `yarn run lint` to check for linting and styling issues.
+- Run `yarn run lint:fix` to fix linting and styling issues.
+- Run `yarn run deploy` to push your app to AWS ECR (Elastic Container Registry). You can run this container using AWS ECS, with properly configured environment variables.
+- Run `yarn run fix` to clean the Yarn cache, Turbo cache, and rebuild the development environment which can fix some issues. If you have lint issues in WebStorm, run File -> Invalidate Caches.
 
 You can also run any of these commands without `run`, e.g. `yarn dev`, Webstorm just doesn't show the nice play button in Markdown.
 

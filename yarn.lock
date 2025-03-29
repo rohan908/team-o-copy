@@ -3182,6 +3182,7 @@ __metadata:
     eslint-config-prettier: "npm:*"
     eslint-plugin-turbo: "npm:*"
     prettier-config-custom: "workspace:*"
+    turbo: "npm:*"
     typescript: "npm:*"
     typescript-eslint: "npm:*"
   languageName: unknown

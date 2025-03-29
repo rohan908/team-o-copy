@@ -13,8 +13,8 @@
         "eslint-config-prettier": "*",
         "eslint-plugin-turbo": "*",
         "prettier-config-custom": "workspace:*",
+        "turbo": "*",
         "typescript": "*",
-        "typescript-eslint": "*",
-        "turbo": "*"
+        "typescript-eslint": "*"
     }
 }

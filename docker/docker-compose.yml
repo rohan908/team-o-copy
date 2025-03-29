@@ -5,7 +5,8 @@ services:
       dockerfile: docker/Dockerfile
     ports:
       - "${PORT:-80}:80"
-    environment:  
+    environment:
+      # Change these to match whatever database you want to use
       - NODE_ENV=${NODE_ENV:-production}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}

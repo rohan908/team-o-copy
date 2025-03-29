@@ -4010,6 +4010,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-prettier", "virtual:19a1bbfd66c0a8b6e4e9b4eb3053d58c46601ff49b62144208f9d27690e7d3dafa1ec4b1cf3db192de427911ae217357531df59f991426daf174c7b5b2cfb34e#npm:10.1.1"],\
           ["eslint-plugin-turbo", "virtual:19a1bbfd66c0a8b6e4e9b4eb3053d58c46601ff49b62144208f9d27690e7d3dafa1ec4b1cf3db192de427911ae217357531df59f991426daf174c7b5b2cfb34e#npm:2.4.4"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["turbo", "npm:2.4.4"],\
           ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
           ["typescript-eslint", "virtual:19a1bbfd66c0a8b6e4e9b4eb3053d58c46601ff49b62144208f9d27690e7d3dafa1ec4b1cf3db192de427911ae217357531df59f991426daf174c7b5b2cfb34e#npm:8.28.0"]\
         ],\
@@ -4126,7 +4127,7 @@ const RAW_RUNTIME_STATE =
           ["@types/turbo", null],\
           ["dotenv", "npm:16.4.7"],\
           ["eslint", "virtual:19a1bbfd66c0a8b6e4e9b4eb3053d58c46601ff49b62144208f9d27690e7d3dafa1ec4b1cf3db192de427911ae217357531df59f991426daf174c7b5b2cfb34e#npm:9.23.0"],\
-          ["turbo", null]\
+          ["turbo", "npm:2.4.4"]\
         ],\
         "packagePeers": [\
           "@types/eslint",\
