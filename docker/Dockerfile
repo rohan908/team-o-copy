@@ -27,14 +27,32 @@ COPY --from=builder /app/apps /app/apps
 COPY --from=builder /app/packages /app/packages
 COPY --from=builder /app/package.json /app/
 
-# Environment variables
-ENV NODE_ENV=production
-ENV PORT=80
-ENV FRONTEND_PORT=80
-ENV BACKEND_PORT=3001
+# Accept build arguments for environment variables
+ARG POSTGRES_USER
+ARG POSTGRES_PASSWORD
+ARG POSTGRES_DB
+ARG POSTGRES_HOST
+ARG POSTGRES_PORT
+ARG POSTGRES_URL
+ARG NODE_ENV
+ARG PORT
+ARG FRONTEND_PORT
+ARG BACKEND_PORT
+
+# Set environment variables
+ENV POSTGRES_USER=${POSTGRES_USER}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+ENV POSTGRES_DB=${POSTGRES_DB}
+ENV POSTGRES_HOST=${POSTGRES_HOST}
+ENV POSTGRES_PORT=${POSTGRES_PORT}
+ENV POSTGRES_URL=${POSTGRES_URL}
+ENV NODE_ENV=${NODE_ENV:-production}
+ENV PORT=${PORT:-80}
+ENV FRONTEND_PORT=${FRONTEND_PORT:-80}
+ENV BACKEND_PORT=${BACKEND_PORT:-3001}
 
 # Expose the port
-EXPOSE 80
+EXPOSE ${PORT}
 
 # Install nginx
 RUN apk add --no-cache nginx

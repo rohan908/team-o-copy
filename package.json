@@ -15,11 +15,7 @@
         "docker:upload": "turbo run docker:upload --concurrency=1",
         "setup": "./scripts/setup.sh",
         "generate_sdk": "yarn install && yarn dlx @yarnpkg/sdks base",
-        "docker:build": "docker build -t softeng-app -f ./docker/Dockerfile .",
-        "aws:login": "dotenv -e .env.aws -- aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com",
-        "aws:tag": "docker tag softeng-app:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest",
-        "aws:push": "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest",
-        "aws:deploy": "./scripts/deploy.sh"
+        "deploy": "./scripts/deploy.sh"
     },
     "devDependencies": {
         "@types/node": "^22.13.13",
