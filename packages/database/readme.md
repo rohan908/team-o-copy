@@ -27,9 +27,6 @@ The first option provides better version-control on your
 database, especially when deploying to production, but both
 work.
 
-For either option, **you must first run `Start Dev`** to run
-the development PostgreSQL server Docker container
-
 ### Prototyping with schema.prisma
 
 Perform any edits desired to `schema.prisma`, and then run
@@ -45,7 +42,7 @@ A few other useful commands:
   and re-creates the schema from scratch
 - `yarn run db:push` (which runs `prisma db push`) syncs the database with
   the current state of your `schema.prisma` without creating a record of
-  any changes. This is automatically run when `Start Dev` is run
+  any changes.
 
 ### Prototyping in SQL
 

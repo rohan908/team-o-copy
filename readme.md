@@ -116,12 +116,11 @@ and takes advantage of all the workspaces/projects in the repo and features of Y
 
 - Run `yarn install` to install all packages
 - Run `yarn run dev` to run the development environment
-- Run `yarn run lint:fix` to validate your code content and style
-- Run `yarn run dev` to start the development server
-- Run `yarn run deploy` to run the production server
-- Run `yarn run dev:stop` to stop the development server
-- Run `yarn run deploy:stop` to stop the production server
-- Run `yarn run fix` to clean the Yarn cache, Turbo cache, and rebuild the development environment which can fix some issues
+- Run `yarn run docker` to build and run a local Docker container with your application
+- Run `yarn run lint` to check for linting and styling issues
+- Run `yarn run lint:fix` to fix linting and styling issues
+- Run `yarn run deploy` to push your app to AWS ECR (Elastic Container Registry)
+- Run `yarn run fix` to clean the Yarn cache, Turbo cache, and rebuild the development environment which can fix some issues. If you have lint issues in WebStorm, run 
 
 You can also run any of these commands without `run`, e.g. `yarn dev`, Webstorm just doesn't show the nice play button in Markdown.
 
@@ -133,6 +132,8 @@ to generate the Prisma client and to push schema changes to the database. For ea
 for local DB, WPI DB, and production DB. These connection details are in the three `.env` files in the root of your repo,
 `.env` specifies the local configuration, `.env.wpi` specifies the configuration for WPI DB, `.env.prod` specifies the configuration
 for production DB.
+
+The `.env.aws` file specifies credentials and information about your AWS ECR repository. It also includes some settings for your Docker containers.
 
 You can also run the frontend and backend separately by running their respective `yarn dev` scripts.
 

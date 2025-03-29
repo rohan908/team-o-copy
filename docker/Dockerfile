@@ -1,58 +1,45 @@
-# Base Node.js image
-FROM node:20.18.0-alpine AS base
+# Stage 1: Build stage
+FROM node:20-alpine AS builder
 
 # Set working directory
 WORKDIR /app
 
-# Install dependencies for the build
-FROM base AS builder
-COPY . .
+# Copy package files and Yarn configuration
+COPY package.json yarn.lock ./
+COPY .yarn .yarn
+COPY .pnp.cjs .pnp.loader.mjs ./
 
-# Install correct Yarn version
+# Copy the entire project structure for building
+COPY apps apps
+COPY packages packages
+COPY configs configs
+COPY tsconfig.json turbo.json ./
+
+# Enable Yarn Berry
 RUN corepack enable
 
 # Install dependencies
 RUN yarn install
 
-# Build the frontend and backend
+# Generate Prisma client
+RUN yarn workspace database generate
+
+# Build the application
 RUN yarn build
 
-# Production image
-FROM base AS production
+# Stage 2: Production stage
+FROM node:20-alpine AS production
 
-# Copy the built applications from the builder stage
-COPY --from=builder /app/apps/frontend/build /app/frontend
-COPY --from=builder /app/node_modules /app/node_modules
-COPY --from=builder /app/apps /app/apps
-COPY --from=builder /app/packages /app/packages
-COPY --from=builder /app/package.json /app/
+WORKDIR /app
 
-# Accept build arguments for environment variables
-ARG POSTGRES_USER
-ARG POSTGRES_PASSWORD
-ARG POSTGRES_DB
-ARG POSTGRES_HOST
-ARG POSTGRES_PORT
-ARG POSTGRES_URL
-ARG NODE_ENV
-ARG PORT
-ARG FRONTEND_PORT
-ARG BACKEND_PORT
+# Copy the entire project structure
+COPY --from=builder /app .
 
-# Set environment variables
-ENV POSTGRES_USER=${POSTGRES_USER}
-ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-ENV POSTGRES_DB=${POSTGRES_DB}
-ENV POSTGRES_HOST=${POSTGRES_HOST}
-ENV POSTGRES_PORT=${POSTGRES_PORT}
-ENV POSTGRES_URL=${POSTGRES_URL}
-ENV NODE_ENV=${NODE_ENV:-production}
-ENV PORT=${PORT:-80}
-ENV FRONTEND_PORT=${FRONTEND_PORT:-80}
-ENV BACKEND_PORT=${BACKEND_PORT:-3001}
+# Enable Yarn Berry for production
+RUN corepack enable
 
-# Expose the port
-EXPOSE ${PORT}
+# Install serve for the frontend
+RUN yarn add serve
 
 # Install nginx
 RUN apk add --no-cache nginx
@@ -60,8 +47,12 @@ RUN apk add --no-cache nginx
 # Copy nginx configuration
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 
-# Start nginx and backend
+# Copy start script
 COPY docker/start.sh /app/start.sh
 RUN chmod +x /app/start.sh
 
+# Expose ports
+EXPOSE 80 3001
+
+# Start the application
 CMD ["/app/start.sh"]
