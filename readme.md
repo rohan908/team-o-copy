@@ -124,10 +124,17 @@ and takes advantage of all the workspaces/projects in the repo and features of Y
 - Run `yarn run fix` to clean the Yarn cache, Turbo cache, and rebuild the development environment which can fix some issues
 
 You can also run any of these commands without `run`, e.g. `yarn dev`, Webstorm just doesn't show the nice play button in Markdown.
+
 Running `yarn workspace [workspace_name] [script_name]` will run scripts from any of the workspaces in the project.
+Alternatively, you can `cd` into any of the package directories and run yarn without the `workspace [workspace_name]` prefix.
 
-###  Database
+There are many useful commands in the *database* package that you should become familiar with, including commands
+to generate the Prisma client and to push schema changes to the database. For each of these commands, there is a variant
+for local DB, WPI DB, and production DB. These connection details are in the three `.env` files in the root of your repo,
+`.env` specifies the local configuration, `.env.wpi` specifies the configuration for WPI DB, `.env.prod` specifies the configuration
+for production DB.
 
+You can also run the frontend and backend separately by running their respective `yarn dev` scripts.
 
 ## Frontend vs Backend (A Web-Development Overview)
 

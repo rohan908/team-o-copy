@@ -7,15 +7,19 @@
         "dev:wpi": "dotenv -e .env.wpi -- turbo run dev",
         "dev:prod": "dotenv -e .env.prod -- turbo run dev",
         "db": "docker-compose -f ./compose-files/docker-compose.db.yaml up --build",
-        "deploy": "docker-compose -f ./compose-files/docker-compose.prod.yaml up --build -d",
         "fix": "yarn cache clean && yarn install",
         "test": "yarn run vitest --ui --open=false",
         "lint": "turbo run lint",
         "lint:fix": "turbo run lint:fix",
         "build": "turbo run build",
         "docker:upload": "turbo run docker:upload --concurrency=1",
-        "setup": "cp .env.example .env && cp .env.example .env.wpi && cp .env.example .env.prod",
-        "generate_sdk": "yarn install && yarn dlx @yarnpkg/sdks base"
+        "setup": "./scripts/setup.sh",
+        "generate_sdk": "yarn install && yarn dlx @yarnpkg/sdks base",
+        "docker:build": "docker build -t softeng-app -f ./docker/Dockerfile .",
+        "aws:login": "dotenv -e .env.aws -- aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com",
+        "aws:tag": "docker tag softeng-app:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest",
+        "aws:push": "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest",
+        "aws:deploy": "./scripts/deploy.sh"
     },
     "devDependencies": {
         "@types/node": "^22.13.13",

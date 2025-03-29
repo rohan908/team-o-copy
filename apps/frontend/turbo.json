@@ -3,10 +3,10 @@
     "extends": ["//"],
     "tasks": {
         "dev": {
-            "env": ["PORT", "BACKEND_PORT", "BACKEND_SOURCE"]
+            "env": ["FRONTEND_PORT", "BACKEND_PORT", "BACKEND_SOURCE", "BACKEND_URL"]
         },
         "deploy": {
-            "env": ["PORT"]
+            "env": ["FRONTEND_PORT", "BACKEND_URL"]
         }
     }
 }

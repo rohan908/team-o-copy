@@ -3,7 +3,17 @@
     "extends": ["//"],
     "tasks": {
         "deploy": {
-            "env": ["PORT"]
+            "env": ["BACKEND_PORT"]
+        },
+        "dev": {
+            "env": [
+                "BACKEND_PORT",
+                "POSTGRES_URL",
+                "POSTGRES_USER",
+                "POSTGRES_PASSWORD",
+                "POSTGRES_DB",
+                "POSTGRES_PORT"
+            ]
         }
     }
 }

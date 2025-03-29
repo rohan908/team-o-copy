@@ -21,7 +21,7 @@
             "persistent": true
         },
         "deploy": {
-            "dependsOn": ["^build", "lint"],
+            "dependsOn": ["^build"],
             "cache": false,
             "persistent": true
         },
@@ -31,14 +31,15 @@
                 "BACKEND_PORT",
                 "FRONTEND_PORT",
                 "BACKEND_SOURCE",
-                "BACKEND_SOURCE",
+                "BACKEND_URL",
+                "PORT",
                 "POSTGRES_PASSWORD",
                 "POSTGRES_DB",
                 "POSTGRES_PORT",
                 "POSTGRES_HOST",
                 "POSTGRES_URL"
             ],
-            "dependsOn": ["^dependencies", "^build"],
+            "dependsOn": ["^dependencies"],
             "outputs": ["build/**"]
         },
         "docker:build": {
@@ -48,9 +49,6 @@
         "docker:upload": {
             "dependsOn": ["docker:build"],
             "cache": false
-        },
-        "database:generate": {
-            "dependsOn": ["database:generate"]
         }
     }
 }

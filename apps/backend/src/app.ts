@@ -2,6 +2,7 @@ import createError, { HttpError } from 'http-errors';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import cors from 'cors';
 import healthcheckRouter from './routes/healthcheck';
 import highscoreRouter from './routes/score.ts';
 import { API_ROUTES } from 'common/src/constants';
