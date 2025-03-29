@@ -1,7 +1,7 @@
 {
     "private": true,
     "name": "common",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "scripts": {
         "lint": "yarn shared:prettier && yarn shared:eslint && yarn shared:tslint",
         "lint:fix": "yarn shared:prettier:fix && yarn shared:eslint:fix && yarn shared:tslint"

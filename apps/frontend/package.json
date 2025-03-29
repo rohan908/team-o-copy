@@ -5,13 +5,13 @@
     "type": "module",
     "scripts": {
         "dev": "dotenv -e ../../.env -- vite",
-        "deploy": "serve ./build -s -p $PORT",
+        "deploy": "dotenv -e ../../.env.prod serve ./build -s",
         "build": "vite build",
         "preview": "vite preview",
         "lint": "yarn shared:prettier && yarn shared:eslint && yarn shared:tslint",
         "lint:fix": "yarn shared:prettier:fix && yarn shared:eslint:fix && yarn shared:tslint",
-        "docker:build": "cd $PROJECT_CWD && docker build --target prod-frontend --tag irwright13/softeng-mqp:frontend --platform linux/amd64 .",
-        "docker:upload": "docker push YOURDOCKERHUB/softeng:frontend"
+        "docker:build": "cd $PROJECT_CWD && docker build --target prod-frontend --tag ${DOCKER_HUB_USERNAME}/softeng-mqp:frontend --platform linux/amd64 .",
+        "docker:upload": "docker push ${DOCKER_HUB_USERNAME}/softeng-mqp:frontend"
     },
     "dependencies": {
         "@auth0/auth0-react": "^2.1.1",
@@ -49,6 +49,6 @@
         "typescript": "*",
         "vite": "^6.2.3",
         "vite-plugin-eslint": "^1.8.1",
-        "vitest": "*"
+        "vitest": "^3.0.9"
     }
 }

@@ -5,14 +5,17 @@ Dockerfile
 **/.git
 docker-compose*.yaml
 
+**/.prettiercache
+**/.vite
+
 **/.vscode
 **/.run
 
 **/build
 
-**/node_modules
 **/.turbo
 **/.prisma
+**/dist
 
 **/coverage
 

@@ -21,7 +21,7 @@ WORKDIR /$WORKDIR
 # Base level installer for packages and files
 FROM base AS installer
 WORKDIR /$WORKDIR
-COPY .. /$WORKDIR
+COPY . /$WORKDIR
 
 
 # Production basics (ports, env, etc)
@@ -116,7 +116,7 @@ RUN npm install --production
 # Run the build task
 RUN npx turbo run build
 
-RUN npm migrate:prod
+RUN npm run migrate:prod
 
 # Use entrypoint (since this contianer should be run as-is)
 # Simply run the migrate:deploy and then deploy

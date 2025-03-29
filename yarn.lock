@@ -2236,7 +2236,7 @@ __metadata:
     ts-config-custom: "npm:*"
     ts-node: "npm:^10.9.2"
     typescript: "npm:*"
-    vitest: "npm:*"
+    vitest: "npm:^3.0.9"
   languageName: unknown
   linkType: soft
 
@@ -3729,7 +3729,7 @@ __metadata:
     typescript: "npm:*"
     vite: "npm:^6.2.3"
     vite-plugin-eslint: "npm:^1.8.1"
-    vitest: "npm:*"
+    vitest: "npm:^3.0.9"
   languageName: unknown
   linkType: soft
 

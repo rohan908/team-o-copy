@@ -9,11 +9,17 @@ Each "package" in this repo also contains a
 readme, providing further details on its tooling,
 and the reasoning for the tooling it has.
 
+Make sure you take time to read through this
+readme and the others in the repository to fully
+understand the project structure. Also make sure
+to read through the `package.json` files in each
+of the packages.
+
 <!-- TOC -->
 
+- [Design Pattern](#design-pattern)
 - [Getting Started](#getting-started)
 - [Useful Scripts](#useful-scripts)
-- [Design Pattern](#design-pattern)
 - [Frontend vs Backend (A Web-Development Overview)](#frontend-vs-backend-a-web-development-overview)
     - [The Hyper-Text Transfer Protocol (HTTP)](#the-hyper-text-transfer-protocol-http)
     - [Using HTTP](#using-http)
@@ -30,8 +36,6 @@ and the reasoning for the tooling it has.
     - [Traefik](#traefik)
     - [Vitest](#vitest)
 - [Miscellaneous](#miscellaneous)
-  - [.run](#run)
-  - [deploy.sh](#deploysh)
   - [.turbo](#turbo)
   - [.gitignore](#gitignore)
   - [Apps](#apps)
@@ -40,38 +44,6 @@ and the reasoning for the tooling it has.
   - [Packages](#packages)
       <!-- TOC -->
 
-## Getting Started
-
-This project uses the Yarn package manager,
-and assumes you already have installed npm on your system.
-
-- Clone the repo using Git
-    - *Ensure the path to the repo does not contain any spaces 
-      (e.g. C:\Users\JohnDoe\Soft Eng\startercode would be invalid)* 
-    - *If using Windows, ensure the repo is not in your OneDrive folder.*
-- Open the repo in WebStorm, and open the Terminal from the bottom left.    
-- Run `npm install --g corepack` to install corepack.
-- Run `corepack enable` to enable corepack. This will install Yarn based on the version defined in `/package.json`
-- Run `yarn --version` and verify the Yarn version is 4.7.0
-- Now that yarn is installed, you can use all the scripts defined in [Useful Scripts](#useful-scripts). 
-  You'll want to run `yarn install` to install all packages used in the project, and you can run `yarn dev` to try out the starter project.
-
-## Useful Scripts
-
-- Run `yarn install` to install all packages
-- Run `yarn dev` to run the development environment
-- Run `yarn setup` runs the above two commands
-- Run `yarn lint:fix` to validate your code content and style
-- Run `yarn dev` to start the development server
-- Run `yarn deploy` to run the production server
-- Run `yarn dev:stop` to stop the development server
-- Run `yar deploy:stop` to stop the production server
-- Run `yarn fix` to clean the Yarn cache, Turbo cache, and rebuild the development environment which can fix some issues
-
-If your commits are failing, run `yarn lint` and examine the output to
-find the error(s). Address them, and your commit will proceed.
-
-Running `yarn workspace [workspace_name] [script_name]` will run scripts from any of the workspaces in the project.
 
 ## Design Pattern
 
@@ -86,6 +58,76 @@ and packages containing common code between them.
 The tooling in this repository is designed around
 making development with this pattern easier and
 faster.
+
+Yarn workspaces allow you to manage multiple packages within a single monorepo,
+enabling easy dependency management and efficient linking between packages.
+Each workspace is a project or package with its own `package.json`, and Yarn handles them collectively,
+ensuring dependencies are installed at the root level when possible.
+
+## Getting Started
+
+These installation instructions assume you already have Git, Node.js and PostgreSQL installed on your system.
+
+- Clone the repo using Git
+    - Ensure the path to the repo does not contain any spaces 
+      (e.g. `C:\Users\JohnDoe\Soft Eng\startercode` would be invalid) 
+    - If using Windows, ensure the repo is not in your OneDrive folder.
+
+- Open the project in WebStorm. 
+  - If using Windows, right click WebStorm before launching it and select 'Run as administrator'. *You will only need this to run the installation commands*.
+
+- Open the terminal from the bottom left.
+  - If using Windows, click the arrow next to the Terminal session and select Git bash as the shell. You can set Webstorm to default to this later.
+
+- Run `corepack -v`.
+    - Corepack should come installed with npm. If corepack is missing, run `npm install --g corepack` to install corepack.
+
+- Run `corepack enable` to enable corepack. This will install Yarn based on the version defined in `/package.json`.
+    - If you get permissions issues, make sure you're running the app in administrator mode on Windows as specified.
+
+- Run `yarn --version` and verify the Yarn version is 4.7.0.
+
+- Now that yarn is installed, you can use all the scripts defined in [Useful Scripts](#useful-scripts).
+
+- Run `yarn install` to install all packages used in the project.
+
+- Run `yarn setup` to create environment files for various run configurations.
+
+- Make sure PostgreSQL is running locally. This will look different depending on your operating system and PostgreSQL installation.
+    - The credentials from the default environment files are as follows:
+    - User: `postgres`, Password: `postgres`, Database: `postgres`
+    - You may change them to suit your specific environment. 
+  
+- Run `yarn workspace database push` to push the Prisma schema defined in the database package to your PostgreSQL database.
+
+- Run `yarn dev` to start the development server.
+
+### Starter Project
+
+The starter project is a basic React application with a frontend, backend, and database, 
+and takes advantage of all the workspaces/projects in the repo and features of Yarn workspaces.
+
+- The *frontend* package runs the React application, a basic counter that communicates with a backend server to get and update the score.
+- The *backend* package runs the backend Express server, which handles HTTP requests from the frontend to get and update the score. It communicates with the database via the database package.
+- The *database* package hosts the Prisma client, which contains the Prisma schema and Prisma client.
+- The *common* package holds a constants file that defines the API routes the frontend and backend use to communicate.
+
+## Useful Scripts
+
+- Run `yarn install` to install all packages
+- Run `yarn run dev` to run the development environment
+- Run `yarn run lint:fix` to validate your code content and style
+- Run `yarn run dev` to start the development server
+- Run `yarn run deploy` to run the production server
+- Run `yarn run dev:stop` to stop the development server
+- Run `yarn run deploy:stop` to stop the production server
+- Run `yarn run fix` to clean the Yarn cache, Turbo cache, and rebuild the development environment which can fix some issues
+
+You can also run any of these commands without `run`, e.g. `yarn dev`, Webstorm just doesn't show the nice play button in Markdown.
+Running `yarn workspace [workspace_name] [script_name]` will run scripts from any of the workspaces in the project.
+
+###  Database
+
 
 ## Frontend vs Backend (A Web-Development Overview)
 
@@ -388,17 +430,7 @@ Vitetest is configured by the following files:
 
 ## Miscellaneous
 
-The following details the remaining files that can be found in the top-level of the repo
-
-### .run
-
-This is a folder used by WebStorm to store the bundled run configurations. **DO NOT modify this
-file**.
-
-### deploy.sh
-
-This is a file that contains a script to auto-run and deploy
-the production docker containers
+The following details the remaining files that can be found in the top-level of the repo.
 
 ### .turbo
 
@@ -409,7 +441,7 @@ modfiy these files, but deleting them is OK.
 
 This defines folders/files that will automatically be excluded
 from your Git repository. Don't modify this unless you are sure you know
-what you're doing
+what you're doing. This includes folders that cache dependencies, and .env files.
 
 ### Apps
 
@@ -423,10 +455,10 @@ described above in the repo. If you want to modify them, use the configs in thes
 ### node_modules
 
 This is location NPM installs packages. Some packages (`turbo` and `prettier`, as an example) still use
-this as a caching location. Deleting this folder shouldn't have any affect other than
-slowing things down temporarily.
+this as a caching location (as opposed to Yarn PnP, which is used in the rest of the repo).
+Deleting this folder shouldn't have any affect other than slowing things down temporarily.
 
 ### Packages
 
 Packages contains packages that the front/back end rely on, including code
-they share. Changes to `Packages` will automatically be reflected in both the front and back ends
+they share. Changes to `Packages` will automatically be reflected in both the front and back ends.
