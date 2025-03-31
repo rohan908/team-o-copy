@@ -1,5 +1,5 @@
 import React from 'react';
-import ExampleComponent from '../components/ExampleComponent.tsx';
+import ExampleComponent from '../example-components/ExampleComponent.tsx';
 
 const ExamplePage = () => {
     return (
