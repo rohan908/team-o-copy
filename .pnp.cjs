@@ -73,6 +73,7 @@ const RAW_RUNTIME_STATE =
           ["husky", "npm:9.1.7"],\
           ["prettier", "npm:3.5.3"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["tailwindcss", "npm:4.1.0"],\
           ["ts-config-custom", "workspace:configs/ts-config-custom"],\
           ["turbo", "npm:2.4.4"],\
           ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
@@ -7393,6 +7394,7 @@ const RAW_RUNTIME_STATE =
           ["husky", "npm:9.1.7"],\
           ["prettier", "npm:3.5.3"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["tailwindcss", "npm:4.1.0"],\
           ["ts-config-custom", "workspace:configs/ts-config-custom"],\
           ["turbo", "npm:2.4.4"],\
           ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
@@ -7597,6 +7599,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/tailwindcss-npm-4.0.17-e3314c4edb-10c0.zip/node_modules/tailwindcss/",\
         "packageDependencies": [\
           ["tailwindcss", "npm:4.0.17"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:4.1.0", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/tailwindcss-npm-4.1.0-02028d91d0-10c0.zip/node_modules/tailwindcss/",\
+        "packageDependencies": [\
+          ["tailwindcss", "npm:4.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
