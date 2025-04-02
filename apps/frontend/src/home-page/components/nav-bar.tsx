@@ -17,6 +17,9 @@ export function NavBar() {
                     <li className={"nav-element"}>
                         <Link to="/map-page">Map</Link>
                     </li>
+                    <li className={"nav-element"}>
+                        <Link to="/directory">Directory</Link>
+                    </li>
                 </ul>
                 <hr />
             </nav>
