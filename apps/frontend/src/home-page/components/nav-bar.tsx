@@ -9,10 +9,9 @@ export function NavBar() {
         <>
             <nav className={"bg-blue-500"}>
                 <ul className={"flex place-items-center place-content-start space-x-5 h-20"}>
-                    <li className={"nav-element font-bold text-xl"}>
+                    <li className={"nav-element font-bold w-20 text-xl"}>
                         <Link to="/">
-                            <img alt={"home icon goes here"}/>
-                            <h1>Home</h1>
+                            <img className={"rounded hover-shadow"} src={"public/logo.png"} alt={"Home"} width={"100%"} height={"100%"}/>
                         </Link>
                     </li>
                     <li className={"nav-element"}>
