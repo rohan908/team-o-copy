@@ -17,7 +17,6 @@ const LogInPageButton = ({ onClick, children, variant, disabled, popupContent, p
     // State that tracks if the popup is open
     const [open, setOpen] = useState(false);
 
-
     const handleClick = () => {
         if (onClick) onClick();
         if (popupContent) setOpen(true); // Open the popup if content is provided
