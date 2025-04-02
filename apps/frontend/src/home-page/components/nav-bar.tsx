@@ -1,5 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 import "../home-style.css"
+import LoginPage from "../../login-components/login-page.tsx";
 
 export function NavBar() {
 
@@ -16,6 +17,9 @@ export function NavBar() {
                     </li>
                     <li className={"nav-element"}>
                         <Link to="/map-page">Map</Link>
+                    </li>
+                    <li className={"nav-element"}>
+                        <LoginPage />
                     </li>
                 </ul>
                 <hr />
