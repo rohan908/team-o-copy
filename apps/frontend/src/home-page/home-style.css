@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+
+}
+
+.nav-element {
+    @apply px-5 rounded text-lg;
+}
+
+.nav-element:hover {
+    @apply text-blue-300;
+}

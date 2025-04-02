@@ -4,11 +4,14 @@ import {HomePage} from "./home-page.tsx";
 import {MapPage} from "../map-page/map-page.tsx";
 
 export function Routing() {
+
+    // Add more page navigation here
+
     return (
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<NavBar/>}>
+                    <Route path="/" element={<NavBar />}>
                         <Route index element={<HomePage/>} />
                         <Route path="map-page" element={<MapPage/>} />
                     </Route>
