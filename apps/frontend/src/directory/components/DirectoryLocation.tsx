@@ -10,7 +10,7 @@ export function DirectoryLocation() {
 
     return (
         <div className="p-6">
-            <h1 className="text-2xl font-bold">Directory Page</h1>
+            <h1 className="text-2xl">Directory Page</h1>
             <p className="mt-4">You selected: <strong>{title}</strong></p>
         </div>
     );
