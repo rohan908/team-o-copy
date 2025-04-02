@@ -5,8 +5,6 @@ import {MapPage} from "../map-page/map-page.tsx";
 import {Directory} from "../directory/directory.tsx";
 import {DirectoryLocation} from "../directory/components/DirectoryLocation.tsx";
 
-
-
 export function Routing() {
 
     // Add more page navigation here
