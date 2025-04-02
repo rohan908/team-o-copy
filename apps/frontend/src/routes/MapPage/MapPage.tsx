@@ -1,5 +1,5 @@
 import React from 'react';
-import HoverInfoComponent from '../components/HoverInfoComponent.tsx';
+import HoverInfoComponent from '../../components/HoverInfoComponent.tsx';
 
 const MapPage = () => {
     return (

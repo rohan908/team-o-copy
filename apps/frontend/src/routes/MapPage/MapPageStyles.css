@@ -1,0 +1,34 @@
+.mapContainer {
+    position: relative;
+    max-width: 1900px;
+}
+
+.imagingSuite{
+    position: absolute;
+    bottom: 30.3%;
+    left: 4%
+}
+
+.pharmacy{
+    position: absolute;
+    bottom: 30.5%;
+    left: 12.7%;
+}
+
+.phlebotomy{
+    position: absolute;
+    bottom: 23.3%;
+    left: 16.2%
+}
+
+.specClinic{
+    position: absolute;
+    bottom: 6.3%;
+    left: 22.8%;
+}
+
+.urgentCare{
+    position: absolute;
+    left: 12.7%;
+    bottom: 23.2%;
+}
