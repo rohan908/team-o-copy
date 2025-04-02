@@ -1,34 +1,39 @@
 .mapContainer {
     position: relative;
-    max-width: 1900px;
+    min-width: 1429px;
 }
 
 .imagingSuite{
     position: absolute;
-    bottom: 30.3%;
-    left: 4%
+    bottom: 43%;
+    left: 60.5%;
+    width: 22.5%;
 }
 
 .pharmacy{
     position: absolute;
-    bottom: 30.5%;
-    left: 12.7%;
+    bottom: 43.4%;
+    left: 66.35%;
+    width: 2.2%;
 }
 
 .phlebotomy{
     position: absolute;
-    bottom: 23.3%;
-    left: 16.2%
+    bottom: 37.6%;
+    left: 68.68%;
+    width: 3.8%;
 }
 
 .specClinic{
     position: absolute;
-    bottom: 6.3%;
-    left: 22.8%;
+    bottom: 24.3%;
+    left: 73%;
+    width: 22%;
 }
 
 .urgentCare{
     position: absolute;
-    left: 12.7%;
-    bottom: 23.2%;
+    left: 66.3%;
+    bottom: 37.65%;
+    width: 12.6%;
 }
