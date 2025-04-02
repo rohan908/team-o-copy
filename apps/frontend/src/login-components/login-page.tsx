@@ -6,7 +6,8 @@ function LoginPage(){
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
+    const [loginStatus, setLoginStatus] = useState('');
+    const [showLoginFeedback, setShowLoginFeedback] = useState(false);
     const handleClick = () => {
         setIsPopupOpen(true);
     }
@@ -20,11 +21,20 @@ function LoginPage(){
     }
 
     const handleLogin=()=>{
-        // store in local for now
-        localStorage.setItem('username', username);
-        localStorage.setItem('password', password);
+        // basic check for pass and failed login's w/o a database
+        const validUser = username == "dev" && password == '1234';
+        if(validUser){
+            // store in local for now
+            localStorage.setItem("username", username);
+            localStorage.setItem("password", password);
+            setLoginStatus("success");
+        }else{
+            setLoginStatus("error");
+        }
         console.log(username,password);
+        console.log(loginStatus);
         setIsPopupOpen(false);
+        setShowLoginFeedback(true);
         // clear the form fields
         setUsername('');
         setPassword('');
@@ -35,6 +45,36 @@ function LoginPage(){
             <LogInPageButton onClick={handleClick} variant={'primary'} disabled={false}>
                 Log In
             </LogInPageButton>
+            {/* User feedback on login*/}
+            <LogInPopUp
+                isOpen={showLoginFeedback}
+                onClose={() => {
+                    setShowLoginFeedback(false);
+                    setLoginStatus('');
+                }}
+                title={loginStatus === 'success' ? 'Login Successful' : 'Login Failed'}
+            >
+                <div className={`p-4 text-center rounded-md font-semibold ${
+                    loginStatus === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}>
+                    {loginStatus === 'success' ? 'Welcome back!' : 'Incorrect username or password.'}
+                </div>
+                <div className="flex justify-center mt-4">
+                    <button
+                        onClick={() => {
+                            setShowLoginFeedback(false);
+                            setLoginStatus('');
+                        }}
+                        className={`px-4 py-2 rounded text-white ${
+                            loginStatus === 'success'
+                                ? 'bg-green-600 hover:bg-green-700'
+                                : 'bg-red-600 hover:bg-red-700'
+                        }`}
+                    >
+                        Close
+                    </button>
+                </div>
+            </LogInPopUp>
             {/* Render the popup outside the button */}
             <LogInPopUp isOpen={isPopupOpen} onClose={handleClose} title={"Login"}>
                 {/* Popup content goes here */}
