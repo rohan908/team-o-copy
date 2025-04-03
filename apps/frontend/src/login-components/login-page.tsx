@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React,{useState} from 'react';
 import LogInPageButton from './components/login-page-button.tsx';
 import LogInPopUp from "./components/login-pop-up.tsx";
-
 interface LoginPageProps {
     isLoggedIn: boolean;
     setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
-
 function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState('');
     const [showLoginFeedback, setShowLoginFeedback] = useState(false);
-
     const handleClick = () => {
         setIsPopupOpen(true);
     }
@@ -24,22 +21,23 @@ function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
         setPassword('');
     }
 
-    const handleLogin = () => {
+    const handleLogin=()=>{
         const validUser = username === "dev" && password === '1234';
-        if (validUser) {
+        if(validUser){
             localStorage.setItem("username", username);
             localStorage.setItem("password", password);
             setLoginStatus("success");
-            setIsLoggedIn(true); // Set logged in state to true
-        } else {
+            setIsLoggedIn(true);
+        }else{
             setLoginStatus("error");
         }
+        console.log(username,password);
+        console.log(loginStatus);
         setIsPopupOpen(false);
         setShowLoginFeedback(true);
         setUsername('');
         setPassword('');
     };
-
     const handleLogout = () => {
         localStorage.removeItem("username");
         localStorage.removeItem("password");
@@ -57,8 +55,6 @@ function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
                     Log Out
                 </LogInPageButton>
             )}
-
-            {/* User feedback on login*/}
             <LogInPopUp
                 isOpen={showLoginFeedback}
                 onClose={() => {
@@ -88,8 +84,6 @@ function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
                     </button>
                 </div>
             </LogInPopUp>
-
-            {/* Login popup */}
             <LogInPopUp isOpen={isPopupOpen} onClose={handleClose} title={"Login"}>
                 <form>
                     <input
@@ -101,7 +95,7 @@ function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
                     <br></br>
                     <br></br>
                     <input
-                        type="password"
+                        type = "password"
                         placeholder="Enter password:"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -128,5 +122,4 @@ function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
         </div>
     );
 }
-
 export default LoginPage;

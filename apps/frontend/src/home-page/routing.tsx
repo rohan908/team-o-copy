@@ -3,7 +3,8 @@ import {NavBar} from "./components/nav-bar.tsx";
 import {HomePage} from "./home-page.tsx";
 import {MapPage} from "../map-page/map-page.tsx";
 import {Display} from "../service-request/submissionDisplay/display.tsx";
-
+import {Directory} from "../directory/directory.tsx";
+import {DirectoryLocation} from "../directory/components/DirectoryLocation.tsx";
 
 export function Routing() {
 
@@ -17,6 +18,8 @@ export function Routing() {
                         <Route index element={<HomePage/>} />
                         <Route path="map-page" element={<MapPage/>} />
                         <Route path="/submission" element={<Display />} />
+                        <Route path="directory" element={<Directory/>}/>
+                        <Route path="/directory/:topic" element={<DirectoryLocation />} />
 
                     </Route>
                 </Routes>
