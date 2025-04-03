@@ -52,49 +52,53 @@ const HoverInfoComponent = () => {
     function handleMouseOver(e: MouseEvent, num: number) {
         let canvas;
         let context
-        switch (num) {
-            case 2:
-                canvas = canvasRefImaging.current;
-                if (!canvas) return;
-                context = canvas.getContext("2d");
-                if (!context) return;
-                break;
-            case 3:
-                canvas = canvasRefPharmacy.current;
-                if (!canvas) return;
-                context = canvas.getContext("2d");
-                if (!context) return;
-                break;
-            case 4:
-                canvas = canvasRefPhlebotomy.current;
-                if (!canvas) return;
-                context = canvas.getContext("2d");
-                if (!context) return;
-                break;
-            case 5:
-                canvas = canvasRefSpecClinic.current;
-                if (!canvas) return;
-                context = canvas.getContext("2d");
-                if (!context) return;
-                break;
-            case 6:
-                canvas = canvasRefUrgentCare.current;
-                if (!canvas) return;
-                context = canvas.getContext("2d");
-                if (!context) return;
-                break;
-        }
-        if (!canvas) return;
-        if (!context) return;
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const pixelData = context.getImageData(x,y,1,1);
-        console.log("Alpha value = " + pixelData.data[3]);
-        if (pixelData.data[3] == 0){
-            setIsOverTransparent(true);
-        } else {
-            setIsOverTransparent(false);
+        let hasDetectedColor = false;
+        for (let num = 0; num < 5; num++) {
+            switch (num) {
+                case 0:
+                    canvas = canvasRefImaging.current;
+                    if (!canvas) return;
+                    context = canvas.getContext("2d");
+                    if (!context) return;
+                    break;
+                case 1:
+                    canvas = canvasRefPharmacy.current;
+                    if (!canvas) return;
+                    context = canvas.getContext("2d");
+                    if (!context) return;
+                    break;
+                case 2:
+                    canvas = canvasRefPhlebotomy.current;
+                    if (!canvas) return;
+                    context = canvas.getContext("2d");
+                    if (!context) return;
+                    break;
+                case 3:
+                    canvas = canvasRefSpecClinic.current;
+                    if (!canvas) return;
+                    context = canvas.getContext("2d");
+                    if (!context) return;
+                    break;
+                case 4:
+                    canvas = canvasRefUrgentCare.current;
+                    if (!canvas) return;
+                    context = canvas.getContext("2d");
+                    if (!context) return;
+                    break;
+            }
+            if (!canvas) return;
+            if (!context) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const pixelData = context.getImageData(x, y, 1, 1);
+            console.log("Alpha value = " + pixelData.data[3]);
+            if (pixelData.data[3] == 0 && !hasDetectedColor) {
+                setIsOverTransparent(true);
+            } else {
+                hasDetectedColor = true;
+                setIsOverTransparent(false);
+            }
         }
     }
 
@@ -159,23 +163,23 @@ const HoverInfoComponent = () => {
                     alt="MainMapImage"
                     className="mainMapImage"
                 />
-                <canvas id="imaging" className="imagingSuite" width={479} height={520} ref={canvasRefImaging}
+                <canvas id="imaging" className="imagingSuite" width={321} height={349} ref={canvasRefImaging}
                         onMouseEnter={() => handleMouseEnter(2)}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event, 2)}/>
-                <canvas id="specClinic" className="specClinic" width={474} height={532} ref={canvasRefSpecClinic}
+                <canvas id="specClinic" className="specClinic" width={314} height={352} ref={canvasRefSpecClinic}
                         onMouseEnter={() => handleMouseEnter(5)}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event, 5)}/>
-                <canvas id="urgentCare" className="urgentCare" width={273} height={229} ref={canvasRefUrgentCare}
+                <canvas id="urgentCare" className="urgentCare" width={180} height={151} ref={canvasRefUrgentCare}
                         onMouseEnter={() => handleMouseEnter(6)}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event, 6)}/>
-                <canvas id="pharmacy" className="pharmacy" width={49} height={96} ref={canvasRefPharmacy}
+                <canvas id="pharmacy" className="pharmacy" width={31} height={61} ref={canvasRefPharmacy}
                         onMouseEnter={() => handleMouseEnter(3)}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event, 3)}/>
-                <canvas id="phlebotomy" className="phlebotomy" width={82} height={152} ref={canvasRefPhlebotomy}
+                <canvas id="phlebotomy" className="phlebotomy" width={54} height={100} ref={canvasRefPhlebotomy}
                         onMouseEnter={() => handleMouseEnter(4)}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event, 4)}/>
