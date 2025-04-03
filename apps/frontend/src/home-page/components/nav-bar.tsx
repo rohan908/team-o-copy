@@ -1,4 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import "../home-style.css"
 import { useState, useEffect } from "react";
 import LoginPage from "../../login-components/login-page.tsx";
@@ -7,7 +9,7 @@ import Service from "../../service-request/service.tsx";
 export function NavBar() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const checkLoginStatus = () => {
             const username = localStorage.getItem("username");
@@ -21,6 +23,11 @@ export function NavBar() {
             window.removeEventListener('storage', checkLoginStatus);
         };
     }, []);
+        useEffect(() => {
+            if (!isLoggedIn) {
+                navigate("/");
+            }
+        }, [isLoggedIn]);
         return (
         <>
             <nav className={"bg-blue-500"}>
@@ -36,7 +43,6 @@ export function NavBar() {
                     <li className={"nav-element"}>
                         <LoginPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
                     </li>
-                    {/* Only render the Service component if user is logged in */}
                     {isLoggedIn && (
                         <li className={"nav-element"}>
                             <Service />
