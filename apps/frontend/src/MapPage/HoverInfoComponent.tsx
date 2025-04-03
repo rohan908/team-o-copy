@@ -14,52 +14,158 @@ const HoverInfoComponent = () => {
     const canvasRefSpecClinic = useRef<HTMLCanvasElement>(null);
     const canvasRefUrgentCare = useRef<HTMLCanvasElement>(null);
     const canvasRef22 = useRef<HTMLCanvasElement>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
 
-    function handleMouseEnter(num: number) {
-        //Has cases for each area.
-        //The area tag should supply which area number it is and match it to the correct description
-        switch (num){
-            case 1:
-                if (!isOverTransparent) {
-                    setHoverInfo("Unspecified Hospital Space");
-                    setIsHovering(true);
-                }
-                break;
-            case 2:
-                if (!isOverTransparent) {
-                    setHoverInfo("This area is the Imaging Suite");
-                    setIsHovering(true);
-                }
-                break;
-            case 3:
-                if (!isOverTransparent) {
-                    setHoverInfo("This area is the Pharmacy");
-                    setIsHovering(true);
-                }
-                break;
-            case 4:
-                if (!isOverTransparent) {
-                    setHoverInfo("This area is the Phlebotomy Area");
-                    setIsHovering(true);
-                }
-                break;
-            case 5:
-                if (!isOverTransparent) {
-                    setHoverInfo("This area is the Spec Clinic");
-                    setIsHovering(true);
-                }
-                break;
-            case 6:
-                if (!isOverTransparent) {
-                    setHoverInfo("This area is the Urgent Care");
-                    setIsHovering(true);
-                }
-                break;
-        }
-    }
+    // Store preloaded images
+    const [images, setImages] = useState<{
+        normal: { [key: string]: HTMLImageElement },
+        dark: { [key: string]: HTMLImageElement }
+    }>({
+        normal: {},
+        dark: {}
+    });
+
+    // Preload all images
+    useEffect(() => {
+        const imageSources = {
+            normal: {
+                imaging: "public/MapImages/ImagingSuiteAlphaChannel.png",
+                pharmacy: "public/MapImages/Pharmacy.png",
+                phlebotomy: "public/MapImages/Phlebotomy.png",
+                specClinic: "public/MapImages/SpecClinic.png",
+                urgentCare: "public/MapImages/UrgentCare.png",
+                twentyTwo: "public/MapImages/22PatFull.png"
+            },
+            dark: {
+                imaging: "public/MapImages/ImagingDark.png",
+                pharmacy: "public/MapImages/PharmacyDark.png",
+                phlebotomy: "public/MapImages/PhleDark.png",
+                specClinic: "public/MapImages/SpecDark.png",
+                urgentCare: "public/MapImages/UrgentDark.png",
+                twentyTwo: "public/MapImages/Darker22.png"
+            }
+        };
+
+        //if we don't have the inital images, the first view is realllyyyyy weird. 
+        //the async function is used to load the images and then set the state, making the first view normal
+        const loadImages = async () => {
+            const normalImages: { [key: string]: HTMLImageElement } = {};
+            const darkImages: { [key: string]: HTMLImageElement } = {};
+
+            for (const [key, src] of Object.entries(imageSources.normal)) {
+                const img = new Image();
+                img.src = src;
+                normalImages[key] = img;
+            }
+
+            for (const [key, src] of Object.entries(imageSources.dark)) {
+                const img = new Image();
+                img.src = src;
+                darkImages[key] = img;
+            }
+
+            setImages({ normal: normalImages, dark: darkImages });
+        };
+
+        loadImages();
+    }, []);
+
+    // Original dimensions of the map and canvases
+    const originalMapWidth = 1425; // This is the original width of the map image
+    const canvasDimensions = {
+        imaging: { width: 321, height: 349 },
+        pharmacy: { width: 31, height: 61 },
+        phlebotomy: { width: 54, height: 100 },
+        specClinic: { width: 314, height: 352 },
+        urgentCare: { width: 180, height: 151 },
+        twentyTwo: { width: 525, height: 608 }
+    };
+
+    // Function to update canvas dimensions based on container width
+    // sorry connor, i like my switch cases lol
+    const updateCanvasDimensions = () => {
+        const mapContainer = mapContainerRef.current;
+        if (!mapContainer) return;
+
+        const containerWidth = mapContainer.offsetWidth;
+        const scale = containerWidth / originalMapWidth;
+
+        const canvases = [
+            { ref: canvasRefImaging, dimensions: canvasDimensions.imaging },
+            { ref: canvasRefPharmacy, dimensions: canvasDimensions.pharmacy },
+            { ref: canvasRefPhlebotomy, dimensions: canvasDimensions.phlebotomy },
+            { ref: canvasRefSpecClinic, dimensions: canvasDimensions.specClinic },
+            { ref: canvasRefUrgentCare, dimensions: canvasDimensions.urgentCare },
+            { ref: canvasRef22, dimensions: canvasDimensions.twentyTwo }
+        ];
+
+        canvases.forEach(({ ref, dimensions }) => {
+            const canvas = ref.current;
+            if (!canvas) return;
+            
+            const newWidth = dimensions.width * scale;
+            const newHeight = dimensions.height * scale;
+            
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            
+            // Redraw the image after resizing
+            const context = canvas.getContext('2d');
+            if (!context) return;
+            
+            const image = new Image();
+            switch (ref) {
+                case canvasRefImaging:
+                    image.src = "public/MapImages/ImagingSuiteAlphaChannel.png";
+                    break;
+                case canvasRefPharmacy:
+                    image.src = "public/MapImages/Pharmacy.png";
+                    break;
+                case canvasRefPhlebotomy:
+                    image.src = "public/MapImages/Phlebotomy.png";
+                    break;
+                case canvasRefSpecClinic:
+                    image.src = "public/MapImages/SpecClinic.png";
+                    break;
+                case canvasRefUrgentCare:
+                    image.src = "public/MapImages/UrgentCare.png";
+                    break;
+                case canvasRef22:
+                    image.src = "public/MapImages/22PatFull.png";
+                    break;
+            }
+            
+            // idk why onload works here but not everywhere else but it works so lol!
+            image.onload = () => {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            };
+        });
+    };
+
+    
     //Sets back to default text if you leave the hover area.
     function handleMouseExit() {
         setIsHovering(false);
+        // Restore original images
+        const canvases = [
+            { ref: canvasRefImaging, image: images.normal.imaging },
+            { ref: canvasRefPharmacy, image: images.normal.pharmacy },
+            { ref: canvasRefPhlebotomy, image: images.normal.phlebotomy },
+            { ref: canvasRefSpecClinic, image: images.normal.specClinic },
+            { ref: canvasRefUrgentCare, image: images.normal.urgentCare },
+            { ref: canvasRef22, image: images.normal.twentyTwo }
+        ];
+
+        canvases.forEach(({ ref, image }) => {
+            const canvas = ref.current;
+            if (!canvas) return;
+            const context = canvas.getContext('2d');
+            if (!context) return;
+            
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        });
     }
 
     function handleMouseOver(e: MouseEvent) {
@@ -111,124 +217,65 @@ const HoverInfoComponent = () => {
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             const pixelData = context.getImageData(x, y, 1, 1);
-            console.log("Alpha value = " + pixelData.data[3]);
             if (pixelData.data[3] == 0 && !hasDetectedColor) {
                 setIsOverTransparent(true);
             } else if (!hasDetectedColor) {
                 hasDetectedColor = true;
                 setIsOverTransparent(false);
-                const image = new Image();
                 switch (num){
                     case 0:
                         setHoverInfo("This area is the Imaging Suite");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
-                        image.src = "public/MapImages/ImagingDark.png";
-                        context.beginPath();
-                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.dark.imaging, 0, 0, canvas.width, canvas.height);
                         break;
                     case 1:
                         setHoverInfo("This area is the Pharmacy");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
-                        image.src = "public/MapImages/PharmacyDark.png";
-                        context.beginPath();
-                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.dark.pharmacy, 0, 0, canvas.width, canvas.height);
                         break;
                     case 2:
                         setHoverInfo("This area is the Phlebotomy Area");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
-                        image.src = "public/MapImages/PhleDark.png";
-                        context.beginPath();
-                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.dark.phlebotomy, 0, 0, canvas.width, canvas.height);
                         break;
                     case 3:
                         setHoverInfo("This area is the Spec Clinic");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
-                        image.src = "public/MapImages/SpecDark.png";
-                        context.beginPath();
-                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.dark.specClinic, 0, 0, canvas.width, canvas.height);
                         break;
                     case 4:
                         setHoverInfo("This area is the Urgent Care");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
-                        image.src = "public/MapImages/UrgentDark.png";
-                        context.beginPath();
-                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.dark.urgentCare, 0, 0, canvas.width, canvas.height);
                         break;
                     case 5:
                         setHoverInfo("This area is 22 Patriot Place");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
-                        image.src = "public/MapImages/Darker22.png";
-                        context.beginPath();
-                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.dark.twentyTwo, 0, 0, canvas.width, canvas.height);
                         break;
                 }
-
             }
         }
     }
 
     useEffect(() => {
-        let canvas = canvasRefImaging.current;
-        if (!canvas) return;
-        let context = canvas.getContext('2d');
-        if (!context) return;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        let image = new Image();
-        image.src = "public/MapImages/ImagingSuiteAlphaChannel.png";
-        context.beginPath();
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-        canvas = canvasRefPharmacy.current;
-        if (!canvas) return;
-        context = canvas.getContext('2d');
-        if (!context) return;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        image = new Image();
-        image.src = "public/MapImages/Pharmacy.png";
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-        canvas = canvasRefPhlebotomy.current;
-        if (!canvas) return;
-        context = canvas.getContext('2d');
-        if (!context) return;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        image = new Image();
-        image.src = "public/MapImages/Phlebotomy.png";
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-        canvas = canvasRefSpecClinic.current;
-        if (!canvas) return;
-        context = canvas.getContext('2d');
-        if (!context) return;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        image = new Image();
-        image.src = "public/MapImages/SpecClinic.png";
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-        canvas = canvasRefUrgentCare.current;
-        if (!canvas) return;
-        context = canvas.getContext('2d');
-        if (!context) return;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        image = new Image();
-        image.src = "public/MapImages/UrgentCare.png";
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-        canvas = canvasRef22.current;
-        if (!canvas) return;
-        context = canvas.getContext('2d');
-        if (!context) return;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        image = new Image();
-        image.src = "public/MapImages/22PatFull.png";
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-    })
+        // Initial setup
+        updateCanvasDimensions();
+        
+        // Add resize listener
+        window.addEventListener('resize', updateCanvasDimensions);
+        
+        // Cleanup
+        return () => {
+            window.removeEventListener('resize', updateCanvasDimensions);
+        };
+    }, []);
 
     return (
         <div>
@@ -237,28 +284,28 @@ const HoverInfoComponent = () => {
                     {!isHovering || isOverTransparent ? `Hover over a map region to learn more` : `Area Information: ${hoverInfo}`}
                 </div>
             </div>
-            <div className="mapContainer">
+            <div className="mapContainer" ref={mapContainerRef}>
                 <img
                     src="public/MapImages/Whole_Floor_Plan.png"
                     alt="MainMapImage"
                     className="mainMapImage"
                 />
-                <canvas id="imaging" className="imagingSuite" width={321} height={349} ref={canvasRefImaging}
+                <canvas id="imaging" className="imagingSuite" ref={canvasRefImaging}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="specClinic" className="specClinic" width={314} height={352} ref={canvasRefSpecClinic}
+                <canvas id="specClinic" className="specClinic" ref={canvasRefSpecClinic}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="urgentCare" className="urgentCare" width={180} height={151} ref={canvasRefUrgentCare}
+                <canvas id="urgentCare" className="urgentCare" ref={canvasRefUrgentCare}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="pharmacy" className="pharmacy" width={31} height={61} ref={canvasRefPharmacy}
+                <canvas id="pharmacy" className="pharmacy" ref={canvasRefPharmacy}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="phlebotomy" className="phlebotomy" width={54} height={100} ref={canvasRefPhlebotomy}
+                <canvas id="phlebotomy" className="phlebotomy" ref={canvasRefPhlebotomy}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="22" className="twentytwo" width={525} height={608} ref={canvasRef22}
+                <canvas id="22" className="twentytwo" ref={canvasRef22}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event)}/>
             </div>

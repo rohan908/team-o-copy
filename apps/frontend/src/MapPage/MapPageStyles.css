@@ -3,6 +3,7 @@
     width: 100%;
     max-width: 100%;
     overflow: hidden;
+    margin-top: 1rem
 }
 
 .mainMapImage {
@@ -14,7 +15,7 @@
 .hoverInfoBar {
     width: 100%;
     max-width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
 }
 
 .imagingSuite{
