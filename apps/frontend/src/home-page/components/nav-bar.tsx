@@ -1,6 +1,8 @@
 import { Outlet, Link } from "react-router-dom";
 import "../home-style.css"
 import LoginPage from "../../login-components/login-page.tsx";
+import Service from "../../service-request/service.tsx";
+
 
 export function NavBar() {
 
@@ -20,6 +22,9 @@ export function NavBar() {
                     </li>
                     <li className={"nav-element"}>
                         <LoginPage />
+                    </li>
+                    <li className={"nav-element"}>
+                        <Service />
                     </li>
                 </ul>
                 <hr />

@@ -1,0 +1,22 @@
+import React from 'react';
+
+interface ButtonProps {
+    onClick: () => void;
+    children?: React.ReactNode;
+    variant: 'primary' | 'secondary';
+    disabled: boolean;
+}
+
+const ServiceRequestButton = ({ onClick, children, variant, disabled }: ButtonProps) => {
+    return (
+        <button
+            className={`flex-1 ${variant === 'primary' ? 'bg-blue-600 hover:bg-blue-400 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'} font-semibold py-2 px-4 rounded border border-gray-400`}
+            onClick={onClick}
+            disabled={disabled}
+        >
+            {children}
+        </button>
+    );
+};
+
+export default ServiceRequestButton;
