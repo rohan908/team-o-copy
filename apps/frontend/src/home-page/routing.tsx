@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {NavBar} from "./components/nav-bar.tsx";
 import {HomePage} from "./home-page.tsx";
-import {MapPage} from "../map-page/map-page.tsx";
+import {MapPage} from "../MapPage/MapPage.tsx";
 import {Directory} from "../directory/directory.tsx";
 import {DirectoryLocation} from "../directory/components/DirectoryLocation.tsx";
 
