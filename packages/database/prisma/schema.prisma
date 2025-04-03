@@ -11,9 +11,12 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-// Example table used in the express router example
-model Score {
-  id    Int      @id @default(autoincrement())
-  time  DateTime
-  score Int
+// creates the employee table
+model Employee {
+  employeeid  Int @id @default(autoincrement())
+  name  String
+  address String
+  phoneNumber Int
+  email String
+  position String
 }
