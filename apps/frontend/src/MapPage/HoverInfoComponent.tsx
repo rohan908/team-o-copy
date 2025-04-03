@@ -8,6 +8,7 @@ const HoverInfoComponent = () => {
     const [hoverInfo, setHoverInfo] = useState("");
     const [isHovering, setIsHovering] = useState(false);
     const [isOverTransparent, setIsOverTransparent] = useState(false);
+    const [numHovering, setNumHovering] = useState(-1);
     const canvasRefImaging = useRef<HTMLCanvasElement>(null);
     const canvasRefPharmacy = useRef<HTMLCanvasElement>(null);
     const canvasRefPhlebotomy = useRef<HTMLCanvasElement>(null);
@@ -172,6 +173,7 @@ const HoverInfoComponent = () => {
         let canvas;
         let context;
         let hasDetectedColor = false;
+        setNumHovering(-1);
         for (let num = 0; num < 6; num++) {
             switch (num) {
                 case 0:
@@ -228,38 +230,82 @@ const HoverInfoComponent = () => {
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
                         context.drawImage(images.dark.imaging, 0, 0, canvas.width, canvas.height);
+                        setNumHovering(0);
                         break;
                     case 1:
                         setHoverInfo("This area is the Pharmacy");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
                         context.drawImage(images.dark.pharmacy, 0, 0, canvas.width, canvas.height);
+                        setNumHovering(1);
                         break;
                     case 2:
                         setHoverInfo("This area is the Phlebotomy Area");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
                         context.drawImage(images.dark.phlebotomy, 0, 0, canvas.width, canvas.height);
+                        setNumHovering(2);
                         break;
                     case 3:
                         setHoverInfo("This area is the Spec Clinic");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
                         context.drawImage(images.dark.specClinic, 0, 0, canvas.width, canvas.height);
+                        setNumHovering(3);
                         break;
                     case 4:
                         setHoverInfo("This area is the Urgent Care");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
                         context.drawImage(images.dark.urgentCare, 0, 0, canvas.width, canvas.height);
+                        setNumHovering(4);
                         break;
                     case 5:
                         setHoverInfo("This area is 22 Patriot Place");
                         setIsHovering(true);
                         context.clearRect(0, 0, canvas.width, canvas.height);
                         context.drawImage(images.dark.twentyTwo, 0, 0, canvas.width, canvas.height);
+                        setNumHovering(5);
                         break;
                 }
+            }
+            switch (num) {
+                case 0:
+                    if (numHovering !=0) {
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.normal.imaging, 0, 0, canvas.width, canvas.height);
+                    }
+                    break;
+                case 1:
+                    if (numHovering !=1) {
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.normal.pharmacy, 0, 0, canvas.width, canvas.height);
+                    }
+                    break;
+                case 2:
+                    if (numHovering !=2) {
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.normal.phlebotomy, 0, 0, canvas.width, canvas.height);
+                    }
+                    break;
+                case 3:
+                    if (numHovering !=3) {
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.normal.specClinic, 0, 0, canvas.width, canvas.height);
+                    }
+                    break;
+                case 4:
+                    if (numHovering !=4) {
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.normal.urgentCare, 0, 0, canvas.width, canvas.height);
+                    }
+                    break;
+                case 5:
+                    if (numHovering !=5) {
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.normal.twentyTwo, 0, 0, canvas.width, canvas.height);
+                    }
+                    break;
             }
         }
     }
