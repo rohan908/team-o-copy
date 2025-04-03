@@ -1,12 +1,31 @@
 import { Outlet, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "../home-style.css"
 import LoginPage from "../../login-components/login-page.tsx";
 import Service from "../../service-request/service.tsx";
 
-
 export function NavBar() {
+    // Track authentication state
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // Add more page navigation here
+    // Check login status on component mount and when localStorage changes
+    useEffect(() => {
+        const checkLoginStatus = () => {
+            const username = localStorage.getItem("username");
+            const password = localStorage.getItem("password");
+            setIsLoggedIn(!!username && !!password);
+        };
+
+        // Check on mount
+        checkLoginStatus();
+
+        // Set up event listener for storage changes (in case user logs in/out in another tab)
+        window.addEventListener('storage', checkLoginStatus);
+
+        return () => {
+            window.removeEventListener('storage', checkLoginStatus);
+        };
+    }, []);
 
     return (
         <>
@@ -21,11 +40,14 @@ export function NavBar() {
                         <Link to="/map-page">Map</Link>
                     </li>
                     <li className={"nav-element"}>
-                        <LoginPage />
+                        <LoginPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
                     </li>
-                    <li className={"nav-element"}>
-                        <Service />
-                    </li>
+                    {/* Only render the Service component if user is logged in */}
+                    {isLoggedIn && (
+                        <li className={"nav-element"}>
+                            <Service />
+                        </li>
+                    )}
                 </ul>
                 <hr />
             </nav>

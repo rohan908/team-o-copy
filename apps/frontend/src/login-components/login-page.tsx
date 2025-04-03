@@ -1,50 +1,63 @@
-import React,{useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import LogInPageButton from './components/login-page-button.tsx';
 import LogInPopUp from "./components/login-pop-up.tsx";
-function LoginPage(){
 
+interface LoginPageProps {
+    isLoggedIn: boolean;
+    setIsLoggedIn: (isLoggedIn: boolean) => void;
+}
+
+function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState('');
     const [showLoginFeedback, setShowLoginFeedback] = useState(false);
+
     const handleClick = () => {
         setIsPopupOpen(true);
     }
 
     const handleClose = () => {
         setIsPopupOpen(false);
-
-        // clear the form fields
         setUsername('');
         setPassword('');
     }
 
-    const handleLogin=()=>{
-        // basic check for pass and failed login's w/o a database
-        const validUser = username == "dev" && password == '1234';
-        if(validUser){
-            // store in local for now
+    const handleLogin = () => {
+        const validUser = username === "dev" && password === '1234';
+        if (validUser) {
             localStorage.setItem("username", username);
             localStorage.setItem("password", password);
             setLoginStatus("success");
-        }else{
+            setIsLoggedIn(true); // Set logged in state to true
+        } else {
             setLoginStatus("error");
         }
-        console.log(username,password);
-        console.log(loginStatus);
         setIsPopupOpen(false);
         setShowLoginFeedback(true);
-        // clear the form fields
         setUsername('');
         setPassword('');
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("username");
+        localStorage.removeItem("password");
+        setIsLoggedIn(false);
+    };
+
     return (
         <div>
-            <LogInPageButton onClick={handleClick} variant={'primary'} disabled={false}>
-                Log In
-            </LogInPageButton>
+            {!isLoggedIn ? (
+                <LogInPageButton onClick={handleClick} variant={'primary'} disabled={false}>
+                    Log In
+                </LogInPageButton>
+            ) : (
+                <LogInPageButton onClick={handleLogout} variant={'secondary'} disabled={false}>
+                    Log Out
+                </LogInPageButton>
+            )}
+
             {/* User feedback on login*/}
             <LogInPopUp
                 isOpen={showLoginFeedback}
@@ -75,9 +88,9 @@ function LoginPage(){
                     </button>
                 </div>
             </LogInPopUp>
-            {/* Render the popup outside the button */}
+
+            {/* Login popup */}
             <LogInPopUp isOpen={isPopupOpen} onClose={handleClose} title={"Login"}>
-                {/* Popup content goes here */}
                 <form>
                     <input
                         type="text"
@@ -88,16 +101,15 @@ function LoginPage(){
                     <br></br>
                     <br></br>
                     <input
-                        type = "password"
+                        type="password"
                         placeholder="Enter password:"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <div className="flex items-center justify-center gap-4 mt-10">
                         <button
-                            onClick={handleLogin} // add log in functionality here
-                            disabled={!username || !password} // disables the button if a username and password haven't been entered
-                            // This bit of fancy styling greys out the button when it is disabled
+                            onClick={handleLogin}
+                            disabled={!username || !password}
                             className={`px-4 py-2 rounded transition-colors ${
                                 username && password
                                     ? 'bg-blue-500 hover:bg-blue-600 text-white cursor-pointer'
@@ -113,12 +125,8 @@ function LoginPage(){
                     </div>
                 </form>
             </LogInPopUp>
-            {/*
-            Displaying of saved values for debugging
-            <p>Username: {username}</p>
-            <p>Password: {password}</p>
-            */}
         </div>
     );
 }
+
 export default LoginPage;
