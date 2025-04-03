@@ -19,28 +19,40 @@ const HoverInfoComponent = () => {
         //The area tag should supply which area number it is and match it to the correct description
         switch (num){
             case 1:
-                setHoverInfo("Unspecified Hospital Space");
-                setIsHovering(true);
+                if (!isOverTransparent) {
+                    setHoverInfo("Unspecified Hospital Space");
+                    setIsHovering(true);
+                }
                 break;
             case 2:
-                setHoverInfo("This area is the Imaging Suite");
-                setIsHovering(true);
+                if (!isOverTransparent) {
+                    setHoverInfo("This area is the Imaging Suite");
+                    setIsHovering(true);
+                }
                 break;
             case 3:
-                setHoverInfo("This area is the Pharmacy");
-                setIsHovering(true);
+                if (!isOverTransparent) {
+                    setHoverInfo("This area is the Pharmacy");
+                    setIsHovering(true);
+                }
                 break;
             case 4:
-                setHoverInfo("This area is the Phlebotomy Area");
-                setIsHovering(true);
+                if (!isOverTransparent) {
+                    setHoverInfo("This area is the Phlebotomy Area");
+                    setIsHovering(true);
+                }
                 break;
             case 5:
-                setHoverInfo("This area is the Spec Clinic");
-                setIsHovering(true);
+                if (!isOverTransparent) {
+                    setHoverInfo("This area is the Spec Clinic");
+                    setIsHovering(true);
+                }
                 break;
             case 6:
-                setHoverInfo("This area is the Urgent Care");
-                setIsHovering(true);
+                if (!isOverTransparent) {
+                    setHoverInfo("This area is the Urgent Care");
+                    setIsHovering(true);
+                }
                 break;
         }
     }
@@ -49,7 +61,7 @@ const HoverInfoComponent = () => {
         setIsHovering(false);
     }
 
-    function handleMouseOver(e: MouseEvent, num: number) {
+    function handleMouseOver(e: MouseEvent) {
         let canvas;
         let context
         let hasDetectedColor = false;
@@ -95,9 +107,32 @@ const HoverInfoComponent = () => {
             console.log("Alpha value = " + pixelData.data[3]);
             if (pixelData.data[3] == 0 && !hasDetectedColor) {
                 setIsOverTransparent(true);
-            } else {
+            } else if (!hasDetectedColor) {
                 hasDetectedColor = true;
                 setIsOverTransparent(false);
+                switch (num){
+                    case 0:
+                        setHoverInfo("This area is the Imaging Suite");
+                        setIsHovering(true);
+                        break;
+                    case 1:
+                        setHoverInfo("This area is the Pharmacy");
+                        setIsHovering(true);
+                        break;
+                    case 2:
+                        setHoverInfo("This area is the Phlebotomy Area");
+                        setIsHovering(true);
+                        break;
+                    case 3:
+                        setHoverInfo("This area is the Spec Clinic");
+                        setIsHovering(true);
+                        break;
+                    case 4:
+                        setHoverInfo("This area is the Urgent Care");
+                        setIsHovering(true);
+                        break;
+                }
+
             }
         }
     }
@@ -164,25 +199,20 @@ const HoverInfoComponent = () => {
                     className="mainMapImage"
                 />
                 <canvas id="imaging" className="imagingSuite" width={321} height={349} ref={canvasRefImaging}
-                        onMouseEnter={() => handleMouseEnter(2)}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event, 2)}/>
+                        onMouseMove={(event) => handleMouseOver(event)}/>
                 <canvas id="specClinic" className="specClinic" width={314} height={352} ref={canvasRefSpecClinic}
-                        onMouseEnter={() => handleMouseEnter(5)}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event, 5)}/>
+                        onMouseMove={(event) => handleMouseOver(event)}/>
                 <canvas id="urgentCare" className="urgentCare" width={180} height={151} ref={canvasRefUrgentCare}
-                        onMouseEnter={() => handleMouseEnter(6)}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event, 6)}/>
+                        onMouseMove={(event) => handleMouseOver(event)}/>
                 <canvas id="pharmacy" className="pharmacy" width={31} height={61} ref={canvasRefPharmacy}
-                        onMouseEnter={() => handleMouseEnter(3)}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event, 3)}/>
+                        onMouseMove={(event) => handleMouseOver(event)}/>
                 <canvas id="phlebotomy" className="phlebotomy" width={54} height={100} ref={canvasRefPhlebotomy}
-                        onMouseEnter={() => handleMouseEnter(4)}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event, 4)}/>
+                        onMouseMove={(event) => handleMouseOver(event)}/>
             </div>
         </div>
     );
