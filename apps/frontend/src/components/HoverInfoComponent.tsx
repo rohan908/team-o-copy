@@ -13,6 +13,7 @@ const HoverInfoComponent = () => {
     const canvasRefPhlebotomy = useRef<HTMLCanvasElement>(null);
     const canvasRefSpecClinic = useRef<HTMLCanvasElement>(null);
     const canvasRefUrgentCare = useRef<HTMLCanvasElement>(null);
+    const canvasRef22 = useRef<HTMLCanvasElement>(null);
 
     function handleMouseEnter(num: number) {
         //Has cases for each area.
@@ -65,7 +66,7 @@ const HoverInfoComponent = () => {
         let canvas;
         let context
         let hasDetectedColor = false;
-        for (let num = 0; num < 5; num++) {
+        for (let num = 0; num < 6; num++) {
             switch (num) {
                 case 0:
                     canvas = canvasRefImaging.current;
@@ -97,6 +98,12 @@ const HoverInfoComponent = () => {
                     context = canvas.getContext("2d");
                     if (!context) return;
                     break;
+                case 5:
+                    canvas = canvasRef22.current;
+                    if (!canvas) return;
+                    context = canvas.getContext("2d");
+                    if (!context) return;
+                    break;
             }
             if (!canvas) return;
             if (!context) return;
@@ -110,26 +117,55 @@ const HoverInfoComponent = () => {
             } else if (!hasDetectedColor) {
                 hasDetectedColor = true;
                 setIsOverTransparent(false);
+                const image = new Image();
                 switch (num){
                     case 0:
                         setHoverInfo("This area is the Imaging Suite");
                         setIsHovering(true);
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        image.src = "public/MapImages/ImagingDark.png";
+                        context.beginPath();
+                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
                         break;
                     case 1:
                         setHoverInfo("This area is the Pharmacy");
                         setIsHovering(true);
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        image.src = "public/MapImages/PharmacyDark.png";
+                        context.beginPath();
+                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
                         break;
                     case 2:
                         setHoverInfo("This area is the Phlebotomy Area");
                         setIsHovering(true);
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        image.src = "public/MapImages/PhleDark.png";
+                        context.beginPath();
+                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
                         break;
                     case 3:
                         setHoverInfo("This area is the Spec Clinic");
                         setIsHovering(true);
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        image.src = "public/MapImages/SpecDark.png";
+                        context.beginPath();
+                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
                         break;
                     case 4:
                         setHoverInfo("This area is the Urgent Care");
                         setIsHovering(true);
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        image.src = "public/MapImages/UrgentDark.png";
+                        context.beginPath();
+                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                        break;
+                    case 5:
+                        setHoverInfo("This area is 22 Patriot Place");
+                        setIsHovering(true);
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        image.src = "public/MapImages/Darker22.png";
+                        context.beginPath();
+                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
                         break;
                 }
 
@@ -183,6 +219,15 @@ const HoverInfoComponent = () => {
         image = new Image();
         image.src = "public/MapImages/UrgentCare.png";
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        canvas = canvasRef22.current;
+        if (!canvas) return;
+        context = canvas.getContext('2d');
+        if (!context) return;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        image = new Image();
+        image.src = "public/MapImages/22PatFull.png";
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
     })
 
     return (
@@ -211,6 +256,9 @@ const HoverInfoComponent = () => {
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event)}/>
                 <canvas id="phlebotomy" className="phlebotomy" width={54} height={100} ref={canvasRefPhlebotomy}
+                        onMouseLeave={() => handleMouseExit()}
+                        onMouseMove={(event) => handleMouseOver(event)}/>
+                <canvas id="22" className="twentytwo" width={525} height={608} ref={canvasRef22}
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event)}/>
             </div>
