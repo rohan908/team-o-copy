@@ -19,6 +19,9 @@ export function NavBar() {
                         <Link to="/map-page">Map</Link>
                     </li>
                     <li className={"nav-element"}>
+                        <Link to="/directory">Directory</Link>
+                    </li>
+                    <li className={"nav-element"}>
                         <LoginPage />
                     </li>
                 </ul>

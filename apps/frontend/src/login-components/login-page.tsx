@@ -1,7 +1,8 @@
 import React,{useState} from 'react';
 import LogInPageButton from './components/login-page-button.tsx';
 import LogInPopUp from "./components/login-pop-up.tsx";
-function LoginPage(){
+
+export function LoginPage(){
 
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [username, setUsername] = useState('');
