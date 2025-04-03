@@ -28,21 +28,6 @@ app.use(cookieParser()); // Cookie parser
 app.use('/', healthcheckRouter);
 app.use('/employee', employeeRouter);
 
-app.get('/', async (req: Request, res: Response) => {
-    const createEmployees = await PrismaClient.employee.create({
-        data: {
-            employeeid: 1,
-            name: 'bob',
-            email: 'bob@gmail.com',
-            address: '80 pine rd',
-            phoneNumber: 1112223333,
-            position: 'recruiter',
-        },
-    });
-
-    res.json(createEmployees);
-});
-
 /**
  * Catch all 404 errors, and forward them to the error handler
  */
