@@ -64,7 +64,7 @@ const HoverInfoComponent = () => {
 
     function handleMouseOver(e: MouseEvent) {
         let canvas;
-        let context
+        let context;
         let hasDetectedColor = false;
         for (let num = 0; num < 6; num++) {
             switch (num) {
