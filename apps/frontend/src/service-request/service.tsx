@@ -57,7 +57,7 @@ Details: ${requestDescription}
             setRequestDescription("")
             setIsPopupOpen(false);
         } else {
-            setRequestStatus("Error: Please fill all fields");
+            setRequestStatus("Error: Please specify a device");
             setShowRequestFeedback(true);
         }
         setIsPopupOpen(false);
@@ -91,7 +91,11 @@ Details: ${requestDescription}
                     <button
                         type="button"
                         onClick={handleRequestSubmit}
-                        className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded"
+                        className={`mt-4 px-4 py-2 rounded ${
+                            requestDescription.trim()
+                                ? 'bg-blue-500 hover:bg-blue-600 text-white cursor-pointer'
+                                : 'bg-gray-300 text-gray-400 cursor-not-allowed opacity-50'
+                        }`}
                         disabled={!requestDescription.trim()}
                     >
                         Submit Request
