@@ -8,7 +8,7 @@ export function Display() {
     return (
         <div>
             <h1>Service Request Submitted</h1>
-            <p><strong>Description:</strong> {description || 'No description provided'}</p>
+            <p><strong>You requested a :</strong> {description || 'No description provided'}</p>
         </div>
     );
 }
