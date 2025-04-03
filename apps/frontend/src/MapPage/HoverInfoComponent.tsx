@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, MouseEvent, MouseEventHandler} from 'react';
 import {useState} from 'react';
-import '../routes/MapPage/MapPageStyles.css';
+import './MapPageStyles.css';
 import {Simulate} from "react-dom/test-utils";
 import mouseOver = Simulate.mouseOver;
 
@@ -232,9 +232,9 @@ const HoverInfoComponent = () => {
 
     return (
         <div>
-            <div className="bg-gray-100 rounded-lg shadow-md p-6 w-300">
+            <div className="bg-gray-100 rounded-lg shadow-md p-6 hoverInfoBar">
                 <div className="text-2xl font-bold mb-4 text-center py-2 rounded">
-                    {!isHovering || isOverTransparent ? `No information to display` : `Area Information: ${hoverInfo}`}
+                    {!isHovering || isOverTransparent ? `Hover over a map region to learn more` : `Area Information: ${hoverInfo}`}
                 </div>
             </div>
             <div className="mapContainer">

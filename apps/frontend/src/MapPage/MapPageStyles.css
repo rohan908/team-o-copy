@@ -1,12 +1,27 @@
 .mapContainer {
     position: relative;
-    min-width: 1429px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.mainMapImage {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.hoverInfoBar {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
 }
 
 .imagingSuite{
     position: absolute;
     bottom: 43%;
     left: 60.5%;
+    width: 22.5%;
 }
 
 .pharmacy{
