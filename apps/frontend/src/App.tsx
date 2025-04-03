@@ -1,17 +1,11 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import MapPage from './routes/MapPage/MapPage.tsx';
+import {Routing} from "./home-page/routing.tsx";
 
 function App() {
-    const router = createBrowserRouter([
-        {
-            path: '/',
-            errorElement: <div />,
-            element: <MapPage />,
-        },
-    ]);
 
-    return <RouterProvider router={router} />;
+    return (
+        <Routing />
+    );
 }
 
 export default App;
