@@ -1,0 +1,61 @@
+.mapContainer {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 1rem
+}
+
+.mainMapImage {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.hoverInfoBar {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 3rem;
+}
+
+.imagingSuite{
+    position: absolute;
+    bottom: 43%;
+    left: 60.5%;
+    width: 22.5%;
+}
+
+.pharmacy{
+    position: absolute;
+    bottom: 43.4%;
+    left: 66.35%;
+    width: 2.2%;
+}
+
+.phlebotomy{
+    position: absolute;
+    bottom: 37.6%;
+    left: 68.68%;
+    width: 3.8%;
+}
+
+.specClinic{
+    position: absolute;
+    bottom: 24.3%;
+    left: 73%;
+    width: 22%;
+}
+
+.urgentCare{
+    position: absolute;
+    left: 66.3%;
+    bottom: 37.65%;
+    width: 12.6%;
+}
+
+.twentytwo{
+    position: absolute;
+    left: 5%;
+    bottom: 1.9%;
+    width: 36.8%;
+}

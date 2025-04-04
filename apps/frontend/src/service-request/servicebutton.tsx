@@ -1,6 +1,5 @@
 import React from 'react';
 
-// An interface that defines the props the component accepts
 interface ButtonProps {
     onClick: () => void;
     children: React.ReactNode;
@@ -8,7 +7,6 @@ interface ButtonProps {
     disabled: boolean;
 }
 
-// ExampleButton component definition
 const ExampleButton = ({ onClick, children, variant, disabled }: ButtonProps) => {
     return (
         <button
@@ -21,5 +19,4 @@ const ExampleButton = ({ onClick, children, variant, disabled }: ButtonProps) =>
     );
 };
 
-// Export the component so it can be used in other files
 export default ExampleButton;
