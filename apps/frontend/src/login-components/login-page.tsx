@@ -1,4 +1,5 @@
 import React,{useState} from 'react';
+import { useNavigate} from 'react-router-dom';
 import LogInPageButton from './components/login-page-button.tsx';
 import LogInPopUp from "./components/login-pop-up.tsx";
 interface LoginPageProps {
@@ -6,6 +7,7 @@ interface LoginPageProps {
     setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
+    const navigate = useNavigate();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -42,6 +44,7 @@ function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
         localStorage.removeItem("username");
         localStorage.removeItem("password");
         setIsLoggedIn(false);
+        navigate("/");
     };
 
     return (
