@@ -25,7 +25,7 @@ export function NavBar() {
     }, []);
         useEffect(() => {
             if (!isLoggedIn) {
-                navigate("/");
+                //navigate("/");
             }
         }, [isLoggedIn]);
         return (
