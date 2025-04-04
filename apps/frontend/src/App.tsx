@@ -1,17 +1,11 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import ExamplePage from './routes/ExamplePage.tsx';
+import {Routing} from "./home-page/routing.tsx";
 
 function App() {
-    const router = createBrowserRouter([
-        {
-            path: '/',
-            errorElement: <div />,
-            element: <ExamplePage />,
-        },
-    ]);
 
-    return <RouterProvider router={router} />;
+    return (
+        <Routing />
+    );
 }
 
 export default App;
