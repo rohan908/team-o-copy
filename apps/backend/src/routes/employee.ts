@@ -5,12 +5,10 @@ import PrismaClient from '../bin/prisma-client';
 const router: Router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-    const deleteEmployees = await PrismaClient.employee.deleteMany({});
-
     const createEmployees = await PrismaClient.employee.createMany({
         data: [
             {
-                employeeid: 1,
+                employeeID: 1,
                 name: 'bob',
                 email: 'bob@gmail.com',
                 address: '80 pine rd',
@@ -18,7 +16,7 @@ router.get('/', async (req: Request, res: Response) => {
                 position: 'recruiter',
             },
             {
-                employeeid: 2,
+                employeeID: 2,
                 name: 'dave',
                 email: 'dave@gmail.com',
                 address: '81 pine rd',
@@ -26,7 +24,7 @@ router.get('/', async (req: Request, res: Response) => {
                 position: 'recruiter',
             },
             {
-                employeeid: 3,
+                employeeID: 3,
                 name: 'john',
                 email: 'john@gmail.com',
                 address: '82 pine rd',
@@ -34,7 +32,7 @@ router.get('/', async (req: Request, res: Response) => {
                 position: 'software engineer',
             },
             {
-                employeeid: 4,
+                employeeID: 4,
                 name: 'jack',
                 email: 'jack@gmail.com',
                 address: '83 pine rd',
@@ -42,7 +40,7 @@ router.get('/', async (req: Request, res: Response) => {
                 position: 'manager',
             },
             {
-                employeeid: 5,
+                employeeID: 5,
                 name: 'julia',
                 email: 'julia@gmail.com',
                 address: '84 pine rd',
@@ -50,6 +48,7 @@ router.get('/', async (req: Request, res: Response) => {
                 position: 'admin',
             },
         ],
+        skipDuplicates: true,
     });
 
     const allEmployees = await PrismaClient.employee.findMany({});
