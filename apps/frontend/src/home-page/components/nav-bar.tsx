@@ -41,13 +41,16 @@ export function NavBar() {
                         <Link to="/map-page">Map</Link>
                     </li>
                     <li className={"nav-element"}>
-                        <LoginPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+                        <Link to="/directory">Directory</Link>
                     </li>
                     {isLoggedIn && (
                         <li className={"nav-element"}>
                             <Service />
                         </li>
                     )}
+                    <li className={"nav-element"}>
+                        <LoginPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+                    </li>
                 </ul>
                 <hr />
             </nav>
