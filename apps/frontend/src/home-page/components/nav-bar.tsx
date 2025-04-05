@@ -1,10 +1,10 @@
-import { Outlet, Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Outlet, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import "../home-style.css"
-import { useState, useEffect } from "react";
-import LoginPage from "../../login-components/login-page.tsx";
-import Service from "../../service-request/service.tsx";
+import { useState, useEffect } from 'react';
+import LoginPage from '../../login-components/login-page.tsx';
+import Service from '../../service-request/service.tsx';
 
 export function NavBar() {
 
