@@ -116,7 +116,7 @@ const theme = createTheme({
     primaryShade: { light: 6, dark: 9 },
     defaultRadius: 30,
 
-    variantColorResolver: myvariantColorResolver(theme)
+    // variantColorResolver: myvariantColorResolver(theme)
 });
 
 
