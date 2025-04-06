@@ -14,38 +14,29 @@ datasource db {
 // haven't ironed out what is necessary for an employee or request, for now
 // there are NO null values allowed in any attribute
 
-// creates the Employee table (strong entity)
-model Employee {
-  employeeID  Int     @id @default(autoincrement()) // primary key employeeid
-  name        String
-  address     String
-  phoneNumber Int // not unique since employees could share a phone
-  email       String  @unique // employees can't share emails
-  position    String
-  makes       assigned[] // connects to the makes relation table
-}
-
-// creates the ServiceRequest table (strong entity)
-model ServiceRequest {
+// creates the langauageServiceRequest table (strong entity)
+model langaugeServiceRequest {
   requestID     Int      @id @default(autoincrement())
   room          String
   createdAt     DateTime @default(now())
   date          String
   time          DateTime
   medicalDevice String
-  makes         assigned[] // connects to the makes relation table
 }
 
-// creates makes table (relation)
-// this is necessary because they have a many-to-many relationship
-model assigned {
-  employeeID Int // foreign key
-  requestID  Int // foreign key
-
-  employee       Employee       @relation(fields: [employeeID], references: [employeeID])
-  servicerequest ServiceRequest @relation(fields: [requestID], references: [requestID])
-
-  @@id([employeeID, requestID]) // primary key (composite key of two foreign keys)
+// creates the directory table (strong entity)
+model directory {
+  dName         String    @id
+  description   String
+  absoluteCoors Int[]
 }
 
+/*
+  creates the graph table (strong entity)
+  bitMap requires a Json object to store a 2D array
+ */
+model graph {
+  gName         String    @id
+  bitMap        Json
+}
 
