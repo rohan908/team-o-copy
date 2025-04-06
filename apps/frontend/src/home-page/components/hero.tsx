@@ -18,8 +18,6 @@ const HeroSection = () => {
     >
 
       <WaveAnimation id="waveCanvas" />
-
-
       <LogInBox />
     </Box>
   );
