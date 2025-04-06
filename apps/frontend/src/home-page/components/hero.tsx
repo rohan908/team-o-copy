@@ -15,10 +15,10 @@ const HeroSection = () => {
         overflow: 'hidden'
       }}
     >
-      {/* Wave animation canvas as the background */}
+
       <WaveAnimation id="waveCanvas" />
 
-      {/* Hero content */}
+
       <Container
         style={{
           position: 'relative',
@@ -35,8 +35,8 @@ const HeroSection = () => {
       >
         <Box
           style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            padding: '2rem',
+            backgroundColor: theme.colors.blueBase?.[4], opacity: 0.9,
+            padding: '3rem',
             borderRadius: theme.radius.lg,
             backdropFilter: 'blur(5px)',
             boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2)'
@@ -65,7 +65,7 @@ const HeroSection = () => {
               color: theme.colors.terquAccet?.[1] || 'white'
             }}
           >
-            Your hero description goes here.
+            Login to access the system
           </Text>
           {/* Add additional content (buttons, links, etc.) as needed */}
         </Box>

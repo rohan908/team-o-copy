@@ -22,7 +22,7 @@ const COLORS = {
     '#2fbcc7',
     '#00a3ad'
   ],
-  BACKGROUND_COLOR: '#FFFFFF'
+  BACKGROUND_COLOR: '#ebfeff'
 };
 
 // Wave animation configuration
@@ -34,7 +34,7 @@ const WAVE_CONFIG = {
   DOT_DENSITY: 0.003,
   DOT_SIZE: 0.5,
   CONTROL_POINTS: 40,      // Number of control points for the shared spline
-  PATH_AMPLITUDE: 0.4,    // Amplitude of the main path
+  PATH_AMPLITUDE: 0.6,    // Amplitude of the main path
   OSCILLATION_RANGE: 0.05  // How far waves can deviate from the main path
 };
 
@@ -295,7 +295,7 @@ function drawBackgroundDots(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasEle
 function generateSharedPath(width, height, time) {
   const points = [];
   const numPoints = WAVE_CONFIG.CONTROL_POINTS;
-  const baseY = height * 0.5; // Center of the screen
+  const baseY = height * 0.25; // top quarter of the screen
   const amplitude = height * WAVE_CONFIG.PATH_AMPLITUDE;
   
   // Generate path control points - static path that doesn't change with time
@@ -308,8 +308,8 @@ function generateSharedPath(width, height, time) {
     // Use static sine waves to create a natural flowing shape
     // No timeOffset is applied here so the path stays fixed
     const y = baseY + 
-              Math.sin(pathProgress * Math.PI * 2) * amplitude * 0.7 +
-              Math.sin(pathProgress * Math.PI * 3 + Math.PI * 0.7) * amplitude * 0.3;
+              Math.sin(pathProgress * Math.PI * 1.2) * amplitude * .9 +
+              Math.sin(pathProgress * Math.PI * 1.2 + Math.PI * .9) * amplitude * 0.5;
     
     points.push({ x, y });
   }
@@ -368,7 +368,7 @@ function drawWaveAlongPath(
       Math.sin(x / width * waveFactor * 4 + timeOffset * 0.7) * oscillationRange * 0.1;
     
     // Combine path position with oscillation
-    const y = pathY + oscillation + (waveIndex * 5);
+    const y = pathY + oscillation + (waveIndex * 15);
     
     wavePoints.push({ x, y });
   }
