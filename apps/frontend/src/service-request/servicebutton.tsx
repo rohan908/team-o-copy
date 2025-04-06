@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button} from "@mantine/core";
 
 interface ButtonProps {
     onClick: () => void;
@@ -9,13 +10,16 @@ interface ButtonProps {
 
 const ExampleButton = ({ onClick, children, variant, disabled }: ButtonProps) => {
     return (
-        <button
-            className={`flex-1 ${variant == 'primary' ? ' bg-blue-600 hover:bg-blue-400 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'} font-semibold py-2 px-4 rounded border border-gray-400`}
+        <Button
+            variant="outline"
+            color="blueBase.9"
+            className="navButton"
+
             onClick={onClick}
             disabled={disabled}
         >
             {children}
-        </button>
+        </Button>
     );
 };
 
