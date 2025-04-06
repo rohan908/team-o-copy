@@ -264,30 +264,6 @@ function drawBackgroundGradient(ctx: CanvasRenderingContext2D, canvas: HTMLCanva
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-/**
- * Draw tiny dots for texture effect
- */
-/*
-function drawBackgroundDots(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
-  const rect = canvas.getBoundingClientRect();
-  const width = rect.width;
-  const height = rect.height;
-  
-  const dotCount = Math.floor(width * height * WAVE_CONFIG.DOT_DENSITY);
-  
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-  
-  for (let i = 0; i < dotCount; i++) {
-    const x = Math.random() * width;
-    const y = Math.random() * height;
-    const size = Math.random() * WAVE_CONFIG.DOT_SIZE;
-    
-    ctx.beginPath();
-    ctx.arc(x, y, size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-*/
 
 /**
  * Function to generate the shared bezier path
@@ -408,7 +384,7 @@ function drawWaveAlongPath(
   ctx.fill();
   
   /*
-  // Now draw the white crest along the top of the wave
+  // Draws a white crest along the top of the wave but SUPER COMPUTATIONALLY EXPENSIVE. Commented out :(
   ctx.beginPath();
   ctx.moveTo(wavePoints[0].x, wavePoints[0].y);
   
@@ -438,6 +414,8 @@ function drawWaveAlongPath(
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
   ctx.stroke();
   */
+
+
   // Debug rendering
   /*
   ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
