@@ -1,7 +1,17 @@
 import React from 'react';
 import {Routing} from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
-import { createTheme, MantineProvider,MantineColorsTuple, rem } from '@mantine/core';
+import { createTheme,
+    MantineProvider,
+    MantineColorsTuple,
+    rem,
+    VariantColorsResolver,
+    Group,
+    defaultVariantColorsResolver,
+    parseThemeColor,
+    rgba,
+    darken,
+} from '@mantine/core';
 
 const blueBase: MantineColorsTuple = [
     '#ebf2ff',
@@ -60,8 +70,50 @@ const theme = createTheme({
         blueBase,
         terquAccet,
         greys,
-    }
+    },
+    primaryShade: { light: 6, dark: 9 },
+    defaultRadius: 30,
 });
+
+const variantColorResolver: VariantColorsResolver = (input) => {
+    const defaultResolvedColors = defaultVariantColorsResolver(input);
+    const parsedColor = parseThemeColor({
+        color: input.color || input.theme.primaryColor,
+        theme: input.theme,
+    });
+
+    // Override some properties for variant
+    if (parsedColor.color === 'blueBase.9' && input.variant === 'outline') {
+        return {
+            ...defaultResolvedColors,
+            // color: 'var(--mantine-color-black)',
+            button-hover-color: "blueBase.9",
+        };
+    }
+
+    // Completely override variant
+    if (input.variant === 'light') {
+        return {
+            background: rgba(parsedColor.value, 0.1),
+            hover: rgba(parsedColor.value, 0.15),
+            border: `1px solid ${parsedColor.value}`,
+            color: darken(parsedColor.value, 0.1),
+        };
+    }
+
+    // Add new variants support
+    if (input.variant === 'danger') {
+        return {
+            background: 'var(--mantine-color-red-9)',
+            hover: 'var(--mantine-color-red-8)',
+            color: 'var(--mantine-color-white)',
+            border: 'none',
+        };
+    }
+
+    return defaultResolvedColors;
+};
+
 function App() {
 
     return (

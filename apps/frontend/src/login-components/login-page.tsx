@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import LogInPageButton from './components/login-page-button.tsx';
 import LogInPopUp from "./components/login-pop-up.tsx";
+
 interface LoginPageProps {
     isLoggedIn: boolean;
     setIsLoggedIn: (isLoggedIn: boolean) => void;
@@ -55,6 +56,8 @@ function LoginPage({isLoggedIn, setIsLoggedIn}: LoginPageProps) {
                     Log Out
                 </LogInPageButton>
             )}
+
+
             <LogInPopUp
                 isOpen={showLoginFeedback}
                 onClose={() => {

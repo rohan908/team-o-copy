@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import "./login-stylesheet.css"
+import {Button} from "@mantine/core";
 
 // An interface that defines the props the component accepts
 interface ButtonProps {
@@ -30,13 +31,13 @@ const LogInPageButton = ({ onClick, children, variant, disabled, popupContent, p
 
 
     return (
-        <button
+        <Button
             className={`flex-1 ${variant == 'primary' ? ' bg-blue-600 hover:bg-blue-400 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'} font-semibold py-2 px-4 rounded border border-gray-400`}
             onClick={onClick}
             disabled={disabled}
         >
             {children}
-        </button>
+        </Button>
     );
 };
 
