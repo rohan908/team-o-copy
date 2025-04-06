@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import healthcheckRouter from './routes/healthcheck';
 import directoryRouter from './routes/directory';
-import languageServiceRequestRouter from "./routes/languageServiceRequest.ts";
+import languageServiceRequestRouter from './routes/languageServiceRequest.ts';
 import { API_ROUTES } from 'common/src/constants';
 
 const app: Express = express(); // Setup the backend

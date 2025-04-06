@@ -26,9 +26,12 @@ model langaugeServiceRequest {
 
 // creates the directory table (strong entity)
 model directory {
-  dName         String    @id
+  dName         String
+  building      String
   description   String
-  absoluteCoors Int[]
+  absoluteCoords Int[]
+
+  @@id([dName, building])
 }
 
 /*

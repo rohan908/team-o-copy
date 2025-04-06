@@ -3,7 +3,7 @@ import PrismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
 
-router.post('/',async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
     // For inputting a request form, adds entry
 });
 

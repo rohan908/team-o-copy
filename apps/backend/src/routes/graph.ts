@@ -9,12 +9,8 @@ const router: Router = express.Router();
     fetch entries, very slow
  */
 
-router.post('/',async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {});
 
-});
-
-router.get('/', async (req: Request, res: Response) => {
-
-});
+router.get('/', async (req: Request, res: Response) => {});
 
 export default router;
