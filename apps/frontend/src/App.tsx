@@ -53,6 +53,47 @@ const greys: MantineColorsTuple = [
     '#4a5167'
 ];
 
+const myvariantColorResolver: VariantColorsResolver = (input) => {
+    const defaultResolvedColors = defaultVariantColorsResolver(input);
+    const parsedColor = parseThemeColor({
+        color: input.color || input.theme.primaryColor,
+        theme: input.theme,
+    });
+
+    // Override some properties for variant
+    if (parsedColor.isThemeColor && parsedColor.color === 'lime' && input.variant === 'filled') {
+        return {
+            ...defaultResolvedColors,
+            color: 'var(--mantine-color-black)',
+            hoverColor: 'var(--mantine-color-black)',
+        };
+    }
+
+    // Completely override variant
+    if (input.variant === 'navButton') {
+        return {
+            // variant="outline",
+            radius: 300,
+            background: 'var(--mantine-color-blueBase-9',
+            hover: 'var(--mantine-color-white)',
+            border: `1px solid ${parsedColor.value}`,
+            color: 'var(--mantine-color-white)',
+        };
+    }
+
+    // Add new variants support
+    if (input.variant === 'danger') {
+        return {
+            background: 'var(--mantine-color-red-9)',
+            hover: 'var(--mantine-color-white)',
+            color: 'var(--mantine-color-red-9)',
+            border: 'none',
+        };
+    }
+
+    return defaultResolvedColors;
+};
+
 const theme = createTheme({
     /** Your theme override here */
     fontSizes: {
@@ -75,13 +116,14 @@ const theme = createTheme({
     primaryShade: { light: 6, dark: 9 },
     defaultRadius: 30,
 
+    variantColorResolver: myvariantColorResolver(theme)
 });
 
 
 function App() {
 
     return (
-        <MantineProvider theme={theme}>
+        <MantineProvider theme={ theme }>
             <Routing />
         </MantineProvider>
     );

@@ -86,7 +86,9 @@ export function NavBar() {
                        // ik this is a shit implementaion, make modal https://mantine.dev/core/modal/
                             <Service />
                     )}
-
+                    <Button variant="navButton">
+                        peepee poopoo
+                    </Button>
 
                 </Flex>
             </nav>
