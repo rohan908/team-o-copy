@@ -213,7 +213,7 @@ export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationPro
 }
 
 /**
- * Resize canvas to match its CSS size × device pixel ratio (chat wrote this)
+ * resize canvas to match its CSS size × device pixel ratio 
  */
 function resizeCanvas(canvas: HTMLCanvasElement): void {
   const dpr = window.devicePixelRatio || 1;
@@ -229,7 +229,7 @@ function resizeCanvas(canvas: HTMLCanvasElement): void {
   canvas.width = rect.width * dpr;
   canvas.height = rect.height * dpr;
   
-  // Scale context for retina/high DPI displays
+  // scale context for higher dpr displays
   const ctx = canvas.getContext('2d');
   if (ctx) {
     console.log("Scaling context by DPR:", dpr);
