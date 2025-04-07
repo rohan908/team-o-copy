@@ -11,13 +11,15 @@ import {
     Divider,
 } from '@mantine/core';
 import { useLogin } from './LoginContext';
-
+import { useNavigate } from 'react-router-dom';
 const LogInBox = () => {
     const theme = useMantineTheme();
     const { isLoggedIn, login, logout } = useLogin();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState<'success' | 'error' | ''>('');
+    const navigate = useNavigate();
+
 
     const handleLogin = () => {
         const success = login(username, password);
@@ -52,7 +54,9 @@ const LogInBox = () => {
                 <Text mb="md" ta="left">Looking for directions?</Text>
 
                 <Flex gap="md" wrap="wrap" mb={{ base: 'xs' }}>
-                    <Button variant="outline" color="dark" style={{
+                    <Button variant="outline" color="dark"
+                            onClick={()=>navigate('/map-page')}
+                            style={{
                         borderRadius: '20px',
                         transition: 'all 0.3s ease',
                         fontSize: 'clamp(12px, 3vw, 18px)',
