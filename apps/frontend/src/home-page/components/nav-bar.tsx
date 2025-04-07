@@ -1,9 +1,7 @@
 import { Outlet, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
 import "../home-style.css"
 import { useState, useEffect } from 'react';
-import LoginPage from '../../login-components/login-page.tsx';
 import Service from '../../service-request/service.tsx';
 
 export function NavBar() {
@@ -14,14 +12,12 @@ export function NavBar() {
         const checkLoginStatus = () => {
             const username = localStorage.getItem("username");
             const password = localStorage.getItem("password");
-            setIsLoggedIn(!!username && !!password);
+            const isValid = username === "admin" && password === "admin";
+            setIsLoggedIn(isValid);
         };
         checkLoginStatus();
         window.addEventListener('storage', checkLoginStatus);
-
-        return () => {
-            window.removeEventListener('storage', checkLoginStatus);
-        };
+        return () => window.removeEventListener('storage', checkLoginStatus);
     }, []);
     useEffect(() => {
         if (!isLoggedIn) {
@@ -48,9 +44,6 @@ export function NavBar() {
                             <Service />
                         </li>
                     )}
-                    <li className={"nav-element"}>
-                        <LoginPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
-                    </li>
                 </ul>
                 <hr />
             </nav>
