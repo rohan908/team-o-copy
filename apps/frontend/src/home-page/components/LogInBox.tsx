@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     TextInput,
@@ -10,52 +10,29 @@ import {
     Text,
     Divider,
 } from '@mantine/core';
+import { useLogin } from './LoginContext';
 
 const LogInBox = () => {
     const theme = useMantineTheme();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isLoggedIn, login, logout } = useLogin();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState<'success' | 'error' | ''>('');
 
-    // Check local storage on mount
-    useEffect(() => {
-        const storedUser = localStorage.getItem('username');
-        const storedPass = localStorage.getItem('password');
-        if (storedUser === 'admin' && storedPass === 'admin') {
-            setIsLoggedIn(true);
-        }
-    }, []);
-
     const handleLogin = () => {
-        const valid = username === 'admin' && password === 'admin';
-        if (valid) {
-            localStorage.setItem('username', username);
-            localStorage.setItem('password', password);
-            setIsLoggedIn(true);
-            setLoginStatus('success');
-        } else {
-            setLoginStatus('error');
-        }
+        const success = login(username, password);
+        setLoginStatus(success ? 'success' : 'error');
         setUsername('');
         setPassword('');
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('username');
-        localStorage.removeItem('password');
-        setIsLoggedIn(false);
+        logout();
         setLoginStatus('');
     };
 
     return (
-        <Flex
-            w="100%"
-            h="100vh"
-            justify="center"
-            align="center"
-            pl={{ md: '20%', sm: '0%' }}
-        >
+        <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
             <Box
                 bg="white"
                 p={{ base: 'xl', sm: '2rem', md: '3rem' }}
@@ -68,31 +45,18 @@ const LogInBox = () => {
                     backdropFilter: 'blur(5px)',
                 }}
             >
-                <Title
-                    order={1}
-                    mb={{ base: 'md', sm: 'lg', md: 'xl' }}
-                    c="black"
-                    ta="left"
-                    fw={700}
-                    fz={{ sm: 'xl', md: 'xxxl' }}
-                >
+                <Title order={1} mb={{ base: 'md', sm: 'lg', md: 'xl' }} c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
                     Let's get started
                 </Title>
 
-                <Text mb="md" ta="left">
-                    Looking for directions?
-                </Text>
+                <Text mb="md" ta="left">Looking for directions?</Text>
 
                 <Flex gap="md" wrap="wrap" mb={{ base: 'xs' }}>
-                    <Button
-                        variant="outline"
-                        color="dark"
-                        style={{
-                            borderRadius: '20px',
-                            transition: 'all 0.3s ease',
-                            fontSize: 'clamp(12px, 3vw, 18px)',
-                        }}
-                    >
+                    <Button variant="outline" color="dark" style={{
+                        borderRadius: '20px',
+                        transition: 'all 0.3s ease',
+                        fontSize: 'clamp(12px, 3vw, 18px)',
+                    }}>
                         Find Your Way Now
                     </Button>
                     <Text mb="0" ta="left" fz={{ base: 'xs' }}>
@@ -128,31 +92,20 @@ const LogInBox = () => {
                                 bg="black"
                                 onClick={handleLogin}
                                 disabled={!username || !password}
-                                style={{
-                                    borderRadius: '50px',
-                                    transition: 'all 0.3s ease',
-                                }}
+                                style={{ borderRadius: '50px', transition: 'all 0.3s ease' }}
                             >
                                 Login
                             </Button>
                         </Group>
                         {loginStatus && (
-                            <Text
-                                mt="md"
-                                c={loginStatus === 'success' ? 'green' : 'red'}
-                                fw={600}
-                            >
-                                {loginStatus === 'success'
-                                    ? 'Welcome back!'
-                                    : 'Incorrect username or password.'}
+                            <Text mt="md" c={loginStatus === 'success' ? 'green' : 'red'} fw={600}>
+                                {loginStatus === 'success' ? 'Welcome back!' : 'Incorrect username or password.'}
                             </Text>
                         )}
                     </>
                 ) : (
                     <Group justify="space-between" mt="xl">
-                        <Text c="green" fw={600}>
-                            Logged in as admin
-                        </Text>
+                        <Text c="green" fw={600}>Logged in as admin</Text>
                         <Button
                             variant="light"
                             color="red"
