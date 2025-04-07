@@ -48,6 +48,7 @@ export function NavBar() {
                     <li className={'nav-element'}>
                         <Link to="/directory">Directory</Link>
                     </li>
+                    {/* Check login status */}
                     {isLoggedIn && (
                         <>
                             <li className={"nav-element"}>
