@@ -14,13 +14,15 @@ interface RoutingProps {
 const Routing: React.FC<RoutingProps> = (props) => {
     const map = useMap();
     const routingControlRef = useRef<L.Routing.Control | null>(null);
-    const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     useEffect(() => {
         if (!map) return;
         routingControlRef.current = L.Routing.control({
+            //Waypoints are only set here, so to update them again, the object must be fully replaced.
+            //This is done by updating its key prop in MapAPIComponent.tsx
             waypoints: [props.waypointOne, props.waypointTwo],
             routeWhileDragging: true,
+            //Adds waypoints indicating start and end
             addWaypoints: true,
             lineOptions: {
                 styles: [{ color: 'blue', weight: 6 }],
@@ -29,39 +31,13 @@ const Routing: React.FC<RoutingProps> = (props) => {
             },
         }).addTo(map);
 
-        function updateStartCoordinates(waypoint: L.LatLng){
-            if (!routingControlRef.current) return;
-            const newLat = waypoint.lat
-            const newLng = waypoint.lng
-            routingControlRef.current.setWaypoints([
-                L.latLng(newLat, newLng),
-                routingControlRef.current.getWaypoints()[1].latLng,
-            ]);
-        }
-
-        function updateEndCoordinates(waypoint: L.LatLng){
-            if (!routingControlRef.current) return;
-            const newLat = waypoint.lat
-            const newLng = waypoint.lng
-            routingControlRef.current.setWaypoints([
-                routingControlRef.current.getWaypoints()[0].latLng,
-                L.latLng(newLat, newLng),
-            ]);
-        }
-
-        setInterval(function () {
-            forceUpdate();
-        }, 1000);
-
         return () => {
+            //Removes the current routing control ref after it's done using it
             if (routingControlRef.current) {
                 map.removeControl(routingControlRef.current);
             }
         };
     }, [map]);
-
-
-
     return null;
 };
 

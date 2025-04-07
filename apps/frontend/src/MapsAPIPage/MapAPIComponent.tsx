@@ -4,7 +4,8 @@ import {Simulate} from "react-dom/test-utils";
 import mouseOver = Simulate.mouseOver;
 import "./LeafletStyles.css";
 import { Container } from '@mantine/core';
-import {LayersControl, MapContainer, Marker, Popup, TileLayer, useMapEvent, useMapEvents,} from 'react-leaflet';
+import {LayersControl, MapContainer, Marker, Popup, TileLayer, useMapEvent, useMapEvents, Tooltip} from 'react-leaflet';
+import { LoadingOverlay } from '@mantine/core';
 import * as L from 'leaflet';
 import 'leaflet';
 import 'leaflet-routing-machine';
@@ -13,51 +14,49 @@ import Routing from './RoutingLogic.tsx'
 import keyDown = Simulate.keyDown;
 
 const MapAPIComponent = () => {
-    const [currentLocationToggle, setCurrentLocationToggle] = useState(false);
-    const [wayOne, setWayOne] = useState(new L.LatLng(0, 0));
-    const [wayTwo, setWayTwo] = useState(new L.LatLng(0, 0));
+    //Default routing coordinates set to -1000, -1000 so they aren't in the way.
+    //I can't set them to undefined without errors, so this is the next best thing.
+    const [wayOne, setWayOne] = useState(new L.LatLng(-1000, -1000));
+    const [wayTwo, setWayTwo] = useState(new L.LatLng(-1000, -1000));
     const [keyCount, setKeyCount] = useState(0);
+    const [loading, setLoading] = useState(false);
 
 
     function LocationMarker() {
-        const [position, setPosition] = useState(new L.LatLng(40, -70));
         const map = useMapEvents({
-            keypress(e){
-                if (e.originalEvent.key == "e"){
+            overlayadd(e){
+                //e.name corresponds to the name of the clicked overlay option. Very convenient once I figured it out.
+                if (e.name == "Click Here to set Current Location"){
+                    setLoading(true);
                     map.locate();
                 }
-                if (e.originalEvent.key == "q"){
+                if (e.name == "Click Here to set destination to 20 Patriot Place"){
+                    setLoading(true);
+                    //Sets destination to coordinates of 20 Patriot Place.
+                    //Calling setKeyCount is necessary to replace the routing component with a new one.
+                    //If it isn't fully replaced, it won't update its coordinates.
                     setWayTwo(new L.LatLng(42.0959358215332, -71.26322174072266));
                     setKeyCount(count => count + 1);
-                }
-                if (e.originalEvent.key == "w"){
-                    setWayTwo(new L.LatLng(42.0959358215332, -71.26322174072266));
-                    setKeyCount(count => count + 1);
+                    setLoading(false);
                 }
             },
+            //Called after map.locate() finds your location.
             locationfound(e) {
                 setWayOne(e.latlng)
-                setPosition(e.latlng)
                 setKeyCount(count => count + 1);
-                if (currentLocationToggle) {
-                   // map.flyTo(e.latlng, map.getMaxZoom())
-                }
+                setLoading(false);
             },
         })
-        return position === null ? null : (
-            <Marker position={position}>
-                <Popup>You are here</Popup>
-            </Marker>
-        )
+        //Blank return so it doesn't yell at me
+        return null;
     }
 
 
     function SetViewOnClick({ }) {
-        if (!currentLocationToggle) {
-            const map = useMapEvent('click', (e) => {
-                map.setView(e.latlng, map.getZoom())
-            })
-        }
+        //Smoothly transitions the map when you click instead of a snapping movement
+        const map = useMapEvent('click', (e) => {
+            map.setView(e.latlng, map.getZoom())
+        })
         return null
     }
 
@@ -74,22 +73,23 @@ const MapAPIComponent = () => {
                 integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
                 crossOrigin=""
             ></script>
-            <p>
-                Click the map and press E to set your starting location to your current location.
-                (It may take a few moments)
-                <br />
-                Click the map and press W to set 20 Patriot Place to your destination. (It may take
-                a few moments)
-                <br />
-                Click the map and press Q to set 22 Patriot Place to your destination. (It may take
-                a few moments)
-            </p>
             <MapContainer
                 id="map-container"
                 center={[42.0959358215332, -71.26322174072266]}
                 zoom={8}
                 scrollWheelZoom={false}
             >
+                <LayersControl>
+                    <LayersControl.Overlay name="Click Here to set Current Location">
+                        <Marker position={[-1000,-1000]} opacity={0}>
+                        </Marker>
+                    </LayersControl.Overlay>
+                    <LayersControl.Overlay name="Click Here to set destination to 20 Patriot Place">
+                        <Marker position={[-1000,-1000]} opacity={0}>
+                        </Marker>
+                    </LayersControl.Overlay>
+                </LayersControl>
+                <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
