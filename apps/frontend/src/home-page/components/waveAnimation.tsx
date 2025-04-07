@@ -130,7 +130,7 @@ export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationPro
             
             // only draw the image once it's loaded- keep image centered in left 1/3 of screen for rule of thirds
             if (heroimage.complete) {
-                ctx.drawImage(heroimage, ((canvas.width/6) - ((heroimage.width/3 * 2)/2)), -50, heroimage.width/3 * 2, heroimage.height/3 * 2);
+                ctx.drawImage(heroimage, 0, -50, heroimage.width/3 * 2, heroimage.height/3 * 2);
             } else {
                 // first time load - add event listener
                 heroimage.onload = () => {
