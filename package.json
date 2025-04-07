@@ -32,7 +32,6 @@
     "vitest": "^3.0.9"
   },
   "dependencies": {
-    "@tabler/icons-react": "^3.31.0",
     "common": "workspace:*",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^7.4.4",

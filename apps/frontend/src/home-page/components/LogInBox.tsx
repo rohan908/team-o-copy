@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, TextInput, Button, Group, useMantineTheme, Title, Flex, Text} from '@mantine/core';
-//import {IconArrowRight } from '@tabler/icons-react';
+import {IconArrowRight } from '@tabler/icons-react';
 
 
 
@@ -13,7 +13,7 @@ const LogInBox = () => {
           justify="center"
           align="center"
           pl={{md: '20%', sm: '0%'}}
-          order = {1}
+          // order = {1}
         >
              {/*background box*/}
         <Box
@@ -61,8 +61,6 @@ const LogInBox = () => {
             Login here for Staff:
             <TextInput
               placeholder="Username"
-              fz={{base: "xs", sm: "sm", md: "md"}}
-              size={{base: "sm", md: "md"}}
               mt="md"
               mb="md"
             />
@@ -70,9 +68,6 @@ const LogInBox = () => {
             <TextInput
               placeholder="Password"
               type="password"
-              fz={{base: "xs", sm: "xs", md: "md"}}
-              size={{base: "sm", xs: "xs", md: "md"}}
-              mb="lg"
             />
             
           </Box>
