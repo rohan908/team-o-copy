@@ -14,7 +14,8 @@ export function Routing() {
                 <Routes>
                     <Route path="/" element={<NavBar />}>
                         <Route index element={<HomePage/>} />
-                        <Route path="map-page" element={<MapAPIPage/>} />
+                        <Route path="map-page" element={<MapPage/>} />
+                        <Route path="map-API" element={<MapAPIPage/>} />
                         <Route path="/submission" element={<Display />} />
                         <Route path="directory" element={<Directory/>}/>
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />

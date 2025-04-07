@@ -3856,7 +3856,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.2.0"
     eslint-plugin-react-refresh: "npm:^0.4.19"
     leaflet: "npm:1.9.4"
-    leaflet-routing-machine: "npm:^3.2.12"
+    leaflet-routing-machine: "npm:3.2.12"
     localforage: "npm:^1.10.0"
     match-sorter: "npm:^6.3.1"
     postcss: "npm:^8.5.3"
@@ -4535,7 +4535,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet-routing-machine@npm:^3.2.12":
+"leaflet-routing-machine@npm:3.2.12":
   version: 3.2.12
   resolution: "leaflet-routing-machine@npm:3.2.12"
   dependencies:

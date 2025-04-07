@@ -1,27 +1,24 @@
-import React, {useEffect, useRef, MouseEvent, MouseEventHandler} from 'react';
-import {useState} from 'react';
-import {Simulate} from "react-dom/test-utils";
-import "./LeafletStyles.css";
-import { Container } from '@mantine/core';
+import React, {useEffect, useReducer, useRef, useState} from 'react';
+import './LeafletStyles.css';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import {MapContainer, Marker, Popup, TileLayer, useMap, useMapEvent, useMapEvents,} from 'react-leaflet';
+import { useMap } from 'react-leaflet';
+import {latLng} from "leaflet";
 
 interface RoutingProps {
     waypointOne: L.LatLng;
     waypointTwo: L.LatLng;
 }
 
-
 const Routing: React.FC<RoutingProps> = (props) => {
     const map = useMap();
     const routingControlRef = useRef<L.Routing.Control | null>(null);
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     useEffect(() => {
         if (!map) return;
-
-        const routingControl = L.Routing.control({
+        routingControlRef.current = L.Routing.control({
             waypoints: [props.waypointOne, props.waypointTwo],
             routeWhileDragging: true,
             addWaypoints: true,
@@ -32,7 +29,29 @@ const Routing: React.FC<RoutingProps> = (props) => {
             },
         }).addTo(map);
 
-        routingControlRef.current = routingControl;
+        function updateStartCoordinates(waypoint: L.LatLng){
+            if (!routingControlRef.current) return;
+            const newLat = waypoint.lat
+            const newLng = waypoint.lng
+            routingControlRef.current.setWaypoints([
+                L.latLng(newLat, newLng),
+                routingControlRef.current.getWaypoints()[1].latLng,
+            ]);
+        }
+
+        function updateEndCoordinates(waypoint: L.LatLng){
+            if (!routingControlRef.current) return;
+            const newLat = waypoint.lat
+            const newLng = waypoint.lng
+            routingControlRef.current.setWaypoints([
+                routingControlRef.current.getWaypoints()[0].latLng,
+                L.latLng(newLat, newLng),
+            ]);
+        }
+
+        setInterval(function () {
+            forceUpdate();
+        }, 1000);
 
         return () => {
             if (routingControlRef.current) {
@@ -40,6 +59,8 @@ const Routing: React.FC<RoutingProps> = (props) => {
             }
         };
     }, [map]);
+
+
 
     return null;
 };
