@@ -1,67 +1,49 @@
 import React from 'react';
-import { Box, TextInput, Button, Group, Container, useMantineTheme, Title, Flex, Text } from '@mantine/core';
+import { Box, TextInput, Button, Group, useMantineTheme, Title, Flex, Text} from '@mantine/core';
+//import {IconArrowRight } from '@tabler/icons-react';
+
 
 
 const LogInBox = () => {
-
     const theme = useMantineTheme();
     return (
-        <Container
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          padding: '1rem',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          paddingLeft: '20%',
-          '@media (max-width: 600px)': {
-            paddingLeft: '0%',
-          },
-        }}
-      >
+        <Flex
+          w="100%"
+          h="100vh"
+          justify="center"
+          align="center"
+          pl={{md: '20%', sm: '0%'}}
+          order = {1}
+        >
              {/*background box*/}
         <Box
+          bg="white"
+          p={{ base: 'xl', sm: '2rem', md: '3rem' }}
+          w="100%"
+          maw={{ base: '90%', sm: '70%', md: '600px' }}
+          pos = "relative"
           style={{
-            backgroundColor: 'white',
             opacity: 0.85,
-            padding: theme.spacing.xl,
             borderRadius: theme.radius.lg,
             backdropFilter: 'blur(5px)',
-            width: '100%',
-            maxWidth: '800px',
-            color: 'black',
-            position: 'relative',
-            margin: '0 auto',
-            '@media (max-width: 768px)': {
-              padding: theme.spacing.md,
-              maxWidth: '90%',
-            },
-            '@media (max-width: 480px)': {
-              padding: theme.spacing.sm,
-              maxWidth: '95%',
-            }
           }}
         >
           <Title
             order={1}
-            style={{
-              fontSize: theme.fontSizes.xxxl,
-              fontWeight: 700,
-              marginBottom: '2rem',
-              color: 'black',
-              textAlign: 'left',
-            }}
+            mb={{ base: 'md', sm: 'lg', md: 'xl' }}
+            c="black"
+            ta="left"
+            fw={700}
+            fz={{sm: 'xl', md: 'xxxl'}}
           >
             Let's get started
           </Title>
           
-          <Text style={{ marginBottom: '1rem', textAlign: 'left' }}>
+          <Text mb="md" ta="left">
             Looking for directions?
           </Text>
           
-          <Flex gap="md" wrap="wrap" style={{ marginBottom: '2rem' }}>
+          <Flex gap="md" wrap="wrap" mb={{ base: 'lg', md: 'xl' }}>
             <Button 
               variant="outline" 
               color="dark" 
@@ -75,39 +57,42 @@ const LogInBox = () => {
             </Button>
           </Flex>
           
-          <Box style={{ marginBottom: '1rem', textAlign: 'left' }}>
+          <Box mb="md" ta="left">
             Login here for Staff:
             <TextInput
               placeholder="Username"
-              size="md"
-              style={{ marginBottom: '1rem', marginTop: '1rem' }}
+              fz={{base: "xs", sm: "sm", md: "md"}}
+              size={{base: "sm", md: "md"}}
+              mt="md"
+              mb="md"
             />
-            
             
             <TextInput
               placeholder="Password"
-              size="md"
-              style={{ marginBottom: '1.5rem' }}
               type="password"
+              fz={{base: "xs", sm: "xs", md: "md"}}
+              size={{base: "sm", xs: "xs", md: "md"}}
+              mb="lg"
             />
             
           </Box>
-          <Group position="right" style={{ width: '100%' }}>
+          <Group justify="flex-start" w="100%">
               <Button 
                 size="md" 
                 color="dark"
+                fw = '600'
+                bg = 'black'
+                //leftSection={<IconArrowRight size={14} />}
                 style={{
-                  fontWeight: 600,
                   borderRadius: '50px',
                   transition: 'all 0.3s ease',
-                  backgroundColor: 'black',
                 }}
               >
                 Login
               </Button>
             </Group>
         </Box>
-      </Container>
+      </Flex>
     )
 }
 
