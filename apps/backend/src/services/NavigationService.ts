@@ -19,7 +19,7 @@ export class NavigationService {
         try {
             // Load all layers (floors and connection layers) from database
             const layers = await PrismaClient.layer.findMany({
-                orderBy: { layerIndex: 'asc' }
+                orderBy: { layerIndex: 'asc' },
             });
 
             // Build 3D navigation grid
