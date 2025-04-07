@@ -5,6 +5,7 @@ import '../home-style.css';
 import { useState, useEffect } from 'react';
 import LoginPage from '../../login-components/login-page.tsx';
 import Service from '../../service-request/service.tsx';
+import AdminPage from "../../AdminPage/AdminPage.tsx";
 
 export function NavBar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,7 +53,7 @@ export function NavBar() {
                     {isLoggedIn && (
                         <>
                             <li className={"nav-element"}>
-                                <Link to="/DisplayRequestsPage">Display Requests Page</Link>
+                                <Link to="/AdminPage">AdminPage</Link>
                             </li>
                             <li className={'nav-element'}>
                                 <Service />

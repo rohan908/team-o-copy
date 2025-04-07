@@ -1,5 +1,15 @@
-import { useState, useEffect} from 'react';
-
+import { useState, useEffect } from 'react';
+import {
+    Box,
+    TextInput,
+    Button,
+    Group,
+    useMantineTheme,
+    Title,
+    Flex,
+    Text,
+    Divider,
+} from '@mantine/core';
 type Props = {
     table: string;
 };
@@ -18,7 +28,7 @@ export function DatabaseController({ table }: Props) {
         formData.append('file', file);
 
         try {
-            console.log("importing file");
+            console.log('importing file');
 
             // sends a post request, formData is empty though
             const res = await fetch(`http://localhost:3001/${table}/import`, {
@@ -26,7 +36,7 @@ export function DatabaseController({ table }: Props) {
                 body: formData,
             });
 
-            console.log("imported file");
+            console.log('imported file');
         } catch (error) {
             console.log(error);
         }
@@ -60,13 +70,53 @@ export function DatabaseController({ table }: Props) {
                 accept={'.csv'}
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
                 className="form-control"
+                color={"black"}
+
             />
             <div>
-                <button onClick={handleImport}>Import CSV</button>
-                <button onClick={handleExport}>Export CSV</button>
-                <button onClick={handleClear}>Clear Table</button>
+                <Button
+                    size="md"
+                    color="dark"
+                    fw="600"
+                    bg="black"
+                    //leftSection={<IconArrowRight size={14} />}
+                    style={{
+                        borderRadius: '50px',
+                        transition: 'all 0.3s ease',
+                    }}
+                    onClick={handleImport}
+                >
+                    Import CSV
+                </Button>
+                <Button
+                    size="md"
+                    color="dark"
+                    fw="600"
+                    bg="black"
+                    //leftSection={<IconArrowRight size={14} />}
+                    style={{
+                        borderRadius: '50px',
+                        transition: 'all 0.3s ease',
+                    }}
+                    onClick={handleExport}
+                >
+                    Export CSV
+                </Button>
+                <Button
+                    size="md"
+                    color="dark"
+                    fw="600"
+                    bg="red"
+                    //leftSection={<IconArrowRight size={14} />}
+                    style={{
+                        borderRadius: '50px',
+                        transition: 'all 0.3s ease',
+                    }}
+                    onClick={handleClear}
+                >
+                    Clear Table
+                </Button>
             </div>
-
         </div>
     );
 }
