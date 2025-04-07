@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 
 interface RoomNumberInputProps {
     value: string;
@@ -20,7 +19,7 @@ const roomNumberInput: React.FC<RoomNumberInputProps> = ({value, onRoomNumberCha
     return (
         <div>
             <label htmlFor="roomNumberInput" className="block text-sm font-medium mb-1">
-                Enter the room number for delivery:
+                Enter the room number for interpreter:
             </label>
             <input
                 id="roomNumberInput"

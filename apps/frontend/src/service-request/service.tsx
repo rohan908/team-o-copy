@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
-import ServiceRequestButton from './servicebutton';
-import ServiceRequestPopUp from "./servicepopup";
-import DateEntryForm from './dateEntry';
-import RoomNumberInput from './roomEntry.tsx'
-import TimeInput from './timeEntry';
-import dateEntry from "./dateEntry";
+import ServiceRequestButton from './components/servicebutton';
+import ServiceRequestPopUp from "./components/servicepopup";
+import DateEntryForm from './components/dateEntry.tsx';
+import RoomNumberInput from './components/roomEntry.tsx'
+import TimeInput from './components/timeEntry';
+import dateEntry from "./components/dateEntry.tsx";
 
 function ServiceRequestPage() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -67,17 +67,17 @@ Details: ${requestDescription}
     return (
         <div>
             <ServiceRequestButton onClick={handleOpenPopup} variant={'primary'} disabled={false}>
-                Submit Service Request
+                Language Interpreter Request
             </ServiceRequestButton>
 
-            <ServiceRequestPopUp isOpen={isPopupOpen} onClose={handleClosePopup} title="Submit Service Request">
+            <ServiceRequestPopUp isOpen={isPopupOpen} onClose={handleClosePopup} title="Language Interpreter Request">
                 <form onSubmit={e => e.preventDefault()}>
-                    <label htmlFor="dropdown">Choose the Device Needed:</label><br/>
+                    <label htmlFor="dropdown">Choose the Language Needed:</label><br/>
                     <select id="deviceSelection" onChange={(e)=> setDeviceName(e.target.value)}>
-                        <option value="Error">-- Select a device --</option>
-                        <option value="EKG Machine">EKG Machine</option>
-                        <option value="Sterilizer">Sterilizer</option>
-                        <option value="Defibrillator">Defibrillator</option>
+                        <option value="Error">-- Select a Language --</option>
+                        <option value="ASL">ASL</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="German">German</option>
                     </select><br/>
                     <DateEntryForm value={selectedDate} onChange={handleDateChange}/><br/>
                     <TimeInput onTimeChange={handleTimeChange}/><br/>

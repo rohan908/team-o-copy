@@ -57,9 +57,9 @@ const timeInput: React.FC<timeEntryProps> = ({onTimeChange}) => {
                         onChange={handleHoursChange}
                         className="w-16 p-2 border rounded text-center"
                         maxLength={2}
-                        aria-label="Hours"
+                        aria-label="Hour"
                     />
-                    <span className="block text-xs text-center mt-1">Hours</span>
+                    <span className="block text-xs text-center mt-1">Hour</span>
                 </div>
 
                 <span className="text-xl font-bold">:</span>
@@ -73,9 +73,9 @@ const timeInput: React.FC<timeEntryProps> = ({onTimeChange}) => {
                         onChange={handleMinutesChange}
                         className="w-16 p-2 border rounded text-center"
                         maxLength={2}
-                        aria-label="Minutes"
+                        aria-label="Minute"
                     />
-                    <span className="block text-xs text-center mt-1">Minutes</span>
+                    <span className="block text-xs text-center mt-1">Minute</span>
                 </div>
 
                 <div>
