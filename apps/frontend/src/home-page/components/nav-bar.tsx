@@ -23,11 +23,11 @@ export function NavBar() {
             window.removeEventListener('storage', checkLoginStatus);
         };
     }, []);
-        useEffect(() => {
-            if (!isLoggedIn) {
-                //navigate("/");
-            }
-        }, [isLoggedIn]);
+    useEffect(() => {
+        if (!isLoggedIn) {
+            //navigate("/");
+        }
+    }, [isLoggedIn]);
         return (
         <>
             <nav className={"bg-blue-500"}>
