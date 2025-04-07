@@ -60,7 +60,25 @@ const theme = createTheme({
         blueBase,
         terquAccet,
         greys,
-    }
+    },
+    components: {
+        Button: {
+            defaultProps: {
+                color: 'blueBase',    // use your custom color
+                size: 'md',
+                radius: 'md',
+                fw: 400,               // font weight (bold)
+            },
+            styles: {
+                root: {
+                    fontFamily: 'Roboto Slab, serif',
+                    fontSize: rem(18),
+                    letterSpacing: '0.5px',
+                    textTransform: 'uppercase',
+                },
+            },
+        },
+    },
 });
 function App() {
 

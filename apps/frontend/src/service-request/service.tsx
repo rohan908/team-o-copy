@@ -6,6 +6,10 @@ import DateEntryForm from './components/dateEntry.tsx';
 import RoomNumberInput from './components/roomEntry.tsx'
 import TimeInput from './components/timeEntry';
 import dateEntry from "./components/dateEntry.tsx";
+import { useMantineTheme } from '@mantine/core';
+import { Button } from '@mantine/core';
+
+
 
 function ServiceRequestPage() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -16,6 +20,8 @@ function ServiceRequestPage() {
     const [requestDescription, setRequestDescription] = useState('');
     const [requestStatus, setRequestStatus] = useState('');
     const [showRequestFeedback, setShowRequestFeedback] = useState(false);
+    const theme = useMantineTheme();
+
 
     const navigate = useNavigate();  // Initialize navigate function
 
@@ -64,8 +70,9 @@ Details: ${requestDescription}
     };
 
 
+
     return (
-        <div>
+        <div style={{ color: theme.colors.blueBase[7] }}>
             <ServiceRequestButton onClick={handleOpenPopup} variant={'primary'} disabled={false}>
                 Language Interpreter Request
             </ServiceRequestButton>
@@ -78,7 +85,7 @@ Details: ${requestDescription}
                         <option value="ASL">ASL</option>
                         <option value="Spanish">Spanish</option>
                         <option value="German">German</option>
-                    </select><br/>
+                    </select><br/><br/>
                     <DateEntryForm value={selectedDate} onChange={handleDateChange}/><br/>
                     <TimeInput onTimeChange={handleTimeChange}/><br/>
                     <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange}/><br/>
@@ -89,18 +96,14 @@ Details: ${requestDescription}
                         className="w-full p-2 border rounded"
                         required={false}
                     />
-                    <button
+                    <Button
                         type="button"
                         onClick={handleRequestSubmit}
-                        className={`mt-4 px-4 py-2 rounded ${
-                            requestDescription.trim()
-                                ? 'bg-blue-500 hover:bg-blue-600 text-white cursor-pointer'
-                                : 'bg-gray-300 text-gray-400 cursor-not-allowed opacity-50'
-                        }`}
+                        color="blueBase"
                         disabled={!requestDescription.trim()}
                     >
                         Submit Request
-                    </button>
+                    </Button>
                 </form>
             </ServiceRequestPopUp>
 
