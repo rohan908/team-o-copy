@@ -21,7 +21,7 @@
 
 This package defines the backend server, and the RESTful API it
 represents. It also includes the packages used.
-
+Test
 This package should be run from the root, see the root readme.md for details.
 
 As discussed in the top-level repo, this project runs completely independently
