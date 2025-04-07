@@ -79,7 +79,7 @@ const MapAPIComponent = () => {
                 zoom={8}
                 scrollWheelZoom={false}
             >
-                <LayersControl>
+                <LayersControl collapsed={false}>
                     <LayersControl.Overlay name="Click Here to set Current Location">
                         <Marker position={[-1000,-1000]} opacity={0}>
                         </Marker>
