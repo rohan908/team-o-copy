@@ -118,12 +118,10 @@ const theme = createTheme({
 
     // variantColorResolver: myvariantColorResolver(theme)
 });
-
-
 function App() {
 
     return (
-        <MantineProvider theme={ theme }>
+        <MantineProvider theme={theme}>
             <Routing />
         </MantineProvider>
     );

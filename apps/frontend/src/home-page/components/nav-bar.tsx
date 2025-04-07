@@ -1,10 +1,11 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
-import {Button, Flex, Image} from "@mantine/core";
+import {Button, Flex, Image, Box, Group, Anchor, Burger, UnstyledButton, Tabs} from "@mantine/core";
 import { useState, useEffect } from 'react';
 // import "../home-style.css";
 import LoginPage from "../../login-components/login-page.tsx";
 import Service from "../../service-request/service.tsx";
 import classes from '../../styles.css'
+import {useDisclosure} from "@mantine/hooks";
 
 type NavItem = {
     name: string;
@@ -45,52 +46,86 @@ export function NavBar() {
         }
     }, [isLoggedIn]);
 
-
+    const [opened, { toggle }] = useDisclosure();
 
     return (
         <>
             <nav>
-                <Flex py="4" px="20" gap="md" bg="white" variant="dark" justify="flex-start" align="center">
+                <Group h="100%" px="md" py="sm">
+                    <Burger opened={opened}  onClick={toggle} hiddenFrom="sm" size="md" />
+                    <Tabs  defaultValue="gallery">
+                        <Tabs.List>
+                            <Tabs.Tab value="gallery" leftSection={<IconPhoto size={12} />}>
+                                Gallery
+                            </Tabs.Tab>
+                            <Tabs.Tab value="messages" leftSection={<IconMessageCircle size={12} />}>
+                                Messages
+                            </Tabs.Tab>
+                            <Tabs.Tab value="settings" leftSection={<IconSettings size={12} />}>
+                                Settings
+                            </Tabs.Tab>
+                        </Tabs.List>
 
-                    {/* Logo */}
-                        <Link to="/">
-                            <Image
-                                className={"rounded"}
-                                src={"public/logo.png"}
-                                alt={"Home"}
-                                h={50}
-                            />
-                        </Link>
+                        <Tabs.Panel value="gallery">
+                            Gallery tab content
+                        </Tabs.Panel>
 
-                        {/* Dynamically Render Buttons */}
-                        {navItems.map((item, index) => (
-                            <Button variant="outline"
-                                    color="blueBase.9"
-                                    component={Link}
-                                    className="navButton"
-                                    to={item.link}
-                                    // styles={{
-                                    //     root: {
-                                    //         '--button-hover': 'black',
-                                    //     },
-                                    // }}
-                            >
-                                {item.name}
-                            </Button>
-                        ))}
-                        {/* Login Page */}
-                    {/*// make modal https://mantine.dev/core/modal/*/}
-                    <LoginPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+                        <Tabs.Panel value="messages">
+                            Messages tab content
+                        </Tabs.Panel>
 
-                    {isLoggedIn && (
-                       // ik this is a shit implementaion, make modal https://mantine.dev/core/modal/
-                            <Service />
-                    )}
-                    <Button variant="navButton">
-                        peepee poopoo
-                    </Button>
+                        <Tabs.Panel value="settings">
+                            Settings tab content
+                        </Tabs.Panel>
+                    </Tabs>
 
-                </Flex>
+
+                    <Group justify="space-between" style={{ flex: 1 }}>
+                            {/* Logo */}
+
+                                <Link to="/">
+                                    <Image
+                                        className={"rounded"}
+                                        src={"public/logoMassGeneralBrigham.png"}
+                                        alt={"Home"}
+                                        h='xl'
+                                    />
+                                </Link>
+
+
+                        {/*</Flex>*/}
+                        <Group ml="xl" gap={0} visibleFrom="sm">
+                            {/* Dynamically Render Buttons */}
+                            {navItems.map((item, index) => (
+                                <Button variant="outline"
+                                        color="black"
+                                        component={Link}
+                                        className="navButton"
+                                        to={item.link}
+                                        justify="flex-end"
+                                    styles={{
+                                        root: {
+
+                                            '--button-hover': 'black',
+                                        },
+                                    }}
+                                >
+                                    {item.name}
+                                </Button>
+                            ))}
+                        </Group>
+                            {/* Login Page
+                            // make modal https://mantine.dev/core/modal/
+                            <LoginPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+
+                            {isLoggedIn && (
+                                // ik this is a shit implementaion, make modal https://mantine.dev/core/modal/
+                                <Service />
+                            )}
+                            */}
+                    </Group>
+                </Group>
+                </Group>
             </nav>
 
             <Outlet />
