@@ -48,6 +48,11 @@ export function NavBar() {
                             <Service />
                         </li>
                     )}
+                    {isLoggedIn && (
+                        <li className={"nav-element"}>
+                            <Link to="/DisplayRequestsPage">Display Requests Page</Link>
+                        </li>
+                    )}
                     <li className={"nav-element"}>
                         <LoginPage setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
                     </li>

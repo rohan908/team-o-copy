@@ -5,6 +5,7 @@ import {MapPage} from "../MapPage/MapPage.tsx";
 import {Directory} from "../directory/directory.tsx";
 import {DirectoryLocation} from "../directory/components/DirectoryLocation.tsx";
 import {Display} from "../service-request/submissionDisplay/display.tsx";
+import {DisplayRequestsPage} from "../DisplayRequestsPage/DisplayRequestsPage.tsx";
 
 export function Routing() {
     return (
@@ -17,6 +18,7 @@ export function Routing() {
                         <Route path="/submission" element={<Display />} />
                         <Route path="directory" element={<Directory/>}/>
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
+                        <Route path="/DisplayRequestsPage" element={<DisplayRequestsPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
