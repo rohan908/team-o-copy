@@ -154,7 +154,6 @@ export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationPro
             
             // draw waves using the shared path
             for (let i = 0; i < WAVE_CONFIG.NUM_WAVES; i++) {
-                const baseOffset = height * 0.65; //offset for the wave from middle of the screen (where bezier curve starts)
                 const color = getGradientColor(i, WAVE_CONFIG.NUM_WAVES);
                 
                 // add a little spice to the wave frequency for each wave so they move differently
@@ -163,7 +162,6 @@ export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationPro
                 
                 drawWaveAlongPath(ctx, width, height, pathPoints, {
                     color,
-                    baseOffset,
                     frequency,
                     phase,
                     time: time,
@@ -242,7 +240,7 @@ function resizeCanvas(canvas: HTMLCanvasElement): void {
 //draws backgroun gradient, but doesnt look good so this is old code
 function drawBackgroundGradient(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
     //const topColor = COLORS.GRADIENT_TOP;
-    const bottomColor = COLORS.BACKGROUND_COLOR;
+    //const bottomColor = COLORS.BACKGROUND_COLOR;
     /*
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
     gradient.addColorStop(0, topColor);
@@ -250,7 +248,7 @@ function drawBackgroundGradient(ctx: CanvasRenderingContext2D, canvas: HTMLCanva
     
     ctx.fillStyle = gradient;
     */
-    ctx.fillStyle = bottomColor;
+    ctx.fillStyle = COLORS.BACKGROUND_COLOR;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -290,7 +288,7 @@ function drawWaveAlongPath(
     pathPoints, 
     options
 ) {
-    const { color, baseOffset, frequency, phase, time, waveIndex } = options;
+    const { color, frequency, phase, time, waveIndex } = options;
     
     // create points that follow the main path but oscillate around it (used for interpolation to make the waves)
     const wavePoints = [];

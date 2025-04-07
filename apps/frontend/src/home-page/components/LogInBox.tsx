@@ -1,6 +1,16 @@
 import React from 'react';
-import { Box, TextInput, Button, Group, useMantineTheme, Title, Flex, Text} from '@mantine/core';
-import {IconArrowRight } from '@tabler/icons-react';
+import {
+    Box,
+    TextInput,
+    Button,
+    Group,
+    useMantineTheme,
+    Title,
+    Flex,
+    Text,
+    Divider,
+} from '@mantine/core';
+//import {IconArrowRight } from '@tabler/icons-react';
 
 
 
@@ -38,25 +48,29 @@ const LogInBox = () => {
           >
             Let's get started
           </Title>
-          
+
           <Text mb="md" ta="left">
             Looking for directions?
           </Text>
-          
-          <Flex gap="md" wrap="wrap" mb={{ base: 'lg', md: 'xl' }}>
-            <Button 
-              variant="outline" 
-              color="dark" 
-              style={{ 
-                borderRadius: '20px', 
+
+          <Flex gap="md" wrap="wrap" mb={{ base: "xs" }}>
+            <Button
+              variant="outline"
+              color="dark"
+              style={{
+                borderRadius: '20px',
                 transition: 'all 0.3s ease',
                 fontSize: 'clamp(12px, 3vw, 18px)',
               }}
             >
-              Click Here to Continue as a Guest
+              Find Your Way Now
             </Button>
+            <Text mb="0" ta="left" fz={{base: "xs"}}>
+                Use our interactive map to find departments, parking, and efficient routes
+            </Text>
           </Flex>
-          
+
+            <Divider variant={"dotted"} size={"lg"} mb={'lg'}></Divider>
           <Box mb="md" ta="left">
             Login here for Staff:
             <TextInput
@@ -64,16 +78,16 @@ const LogInBox = () => {
               mt="md"
               mb="md"
             />
-            
+
             <TextInput
               placeholder="Password"
               type="password"
             />
-            
+
           </Box>
           <Group justify="flex-start" w="100%">
-              <Button 
-                size="md" 
+              <Button
+                size="md"
                 color="dark"
                 fw = '600'
                 bg = 'black'
