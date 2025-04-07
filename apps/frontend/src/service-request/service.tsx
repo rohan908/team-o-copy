@@ -8,12 +8,15 @@ import TimeInput from './components/timeEntry';
 import dateEntry from "./components/dateEntry.tsx";
 import { useMantineTheme } from '@mantine/core';
 import { Button } from '@mantine/core';
+import ISO6391 from 'iso-639-1';
+import { Select } from '@mantine/core';
+
 
 
 
 function ServiceRequestPage() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [deviceName, setDeviceName] = useState('Error');
+    const [deviceName, setLanguageName] = useState('Error');
     const [selectedDate, setSelectedDate] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
@@ -35,6 +38,15 @@ function ServiceRequestPage() {
     const handleDateChange = (date: string) => {
         setSelectedDate(date);
     };
+    // to get access to all languages using premade ISO6391 list, and adding ASL to it
+    const languageOptions = [
+        { value: 'asl', label: 'ASL (American Sign Language)' },
+        ...ISO6391.getAllCodes().map((code) => ({
+            value: code,
+            label: ISO6391.getName(code),
+        })),
+    ];
+
 
     // Create a formatted description from all inputs
     const getFormattedDescription = () => {
@@ -79,13 +91,16 @@ Details: ${requestDescription}
 
             <ServiceRequestPopUp isOpen={isPopupOpen} onClose={handleClosePopup} title="Language Interpreter Request">
                 <form onSubmit={e => e.preventDefault()}>
-                    <label htmlFor="dropdown">Choose the Language Needed:</label><br/>
-                    <select id="deviceSelection" onChange={(e)=> setDeviceName(e.target.value)}>
-                        <option value="Error">-- Select a Language --</option>
-                        <option value="ASL">ASL</option>
-                        <option value="Spanish">Spanish</option>
-                        <option value="German">German</option>
-                    </select><br/><br/>
+                    <Select
+                        label = "Choose the Language Needed:"
+                        placeholder = "--Select a Language--"
+                        searchable
+                        nothingFoundMessage = "Language not found"
+                        data={languageOptions}
+                        value ={deviceName === 'Error' ? ' ' : deviceName}
+                        onChange={(value) => setLanguageName(value ?? 'Error')}
+                    ></Select>
+                    <br/>
                     <DateEntryForm value={selectedDate} onChange={handleDateChange}/><br/>
                     <TimeInput onTimeChange={handleTimeChange}/><br/>
                     <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange}/><br/>
