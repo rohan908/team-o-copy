@@ -14,7 +14,7 @@ export interface FloorMap {
     layerIndex: number; // Sequential index in the 3D grid
     name: string;
     isConnectionLayer: boolean; // True if this is a connection layer between floors
-    bitmap: Uint8Array; // Changed from Buffer to Uint8Array to match Prisma's return type
+    bitmap: Buffer;
     width: number;
     height: number;
     createdAt?: Date;

@@ -13,9 +13,10 @@ try {
 
     // Load bitmap files into the database after connection
     const bitmapLoader = new BitmapLoaderService();
-    bitmapLoader.loadBitmaps()
+    bitmapLoader
+        .loadBitmaps()
         .then(() => console.log('Floor maps loaded successfully'))
-        .catch(error => console.error('Failed to load floor maps:', error));
+        .catch((error) => console.error('Failed to load floor maps:', error));
 } catch (error) {
     // Log any errors
     console.error(`Unable to establish database connection:

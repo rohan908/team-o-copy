@@ -14,13 +14,20 @@ export class NavigationService {
 
     /**
      * Initializes the navigation service by loading all layers and building the grid
+     * @returns Promise that resolves when initialization is complete
      */
     public async initialize(): Promise<void> {
         try {
             // Load all layers (floors and connection layers) from database
-            const layers = await PrismaClient.layer.findMany({
+            const prismaLayers = await PrismaClient.layer.findMany({
                 orderBy: { layerIndex: 'asc' },
             });
+
+            // Convert Prisma's Uint8Array to Buffer for each layer
+            const layers: FloorMap[] = prismaLayers.map(layer => ({
+                ...layer,
+                bitmap: Buffer.from(layer.bitmap)
+            }));
 
             // Build 3D navigation grid
             this.navigationGrid = this.gridBuilder.buildNavigationGrid(layers);
@@ -37,6 +44,10 @@ export class NavigationService {
 
     /**
      * Finds a path between two points in the hospital
+     * @param start Starting coordinate
+     * @param end Ending coordinate
+     * @returns Result containing the path and additional information
+     * @throws Error if navigation service is not initialized
      */
     public findPath(start: Coordinate, end: Coordinate): PathFindingResult {
         if (!this.pathFinder || !this.navigationGrid) {

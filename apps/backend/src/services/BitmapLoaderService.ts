@@ -24,8 +24,9 @@ export class BitmapLoaderService {
             }
 
             // Get all bitmap files
-            const files = fs.readdirSync(this.bitmapDirectory)
-                .filter(file => file.endsWith('.bmp'));
+            const files = fs
+                .readdirSync(this.bitmapDirectory)
+                .filter((file) => file.endsWith('.bmp'));
 
             console.log(`Found ${files.length} bitmap files`);
 
@@ -68,7 +69,7 @@ export class BitmapLoaderService {
                     bitmap: bitmapBuffer,
                     width,
                     height,
-                    isConnectionLayer: fileInfo.isConnectionLayer
+                    isConnectionLayer: fileInfo.isConnectionLayer,
                 },
                 create: {
                     layerIndex: fileInfo.layerIndex,
@@ -76,8 +77,8 @@ export class BitmapLoaderService {
                     bitmap: bitmapBuffer,
                     width,
                     height,
-                    isConnectionLayer: fileInfo.isConnectionLayer
-                }
+                    isConnectionLayer: fileInfo.isConnectionLayer,
+                },
             });
 
             console.log(`Processed ${filename} as layer ${fileInfo.layerIndex}`);
@@ -89,7 +90,7 @@ export class BitmapLoaderService {
     private parseFilename(filename: string): {
         layerIndex: number;
         name: string;
-        isConnectionLayer: boolean
+        isConnectionLayer: boolean;
     } | null {
         // Remove extension
         const baseName = filename.replace(/\.bmp$/i, '');
@@ -100,7 +101,7 @@ export class BitmapLoaderService {
             return {
                 layerIndex: parseInt(floorMatch[1]) * 2, // Use even indices for floors
                 name: floorMatch[2].replace(/_/g, ' '),
-                isConnectionLayer: false
+                isConnectionLayer: false,
             };
         }
 
@@ -111,20 +112,22 @@ export class BitmapLoaderService {
             return {
                 layerIndex: lowerFloor * 2 + 1, // Use odd indices for connections
                 name: connectionMatch[3].replace(/_/g, ' '),
-                isConnectionLayer: true
+                isConnectionLayer: true,
             };
         }
 
         return null;
     }
 
-    private bitmapToGrid(bmpData: Buffer): { grid: boolean[][], width: number, height: number } {
+    private bitmapToGrid(bmpData: Buffer): { grid: boolean[][]; width: number; height: number } {
         // Read BMP width and height from header
         const width = bmpData.readInt32LE(18);
         const height = bmpData.readInt32LE(22);
 
         // Create a grid based on the bitmap data
-        const grid: boolean[][] = Array(height).fill(null).map(() => Array(width).fill(false));
+        const grid: boolean[][] = Array(height)
+            .fill(null)
+            .map(() => Array(width).fill(false));
 
         // Start of pixel data
         const pixelOffset = bmpData.readInt32LE(10);
@@ -138,7 +141,7 @@ export class BitmapLoaderService {
 
             for (let x = 0; x < width; x++) {
                 // For monochrome BMPs, we need to extract bits
-                const byteIndex = pixelOffset + (invY * rowSize) + Math.floor(x / 8);
+                const byteIndex = pixelOffset + invY * rowSize + Math.floor(x / 8);
                 const bitOffset = 7 - (x % 8); // BMP bits are ordered from MSB to LSB
 
                 if (byteIndex < bmpData.length) {
