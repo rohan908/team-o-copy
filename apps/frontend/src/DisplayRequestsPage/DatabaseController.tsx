@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
+
 type Props = {
     table: string;
 };
@@ -16,15 +17,30 @@ export function DatabaseController({ table }: Props) {
         const formData = new FormData();
         formData.append('file', file);
 
-        const res = await fetch(`/api/import/${table}`, {
-            method: 'POST',
-            body: formData,
-        });
-        setMessage(await res.text());
+        try {
+            console.log("importing file");
+
+            // sends a post request, formData is empty though
+            const res = await fetch(`http://localhost:3001/${table}/import`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            console.log("imported file");
+        } catch (error) {
+            console.log(error);
+        }
+
+        //setMessage(await res.statusText);
     };
     // export function handling
-    const handleExport = () => {
+    const handleExport = async () => {
         window.location.href = `api/export/${table}`;
+        /*
+        // checking connection, prints whole table to console
+        const res = await fetch(`/api/${table}/all`)
+            .then((res) => console.log(res))
+         */
     };
     // clear function handling
     const handleClear = async () => {

@@ -3,8 +3,12 @@ import PrismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
 
-router.post('/:name', async (req: Request, res: Response) => {
+router.post('/import', async (req: Request, res: Response) => {
     // Will need for updating directories with CSV files
+    // Need to figure out how to parse FormData once it is passed
+    console.log(JSON.stringify(req.body));
+    console.log('Imported Table Successfully');
+    res.json(req.body);
 });
 
 // Retrieves all directory entries
