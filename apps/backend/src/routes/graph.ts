@@ -14,28 +14,42 @@ const navigationService = new NavigationService();
     }
 })();
 
-router.post('/findPath', async (req: Request, res: Response) => {
+/*
+Frontend will make a request like this and receive the path:
+
+fetch('/graph/findPath', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({
+    startX: 10, startY: 20, startZ: 0,
+    endX: 50, endY: 60, endZ: 2
+  })
+})
+ */
+
+// declaring types as any to get around typescript error. Revisit if it becomes a problem.
+router.post('/findPath', (req: any, res: any) => {
     try {
         const { startX, startY, startZ, endX, endY, endZ } = req.body;
 
         // Validate input
-        if ([startX, startY, startZ, endX, endY, endZ].some(param => param === undefined)) {
+        if ([startX, startY, startZ, endX, endY, endZ].some((param) => param === undefined)) {
             return res.status(400).json({
                 success: false,
-                error: 'Missing required parameters'
+                error: 'Missing required parameters',
             });
         }
 
         const start: Coordinate = {
-            x: parseInt(startX),
-            y: parseInt(startY),
-            z: parseInt(startZ)
+            x: Number(startX),
+            y: Number(startY),
+            z: Number(startZ),
         };
 
         const end: Coordinate = {
-            x: parseInt(endX),
-            y: parseInt(endY),
-            z: parseInt(endZ)
+            x: Number(endX),
+            y: Number(endY),
+            z: Number(endZ),
         };
 
         const result = navigationService.findPath(start, end);
@@ -43,19 +57,19 @@ router.post('/findPath', async (req: Request, res: Response) => {
         if (result.path.length === 0) {
             return res.status(404).json({
                 success: false,
-                error: 'No path found between the specified points'
+                error: 'No path found between the specified points',
             });
         }
 
         return res.json({
             success: true,
-            result
+            result,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error finding path:', error);
         return res.status(500).json({
             success: false,
-            error: error.message || 'An error occurred while finding the path'
+            error: error.message || 'An error occurred while finding the path',
         });
     }
 });

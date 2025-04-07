@@ -8,7 +8,9 @@ export class BitmapService {
      */
     public decodeBitmap(floorMap: FloorMap): boolean[][] {
         const { bitmap, width, height } = floorMap;
-        const grid: boolean[][] = Array(height).fill(null).map(() => Array(width).fill(false));
+        const grid: boolean[][] = Array(height)
+            .fill(null)
+            .map(() => Array(width).fill(false));
 
         // Assuming bitmap is stored as a buffer of bits where:
         // 1 = walkable space, 0 = wall/obstacle
@@ -44,7 +46,7 @@ export class BitmapService {
                     // Set the corresponding bit if the cell is walkable
                     const byteIndex = Math.floor((y * width + x) / 8);
                     const bitIndex = (y * width + x) % 8;
-                    buffer[byteIndex] |= (1 << (7 - bitIndex));
+                    buffer[byteIndex] |= 1 << (7 - bitIndex);
                 }
             }
         }

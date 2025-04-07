@@ -6,6 +6,8 @@ import healthcheckRouter from './routes/healthcheck';
 import employeeRouter from './routes/employee.ts';
 import serviceRequestRouter from './routes/serviceRequest.ts';
 import assignedEmployeeRouter from './routes/assigned.ts';
+import graphRouter from './routes/graph.ts';
+
 import { API_ROUTES } from 'common/src/constants';
 import PrismaClient from './bin/prisma-client.ts';
 
@@ -31,6 +33,7 @@ app.use('/', healthcheckRouter);
 app.use('/employee', employeeRouter);
 app.use('/servicereqs', serviceRequestRouter);
 app.use('/assigned', assignedEmployeeRouter);
+app.use('/graph', graphRouter);
 
 /**
  * Catch all 404 errors, and forward them to the error handler

@@ -21,7 +21,7 @@ export class NavigationGridBuilder {
         const grid: NavigationNode[][][] = [];
 
         // Create grid for each layer
-        sortedLayers.forEach(layer => {
+        sortedLayers.forEach((layer) => {
             const layerGrid = this.createLayerGrid(layer);
 
             // Store grid at the appropriate z-index
@@ -51,7 +51,7 @@ export class NavigationGridBuilder {
                     x,
                     y,
                     z: layerIndex,
-                    isWalkable: walkableGrid[y][x]
+                    isWalkable: walkableGrid[y][x],
                 };
             }
         }

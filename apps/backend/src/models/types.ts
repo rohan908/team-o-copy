@@ -10,13 +10,15 @@ export interface NavigationNode extends Coordinate {
 }
 
 export interface FloorMap {
-    id: number; // unique ID for each map
-    layerIndex: number; // the index position of the map within the vertical stack
-    name: string; //
-    isConnectionLayer: boolean;
-    bitmap: Buffer;
+    id: number;
+    layerIndex: number; // Sequential index in the 3D grid
+    name: string;
+    isConnectionLayer: boolean; // True if this is a connection layer between floors
+    bitmap: Uint8Array; // Changed from Buffer to Uint8Array to match Prisma's return type
     width: number;
     height: number;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export interface PathFindingResult {

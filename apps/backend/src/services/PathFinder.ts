@@ -59,11 +59,11 @@ export class PathFinder {
         // All six possible directions in 3D space
         const directions = [
             { dx: 0, dy: -1, dz: 0 }, // North
-            { dx: 1, dy: 0, dz: 0 },  // East
-            { dx: 0, dy: 1, dz: 0 },  // South
+            { dx: 1, dy: 0, dz: 0 }, // East
+            { dx: 0, dy: 1, dz: 0 }, // South
             { dx: -1, dy: 0, dz: 0 }, // West
-            { dx: 0, dy: 0, dz: 1 },  // Up
-            { dx: 0, dy: 0, dz: -1 }  // Down
+            { dx: 0, dy: 0, dz: 1 }, // Up
+            { dx: 0, dy: 0, dz: -1 }, // Down
         ];
 
         // Check all six directions
@@ -123,10 +123,7 @@ export class PathFinder {
     /**
      * Reconstructs the path from the end point to the start point
      */
-    private reconstructPath(
-        previous: Map<string, Coordinate>,
-        end: Coordinate
-    ): PathFindingResult {
+    private reconstructPath(previous: Map<string, Coordinate>, end: Coordinate): PathFindingResult {
         const path: Coordinate[] = [end];
         let current = end;
         let distance = 0;
@@ -142,7 +139,7 @@ export class PathFinder {
         return {
             path,
             distance,
-            layersTraversed: Array.from(layersTraversed)
+            layersTraversed: Array.from(layersTraversed),
         };
     }
 }
