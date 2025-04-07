@@ -98,6 +98,18 @@ const findPathHandler: RequestHandler<
     }
 };
 
+// Debug endpoint to get information about the navigation grid
+/*
+router.get('/debug', (req: any, res: any) => {
+    if (!navigationService.isInitialized()) {
+        return res.status(500).json({ error: 'Navigation service not initialized' });
+    }
+
+    // Get the grid dimensions and some sample walkable points
+    const debug = navigationService.getDebugInfo();
+    res.json(debug);
+});
+*/
 // Register the handler with the router
 router.post('/findPath', findPathHandler);
 

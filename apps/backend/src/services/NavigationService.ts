@@ -24,9 +24,9 @@ export class NavigationService {
             });
 
             // Convert Prisma's Uint8Array to Buffer for each layer
-            const layers: FloorMap[] = prismaLayers.map(layer => ({
+            const layers: FloorMap[] = prismaLayers.map((layer) => ({
                 ...layer,
-                bitmap: Buffer.from(layer.bitmap)
+                bitmap: Buffer.from(layer.bitmap),
             }));
 
             // Build 3D navigation grid
@@ -56,4 +56,41 @@ export class NavigationService {
 
         return this.pathFinder.findPath(start, end);
     }
+
+    /* Debugging for grid generation
+    public getDebugInfo(): any {
+        if (!this.navigationGrid) {
+            return { error: 'Navigation grid not initialized' };
+        }
+
+        const walkablePoints: Coordinate[] = [];
+
+        // Find the dimensions of the grid
+        const layers = this.navigationGrid.length;
+        const height = this.navigationGrid[0]?.length || 0;
+        const width = this.navigationGrid[0]?.[0]?.length || 0;
+
+        // Find some sample walkable points
+        if (layers > 0 && height > 0 && width > 0) {
+            for (let z = 0; z < layers; z++) {
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        if (this.navigationGrid[z]?.[y]?.[x]?.isWalkable) {
+                            walkablePoints.push({ x, y, z });
+                            // Only collect up to 10 points per layer
+                            if (walkablePoints.length >= 10 * (z + 1)) break;
+                        }
+                    }
+                    if (walkablePoints.length >= 10 * (z + 1)) break;
+                }
+            }
+
+        }
+
+        return {
+            dimensions: { layers, height, width },
+            sampleWalkablePoints: walkablePoints,
+        };
+    }
+    */
 }
