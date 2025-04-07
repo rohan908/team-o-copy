@@ -6487,6 +6487,7 @@ __metadata:
     eslint: "npm:^9.23.0"
     eslint-config-custom: "workspace:*"
     husky: "npm:^9.1.7"
+    iso-639-1: "npm:^3.1.5"
     prettier: "npm:^3.5.3"
     prettier-config-custom: "workspace:*"
     tailwindcss: "npm:^4.1.0"
