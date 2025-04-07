@@ -1,8 +1,23 @@
+import WaveAnimation from "./components/waveAnimation.tsx";
+import LogInBox from "./components/LogInBox.tsx";
+import { Box} from '@mantine/core';
+
+
 export function HomePage() {
     return (
         <>
-           <h1 className={"text-blue-500 text-4xl text-center bg-white h-15"}>Mass General Brigham</h1>
-            <h1 className={"text-center text-2xl"}>This is the home page</h1>
+            <Box
+                style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '100vh',
+                    overflow: 'hidden'
+                }}
+            >
+
+                <WaveAnimation id="waveCanvas" />
+                <LogInBox />
+            </Box>
         </>
     );
 }

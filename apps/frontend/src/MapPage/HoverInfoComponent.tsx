@@ -72,7 +72,7 @@ const HoverInfoComponent = () => {
     }, []);
 
     // Original dimensions of the map and canvases
-    const originalMapWidth = 1425; // This is the original width of the map image
+    const originalMapWidth = 1425;
     const canvasDimensions = {
         imaging: { width: 321, height: 349 },
         pharmacy: { width: 31, height: 61 },

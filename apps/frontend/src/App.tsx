@@ -60,7 +60,8 @@ const theme = createTheme({
         blueBase,
         terquAccet,
         greys,
-    }
+    },
+    
 });
 function App() {
 
