@@ -19,8 +19,8 @@ const roomNumberInput: React.FC<RoomNumberInputProps> = ({value, onRoomNumberCha
     return (
         <div>
           <br />
-            <label htmlFor="roomNumberInput" className="block text-sm font-medium mb-1">
-                Enter the room number for interpreter:
+            <label htmlFor="roomNumberInput" className="block text-sm font-medium mb-1" style={{fontSize: '20px'}}>
+                Enter the room number for interpreter:*
             </label>
             <input
                 id="roomNumberInput"

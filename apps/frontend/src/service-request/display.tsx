@@ -48,7 +48,7 @@ export function Display() {
                         <p><strong>Date:</strong> {selectedDate}</p>
                         <p><strong>Time:</strong> {selectedTime}</p>
                         <p><strong>Room:</strong> {roomNumber}</p>
-                        <p><strong>Details:</strong> {requestDescription}</p>
+                        <p><strong>Details:</strong> {requestDescription || 'N/A'}</p>
                     </div>
                 </Box>
             </Flex>

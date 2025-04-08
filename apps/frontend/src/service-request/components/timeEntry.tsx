@@ -45,7 +45,7 @@ const TimeInput: React.FC<timeEntryProps> = ({onTimeChange}) => {
 
   return (
     <div className=" mx-auto">
-      <label className="block text-sm font-medium mb-2">Enter Time:</label>
+      <label className="block mb-2 "style={{fontSize: '20px'}}>Enter Time:*</label>
 
       <div className="flex items-center space-x-2">
         <div>

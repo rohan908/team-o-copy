@@ -44,7 +44,7 @@ function Language() {
     ];
 
     const handleRequestSubmit = () => {
-        if (requestDescription && language != "Error") {
+        if (language != "Error" && selectedDate.trim() && selectedTime.trim() && roomNumber.trim()) {
             setRequestStatus("Request Submitted Successfully");
                 navigate('/submission', { state: {
                         label: language === 'asl'
@@ -57,7 +57,7 @@ function Language() {
                     }
                 });
         } else {
-            setRequestStatus("Error: Please specify a device");
+            setRequestStatus("Error: Please fill out all required fields.");
             setShowRequestFeedback(true);
         }
     };
@@ -88,7 +88,7 @@ function Language() {
             <br/>
             <form onSubmit={e => e.preventDefault()}>
               <Select
-                label="Choose the Language Needed:"
+                label="Choose the Language Needed:*"
                 placeholder="--Select a Language--"
                 searchable
                 nothingFoundMessage="Language not found"
@@ -97,6 +97,9 @@ function Language() {
                 onChange={(value) => setLanguageName(value ?? 'Error')}
                 mb="md"
                 styles={{
+                  label: {
+                    fontSize: theme.fontSizes.sm,
+                  },
                   input: {
                     borderColor: 'black',
                   },
@@ -127,10 +130,26 @@ function Language() {
                 color="dark"
                 bg="black"
                 radius="xl"
-                disabled={!requestDescription.trim()}
+                disabled={
+                  language === 'Error' ||
+                  !selectedDate.trim() ||
+                  !selectedTime.trim()
+                }
               >
                 Submit Request
               </Button>
+              <br/><br/>
+              <Box bg='greys.1'p={{ md: '1rem'}}
+                            w="100%"
+                            maw={{base: '70%', sm:'70%', md: '650px' }}
+                            style={{
+                              opacity: 0.85,
+                              borderRadius: theme.radius.lg,
+                              backdropFilter: 'blur(5px)',
+                            }}>
+              <Text fz='xs'>All required fields are marked with *</Text>
+
+            </Box>
             </form>
 
             {showRequestFeedback && (
@@ -139,6 +158,7 @@ function Language() {
               </Box>
             )}
           </Box>
+
       </Flex>
     );
 }

@@ -13,7 +13,7 @@ const DateInputForm: React.FC<DateInputProps> = ({value, onChange}) => {
 
     return (
     <div className="mb-4">
-        <label htmlFor="date" className="block mb-2">Select a date:</label>
+        <label htmlFor="date" className="block mb-2" style={{fontSize: '20px'}}>Select a date:*</label>
         <input
             type="date"
             id="date"
