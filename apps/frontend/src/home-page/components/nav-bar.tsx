@@ -13,10 +13,12 @@ export const navItems: NavItem[] = [
 
     { name: "Map", link: "/map-page" },
     { name: "Directory", link: "/directory" },
+    { name: "Navigation", link: "/map-API" },
 ];
 
 
 export function NavBar() {
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
@@ -35,9 +37,11 @@ export function NavBar() {
                         <Menu.Dropdown >
                             {navItems.map((item, index) => (
                                 <>
-                                <Menu.Item color="grey.3" component={Link}
-                                to={item.link}
-                                           px="md"
+                                <Menu.Item
+                                    color="grey.3"
+                                    component={Link}
+                                    to={item.link}
+                                    px="md"
                                 >
                                 {item.name}
                                 </Menu.Item>
@@ -69,6 +73,7 @@ export function NavBar() {
                                         justify="flex-end"
                                         component={Link}
                                         to={item.link}
+                                        size="xs"
                                 >
                                     {item.name}
                                 </Button>
@@ -78,7 +83,6 @@ export function NavBar() {
                     </Group>
                 </Group>
             </nav>
-
             <Outlet />
         </>
     );

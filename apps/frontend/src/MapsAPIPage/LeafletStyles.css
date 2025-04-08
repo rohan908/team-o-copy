@@ -1,0 +1,56 @@
+#map-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.p-10{
+    position: absolute;
+    height: 85%;
+    width: 100%;
+}
+
+.leaflet-routing-container.leaflet-bar.leaflet-control{
+    width: 50%;
+    height: 100%;
+}
+
+.leaflet-top.leaflet-right{
+    width: 60%;
+    height: 70%;
+}
+
+.leaflet-routing-alternatives-container {
+    width: 100%;
+    height: 100%;
+}
+
+.leaflet-routing-alt{
+    width: 100%;
+    height: 80%;
+}
+
+.leaflet-routing-alt.leaflet-routing-alt-minimized{
+    width: 100%;
+    height: 20%;
+}
+
+.leaflet-routing-instruction-icon{
+    width: 5%;
+    height: 100%;
+}
+
+.leaflet-routing-instruction-text{
+    width: 85%;
+    height: 100%;
+}
+
+.leaflet-routing-instruction-distance{
+    width: 10%;
+    height: 100%;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+}
