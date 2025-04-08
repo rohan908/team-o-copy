@@ -1,6 +1,9 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import {Button, Flex, Image, Box, Group, Anchor, Burger, UnstyledButton, Tabs, Menu} from "@mantine/core";
 import { useState, useEffect } from 'react';
+import "../home-style.css";
+import { useLogin } from './LoginContext'; // adjust path if needed
+import Service from '../../service-request/service.tsx';
 
 
 import {useDisclosure} from "@mantine/hooks";
@@ -17,10 +20,14 @@ export const navItems: NavItem[] = [
     { name: "Navigation", link: "/map-API" },
 ];
 
+export const adminNavItems: NavItem[] = [
+    { name: "Service Request", link: "/submission" }, //add service rec routting here logan
+
+    // { name: "Profile", link: "/submission" }// potential delighter- login button can be in this
+];
 
 export function NavBar() {
-
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isLoggedIn, logout } = useLogin();
     const navigate = useNavigate();
 
     const [opened, { toggle }] = useDisclosure();
@@ -79,8 +86,32 @@ export function NavBar() {
                                     {item.name}
                                 </Button>
                             ))}
+                            { isLoggedIn &&
+                                adminNavItems.map((item, index) => (
+                                    <Button variant="outline"
+                                            color="black"
+                                            className="navButton"
+                                            justify="flex-end"
+                                            component={Link}
+                                            to={item.link}
+                                            size="xs"
+                                    >
+                                        {item.name}
+                                    </Button>
+                                ))}
+                            {/* Logout Button */}
+                            {isLoggedIn &&
+                                <Button variant="outline"
+                                     color="red"
+                                     className="LoggoutButton"
+                                     justify="flex-end"
+                                     onClick={logout}
+                                     size="xs"
+                            >
+                                Logout
+                            </Button>
+                            }
                         </Group>
-
                     </Group>
                 </Group>
             </nav>
