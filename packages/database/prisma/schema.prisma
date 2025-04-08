@@ -42,8 +42,6 @@ model layer {
   bitmap            Bytes     // Binary representation of the bitmap
   width             Int
   height            Int
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
 }
 
 /*
