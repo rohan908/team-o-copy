@@ -19,7 +19,7 @@ const DateInputForm: React.FC<DateInputProps> = ({value, onChange}) => {
             id="date"
             value={value}
             onChange={handleDateChange}
-            className="p-2 border rounded w-full"
+            className=  "p-2 border rounded w-full"
         />
     </div>
     );

@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
+import { useMantineTheme, Box, Button, Flex, Title, Text, Divider, Select, Textarea } from '@mantine/core';
 import ServiceRequestButton from './components/servicebutton';
 import ServiceRequestPopUp from "./components/servicepopup";
 import DateEntryForm from './components/dateEntry.tsx';
 import RoomNumberInput from './components/roomEntry.tsx'
 import TimeInput from './components/timeEntry';
-import dateEntry from "./components/dateEntry.tsx";
-import { useMantineTheme } from '@mantine/core';
-import { Button } from '@mantine/core';
 import ISO6391 from 'iso-639-1';
-import { Select } from '@mantine/core';
 
 
 
 
 function ServiceRequestPage() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [deviceName, setLanguageName] = useState('Error');
+    const [language, setLanguageName] = useState('Error');
     const [selectedDate, setSelectedDate] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
@@ -24,9 +21,8 @@ function ServiceRequestPage() {
     const [requestStatus, setRequestStatus] = useState('');
     const [showRequestFeedback, setShowRequestFeedback] = useState(false);
     const theme = useMantineTheme();
-
-
     const navigate = useNavigate();  // Initialize navigate function
+
 
     // Getters (handlers) for child components outside of this component
     const handleRoomChange = (room: string) => {
@@ -51,7 +47,7 @@ function ServiceRequestPage() {
     // Create a formatted description from all inputs
     const getFormattedDescription = () => {
         return `
-Device: ${deviceName} | 
+Device: ${language} | 
 Date: ${selectedDate} | 
 Time: ${selectedTime} | 
 Room: ${roomNumber} | 
@@ -59,77 +55,140 @@ Details: ${requestDescription}
         `.trim();
     };
 
-    const handleOpenPopup = () => {
-        setIsPopupOpen(true);
-    };
-
-    const handleClosePopup = () => {
-        setIsPopupOpen(false);
-        setRequestDescription('');
-    };
-
     const handleRequestSubmit = () => {
-        if (requestDescription && deviceName != "Error") {
+        if (requestDescription && language != "Error") {
             setRequestStatus("Request Submitted Successfully");
             navigate('/submission', { state: { description: getFormattedDescription() } });
-            setRequestDescription("")
-            setIsPopupOpen(false);
         } else {
             setRequestStatus("Error: Please specify a device");
             setShowRequestFeedback(true);
         }
-        setIsPopupOpen(false);
     };
 
 
 
     return (
-        <div style={{ color: theme.colors.blueBase[7] }}>
-            <ServiceRequestButton onClick={handleOpenPopup} variant={'primary'} disabled={false}>
-                Language Interpreter Request
-            </ServiceRequestButton>
+      <Flex
+          w-="100%"
+          h="100%"
+          justify="center"
+          align="center"
+        >
+          <Box
+            bg="white"
+            p={{base: 'xl', sm:'2rem', md: '3rem'}}
+            w="100%"
+            maw={{base: '90%', sm:'70%', md: '750px' }}
+            style={{
+              opacity: 0.85,
+              borderRadius: theme.radius.lg,
+              backdropFilter: 'blur(5px)',
+            }}
+          >
+            <Title order={1} mb = "xs" c="black">Interpreter Request</Title>
+            <Text fz ="xs" mb="xs">Please fill out the following form to request for a language interpreter</Text>
 
-            <ServiceRequestPopUp isOpen={isPopupOpen} onClose={handleClosePopup} title="Language Interpreter Request">
-                <form onSubmit={e => e.preventDefault()}>
-                    <Select
-                        label = "Choose the Language Needed:"
-                        placeholder = "--Select a Language--"
-                        searchable
-                        nothingFoundMessage = "Language not found"
-                        data={languageOptions}
-                        value ={deviceName === 'Error' ? ' ' : deviceName}
-                        onChange={(value) => setLanguageName(value ?? 'Error')}
-                    ></Select>
-                    <br/>
-                    <DateEntryForm value={selectedDate} onChange={handleDateChange}/><br/>
-                    <TimeInput onTimeChange={handleTimeChange}/><br/>
-                    <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange}/><br/>
-                    <textarea
-                        placeholder="Specify additional details here:"
-                        value={requestDescription}
-                        onChange={(e) => setRequestDescription(e.target.value)}
-                        className="w-full p-2 border rounded"
-                        required={false}
-                    />
-                    <Button
-                        type="button"
-                        onClick={handleRequestSubmit}
-                        color="blueBase"
-                        disabled={!requestDescription.trim()}
-                    >
-                        Submit Request
-                    </Button>
-                </form>
-            </ServiceRequestPopUp>
+            <br/>
+            <form onSubmit={e => e.preventDefault()}>
+              <Select
+                label="Choose the Language Needed:"
+                placeholder="--Select a Language--"
+                searchable
+                nothingFoundMessage="Language not found"
+                data={languageOptions}
+                value={language === 'Error' ? '' : language}
+                onChange={(value) => setLanguageName(value ?? 'Error')}
+                mb="md"
+                styles={{
+                  input: {
+                    borderColor: 'black',
+                  },
+                }}
+              />
+              <DateEntryForm value={selectedDate} onChange={handleDateChange} />
+              <TimeInput onTimeChange={handleTimeChange} />
+              <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange} />
 
-            <ServiceRequestPopUp isOpen={showRequestFeedback} onClose={() => setShowRequestFeedback(false)} title="Request Status">
-                <div className={`p-4 text-center rounded-md font-semibold ${
-                    requestStatus.startsWith("Error") ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                }`}>
-                    {requestStatus}
-                </div>
-            </ServiceRequestPopUp>
-        </div>
+              <Textarea
+                placeholder="Specify additional details here:"
+                value={requestDescription}
+                onChange={(e) => setRequestDescription(e.target.value)}
+                autosize
+                minRows={3}
+                mt="md"
+                mb="md"
+                styles={{
+                  input: {
+                    borderColor: 'black',
+                  },
+                }}
+              />
+
+              <Button
+                type="button"
+                onClick={handleRequestSubmit}
+                color="dark"
+                bg="black"
+                radius="xl"
+                disabled={!requestDescription.trim()}
+              >
+                Submit Request
+              </Button>
+            </form>
+
+            {showRequestFeedback && (
+              <Box mt="lg" p="md" bg={requestStatus.startsWith("Error") ? 'red.1' : 'green.1'} c={requestStatus.startsWith("Error") ? 'red.8' : 'green.8'} style={{ borderRadius: 8 }}>
+                {requestStatus}
+              </Box>
+            )}
+          </Box>
+      </Flex>
+        // <div style={{ color: theme.colors.blueBase[4] }}>
+        //     <ServiceRequestButton onClick={handleOpenPopup} variant={'primary'} disabled={false}>
+        //         Language Interpreter Request
+        //     </ServiceRequestButton>
+        //
+        //     <ServiceRequestPopUp isOpen={isPopupOpen} onClose={handleClosePopup} title="Language Interpreter Request">
+        //         <form onSubmit={e => e.preventDefault()}>
+        //             <Select
+        //                 label = "Choose the Language Needed:"
+        //                 placeholder = "--Select a Language--"
+        //                 searchable
+        //                 nothingFoundMessage = "Language not found"
+        //                 data={languageOptions}
+        //                 value ={deviceName === 'Error' ? ' ' : deviceName}
+        //                 onChange={(value) => setLanguageName(value ?? 'Error')}
+        //             ></Select>
+        //             <br/>
+        //             <DateEntryForm value={selectedDate} onChange={handleDateChange}/><br/>
+        //             <TimeInput onTimeChange={handleTimeChange}/><br/>
+        //             <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange}/><br/>
+        //             <textarea
+        //                 placeholder="Specify additional details here:"
+        //                 value={requestDescription}
+        //                 onChange={(e) => setRequestDescription(e.target.value)}
+        //                 className="w-full p-2 border rounded"
+        //                 required={false}
+        //             />
+        //             <Button
+        //                 type="button"
+        //                 onClick={handleRequestSubmit}
+        //                 color="blueBase"
+        //                 disabled={!requestDescription.trim()}
+        //             >
+        //                 Submit Request
+        //             </Button>
+        //         </form>
+        //     </ServiceRequestPopUp>
+        //
+        //     <ServiceRequestPopUp isOpen={showRequestFeedback} onClose={() => setShowRequestFeedback(false)} title="Request Status">
+        //         <div className={`p-4 text-center rounded-md font-semibold ${
+        //             requestStatus.startsWith("Error") ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+        //         }`}>
+        //             {requestStatus}
+        //         </div>
+        //     </ServiceRequestPopUp>
+        // </div>
     );
 }
 

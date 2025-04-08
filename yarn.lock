@@ -760,6 +760,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/dates@npm:^7.17.3":
+  version: 7.17.3
+  resolution: "@mantine/dates@npm:7.17.3"
+  dependencies:
+    clsx: "npm:^2.1.1"
+  peerDependencies:
+    "@mantine/core": 7.17.3
+    "@mantine/hooks": 7.17.3
+    dayjs: ">=1.0.0"
+    react: ^18.x || ^19.x
+    react-dom: ^18.x || ^19.x
+  checksum: 10c0/90e4e59512dee32780087f50b199eeb3ccf5d0f1e230ccf3b72f04b5176d38be0d953cd3dc0aea864aa01757064d6893d5ab61405547a43b9e9e2ad10d5ab9b0
+  languageName: node
+  linkType: hard
+
 "@mantine/hooks@npm:^7.17.3":
   version: 7.17.3
   resolution: "@mantine/hooks@npm:7.17.3"
@@ -3801,6 +3816,7 @@ __metadata:
   dependencies:
     "@auth0/auth0-react": "npm:^2.1.1"
     "@mantine/core": "npm:^7.17.3"
+    "@mantine/dates": "npm:^7.17.3"
     "@mantine/hooks": "npm:^7.17.3"
     "@tabler/icons-react": "npm:^3.31.0"
     "@tailwindcss/vite": "npm:^4.0.17"

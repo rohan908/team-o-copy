@@ -5,6 +5,8 @@ import {MapPage} from "../MapPage/MapPage.tsx";
 import {Directory} from "../directory/directory.tsx";
 import {DirectoryLocation} from "../directory/components/DirectoryLocation.tsx";
 import {Display} from "../service-request/display.tsx";
+import Service from '../service-request/service.tsx';
+
 
 import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
