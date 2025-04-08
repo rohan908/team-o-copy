@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { useLogin } from './LoginContext';
 import { useNavigate } from 'react-router-dom';
+
 const LogInBox = () => {
     const theme = useMantineTheme();
     const { isLoggedIn, login, logout } = useLogin();
@@ -26,6 +27,10 @@ const LogInBox = () => {
         setLoginStatus(success ? 'success' : 'error');
         setUsername('');
         setPassword('');
+
+        setTimeout(() => {
+            navigate('/map-API'); // Redirect to map-API
+        }, 1000);
     };
 
     const handleLogout = () => {
@@ -88,7 +93,7 @@ const LogInBox = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </Box>
-                        <Group justify="flex-start" w="100%">
+                        {/*<Group justify="flex-start" w="100%">*/}
                             <Button
                                 size="md"
                                 color="dark"
@@ -100,7 +105,7 @@ const LogInBox = () => {
                             >
                                 Login
                             </Button>
-                        </Group>
+                        {/*</Group>*/}
                         {loginStatus && (
                             <Text mt="md" c={loginStatus === 'success' ? 'green' : 'red'} fw={600}>
                                 {loginStatus === 'success' ? 'Welcome back!' : 'Incorrect username or password.'}

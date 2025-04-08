@@ -3,11 +3,9 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import healthcheckRouter from './routes/healthcheck';
-import employeeRouter from './routes/employee.ts';
-import serviceRequestRouter from './routes/serviceRequest.ts';
-import assignedEmployeeRouter from './routes/assigned.ts';
+import directoryRouter from './routes/directory';
+import languageServiceRequestRouter from './routes/languageServiceRequest.ts';
 import { API_ROUTES } from 'common/src/constants';
-import PrismaClient from './bin/prisma-client.ts';
 
 const app: Express = express(); // Setup the backend
 
@@ -26,11 +24,10 @@ app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
 
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
-// won't be reached by the default proxy and prod setup
+// won't be reached by the default proxy and prod setup -> Not True
 app.use('/', healthcheckRouter);
-app.use('/employee', employeeRouter);
-app.use('/servicereqs', serviceRequestRouter);
-app.use('/assigned', assignedEmployeeRouter);
+app.use('/directory', directoryRouter);
+app.use('/languageServiceRequest', languageServiceRequestRouter);
 
 /**
  * Catch all 404 errors, and forward them to the error handler
