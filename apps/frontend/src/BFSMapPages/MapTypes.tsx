@@ -14,6 +14,7 @@ export interface Map {
     xBigMapToSmallMapScale: number;
     yBigMapToSmallMapOffset: number;
     yBigMapToSmallMapScale: number;
+    imageSrc: string;
 }
 
 
