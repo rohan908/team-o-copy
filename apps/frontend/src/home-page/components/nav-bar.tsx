@@ -5,6 +5,7 @@ import "../home-style.css";
 import { useLogin } from './LoginContext'; // adjust path if needed
 import Service from '../../service-request/service.tsx';
 
+
 import {useDisclosure} from "@mantine/hooks";
 
 type NavItem = {
@@ -20,7 +21,7 @@ export const navItems: NavItem[] = [
 ];
 
 export const adminNavItems: NavItem[] = [
-    { name: "Service Request", link: "/submission" }, //add service rec routting here logan
+    { name: "Service Request", link: "/language-form" }, //add service rec routting here logan
 
     // { name: "Profile", link: "/submission" }// potential delighter- login button can be in this
 ];

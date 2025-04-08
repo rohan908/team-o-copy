@@ -23,14 +23,16 @@ const LogInBox = () => {
 
 
     const handleLogin = () => {
-        const success = login(username, password);
+        const success: boolean = login(username, password);
         setLoginStatus(success ? 'success' : 'error');
         setUsername('');
         setPassword('');
 
-        setTimeout(() => {
-            navigate('/map-API'); // Redirect to map-API
-        }, 1000);
+        if (success) {
+            setTimeout(() => {navigate('/map-API')}, 1000);
+        }
+
+
     };
 
     const handleLogout = () => {
