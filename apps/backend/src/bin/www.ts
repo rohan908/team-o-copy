@@ -10,7 +10,10 @@ console.info('Connecting to database...');
 try {
     // This intrinsically connects to the database
     require('./prisma-client.ts');
+
+    // backs up Directory database into 'backup.csv'
     exportToCSV();
+
     console.log('Successfully connected to the database');
 
     // Load bitmap files into the database after connection
@@ -20,11 +23,13 @@ try {
         .then(() => console.log('Floor maps loaded successfully'))
         .catch((error) => console.error('Failed to load floor maps:', error));
 } catch (error) {
+    // Log any errors
     console.error(`Unable to establish database connection:
   ${error}`);
     process.exit(1); // Then exit
 }
 
+// Get port from environment and store in Express
 const port: string | undefined = process.env.BACKEND_PORT;
 
 if (port === undefined) {

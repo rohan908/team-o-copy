@@ -1,6 +1,9 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import {Button, Flex, Image, Box, Group, Anchor, Burger, UnstyledButton, Tabs, Menu} from "@mantine/core";
 import { useState, useEffect } from 'react';
+import "../home-style.css";
+import { useLogin } from './LoginContext'; // adjust path if needed
+import Service from '../../service-request/service.tsx';
 
 import {useDisclosure} from "@mantine/hooks";
 
@@ -16,10 +19,14 @@ export const navItems: NavItem[] = [
     { name: "Navigation", link: "/map-API" },
 ];
 
+export const adminNavItems: NavItem[] = [
+    { name: "Service Request", link: "/submission" }, //add service rec routting here logan
+
+    // { name: "Profile", link: "/submission" }// potential delighter- login button can be in this
+];
 
 export function NavBar() {
-
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isLoggedIn, logout } = useLogin();
     const navigate = useNavigate();
 
     const [opened, { toggle }] = useDisclosure();
@@ -38,6 +45,7 @@ export function NavBar() {
                             {navItems.map((item, index) => (
                                 <>
                                 <Menu.Item
+                                    key={index}
                                     color="grey.3"
                                     component={Link}
                                     to={item.link}
@@ -47,7 +55,32 @@ export function NavBar() {
                                 </Menu.Item>
                                 </>
                             ))}
-
+                            { isLoggedIn && (
+                                <>
+                                    {adminNavItems.map((item, index) => (
+                                        <Menu.Item
+                                            key={index}
+                                            color="grey.3"
+                                            component={Link}
+                                            to={item.link}
+                                            px="md"
+                                        >
+                                            {item.name}
+                                        </Menu.Item>
+                                    ))}
+                                    <Menu.Divider />
+                                    {/* Logout Button */}
+                                        <Menu.Item
+                                            color="red"
+                                            px="md"
+                                            component={Link}
+                                            to={'/'}
+                                            onClick={logout}
+                                        >
+                                            Logout
+                                        </Menu.Item>
+                                    </>
+                                )}
                         </Menu.Dropdown>
                     </Menu>
 
@@ -57,7 +90,7 @@ export function NavBar() {
                                 <Link to="/">
                                     <Image
                                         className={"rounded"}
-                                        src={"public/logoMassGeneralBrigham.png"}
+                                        src={"/logoMassGeneralBrigham.png"}
                                         alt={"Home"}
                                         h='xl'
                                     />
@@ -78,8 +111,35 @@ export function NavBar() {
                                     {item.name}
                                 </Button>
                             ))}
+                            { isLoggedIn && (
+                                <>
+                                    {adminNavItems.map((item, index) => (
+                                    <Button variant="outline"
+                                            color="black"
+                                            className="navButton"
+                                            justify="flex-end"
+                                            component={Link}
+                                            to={item.link}
+                                            size="xs"
+                                    >
+                                        {item.name}
+                                    </Button>
+                                    ))}
+                                    {/* Logout Button */}
+                                    <Button variant="outline"
+                                            color="red"
+                                            className="LoggoutButton"
+                                            justify="flex-end"
+                                            onClick={logout}
+                                            component={Link}
+                                            to={'/'}
+                                            size="xs"
+                                    >
+                                        Logout
+                                    </Button>
+                                </>
+                            )}
                         </Group>
-
                     </Group>
                 </Group>
             </nav>

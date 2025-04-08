@@ -104,5 +104,7 @@ const findPathHandler: RequestHandler<
 router.post('/', async (req: Request, res: Response) => {});
 router.get('/', async (req: Request, res: Response) => {});
 router.post('/findPath', findPathHandler);
+router.post('/findPath', findPathHandler);
+
 
 export default router;
