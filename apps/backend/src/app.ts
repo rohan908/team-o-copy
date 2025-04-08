@@ -5,6 +5,8 @@ import logger from 'morgan';
 import healthcheckRouter from './routes/healthcheck';
 import directoryRouter from './routes/directory';
 import languageServiceRequestRouter from './routes/languageServiceRequest.ts';
+import graphRouter from './routes/graph.ts';
+
 import { API_ROUTES } from 'common/src/constants';
 
 const app: Express = express(); // Setup the backend
@@ -28,6 +30,7 @@ app.use(cookieParser()); // Cookie parser
 app.use('/', healthcheckRouter);
 app.use('/directory', directoryRouter);
 app.use('/languageServiceRequest', languageServiceRequestRouter);
+app.use('/graph', graphRouter);
 
 /**
  * Catch all 404 errors, and forward them to the error handler
