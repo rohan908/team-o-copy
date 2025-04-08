@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import {
     Box,
     Text,
@@ -17,7 +18,7 @@ interface HospitalSelectBoxProps {
     onSelectDepartment?: (dept: string) => void;
 }
 
-const HospitalSelectBox: React.FC<HospitalSelectBoxProps> = ({
+const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                                                                  onSelectHospital,
                                                                  onSelectDepartment,
                                                              }) => {
@@ -40,7 +41,7 @@ const HospitalSelectBox: React.FC<HospitalSelectBoxProps> = ({
     return (
         <Flex
             w="100%"
-            justify="center"
+            justify="flex-start"
             align="center"
             style={{ position: 'relative' }}
         >
@@ -48,7 +49,7 @@ const HospitalSelectBox: React.FC<HospitalSelectBoxProps> = ({
             <Box
                 bg="white"
                 p={{ base: 'xl', sm: '2rem', md: '3rem' }}
-                w="100%"
+                w="70%"
                 maw={{ base: '90%', sm: '70%', md: '600px' }}
                 style={{
                     opacity: 0.85,
@@ -64,26 +65,11 @@ const HospitalSelectBox: React.FC<HospitalSelectBoxProps> = ({
                     fw={700}
                     fz={{ sm: 'xl', md: 'xxxl' }}
                 >
-                    Let’s get started
+                    Find your Way!
                 </Title>
 
-                <Text mb="md" ta="left">
-                    Looking for directions?
-                </Text>
 
                 <Flex gap="md" wrap="wrap" mb={{ base: 'xs' }}>
-                    <Button
-                        variant="outline"
-                        color="dark"
-                        style={{
-                            borderRadius: '20px',
-                            transition: 'all 0.3s ease',
-                            fontSize: 'clamp(12px, 3vw, 18px)',
-                        }}
-                        onClick={handleFindPath}
-                    >
-                        Find Your Way Now
-                    </Button>
                     <Text mb="0" ta="left" fz={{ base: 'xs' }}>
                         Use our interactive map to find departments, parking, and efficient routes
                     </Text>
@@ -118,10 +104,14 @@ const HospitalSelectBox: React.FC<HospitalSelectBoxProps> = ({
                     value={department}
                     onChange={setDepartment}
                     mb="md"
+
+
                 />
+                <Button onClick={handleFindPath}>Find Path</Button>
+
             </Box>
         </Flex>
     );
 };
 
-export default HospitalSelectBox;
+export default SelectBox;
