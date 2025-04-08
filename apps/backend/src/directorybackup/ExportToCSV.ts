@@ -37,7 +37,7 @@ export async function exportToCSV() {
         const csvContent = csvRows.join('\n');
 
         // write to backup.csv file, creates files if doesn't exist (should exist already tho)
-        const filePath = path.resolve(__dirname, '../backup.csv');
+        const filePath = './src/directorybackup/backup.csv';
         fs.writeFileSync(filePath, csvContent);
         console.log('CSV written to:', filePath);
     } catch (error) {
