@@ -8,6 +8,7 @@ type LoginContextType = {
 
 const LoginContext = createContext<LoginContextType | undefined>(undefined);
 
+
 export const LoginProvider = ({ children }: { children: ReactNode }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
