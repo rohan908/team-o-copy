@@ -36,7 +36,7 @@ const TimeInput: React.FC<timeEntryProps> = ({onTimeChange}) => {
     if (hours && minutes) {
       const formattedHours = hours.padStart(2, '0');
       const formattedMinutes = minutes.padStart(2, '0');
-      const formattedTime = '${formattedHours}:${formattedMinutes} ${period}';
+      const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
       onTimeChange(formattedTime);
     } else {
       onTimeChange('');

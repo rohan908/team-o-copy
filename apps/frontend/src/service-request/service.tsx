@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';  // Import useNavigate
 import { useMantineTheme, Box, Button, Flex, Title, Text, Select, Textarea } from '@mantine/core';
 import ServiceRequestButton from './components/servicebutton';
 import ServiceRequestPopUp from "./components/servicepopup";
-import DateEntryForm from './components/dateEntry.tsx';
+import DateInputForm from './components/dateEntry.tsx';
 import RoomNumberInput from './components/roomEntry.tsx'
 import TimeInput from './components/timeEntry';
 import ISO6391 from 'iso-639-1';
@@ -21,6 +21,7 @@ function Language() {
     const [showRequestFeedback, setShowRequestFeedback] = useState(false);
     const theme = useMantineTheme();
     const navigate = useNavigate();  // Initialize navigate function
+
 
 
     // Getters (handlers) for child components outside of this component
@@ -42,22 +43,19 @@ function Language() {
         })),
     ];
 
-
-    // Create a formatted description from all inputs
-    const getFormattedDescription = () => {
-        return `
-Language: ${language} | 
-Date: ${selectedDate} | 
-Time: ${selectedTime} | 
-Room: ${roomNumber} | 
-Details: ${requestDescription}
-        `.trim();
-            };
-
     const handleRequestSubmit = () => {
         if (requestDescription && language != "Error") {
             setRequestStatus("Request Submitted Successfully");
-            navigate('/submission', { state: { description: getFormattedDescription() } });
+                navigate('/submission', { state: {
+                        label: language === 'asl'
+                            ? 'ASL (American Sign Language)'
+                            : ISO6391.getName(language),
+                        selectedDate,
+                        selectedTime,
+                        roomNumber,
+                        requestDescription,
+                    }
+                });
         } else {
             setRequestStatus("Error: Please specify a device");
             setShowRequestFeedback(true);
@@ -104,7 +102,7 @@ Details: ${requestDescription}
                   },
                 }}
               />
-              <DateEntryForm value={selectedDate} onChange={handleDateChange} />
+              <DateInputForm value={selectedDate} onChange={handleDateChange} />
               <TimeInput onTimeChange={handleTimeChange} />
               <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange} />
 
