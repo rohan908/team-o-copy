@@ -74,7 +74,7 @@ const myvariantColorResolver: VariantColorsResolver = (input) => {
         return {
             // variant="outline",
             radius: 300,
-            background: 'var(--mantine-color-blueBase-9',
+            background: 'var(--mantine-color-blueBase-9)',
             hover: 'var(--mantine-color-white)',
             border: `1px solid ${parsedColor.value}`,
             color: 'var(--mantine-color-white)',
