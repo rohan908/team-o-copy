@@ -2,8 +2,8 @@ import app from '../app.ts';
 import http from 'http';
 import { AddressInfo } from 'net';
 import { createHttpTerminator } from 'http-terminator';
-import { exportToCSV } from '../directorybackup/ExportToCSV.ts';
 import { BitmapLoaderService } from '../services/BitmapLoaderService';
+import { exportToCSV } from '../directorybackup/ExportToCSV.ts';
 
 // Attempt a database connection
 console.info('Connecting to database...');

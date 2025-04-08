@@ -34,14 +34,6 @@ model directory {
   @@id([dName, building])
 }
 
-/*
-  creates the graph table (strong entity)
-  bitMap requires a Json object to store a 2D array
- */
-model graph {
-  gName         String    @id
-  bitMap        Json
-}
 model layer {
   id                Int       @id @default(autoincrement())
   layerIndex        Int       @unique
@@ -52,5 +44,14 @@ model layer {
   height            Int
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
+}
+
+/*
+  creates the graph table (strong entity)
+  bitMap requires a Json object to store a 2D array
+ */
+model graph {
+  gName         String    @id
+  bitMap        Json
 }
 
