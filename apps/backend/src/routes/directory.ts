@@ -3,12 +3,33 @@ import PrismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
 
+// Will update the directory backup CSV with more entries from a given CSV
 router.post('/import', async (req: Request, res: Response) => {
     // Will need for updating directories with CSV files
     // Need to figure out how to parse FormData once it is passed
-    console.log(JSON.stringify(req.body));
+    const { receivedData } = req.body;
+
+    console.log('Received:', req.body);
+
+    res.status(200).json({
+        message: 'Data received successfully',
+        receivedData: { receivedData },
+    });
+
     console.log('Imported Table Successfully');
-    res.json(req.body);
+    res.json(receivedData);
+});
+
+// Exports current directory backup CSV to frontend
+router.get('/export', async (req: Request, res: Response) => {});
+
+// Clears the directory backup CSV
+router.delete('/clear', async (req: Request, res: Response) => {
+    // Add removal from CSV file
+
+    res.status(200).json({
+        message: 'Table cleared successfully',
+    });
 });
 
 // Retrieves all directory entries

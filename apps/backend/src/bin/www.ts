@@ -8,6 +8,7 @@ console.info('Connecting to database...');
 try {
     // This intrinsically connects to the database
     require('./prisma-client.ts');
+
     console.log('Successfully connected to the database');
 } catch (error) {
     // Log any errors

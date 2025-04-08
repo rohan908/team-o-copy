@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
     Box,
     TextInput,
@@ -30,11 +31,11 @@ export function DatabaseController({ table }: Props) {
         try {
             console.log('importing file');
 
-            // sends a post request, formData is empty though
-            const res = await fetch(`http://localhost:3001/${table}/import`, {
-                method: 'POST',
-                body: formData,
-            });
+            const res = await axios.post(`http://localhost:3001/${table}/import`, formData)
+                .then(responseData => {
+                    console.log('Response from server:', responseData);
+                })
+                .catch(err => console.log(err));
 
             console.log('imported file');
         } catch (error) {
@@ -43,6 +44,7 @@ export function DatabaseController({ table }: Props) {
 
         //setMessage(await res.statusText);
     };
+
     // export function handling
     const handleExport = async () => {
         window.location.href = `api/export/${table}`;
@@ -51,14 +53,16 @@ export function DatabaseController({ table }: Props) {
         const res = await fetch(`/api/${table}/all`)
             .then((res) => console.log(res))
          */
+        const res = await axios.get(`http://localhost:3001/${table}/export`, {})
     };
+
     // clear function handling
     const handleClear = async () => {
         if (!confirm('Are you sure you want to clear this table?')) return;
-        const res = await fetch(`/api/clear/${table}`, {
-            method: 'DELETE',
-        });
-        setMessage(await res.text());
+        const res = await axios.delete('http://localhost:3001/${table}/clear')
+            .then(responseData => {
+                console.log('Response from server:', responseData);
+            });
     };
 
     return (
