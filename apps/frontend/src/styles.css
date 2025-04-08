@@ -12,3 +12,8 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 }
+
+.navButton:hover {
+    background-color: #0043ad;
+    color: white;
+}
