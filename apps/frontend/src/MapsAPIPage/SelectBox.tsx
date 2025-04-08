@@ -40,7 +40,6 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
 
     return (
         <Flex
-            w="100%"
             justify="flex-start"
             align="center"
             style={{ position: 'relative' }}
@@ -49,8 +48,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
             <Box
                 bg="white"
                 p={{ base: 'xl', sm: '2rem', md: '3rem' }}
-                w="70%"
-                maw={{ base: '90%', sm: '70%', md: '600px' }}
+                maw={{ base: '90%', sm: '70%', md: '450px' }}
                 style={{
                     opacity: 0.85,
                     borderRadius: theme.radius.lg,
