@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
-import { useMantineTheme, Box, Button, Flex, Title, Text, Divider, Select, Textarea } from '@mantine/core';
+import { useMantineTheme, Box, Button, Flex, Title, Text, Select, Textarea } from '@mantine/core';
 import ServiceRequestButton from './components/servicebutton';
 import ServiceRequestPopUp from "./components/servicepopup";
 import DateEntryForm from './components/dateEntry.tsx';
@@ -11,8 +11,7 @@ import ISO6391 from 'iso-639-1';
 
 
 
-function ServiceRequestPage() {
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
+function Language() {
     const [language, setLanguageName] = useState('Error');
     const [selectedDate, setSelectedDate] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
@@ -47,13 +46,13 @@ function ServiceRequestPage() {
     // Create a formatted description from all inputs
     const getFormattedDescription = () => {
         return `
-Device: ${language} | 
+Language: ${language} | 
 Date: ${selectedDate} | 
 Time: ${selectedTime} | 
 Room: ${roomNumber} | 
 Details: ${requestDescription}
         `.trim();
-    };
+            };
 
     const handleRequestSubmit = () => {
         if (requestDescription && language != "Error") {
@@ -143,53 +142,7 @@ Details: ${requestDescription}
             )}
           </Box>
       </Flex>
-        // <div style={{ color: theme.colors.blueBase[4] }}>
-        //     <ServiceRequestButton onClick={handleOpenPopup} variant={'primary'} disabled={false}>
-        //         Language Interpreter Request
-        //     </ServiceRequestButton>
-        //
-        //     <ServiceRequestPopUp isOpen={isPopupOpen} onClose={handleClosePopup} title="Language Interpreter Request">
-        //         <form onSubmit={e => e.preventDefault()}>
-        //             <Select
-        //                 label = "Choose the Language Needed:"
-        //                 placeholder = "--Select a Language--"
-        //                 searchable
-        //                 nothingFoundMessage = "Language not found"
-        //                 data={languageOptions}
-        //                 value ={deviceName === 'Error' ? ' ' : deviceName}
-        //                 onChange={(value) => setLanguageName(value ?? 'Error')}
-        //             ></Select>
-        //             <br/>
-        //             <DateEntryForm value={selectedDate} onChange={handleDateChange}/><br/>
-        //             <TimeInput onTimeChange={handleTimeChange}/><br/>
-        //             <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange}/><br/>
-        //             <textarea
-        //                 placeholder="Specify additional details here:"
-        //                 value={requestDescription}
-        //                 onChange={(e) => setRequestDescription(e.target.value)}
-        //                 className="w-full p-2 border rounded"
-        //                 required={false}
-        //             />
-        //             <Button
-        //                 type="button"
-        //                 onClick={handleRequestSubmit}
-        //                 color="blueBase"
-        //                 disabled={!requestDescription.trim()}
-        //             >
-        //                 Submit Request
-        //             </Button>
-        //         </form>
-        //     </ServiceRequestPopUp>
-        //
-        //     <ServiceRequestPopUp isOpen={showRequestFeedback} onClose={() => setShowRequestFeedback(false)} title="Request Status">
-        //         <div className={`p-4 text-center rounded-md font-semibold ${
-        //             requestStatus.startsWith("Error") ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-        //         }`}>
-        //             {requestStatus}
-        //         </div>
-        //     </ServiceRequestPopUp>
-        // </div>
     );
 }
 
-export default ServiceRequestPage;
+export default Language;
