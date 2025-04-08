@@ -15,17 +15,17 @@ export function Routing() {
 
     return (
         <>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<NavBar />}>
-                            <Route index element={<HomePage/>} />
-                            <Route path="map-page" element={<MapPage/>} />
-                            <Route path="/submission" element={<Display />} />
-                            <Route path="directory" element={<Directory/>}/>
-                            <Route path="/directory/:topic" element={<DirectoryLocation />} />
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<NavBar />}>
+                        <Route index element={<HomePage/>} />
+                        <Route path="map-page" element={<MapPage/>} />
+                        <Route path="/submission" element={<Display />} />
+                        <Route path="directory" element={<Directory/>}/>
+                        <Route path="/directory/:topic" element={<DirectoryLocation />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
         </>
     );
 }
