@@ -33,11 +33,11 @@ function ServiceRequestPage() {
     // Create a formatted description from all inputs
     const getFormattedDescription = () => {
         return `
-        Device: ${deviceName} | 
-        Date: ${selectedDate} | 
-        Time: ${selectedTime} | 
-        Room: ${roomNumber} | 
-        Details: ${requestDescription}
+Device: ${deviceName} | 
+Date: ${selectedDate} | 
+Time: ${selectedTime} | 
+Room: ${roomNumber} | 
+Details: ${requestDescription}
         `.trim();
     };
 
