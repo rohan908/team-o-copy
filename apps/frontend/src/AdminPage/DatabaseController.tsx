@@ -62,13 +62,12 @@ export function DatabaseController({ table }: Props) {
 
     // export function handling
     const handleExport = async () => {
-        window.location.href = `api/export/${table}`;
-        /*
-        // checking connection, prints whole table to console
-        const res = await fetch(`/api/${table}/all`)
-            .then((res) => console.log(res))
-         */
-        const res = await axios.get(`http://localhost:3001/${table}/export`, {})
+        const link = document.createElement('a');
+        link.href = "http/localhost:3001/static-export/backup.csv"
+        link.setAttribute('download', 'backup.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     // clear function handling
