@@ -760,27 +760,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/dates@npm:^7.17.3":
-  version: 7.17.3
-  resolution: "@mantine/dates@npm:7.17.3"
-  dependencies:
-    clsx: "npm:^2.1.1"
-  peerDependencies:
-    "@mantine/core": 7.17.3
-    "@mantine/hooks": 7.17.3
-    dayjs: ">=1.0.0"
-    react: ^18.x || ^19.x
-    react-dom: ^18.x || ^19.x
-  checksum: 10c0/90e4e59512dee32780087f50b199eeb3ccf5d0f1e230ccf3b72f04b5176d38be0d953cd3dc0aea864aa01757064d6893d5ab61405547a43b9e9e2ad10d5ab9b0
-  languageName: node
-  linkType: hard
-
 "@mantine/hooks@npm:^7.17.3":
   version: 7.17.3
   resolution: "@mantine/hooks@npm:7.17.3"
   peerDependencies:
     react: ^18.x || ^19.x
   checksum: 10c0/a823d8ee7ebc56547881601e09e9625900682380b96665fd07cdbe540e95045587681c2cb2c132138045e2d02fd47125dd93e83e9022074f80e88a8114428b28
+  languageName: node
+  linkType: hard
+
+"@mapbox/corslite@npm:0.0.7":
+  version: 0.0.7
+  resolution: "@mapbox/corslite@npm:0.0.7"
+  checksum: 10c0/9b7818377d6f1b44c1c39782fa37350894da03663f6c050e7b340fb7f45100a26c0a1eeb0c478612a43cf60ba55f85c5dfe2184b06230734e059d2c5c458ecbd
+  languageName: node
+  linkType: hard
+
+"@mapbox/polyline@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@mapbox/polyline@npm:0.2.0"
+  bin:
+    polyline: bin/polyline.bin.js
+  checksum: 10c0/4e0972ec41afa5ef77ae9bc2ab250e24db15d83898bbce4682dfadcc60776231ccc75ba5ad4042c4fde705b667df99602201723d814aaec9b1ad8c1ce7e06974
   languageName: node
   linkType: hard
 
@@ -915,6 +916,17 @@ __metadata:
   dependencies:
     "@prisma/debug": "npm:6.5.0"
   checksum: 10c0/45033d8c20a19d6e0329ff15901606a53be9f43c843ddfd99848c8ac388b12e1b65c202e95a1d5cdc7da4bfee77ed3795ba3c7e0b1d1fa6380c9a253e1bedfd2
+  languageName: node
+  linkType: hard
+
+"@react-leaflet/core@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@react-leaflet/core@npm:2.1.0"
+  peerDependencies:
+    leaflet: ^1.9.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 10c0/d5218c79ab9decd458e1fa8a0ec3757542e3ea4e569afa151a32ef0e9ceb63a13174f3fbc740fe0d514df8b0b3e30d913bfb0b8b661dac13924934d7e430bfc9
   languageName: node
   linkType: hard
 
@@ -1523,6 +1535,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/geojson@npm:*":
+  version: 7946.0.16
+  resolution: "@types/geojson@npm:7946.0.16"
+  checksum: 10c0/1ff24a288bd5860b766b073ead337d31d73bdc715e5b50a2cee5cb0af57a1ed02cc04ef295f5fa68dc40fe3e4f104dd31282b2b818a5ba3231bc1001ba084e3c
+  languageName: node
+  linkType: hard
+
 "@types/history@npm:^4.7.11":
   version: 4.7.11
   resolution: "@types/history@npm:4.7.11"
@@ -1557,6 +1576,24 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/ff8f54fc49621210291f815fe5b15d809fd7d032941b3180743440bd507ecdf08b9e844625fa346af568c84bf34114eb378dcdc3e921a08ba1e2a08d7e3c809c
+  languageName: node
+  linkType: hard
+
+"@types/leaflet-routing-machine@npm:^3.2.8":
+  version: 3.2.8
+  resolution: "@types/leaflet-routing-machine@npm:3.2.8"
+  dependencies:
+    "@types/leaflet": "npm:*"
+  checksum: 10c0/fa88c8da895feba7072dbddaa6be2b170fbeb5ac24ca89b9df1872a4e78157fb54e1c030b9b68d3bf98f126636b02cfbf03bcf222031cb109408c2640c9836b0
+  languageName: node
+  linkType: hard
+
+"@types/leaflet@npm:*, @types/leaflet@npm:1.9.17":
+  version: 1.9.17
+  resolution: "@types/leaflet@npm:1.9.17"
+  dependencies:
+    "@types/geojson": "npm:*"
+  checksum: 10c0/b03c98921a1874212d456f5bddb2e2eda87c1a82b458a73d2df844af2ebe59eba869294b563637f4e52b38a5cd8f88c84febd519feb4bc6f3d14768822c1189c
   languageName: node
   linkType: hard
 
@@ -2435,6 +2472,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"buffer-from@npm:^1.0.0":
+  version: 1.1.2
+  resolution: "buffer-from@npm:1.1.2"
+  checksum: 10c0/124fff9d66d691a86d3b062eff4663fe437a9d9ee4b47b1b9e97f5a5d14f6d5399345db80f796827be7c95e70a8e765dd404b7c3ff3b3324f98e9b0c8826cc34
+  languageName: node
+  linkType: hard
+
 "bytes@npm:3.0.0":
   version: 3.0.0
   resolution: "bytes@npm:3.0.0"
@@ -2883,6 +2927,7 @@ __metadata:
   resolution: "database@workspace:packages/database"
   dependencies:
     "@prisma/client": "npm:6.5.0"
+    "@types/node": "npm:^14.14.21"
     "@yarnpkg/pnpify": "npm:^4.0.0-rc.45"
     dotenv: "npm:*"
     dotenv-cli: "npm:*"
@@ -2892,6 +2937,8 @@ __metadata:
     prettier-config-custom: "npm:*"
     prisma: "npm:6.5.0"
     ts-config-custom: "npm:*"
+    ts-node: "npm:^9.1.1"
+    typescript: "npm:^4.1.3"
   languageName: unknown
   linkType: soft
 
@@ -3816,10 +3863,11 @@ __metadata:
   dependencies:
     "@auth0/auth0-react": "npm:^2.1.1"
     "@mantine/core": "npm:^7.17.3"
-    "@mantine/dates": "npm:^7.17.3"
     "@mantine/hooks": "npm:^7.17.3"
     "@tabler/icons-react": "npm:^3.31.0"
     "@tailwindcss/vite": "npm:^4.0.17"
+    "@types/leaflet": "npm:1.9.17"
+    "@types/leaflet-routing-machine": "npm:^3.2.8"
     "@types/node": "npm:*"
     "@types/prop-types": "npm:^15.7.5"
     "@types/react": "npm:^18.0.37"
@@ -3837,6 +3885,8 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.2.0"
     eslint-plugin-react-refresh: "npm:^0.4.19"
     iso-639-1: "npm:^3.1.5"
+    leaflet: "npm:1.9.4"
+    leaflet-routing-machine: "npm:3.2.12"
     localforage: "npm:^1.10.0"
     match-sorter: "npm:^6.3.1"
     postcss: "npm:^8.5.3"
@@ -3846,6 +3896,7 @@ __metadata:
     prettier-config-custom: "workspace:*"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
+    react-leaflet: "npm:^4.2.1"
     react-router-bootstrap: "npm:^0.26.2"
     react-router-dom: "npm:^6.11.2"
     serve: "npm:^14.2.0"
@@ -4383,13 +4434,6 @@ __metadata:
   version: 3.1.1
   resolution: "isexe@npm:3.1.1"
   checksum: 10c0/9ec257654093443eb0a528a9c8cbba9c0ca7616ccb40abd6dde7202734d96bb86e4ac0d764f0f8cd965856aacbff2f4ce23e730dc19dfb41e3b0d865ca6fdcc7
-  languageName: node
-  linkType: hard
-
-"iso-639-1@npm:^3.1.5":
-  version: 3.1.5
-  resolution: "iso-639-1@npm:3.1.5"
-  checksum: 10c0/04739478e55313f2badd4b1db80b3fb61a326cb9df639a05098ccbbac2b52e60458707d9c4834f5a0cddd133dc71f5f5554e99b16d8f26f86e359b3a0e91da0d
   languageName: node
   linkType: hard
 
@@ -6503,7 +6547,6 @@ __metadata:
     eslint: "npm:^9.23.0"
     eslint-config-custom: "workspace:*"
     husky: "npm:^9.1.7"
-    iso-639-1: "npm:^3.1.5"
     prettier: "npm:^3.5.3"
     prettier-config-custom: "workspace:*"
     tailwindcss: "npm:^4.1.0"
