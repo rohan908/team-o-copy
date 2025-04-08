@@ -6,6 +6,8 @@ import PrismaClient from '../bin/prisma-client';
 export class BitmapLoaderService {
     private bitmapService: BitmapService;
     private readonly bitmapDirectory: string;
+    private readonly maxRetries: number = 3;
+    private readonly retryDelay: number = 1000; // 1 second
 
     constructor(bitmapDirectory: string = path.join(process.cwd(), 'bitmaps')) {
         this.bitmapService = new BitmapService();
@@ -32,7 +34,12 @@ export class BitmapLoaderService {
 
             // Process each file
             for (const file of files) {
-                await this.processFile(file);
+                try {
+                    await this.processFile(file);
+                } catch (error) {
+                    console.error(`Error processing file ${file}:`, error);
+                    // Continue with next file instead of failing the entire process
+                }
             }
 
             console.log('Bitmap loading complete');
@@ -43,48 +50,82 @@ export class BitmapLoaderService {
     }
 
     private async processFile(filename: string): Promise<void> {
-        try {
-            // Parse filename to extract metadata
-            const fileInfo = this.parseFilename(filename);
+        // Parse filename to extract metadata
+        const fileInfo = this.parseFilename(filename);
 
-            if (!fileInfo) {
-                console.warn(`Skipping file with invalid name format: ${filename}`);
-                return;
-            }
-
-            const filePath = path.join(this.bitmapDirectory, filename);
-            const bmpData = fs.readFileSync(filePath);
-
-            // Extract bitmap info and convert to grid
-            const { grid, width, height } = this.bitmapToGrid(bmpData);
-
-            // Convert grid to compressed binary format for database
-            const bitmapBuffer = this.bitmapService.encodeBitmap(grid, width, height);
-
-            // Upsert to database
-            await PrismaClient.layer.upsert({
-                where: { layerIndex: fileInfo.layerIndex },
-                update: {
-                    name: fileInfo.name,
-                    bitmap: bitmapBuffer,
-                    width,
-                    height,
-                    isConnectionLayer: fileInfo.isConnectionLayer,
-                },
-                create: {
-                    layerIndex: fileInfo.layerIndex,
-                    name: fileInfo.name,
-                    bitmap: bitmapBuffer,
-                    width,
-                    height,
-                    isConnectionLayer: fileInfo.isConnectionLayer,
-                },
-            });
-
-            console.log(`Processed ${filename} as layer ${fileInfo.layerIndex}`);
-        } catch (error) {
-            console.error(`Error processing file ${filename}:`, error);
+        if (!fileInfo) {
+            console.warn(`Skipping file with invalid name format: ${filename}`);
+            return;
         }
+
+        const filePath = path.join(this.bitmapDirectory, filename);
+        const bmpData = fs.readFileSync(filePath);
+
+        // Extract bitmap info and convert to grid
+        const { grid, width, height } = this.bitmapToGrid(bmpData);
+
+        // Convert grid to compressed binary format for database
+        const bitmapBuffer = this.bitmapService.encodeBitmap(grid, width, height);
+
+        // Attempt to upsert with retry logic
+        await this.upsertWithRetry(fileInfo, bitmapBuffer, width, height);
+    }
+
+    private async upsertWithRetry(
+        fileInfo: { layerIndex: number; name: string; isConnectionLayer: boolean },
+        bitmapBuffer: Buffer,
+        width: number,
+        height: number
+    ): Promise<void> {
+        let lastError: Error | null = null;
+
+        for (let attempt = 0; attempt < this.maxRetries; attempt++) {
+            try {
+                // Check if the record already exists
+                const existingLayer = await PrismaClient.layer.findUnique({
+                    where: { layerIndex: fileInfo.layerIndex }
+                });
+
+                if (existingLayer) {
+                    // Update existing record
+                    await PrismaClient.layer.update({
+                        where: { layerIndex: fileInfo.layerIndex },
+                        data: {
+                            name: fileInfo.name,
+                            bitmap: bitmapBuffer,
+                            width,
+                            height,
+                            isConnectionLayer: fileInfo.isConnectionLayer,
+                        },
+                    });
+                } else {
+                    // Create new record
+                    await PrismaClient.layer.create({
+                        data: {
+                            layerIndex: fileInfo.layerIndex,
+                            name: fileInfo.name,
+                            bitmap: bitmapBuffer,
+                            width,
+                            height,
+                            isConnectionLayer: fileInfo.isConnectionLayer,
+                        },
+                    });
+                }
+
+                console.log(`Processed ${fileInfo.name} as layer ${fileInfo.layerIndex}`);
+                return; // Success, exit the retry loop
+            } catch (error) {
+                lastError = error as Error;
+                console.warn(`Attempt ${attempt + 1} failed for layer ${fileInfo.layerIndex}, retrying in ${this.retryDelay}ms...`);
+
+                // Wait before retrying
+                await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+            }
+        }
+
+        // If we get here, all retry attempts failed
+        console.error(`Failed to process layer ${fileInfo.layerIndex} after ${this.maxRetries} attempts`);
+        throw lastError;
     }
 
     private parseFilename(filename: string): {
