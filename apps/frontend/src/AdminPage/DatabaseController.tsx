@@ -11,13 +11,26 @@ import {
     Text,
     Divider,
 } from '@mantine/core';
+
 type Props = {
     table: string;
 };
 export function DatabaseController({ table }: Props) {
     // useState variables -> might need to change types
-    const [file, setFile] = useState<File | null>(null);
-    const [message, setMessage] = useState('');
+    const [file, setFile] = useState<File| null>(null);
+
+    // reads the given file and returns as string
+    async function getData(datafile: File) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                resolve(reader.result as string);
+            }
+
+            reader.readAsText(datafile);
+        });
+    }
 
     // import function handling
     const handleImport = async () => {
@@ -25,13 +38,15 @@ export function DatabaseController({ table }: Props) {
             console.log('No file import');
             return;
         }
-        const formData = new FormData();
-        formData.append('file', file);
+
+        const data= await getData(file);
+        console.log(data);
 
         try {
             console.log('importing file');
 
-            const res = await axios.post(`http://localhost:3001/${table}/import`, formData)
+            // Sends parsed data to the database
+            const res = await axios.post(`http://localhost:3001/${table}/import`, data)
                 .then(responseData => {
                     console.log('Response from server:', responseData);
                 })
@@ -75,7 +90,6 @@ export function DatabaseController({ table }: Props) {
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
                 className="form-control"
                 color={"black"}
-
             />
             <div>
                 <Button
