@@ -11,6 +11,45 @@ export function CSVTable({ table }: Props) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    // Function to deal with quoted fields
+    const parseCSVLine = (line: string) => {
+        const values = [];
+        let current = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < line.length; i++) {
+            const char =line[i];
+
+            if (char === '"') {
+                inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+                values.push(current);
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+
+        values.push(current);
+
+        return values;
+    };
+
+    const parseCSV = (csvString: string) => {
+        const lines = csvString.split('\n');
+        if (lines.length === 0) return [];
+
+        const headers = parseCSVLine(lines[0]);
+
+        return lines.slice(1).filter(line => line.trim() !== '').map((line) => {
+            const values = parseCSVLine(line);
+            return headers.reduce((obj, header, index) => {
+                obj[header] = values[index]?.trim() || '';
+                return obj;
+            }, {} as Record<string, string>);
+        });
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,21 +71,6 @@ export function CSVTable({ table }: Props) {
         };
         fetchData();
     }, [table]);
-
-    const parseCSV = (csvString: string) => {
-        const lines = csvString.split('\n');
-        if (lines.length ===0) return [];
-
-        const headers = lines[0].split(',').map(h => h.trim());
-
-        return lines.slice(1).filter(line => line.trim() !== '').map(line => {
-            const values = line.split(',');
-            return headers.reduce((obj, header, index) => {
-                obj[header] = values[index]?.trim() || '';
-                return obj;
-            }, {} as Record<string, string>);
-        });
-    };
 
     if (loading) {
         return <Center><Loader /></Center>;
