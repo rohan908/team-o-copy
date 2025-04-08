@@ -16,7 +16,7 @@ export function MapAPIPage() {
     return (
         <Box
             style={{
-                position: 'absolute',
+                position: 'relative',
                 width: '100%',
                 height: '100vh',
                 overflow: 'hidden',
