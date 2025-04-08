@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
-import { useMantineTheme, Box, Button, Flex, Title, Text, Select, Textarea } from '@mantine/core';
-import ServiceRequestButton from './components/servicebutton';
-import ServiceRequestPopUp from "./components/servicepopup";
+import { useMantineTheme, Box, Flex, Title, Text, Stack } from '@mantine/core';
 import DateInputForm from './components/dateEntry.tsx';
 import RoomNumberInput from './components/roomEntry.tsx'
 import TimeInput from './components/timeEntry';
+import RequestDescription from "./components/requestDescription.tsx";
+import LanguageSelect from "./components/LanguageSelect.tsx";
+import SubmitButton from './components/submitButton';
 import ISO6391 from 'iso-639-1';
 
 
@@ -16,7 +17,7 @@ function Language() {
     const [selectedDate, setSelectedDate] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
-    const [requestDescription, setRequestDescription] = useState('');
+    const [description, setSelectedDescription] = useState('');
     const [requestStatus, setRequestStatus] = useState('');
     const [showRequestFeedback, setShowRequestFeedback] = useState(false);
     const theme = useMantineTheme();
@@ -34,6 +35,10 @@ function Language() {
     const handleDateChange = (date: string) => {
         setSelectedDate(date);
     };
+    const handleDescriptionChange = (description: string) => {
+      setSelectedDescription(description);
+    }
+
     // to get access to all languages using premade ISO6391 list, and adding ASL to it
     const languageOptions = [
         { value: 'asl', label: 'ASL (American Sign Language)' },
@@ -53,7 +58,7 @@ function Language() {
                         selectedDate,
                         selectedTime,
                         roomNumber,
-                        requestDescription,
+                        description,
                     }
                 });
         } else {
@@ -85,71 +90,33 @@ function Language() {
             <Title order={1} mb = "xs" c="black">Interpreter Request</Title>
             <Text fz ="xs" mb="xs">Please fill out the following form to request for a language interpreter</Text>
 
-            <br/>
             <form onSubmit={e => e.preventDefault()}>
-              <Select
-                label="Choose the Language Needed:*"
-                placeholder="--Select a Language--"
-                searchable
-                nothingFoundMessage="Language not found"
-                data={languageOptions}
-                value={language === 'Error' ? '' : language}
-                onChange={(value) => setLanguageName(value ?? 'Error')}
-                mb="md"
-                styles={{
-                  label: {
-                    fontSize: theme.fontSizes.sm,
-                  },
-                  input: {
-                    borderColor: 'black',
-                  },
-                }}
-              />
-              <DateInputForm value={selectedDate} onChange={handleDateChange} />
-              <TimeInput onTimeChange={handleTimeChange} />
-              <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange} />
+              <Stack spacing="md">
+                <LanguageSelect value={language} setLanguageName={setLanguageName} />
+                <DateInputForm value={selectedDate} onChange={handleDateChange} />
+                <TimeInput onTimeChange={handleTimeChange} />
+                <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange} />
+                <RequestDescription value={description} onChange={handleDescriptionChange} />
+                <SubmitButton
+                  language={language}
+                  selectedDate={selectedDate}
+                  selectedTime={selectedTime}
+                  roomNumber={roomNumber}
+                  onClick={handleRequestSubmit}
+                />
 
-              <Textarea
-                placeholder="Specify additional details here:"
-                value={requestDescription}
-                onChange={(e) => setRequestDescription(e.target.value)}
-                autosize
-                minRows={3}
-                mt="md"
-                mb="md"
-                styles={{
-                  input: {
-                    borderColor: 'black',
-                  },
-                }}
-              />
+              <Box
+                bg='greys.1'
+                p={{base: '1rem', sm:'1rem', md: '1rem'}}
+                style={{
+                  opacity: 0.85,
+                  borderRadius: theme.radius.lg,
+                  backdropFilter: 'blur(5px)',
+                }}>
+              <Text fz={{base: 'xxs'}}>All required fields are marked with *</Text>
 
-              <Button
-                type="button"
-                onClick={handleRequestSubmit}
-                color="dark"
-                bg="black"
-                radius="xl"
-                disabled={
-                  language === 'Error' ||
-                  !selectedDate.trim() ||
-                  !selectedTime.trim()
-                }
-              >
-                Submit Request
-              </Button>
-              <br/><br/>
-              <Box bg='greys.1'p={{ md: '1rem'}}
-                            w="100%"
-                            maw={{base: '70%', sm:'70%', md: '650px' }}
-                            style={{
-                              opacity: 0.85,
-                              borderRadius: theme.radius.lg,
-                              backdropFilter: 'blur(5px)',
-                            }}>
-              <Text fz='xs'>All required fields are marked with *</Text>
-
-            </Box>
+              </Box>
+              </Stack>
             </form>
 
             {showRequestFeedback && (

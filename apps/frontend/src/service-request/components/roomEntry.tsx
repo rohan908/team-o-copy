@@ -1,39 +1,52 @@
+import { useMantineTheme, Box, Text, Input } from '@mantine/core';
 
 interface RoomNumberInputProps {
-    value: string;
-    onRoomNumberChange: (roomNumber: string) => void;
+  value: string;
+  onRoomNumberChange: (roomNumber: string) => void;
 }
 
-const roomNumberInput: React.FC<RoomNumberInputProps> = ({value, onRoomNumberChange}) => {
+const RoomNumberInput: React.FC<RoomNumberInputProps> = ({ value, onRoomNumberChange }) => {
+  const theme = useMantineTheme();
+  const handleRoomNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    // Only allow digits and limit to 3 characters
+    if (/^\d{0,3}$/.test(newValue)) {
+      onRoomNumberChange(newValue);
+    }
+  };
 
-    const handleRoomNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue: string = e.target.value;
-
-        // Only allow digits and limit to 3 characters
-        if (/^\d{0,3}$/.test(newValue)) {
-            onRoomNumberChange(newValue);
-
-        }
-    };
-
-    return (
-        <div>
-          <br />
-            <label htmlFor="roomNumberInput" className="block text-sm font-medium mb-1" style={{fontSize: '20px'}}>
-                Enter the room number for interpreter:*
-            </label>
-            <input
-                id="roomNumberInput"
-                type="text"
-                inputMode="numeric"
-                value={value}
-                onChange={handleRoomNumberChange}
-                className="w-16 p-2 border rounded text-center"
-                placeholder="000"
-                required
-            />
-        </div>
-    );
+  return (
+    <Box>
+      <Text
+        component="label"
+        htmlFor="roomNumberInput"
+        fz={{ base: 'sm', md: 'md', sm: 'sm', xs: 'xs' }}
+        fw={500}
+        mb={4}
+        display="block"
+      >
+        Enter the room number for interpreter:*
+      </Text>
+      <Input
+        id="roomNumberInput"
+        type="text"
+        inputMode="numeric"
+        value={value}
+        onChange={handleRoomNumberChange}
+        placeholder="000"
+        required
+        radius="sm"
+        maw="4rem"
+        styles={{
+          input: {
+            textAlign: 'center',
+            padding: '0.5rem',
+            borderColor: 'black',
+          },
+        }}
+      />
+    </Box>
+  );
 };
 
-export default roomNumberInput;
+export default RoomNumberInput;

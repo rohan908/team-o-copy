@@ -13,12 +13,11 @@ export function Display() {
         selectedDate,
         selectedTime,
         roomNumber,
-        requestDescription,
+        description,
     } = location.state || {}; // fallback for safety
 
     return (
         <div>
-
             <br/>
             <Flex
                 w-="100%"
@@ -30,7 +29,7 @@ export function Display() {
                 <h1 style={{textAlign: 'center'}}> Service Request Submitted</h1>
                 <Box
                     bg="greys.1"
-                    p={{ md: '2rem' }}
+                    p={{ base: 'xl', sm: '2rem', md: '1rem' }}
                     w="100%"
                     maw={{ base: '90%', sm: '70%', md: '600px' }}
                     pos="relative"
@@ -40,7 +39,6 @@ export function Display() {
                         backdropFilter: 'blur(5px)',
                     }}
 
-
                     >
 
                     <div>
@@ -48,7 +46,7 @@ export function Display() {
                         <p><strong>Date:</strong> {selectedDate}</p>
                         <p><strong>Time:</strong> {selectedTime}</p>
                         <p><strong>Room:</strong> {roomNumber}</p>
-                        <p><strong>Details:</strong> {requestDescription || 'N/A'}</p>
+                        <p><strong>Details:</strong> {description || 'N/A'}</p>
                     </div>
                 </Box>
             </Flex>

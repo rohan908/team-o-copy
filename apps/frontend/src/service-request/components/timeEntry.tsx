@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Box, Text, Input, Select, Flex } from '@mantine/core';
 
-interface timeEntryProps {
+interface TimeEntryProps {
   onTimeChange: (time: string) => void;
 }
 
-
-const TimeInput: React.FC<timeEntryProps> = ({onTimeChange}) => {
+const TimeInput: React.FC<TimeEntryProps> = ({ onTimeChange }) => {
   const [hours, setHours] = useState('');
   const [minutes, setMinutes] = useState('');
-  const [period, setPeriod] = useState('AM');
+  const [period, setPeriod] = useState<'AM' | 'PM'>('AM');
 
-  // Validate hours (1-12 for 12-hour format)
   const handleHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value === '' || (/^\d{1,2}$/.test(value) && parseInt(value) > 0 && parseInt(value) <= 12)) {
@@ -18,7 +17,6 @@ const TimeInput: React.FC<timeEntryProps> = ({onTimeChange}) => {
     }
   };
 
-  // Validate minutes (0-59)
   const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value === '' || (/^\d{1,2}$/.test(value) && parseInt(value) < 60)) {
@@ -26,12 +24,10 @@ const TimeInput: React.FC<timeEntryProps> = ({onTimeChange}) => {
     }
   };
 
-  // Handle period change (AM/PM)
-  const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPeriod(e.target.value);
+  const handlePeriodChange = (value: 'AM' | 'PM') => {
+    setPeriod(value);
   };
 
-  // Update parent component whenever time changes
   useEffect(() => {
     if (hours && minutes) {
       const formattedHours = hours.padStart(2, '0');
@@ -44,51 +40,76 @@ const TimeInput: React.FC<timeEntryProps> = ({onTimeChange}) => {
   }, [hours, minutes, period, onTimeChange]);
 
   return (
-    <div className=" mx-auto">
-      <label className="block mb-2 "style={{fontSize: '20px'}}>Enter Time:*</label>
+    <Box>
+      <Text
+        component="label"
+        fz={{ base: 'sm', md: 'md', sm: 'sm', xs: 'xs' }}
+        mb={4}
+        display="block">
+        Enter Time:*
+      </Text>
+      <Flex gap="xs" align="center">
+        {/* Hours */}
+        <Input
+          type="text"
+          inputMode="numeric"
+          placeholder="HH"
+          value={hours}
+          onChange={handleHoursChange}
+          maxLength={2}
+          aria-label="Hour"
+          maw="4rem"
+          radius="sm"
+          styles={{
+            input: {
+              textAlign: 'center',
+              padding: '0.25rem',
+              borderColor: 'black'
+            },
+          }}
+        />
 
-      <div className="flex items-center space-x-2">
-        <div>
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="HH"
-            value={hours}
-            onChange={handleHoursChange}
-            className="h-10 w-16 p-2 border rounded text-center"
-            maxLength={2}
-            aria-label="Hour"
-          />
+        <Text size="xl" fw={600}>:
+        </Text>
 
+        {/* Minutes */}
+        <Input
+          type="text"
+          inputMode="numeric"
+          placeholder="MM"
+          value={minutes}
+          onChange={handleMinutesChange}
+          maxLength={2}
+          aria-label="Minute"
+          maw="4rem"
+          radius="sm"
+          styles={{
+            input: {
+              textAlign: 'center',
+              padding: '0.25rem',
+              borderColor: 'black'
+            },
+          }}
+        />
 
-        <span className="text-xl font-bold">:</span>
-
-
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="MM"
-            value={minutes}
-            onChange={handleMinutesChange}
-            className="h-10 w-16 p-2 border rounded text-center"
-            maxLength={2}
-            aria-label="Minute"
-          />
-        </div>
-
-        <div>
-          <select
-            value={period}
-            onChange={handlePeriodChange}
-            className="w-16 p-2 border rounded text-center h-10"
-            aria-label="AM/PM"
-          >
-            <option value="AM">AM</option>
-            <option value="PM">PM</option>
-          </select>
-        </div>
-      </div>
-    </div>
+        {/* AM/PM */}
+        <Select
+          data={['AM', 'PM']}
+          value={period}
+          onChange={(val) => handlePeriodChange(val as 'AM' | 'PM')}
+          aria-label="AM/PM"
+          maw="5rem"
+          radius="sm"
+          styles={{
+            input: {
+              textAlign: 'center',
+              padding: '0.5rem',
+              borderColor: 'black'
+            },
+          }}
+        />
+      </Flex>
+    </Box>
   );
 };
 
