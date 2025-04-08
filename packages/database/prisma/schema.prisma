@@ -42,4 +42,15 @@ model graph {
   gName         String    @id
   bitMap        Json
 }
+model layer {
+  id                Int       @id @default(autoincrement())
+  layerIndex        Int       @unique
+  name              String
+  isConnectionLayer Boolean   @default(false)
+  bitmap            Bytes     // Binary representation of the bitmap
+  width             Int
+  height            Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
 
