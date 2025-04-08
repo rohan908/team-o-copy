@@ -27,7 +27,7 @@ const MapAPIComponent = () => {
                     //Sets destination to coordinates of 20 Patriot Place.
                     //Calling setKeyCount is necessary to replace the routing component with a new one.
                     //If it isn't fully replaced, it won't update its coordinates.
-                    setWayTwo(new L.LatLng(42.09593582153, -71.26322174072266));
+                        setWayTwo(new L.LatLng(42.092954, -71.268296));
                     setKeyCount(count => count + 1);
                     setHasLoadedLocation(true);
                 }

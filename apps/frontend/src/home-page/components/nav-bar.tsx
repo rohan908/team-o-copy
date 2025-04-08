@@ -45,6 +45,7 @@ export function NavBar() {
                             {navItems.map((item, index) => (
                                 <>
                                 <Menu.Item
+                                    key={index}
                                     color="grey.3"
                                     component={Link}
                                     to={item.link}
@@ -54,7 +55,32 @@ export function NavBar() {
                                 </Menu.Item>
                                 </>
                             ))}
-
+                            { isLoggedIn && (
+                                <>
+                                    {adminNavItems.map((item, index) => (
+                                        <Menu.Item
+                                            key={index}
+                                            color="grey.3"
+                                            component={Link}
+                                            to={item.link}
+                                            px="md"
+                                        >
+                                            {item.name}
+                                        </Menu.Item>
+                                    ))}
+                                    <Menu.Divider />
+                                    {/* Logout Button */}
+                                        <Menu.Item
+                                            color="red"
+                                            px="md"
+                                            component={Link}
+                                            to={'/'}
+                                            onClick={logout}
+                                        >
+                                            Logout
+                                        </Menu.Item>
+                                    </>
+                                )}
                         </Menu.Dropdown>
                     </Menu>
 
@@ -64,7 +90,7 @@ export function NavBar() {
                                 <Link to="/">
                                     <Image
                                         className={"rounded"}
-                                        src={"public/logoMassGeneralBrigham.png"}
+                                        src={"/logoMassGeneralBrigham.png"}
                                         alt={"Home"}
                                         h='xl'
                                     />
@@ -85,8 +111,9 @@ export function NavBar() {
                                     {item.name}
                                 </Button>
                             ))}
-                            { isLoggedIn &&
-                                adminNavItems.map((item, index) => (
+                            { isLoggedIn && (
+                                <>
+                                    {adminNavItems.map((item, index) => (
                                     <Button variant="outline"
                                             color="black"
                                             className="navButton"
@@ -97,19 +124,21 @@ export function NavBar() {
                                     >
                                         {item.name}
                                     </Button>
-                                ))}
-                            {/* Logout Button */}
-                            {isLoggedIn &&
-                                <Button variant="outline"
-                                     color="red"
-                                     className="LoggoutButton"
-                                     justify="flex-end"
-                                     onClick={logout}
-                                     size="xs"
-                            >
-                                Logout
-                            </Button>
-                            }
+                                    ))}
+                                    {/* Logout Button */}
+                                    <Button variant="outline"
+                                            color="red"
+                                            className="LoggoutButton"
+                                            justify="flex-end"
+                                            onClick={logout}
+                                            component={Link}
+                                            to={'/'}
+                                            size="xs"
+                                    >
+                                        Logout
+                                    </Button>
+                                </>
+                            )}
                         </Group>
                     </Group>
                 </Group>
