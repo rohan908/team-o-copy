@@ -1,6 +1,7 @@
 import express, { Router, RequestHandler } from 'express';
 import { NavigationService } from '../services/NavigationService';
 import { Coordinate } from '../models/types';
+import PrismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
 const navigationService = new NavigationService();
@@ -115,5 +116,6 @@ router.post('/findPath', findPathHandler);
 
 // Register the handler with the router
 router.post('/findPath', findPathHandler);
+
 
 export default router;

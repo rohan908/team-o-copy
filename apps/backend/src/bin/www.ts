@@ -3,12 +3,17 @@ import http from 'http';
 import { AddressInfo } from 'net';
 import { createHttpTerminator } from 'http-terminator';
 import { BitmapLoaderService } from '../services/BitmapLoaderService';
+import { exportToCSV } from '../directorybackup/ExportToCSV.ts';
 
 // Attempt a database connection
 console.info('Connecting to database...');
 try {
     // This intrinsically connects to the database
     require('./prisma-client.ts');
+
+    // backs up Directory database into 'backup.csv'
+    exportToCSV();
+
     console.log('Successfully connected to the database');
 
     // Load bitmap files into the database after connection
