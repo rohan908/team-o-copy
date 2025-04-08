@@ -1,10 +1,9 @@
-import React, {useEffect, useReducer, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import './LeafletStyles.css';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import { useMap } from 'react-leaflet';
-import {latLng} from "leaflet";
 
 interface RoutingProps {
     waypointOne: L.LatLng;
@@ -24,12 +23,14 @@ const Routing: React.FC<RoutingProps> = (props) => {
             routeWhileDragging: true,
             //Adds waypoints indicating start and end
             addWaypoints: true,
+            useZoomParameter: true,
             lineOptions: {
                 styles: [{ color: 'blue', weight: 6 }],
                 extendToWaypoints: false,
                 missingRouteTolerance: 0,
             },
         }).addTo(map);
+
 
         return () => {
             //Removes the current routing control ref after it's done using it

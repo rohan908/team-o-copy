@@ -1,17 +1,12 @@
-import React, {useEffect, useRef, MouseEvent, MouseEventHandler} from 'react';
 import {useState} from 'react';
-import {Simulate} from "react-dom/test-utils";
-import mouseOver = Simulate.mouseOver;
 import "./LeafletStyles.css";
-import { Container } from '@mantine/core';
-import {LayersControl, MapContainer, Marker, Popup, TileLayer, useMapEvent, useMapEvents, Tooltip} from 'react-leaflet';
+import {MapContainer, TileLayer, useMapEvent, useMapEvents} from 'react-leaflet';
 import { LoadingOverlay } from '@mantine/core';
 import * as L from 'leaflet';
 import 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import Routing from './RoutingLogic.tsx'
-import keyDown = Simulate.keyDown;
 
 const MapAPIComponent = () => {
     //Default routing coordinates set to -1000, -1000 so they aren't in the way.
@@ -20,26 +15,21 @@ const MapAPIComponent = () => {
     const [wayTwo, setWayTwo] = useState(new L.LatLng(-1000, -1000));
     const [keyCount, setKeyCount] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [hasLoadedLocation, setHasLoadedLocation] = useState(0);
+    const [hasLoadedLocation, setHasLoadedLocation] = useState(false);
 
 
     function LocationMarker() {
         const map = useMapEvents({
-            layeradd(e){
-                if (hasLoadedLocation < 1){
-                    //e.name corresponds to the name of the clicked overlay option. Very convenient once I figured it out.
-                    //if (e.name == "Click Here to set Current Location"){
+            layeradd(){
+                if (!hasLoadedLocation){
                     setLoading(true);
                     map.locate();
-                    // }
-                    // if (e.name == "Click Here to set destination to 20 Patriot Place"){
                     //Sets destination to coordinates of 20 Patriot Place.
                     //Calling setKeyCount is necessary to replace the routing component with a new one.
                     //If it isn't fully replaced, it won't update its coordinates.
                     setWayTwo(new L.LatLng(42.09593582153, -71.26322174072266));
                     setKeyCount(count => count + 1);
-                    //}
-                    setHasLoadedLocation(hasLoadedLocation + 1);
+                    setHasLoadedLocation(true);
                 }
             },
             //Called after map.locate() finds your location.
@@ -48,10 +38,6 @@ const MapAPIComponent = () => {
                 setKeyCount(count => count + 1);
                 setLoading(false);
             },
-            click(){
-                setWayOne(wayOne);
-                setKeyCount(keyCount + 1);
-            }
         })
         //Blank return so it doesn't yell at me
         return null;
@@ -86,16 +72,6 @@ const MapAPIComponent = () => {
                 scrollWheelZoom={false}
             >
                 <Routing key={keyCount} waypointOne={wayOne} waypointTwo={wayTwo} />
-                {/*<LayersControl collapsed={false}>*/}
-                {/*    <LayersControl.Overlay name="Click Here to set Current Location">*/}
-                {/*        <Marker position={[-1000,-1000]} opacity={0}>*/}
-                {/*        </Marker>*/}
-                {/*    </LayersControl.Overlay>*/}
-                {/*    <LayersControl.Overlay name="Click Here to set destination to 20 Patriot Place">*/}
-                {/*        <Marker position={[-1000,-1000]} opacity={0}>*/}
-                {/*        </Marker>*/}
-                {/*    </LayersControl.Overlay>*/}
-                {/*</LayersControl>*/}
                 <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
                 <LocationMarker/>
                 <TileLayer
