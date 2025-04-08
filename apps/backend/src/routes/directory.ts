@@ -31,7 +31,12 @@ router.post('/import', async (req: Request, res: Response) => {
 });
 
 // Exports current directory backup CSV to frontend
-router.get('/export', async (req: Request, res: Response) => {});
+router.get('/export', async (req: Request, res: Response) => {
+    const csvData = fs.readFileSync('./src/directorybackup/backup.csv', 'utf-8');
+
+    res.type('text/plain');
+    res.send(csvData);
+});
 
 // Clears the directory backup CSV
 router.delete('/clear', async (req: Request, res: Response) => {

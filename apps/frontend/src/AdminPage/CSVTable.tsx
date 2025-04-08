@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Table, Title, Loader, Center, ScrollArea, Text } from '@mantine/core'
+import fs from 'fs';
 
 type Props = {
     table: string;
@@ -13,7 +14,7 @@ export function CSVTable({ table }: Props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`http://localhost:3001/api/${table}/export`); //This is where you pull the CSV data
+                const res = await fetch(`http://localhost:3001/${table}/export`); //This is where you pull the CSV data
 
                 if (!res.ok) {
                     throw new Error(`HTTP error!: ${res.status}`);

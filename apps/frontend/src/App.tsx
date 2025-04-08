@@ -1,7 +1,18 @@
 import React from 'react';
 import {Routing} from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
-import { createTheme, MantineProvider,MantineColorsTuple, rem } from '@mantine/core';
+import { createTheme,
+    MantineProvider,
+    MantineColorsTuple,
+    rem,
+    VariantColorsResolver,
+    Group,
+    defaultVariantColorsResolver,
+    parseThemeColor,
+    rgba,
+    darken,
+    MantineRadiusValues,
+} from '@mantine/core';
 
 const blueBase: MantineColorsTuple = [
     '#ebf2ff',
@@ -42,6 +53,47 @@ const greys: MantineColorsTuple = [
     '#4a5167'
 ];
 
+const myvariantColorResolver: VariantColorsResolver = (input) => {
+    const defaultResolvedColors = defaultVariantColorsResolver(input);
+    const parsedColor = parseThemeColor({
+        color: input.color || input.theme.primaryColor,
+        theme: input.theme,
+    });
+
+    // Override some properties for variant
+    if (parsedColor.isThemeColor && parsedColor.color === 'lime' && input.variant === 'filled') {
+        return {
+            ...defaultResolvedColors,
+            color: 'var(--mantine-color-black)',
+            hoverColor: 'var(--mantine-color-black)',
+        };
+    }
+
+    // Completely override variant
+    if (input.variant === 'navButton') {
+        return {
+            // variant="outline",
+            radius: 300,
+            background: 'var(--mantine-color-blueBase-9)',
+            hover: 'var(--mantine-color-white)',
+            border: `1px solid ${parsedColor.value}`,
+            color: 'var(--mantine-color-white)',
+        };
+    }
+
+    // Add new variants support
+    if (input.variant === 'danger') {
+        return {
+            background: 'var(--mantine-color-red-9)',
+            hover: 'var(--mantine-color-red-8)',
+            color: 'var(--mantine-color-white)',
+            border: 'none',
+        };
+    }
+
+    return defaultResolvedColors;
+};
+
 const theme = createTheme({
     /** Your theme override here */
     fontSizes: {
@@ -61,7 +113,10 @@ const theme = createTheme({
         terquAccet,
         greys,
     },
-    
+    primaryShade: { light: 6, dark: 9 },
+    defaultRadius: 30,
+
+    // variantColorResolver: myvariantColorResolver(theme)
 });
 function App() {
 
