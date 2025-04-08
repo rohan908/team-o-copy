@@ -7,7 +7,13 @@ import {DirectoryLocation} from "../directory/components/DirectoryLocation.tsx";
 import {Display} from "../service-request/submissionDisplay/display.tsx";
 import {MapAPIPage} from "../MapsAPIPage/MapAPIPage.tsx";
 
+import { AppShell, Burger } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+
+
 export function Routing() {
+    const [opened, { toggle }] = useDisclosure();
+
     return (
         <>
             <BrowserRouter>
