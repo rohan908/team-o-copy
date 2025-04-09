@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx';
 import {
     Box,
     Text,
@@ -25,6 +26,9 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
     const [hospital, setHospital] = useState<string | null>(null);
     const [department, setDepartment] = useState<string | null>(null);
     const [collapsed, setCollapsed] = useState(false);
+    const [departmentOptions, setDepartmentOptions] = useState<
+        { value: string; label: string }[]
+    >([]);
 
     const hospitalCoords = new L.LatLng(42.09593582153, -71.26322174072266);
 
@@ -37,6 +41,27 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
         }
         setCollapsed(true);
     };
+
+    useEffect(() => {
+        if (hospital === '20 Patriot St') {
+            const options = Patriot20.map((dept) => ({
+                value: dept.slug,
+                label: dept.title,
+            }));
+            setDepartmentOptions(options);
+        } else if (hospital === '22 Patriot St') {
+            const options = Patriot22.map((dept) => ({
+                value: dept.slug,
+                label: dept.title,
+            }));
+            setDepartmentOptions(options);
+        } else {
+            setDepartmentOptions([]);
+        }
+
+        // Reset department when hospital changes
+        setDepartment(null);
+    }, [hospital]);
 
     return (
         <Box
@@ -66,14 +91,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                 }}
             >
                 <Collapse in={!collapsed}>
-                    <Title
-                        order={2}
-                        mb="md"
-                        c="black"
-                        ta="left"
-                        fw={700}
-                        fz={{ sm: 'xl', md: 'xxxl' }}
-                    >
+                    <Title order={2} mb="md" c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
                         Find your Way!
                     </Title>
 
@@ -100,8 +118,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                     <Select
                         placeholder="Hospital"
                         data={[
-                            { value: 'hospital-a', label: '20 Patriot St' },
-                            { value: 'hospital-b', label: '22 Patriot St' },
+                            { value: '20 Patriot St', label: '20 Patriot St' },
+                            { value: '22 Patriot St', label: '22 Patriot St' },
                         ]}
                         value={hospital}
                         onChange={setHospital}
@@ -113,13 +131,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                     </Text>
                     <Select
                         placeholder="Department"
-                        data={[
-                            { value: 'cardiology', label: 'Cardiology' },
-                            { value: 'neurology', label: 'Neurology' },
-                        ]}
+                        data={departmentOptions}
                         value={department}
                         onChange={setDepartment}
                         mb="md"
+                        disabled={!hospital || departmentOptions.length === 0}
                     />
 
                     <Flex justify="flex-end" gap="md">
