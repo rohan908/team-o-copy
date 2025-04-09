@@ -1,6 +1,7 @@
 import express, { Router, Request, Response } from 'express';
 import PrismaClient from '../bin/prisma-client';
-import { parseDirectoryData } from '../directorybackup/directorydata.ts';
+import { parseDirectoryData } from '../directorybackup/directorydata';
+import { parseFullDirectory } from '../directorybackup/DirectoryDatabaseToFrontend';
 
 const router: Router = express.Router();
 
@@ -13,6 +14,17 @@ router.get('/all', async (req: Request, res: Response) => {
     const allDirectories = await PrismaClient.directory.findMany({});
     console.log(allDirectories);
     res.json(allDirectories);
+});
+
+router.get('/fulldirectory', async (req: Request, res: Response) => {
+    try {
+        console.log('TEST');
+        const fullDirectoryArr = await parseFullDirectory();
+        res.json(fullDirectoryArr);
+    } catch (e) {
+        console.error(e);
+        res.status(500);
+    }
 });
 
 router.get('/directorybuilding', async (req: Request, res: Response) => {
