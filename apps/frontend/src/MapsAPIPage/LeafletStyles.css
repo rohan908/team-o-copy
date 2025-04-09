@@ -4,6 +4,15 @@
     height: 100%;
 }
 
+.box-overlay {
+    pointer-events: none; /* Let clicks pass through */
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.box-overlay .interactive {
+    pointer-events: auto; /* Only these are clickable */
+}
+
 .p-10{
     position: absolute;
     height: 85%;

@@ -20,7 +20,7 @@ const Routing: React.FC<RoutingProps> = (props) => {
             //Waypoints are only set here, so to update them again, the object must be fully replaced.
             //This is done by updating its key prop in MapAPIComponent.tsx
             waypoints: [props.waypointOne, props.waypointTwo],
-            routeWhileDragging: true,
+            routeWhileDragging: false,
             //Adds waypoints indicating start and end
             addWaypoints: true,
             useZoomParameter: true,

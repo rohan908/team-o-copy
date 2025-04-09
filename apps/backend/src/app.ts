@@ -8,6 +8,7 @@ import languageServiceRequestRouter from './routes/languageServiceRequest.ts';
 import graphRouter from './routes/graph.ts';
 
 import { API_ROUTES } from 'common/src/constants';
+import PrismaClient from './bin/prisma-client.ts';
 
 const app: Express = express(); // Setup the backend
 
@@ -26,7 +27,7 @@ app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
 
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
-// won't be reached by the default proxy and prod setup -> Not True
+// won't be reached by the default proxy and prod setup
 app.use('/', healthcheckRouter);
 app.use('/directory', directoryRouter);
 app.use('/languageServiceRequest', languageServiceRequestRouter);
