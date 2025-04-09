@@ -121,7 +121,7 @@ export async function DrawPathForMap(startCoordSmallMap: Coordinate, endCoordSma
     const path = await Promise.race<Coordinate[]>([
       findPath(startCoordBigMap, endCoordBigMap),
       new Promise<Coordinate[]>((_, reject) =>
-        setTimeout(() => reject(new Error('Path finding timeout')), 10000)
+        setTimeout(() => reject(new Error('Path finding timeout')), 100000)
       )
     ]);
 

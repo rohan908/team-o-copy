@@ -10,9 +10,9 @@ import {MapAPIPage} from "../MapsAPIPage/MapAPIPage.tsx";
 import Language from "../service-request/service";
 import {BSFMapPage} from "../BFSMapPages/components/BSFMapPage.tsx";
 
-
 import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import LanguageRequestHistory from "../AdminPage/LanguageRequestHistory.tsx";
 
 
 export function Routing() {
@@ -32,6 +32,7 @@ export function Routing() {
                         <Route path="/language-form" element={<Language />} />
                         <Route path="/BFSMapPage" element={<BSFMapPage/>} />
                         <Route path="/admin-page" element={<AdminPage />} />
+                      <Route path="/language-request-history" element={<LanguageRequestHistory />} />
                  </Route>
                 </Routes>
             </BrowserRouter>
