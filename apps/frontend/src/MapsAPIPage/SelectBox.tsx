@@ -133,7 +133,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                                 transition: 'all 0.3s ease',
                             }}
                         >
-                            I've arrived
+                            I've Arrived
                         </Button>
                         <Button
                             onClick={handleFindPath}
