@@ -5,10 +5,12 @@ import logger from 'morgan';
 import healthcheckRouter from './routes/healthcheck';
 import directoryRouter from './routes/directory';
 import languageServiceRequestRouter from './routes/languageServiceRequest.ts';
+import exportRoute from './routes/ExportRoute.ts';
 import graphRouter from './routes/graph.ts';
 
 import { API_ROUTES } from 'common/src/constants';
 import PrismaClient from './bin/prisma-client.ts';
+
 const cors = require('cors');
 const app: Express = express(); // Setup the backend
 
@@ -33,6 +35,8 @@ app.use('/', healthcheckRouter);
 app.use('/directory', directoryRouter);
 app.use('/languageServiceRequest', languageServiceRequestRouter);
 app.use('/graph', graphRouter);
+// adding export routing
+app.use('/exportRoute', exportRoute);
 
 /**
  * Catch all 404 errors, and forward them to the error handler
