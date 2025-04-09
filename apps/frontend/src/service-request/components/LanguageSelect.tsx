@@ -7,6 +7,7 @@ interface LanguageSelectProps {
   setLanguageName: (value: string) => void;
 }
 
+// to get access to all languages using premade ISO6391 list, and adding ASL to it
 const languageOptions = [
   { value: 'asl', label: 'ASL (American Sign Language)' },
   ...ISO6391.getAllCodes().map((code) => ({

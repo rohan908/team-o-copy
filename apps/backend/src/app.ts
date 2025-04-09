@@ -10,7 +10,7 @@ import graphRouter from './routes/graph.ts';
 import { API_ROUTES } from 'common/src/constants';
 
 const app: Express = express(); // Setup the backend
-
+const cors = require('cors');
 // Setup generic middlewear
 app.use(
     logger('dev', {
@@ -24,14 +24,13 @@ app.use(
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
-
+app.use(cors());
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup -> Not True
 app.use('/', healthcheckRouter);
 app.use('/directory', directoryRouter);
-app.use('/languageServiceRequest', languageServiceRequestRouter);
+app.use('/requests', languageServiceRequestRouter);
 app.use('/graph', graphRouter);
-
 /**
  * Catch all 404 errors, and forward them to the error handler
  */

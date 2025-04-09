@@ -39,28 +39,46 @@ function Language() {
       setSelectedDescription(description);
     }
 
-    // to get access to all languages using premade ISO6391 list, and adding ASL to it
-    const languageOptions = [
-        { value: 'asl', label: 'ASL (American Sign Language)' },
-        ...ISO6391.getAllCodes().map((code) => ({
-            value: code,
-            label: ISO6391.getName(code),
-        })),
-    ];
-
-    const handleRequestSubmit = () => {
+    const handleRequestSubmit = async () => {
         if (language != "Error" && selectedDate.trim() && selectedTime.trim() && roomNumber.trim()) {
             setRequestStatus("Request Submitted Successfully");
-                navigate('/submission', { state: {
+                try {
+                  const response = await fetch('http://localhost:3001/requests', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                      language,
+                      selectedDate,
+                      selectedTime,
+                      roomNumber,
+                      description,
+                    }),
+                  });
+                  if (response.ok) {
+                    const data = await response.json();
+                    console.log('Request submitted:', data);
+
+                    navigate('/submission', { state: {
                         label: language === 'asl'
-                            ? 'ASL (American Sign Language)'
-                            : ISO6391.getName(language),
+                          ? 'ASL (American Sign Language)'
+                          : ISO6391.getName(language),
                         selectedDate,
                         selectedTime,
                         roomNumber,
                         description,
-                    }
-                });
+                      }
+                    });
+                  }
+                  else {
+            console.error('Server error:', response.statusText);
+            setRequestStatus('Server error. Please try again.');
+            setShowRequestFeedback(true);
+          }
+        } catch (err) {
+        console.error('Network error:', err);
+        setRequestStatus('Network error. Please try again.');
+        setShowRequestFeedback(true);
+      }
         } else {
             setRequestStatus("Error: Please fill out all required fields.");
             setShowRequestFeedback(true);
