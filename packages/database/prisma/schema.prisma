@@ -16,40 +16,40 @@ datasource db {
 
 // creates the langauageServiceRequest table (strong entity)
 model langaugeServiceRequest {
-  requestID     Int      @id @default(autoincrement())
-  room          String
-  createdAt     DateTime @default(now())
-  date          String
-  time          DateTime
-  medicalDevice String
+  requestID   Int      @id @default(autoincrement())
+  room        String
+  createdAt   DateTime @default(now())
+  date        String
+  time        String
+  language    String
+  description String?
 }
 
 // creates the directory table (strong entity)
 model directory {
-  dName         String
-  building      String
-  description   String
+  dName          String
+  building       String
+  description    String
   absoluteCoords Int[]
 
   @@id([dName, building])
 }
 
 model layer {
-  id                Int       @id @default(autoincrement())
-  layerIndex        Int       @unique
+  id                Int     @id @default(autoincrement())
+  layerIndex        Int     @unique
   name              String
-  isConnectionLayer Boolean   @default(false)
-  bitmap            Bytes     // Binary representation of the bitmap
+  isConnectionLayer Boolean @default(false)
+  bitmap            Bytes // Binary representation of the bitmap
   width             Int
   height            Int
 }
 
-/*
-  creates the graph table (strong entity)
-  bitMap requires a Json object to store a 2D array
+/**
+ * creates the graph table (strong entity)
+ * bitMap requires a Json object to store a 2D array
  */
 model graph {
-  gName         String    @id
-  bitMap        Json
+  gName  String @id
+  bitMap Json
 }
-

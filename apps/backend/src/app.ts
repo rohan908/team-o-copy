@@ -32,7 +32,7 @@ app.use(cookieParser()); // Cookie parser
 // won't be reached by the default proxy and prod setup -> Not True
 app.use('/', healthcheckRouter);
 app.use('/directory', directoryRouter);
-app.use('/languageServiceRequest', languageServiceRequestRouter);
+app.use('/requests', languageServiceRequestRouter);
 app.use('/graph', graphRouter);
 // adding export routing
 app.use('/exportRoute', exportRoute);

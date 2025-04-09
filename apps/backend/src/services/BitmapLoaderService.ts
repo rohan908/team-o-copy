@@ -83,7 +83,7 @@ export class BitmapLoaderService {
             try {
                 // Check if the record already exists
                 const existingLayer = await PrismaClient.layer.findUnique({
-                    where: { layerIndex: fileInfo.layerIndex }
+                    where: { layerIndex: fileInfo.layerIndex },
                 });
 
                 if (existingLayer) {
@@ -116,15 +116,19 @@ export class BitmapLoaderService {
                 return; // Success, exit the retry loop
             } catch (error) {
                 lastError = error as Error;
-                console.warn(`Attempt ${attempt + 1} failed for layer ${fileInfo.layerIndex}, retrying in ${this.retryDelay}ms...`);
+                console.warn(
+                    `Attempt ${attempt + 1} failed for layer ${fileInfo.layerIndex}, retrying in ${this.retryDelay}ms...`
+                );
 
                 // Wait before retrying
-                await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+                await new Promise((resolve) => setTimeout(resolve, this.retryDelay));
             }
         }
 
         // If we get here, all retry attempts failed
-        console.error(`Failed to process layer ${fileInfo.layerIndex} after ${this.maxRetries} attempts`);
+        console.error(
+            `Failed to process layer ${fileInfo.layerIndex} after ${this.maxRetries} attempts`
+        );
         throw lastError;
     }
 
