@@ -31,7 +31,6 @@ model directory {
   building       String
   description    String
   absoluteCoords Int[]
-
   @@id([dName, building])
 }
 
