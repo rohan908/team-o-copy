@@ -6,17 +6,17 @@ import { Container, Image } from "@mantine/core";
 
 export function MapHandler( currentMap : Map) {
   // State for coordinates that will be updated by user interaction
-  const [startCoord, setStartCoord] = useState<Coordinate>({x: 100, y: 100, z: currentMap.floor});
-  const [endCoord, setEndCoord] = useState<Coordinate>({x: 200, y: 200, z: currentMap.floor});
+  const [startCoord, setStartCoord] = useState<Coordinate>({x: 1786, y: 2647, z: 2});
+  const [endCoord, setEndCoord] = useState<Coordinate>({x: 1984, y: 2171, z: 2});
 
 
   return (
     <Container>
-      <Image
+      {/*<Image
         src={currentMap.imageSrc}
         alt={`${currentMap.name} Map`}
         style={{zIndex: 1}}
-      />
+      />*/}
       <MapCanvas
         startCoord={startCoord}
         endCoord={endCoord}

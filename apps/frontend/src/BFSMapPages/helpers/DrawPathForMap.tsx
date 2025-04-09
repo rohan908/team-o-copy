@@ -24,13 +24,15 @@ function convertBigMapCoordsToSmallMap(bigMapCoord : Coordinate, currMap : Map) 
 
 
 function drawPathOnMapCanvas(path : Coordinate[], ctx : CanvasRenderingContext2D) {
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = 20;
     ctx.beginPath();
     ctx.moveTo(path[0].x, path[0].y);
 
 
-    path.forEach(coord => {
-        ctx.lineTo(coord.x, coord.y);
-    });
+    for (let i = 0; i < path.length; i += 5) {
+        ctx.lineTo(path[i].x, path[i].y);
+    }
     ctx.stroke();
 }
  //i wrote this before in waveanimation.tsx and so im exporting it for future use
@@ -56,6 +58,7 @@ export async function DrawPathForMap(startCoordSmallMap : Coordinate, endCoordSm
     const endCoordBigMap : Coordinate = convertSmallMapCoordsToBigMap(endCoordSmallMap, currMap);
 
     const path : Coordinate[]   = await findPath(startCoordBigMap, endCoordBigMap);
+    //console.log(path);
     const pathSmallMap : Coordinate[] = path.map(coord => convertBigMapCoordsToSmallMap(coord, currMap));
 
     const canvas = document.getElementById('mapCanvas') as HTMLCanvasElement;
@@ -67,11 +70,9 @@ export async function DrawPathForMap(startCoordSmallMap : Coordinate, endCoordSm
 
     // I know that defining the function here is bad practice, but I refuse to pass the path variable as an argument so we ball
     function drawMap(canvas : HTMLCanvasElement, ctx : CanvasRenderingContext2D, currMap : Map) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-        ctx.strokeStyle = 'blue';
-        ctx.lineWidth = 2;
-    
+        ctx.fillStyle = 'yellow';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
         drawPathOnMapCanvas(pathSmallMap, ctx);
     }
 

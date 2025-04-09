@@ -9,7 +9,7 @@ import graphRouter from './routes/graph.ts';
 
 import { API_ROUTES } from 'common/src/constants';
 import PrismaClient from './bin/prisma-client.ts';
-
+const cors = require('cors');
 const app: Express = express(); // Setup the backend
 
 // Setup generic middlewear
@@ -22,6 +22,7 @@ app.use(
     })
 ); // This records all HTTP requests
 
+app.use(cors());
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
