@@ -82,42 +82,60 @@ export function resizeCanvas(canvas: HTMLCanvasElement): void {
 }
 
 
-function drawMap(pathSmallMap: Coordinate[], canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, currMap: Map) {
+function drawMap(pathSmallMap: Coordinate[], canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, currMap: Map): Promise<void> {
+  return new Promise((resolve, reject) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const image = new Image();
     image.src = currMap.imageSrc;
     
     image.onload = () => {
+      try {
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
         drawPathOnMapCanvas(pathSmallMap, ctx, currMap);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
     };
     
     image.onerror = () => {
-        console.error("map image didnt load ERROR");
+      console.error("map image didn't load ERROR");
+      try {
         drawPathOnMapCanvas(pathSmallMap, ctx, currMap);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
     };
+  });
 }
 
 
-export async function DrawPathForMap(startCoordSmallMap : Coordinate, endCoordSmallMap : Coordinate, currMap : Map) {
+export async function DrawPathForMap(startCoordSmallMap: Coordinate, endCoordSmallMap: Coordinate, currMap: Map): Promise<() => void> {
   try {
     const startCoordBigMap: Coordinate = convertSmallMapCoordsToBigMap(startCoordSmallMap, currMap);
     const endCoordBigMap: Coordinate = convertSmallMapCoordsToBigMap(endCoordSmallMap, currMap);
+
 
     const path = await Promise.race<Coordinate[]>([
       findPath(startCoordBigMap, endCoordBigMap),
       new Promise<Coordinate[]>((_, reject) =>
         setTimeout(() => reject(new Error('Path finding timeout')), 10000)
-      )]);
+      )
+    ]);
+
     if (!path || path.length === 0) {
       throw new Error('No path returned from backend');
     }
 
-    console.log(path);
     const pathSmallMap: Coordinate[] = path.map(coord => convertBigMapCoordsToSmallMap(coord, currMap));
 
     const canvas = document.getElementById('mapCanvas') as HTMLCanvasElement;
+    if (!canvas) {
+      throw new Error('Canvas element not found');
+    }
+
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       throw new Error('Failed to get canvas context');
@@ -126,22 +144,22 @@ export async function DrawPathForMap(startCoordSmallMap : Coordinate, endCoordSm
     //init resize canvas
     resizeCanvas(canvas);
     
-    // add resize event listener
+    // Draw map and path
+    await drawMap(pathSmallMap, canvas, ctx, currMap);
+    
+    // Add resize event listener
     const handleResize = () => {
       resizeCanvas(canvas);
       drawMap(pathSmallMap, canvas, ctx, currMap);
     };
     window.addEventListener('resize', handleResize);
 
-    //init draw map
-    drawMap(pathSmallMap, canvas, ctx, currMap);
-
-    //clean up the event listener
+    // cleanup function
     return () => {
       window.removeEventListener('resize', handleResize);
-    }
+    };
   } catch (error) {
-    console.error("error in DrawPathForMap", error);
+    console.error("Error in DrawPathForMap:", error);
     throw error;
   }
 }

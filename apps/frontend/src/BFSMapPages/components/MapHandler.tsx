@@ -10,7 +10,7 @@ export function MapHandler(currentMap: Map) {
   const [isSettingStart, setIsSettingStart] = useState(false);
   const [isSettingEnd, setIsSettingEnd] = useState(false);
   
-  // Handle map clicks to set coordinates
+  // meant to handle the map clicks for the controller but math not mathing
   const handleMapClick = (x: number, y: number) => {
     const z = currentMap.floor;
     
@@ -25,7 +25,7 @@ export function MapHandler(currentMap: Map) {
 
   return (
     <Box pos="relative" w="100%" h="100%" style={{ overflow: 'hidden' }}>
-      {/* Controls overlay */}
+      {/* Contorller is not wokring math wise so commenting it out
       <Box 
         pos="absolute" 
         top={10} 
@@ -72,28 +72,8 @@ export function MapHandler(currentMap: Map) {
           </Tooltip>
         </Group>
       </Box>
+      */}
 
-      {/* Instructions overlay */}
-      {(isSettingStart || isSettingEnd) && (
-        <Box
-          pos="absolute"
-          bottom={10}
-          left={0}
-          right={0}
-          mx="auto"
-          style={{ zIndex: 10, textAlign: 'center', width: 'fit-content' }}
-          bg="rgba(0, 0, 0, 0.7)"
-          p="xs"
-          sx={{ backdropFilter: 'blur(2px)' }}
-          radius="xl"
-        >
-          <Text c="white" fz="sm">
-            Click on the map to set the {isSettingStart ? 'starting' : 'ending'} point
-          </Text>
-        </Box>
-      )}
-      
-      {/* The map canvas */}
       <MapCanvas
         startCoord={startCoord}
         endCoord={endCoord}

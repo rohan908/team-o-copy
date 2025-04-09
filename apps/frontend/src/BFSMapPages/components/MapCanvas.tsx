@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Coordinate, Map } from '../helpers/MapTypes';
 import { DrawPathForMap } from '../helpers/DrawPathForMap';
+import { LoadingOverlay } from '@mantine/core';
+import { Box } from '@mantine/core';
 
 interface MapCanvasProps {
     startCoord: Coordinate;
@@ -9,21 +11,29 @@ interface MapCanvasProps {
     className?: string; //now we can pass in a CSS class name to style it for fturue, maybe we dont use it
     // this interface is propably not needed but maybe i need to change the css for each map idk
     onClick?: (x: number, y: number) => void;
+    onLoadingChange?: (isLoading: boolean) => void;
 }
 
-export function MapCanvas({ startCoord, endCoord, currentMap, className, onClick }: MapCanvasProps) {
+export function MapCanvas({ startCoord, endCoord, currentMap, className, onClick, onLoadingChange }: MapCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    let cleanup: (() => void) | undefined; // bc DrawPathForMap is async this is needed and it was a really annoying bug :(
+    let cleanup: (() => void) | undefined;
+    setIsLoading(true);
+    if (onLoadingChange) onLoadingChange(true);
 
     const initializeDrawing = async () => {
       try {
         cleanup = await DrawPathForMap(startCoord, endCoord, currentMap);
+        setIsLoading(false);
+        if (onLoadingChange) onLoadingChange(false);
       } catch (error) {
         console.error('MapCanvas error:', error);
+        setIsLoading(false);
+        if (onLoadingChange) onLoadingChange(false);
       }
     };
 
@@ -34,7 +44,7 @@ export function MapCanvas({ startCoord, endCoord, currentMap, className, onClick
         cleanup();
       }
     };
-  }, [startCoord, endCoord, currentMap]); //now we can rerun when coords and map change
+  }, [startCoord, endCoord, currentMap, onLoadingChange]);
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current || !onClick) return;
@@ -57,23 +67,31 @@ export function MapCanvas({ startCoord, endCoord, currentMap, className, onClick
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      id="mapCanvas"
-      className={className}
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        objectFit: 'contain',
-        zIndex: 2,
-        pointerEvents: onClick ? 'auto' : 'none',
-        cursor: onClick ? 'crosshair' : 'default'
-      }}
-      onClick={handleCanvasClick}
-    />
+    <Box pos="relative" w="100%" h="100%">
+      <LoadingOverlay
+        visible={isLoading}
+        zIndex={1000}
+        overlayProps={{ radius: "sm", blur: 2 }}
+        loaderProps={{ color: 'blue', type: 'bars' }}
+      />
+      <canvas
+        ref={canvasRef}
+        id="mapCanvas"
+        className={className}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'contain',
+          zIndex: 2,
+          pointerEvents: onClick ? 'auto' : 'none',
+          cursor: onClick ? 'crosshair' : 'default'
+        }}
+        onClick={handleCanvasClick}
+      />
+    </Box>
   );
 }
 
