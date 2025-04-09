@@ -42,19 +42,22 @@ function Language() {
     const handleRequestSubmit = async () => {
         if (language != "Error" && selectedDate.trim() && selectedTime.trim() && roomNumber.trim()) {
             setRequestStatus("Request Submitted Successfully");
-          console.log("👉 sending request", {
+
+          console.log("sending request", {
             language,
             selectedDate,
             selectedTime,
             roomNumber,
             description,
           });
+          const label =
+            language === 'asl' ? 'ASL (American Sign Language)' : ISO6391.getName(language);
             try {
                   const response = await fetch('http://localhost:3001/requests', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                      language,
+                      label,
                       selectedDate,
                       selectedTime,
                       roomNumber,
