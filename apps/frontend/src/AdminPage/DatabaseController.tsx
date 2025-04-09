@@ -18,7 +18,7 @@ type Props = {
 };
 export function DatabaseController({ table }: Props) {
     // useState variables -> might need to change types
-    const [file, setFile] = useState<File| null>(null);
+    const [file, setFile] = useState<File | null>(null);
 
     // reads the given file and returns as string
     async function getData(datafile: File) {
@@ -27,7 +27,7 @@ export function DatabaseController({ table }: Props) {
 
             reader.onload = () => {
                 resolve(reader.result as string);
-            }
+            };
 
             reader.readAsText(datafile);
         });
@@ -40,18 +40,19 @@ export function DatabaseController({ table }: Props) {
             return;
         }
 
-        const data= await getData(file);
+        const data = await getData(file);
         console.log(data);
 
         try {
             console.log('importing file');
 
             // Sends parsed data to the database
-            const res = await axios.post(`http://localhost:3001/${table}/import`, data)
-                .then(responseData => {
+            const res = await axios
+                .post(`http://localhost:3001/${table}/import`, data)
+                .then((responseData) => {
                     console.log('Response from server:', responseData);
                 })
-                .catch(err => console.log(err));
+                .catch((err) => console.log(err));
 
             console.log('imported file');
         } catch (error) {
@@ -64,7 +65,7 @@ export function DatabaseController({ table }: Props) {
     // export function handling
     const handleExport = async () => {
         const link = document.createElement('a');
-        link.href = "http://localhost:3001/exportRoute/static-export/backup.csv"
+        link.href = 'http://localhost:3001/exportRoute/static-export/backup.csv';
         link.setAttribute('download', 'backup.csv');
         document.body.appendChild(link);
         link.click();
@@ -74,8 +75,9 @@ export function DatabaseController({ table }: Props) {
     // clear function handling
     const handleClear = async () => {
         if (!confirm('Are you sure you want to clear this table?')) return;
-        const res = await axios.get(`http://localhost:3001/${table}/clear`, {})
-            .then(responseData => {
+        const res = await axios
+            .get(`http://localhost:3001/${table}/clear`, {})
+            .then((responseData) => {
                 console.log('Response from server:', responseData);
             });
     };
@@ -90,15 +92,22 @@ export function DatabaseController({ table }: Props) {
             {/**/}
             {/*Input for import csv*/}
             <FileInput
-                label={'Import File Here'}
-                radius={"sm"}
-                placeholder={"Choose a CSV file"}
-                accept={'.csv'}
+                label="Import File Here"
+                radius="sm"
+                placeholder="Choose a CSV file"
+                accept=".csv"
                 onChange={setFile}
-                className="form-control"
-                color={"black"}
+                color="black"
+                className="w-full sm:max-w-sm mx-auto"
             />
-            <Group gap={"sm"} py={"md"}>
+            <Flex
+                gap="sm"
+                justify="center"
+                align="center"
+                direction={{ base: 'column', sm: 'row' }}
+                wrap="wrap"
+                py="md"
+            >
                 <Button
                     size="md"
                     color="dark"
@@ -147,7 +156,7 @@ export function DatabaseController({ table }: Props) {
                 >
                     Clear Table
                 </Button>
-            </Group>
+            </Flex>
         </div>
     );
 }
