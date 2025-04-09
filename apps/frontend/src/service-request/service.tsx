@@ -42,7 +42,14 @@ function Language() {
     const handleRequestSubmit = async () => {
         if (language != "Error" && selectedDate.trim() && selectedTime.trim() && roomNumber.trim()) {
             setRequestStatus("Request Submitted Successfully");
-                try {
+          console.log("👉 sending request", {
+            language,
+            selectedDate,
+            selectedTime,
+            roomNumber,
+            description,
+          });
+            try {
                   const response = await fetch('http://localhost:3001/requests', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
