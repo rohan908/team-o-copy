@@ -4,6 +4,7 @@ import {
     Box,
     TextInput,
     Button,
+    FileInput,
     Group,
     useMantineTheme,
     Title,
@@ -63,7 +64,7 @@ export function DatabaseController({ table }: Props) {
     // export function handling
     const handleExport = async () => {
         const link = document.createElement('a');
-        link.href = "http/localhost:3001/static-export/backup.csv"
+        link.href = "http://localhost:3001/exportRoute/static-export/backup.csv"
         link.setAttribute('download', 'backup.csv');
         document.body.appendChild(link);
         link.click();
@@ -73,24 +74,31 @@ export function DatabaseController({ table }: Props) {
     // clear function handling
     const handleClear = async () => {
         if (!confirm('Are you sure you want to clear this table?')) return;
-        const res = await axios.delete('http://localhost:3001/${table}/clear')
+        const res = await axios.get(`http://localhost:3001/${table}/clear`, {})
             .then(responseData => {
                 console.log('Response from server:', responseData);
             });
     };
 
+    // used to reload the page when a button is pressed
+    function reloadPage() {
+        window.location.reload();
+    }
+
     return (
         <div>
             {/**/}
             {/*Input for import csv*/}
-            <input
-                type={'file'}
+            <FileInput
+                label={'Import File Here'}
+                radius={"sm"}
+                placeholder={"Choose a CSV file"}
                 accept={'.csv'}
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                onChange={setFile}
                 className="form-control"
                 color={"black"}
             />
-            <div>
+            <Group gap={"sm"} py={"md"}>
                 <Button
                     size="md"
                     color="dark"
@@ -101,7 +109,10 @@ export function DatabaseController({ table }: Props) {
                         borderRadius: '50px',
                         transition: 'all 0.3s ease',
                     }}
-                    onClick={handleImport}
+                    onClick={() => {
+                        handleImport();
+                        reloadPage();
+                    }}
                 >
                     Import CSV
                 </Button>
@@ -129,11 +140,14 @@ export function DatabaseController({ table }: Props) {
                         borderRadius: '50px',
                         transition: 'all 0.3s ease',
                     }}
-                    onClick={handleClear}
+                    onClick={() => {
+                        handleClear();
+                        reloadPage();
+                    }}
                 >
                     Clear Table
                 </Button>
-            </div>
+            </Group>
         </div>
     );
 }

@@ -2,6 +2,7 @@ import express, { Router, Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 import PrismaClient from '../bin/prisma-client';
+import { outlierValues } from '../directorybackup/ExportToCSV.ts';
 
 const router: Router = express.Router();
 
@@ -11,16 +12,30 @@ router.post('/import', async (req: Request, res: Response) => {
     // Need to figure out how to parse FormData once it is passed
     const { receivedData } = req.body;
     const dataString = JSON.stringify(req.body);
+    const filePath = './src/directorybackup/backup.csv';
+
+    fs.writeFileSync(filePath, '');
 
     const dataToAdd = parseCSVString(dataString);
     console.log(dataToAdd);
 
-    const createDirectories = await PrismaClient.directory.createMany({
-        data: dataToAdd,
-        skipDuplicates: true,
-    });
+    // gets the headers (first row of table showing the names of each column)
+    const headers = Object.keys(dataToAdd[0]);
 
-    console.log(dataString);
+    // turns rows of table data into CSV data (separates data by commas)
+    const csvRows = [
+        headers.join(','), // Header row
+        ...dataToAdd.map((directory) =>
+            headers.map((key) => outlierValues(directory[key as keyof typeof directory]))
+        ),
+    ];
+
+    // adds the indent when row is done
+    const csvContent = csvRows.join('\n');
+
+    const currentContent = fs.readFileSync(filePath, 'utf-8');
+    fs.writeFileSync(filePath, currentContent + csvContent);
+    console.log('CSV written to:', filePath);
 
     res.status(200).json({
         status: 'success',
@@ -39,8 +54,10 @@ router.get('/export', async (req: Request, res: Response) => {
 });
 
 // Clears the directory backup CSV
-router.delete('/clear', async (req: Request, res: Response) => {
+router.get('/clear', async (req: Request, res: Response) => {
     // Add removal from CSV file
+    const filePath = './src/directorybackup/backup.csv';
+    fs.writeFileSync(filePath, '');
 
     res.status(200).json({
         message: 'Table cleared successfully',
@@ -72,27 +89,37 @@ router.get('/:building', async (req: Request, res: Response) => {
 
 // Parses a string in csv format and returns in prisma schema
 function parseCSVString(csvString: string) {
-    const cleanup = csvString
-        .replace(/,/g, '//')
+    let cleanup = csvString
+        .replace(/,/g, ';;')
         .replace(/[{}":]/g, '')
-        .replace(/\\r\\n/g, '\n');
-    const lines = cleanup.trim().split('\n');
-    const headers = lines[0].split('//');
+        .replace(/\\r/g, '')
+        .replace(/\\n/g, '*');
+    if (cleanup.charAt(cleanup.length - 1) === '*') {
+        cleanup = cleanup.substring(0, cleanup.length - 1);
+    }
+
+    const lines = cleanup.trim().split('*');
+    const headers = lines[0].split(';;');
+
+    console.log(csvString);
+    console.log(cleanup);
+    console.log(lines);
+    console.log(headers);
 
     return lines.slice(1).map((line) => {
         line = line.replace(/\\/g, '');
 
         // must format absoluteCoords correctly
-        const lastSeparator = line.lastIndexOf('//');
+        const lastSeparator = line.lastIndexOf(';;');
         line = line.slice(0, lastSeparator) + ',' + line.slice(lastSeparator + 2);
 
-        const values = line.split('//');
+        const values = line.split(';;');
 
         const obj: any = {};
         console.log(values);
         headers.forEach((header, i) => {
             if (header == 'absoluteCoords') {
-                obj[header] = JSON.parse(values[i]);
+                obj[header] = values[i].split(',').map((item) => +item);
             } else obj[header] = values[i];
         });
         return {

@@ -8,7 +8,7 @@ const router = Router();
 router.get('/static-export/:filename', (req: Request, res: Response) => {
     const fileName = req.params.filename;
 
-    const filePath = path.join(__dirname, '../downloads', fileName);
+    const filePath = path.join('./src/directorybackup', fileName);
 
     if (!fs.existsSync(filePath)) {
         return console.log('file not found:');
