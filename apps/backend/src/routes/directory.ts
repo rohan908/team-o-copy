@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import PrismaClient from '../bin/prisma-client';
 import { outlierValues } from '../directorybackup/ExportToCSV.ts';
+import { parseDirectoryData } from '../directorybackup/directorydata.ts';
 
 const router: Router = express.Router();
 
@@ -69,6 +70,17 @@ router.get('/all', async (req: Request, res: Response) => {
     const allDirectories = await PrismaClient.directory.findMany({});
     console.log(allDirectories);
     res.json(allDirectories);
+});
+
+router.get('/directorybuilding', async (req: Request, res: Response) => {
+    try {
+        console.log('TEST');
+        const buildingsArr = await parseDirectoryData();
+        res.json(buildingsArr);
+    } catch (e) {
+        console.error(e);
+        res.status(500);
+    }
 });
 
 /*

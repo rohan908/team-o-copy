@@ -1,12 +1,35 @@
 import { useParams } from 'react-router-dom';
-import { Patriot20, Patriot22 } from './directorydata';
+import React, { useEffect, useState } from 'react';
+
+// define a DirectoryLink type for useState
+type DirectoryLink = {
+    title: string;
+    path: string;
+};
 
 export function DirectoryLocation() {
-    const { topic } = useParams<{ topic: string }>();
+    // starting state is empty array
+    const [title, setTitle] = useState<string>("");
 
-    const allTopics = [...Patriot20, ...Patriot22];
-    const match = allTopics.find(item => item.slug === topic);
-    const title = match?.title ?? 'Unknown Topic';
+    useEffect(() => {
+        const fetchData = async () => {
+
+            const response = await fetch('/api/directory-data');
+
+            // takes response from get query and recieves patriot20+22 arrays
+            const { Patriot20, Patriot22 } = await response.json();
+
+            const { topic } = useParams<{ topic: string }>();
+
+            const allTopics = [...Patriot20, ...Patriot22];
+            const match = allTopics.find(item => item.slug === topic);
+            const title = match?.title ?? 'Unknown Topic';
+
+            setTitle(title);
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <div className="p-6">
