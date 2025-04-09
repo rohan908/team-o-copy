@@ -114,7 +114,4 @@ router.get('/debug', (req: any, res: any) => {
 // Register the handler with the router
 router.post('/findPath', findPathHandler);
 
-// Register the handler with the router
-router.post('/findPath', findPathHandler);
-
 export default router;
