@@ -16,11 +16,14 @@ import * as L from 'leaflet';
 interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
+    onCollapseChange?: (isCollapsed: boolean) => void; // 👈 new prop
+
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                                                          onSelectHospital,
                                                          onSelectDepartment,
+                                                         onCollapseChange
                                                      }) => {
     const theme = useMantineTheme();
     const [hospital, setHospital] = useState<string | null>(null);
@@ -41,6 +44,10 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
         }
         setCollapsed(true);
     };
+
+    useEffect(() => {
+        onCollapseChange?.(collapsed);
+    }, [collapsed]);
 
     useEffect(() => {
         if (hospital === '20 Patriot St') {
@@ -81,8 +88,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                 bg="white"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="100%"
-                maw={{ base: '95%', sm: '80%', md: '600px' }}
                 style={{
+                    maxWidth: collapsed ? '400px' : '80%', // ✅ Collapse mode limits width
                     opacity: 0.95,
                     borderRadius: theme.radius.lg,
                     backdropFilter: 'blur(5px)',
@@ -143,18 +150,6 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                             onClick={handleFindPath}
                             color="dark"
                             fw="600"
-                            bg="green"
-                            style={{
-                                borderRadius: '50px',
-                                transition: 'all 0.3s ease',
-                            }}
-                        >
-                            I've Arrived
-                        </Button>
-                        <Button
-                            onClick={handleFindPath}
-                            color="dark"
-                            fw="600"
                             bg="black"
                             style={{
                                 borderRadius: '50px',
@@ -167,22 +162,35 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                 </Collapse>
 
                 {collapsed && (
-                    <Button
-                        variant="subtle"
-                        fullWidth
-                        size="lg"
-                        onClick={() => setCollapsed(false)}
+                    <Box
                         style={{
-                            borderRadius: 0,
-                            height: '3rem',
-                            fontWeight: 600,
-                            fontSize: '1rem',
-                            backgroundColor: theme.colors.gray[1],
-                            borderTop: `1px solid ${theme.colors.gray[3]}`,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '100%',
                         }}
                     >
-                        Expand Directions Menu
-                    </Button>
+                        <Box
+                            w="100%"
+                            maw={{ base: '100%', md: '400px' }}
+                        >
+                            <Button
+                                variant="subtle"
+                                fullWidth
+                                size="md"
+                                onClick={() => setCollapsed(false)}
+                                style={{
+                                    borderRadius: 0,
+                                    height: '3rem',
+                                    fontWeight: 600,
+                                    fontSize: '1rem',
+                                    backgroundColor: theme.colors.gray[1],
+                                    borderTop: `1px solid ${theme.colors.gray[3]}`,
+                                }}
+                            >
+                                Expand Directions Menu
+                            </Button>
+                        </Box>
+                    </Box>
                 )}
             </Box>
         </Box>
