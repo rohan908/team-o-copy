@@ -5,12 +5,14 @@ import logger from 'morgan';
 import healthcheckRouter from './routes/healthcheck';
 import directoryRouter from './routes/directory';
 import languageServiceRequestRouter from './routes/languageServiceRequest.ts';
+import exportRoute from './routes/ExportRoute.ts';
 import graphRouter from './routes/graph.ts';
 
 import { API_ROUTES } from 'common/src/constants';
 
-const app: Express = express(); // Setup the backend
 const cors = require('cors');
+const app: Express = express(); // Setup the backend
+
 // Setup generic middlewear
 app.use(
     logger('dev', {
@@ -21,16 +23,20 @@ app.use(
     })
 ); // This records all HTTP requests
 
+app.use(cors());
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
-app.use(cors());
+
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup -> Not True
 app.use('/', healthcheckRouter);
 app.use('/directory', directoryRouter);
 app.use('/requests', languageServiceRequestRouter);
 app.use('/graph', graphRouter);
+// adding export routing
+app.use('/exportRoute', exportRoute);
+
 /**
  * Catch all 404 errors, and forward them to the error handler
  */
