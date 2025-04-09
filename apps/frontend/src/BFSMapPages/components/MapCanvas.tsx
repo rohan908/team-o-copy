@@ -19,10 +19,13 @@ export function MapCanvas({ startCoord, endCoord, currentMap, className }: MapCa
     let cleanup: (() => void) | undefined; // bc DrawPathForMap is async this is needed and it was a really annoying bug :(
 
     const initializeDrawing = async () => {
-      cleanup = await DrawPathForMap(startCoord, endCoord, currentMap);
+      try {
+        cleanup = await DrawPathForMap(startCoord, endCoord, currentMap);
+      } catch (error) {
+        console.error('MapCanvas error:', error);
+      }
     };
 
-    // Call the async function
     initializeDrawing();
 
     return () => {
@@ -44,7 +47,8 @@ export function MapCanvas({ startCoord, endCoord, currentMap, className }: MapCa
         width: '100%',
         height: '100%',
         zIndex: 2,
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        backgroundColor: "transparent"
       }}
     />
   );
