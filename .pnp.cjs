@@ -75,6 +75,7 @@ const RAW_RUNTIME_STATE =
           ["eslint", "virtual:19a1bbfd66c0a8b6e4e9b4eb3053d58c46601ff49b62144208f9d27690e7d3dafa1ec4b1cf3db192de427911ae217357531df59f991426daf174c7b5b2cfb34e#npm:9.23.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["husky", "npm:9.1.7"],\
+          ["iso-639-1", "npm:3.1.5"],\
           ["multer", "npm:1.4.5-lts.2"],\
           ["papaparse", "npm:5.5.2"],\
           ["prettier", "npm:3.5.3"],\
@@ -5001,6 +5002,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-react-compiler", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:19.0.0-beta-aeaed83-20250323"],\
           ["eslint-plugin-react-hooks", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:5.2.0"],\
           ["eslint-plugin-react-refresh", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.4.19"],\
+          ["iso-639-1", "npm:3.1.5"],\
           ["leaflet", "npm:1.9.4"],\
           ["leaflet-routing-machine", "npm:3.2.12"],\
           ["localforage", "npm:1.10.0"],\
@@ -5620,6 +5622,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/isexe-npm-3.1.1-9c0061eead-9ec2576540.zip/node_modules/isexe/",\
         "packageDependencies": [\
           ["isexe", "npm:3.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["iso-639-1", [\
+      ["npm:3.1.5", {\
+        "packageLocation": "./.yarn/cache/iso-639-1-npm-3.1.5-02159b99a1-04739478e5.zip/node_modules/iso-639-1/",\
+        "packageDependencies": [\
+          ["iso-639-1", "npm:3.1.5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8192,6 +8203,7 @@ const RAW_RUNTIME_STATE =
           ["eslint", "virtual:19a1bbfd66c0a8b6e4e9b4eb3053d58c46601ff49b62144208f9d27690e7d3dafa1ec4b1cf3db192de427911ae217357531df59f991426daf174c7b5b2cfb34e#npm:9.23.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["husky", "npm:9.1.7"],\
+          ["iso-639-1", "npm:3.1.5"],\
           ["multer", "npm:1.4.5-lts.2"],\
           ["papaparse", "npm:5.5.2"],\
           ["prettier", "npm:3.5.3"],\

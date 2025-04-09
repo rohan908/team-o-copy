@@ -34,6 +34,16 @@ model directory {
   @@id([dName, building])
 }
 
+model layer {
+  id                Int       @id @default(autoincrement())
+  layerIndex        Int       @unique
+  name              String
+  isConnectionLayer Boolean   @default(false)
+  bitmap            Bytes     // Binary representation of the bitmap
+  width             Int
+  height            Int
+}
+
 /*
   creates the graph table (strong entity)
   bitMap requires a Json object to store a 2D array

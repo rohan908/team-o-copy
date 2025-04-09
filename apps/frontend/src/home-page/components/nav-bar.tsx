@@ -21,7 +21,7 @@ export const navItems: NavItem[] = [
 ];
 
 export const adminNavItems: NavItem[] = [
-    { name: "Service Request", link: "/submission" }, //add service rec routting here logan
+    { name: "Service Request", link: "/language-form" }, //add service rec routting here logan
     { name: "Admin Page", link: '/admin-page' },
 
     // { name: "Profile", link: "/submission" }// potential delighter- login button can be in this
@@ -145,7 +145,6 @@ export function NavBar() {
                     </Group>
                 </Group>
             </nav>
-
             <Outlet />
         </>
     );

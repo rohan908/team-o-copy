@@ -4,9 +4,11 @@ import {HomePage} from "./home-page.tsx";
 import {MapPage} from "../MapPage/MapPage.tsx";
 import {Directory} from "../directory/directory.tsx";
 import {DirectoryLocation} from "../directory/components/DirectoryLocation.tsx";
-import {Display} from "../service-request/submissionDisplay/display.tsx";
+import {Display} from "../service-request/display.tsx";
 import {AdminPage} from "../AdminPage/AdminPage.tsx";
 import {MapAPIPage} from "../MapsAPIPage/MapAPIPage.tsx";
+import Language from "../service-request/service";
+
 
 import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -26,6 +28,7 @@ export function Routing() {
                         <Route path="/submission" element={<Display />} />
                         <Route path="directory" element={<Directory/>}/>
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
+                        <Route path="/language-form" element={<Language />} />
                         <Route path="/admin-page" element={<AdminPage />} />
                     </Route>
                 </Routes>

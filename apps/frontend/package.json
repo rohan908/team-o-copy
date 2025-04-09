@@ -21,6 +21,7 @@
         "common": "*",
         "dotenv": "*",
         "dotenv-cli": "*",
+        "iso-639-1": "^3.1.5",
         "leaflet": "1.9.4",
         "leaflet-routing-machine": "3.2.12",
         "localforage": "^1.10.0",
