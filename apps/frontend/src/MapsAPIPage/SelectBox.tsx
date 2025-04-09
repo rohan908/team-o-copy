@@ -98,10 +98,10 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                         Select Hospital:
                     </Text>
                     <Select
-                        placeholder="Hospital A or B"
+                        placeholder="Hospital"
                         data={[
-                            { value: 'hospital-a', label: 'Hospital A' },
-                            { value: 'hospital-b', label: 'Hospital B' },
+                            { value: 'hospital-a', label: '20 Patriot St' },
+                            { value: 'hospital-b', label: '22 Patriot St' },
                         ]}
                         value={hospital}
                         onChange={setHospital}
@@ -122,7 +122,19 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                         mb="md"
                     />
 
-                    <Flex justify="flex-end">
+                    <Flex justify="flex-end" gap="md">
+                        <Button
+                            onClick={handleFindPath}
+                            color="dark"
+                            fw="600"
+                            bg="green"
+                            style={{
+                                borderRadius: '50px',
+                                transition: 'all 0.3s ease',
+                            }}
+                        >
+                            I've arrived
+                        </Button>
                         <Button
                             onClick={handleFindPath}
                             color="dark"
