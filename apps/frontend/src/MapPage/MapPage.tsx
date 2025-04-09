@@ -5,7 +5,7 @@ export function MapPage() {
     return (
         <div className="p-10">
             <h1 className="font-bold text-xl pb-4">Map Page</h1>
-            <HoverInfoComponent></HoverInfoComponent>
+            <HoverInfoComponent mapVersion={0} offsetData={[0,0]}></HoverInfoComponent>
         </div>
     );
 }

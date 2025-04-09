@@ -2,20 +2,29 @@ import React, {useEffect, useRef, MouseEvent, MouseEventHandler} from 'react';
 import {useState} from 'react';
 import './MapPageStyles.css';
 import {Simulate} from "react-dom/test-utils";
-import mouseOver = Simulate.mouseOver;
+interface HoverCompProps {
+    mapVersion: number;
+    offsetData: number[];
+}
 
-const HoverInfoComponent = () => {
+const HoverInfoComponent: React.FC<HoverCompProps> = (props) => {
     const [hoverInfo, setHoverInfo] = useState("");
     const [isHovering, setIsHovering] = useState(false);
     const [isOverTransparent, setIsOverTransparent] = useState(false);
     const [numHovering, setNumHovering] = useState(-1);
+    const mapDisplay = props.mapVersion;
+    const offsetInfoX = props.offsetData[0];
+    const offsetInfoY = props.offsetData[1];
     const canvasRefImaging = useRef<HTMLCanvasElement>(null);
     const canvasRefPharmacy = useRef<HTMLCanvasElement>(null);
     const canvasRefPhlebotomy = useRef<HTMLCanvasElement>(null);
     const canvasRefSpecClinic = useRef<HTMLCanvasElement>(null);
     const canvasRefUrgentCare = useRef<HTMLCanvasElement>(null);
     const canvasRef22 = useRef<HTMLCanvasElement>(null);
+    const canvasRef22Isolated = useRef<HTMLCanvasElement>(null);
+    const canvasLocationMarker = useRef<HTMLCanvasElement>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
+
 
     // Store preloaded images
     const [images, setImages] = useState<{
@@ -35,7 +44,9 @@ const HoverInfoComponent = () => {
                 phlebotomy: "public/MapImages/Phlebotomy.png",
                 specClinic: "public/MapImages/SpecClinic.png",
                 urgentCare: "public/MapImages/UrgentCare.png",
-                twentyTwo: "public/MapImages/22PatFull.png"
+                twentyTwo: "public/MapImages/22PatFull.png",
+                twentyTwoIsolated: "public/MapImages/22PatriotSolitary.png",
+                locationMarker: "public/MapImages/LocationMarker.png"
             },
             dark: {
                 imaging: "public/MapImages/ImagingDark.png",
@@ -43,7 +54,8 @@ const HoverInfoComponent = () => {
                 phlebotomy: "public/MapImages/PhleDark.png",
                 specClinic: "public/MapImages/SpecDark.png",
                 urgentCare: "public/MapImages/UrgentDark.png",
-                twentyTwo: "public/MapImages/Darker22.png"
+                twentyTwo: "public/MapImages/Darker22.png",
+                twentyTwoIsolated: "public/MapImages/22PatriotSolitaryDark.png"
             }
         };
 
@@ -82,23 +94,56 @@ const HoverInfoComponent = () => {
         twentyTwo: { width: 525, height: 608 }
     };
 
+    const originalMapWidthOne = 720;
+    const canvasDimensionsOne = {
+        imaging: { width: 387, height: 418 },
+        pharmacy: { width: 37, height: 74 },
+        phlebotomy: { width: 64, height: 121 },
+        specClinic: { width: 385, height: 430 },
+        urgentCare: { width: 223, height: 187 },
+    };
+
+    const originalMapWidthTwo = 720;
+    const canvasDimensionsTwo = {
+        twentyTwoIsolated: { width: 683, height: 437 }
+    };
+
     // Function to update canvas dimensions based on container width
     // sorry connor, i like my switch cases lol
     const updateCanvasDimensions = () => {
         const mapContainer = mapContainerRef.current;
         if (!mapContainer) return;
-
-        const containerWidth = mapContainer.offsetWidth;
-        const scale = containerWidth / originalMapWidth;
-
-        const canvases = [
+        let containerWidth = mapContainer.offsetWidth;
+        let scale = containerWidth / originalMapWidth;
+        let canvases = [
             { ref: canvasRefImaging, dimensions: canvasDimensions.imaging },
             { ref: canvasRefPharmacy, dimensions: canvasDimensions.pharmacy },
             { ref: canvasRefPhlebotomy, dimensions: canvasDimensions.phlebotomy },
             { ref: canvasRefSpecClinic, dimensions: canvasDimensions.specClinic },
             { ref: canvasRefUrgentCare, dimensions: canvasDimensions.urgentCare },
-            { ref: canvasRef22, dimensions: canvasDimensions.twentyTwo }
+            { ref: canvasRef22, dimensions: canvasDimensions.twentyTwo },
         ];
+
+        if (mapDisplay == 1){
+            containerWidth = mapContainer.offsetWidth;
+            scale = containerWidth / originalMapWidthOne;
+            canvases = [
+                { ref: canvasRefImaging, dimensions: canvasDimensionsOne.imaging },
+                { ref: canvasRefPharmacy, dimensions: canvasDimensionsOne.pharmacy },
+                { ref: canvasRefPhlebotomy, dimensions: canvasDimensionsOne.phlebotomy },
+                { ref: canvasRefSpecClinic, dimensions: canvasDimensionsOne.specClinic },
+                { ref: canvasRefUrgentCare, dimensions: canvasDimensionsOne.urgentCare },
+            ];
+        }
+
+        if (mapDisplay == 2){
+            containerWidth = mapContainer.offsetWidth;
+            scale = containerWidth / originalMapWidthTwo;
+            canvases = [
+                {ref: canvasRef22Isolated, dimensions: canvasDimensionsTwo.twentyTwoIsolated}
+            ]
+        }
+
 
         canvases.forEach(({ ref, dimensions }) => {
             const canvas = ref.current;
@@ -134,6 +179,9 @@ const HoverInfoComponent = () => {
                 case canvasRef22:
                     image.src = "public/MapImages/22PatFull.png";
                     break;
+                case canvasRef22Isolated:
+                    image.src = "public/MapImages/22PatSolitary.png";
+                    break;
             }
             
             // idk why onload works here but not everywhere else but it works so lol!
@@ -155,7 +203,8 @@ const HoverInfoComponent = () => {
             { ref: canvasRefPhlebotomy, image: images.normal.phlebotomy },
             { ref: canvasRefSpecClinic, image: images.normal.specClinic },
             { ref: canvasRefUrgentCare, image: images.normal.urgentCare },
-            { ref: canvasRef22, image: images.normal.twentyTwo }
+            { ref: canvasRef22, image: images.normal.twentyTwo },
+            { ref: canvasRef22Isolated, image: images.normal.twentyTwoIsolated },
         ];
 
         canvases.forEach(({ ref, image }) => {
@@ -174,7 +223,7 @@ const HoverInfoComponent = () => {
         let context;
         let hasDetectedColor = false;
         setNumHovering(-1);
-        for (let num = 0; num < 6; num++) {
+        for (let num = 0; num < 7; num++) {
             switch (num) {
                 case 0:
                     canvas = canvasRefImaging.current;
@@ -208,6 +257,12 @@ const HoverInfoComponent = () => {
                     break;
                 case 5:
                     canvas = canvasRef22.current;
+                    if (!canvas) return;
+                    context = canvas.getContext("2d");
+                    if (!context) return;
+                    break;
+                case 6:
+                    canvas = canvasRef22Isolated.current;
                     if (!canvas) return;
                     context = canvas.getContext("2d");
                     if (!context) return;
@@ -267,6 +322,13 @@ const HoverInfoComponent = () => {
                         context.drawImage(images.dark.twentyTwo, 0, 0, canvas.width, canvas.height);
                         setNumHovering(5);
                         break;
+                    case 6:
+                        setHoverInfo("This area is 22 Patriot Place");
+                        setIsHovering(true);
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.dark.twentyTwoIsolated, 0, 0, canvas.width, canvas.height);
+                        setNumHovering(6);
+                        break;
                 }
             }
             switch (num) {
@@ -306,57 +368,204 @@ const HoverInfoComponent = () => {
                         context.drawImage(images.normal.twentyTwo, 0, 0, canvas.width, canvas.height);
                     }
                     break;
+                case 6:
+                    if (numHovering !=6) {
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.drawImage(images.normal.twentyTwoIsolated, 0, 0, canvas.width, canvas.height);
+                    }
+                    break;
             }
         }
+    }
+
+    function locationMarker(){
+        const canvas = canvasLocationMarker.current;
+        if (!canvas) return;
+        const context = canvas.getContext("2d");
+        if (!context) return;
+        const img = new Image();
+        img.src = "public/MapImages/LocationMarker.png";
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(img,0,0,canvas.width, canvas.height);
     }
 
     useEffect(() => {
         // Initial setup
         updateCanvasDimensions();
-        
+
         // Add resize listener
         window.addEventListener('resize', updateCanvasDimensions);
-        
+        window.addEventListener('mousemove', locationMarker);
+
         // Cleanup
         return () => {
             window.removeEventListener('resize', updateCanvasDimensions);
         };
     }, []);
 
-    return (
-        <div>
-            <div className="bg-gray-100 rounded-lg shadow-md p-6 hoverInfoBar">
-                <div className="text-2xl font-bold mb-4 text-center py-2 rounded">
-                    {!isHovering || isOverTransparent ? `Hover over a map region to learn more` : `Area Information: ${hoverInfo}`}
+    if (mapDisplay == 0) {
+        return (
+            <div>
+                <div className="bg-white rounded-lg shadow-md p-6 hoverInfoBar">
+                    <div className="text-2xl font-bold mb-4 text-center py-2 rounded">
+                        {!isHovering || isOverTransparent
+                            ? `Hover over a map region to learn more`
+                            : `Area Information: ${hoverInfo}`}
+                    </div>
+                </div>
+                <div className="mapContainer" ref={mapContainerRef}>
+                    <img
+                        src="public/MapImages/Whole_Floor_Plan.png"
+                        alt="MainMapImage"
+                        className="mainMapImage"
+                    />
+                    <canvas
+                        id="imaging"
+                        className="imagingSuiteZero"
+                        ref={canvasRefImaging}
+                        onMouseLeave={() => handleMouseExit()}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="specClinic"
+                        className="specClinicZero"
+                        ref={canvasRefSpecClinic}
+                        onMouseLeave={() => handleMouseExit()}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="urgentCare"
+                        className="urgentCareZero"
+                        ref={canvasRefUrgentCare}
+                        onMouseLeave={() => handleMouseExit()}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="pharmacy"
+                        className="pharmacyZero"
+                        ref={canvasRefPharmacy}
+                        onMouseLeave={() => handleMouseExit()}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="phlebotomy"
+                        className="phlebotomyZero"
+                        ref={canvasRefPhlebotomy}
+                        onMouseLeave={() => handleMouseExit()}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="22"
+                        className="twentytwoZero"
+                        ref={canvasRef22}
+                        onMouseLeave={() => handleMouseExit()}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
                 </div>
             </div>
-            <div className="mapContainer" ref={mapContainerRef}>
-                <img
-                    src="public/MapImages/Whole_Floor_Plan.png"
-                    alt="MainMapImage"
-                    className="mainMapImage"
-                />
-                <canvas id="imaging" className="imagingSuite" ref={canvasRefImaging}
+        );
+    } else if (mapDisplay == 1) {
+        return (
+            <div>
+                <div className="bg-white rounded-lg p-6 hoverInfoBar">
+                    <div className="text-2xl font-bold mb-4 text-center py-2 rounded">
+                        {!isHovering || isOverTransparent
+                            ? `Hover over a map region to learn more`
+                            : `Area Information: ${hoverInfo}`}
+                    </div>
+                </div>
+                <div className="mapContainer" ref={mapContainerRef}>
+                    <img
+                        src="public/MapImages/Rough_Floor_Plan.png"
+                        alt="MainMapImage"
+                        className="mainMapImage"
+                    />
+                    <canvas
+                        id="imaging"
+                        className="imagingSuiteOne"
+                        ref={canvasRefImaging}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="specClinic" className="specClinic" ref={canvasRefSpecClinic}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="specClinic"
+                        className="specClinicOne"
+                        ref={canvasRefSpecClinic}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="urgentCare" className="urgentCare" ref={canvasRefUrgentCare}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="urgentCare"
+                        className="urgentCareOne"
+                        ref={canvasRefUrgentCare}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="pharmacy" className="pharmacy" ref={canvasRefPharmacy}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="pharmacy"
+                        className="pharmacyOne"
+                        ref={canvasRefPharmacy}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="phlebotomy" className="phlebotomy" ref={canvasRefPhlebotomy}
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="phlebotomy"
+                        className="phlebotomyOne"
+                        ref={canvasRefPhlebotomy}
                         onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event)}/>
-                <canvas id="22" className="twentytwo" ref={canvasRef22}
-                        onMouseLeave={() => handleMouseExit()}
-                        onMouseMove={(event) => handleMouseOver(event)}/>
+                        onMouseMove={(event) => handleMouseOver(event)}
+                    />
+                    <canvas
+                        id="location"
+                        className="locationMarker"
+                        ref={canvasLocationMarker}
+                        style={{
+                            position: 'absolute',
+                            bottom: offsetInfoY + '%',
+                            left: offsetInfoX + '%',
+                            height: '6.42%',
+                            width: '5%',
+                        }}
+                    />
+                </div>
             </div>
-        </div>
-    );
+        );
+    } else if (mapDisplay == 2) {
+        return (
+            <div>
+                <div className="bg-gray-100 rounded-lg shadow-md p-6 hoverInfoBar">
+                    <div className="text-2xl font-bold mb-4 text-center py-2 rounded">
+                        {!isHovering || isOverTransparent
+                            ? `Hover over a map region to learn more`
+                            : `Area Information: ${hoverInfo}`}
+                    </div>
+                </div>
+                <div className="mapContainer" ref={mapContainerRef}>
+                    <img
+                        src="public/MapImages/22PatIsolated.png"
+                        alt="MainMapImage"
+                        className="mainMapImage"
+                    />
+                    <canvas
+                        id="location"
+                        className="locationMarker"
+                        ref={canvasLocationMarker}
+                        style={{
+                            position: 'absolute',
+                            bottom: offsetInfoY + '%',
+                            left: offsetInfoX + '%',
+                            height: '6.42%',
+                            width: '5%',
+                        }}
+                    />
+                    {/*<canvas id="22Iso" className="twentytwoTwo" ref={canvasRef22Isolated}*/}
+                    {/*        onMouseLeave={() => handleMouseExit()}*/}
+                    {/*        onMouseMove={(event) => handleMouseOver(event)}*/}
+                    {/*/>*/}
+                </div>
+            </div>
+        );
+    }
 }
 
 export default HoverInfoComponent;
