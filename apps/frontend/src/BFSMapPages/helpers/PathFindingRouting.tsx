@@ -2,7 +2,7 @@ import { Coordinate } from "./MapTypes";
 
 export async function findPath(startCoord: Coordinate, endCoord: Coordinate): Promise<Coordinate[]> {
     try {
-        const response = await fetch('/graph/findPath', {
+        const response = await fetch('http://localhost:3001/graph/findPath', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

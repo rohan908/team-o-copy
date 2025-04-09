@@ -2,6 +2,7 @@ import { outsideMap } from "../helpers/MapObjects";
 import { MapHandler } from "./MapHandler";
 import { Container } from "@mantine/core";
 import { useState } from "react";
+import { Map } from "../helpers/MapTypes.tsx" //import map type for proper type checking
 
 export function BSFMapPage() {
     return (
@@ -13,7 +14,13 @@ export function BSFMapPage() {
 }
 
 function MapSwitcher() {
-    const [currentMap, setCurrentMap] = useState(outsideMap);
+    const [currentMap, setCurrentMap] = useState<Map>(outsideMap);
+
+    // Define maps object to select from
+    const maps: Record<string, Map> ={
+      outside: outsideMap
+      // add more maps here
+    }
 
     return (
         <>
@@ -21,7 +28,7 @@ function MapSwitcher() {
                 <option value="outside">Outside Map</option>
                 {/* change e for future implemetation */}
             </select>
-            <MapHandler currentMap={currentMap} />
+            <MapHandler {...currentMap} />
         </>
     );
 }
