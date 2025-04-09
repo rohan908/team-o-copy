@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
-import {useMantineTheme,Collapse, Table, Button, Divider } from '@mantine/core'
+import {useMantineTheme,Collapse, Button, Divider, Center } from '@mantine/core'
 import { useNavigate } from 'react-router-dom';
 import Language from "../service-request/service.tsx";
 import LanguageRequestHistory from "./LanguageRequestHistory.tsx";
@@ -20,12 +20,13 @@ export function AdminPage() {
 
       <div className="p-4 sm:p-6 md:p-10 max-w-4xl mx-auto w-full">
         <h1 className="font-bold text-xl mb-4 text-center">Admin Page</h1>
-          <Button
+        <Center>
+        <Button
             size="md"
             color="dark"
             fw="600"
             bg="black"
-            //leftSection={<IconArrowRight size={14} />}
+            mt="sm"
             style={{
               borderRadius: '50px',
               transition: 'all 0.3s ease',
@@ -34,6 +35,7 @@ export function AdminPage() {
           >
             Language Request Form History
           </Button>
+        </Center>
           <br/>
           <Divider
             my="md"
