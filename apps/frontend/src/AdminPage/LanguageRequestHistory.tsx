@@ -90,7 +90,7 @@ export function LanguageRequestHistory() {
     >
       <Title
         order={1}
-        mb="lg"
+        mb="sm"
         c="black"
         ta="left"
         fw={700}
@@ -98,7 +98,15 @@ export function LanguageRequestHistory() {
       >
         Language Service Requests
       </Title>
-
+      <Text
+      c="black"
+      ta="left"
+      mb ="sm"
+      fw={500}
+      fz={{ sm: 'xxs', md: 'xs' }}
+      >
+      Click on a row to find out more information
+    </Text>
       <ScrollArea
         type="scroll"
         offsetScrollbars
