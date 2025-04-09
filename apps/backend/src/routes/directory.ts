@@ -1,5 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import PrismaClient from '../bin/prisma-client';
+import { parseDirectoryData } from '../directorybackup/directorydata.ts';
 
 const router: Router = express.Router();
 
@@ -14,8 +15,19 @@ router.get('/all', async (req: Request, res: Response) => {
     res.json(allDirectories);
 });
 
+router.get('/directorybuilding', async (req: Request, res: Response) => {
+    try {
+        console.log('TEST');
+        const buildingsArr = await parseDirectoryData();
+        res.json(buildingsArr);
+    } catch (e) {
+        console.error(e);
+        res.status(500);
+    }
+});
+
 /*
-    Retrieves all directories in a specified building
+    Retrieves al:l directories in a specified building
     Ex: http://localhost:3001/directory/Patriot-22
  */
 router.get('/:building', async (req: Request, res: Response) => {
@@ -27,7 +39,7 @@ router.get('/:building', async (req: Request, res: Response) => {
         },
     });
     console.log(directories);
-    res.json(directories);
+    res.send(directories);
 });
 
 export default router;
