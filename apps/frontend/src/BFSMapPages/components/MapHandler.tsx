@@ -6,8 +6,8 @@ import { IconMapPin, IconTarget } from '@tabler/icons-react';
 import {parseDirectoryData} from "../../directory/components/directorydata.tsx";
 
 export function MapHandler(currentMap: Map) {
-  const [startCoord, setStartCoord] = useState<Coordinate>({x: 1786, y: 2647, z: 2});
-  const [endCoord, setEndCoord] = useState<Coordinate>({x: 1984, y: 2171, z: 2});
+  const [startCoord, setStartCoord] = useState<Coordinate>({x: 2000, y: 1300, z: 2});
+  const [endCoord, setEndCoord] = useState<Coordinate>({x: 1323, y: 1417, z: 2});
   const [isSettingStart, setIsSettingStart] = useState(false);
   const [isSettingEnd, setIsSettingEnd] = useState(false);
   
