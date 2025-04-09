@@ -34,7 +34,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
         { value: string; label: string }[]
     >([]);
 
-    const hospitalCoords = new L.LatLng(42.09593582153, -71.26322174072266);
+    const hospitalCoords = new L.LatLng(42.091846, -71.266614);
 
     const handleFindPath = () => {
         if (hospital) {
@@ -42,6 +42,9 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
         }
         if (department && onSelectDepartment) {
             onSelectDepartment(department);
+        }
+        if (department == "pharmacy"){
+          onSelectHospital(new L.LatLng(42.093429, -71.268228));
         }
         setCollapsed(true);
     };
@@ -90,7 +93,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="100%"
                 style={{
-                    maxWidth: collapsed ? '400px' : '80%', // ✅ Collapse mode limits width
+                    maxWidth: collapsed ? '300px' : '80%', // ✅ Collapse mode limits width
                     opacity: 0.95,
                     borderRadius: theme.radius.lg,
                     backdropFilter: 'blur(5px)',
