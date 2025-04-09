@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Coordinate, Map } from './MapTypes';
-import { DrawPathForMap } from './DrawPathForMap';
+import { Coordinate, Map } from '../helpers/MapTypes';
+import { DrawPathForMap } from '../helpers/DrawPathForMap';
 
 interface MapCanvasProps {
     startCoord: Coordinate;
