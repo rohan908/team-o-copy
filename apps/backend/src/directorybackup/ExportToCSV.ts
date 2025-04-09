@@ -48,7 +48,7 @@ export async function exportToCSV() {
 }
 
 // Helper function for outlier values like commas, quotation marks, indents
-function outlierValues(value: any): string {
+export function outlierValues(value: any): string {
     // makes sure null or undefined values are entered as empty string
     if (value === null || value === undefined) return '';
 
