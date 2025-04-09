@@ -12,25 +12,25 @@ export const outsideMap = {
 
 export const insidePrescott22Map = {
     name: "InsidePrescot22Map",
-    width: null,
-    height: null,
+    width: 5000,
+    height: 4000,
     floor: 2,
-    xBigMapToSmallMapOffset: null,
-    xBigMapToSmallMapScale: null,
-    yBigMapToSmallMapOffset: null,
-    yBigMapToSmallMapScale: null,
+    xBigMapToSmallMapOffset: 0,
+    xBigMapToSmallMapScale: 1,
+    yBigMapToSmallMapOffset: 0,
+    yBigMapToSmallMapScale: 1,
     imageSrc: null,
 };
 
 export const insidePrescott20Map = {
     name: "InsidePrescott20Map",
-    width: null,
-    height: null,
+    width: 5000,
+    height: 4000,
     floor: 2,
-    xBigMapToSmallMapOffset: null,
-    xBigMapToSmallMapScale: null,   
-    yBigMapToSmallMapOffset: null,
-    yBigMapToSmallMapScale: null,
+    xBigMapToSmallMapOffset: 0,
+    xBigMapToSmallMapScale: 1,
+    yBigMapToSmallMapOffset: 0,
+    yBigMapToSmallMapScale: 1,
     imageSrc: null,
 };
 

@@ -13,6 +13,7 @@ import {
     Collapse,
 } from '@mantine/core';
 import * as L from 'leaflet';
+import { useNavigate } from 'react-router-dom';
 
 interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
@@ -24,6 +25,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                                                          onSelectDepartment,
                                                      }) => {
     const theme = useMantineTheme();
+    const navigate = useNavigate();
     const [hospital, setHospital] = useState<string | null>(null);
     const [department, setDepartment] = useState<string | null>(null);
     const [collapsed, setCollapsed] = useState(false);
@@ -48,6 +50,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
             onSelectDepartment(department);
         }
         setCollapsed(true);
+    };
+
+    const handleIveArrived = () => {
+        navigate('/BFSMapPage');
+        console.log('going to BFSMapPage');
     };
 
     useEffect(() => {
@@ -164,7 +171,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                             Find Path
                         </Button>
                         <Button
-                            onClick={handleFindPath}
+                            onClick={handleIveArrived}
                             color="dark"
                             fw="600"
                             bg="green"
