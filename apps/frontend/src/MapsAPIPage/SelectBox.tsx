@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx';
+import { Space } from '@mantine/core'
 import {
     Box,
     Text,
@@ -30,12 +31,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
         { value: string; label: string }[]
     >([]);
 
-    const hospitalCoords = new L.LatLng(42.091902, -71.266420);
 
     const handleFindPath = () => {
-        // if (hospital) {
-        //     onSelectHospital(hospitalCoords);
-        // }
+        if (!hospital) {
+             return;
+        }
         if (department == "pharmacy"){
             onSelectHospital(new L.LatLng(42.09308766703694, -71.26829740033861));
             console.log("you selected :",department )
@@ -43,6 +43,9 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
         else{
             onSelectHospital(new L.LatLng(42.091902, -71.266422));
             console.log("else you selected :",department )
+        }
+        if (department && onSelectDepartment) {
+            onSelectDepartment(department);
         }
         setCollapsed(true);
     };
@@ -103,7 +106,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                     <Text
                         mb="sm"
                         ta="left"
-                        fz="sm"
+                        fz={{ base: 'xxs', sm: 'sm', md: 'sm' }}
                         c="dimmed"
                         style={{
                             fontStyle: 'italic',
@@ -132,7 +135,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                     />
 
                     <Text ta="left" mb="sm" fw={500}>
-                        Select Department (Optional):
+                        Select Department:
                     </Text>
                     <Select
                         placeholder="Department"
@@ -144,23 +147,15 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                     />
 
                     <Flex justify="flex-end" gap="md">
-                        <Button
-                            onClick={handleFindPath}
-                            color="dark"
-                            fw="600"
-                            bg="green"
-                            style={{
-                                borderRadius: '50px',
-                                transition: 'all 0.3s ease',
-                            }}
-                        >
-                            I've Arrived
-                        </Button>
+
+
                         <Button
                             onClick={handleFindPath}
                             color="dark"
                             fw="600"
                             bg="black"
+                            fz={{ base: 'xs', sm: 'sm', md: 'sm' }}
+
                             style={{
                                 borderRadius: '50px',
                                 transition: 'all 0.3s ease',
@@ -168,29 +163,51 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                         >
                             Find Path
                         </Button>
+                        <Button
+                            onClick={handleFindPath}
+                            color="dark"
+                            fw="600"
+                            bg="green"
+                            fz={{ base: 'xs', sm: 'sm', md: 'sm' }}
+
+                            style={{
+                                borderRadius: '50px',
+                                transition: 'all 0.3s ease',
+                            }}
+                        >
+                            I've Arrived
+                        </Button>
                     </Flex>
                 </Collapse>
 
                 {collapsed && (
-                    <Button
-                        variant="subtle"
-                        fullWidth
-                        size="lg"
-                        onClick={() => setCollapsed(false)}
-                        style={{
-                            borderRadius: 0,
-                            height: '3rem',
-                            fontWeight: 600,
-                            fontSize: '1rem',
-                            backgroundColor: theme.colors.gray[1],
-                            borderTop: `1px solid ${theme.colors.gray[3]}`,
-                        }}
-                    >
-                        Expand Directions Menu
-                    </Button>
+                    <Button.Group>
+                        <Button
+                            px="md"
+                            variant="subtle"
+                            fullWidth
+                            size="lg"
+                            onClick={() => setCollapsed(false)}
+                            style={{
+                                borderRadius: 0,
+                                height: '3rem',
+                                fontWeight: 600,
+                                fontSize: '1rem',
+                                backgroundColor: theme.colors.gray[1],
+                                borderTop: `1px solid ${theme.colors.gray[3]}`,
+                            }}
+                        >
+                            Expand Directions Menu
+                        </Button>
+
+                    </Button.Group>
+
                 )}
+
             </Box>
+            <Space h ="md"/>
         </Box>
+
     );
 };
 
