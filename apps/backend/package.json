@@ -13,6 +13,7 @@
         "@swc/helpers": "^0.5.1",
         "common": "*",
         "cookie-parser": "~1.4.4",
+        "cors": "*",
         "database": "*",
         "dotenv": "*",
         "dotenv-cli": "*",
