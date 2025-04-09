@@ -42,7 +42,7 @@ function drawPathOnMapCanvas(path : Coordinate[], ctx : CanvasRenderingContext2D
     ctx.moveTo(relCanvasX(path[0].x), relCanvasY(path[0].y));
 
     console.log("starting relx", relCanvasX(path[0].x));
-    console.log("starting rely", relCanvasX(path[0].x))
+    console.log("starting rely", relCanvasY(path[0].y))
 
 
     for (let i = 0; i < path.length; i += 5) {
@@ -50,6 +50,8 @@ function drawPathOnMapCanvas(path : Coordinate[], ctx : CanvasRenderingContext2D
     }
     ctx.stroke();
 
+    /* DEBUGGGGGGG
+    // Draw start and end points for better visibility
     ctx.fillStyle = 'red';
     ctx.beginPath();
     ctx.arc(relCanvasX(path[0].x), relCanvasY(path[0].y), 10, 0, 2 * Math.PI); // Start point
@@ -61,8 +63,10 @@ function drawPathOnMapCanvas(path : Coordinate[], ctx : CanvasRenderingContext2D
     ctx.beginPath();
     ctx.arc(endX, endY, 10, 0, 2 * Math.PI); // End point
     ctx.fill();
+    */
 }
- //i wrote this before in waveanimation.tsx and so im exporting it for future use
+
+//i wrote this before in waveanimation.tsx and so im exporting it for future use
 export function resizeCanvas(canvas: HTMLCanvasElement): void {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
@@ -78,6 +82,22 @@ export function resizeCanvas(canvas: HTMLCanvasElement): void {
 }
 
 
+function drawMap(pathSmallMap: Coordinate[], canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, currMap: Map) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const image = new Image();
+    image.src = currMap.imageSrc;
+    
+    image.onload = () => {
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        drawPathOnMapCanvas(pathSmallMap, ctx, currMap);
+    };
+    
+    image.onerror = () => {
+        console.error("map image didnt load ERROR");
+        drawPathOnMapCanvas(pathSmallMap, ctx, currMap);
+    };
+}
 
 
 export async function DrawPathForMap(startCoordSmallMap : Coordinate, endCoordSmallMap : Coordinate, currMap : Map) {
@@ -95,7 +115,7 @@ export async function DrawPathForMap(startCoordSmallMap : Coordinate, endCoordSm
     }
 
     console.log(path);
-    const pathSmallMap: Coordinate[] = path.map(path => convertBigMapCoordsToSmallMap(path, currMap));
+    const pathSmallMap: Coordinate[] = path.map(coord => convertBigMapCoordsToSmallMap(coord, currMap));
 
     const canvas = document.getElementById('mapCanvas') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
@@ -103,25 +123,18 @@ export async function DrawPathForMap(startCoordSmallMap : Coordinate, endCoordSm
       throw new Error('Failed to get canvas context');
     }
 
-    // I know that defining the function here is bad practice, but I refuse to pass the path variable as an argument so we ball
-    function drawMap(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, currMap: Map) {
-      ctx.fillStyle = 'yellow';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      drawPathOnMapCanvas(pathSmallMap, ctx, currMap);
-    }
-
     //init resize canvas
     resizeCanvas(canvas);
+    
     // add resize event listener
     const handleResize = () => {
       resizeCanvas(canvas);
-      drawMap(canvas, ctx, currMap);
+      drawMap(pathSmallMap, canvas, ctx, currMap);
     };
     window.addEventListener('resize', handleResize);
 
     //init draw map
-    drawMap(canvas, ctx, currMap);
+    drawMap(pathSmallMap, canvas, ctx, currMap);
 
     //clean up the event listener
     return () => {
@@ -131,10 +144,4 @@ export async function DrawPathForMap(startCoordSmallMap : Coordinate, endCoordSm
     console.error("error in DrawPathForMap", error);
     throw error;
   }
-    
-    
-
-
-    
-
 }
