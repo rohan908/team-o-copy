@@ -2,6 +2,8 @@ import { Coordinate } from "./MapTypes";
 import { Map } from "./MapTypes";
 import { findPath } from "./PathFindingRouting";
 
+
+// we need to convert the coordinates to the big map coordinates (the backend path is the outside map with all details of both buildings) and back
 function convertSmallMapCoordsToBigMap(smallMapCoord : Coordinate, currMap : Map) {
     const bigMapCoord = {
         x: smallMapCoord.x * currMap.xBigMapToSmallMapScale + currMap.xBigMapToSmallMapOffset,
@@ -19,6 +21,8 @@ function convertBigMapCoordsToSmallMap(bigMapCoord : Coordinate, currMap : Map) 
     return smallMapCoord;
 }
 
+
+
 function drawPathOnMapCanvas(path : Coordinate[], ctx : CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.moveTo(path[0].x, path[0].y);
@@ -29,7 +33,7 @@ function drawPathOnMapCanvas(path : Coordinate[], ctx : CanvasRenderingContext2D
     });
     ctx.stroke();
 }
-
+ //i wrote this before in waveanimation.tsx and so im exporting it for future use
 export function resizeCanvas(canvas: HTMLCanvasElement): void {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
@@ -47,7 +51,7 @@ export function resizeCanvas(canvas: HTMLCanvasElement): void {
 
 
 
-export async function PathOnMapCanvas(startCoordSmallMap : Coordinate, endCoordSmallMap : Coordinate, currMap : Map) {
+export async function DrawPathForMap(startCoordSmallMap : Coordinate, endCoordSmallMap : Coordinate, currMap : Map) {
     const startCoordBigMap : Coordinate = convertSmallMapCoordsToBigMap(startCoordSmallMap, currMap);
     const endCoordBigMap : Coordinate = convertSmallMapCoordsToBigMap(endCoordSmallMap, currMap);
 
@@ -65,15 +69,10 @@ export async function PathOnMapCanvas(startCoordSmallMap : Coordinate, endCoordS
     function drawMap(canvas : HTMLCanvasElement, ctx : CanvasRenderingContext2D, currMap : Map) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-        const img = new Image();
-        img.src = currMap.imageSrc;
-        img.onload = () => {
-            ctx.drawImage(img, 0, 0);
-            ctx.strokeStyle = 'blue';
-            ctx.lineWidth = 2;
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 2;
     
-            drawPathOnMapCanvas(pathSmallMap, ctx);
-        }
+        drawPathOnMapCanvas(pathSmallMap, ctx);
     }
 
     //init resize canvas
