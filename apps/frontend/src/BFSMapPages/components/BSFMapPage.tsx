@@ -6,7 +6,7 @@ import { Map } from "../helpers/MapTypes.tsx" //import map type for proper type 
 
 export function BSFMapPage() {
     return (
-        <Container size="xl" p="md">
+        <Container w={"500px"} h={"500px"} pos={"relative"} m={"auto"}>
             <MapSwitcher />
         </Container>
     );
