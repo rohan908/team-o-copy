@@ -14,7 +14,6 @@ datasource db {
 // haven't ironed out what is necessary for an employee or request, for now
 // there are NO null values allowed in any attribute
 
-DROP TABLE * languageServiceRequest;
 // creates the langauageServiceRequest table (strong entity)
 model langaugeServiceRequest {
   requestID   Int      @id @default(autoincrement())
