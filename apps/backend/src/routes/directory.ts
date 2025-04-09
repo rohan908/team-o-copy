@@ -101,22 +101,21 @@ function parseCSVString(csvString: string) {
     const lines = cleanup.trim().split('*');
     const headers = lines[0].split(';;');
 
-    console.log(csvString);
-    console.log(cleanup);
-    console.log(lines);
-    console.log(headers);
-
     return lines.slice(1).map((line) => {
-        line = line.replace(/\\/g, '');
+        console.log(line);
 
         // must format absoluteCoords correctly
-        const lastSeparator = line.lastIndexOf(';;');
-        line = line.slice(0, lastSeparator) + ',' + line.slice(lastSeparator + 2);
-
+        // can support any number of coords in format x1,x2,x3...
+        const separator = line.indexOf('\\');
+        line =
+            line.slice(0, separator) + line.slice(separator, line.length - 1).replace(/;;/g, ',');
+        line = line.replace(/\\/g, '');
+        console.log(line);
         const values = line.split(';;');
-
         const obj: any = {};
+
         console.log(values);
+
         headers.forEach((header, i) => {
             if (header == 'absoluteCoords') {
                 obj[header] = values[i].split(',').map((item) => +item);
