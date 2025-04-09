@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { parseDirectoryData } from '../directory/components/directorydata.tsx';
-import { Space } from '@mantine/core'
+import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx';
 import {
     Box,
     Text,
@@ -13,22 +12,21 @@ import {
     Collapse,
 } from '@mantine/core';
 import * as L from 'leaflet';
-import { useNavigate } from 'react-router-dom';
 
 interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
-}
+    onCollapseChange?: (isCollapsed: boolean) => void; // 👈 new prop
 
-let Patriot20: { title: string; slug: string }[] = [];
-let Patriot22: { title: string; slug: string }[] = [];
+
+}
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                                                          onSelectHospital,
                                                          onSelectDepartment,
+                                                         onCollapseChange
                                                      }) => {
     const theme = useMantineTheme();
-    const navigate = useNavigate();
     const [hospital, setHospital] = useState<string | null>(null);
     const [department, setDepartment] = useState<string | null>(null);
     const [collapsed, setCollapsed] = useState(false);
@@ -36,36 +34,26 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
         { value: string; label: string }[]
     >([]);
 
+    const hospitalCoords = new L.LatLng(42.091846, -71.266614);
 
     const handleFindPath = () => {
-        if (!hospital) {
-             return;
-        }
-        if (department == "pharmacy"){
-            onSelectHospital(new L.LatLng(42.09308766703694, -71.26829740033861));
-            console.log("you selected :",department )
-        }
-        else{
-            onSelectHospital(new L.LatLng(42.091902, -71.266422));
-            console.log("else you selected :",department )
+        if (hospital) {
+            onSelectHospital(hospitalCoords);
         }
         if (department && onSelectDepartment) {
             onSelectDepartment(department);
         }
+        if (department == "pharmacy"){
+          onSelectHospital(new L.LatLng(42.093429, -71.268228));
+        }
         setCollapsed(true);
     };
 
-    const handleIveArrived = () => {
-        navigate('/BFSMapPage');
-        console.log('going to BFSMapPage');
-    };
+    useEffect(() => {
+        onCollapseChange?.(collapsed);
+    }, [collapsed]);
 
     useEffect(() => {
-        parseDirectoryData().then(items => {
-          Patriot20 = items[0];
-          Patriot22 = items[1];
-        })
-
         if (hospital === '20 Patriot St') {
             const options = Patriot20.map((dept) => ({
                 value: dept.slug,
@@ -104,8 +92,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                 bg="white"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="100%"
-                maw={{ base: '95%', sm: '80%', md: '600px' }}
                 style={{
+                    maxWidth: collapsed ? '300px' : '80%', // ✅ Collapse mode limits width
                     opacity: 0.95,
                     borderRadius: theme.radius.lg,
                     backdropFilter: 'blur(5px)',
@@ -121,7 +109,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                     <Text
                         mb="sm"
                         ta="left"
-                        fz={{ base: 'xxs', sm: 'sm', md: 'sm' }}
+                        fz="sm"
                         c="dimmed"
                         style={{
                             fontStyle: 'italic',
@@ -162,15 +150,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                     />
 
                     <Flex justify="flex-end" gap="md">
-
-
                         <Button
                             onClick={handleFindPath}
                             color="dark"
                             fw="600"
                             bg="black"
-                            fz={{ base: 'xs', sm: 'sm', md: 'sm' }}
-
                             style={{
                                 borderRadius: '50px',
                                 transition: 'all 0.3s ease',
@@ -178,51 +162,42 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                         >
                             Find Path
                         </Button>
-                        <Button
-                            onClick={handleIveArrived}
-                            color="dark"
-                            fw="600"
-                            bg="green"
-                            fz={{ base: 'xs', sm: 'sm', md: 'sm' }}
-
-                            style={{
-                                borderRadius: '50px',
-                                transition: 'all 0.3s ease',
-                            }}
-                        >
-                            I've Arrived
-                        </Button>
                     </Flex>
                 </Collapse>
 
                 {collapsed && (
-                    <Button.Group>
-                        <Button
-                            px="md"
-                            variant="subtle"
-                            fullWidth
-                            size="lg"
-                            onClick={() => setCollapsed(false)}
-                            style={{
-                                borderRadius: 0,
-                                height: '3rem',
-                                fontWeight: 600,
-                                fontSize: '1rem',
-                                backgroundColor: theme.colors.gray[1],
-                                borderTop: `1px solid ${theme.colors.gray[3]}`,
-                            }}
+                    <Box
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '100%',
+                        }}
+                    >
+                        <Box
+                            w="100%"
+                            maw={{ base: '100%', md: '400px' }}
                         >
-                            Expand Directions Menu
-                        </Button>
-
-                    </Button.Group>
-
+                            <Button
+                                variant="subtle"
+                                fullWidth
+                                size="md"
+                                onClick={() => setCollapsed(false)}
+                                style={{
+                                    borderRadius: 0,
+                                    height: '3rem',
+                                    fontWeight: 600,
+                                    fontSize: '1rem',
+                                    backgroundColor: theme.colors.gray[1],
+                                    borderTop: `1px solid ${theme.colors.gray[3]}`,
+                                }}
+                            >
+                                Expand Directions Menu
+                            </Button>
+                        </Box>
+                    </Box>
                 )}
-
             </Box>
-            <Space h ="md"/>
         </Box>
-
     );
 };
 
