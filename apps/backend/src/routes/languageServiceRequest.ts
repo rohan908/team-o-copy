@@ -35,7 +35,7 @@ router.post('/', async (req: Request, res: Response) => {
 // this will be for posting on the website
 router.get('/', async (req: Request, res: Response) => {
     const allServiceRequests = await PrismaClient.langaugeServiceRequest.findMany({});
-    console.log(allServiceRequests);
+
     res.json(allServiceRequests);
 });
 

@@ -6,34 +6,34 @@ type Props = {
     table: string;
 };
 
+// Function to deal with quoted fields
+export const parseCSVLine = (line: string) => {
+  const values = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char =line[i];
+
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      values.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+
+  values.push(current);
+
+  return values;
+};
+
 export function CSVTable({ table }: Props) {
     const [data, setData] = useState<Record<string, string>[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
-    // Function to deal with quoted fields
-    const parseCSVLine = (line: string) => {
-        const values = [];
-        let current = '';
-        let inQuotes = false;
-
-        for (let i = 0; i < line.length; i++) {
-            const char =line[i];
-
-            if (char === '"') {
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                values.push(current);
-                current = '';
-            } else {
-                current += char;
-            }
-        }
-
-        values.push(current);
-
-        return values;
-    };
 
     const parseCSV = (csvString: string) => {
         const lines = csvString.split('\n');
