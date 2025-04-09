@@ -52,7 +52,8 @@ export function MapAPIPage() {
                         zIndex: 9999,
                         bottom: isMobile ? '5rem' : '0rem', // mobile vs desktop
                         pointerEvents: 'auto',
-                        left: isMobile ? '1rem' : '1rem',
+                        right: isMobile ? '13rem' : '5rem',
+
                         ...(window.innerWidth <= 768 && {
                             bottom: '4rem', // On mobile, float above SelectBox
                         }),

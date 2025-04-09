@@ -18,6 +18,7 @@ interface HospitalSelectBoxProps {
     onSelectDepartment?: (dept: string) => void;
     onCollapseChange?: (isCollapsed: boolean) => void; // 👈 new prop
 
+
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = ({
@@ -134,7 +135,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                     />
 
                     <Text ta="left" mb="sm" fw={500}>
-                        Select Department (Optional):
+                        Select Department:
                     </Text>
                     <Select
                         placeholder="Department"
