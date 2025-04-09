@@ -1,87 +1,209 @@
-  import React, { useEffect, useState } from 'react';
-  import {
-    useMantineTheme,
-    Table,
-    Title,
-    ScrollArea,
-    Text,
-    Flex,
-    Box,
-    Loader,
-    Center,
-  } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import {
+  useMantineTheme,
+  Table,
+  Title,
+  ScrollArea,
+  Text,
+  Box,
+  Loader,
+  Center,
+  Transition,
+} from '@mantine/core';
 
-  export function LanguageRequestHistory() {
-    const theme = useMantineTheme();
+// Type-safe interface for request data
+interface LanguageRequest {
+  RequestID: number;
+  language: string;
+  createdAt: string;
+  room?: string;
+  date?: string;
+  time?: string;
+  description?: string;
+  [key: string]: unknown;
+}
 
-    const [data, setData] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+// basic calculator to show how long ago request was made
+function timeAgo(dateString: string): string {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return 'N/A';
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const res = await fetch(`http://localhost:3001/requests`);
-          if (!res.ok) throw new Error(`HTTP error!: ${res.status}`);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHr = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHr / 24);
 
-          const json = await res.json();
-          setData(json);
-        } catch (err) {
-          console.error('Error fetching request forms', err);
-          setError('Failed to load request data');
-        } finally {
-          setLoading(false);
-        }
-      };
+  if (diffSec < 60) return `${diffSec}s ago`;
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffHr < 24) return `${diffHr}h ago`;
+  return `${diffDay}d ago`;
+}
 
-      fetchData();
-    }, []);
+export function LanguageRequestHistory() {
+  const theme = useMantineTheme();
 
-    if (loading) {
-      return <Center><Loader /></Center>;
-    }
+  const [data, setData] = useState<LanguageRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [expandedRow, setExpandedRow] = useState<number | null>(null);
 
-    if (error) {
-      return <Text color="red">{error}</Text>;
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`http://localhost:3001/requests`);
+        if (!res.ok) throw new Error(`HTTP error!: ${res.status}`);
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        console.error('Error fetching request forms', err);
+        setError('Failed to load request data');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (!data.length) {
-      return <Text>No request form data found.</Text>;
-    }
+    fetchData();
+  }, []);
 
-    const columns = Object.keys(data[0]);
+  if (loading) return <Center><Loader /></Center>;
+  if (error) return <Text color="red">{error}</Text>;
+  if (!data.length) return <Text>No request form data found.</Text>;
 
-    return (
-      <Flex justify="center">
-        <Box maw="90%" w="100%">
-          <ScrollArea>
-            <Title order={4} mb="sm" style={{textAlign: 'center'}} >Language Service Requests</Title>
-            <Table striped highlightOnHover withColumnBorders>
-              <thead>
-              <tr>
-                {columns.map((col) => (
-                  <th key={col}>{col}</th>
+  const summaryColumns = ['requestID', 'language', 'createdAt'];
+
+  return (
+    <Box
+      bg="white"
+      p="md"
+      w="100%"
+      h="100vh"
+      style={{
+        opacity: 0.95,
+        backdropFilter: 'blur(5px)',
+        borderRadius: theme.radius.lg,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Title
+        order={1}
+        mb="lg"
+        c="black"
+        ta="left"
+        fw={700}
+        fz={{ sm: 'xl', md: 'xxxl' }}
+      >
+        Language Service Requests
+      </Title>
+
+      <ScrollArea
+        type="scroll"
+        offsetScrollbars
+        scrollbarSize={6}
+        style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden' }}
+      >
+        <Table
+          striped
+          withColumnBorders
+          highlightOnHover
+          style={{
+            width: '100%',
+            tableLayout: 'auto',
+          }}
+        >
+          <thead>
+          <tr style={{ backgroundColor: theme.colors.dark[6], color: 'white' }}>
+            {summaryColumns.map((col) => (
+              <th
+                key={col}
+                style={{
+                  padding: '12px',
+                  textTransform: 'capitalize',
+                  whiteSpace: 'nowrap',
+                  textAlign: 'left',
+                }}
+              >
+                {col === 'createdAt'
+                  ? 'Submitted'
+                  : col === 'RequestID'
+                    ? 'Request ID'
+                    : col.charAt(0).toUpperCase() + col.slice(1)}
+              </th>
+            ))}
+          </tr>
+          </thead>
+          <tbody>
+          {data.map((row, idx) => (
+            <React.Fragment key={idx}>
+              <tr
+                onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: theme.colors.gray[1],
+                  borderRadius: '12px',
+                }}
+              >
+                {summaryColumns.map((col) => (
+                  <td
+                    key={col}
+                    style={{
+                      padding: '12px',
+                      fontWeight: 500,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {col === 'createdAt' ? timeAgo(row[col] as string) : String(row[col] ?? 'N/A')}
+                  </td>
                 ))}
               </tr>
-              </thead>
-              <tbody>
-              {data.map((row, idx) => (
-                <tr key={idx}>
-                  {columns.map((col) => (
-                    <td key={col}>
-                      {typeof row[col] === 'object'
-                        ? JSON.stringify(row[col])
-                        : String(row[col])}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-              </tbody>
-            </Table>
-          </ScrollArea>
-        </Box>
-      </Flex>
-    );
-  }
+              <tr>
+                <td colSpan={summaryColumns.length} style={{ padding: 0 }}>
+                  <Transition
+                    mounted={expandedRow === idx}
+                    transition="scale-y"
+                    duration={250}
+                    timingFunction="ease"
+                  >
+                    {(styles) => (
+                      <Box
+                        style={{
+                          ...styles,
+                          overflow: 'hidden',
+                          backgroundColor: theme.colors.gray[2],
+                          padding: theme.spacing.md,
+                          marginTop: theme.spacing.xs,
+                          marginBottom: theme.spacing.md,
+                          marginInline: theme.spacing.sm,
+                          boxShadow: theme.shadows.xs,
+                          borderRadius: theme.radius.md,
+                        }}
+                      >
+                        {Object.entries(row).map(([key, value]) => {
+                          if (summaryColumns.includes(key)) return null;
+                          return (
+                            <Text key={key} size="sm" mb="xs">
+                              <strong>{key}:</strong>{' '}
+                              {typeof value === 'object'
+                                ? JSON.stringify(value)
+                                : String(value)}
+                            </Text>
+                          );
+                        })}
+                      </Box>
+                    )}
+                  </Transition>
+                </td>
+              </tr>
+            </React.Fragment>
+          ))}
+          </tbody>
+        </Table>
+      </ScrollArea>
+    </Box>
+  );
+}
 
-  export default LanguageRequestHistory;
+export default LanguageRequestHistory;
