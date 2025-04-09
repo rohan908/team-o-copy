@@ -3,6 +3,7 @@ import { MapCanvas } from "./MapCanvas";
 import { Coordinate, Map } from "../helpers/MapTypes";
 import { Box, Text, Group, Badge, ActionIcon, Tooltip } from "@mantine/core";
 import { IconMapPin, IconTarget } from '@tabler/icons-react';
+import {parseDirectoryData} from "../../directory/components/directorydata.tsx";
 
 export function MapHandler(currentMap: Map) {
   const [startCoord, setStartCoord] = useState<Coordinate>({x: 1786, y: 2647, z: 2});
@@ -22,6 +23,10 @@ export function MapHandler(currentMap: Map) {
       setIsSettingEnd(false);
     }
   };
+
+  parseDirectoryData().then(data => {
+    console.log(data);
+  })
 
   return (
     <Box pos="relative" w="100%" h="100%" style={{ overflow: 'hidden' }}>

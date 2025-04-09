@@ -44,6 +44,7 @@ export async function parseDirectoryData() {
       );
     }
   }
+  console.log(Patriot20);
   return [Patriot20, Patriot22];
 }
 

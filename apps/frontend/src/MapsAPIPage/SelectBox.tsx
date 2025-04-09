@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx';
+import { parseDirectoryData } from '../directory/components/directorydata.tsx';
 import { Space } from '@mantine/core'
 import {
     Box,
@@ -19,6 +19,9 @@ interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
 }
+
+let Patriot20: { title: string; slug: string }[] = [];
+let Patriot22: { title: string; slug: string }[] = [];
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                                                          onSelectHospital,
@@ -58,6 +61,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
     };
 
     useEffect(() => {
+        parseDirectoryData().then(items => {
+          Patriot20 = items[0];
+          Patriot22 = items[1];
+        })
+
         if (hospital === '20 Patriot St') {
             const options = Patriot20.map((dept) => ({
                 value: dept.slug,
