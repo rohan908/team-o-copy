@@ -3,6 +3,7 @@ import PrismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
 
+// uploads the language request service form to the database table
 router.post('/', async (req: Request, res: Response) => {
     console.log('Incoming POST to /api/requests');
     console.log('Request body:', req.body);

@@ -35,6 +35,8 @@ app.use(cookieParser()); // Cookie parser
 
   When posting or fetching database data, create a new router file
   under /routes and add it here
+
+  Also give it an API route under 'common/src/constants'
  */
 app.use(API_ROUTES.HEALTHCHECK, healthcheckRouter);
 app.use(API_ROUTES.DIRECTORY, directoryRouter);

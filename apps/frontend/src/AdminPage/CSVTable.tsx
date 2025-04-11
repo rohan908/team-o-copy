@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Table, Title, Loader, Center, ScrollArea, Text } from '@mantine/core';
-import { parseBackupCSV } from 'common/src/CSVParsing.ts';
-import fs from 'fs';
 
 type Props = {
     table: string;
@@ -15,7 +13,8 @@ export function CSVTable({ table }: Props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`/api/${table}/export`); //This is where you pull the CSV data
+                // This is where you pull the directory data
+                const res = await fetch(`/api/${table}/export`);
 
                 if (!res.ok) {
                     throw new Error(`HTTP error!: ${res.status}`);
@@ -27,8 +26,8 @@ export function CSVTable({ table }: Props) {
                 });
 
             } catch (error) {
-                console.error('Error fetching CSV table', error);
-                setError(error instanceof Error ? error.message : 'Failed to load CSV');
+                console.error('Error fetching directory table', error);
+                setError(error instanceof Error ? error.message : 'Failed to load table');
             } finally {
                 setLoading(false);
             }
@@ -49,7 +48,7 @@ export function CSVTable({ table }: Props) {
     }
 
     if (!data.length) {
-        return <Text>No Data Found in CSV</Text>;
+        return <Text>No Data Found in Directory Table</Text>;
     }
 
     const columns = Object.keys(data[0]);

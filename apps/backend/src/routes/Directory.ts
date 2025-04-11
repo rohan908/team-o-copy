@@ -1,6 +1,5 @@
 import express, { Router, Request, Response } from 'express';
 import fs from 'fs';
-import path from 'path';
 import PrismaClient from '../bin/prisma-client';
 import { exportToCSV } from '../directoryBackup/ExportToCSV.ts';
 import {
@@ -10,7 +9,6 @@ import {
     parseImportedCSV,
 } from 'common/src/CSVParsing.ts';
 import { BACKUP_PATHS } from 'common/src/constants.ts';
-import prismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
 
@@ -50,13 +48,13 @@ router.get('/export', async (req: Request, res: Response) => {
     const csvData = fs.readFileSync('./src/directoryBackup/backup.csv', 'utf-8');
 
     const directoryData = await PrismaClient.directory.findMany({});
-    console.log(directoryData);
+
     res.send(directoryData);
 });
 
 /*
     Retrieves all directories in a specified building
-    Ex: http://localhost:3001/directory/Patriot-22
+    Ex: api/directory/Patriot-22
  */
 router.get('/:building', async (req: Request, res: Response) => {
     const building = req.params.building;
