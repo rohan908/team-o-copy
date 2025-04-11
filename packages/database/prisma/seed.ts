@@ -5,6 +5,9 @@ import PrismaClient from '../../../apps/backend/src/bin/prisma-client';
     Run "yarn workspace database seed" to populate the table
  */
 export async function populate() {
+
+    // !!! NEED TO ADD EMPLOYEE DATA BACK !!!
+
     // Clears directory table for placing default values
     const truncateDirectory = await PrismaClient.directory.deleteMany({});
 

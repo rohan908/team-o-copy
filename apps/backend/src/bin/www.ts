@@ -3,7 +3,7 @@ import http from 'http';
 import { AddressInfo } from 'net';
 import { createHttpTerminator } from 'http-terminator';
 import { BitmapLoaderService } from '../services/BitmapLoaderService';
-import { exportToCSV } from '../directorybackup/ExportToCSV.ts';
+import { exportToCSV } from '../directoryBackup/ExportToCSV.ts';
 
 // Attempt a database connection
 console.info('Connecting to database...');

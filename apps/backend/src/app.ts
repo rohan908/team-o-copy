@@ -29,13 +29,19 @@ app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
 
-// Setup routers. ALL ROUTERS MUST use /api as a start point, or they
-// won't be reached by the default proxy and prod setup
+/*
+  Setup routers. ALL ROUTERS MUST use /api as a start point, or they
+  won't be reached by the default proxy and prod setup.
+
+  When posting or fetching database data, create a new router file
+  under /routes and add it here
+ */
 app.use('/', healthcheckRouter);
 app.use('/directory', directoryRouter);
 app.use('/requests', languageServiceRequestRouter);
 app.use('/graph', graphRouter);
-// adding export routing
+
+// adding route for file exporting
 app.use('/exportRoute', exportRoute);
 
 /**

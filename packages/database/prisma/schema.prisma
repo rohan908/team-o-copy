@@ -14,6 +14,16 @@ datasource db {
 // haven't ironed out what is necessary for an employee or request, for now
 // there are NO null values allowed in any attribute
 
+// creates the employee table
+model Employee {
+  employeeid  Int @id @default(autoincrement())
+  name  String
+  address String
+  phoneNumber Int
+  email String
+  position String
+}
+
 // creates the langauageServiceRequest table (strong entity)
 model langaugeServiceRequest {
   requestID   Int      @id @default(autoincrement())

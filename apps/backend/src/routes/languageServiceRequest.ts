@@ -39,6 +39,8 @@ router.get('/', async (req: Request, res: Response) => {
     res.json(allServiceRequests);
 });
 
+// helper function for converting the database time value
+// to a more readable string
 function convertTo24Hour(time: string): string {
     const [raw, modifier] = time.split(' ');
     let [hours, minutes] = raw.split(':').map(Number);

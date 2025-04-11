@@ -3,6 +3,11 @@ import BuildingBox from './components/BuildingBox.tsx';
 import axios from 'axios';
 
 
+/*
+  !!! THIS FILE IS DEPRECATED WILL NOT BE USING GOING FORWARD
+  !!! WILL REMOVE SOON
+ */
+
 // define a DirectoryLink type for useState
 type DirectoryLink = {
     title: string;
@@ -11,25 +16,33 @@ type DirectoryLink = {
 
 export function Directory() {
     // starting state is empty array
-    const [buildingALinks, setBuildingALinks] = useState<DirectoryLink[]>([]);
-    const [buildingBLinks, setBuildingBLinks] = useState<DirectoryLink[]>([]);
+    const [Patriot20, setPatriot20] = useState<any[]>([]);
+    const [Patriot22, setPatriot22] = useState<any[]>([]);
+
+    const [linkedPatriot20, setPatriot20Links] = useState<DirectoryLink[]>([]);
+    const [linkedPatriot22, setPatriot22Links] = useState<DirectoryLink[]>([]);
 
     useEffect(() => {
-
         const fetchData = async () => {
             console.log("fetching");
-            // gets the department names and building through https query from directory.ts
-            await fetch(`http://localhost:3001/directory/directorybuilding`)
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
-                    }
-                    return res.json(); // parse the JSON from response body
-                })
-                .then(data => {
-                    // stores building data to be accessed
-                    const Patriot20 = data[0];
-                    const Patriot22 = data[1];
+            // gets the department names from a specified building
+            const p20 = await fetch(`http://localhost:3001/directory/:Patriot-20`);
+            if (!p20.ok) {
+              throw new Error(`HTTP error! status: ${p20.status}`);
+            }
+            const directoryDataPatriot20 = p20.json().then(res => {
+              setPatriot20(res);
+            });
+
+            // gets the department names from a specified building
+            const p22 = await fetch(`http://localhost:3001/directory/:Patriot-22`);
+            if (!p22.ok) {
+              throw new Error(`HTTP error! status: ${p22.status}`);
+            }
+            const directoryDataPatriot22 = p22.json().then(res => {
+              setPatriot20(res);
+            });
+
 
                     // creates url for clicking each department for Patriot 20
                     const buildingALinks = Patriot20.map((item: { title: string; slug: string }) => ({
@@ -44,11 +57,10 @@ export function Directory() {
                     }));
 
                     // building info to be displayed
-                    setBuildingALinks(buildingALinks);
-                    setBuildingBLinks(buildingBLinks);
+                    setPatriot20Links(buildingALinks);
+                    setPatriot22Links(buildingBLinks);
 
-                })
-                .catch(err => console.error("Fetch failed:", err));
+                //.catch(err => console.error("Fetch failed:", err));
 
             // tester console outputs
             console.log(buildingALinks.toString());
@@ -64,8 +76,8 @@ export function Directory() {
             <h1 className="text-2xl font-bold text-center mb-8">Directory Overview</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <BuildingBox directoryList={buildingALinks} building={20} />
-                <BuildingBox directoryList={buildingBLinks} building={22} />
+                <BuildingBox directoryList={Patriot20} building={20} />
+                <BuildingBox directoryList={Patriot22} building={22} />
             </div>
         </div>
     );
