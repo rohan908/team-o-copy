@@ -8,11 +8,12 @@ import {Display} from "../service-request/display.tsx";
 import {AdminPage} from "../AdminPage/AdminPage.tsx";
 import {MapAPIPage} from "../MapsAPIPage/MapAPIPage.tsx";
 import Language from "../service-request/service";
-import {BSFMapPage} from "../BFSMapPages/components/BSFMapPage.tsx";
+import {BSFMapPage} from "../BFSMapPages-OLD/components/BSFMapPage.tsx";
 
 import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import LanguageRequestHistory from "../AdminPage/LanguageRequestHistory.tsx";
+import {DraggableMap} from "../IndoorMapPage/DraggableMap.tsx";
 
 
 export function Routing() {
@@ -30,7 +31,7 @@ export function Routing() {
                         <Route path="directory" element={<Directory/>}/>
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
                         <Route path="/language-form" element={<Language />} />
-                        <Route path="/BFSMapPage" element={<BSFMapPage/>} />
+                        <Route path="/IndoorMapPage" element={<DraggableMap/>} />
                         <Route path="/admin-page" element={<AdminPage />} />
                       <Route path="/language-request-history" element={<LanguageRequestHistory />} />
                  </Route>

@@ -66,7 +66,7 @@ export function MapAPIPage() {
                         fw={600}
                         bg="green"
                         component={Link}
-                        to={"/BFSMapPage"}
+                        to={"/IndoorMapPage"}
                         style={{
                             borderRadius: '50px',
                             padding: '0.5rem 1rem',

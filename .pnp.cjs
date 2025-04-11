@@ -1942,6 +1942,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@tweenjs/tween.js", [\
+      ["npm:23.1.3", {\
+        "packageLocation": "./.yarn/cache/@tweenjs-tween.js-npm-23.1.3-54a25ced7d-811b30f5f0.zip/node_modules/@tweenjs/tween.js/",\
+        "packageDependencies": [\
+          ["@tweenjs/tween.js", "npm:23.1.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/body-parser", [\
       ["npm:1.19.5", {\
         "packageLocation": "./.yarn/cache/@types-body-parser-npm-1.19.5-97fb106976-aebeb200f2.zip/node_modules/@types/body-parser/",\
@@ -2362,6 +2371,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/stats.js", [\
+      ["npm:0.17.3", {\
+        "packageLocation": "./.yarn/cache/@types-stats.js-npm-0.17.3-72645350c6-ccccc992c6.zip/node_modules/@types/stats.js/",\
+        "packageDependencies": [\
+          ["@types/stats.js", "npm:0.17.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/superagent", [\
       ["npm:8.1.9", {\
         "packageLocation": "./.yarn/cache/@types-superagent-npm-8.1.9-673be5c6fd-12631f1d8b.zip/node_modules/@types/superagent/",\
@@ -2386,11 +2404,42 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/three", [\
+      ["npm:0.139.0", {\
+        "packageLocation": "./.yarn/cache/@types-three-npm-0.139.0-7d87bcb454-d00eea8d76.zip/node_modules/@types/three/",\
+        "packageDependencies": [\
+          ["@types/three", "npm:0.139.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:0.175.0", {\
+        "packageLocation": "./.yarn/cache/@types-three-npm-0.175.0-81d9a2aeae-9e4b4a0aeb.zip/node_modules/@types/three/",\
+        "packageDependencies": [\
+          ["@types/three", "npm:0.175.0"],\
+          ["@tweenjs/tween.js", "npm:23.1.3"],\
+          ["@types/stats.js", "npm:0.17.3"],\
+          ["@types/webxr", "npm:0.5.21"],\
+          ["@webgpu/types", "npm:0.1.60"],\
+          ["fflate", "npm:0.8.2"],\
+          ["meshoptimizer", "npm:0.18.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/treeify", [\
       ["npm:1.0.3", {\
         "packageLocation": "./.yarn/cache/@types-treeify-npm-1.0.3-ef5ef3400e-758902638f.zip/node_modules/@types/treeify/",\
         "packageDependencies": [\
           ["@types/treeify", "npm:1.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/webxr", [\
+      ["npm:0.5.21", {\
+        "packageLocation": "./.yarn/cache/@types-webxr-npm-0.5.21-ccbf17435b-7b6a7001f8.zip/node_modules/@types/webxr/",\
+        "packageDependencies": [\
+          ["@types/webxr", "npm:0.5.21"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2731,6 +2780,15 @@ const RAW_RUNTIME_STATE =
           ["@vitest/pretty-format", "npm:3.0.9"],\
           ["loupe", "npm:3.1.3"],\
           ["tinyrainbow", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@webgpu/types", [\
+      ["npm:0.1.60", {\
+        "packageLocation": "./.yarn/cache/@webgpu-types-npm-0.1.60-79b3475636-6dcd286806.zip/node_modules/@webgpu/types/",\
+        "packageDependencies": [\
+          ["@webgpu/types", "npm:0.1.60"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4992,6 +5050,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:18.3.5"],\
           ["@types/react-router-bootstrap", "npm:0.26.6"],\
           ["@types/react-router-dom", "npm:5.3.3"],\
+          ["@types/three", "npm:0.175.0"],\
           ["@vitejs/plugin-react-swc", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.8.1"],\
           ["axios", "npm:1.8.4"],\
           ["common", "workspace:packages/common"],\
@@ -5020,6 +5079,8 @@ const RAW_RUNTIME_STATE =
           ["react-router-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:6.30.0"],\
           ["serve", "npm:14.2.4"],\
           ["tailwindcss", "npm:4.0.17"],\
+          ["three", "npm:0.175.0"],\
+          ["threejs-compass", "npm:1.1.7"],\
           ["ts-config-custom", "workspace:configs/ts-config-custom"],\
           ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
           ["vite", "virtual:f28648ad6e4ba49be37777d881542bbac8cbd2e136b774456a46a00cee5a47912d5eb99c6062d5bbb79057fbbf1935e59a1d962d63318b08b5f4ca61057094e9#npm:6.2.3"],\
@@ -6096,6 +6157,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/merge2-npm-1.4.1-a2507bd06c-254a8a4605.zip/node_modules/merge2/",\
         "packageDependencies": [\
           ["merge2", "npm:1.4.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["meshoptimizer", [\
+      ["npm:0.18.1", {\
+        "packageLocation": "./.yarn/cache/meshoptimizer-npm-0.18.1-ce62c2344d-8a825c58b2.zip/node_modules/meshoptimizer/",\
+        "packageDependencies": [\
+          ["meshoptimizer", "npm:0.18.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8528,6 +8598,34 @@ const RAW_RUNTIME_STATE =
           ["minizlib", "npm:3.0.1"],\
           ["mkdirp", "npm:3.0.1"],\
           ["yallist", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["three", [\
+      ["npm:0.139.2", {\
+        "packageLocation": "./.yarn/cache/three-npm-0.139.2-62a04e8b92-cf89f84921.zip/node_modules/three/",\
+        "packageDependencies": [\
+          ["three", "npm:0.139.2"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:0.175.0", {\
+        "packageLocation": "./.yarn/cache/three-npm-0.175.0-3705f33652-eb47d45aae.zip/node_modules/three/",\
+        "packageDependencies": [\
+          ["three", "npm:0.175.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["threejs-compass", [\
+      ["npm:1.1.7", {\
+        "packageLocation": "./.yarn/cache/threejs-compass-npm-1.1.7-d3e21904d0-7093d52002.zip/node_modules/threejs-compass/",\
+        "packageDependencies": [\
+          ["threejs-compass", "npm:1.1.7"],\
+          ["@types/three", "npm:0.139.0"],\
+          ["lodash", "npm:4.17.21"],\
+          ["three", "npm:0.139.2"]\
         ],\
         "linkType": "HARD"\
       }]\
