@@ -15,7 +15,7 @@ export function CSVTable({ table }: Props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`http://localhost:3001/${table}/export`); //This is where you pull the CSV data
+                const res = await fetch(`/api/${table}/export`); //This is where you pull the CSV data
 
                 if (!res.ok) {
                     throw new Error(`HTTP error!: ${res.status}`);

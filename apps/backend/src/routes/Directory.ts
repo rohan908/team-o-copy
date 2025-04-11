@@ -9,7 +9,7 @@ import {
     parseBackupCSV,
     parseImportedCSV,
 } from 'common/src/CSVParsing.ts';
-import { BACKUP_PATHS} from "common/src/constants.ts";
+import { BACKUP_PATHS } from 'common/src/constants.ts';
 import prismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
@@ -22,6 +22,9 @@ router.post('/import', async (req: Request, res: Response) => {
     const dataString = JSON.stringify(req.body);
 
     const dataToAdd = parseImportedCSV(dataString);
+
+    // clears directory database for new input data
+    const prismaClear = await PrismaClient.directory.deleteMany({});
 
     // adds the imported file data to Prisma
     const prismaCreate = await PrismaClient.directory.createMany({
@@ -68,7 +71,7 @@ router.get('/:building', async (req: Request, res: Response) => {
 });
 
 // Clears the directory database table
-router.get('/clear', async (req: Request, res: Response) => {
+router.delete('/clear', async (req: Request, res: Response) => {
     // Add removal from CSV file
     const deleteData = await PrismaClient.directory.deleteMany({});
 

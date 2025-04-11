@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import { cleanString, formatBeforeWriteToBackupCSV } from 'common/src/CSVParsing.ts';
-import { BACKUP_PATHS } from "common/src/constants.ts";
+import { BACKUP_PATHS } from 'common/src/constants.ts';
 import PrismaClient from '../bin/prisma-client';
 import fs from 'fs';
 import path from 'path';
