@@ -1,8 +1,9 @@
 import {useEffect} from 'react';
 import * as THREE from "three";
-import Compass from "threejs-compass";
-import {Container, useMantineTheme} from "@mantine/core";
+
+import {Box, useMantineTheme} from "@mantine/core";
 import Stats from "three/examples/jsm/libs/stats.module.js"
+import CustomCompass from "./CustomCompass.tsx";
 
 
 export function DraggableMap() {
@@ -26,22 +27,15 @@ export function DraggableMap() {
       1,
       1000
     );
-    camera.position.z = 96;
 
-    const compass : Compass = new Compass(camera, renderer);
+    const compass : CustomCompass = new CustomCompass(camera, renderer, {
+      maxZoom: 200,
+      minZoom: 400,
+      step: 0.04
+    });
     compass.setAllEvents();
 
     scene.background = new THREE.Color(theme.colors.blueBase[9]);
-    scene.fog = new THREE.Fog(0x000000, 96, 1000);
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    ambientLight.castShadow = true;
-    scene.add(ambientLight);
-
-    const spotLight = new THREE.SpotLight(0xffffff, 0.5);
-    spotLight.castShadow = true;
-    spotLight.position.set(0, 64, 32);
-    scene.add(spotLight);
 
     /*
     const boxGeo = new THREE.BoxGeometry(16, 16, 16);
@@ -54,11 +48,12 @@ export function DraggableMap() {
     const mapGeo = new THREE.PlaneGeometry(500, 400);
     const mapMaterial = new THREE.MeshBasicMaterial({map: mapTexture});
     const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
+    mapPlane.position.set(0, 0, 10);
     scene.add(mapPlane);
 
     //you can get rid of this later but its for debugging to see that im not eating a huge amount into the browser lol, shows stats in the top left
-    const stats = Stats();
-    document.body.appendChild(stats.domElement);
+    /*const stats = Stats();
+    document.body.appendChild(stats.domElement); */
 
     const animate = () => {
       /*
@@ -66,7 +61,7 @@ export function DraggableMap() {
       boxMesh.rotation.y += 0.01;
       */
 
-      stats.update();
+      //stats.update();
       renderer.render(scene, camera);
       window.requestAnimationFrame(animate);
     };
@@ -75,9 +70,9 @@ export function DraggableMap() {
   }, []);
 
   return (
-    <Container w="100%" h="100%">
-      <canvas id="insideMapCanvas" style={{width: "100vw", height: "100vh"}}/>
-    </Container>
+    <Box w="100vw" h="100vh" p={0}>
+      <canvas id="insideMapCanvas" style={{width: "100%", height: "100%", position: "absolute"}}/>
+    </Box>
   )
 
 }
