@@ -2952,7 +2952,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cors@npm:*, cors@npm:^2.8.5":
+"cors@npm:*":
   version: 2.8.5
   resolution: "cors@npm:2.8.5"
   dependencies:
@@ -6727,7 +6727,7 @@ __metadata:
     "@vitest/ui": "npm:^3.0.9"
     "@yarnpkg/pnpify": "npm:^4.1.4"
     common: "workspace:*"
-    cors: "npm:^2.8.5"
+    cors: "npm:*"
     dotenv: "npm:^16.4.7"
     dotenv-cli: "npm:^7.4.4"
     eslint: "npm:^9.23.0"

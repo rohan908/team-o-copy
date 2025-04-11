@@ -6,6 +6,7 @@ import SelectBox from './SelectBox.tsx';
 import MapAPIComponent from './MapAPIComponent.tsx';
 
 import { useMediaQuery } from '@mantine/hooks';
+import {Link} from "react-router-dom";
 
 export function MapAPIPage() {
     // Store hospital coordinate from the user
@@ -64,6 +65,8 @@ export function MapAPIPage() {
                         size="lg"
                         fw={600}
                         bg="green"
+                        component={Link}
+                        to={"/BFSMapPage"}
                         style={{
                             borderRadius: '50px',
                             padding: '0.5rem 1rem',

@@ -24,6 +24,7 @@
     "@types/papaparse": "^5.3.15",
     "@vitest/ui": "^3.0.9",
     "@yarnpkg/pnpify": "^4.1.4",
+    "cors": "*",
     "eslint": "^9.23.0",
     "eslint-config-custom": "workspace:*",
     "husky": "^9.1.7",
