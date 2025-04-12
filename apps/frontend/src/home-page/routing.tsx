@@ -7,6 +7,7 @@ import {DirectoryLocation} from "../directory/components/DirectoryLocation.tsx";
 import {Display} from "../service-request/display.tsx";
 import {AdminPage} from "../AdminPage/AdminPage.tsx";
 import {MapAPIPage} from "../MapsAPIPage/MapAPIPage.tsx";
+import {NodeDirectory} from "../NodeDirectoryPage/NodeDirectory.tsx"
 import Language from "../service-request/service";
 import {BSFMapPage} from "../BFSMapPages-OLD/components/BSFMapPage.tsx";
 
@@ -29,6 +30,7 @@ export function Routing() {
                         <Route path="map-API" element={<MapAPIPage/>} />
                         <Route path="/submission" element={<Display />} />
                         <Route path="directory" element={<Directory/>}/>
+                        <Route path="/NodeDirectory" element={<NodeDirectory/>}/>
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
                         <Route path="/language-form" element={<Language />} />
                         <Route path="/IndoorMapPage" element={<DraggableMap/>} />
