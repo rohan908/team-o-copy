@@ -1,6 +1,13 @@
 import {useState} from 'react';
-import {Accordion, Image, Box, Center, Flex, useMantineTheme} from '@mantine/core';
-import "./NodeDirectory.css"
+import {
+  Accordion,
+  Image,
+  Center,
+  Flex,
+  useMantineTheme,
+  Group, Avatar, Text, Box
+} from '@mantine/core';
+
 
 interface TempDummyNode{
   x: number;
@@ -15,6 +22,7 @@ interface TempDummyNode{
 
 
 export function NodeDirectory() {
+  //Setup of my test nodes. Should be sourced from backend in future.
   const [nodeList, setNodeList] = useState<TempDummyNode[]>([]);
   const [hasAddedData, setHasAddedData] = useState(false);
   const nodeOne : TempDummyNode = {
@@ -37,12 +45,34 @@ export function NodeDirectory() {
     description: "TestRoom2Description",
     connectingNodes: [nodeOne]
   };
-  const newNodeList : TempDummyNode[] = [nodeOne, nodeTwo];
+  const nodeThree : TempDummyNode = {
+    x: 0,
+    y: 0,
+    floor: 2,
+    type: "Hallway",
+    name: "TestHallway1",
+    id: 2,
+    description: "TestHallway1Description",
+    connectingNodes: [nodeOne]
+  };
+  const nodeFour : TempDummyNode = {
+    x: 0,
+    y: 0,
+    floor: 1,
+    type: "Elevator",
+    name: "TestElevator1",
+    id: 2,
+    description: "TestElevator1Description",
+    connectingNodes: [nodeOne]
+  };
+  nodeOne.connectingNodes.push(nodeTwo);
+  const newNodeList : TempDummyNode[] = [nodeOne, nodeTwo, nodeThree, nodeFour];
   if (!hasAddedData) {
     setNodeList(nodeList.concat(newNodeList));
     setHasAddedData(true);
   }
 
+  //Returns names of nodes in a list. Returns a default value if no nodes are given.
   function returnNodeNames(nodes: TempDummyNode[]) {
     const listOfNames : string[] = [];
     let isThereData = false;
@@ -56,36 +86,41 @@ export function NodeDirectory() {
     return listOfNames;
   }
 
+  interface AccordionLabelProps {
+    label: string;
+    image: string;
+  }
+
+  function AccordionLabel({ label, image }: AccordionLabelProps) {
+    return (
+      <Group wrap="nowrap">
+        <Avatar src={image} radius="xl" size="lg" />
+          <Text>{label}</Text>
+      </Group>
+    );
+  }
+
+  //In theory, this returns image tags based on what string is given. In practice, they aren't showing up in the icon slot, but neither is anything else.
   function mapTypesToIcons(type: string){
-    if (type == "Elevator"){
-      return <Image
-        fit="contain"
-        radius="md"
-        src="public/NodeDirectoryIcons/Elevator.png"
-        alt="Hallway Icon"
-      />
+    if (type.localeCompare("Elevator") === 0){
+      return "public/NodeDirectoryIcons/Elevator.png";
     }
-    if (type == "Hallway"){
-      return <Image
-        fit="contain"
-        radius="md"
-        src="public/NodeDirectoryIcons/Hallway.png"
-        alt="Hallway Icon"
-      />
+    else if (type.localeCompare("Hallway") === 0){
+      return "public/NodeDirectoryIcons/Hallway.png";
     }
-    if (type == "Room"){
-      return <Image
-        fit="contain"
-        radius="md"
-        src="public/NodeDirectoryIcons/Room.png"
-        alt="Hallway Icon"
-      />
+    else if (type.localeCompare("Room") === 0){
+      return "public/NodeDirectoryIcons/Room.png";
+    }
+    else {
+      return "public/NodeDirectoryIcons/Room.png";
     }
   }
 
   const nodes = nodeList.map((item) => (
     <Accordion.Item key={item.id} value={item.name}>
-      <Accordion.Control icon={mapTypesToIcons(item.type)}>{item.name}</Accordion.Control>
+      <Accordion.Control>
+        <AccordionLabel label={item.name} image={mapTypesToIcons(item.type)}></AccordionLabel>
+      </Accordion.Control>
       <Accordion.Panel>X Coordinate: {item.x}</Accordion.Panel>
       <Accordion.Panel>Y Coordinate:{item.y}</Accordion.Panel>
       <Accordion.Panel>Floor: {item.floor}</Accordion.Panel>
@@ -97,16 +132,14 @@ export function NodeDirectory() {
 
   return (
     <Center>
-      <Flex align={"center"}  style={{
-        margin: 'var(--mantine-spacing-xl)',
-        color: 'var(--mantine-color-black)',
-        background: '#00A3AC',
-
-      }}>
-        <Accordion chevronPosition="right">
-          {nodes}
-        </Accordion>
-      </Flex>
+      <Box>
+        <Text>
+          Node Directory Listing
+        </Text>
+          <Accordion>
+            {nodes}
+          </Accordion>
+      </Box>
     </Center>
   );
 
