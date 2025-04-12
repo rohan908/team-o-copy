@@ -53,7 +53,7 @@ export function LanguageRequestHistory() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`http://localhost:3001/requests`);
+        const res = await fetch(`/api/languageSR`);
         if (!res.ok) throw new Error(`HTTP error!: ${res.status}`);
         const json = await res.json();
         setData(json);

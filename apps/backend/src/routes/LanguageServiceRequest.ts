@@ -3,6 +3,7 @@ import PrismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
 
+// uploads the language request service form to the database table
 router.post('/', async (req: Request, res: Response) => {
     console.log('Incoming POST to /api/requests');
     console.log('Request body:', req.body);
@@ -39,6 +40,8 @@ router.get('/', async (req: Request, res: Response) => {
     res.json(allServiceRequests);
 });
 
+// helper function for converting the database time value
+// to a more readable string
 function convertTo24Hour(time: string): string {
     const [raw, modifier] = time.split(' ');
     let [hours, minutes] = raw.split(':').map(Number);

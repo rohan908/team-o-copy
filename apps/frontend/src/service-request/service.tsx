@@ -9,9 +9,6 @@ import LanguageSelect from "./components/LanguageSelect.tsx";
 import SubmitButton from './components/submitButton';
 import ISO6391 from 'iso-639-1';
 
-
-
-
 function Language() {
     const [language, setLanguageName] = useState('Error');
     const [selectedDate, setSelectedDate] = useState('');
@@ -53,7 +50,7 @@ function Language() {
           const label =
             language === 'asl' ? 'ASL (American Sign Language)' : ISO6391.getName(language);
             try {
-                  const response = await fetch('http://localhost:3001/requests', {
+                  const response = await fetch('api/languageSR/', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({

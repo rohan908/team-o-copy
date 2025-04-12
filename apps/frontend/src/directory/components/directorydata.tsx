@@ -1,3 +1,5 @@
+// !!! THIS SHOULD BE REMOVED !!!
+
 // directoryData.ts
 export const Patriot20 = [
   { title: 'Electromyography (EMG)', slug: 'emg' },
