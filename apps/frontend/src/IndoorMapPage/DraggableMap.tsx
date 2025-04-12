@@ -1,9 +1,11 @@
 import {useEffect} from 'react';
 import * as THREE from "three";
+import mapEditorBox from "./Components/MapEditorBox.tsx";
 
 import {Box, useMantineTheme} from "@mantine/core";
 import Stats from "three/examples/jsm/libs/stats.module.js"
 import CustomCompass from "./CustomCompass.tsx";
+import MapEditorBox from "./Components/MapEditorBox.tsx";
 
 // Ok im going to carefully explain how this works for everyone else imiplemetning three JS
 export function DraggableMap() {
@@ -86,7 +88,9 @@ export function DraggableMap() {
   }, []);
 
   return (
+
     <Box w="100vw" h="100vh" p={0}>
+      <MapEditorBox/>
       <canvas id="insideMapCanvas" style={{width: "100%", height: "100%", position: "absolute"}}/>
     </Box>
   )
