@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as THREE from "three";
 import { Box, useMantineTheme } from "@mantine/core";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -7,7 +7,6 @@ import MapEditorBox from "./Components/MapEditorBox.tsx";
 
 export function DraggableMap() {
   const theme = useMantineTheme();
-
 
   useEffect(() => {
     // Get canvas element
@@ -45,10 +44,10 @@ export function DraggableMap() {
     // Create node objects
     const objects = [];
     for (let i = 0; i < 3; i++) {
-      const geometry = new THREE.SphereGeometry(15, 32, 16);
+      const geometry = new THREE.SphereGeometry(2, 12, 6);
       const material = new THREE.MeshBasicMaterial({color: 0xffff00});
       const sphere = new THREE.Mesh(geometry, material);
-      sphere.position.x = -i * 50;
+      sphere.position.x = i+10;
       scene.add(sphere);
       objects.push(sphere);
     }

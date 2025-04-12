@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     Box,
     Collapse,
@@ -110,6 +110,18 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({onCollapseChange}) => {
                 Remove Edge
               </Button>
             </Flex>
+            <Flex direction="row" justify="space-between">
+              <text>
+                x: 1232
+              </text>
+              <text>
+                y: 1232
+              </text>
+              <text>
+                floor: 1
+              </text>
+            </Flex>
+
 
             <ActionIcon size="input-sm" onClick={()=>setCollapsed(true)} aria-label="ActionIcon the same size as inputs">
               <IconArrowBadgeRight/>
