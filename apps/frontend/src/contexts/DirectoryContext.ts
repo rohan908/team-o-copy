@@ -28,10 +28,36 @@ import React, { createContext, useContext } from 'react';
  */
 
 /*
-    define context for directory database data
+    define context for directory database data DirectoryContext
 
  */
 export const DirectoryContext = createContext(null);
+
+/*
+    Defines DirectoryProvider provider component, which is a wrapper that contains
+    the Routes component, allowing frontend files to acccess the context (via
+    the custom hook)
+ */
+const DirectoryProvider = ({children}) {
+    const
+}
+
+
+
+export function TasksProvider({ children }) {
+    const [tasks, dispatch] = useReducer(
+        tasksReducer,
+        initialTasks
+    );
+
+    return (
+        <TasksContext.Provider value={tasks}>
+        <TasksDispatchContext.Provider value={dispatch}>
+            {children}
+            </TasksDispatchContext.Provider>
+            </TasksContext.Provider>
+    );
+}
 
 /*
     defines custom hook so that consumer components don't directly interact

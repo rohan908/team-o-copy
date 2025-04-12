@@ -31,6 +31,8 @@ export async function parseFullDirectory() {
 
         // gets the 1st, 2nd, and 3rd element of each row --> 1st item is department
         // 2nd is building, 3rd is slug
+
+        // try and rework for efficiency and readibility
         const departmentName = row.slice(0, firstCommaIndex);
         const buildingNum = row.slice(firstCommaIndex + 1, secondCommaIndex);
         const slugVal = row.slice(secondCommaIndex + 1, thirdCommaIndex);

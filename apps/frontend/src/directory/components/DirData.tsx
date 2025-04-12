@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createContext, useContext } from 'react';
 
 
 // starting state is empty array
@@ -7,6 +7,7 @@ export let Patriot22: { title: string; slug: string, coords: number[] }[] = [];
 
 export function CreateDirectoryArraysForFrontend() {
 
+    const dirArr = useContext(DirectoryContext);
     useEffect(() => {
 
         const fetchData = async () => {
