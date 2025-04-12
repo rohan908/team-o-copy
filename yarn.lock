@@ -2684,6 +2684,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"camera-controls@npm:^2.10.1":
+  version: 2.10.1
+  resolution: "camera-controls@npm:2.10.1"
+  peerDependencies:
+    three: ">=0.126.1"
+  checksum: 10c0/1a161b9a5faa1572401f58e2cf83ab8dd9cfb14e0d889de6105c65ceab64a9eef0961752121a01a1a61692e7cc0d4deb2463a3119fc9bce968ef6e928418e530
+  languageName: node
+  linkType: hard
+
 "caniuse-lite@npm:^1.0.30001688":
   version: 1.0.30001707
   resolution: "caniuse-lite@npm:1.0.30001707"
@@ -6785,6 +6794,7 @@ __metadata:
     "@types/papaparse": "npm:^5.3.15"
     "@vitest/ui": "npm:^3.0.9"
     "@yarnpkg/pnpify": "npm:^4.1.4"
+    camera-controls: "npm:^2.10.1"
     common: "workspace:*"
     cors: "npm:*"
     dotenv: "npm:^16.4.7"

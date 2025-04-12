@@ -68,6 +68,7 @@ const RAW_RUNTIME_STATE =
           ["@types/papaparse", "npm:5.3.15"],\
           ["@vitest/ui", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:3.0.9"],\
           ["@yarnpkg/pnpify", "npm:4.1.4"],\
+          ["camera-controls", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:2.10.1"],\
           ["common", "workspace:packages/common"],\
           ["cors", "npm:2.8.5"],\
           ["dotenv", "npm:16.4.7"],\
@@ -3475,6 +3476,28 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/camelcase-css-npm-2.0.1-90d1b6df08-1a1a3137e8.zip/node_modules/camelcase-css/",\
         "packageDependencies": [\
           ["camelcase-css", "npm:2.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["camera-controls", [\
+      ["npm:2.10.1", {\
+        "packageLocation": "./.yarn/cache/camera-controls-npm-2.10.1-0d6697f4ce-1a161b9a5f.zip/node_modules/camera-controls/",\
+        "packageDependencies": [\
+          ["camera-controls", "npm:2.10.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:2.10.1", {\
+        "packageLocation": "./.yarn/__virtual__/camera-controls-virtual-cb60dc6e65/0/cache/camera-controls-npm-2.10.1-0d6697f4ce-1a161b9a5f.zip/node_modules/camera-controls/",\
+        "packageDependencies": [\
+          ["camera-controls", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:2.10.1"],\
+          ["@types/three", null],\
+          ["three", null]\
+        ],\
+        "packagePeers": [\
+          "@types/three",\
+          "three"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8266,6 +8289,7 @@ const RAW_RUNTIME_STATE =
           ["@types/papaparse", "npm:5.3.15"],\
           ["@vitest/ui", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:3.0.9"],\
           ["@yarnpkg/pnpify", "npm:4.1.4"],\
+          ["camera-controls", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:2.10.1"],\
           ["common", "workspace:packages/common"],\
           ["cors", "npm:2.8.5"],\
           ["dotenv", "npm:16.4.7"],\
