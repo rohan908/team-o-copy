@@ -53,7 +53,7 @@ export function NodeDirectory() {
     name: "TestHallway1",
     id: 2,
     description: "TestHallway1Description",
-    connectingNodes: [nodeOne]
+    connectingNodes: []
   };
   const nodeFour : TempDummyNode = {
     x: 0,
@@ -63,7 +63,7 @@ export function NodeDirectory() {
     name: "TestElevator1",
     id: 2,
     description: "TestElevator1Description",
-    connectingNodes: [nodeOne]
+    connectingNodes: [nodeOne, nodeTwo]
   };
   nodeOne.connectingNodes.push(nodeTwo);
   const newNodeList : TempDummyNode[] = [nodeOne, nodeTwo, nodeThree, nodeFour];
@@ -131,16 +131,16 @@ export function NodeDirectory() {
   ));
 
   return (
-    <Center>
-      <Box>
+    <Box>
+      <Center>
         <Text>
           Node Directory Listing
         </Text>
-          <Accordion>
-            {nodes}
-          </Accordion>
-      </Box>
-    </Center>
+      </Center>
+        <Accordion>
+          {nodes}
+        </Accordion>
+    </Box>
   );
 
 }
