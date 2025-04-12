@@ -7,12 +7,8 @@ import {
     useMantineTheme,
     Title,
     Flex,
-    Text,
-    Divider,
 } from '@mantine/core';
 import {IconArrowBadgeRight, IconArrowBadgeDown} from '@tabler/icons-react'
-
-import { useNavigate } from 'react-router-dom';
 
 interface MapEditorBoxProps {
   onCollapseChange?: (isCollapsed: boolean) => void;

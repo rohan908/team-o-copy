@@ -1,11 +1,13 @@
 import {useEffect} from 'react';
 import * as THREE from "three";
-import mapEditorBox from "./Components/MapEditorBox.tsx";
 
 import {Box, useMantineTheme} from "@mantine/core";
 import Stats from "three/examples/jsm/libs/stats.module.js"
 import CustomCompass from "./CustomCompass.tsx";
 import MapEditorBox from "./Components/MapEditorBox.tsx";
+import { DragControls } from 'three/addons/controls/DragControls.js';
+import {PickHelper} from './PickHelper'
+
 
 // Ok im going to carefully explain how this works for everyone else imiplemetning three JS
 export function DraggableMap() {
@@ -44,6 +46,14 @@ export function DraggableMap() {
     });
     compass.setAllEvents();
 
+    const raycaster = new THREE.Raycaster(); // Raycaster for highlight on hover
+    const mouse = new THREE.Vector2(); // Mouse for tracking selection of objects
+    const pickPosition = {x: 0, y: 0}; //
+    const time = 0;
+    clearPickPosition();
+    const pickHelper = new PickHelper();
+
+
 
     scene.background = new THREE.Color(theme.colors.terquAccet[8]);
     // Taken from https://github.com/lo-th/Oimo.js/blob/dc745bb86c25767b2df59dee4b63c16bf86c3171/examples/test_basic.html
@@ -66,12 +76,30 @@ export function DraggableMap() {
     const mapGeo = new THREE.PlaneGeometry(500, 400);
     const mapMaterial = new THREE.MeshBasicMaterial({map: mapTexture});
     const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
+    // Add nodes as spheres
+    const geometry = new THREE.SphereGeometry( 8, 16, 8 ); // Radius, width segments, height segments
+    const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
     mapPlane.position.set(0, 0, 0);
     scene.add(mapPlane);
+
+
+    const objects = [];
+    for (let i = 0; i < 3; i++) {
+      const geometry = new THREE.SphereGeometry( 15, 32, 16 );
+      const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+      const sphere = new THREE.Mesh( geometry, material );
+      sphere.position.x = -i * 10.1;
+      scene.add(sphere);
+      objects.push(sphere);
+    }
+    //const controls = new DragControls(objects, camera, renderer.domElement);
+    //scene.add(plane);
+
 
     //you can get rid of this later but its for debugging to see that im not eating a huge amount into the browser lol, shows stats in the top left
     /*const stats = Stats();
     document.body.appendChild(stats.domElement); */
+
 
     const animate = () => {
       /*
@@ -80,10 +108,60 @@ export function DraggableMap() {
       */
 
       //stats.update();
+      //pickHelper.pick(pickPosition, scene, camera)
+      //console.log(pickPosition)
+      // cast a ray through the frustum
+      raycaster.setFromCamera(new THREE.Vector2(pickPosition.x, pickPosition.y), camera);
+      // get the list of objects the ray intersected
+      const intersectedObjects = raycaster.intersectObjects(scene.children);
+      if (intersectedObjects.length) {
+        const pickedObject = intersectedObjects[0].object;
+        if (objects.includes(pickedObject) && pickedObject instanceof THREE.Mesh) {
+          if (pickedObject.material instanceof THREE.MeshBasicMaterial) {
+            pickedObject.material.color.set(0xff0000);
+
+          }
+        }
+
+        }
       renderer.render(scene, camera);
       window.requestAnimationFrame(animate);
     };
     animate();
+
+    //
+    function getCanvasRelativePosition(event) {
+      if(canvas !== null) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: (event.clientX - rect.left) * canvas.clientWidth  / rect.width,
+          y: (event.clientY - rect.top ) * canvas.clientHeight / rect.height,
+        };
+      }
+    }
+
+    function setPickPosition(event) {
+      if(canvas !== null) {
+        const pos = getCanvasRelativePosition(event);
+        if(pos !== null) {
+          pickPosition.x = (pos.x / canvas.clientWidth ) *  2 - 1;
+          pickPosition.y = (pos.y / canvas.clientHeight) * -2 + 1;  // note we flip Y
+        }
+      }
+    }
+
+    function clearPickPosition() {
+      // unlike the mouse which always has a position
+      // if the user stops touching the screen we want
+      // to stop picking. For now we just pick a value
+      // unlikely to pick something
+      pickPosition.x = -100000;
+      pickPosition.y = -100000;
+    }
+
+    window.addEventListener('mousemove', setPickPosition);
+    window.addEventListener('mouseout', clearPickPosition);
+    window.addEventListener('mouseleave', clearPickPosition);
 
   }, []);
 
@@ -114,3 +192,5 @@ function gradTexture(color : [number[], string[]]) {
   return texture;
 }
 */
+
+
