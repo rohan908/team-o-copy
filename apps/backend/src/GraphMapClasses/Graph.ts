@@ -1,22 +1,21 @@
-import {NodeDataType} from "../models/MapTypes.ts";
-import {Node} from "./Node.ts";
+import {Node, ConnectingNode} from "./Node.ts";
 
-export class Graph<NodeDataType> {
-  nodes: Map<NodeDataType, Node<NodeDataType>> = new Map<NodeDataType, Node<NodeDataType>>();
-  comparator: (a: NodeDataType, b: NodeDataType) => number;
-  root: Node<NodeDataType>;
+export class Graph<T> {
+  nodes: Map<T, Node<T>> = new Map<T, Node<T>>();
+  comparator: (a: T, b: T) => number;
+  root: Node<T>;
 
-  constructor(comparator: (a: NodeDataType, b: NodeDataType) => number, data: NodeDataType) {
+  constructor(comparator: (a: T, b: T) => number, data: T) {
     this.comparator = comparator;
-    this.root = new Node<NodeDataType>(data, comparator);
+    this.root = new Node<T>(data, comparator);
   }
 
   /**
    * adds a new node to the graph
-   * @param {NodeDataType} data
-   * @returns {Node<NodeDataType>}
+   * @param {T} data
+   * @returns {Node<T>}
    */
-  addNewNode(data: NodeDataType): Node<NodeDataType> {
+  addNewNode(data: T): Node<T> {
     let node = this.nodes.get(data);
     // if the node is already in the graph, then there is no need to build it
     if (node != null) {
@@ -30,21 +29,19 @@ export class Graph<NodeDataType> {
 
   /**
    * remove a node from the graph
-   * @param {NodeDataType} data
-   * @returns {Node<NodeDataType> | null}
+   * @param {T} data
+   * @returns {Node<T> | null}
    */
 
-  removeNode(data: NodeDataType) {
+  removeNode(data: T) {
     let nodeToRemove = this.nodes.get(data);
+    if (nodeToRemove){ //if node is not undefined
+      nodeToRemove.adjNodes.forEach((edge: ConnectingNode<T>) => { //bc undirected, we can just look at the nodToRemove's adjacent nodes
+        // remove notToRemove from each adjacent node
+        edge.destination.removeNeighbour(nodeToRemove.data)
+      })
+    }
 
-    this.nodes.forEach((node) => {
-        // if nodeToRemove is not undefined and if node in graph contains nodeToRemove in list of adjacent nodes
-        if (nodeToRemove && node.adjNodes.includes(nodeToRemove)){
-          // remove nodeToRemove
-          node.removeNeighbour(nodeToRemove.data)
-        }
-      }
-    );
     this.nodes.delete(data);
     return nodeToRemove;
   }
@@ -53,13 +50,15 @@ export class Graph<NodeDataType> {
    * add an edge to the graph
    * @param source
    * @param destination
+   * @param weight
    */
-  addEdge(source: NodeDataType, destination: NodeDataType): void {
-    let sourceNode: Node<NodeDataType> = this.addNewNode(source);
-    let destinationNode: Node<NodeDataType> = this.addNewNode(destination);
+  addEdge(source: T, destination: T, weight: number): void {
+    let sourceNode: Node<T> = this.addNewNode(source);
+    let destinationNode: Node<T> = this.addNewNode(destination);
 
-    // add the destination node to the list of adjacent nodes for the destination node.
-    sourceNode.addNewNeighbour(destinationNode);
+    // adds the connection neighbors of both nodes to eachother
+    sourceNode.addNewNeighbour(destinationNode, weight);
+    destinationNode.addNewNeighbour(sourceNode, weight);
   }
 
   /**
@@ -67,16 +66,17 @@ export class Graph<NodeDataType> {
    * @param source
    * @param destination
    */
-  removeEdge(source: NodeDataType, destination: NodeDataType): void {
+  removeEdge(source: T, destination: T): void {
     //get the source node
-    let sourceNode: Node<NodeDataType> | undefined = this.nodes.get(source);
+    let sourceNode: Node<T> | undefined = this.nodes.get(source);
     //get the destination node
-    let destinationNode: Node<NodeDataType> | undefined =
+    let destinationNode: Node<T> | undefined =
       this.nodes.get(destination);
 
     //remove the destination from the list of adjacent nodes on the source node
     if (sourceNode && destinationNode) {
       sourceNode.removeNeighbour(destinationNode.data);
+      destinationNode.removeNeighbour(sourceNode.data);
     }
   }
 }
