@@ -88,35 +88,47 @@ export function DatabaseController({ table }: Props) {
     }
 
     return (
-        <div>
+        <div className="w-full max-w-md mx-auto">
             {/**/}
             {/*Input for import csv*/}
             <FileInput
                 label="Import File Here"
-                radius="sm"
+                radius="md"
                 placeholder="Choose a CSV file"
                 accept=".csv"
                 onChange={setFile}
-                color="black"
-                className="w-full sm:max-w-sm mx-auto"
+                className="mb-4"
+                styles={{
+                  input: {
+                    borderColor: '000',
+                    '&:hover': {
+                      borderColor: '#93c5fd',
+                    }
+                  }
+                }}
             />
             <Flex
-                gap="sm"
+                gap="md"
                 justify="center"
                 align="center"
                 direction={{ base: 'column', sm: 'row' }}
                 wrap="wrap"
-                py="md"
             >
                 <Button
-                    size="md"
+                    size="sm"
                     color="dark"
-                    fw="600"
-                    bg="black"
+                    bg="#153A90"
+                    className="nav-element hover-shadow"
                     //leftSection={<IconArrowRight size={14} />}
                     style={{
-                        borderRadius: '50px',
-                        transition: 'all 0.3s ease',
+                        root: {
+                          borderColor: '#000',
+                          '&:hover': {
+                            color: '#93c5fd',
+                            borderColor: '#93c5fd',
+                            backgroundColor: 'transparent',
+                          }
+                          }
                     }}
                     onClick={() => {
                         handleImport();
@@ -126,28 +138,42 @@ export function DatabaseController({ table }: Props) {
                     Import CSV
                 </Button>
                 <Button
-                    size="md"
-                    color="dark"
-                    fw="600"
-                    bg="black"
-                    //leftSection={<IconArrowRight size={14} />}
-                    style={{
-                        borderRadius: '50px',
-                        transition: 'all 0.3s ease',
-                    }}
+                  size="sm"
+                  color="dark"
+                  className="nav-element hover-shadow"
+                  bg="#153A90"
+                  fw="600"
+                  //leftSection={<IconArrowRight size={14} />}
+                  style={{
+                    root: {
+                      borderColor: '#000',
+                      '&:hover': {
+                        color: '#93c5fd',
+                        borderColor: '#93c5fd',
+                        backgroundColor: 'transparent',
+                      }
+                    }
+                  }}
                     onClick={handleExport}
                 >
                     Export CSV
                 </Button>
                 <Button
-                    size="md"
+                    size="sm"
                     color="dark"
                     fw="600"
                     bg="red"
+                    className="nav-element hover-shadow"
                     //leftSection={<IconArrowRight size={14} />}
                     style={{
-                        borderRadius: '50px',
-                        transition: 'all 0.3s ease',
+                      root: {
+                        borderColor: '#000',
+                        '&:hover': {
+                          color: '#93c5fd',
+                          borderColor: '#93c5fd',
+                          backgroundColor: 'transparent',
+                        }
+                      }
                     }}
                     onClick={() => {
                         handleClear();
