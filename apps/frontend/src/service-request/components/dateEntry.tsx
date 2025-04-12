@@ -1,48 +1,55 @@
-// components/dateEntry.tsx
-import { Box, Input, Text, useMantineTheme } from '@mantine/core';
+import { useState } from 'react';
+import {DateInput, DateInputProps} from '@mantine/dates';
 
-interface DateInputProps {
-  value: string;
-  onChange: (value: string) => void;
-}
-
-const DateInputForm: React.FC<DateInputProps> = ({ value, onChange }) => {
-  const theme = useMantineTheme();
-
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
-  };
-
+const DateEntry: React.FC<DateInputProps> = (props) => {
+  const [value, setValue] = useState<Date | null>(null);
   return (
-    <Box>
-      <Text
-        component="label"
-        htmlFor="date"
-        fz={{ base: 'sm', md: 'md', sm: 'sm', xs: 'xs' }}
-          mb={theme.spacing.xs}
-        style={{
-          fontSize: theme.fontSizes.sm,
-        }}
-      >
-        Select a date:*
-      </Text>
-      <Input
-        id="date"
-        type="date"
-        value={value}
-        onChange={handleDateChange}
-        radius={theme.radius.sm}
-        maw="10rem"
-        styles={{
-          input: {
-            padding: theme.spacing.sm,
-            borderColor: 'black',
-            textAlign: 'left',
+    <DateInput
+      {...props}
+      value={value}
+      onChange={setValue}
+      label="Date input"
+      placeholder="Date input"
+      styles={{
+        calendar: {
+          // Calendar header (month/year navigation)
+          calendarHeader: {
+            margin: '0 auto',
+            maxWidth: '100%',
           },
-        }}
-      />
-    </Box>
+          // Weekday names (Mon, Tue, etc.)
+          weekday: {
+            fontWeight: 'normal',
+            padding: '0.25rem 0',
+            fontSize: '0.75rem',
+          },
+          // Individual day cells
+          day: {
+            height: '2rem',
+            width: '2rem',
+            fontSize: '0.875rem',
+            margin: '0.1rem',
+            borderRadius: 'sm',
+          },
+          // Month table
+          month: {
+            width: '100%',
+            tableLayout: 'fixed',
+          },
+          // Cell container
+          cell: {
+            padding: '0.1rem',
+          },
+        },
+      }}
+      // Ensures consistent popover behavior
+      dropdownType="popover"
+      popoverProps={{
+        withinPortal: true,
+        zIndex: 1000,
+      }}
+    />
   );
 };
 
-export default DateInputForm;
+export default DateEntry;
