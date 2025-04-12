@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
-import ServiceRequestButton from './servicebutton';
-import ServiceRequestPopUp from "./servicepopup";
-import DateEntryForm from './dateEntry';
-import RoomNumberInput from './roomEntry.tsx'
-import TimeInput from './timeEntry';
-import dateEntry from "./dateEntry";
+import { useMantineTheme, Box, Flex, Title, Text, Stack } from '@mantine/core';
+import DateInputForm from './components/dateEntry.tsx';
+import RoomNumberInput from './components/roomEntry.tsx'
+import TimeInput from './components/timeEntry';
+import RequestDescription from "./components/requestDescription.tsx";
+import LanguageSelect from "./components/LanguageSelect.tsx";
+import SubmitButton from './components/submitButton';
+import ISO6391 from 'iso-639-1';
 
-function ServiceRequestPage() {
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [deviceName, setDeviceName] = useState('Error');
+function Language() {
+    const [language, setLanguageName] = useState('Error');
     const [selectedDate, setSelectedDate] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
-    const [requestDescription, setRequestDescription] = useState('');
+    const [description, setSelectedDescription] = useState('');
     const [requestStatus, setRequestStatus] = useState('');
     const [showRequestFeedback, setShowRequestFeedback] = useState(false);
-
+    const theme = useMantineTheme();
     const navigate = useNavigate();  // Initialize navigate function
+
+
 
     // Getters (handlers) for child components outside of this component
     const handleRoomChange = (room: string) => {
@@ -29,90 +32,127 @@ function ServiceRequestPage() {
     const handleDateChange = (date: string) => {
         setSelectedDate(date);
     };
+    const handleDescriptionChange = (description: string) => {
+      setSelectedDescription(description);
+    }
 
-    // Create a formatted description from all inputs
-    const getFormattedDescription = () => {
-        return `
-Device: ${deviceName} | 
-Date: ${selectedDate} | 
-Time: ${selectedTime} | 
-Room: ${roomNumber} | 
-Details: ${requestDescription}
-        `.trim();
-    };
-
-    const handleOpenPopup = () => {
-        setIsPopupOpen(true);
-    };
-
-    const handleClosePopup = () => {
-        setIsPopupOpen(false);
-        setRequestDescription('');
-    };
-
-    const handleRequestSubmit = () => {
-        if (requestDescription && deviceName != "Error") {
+    const handleRequestSubmit = async () => {
+        if (language != "Error" && selectedDate.trim() && selectedTime.trim() && roomNumber.trim()) {
             setRequestStatus("Request Submitted Successfully");
-            navigate('/submission', { state: { description: getFormattedDescription() } });
-            setRequestDescription("")
-            setIsPopupOpen(false);
+
+          console.log("sending request", {
+            language,
+            selectedDate,
+            selectedTime,
+            roomNumber,
+            description,
+          });
+          const label =
+            language === 'asl' ? 'ASL (American Sign Language)' : ISO6391.getName(language);
+            try {
+                  const response = await fetch('api/languageSR/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                      label,
+                      selectedDate,
+                      selectedTime,
+                      roomNumber,
+                      description,
+                    }),
+                  });
+                  if (response.ok) {
+                    const data = await response.json();
+                    console.log('Request submitted:', data);
+
+                    navigate('/submission', { state: {
+                        label: language === 'asl'
+                          ? 'ASL (American Sign Language)'
+                          : ISO6391.getName(language),
+                        selectedDate,
+                        selectedTime,
+                        roomNumber,
+                        description,
+                      }
+                    });
+                  }
+                  else {
+            console.error('Server error:', response.statusText);
+            setRequestStatus('Server error. Please try again.');
+            setShowRequestFeedback(true);
+          }
+        } catch (err) {
+        console.error('Network error:', err);
+        setRequestStatus('Network error. Please try again.');
+        setShowRequestFeedback(true);
+      }
         } else {
-            setRequestStatus("Error: Please specify a device");
+            setRequestStatus("Error: Please fill out all required fields.");
             setShowRequestFeedback(true);
         }
-        setIsPopupOpen(false);
     };
+
 
 
     return (
-        <div>
-            <ServiceRequestButton onClick={handleOpenPopup} variant={'primary'} disabled={false}>
-                Submit Service Request
-            </ServiceRequestButton>
+      <Flex
+          w-="100%"
+          h="100%"
+          justify="center"
+          align="center"
+        >
+          <Box
+            bg="white"
+            p={{base: 'xl', sm:'2rem', md: '3rem'}}
+            w="100%"
+            maw={{base: '90%', sm:'70%', md: '750px' }}
+            style={{
+              opacity: 0.85,
+              borderRadius: theme.radius.lg,
+              backdropFilter: 'blur(5px)',
+            }}
+          >
+            <Title order={1} mb = "xs" c="black">Interpreter Request</Title>
+            <Text fz ="xs" mb="xs">Please fill out the following form to request for a language interpreter</Text>
 
-            <ServiceRequestPopUp isOpen={isPopupOpen} onClose={handleClosePopup} title="Submit Service Request">
-                <form onSubmit={e => e.preventDefault()}>
-                    <label htmlFor="dropdown">Choose the Device Needed:</label><br/>
-                    <select id="deviceSelection" onChange={(e)=> setDeviceName(e.target.value)}>
-                        <option value="Error">-- Select a device --</option>
-                        <option value="EKG Machine">EKG Machine</option>
-                        <option value="Sterilizer">Sterilizer</option>
-                        <option value="Defibrillator">Defibrillator</option>
-                    </select><br/>
-                    <DateEntryForm value={selectedDate} onChange={handleDateChange}/><br/>
-                    <TimeInput onTimeChange={handleTimeChange}/><br/>
-                    <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange}/><br/>
-                    <textarea
-                        placeholder="Specify additional details here:"
-                        value={requestDescription}
-                        onChange={(e) => setRequestDescription(e.target.value)}
-                        className="w-full p-2 border rounded"
-                        required={false}
-                    />
-                    <button
-                        type="button"
-                        onClick={handleRequestSubmit}
-                        className={`mt-4 px-4 py-2 rounded ${
-                            requestDescription.trim()
-                                ? 'bg-blue-500 hover:bg-blue-600 text-white cursor-pointer'
-                                : 'bg-gray-300 text-gray-400 cursor-not-allowed opacity-50'
-                        }`}
-                        disabled={!requestDescription.trim()}
-                    >
-                        Submit Request
-                    </button>
-                </form>
-            </ServiceRequestPopUp>
+            <form onSubmit={e => e.preventDefault()}>
+              <Stack spacing="md">
+                <LanguageSelect value={language} setLanguageName={setLanguageName} />
+                <DateInputForm value={selectedDate} onChange={handleDateChange} />
+                <TimeInput onTimeChange={handleTimeChange} />
+                <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange} />
+                <RequestDescription value={description} onChange={handleDescriptionChange} />
+                <SubmitButton
+                  language={language}
+                  selectedDate={selectedDate}
+                  selectedTime={selectedTime}
+                  roomNumber={roomNumber}
+                  onClick={handleRequestSubmit}
+                />
 
-            <ServiceRequestPopUp isOpen={showRequestFeedback} onClose={() => setShowRequestFeedback(false)} title="Request Status">
-                <div className={`p-4 text-center rounded-md font-semibold ${
-                    requestStatus.startsWith("Error") ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                }`}>
-                    {requestStatus}
-                </div>
-            </ServiceRequestPopUp>
-        </div>
+              <Box
+                bg='greys.1'
+                p={{base: '1rem', sm:'1rem', md: '1rem'}}
+                style={{
+                  opacity: 0.85,
+                  borderRadius: theme.radius.lg,
+                  backdropFilter: 'blur(5px)',
+                }}>
+              <Text fz={{base: 'xxs'}}>All required fields are marked with *</Text>
+
+              </Box>
+              </Stack>
+            </form>
+
+            {showRequestFeedback && (
+              <Box mt="lg" p="md" bg={requestStatus.startsWith("Error") ? 'red.1' : 'green.1'} c={requestStatus.startsWith("Error") ? 'red.8' : 'green.8'} style={{ borderRadius: 8 }}>
+                {requestStatus}
+              </Box>
+            )}
+          </Box>
+
+      </Flex>
     );
 }
 
-export default ServiceRequestPage;
+export default Language;

@@ -14,32 +14,51 @@ datasource db {
 // haven't ironed out what is necessary for an employee or request, for now
 // there are NO null values allowed in any attribute
 
+// creates the employee table
+model Employee {
+  employeeid  Int @id @default(autoincrement())
+  name  String
+  address String
+  phoneNumber Int
+  email String
+  position String
+}
+
 // creates the langauageServiceRequest table (strong entity)
 model langaugeServiceRequest {
-  requestID     Int      @id @default(autoincrement())
-  room          String
-  createdAt     DateTime @default(now())
-  date          String
-  time          DateTime
-  medicalDevice String
+  requestID   Int      @id @default(autoincrement())
+  room        String
+  createdAt   DateTime @default(now())
+  date        String
+  time        String
+  language    String
+  description String?
 }
 
 // creates the directory table (strong entity)
 model directory {
-  dName         String
-  building      String
-  description   String
+  dName          String
+  building       String
+  description    String
   absoluteCoords Int[]
-
   @@id([dName, building])
 }
 
-/*
-  creates the graph table (strong entity)
-  bitMap requires a Json object to store a 2D array
- */
-model graph {
-  gName         String    @id
-  bitMap        Json
+model layer {
+  id                Int     @id @default(autoincrement())
+  layerIndex        Int     @unique
+  name              String
+  isConnectionLayer Boolean @default(false)
+  bitmap            Bytes // Binary representation of the bitmap
+  width             Int
+  height            Int
 }
 
+/**
+ * creates the graph table (strong entity)
+ * bitMap requires a Json object to store a 2D array
+ */
+model graph {
+  gName  String @id
+  bitMap Json
+}

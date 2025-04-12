@@ -2,10 +2,14 @@ import createError, { HttpError } from 'http-errors';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import healthcheckRouter from './routes/healthcheck';
-import directoryRouter from './routes/directory';
-import languageServiceRequestRouter from './routes/languageServiceRequest.ts';
+import healthcheckRouter from './routes/HealthCheck.ts';
+import directoryRouter from './routes/Directory.ts';
+import languageServiceRequestRouter from './routes/LanguageServiceRequest.ts';
+import exportRoute from './routes/ExportRoute.ts';
+import graphRouter from './routes/Graph.ts';
+
 import { API_ROUTES } from 'common/src/constants';
+import PrismaClient from './bin/prisma-client.ts';
 
 const cors = require('cors');
 const app: Express = express(); // Setup the backend
@@ -25,11 +29,22 @@ app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
 
-// Setup routers. ALL ROUTERS MUST use /api as a start point, or they
-// won't be reached by the default proxy and prod setup -> Not True
-app.use('/', healthcheckRouter);
-app.use('/directory', directoryRouter);
-app.use('/languageServiceRequest', languageServiceRequestRouter);
+/*
+  Setup routers. ALL ROUTERS MUST use /api as a start point, or they
+  won't be reached by the default proxy and prod setup.
+
+  When posting or fetching database data, create a new router file
+  under /routes and add it here
+
+  Also give it an API route under 'common/src/constants'
+ */
+app.use(API_ROUTES.HEALTHCHECK, healthcheckRouter);
+app.use(API_ROUTES.DIRECTORY, directoryRouter);
+app.use(API_ROUTES.LANGUAGESR, languageServiceRequestRouter);
+app.use(API_ROUTES.GRAPH, graphRouter);
+
+// adding route for file exporting
+app.use(API_ROUTES.EXPORTROUTE, exportRoute);
 
 /**
  * Catch all 404 errors, and forward them to the error handler
