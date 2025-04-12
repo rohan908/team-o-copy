@@ -15,16 +15,6 @@ export async function exportToCSV() {
         // query to get data from directory table
         const directoryData = await PrismaClient.directory.findMany({});
 
-        if (directoryData.length === 0) {
-            return;
-        }
-
-        // stop function if directory is empty
-        if (directoryData.length === 0) {
-            console.log('No data found.');
-            return;
-        }
-
         const csvContent = formatBeforeWriteToBackupCSV(directoryData);
 
         // write to backup.csv file, creates files if doesn't exist (should exist already tho)
