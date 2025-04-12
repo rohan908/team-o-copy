@@ -74,7 +74,7 @@ export async function populate() {
             { dName: 'Rheumatology', building: 'Patriot-22', description: 'rheumatology', absoluteCoords: [0,0] },
             { dName: 'Vein Care Services', building: 'Patriot-22', description: 'vcs', absoluteCoords: [0,0] },
             { dName: 'Women\'s Health', building: 'Patriot-22', description: 'woman\'s-Health', absoluteCoords: [0,0] },
-            { dName: 'Patient Financial Services', building: 'Patriot-22', description: 'financial-services', absoluteCoords: [0,0] },
+            { dName: 'Patient Financial Services', building: 'Patriot-22', description: 'financial-OldMapServices', absoluteCoords: [0,0] },
         ],
         skipDuplicates: true,
     });
