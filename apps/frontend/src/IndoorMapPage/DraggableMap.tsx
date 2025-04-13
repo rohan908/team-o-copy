@@ -47,7 +47,7 @@ export function DraggableMap() {
       const geometry = new THREE.SphereGeometry(2, 12, 6);
       const material = new THREE.MeshBasicMaterial({color: 0xffff00});
       const sphere = new THREE.Mesh(geometry, material);
-      sphere.position.x = i+10;
+      sphere.position.x = i+1;
       scene.add(sphere);
       objects.push(sphere);
     }
@@ -61,25 +61,23 @@ export function DraggableMap() {
       RIGHT: THREE.MOUSE.ROTATE
     };
 
+    // raycaster for selecting nodes
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+
+    function onPointerMove(event) {
+      // Get canvas bounds
+      if(canvas) {
+        const rect = canvas.getBoundingClientRect();
+        // Calculate pointer position in normalized device coordinates
+        // (-1 to +1) for both components
+        pointer.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+        pointer.y = -((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+      }
+    }
+
     // Mouse controls for dragging nodes
     const dragControls = new DragControls(objects, camera, renderer.domElement);
-
-    // Event handlers that disable camera controls when draggin a node
-    dragControls.addEventListener('hoveron', function(event) {
-      const object = event.object;
-      if (object instanceof THREE.Mesh &&
-        object.material instanceof THREE.MeshBasicMaterial) {
-        object.material.color.set(0xaaaaaa);
-      }
-    });
-
-    dragControls.addEventListener('hoveroff', function(event) {
-      const object = event.object;
-      if (object instanceof THREE.Mesh &&
-        object.material instanceof THREE.MeshBasicMaterial) {
-        object.material.color.set(0xffff00);
-      }
-    });
 
     dragControls.addEventListener('dragstart', function() {
       orbitControls.enabled = false;
@@ -105,12 +103,25 @@ export function DraggableMap() {
     };
 
     window.addEventListener('mouseup', handleMouseUp);
+
     renderer.domElement.addEventListener('mouseleave', handleMouseLeave);
 
     const animate = () => {
+      raycaster.setFromCamera( pointer, camera );
+      // calculate objects intersecting the picking ray
+      const intersects = raycaster.intersectObjects( objects );
+      // hover color
+      if(intersects.length > 0) {
+        const intersect = intersects[0]; // grab the first intersected object
+        if(intersect.object instanceof THREE.Mesh && intersect.object.material instanceof THREE.MeshBasicMaterial) {
+          intersect.object.material.color.set(0xffffff);
+        }
+      }
+
       renderer.render(scene, camera);
       window.requestAnimationFrame(animate);
     };
+    window.addEventListener( 'pointermove', onPointerMove );
     animate();
   }, []);
 
