@@ -37,6 +37,7 @@
     "vitest": "^3.0.9"
   },
   "dependencies": {
+    "@mantine/form": "^7.17.4",
     "camera-controls": "^2.10.1",
     "common": "workspace:*",
     "cors": "^2.8.5",

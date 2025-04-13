@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import * as THREE from "three";
 import { Box, useMantineTheme } from "@mantine/core";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -10,6 +10,19 @@ export function DraggableMap() {
     const [nodeSelected, setNodeSelected] = useState(false);
     const [nodeX, setNodeX] = useState(0);
     const [nodeY, setNodeY] = useState(0);
+    const [floor, setNodeFloor] = useState(0);
+    const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
+
+    // updates the selected node position from UI
+    const updateNodePosition = (x: number, y: number, floor: number) => {
+        setNodeX(x);
+        setNodeY(y);
+        if(selectedObject.current) {
+            selectedObject.current.position.x = x;
+            selectedObject.current.position.y = y;
+            console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
+        }
+    }
 
   useEffect(() => {
       // Get canvas element
@@ -47,7 +60,6 @@ export function DraggableMap() {
       // Create node objects
       const objects: THREE.Object3D[] = [];
       objects.push(new THREE.Object3D());
-      let selectedObject: THREE.Object3D<THREE.Object3DEventMap> | null = null;
       for (let i = 0; i < 3; i++) {
           const geometry = new THREE.SphereGeometry(2, 12, 6);
           const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
@@ -86,7 +98,10 @@ export function DraggableMap() {
           // Dispose of the old dragControls
           dragControls.dispose();
           // Create a new array with only the selected object (if any)
-          draggableObjects = selectedObject ? [selectedObject] : [];
+          draggableObjects = [];
+          if (selectedObject.current) {
+              draggableObjects.push(selectedObject.current);
+          }
           // new dragControls with the updated array
           dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
           // Event listeners that enable camera movement
@@ -117,31 +132,30 @@ export function DraggableMap() {
               const intersects = raycaster.intersectObjects(objects);
               if (intersects.length > 0) {
                   const intersect = intersects[0]; // grab the first intersected object
-                  if (selectedObject === null || selectedObject !== intersect.object) { // object is not alread selected
-                    if(selectedObject !== intersect.object) {
-                      if (selectedObject instanceof THREE.Mesh &&
-                          selectedObject.material instanceof THREE.MeshBasicMaterial
+                  if (selectedObject.current === null || selectedObject.current !== intersect.object) { // object is not alread selected
+                    if(selectedObject.current !== intersect.object) {
+                      if (selectedObject.current instanceof THREE.Mesh &&
+                          selectedObject.current.material instanceof THREE.MeshBasicMaterial
                       ) {
-                        selectedObject.material.color.set(0xffff00);
+                        selectedObject.current.material.color.set(0xffff00);
                       }
                     }
-                    selectedObject = intersect.object;
-                    if (selectedObject instanceof THREE.Mesh &&
-                        selectedObject.material instanceof THREE.MeshBasicMaterial
+                    selectedObject.current = intersect.object;
+                    if (selectedObject.current instanceof THREE.Mesh &&
+                        selectedObject.current.material instanceof THREE.MeshBasicMaterial
                     ) {
-                      selectedObject.material.color.set(0x000000);
+                      selectedObject.current.material.color.set(0x000000);
                       setNodeSelected(true);
                     }
                   } else { // Object is already selected
-                      if (selectedObject instanceof THREE.Mesh &&
-                          selectedObject.material instanceof THREE.MeshBasicMaterial
+                      if (selectedObject.current instanceof THREE.Mesh &&
+                          selectedObject.current.material instanceof THREE.MeshBasicMaterial
                       ) {
-                        selectedObject.material.color.set(0xffff00);
+                        selectedObject.current.material.color.set(0xffff00);
                       }
-                    selectedObject = null;
+                    selectedObject.current = null;
                       setNodeSelected(false);
                   }
-                  console.log('Selected object:', selectedObject);
                   updateDraggableObjects();
               }
           }
@@ -165,9 +179,11 @@ export function DraggableMap() {
       renderer.domElement.addEventListener('mouseleave', handleMouseLeave);
 
       const animate = () => {
-          if(selectedObject !== null){
-              setNodeX(selectedObject.position.x);
-              setNodeY(selectedObject.position.y);
+          if(selectedObject.current){
+              // selected object use state position for passing to UI
+              setNodeX(selectedObject.current.position.x);
+              setNodeY(selectedObject.current.position.y);
+              setNodeFloor(1); //TODO: Setup floor handling with floor switcher, may not want this functionality at all.
           }
 
           renderer.render(scene, camera);
@@ -179,9 +195,14 @@ export function DraggableMap() {
   return (
     <Box w="100vw" h="100vh" p={0}>
         <MapEditorBox
+            // Pass selected node data to the ui
             nodeSelected={nodeSelected}
             nodeX={nodeX}
             nodeY={nodeY}
+            floor={floor}
+
+            // handle updating the node position from ui
+            updateNodePosition={updateNodePosition}
         />
       <canvas id="insideMapCanvas" style={{width: "100%", height: "100%", position: "absolute"}}/>
     </Box>

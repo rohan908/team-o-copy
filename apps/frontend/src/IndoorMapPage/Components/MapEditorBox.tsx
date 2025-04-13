@@ -7,19 +7,26 @@ import {
     useMantineTheme,
     Title,
     Flex,
+    TextInput,
 } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import {IconArrowBadgeRight, IconArrowBadgeDown} from '@tabler/icons-react'
-
 
 interface MapEditorBoxProps {
   onCollapseChange?: (isCollapsed: boolean) => void;
-    nodeSelected?: boolean;
+    nodeSelected?: (isSelected: boolean) => void;
     nodeX?: number;
     nodeY?: number;
+    floor?: number;
+    updateNodePosition?: (x: number, y: number, floor: number) => void;
 }
 
-
-const MapEditorBox: React.FC<MapEditorBoxProps> = ({onCollapseChange, nodeSelected = false, nodeX = 0, nodeY = 0}) => {
+const MapEditorBox: React.FC<MapEditorBoxProps> = ({onCollapseChange,
+                                                       nodeSelected = false,
+                                                       nodeX = 0,
+                                                       nodeY = 0,
+                                                       floor = 0,
+                                                       updateNodePosition}) => {
     const theme = useMantineTheme();
     const [collapsed, setCollapsed] = useState(false);
 
@@ -31,6 +38,45 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({onCollapseChange, nodeSelect
       null;
     const handleRemoveEdge = () =>
       null;
+
+    const handleUpdateNodePosition = () => {
+        // Get values from form
+        const values = form.getValues();
+        const x = parseFloat(values.xpos); // convert from string to float
+        const y = parseFloat(values.ypos);
+        const floorNum = parseInt(values.floor);
+
+        // Validate values
+        if (isNaN(x) || isNaN(y) || isNaN(floorNum)) {
+            console.log(x, y, floorNum);
+            alert("Please enter valid numbers for X, Y, and Floor");
+            return;
+        }
+
+        if (updateNodePosition) {
+            updateNodePosition(x, y, floorNum);
+        }
+    }
+
+
+    const form = useForm({
+        mode: 'uncontrolled',
+        initialValues: {
+            xpos: 'Select a node',
+            ypos: 'Select a node',
+            floor: 'Select a node',
+        },
+    });
+
+    useEffect(()=>{
+        if(nodeSelected){
+            form.setValues({
+                xpos: nodeX.toString(),
+                ypos: nodeY.toString(),
+                floor: floor.toString()
+            })
+        }
+    },[nodeSelected, nodeX, nodeY, floor])
 
     useEffect(() => {
       onCollapseChange?.(collapsed);
@@ -52,7 +98,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({onCollapseChange, nodeSelect
         <Box
           bg="white"
           p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
-          w="20%"
+          w="30%"
           style={{
             maxWidth: collapsed ? '300px' : '80%', // ✅ Collapse mode limits width
             opacity: 0.95,
@@ -116,15 +162,39 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({onCollapseChange, nodeSelect
               </Button>
             </Flex>
             <Flex direction="row" justify="space-between">
-              <text>
-                x: {nodeSelected ? nodeX : "No node selected"}
-              </text>
-              <text>
-                y: {nodeSelected ? nodeY : "No node selected"}
-              </text>
-              <text>
-                floor: 1
-              </text>
+              <TextInput
+                label="X Position"
+                placeholder="Select a node"
+                disabled={!nodeSelected}
+                key={form.key('xpos')}
+                {...form.getInputProps('xpos')}>
+              </TextInput>
+                <TextInput
+                    label="Y Position"
+                    placeholder="Select a node"
+                    disabled={!nodeSelected}
+                    key={form.key('ypos')}
+                    {...form.getInputProps('ypos')}>
+                </TextInput>
+                <TextInput
+                    label="Floor"
+                    placeholder="Select a node"
+                    disabled={!nodeSelected}
+                    key={form.key('floor')}
+                    {...form.getInputProps('floor')}>
+                </TextInput>
+                <Button
+                    onClick={handleUpdateNodePosition}
+                    color="dark"
+                    fw="600"
+                    bg="black"
+                    disabled={!nodeSelected}
+                    style={{
+                    borderRadius: '50px',
+                    transition: 'all 0.3s ease'
+                    }}>
+                    Update Position
+                </Button>
             </Flex>
 
 
