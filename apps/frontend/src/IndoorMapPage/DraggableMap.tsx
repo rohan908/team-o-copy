@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import * as THREE from "three";
+import FloorSwitchBox from "./components/FloorManagerBox.tsx";
 
 
 import {Box, useMantineTheme} from "@mantine/core";
@@ -14,24 +15,6 @@ export function DraggableMap() {
   const theme = useMantineTheme();
   const canvasId = 'insideMapCanvas'
 
-  const FloorManager = () => {
-
-    const fl1 = () => {
-      setFloor(1);
-    };
-
-    const fl3 = () => {
-      setFloor(3);
-    };
-
-    return (
-      <div>
-        <h1 style={{position: "absolute"}}>Floor: {floor}</h1>
-        <button onClick={fl1} style={{position: "absolute", left: "100px", top: "125px"}}>1</button>
-        <button onClick={fl3} style={{position: "absolute" , left: "100px"}} >3</button>
-      </div>
-    );
-  };
 
   // we use useEffect for the constant peripheral animation loop since it runs on every render seperate from the react render loop
   useEffect(() => {
@@ -125,8 +108,8 @@ const texturePath= floor === 1
 
   return (
     <Box w="100vw" h="100vh" p={0}>
+      <FloorSwitchBox floor={floor} setFloor={setFloor} />
       <canvas id="insideMapCanvas" style={{width: "100%", height: "100%", position: "absolute"}}/>
-      <FloorManager></FloorManager>
     </Box>
   )
 
