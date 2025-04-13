@@ -17,8 +17,6 @@ interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
     onCollapseChange?: (isCollapsed: boolean) => void;
-
-
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {

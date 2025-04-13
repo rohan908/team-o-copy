@@ -4,7 +4,7 @@ import {Box} from '@mantine/core';
 
 const GoogleMapsAPI: React.FC = () =>{
   return(
-    <APIProvider apiKey={"AIzaSyCaFWSHL9LuEE8ImJiUpxWrucfysx70F2k"} onLoad={()=>console.log("Maps API loaded")}>
+    <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} onLoad={()=>console.log("Maps API loaded")}>
       {/*APIProvider component requires a key, PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API*/}
       <Box style={{position: 'relative', width: '100%', height: '100%'}} >
       <Map
