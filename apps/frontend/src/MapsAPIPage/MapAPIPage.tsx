@@ -4,6 +4,7 @@ import { Box, Button } from '@mantine/core';
 import * as L from 'leaflet';
 import SelectBox from './SelectBox.tsx';
 import MapAPIComponent from './MapAPIComponent.tsx';
+import GoogleMapsAPI from "./GoogleMapsAPI.tsx";
 
 import { useMediaQuery } from '@mantine/hooks';
 import {Link} from "react-router-dom";
@@ -30,10 +31,8 @@ export function MapAPIPage() {
             }}
         >
             {/* Map behind */}
-            <MapAPIComponent hospitalCoord={selectedHospital}
-            />
+            <GoogleMapsAPI/>
 
-            {/* SelectBox on top */}
             <div
                 style={{
                     position: 'absolute',
