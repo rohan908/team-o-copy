@@ -16,16 +16,13 @@ import * as L from 'leaflet';
 interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
-    onCollapseChange?: (isCollapsed: boolean) => void; // 👈 new prop
+    onCollapseChange?: (isCollapsed: boolean) => void;
 
 
 }
 
-const SelectBox: React.FC<HospitalSelectBoxProps> = ({
-                                                         onSelectHospital,
-                                                         onSelectDepartment,
-                                                         onCollapseChange
-                                                     }) => {
+const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
+    const {onSelectHospital, onSelectDepartment, onCollapseChange} = props;
     const theme = useMantineTheme();
     const [hospital, setHospital] = useState<string | null>(null);
     const [department, setDepartment] = useState<string | null>(null);
@@ -93,7 +90,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="100%"
                 style={{
-                    maxWidth: collapsed ? '300px' : '80%', // ✅ Collapse mode limits width
+                    maxWidth: collapsed ? '300px' : '80%',
                     opacity: 0.95,
                     borderRadius: theme.radius.lg,
                     backdropFilter: 'blur(5px)',
@@ -102,7 +99,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = ({
                 }}
             >
                 <Collapse in={!collapsed}>
-                    <Title order={2} mb="md" c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
+                    <Title order={2} mb="md" c="#001D4D" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
                         Find your Way!
                     </Title>
 
