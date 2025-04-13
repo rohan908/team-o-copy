@@ -78,10 +78,69 @@ export async function populate() {
         ],
         skipDuplicates: true,
     });
+    
+    // ------------------------------------------- //
+    // Example floor map and node set up. Writing a script on the front end so we can paste will be much better
+
+    // first define each node
+    const node1 = await PrismaClient.node.create({
+        data: {
+            x: 0,
+            y: 0,
+            z: 0,
+            name: 'Node 1',
+            description: 'Node 1',
+            nodeType: 'hallway',
+            mapId: 1,
+        },
+    });
+    const node2 = await PrismaClient.node.create({
+        data: {
+            x: 1,
+            y: 1,
+            z: 0,
+            name: 'Node 2',
+            description: 'Node 2',
+            nodeType: 'hallway',
+            mapId: 1,
+        }
+    });
+    // .... and so on
+
+    // then define each edge
+    const edge1 = await PrismaClient.edge.create({
+        data: {
+            weight: calculateWeight(node1, node2),
+            mapId: 1,
+            nodes: {
+                connect: [
+                    { id: node1.id },
+                    { id: node2.id },
+                ],
+            },
+        },
+    });
+    // .... and so on
+
+    // then define the floor map
+
+    const floorMaps1Patriot20 = await PrismaClient.floorMap.createMany({
+        data: [
+            { name: '1st Floor', description: '1st Floor', nodeType: 'floor', mapId: 1 },
+        ],
+        skipDuplicates: true,
+    });
 
     // !!! Will want image bitmaps created here !!!
 
     console.log("\nSuccessfully populated tables\n");
+}
+
+// ------------------------------------------- //
+// helper function to calc weight between two nodes
+// for now an elevator has a weight of 5
+function calculateWeight(node1: Node, node2: Node) {
+    return node1.z !== node2.z ? 5 : (Math.sqrt(Math.pow(node1.x - node2.x, 2) + Math.pow(node1.y - node2.y, 2)));
 }
 
 // Runs populate on the prisma client
