@@ -132,28 +132,41 @@ export function DraggableMap() {
               const intersects = raycaster.intersectObjects(objects);
               if (intersects.length > 0) {
                   const intersect = intersects[0]; // grab the first intersected object
-                  if (selectedObject.current === null || selectedObject.current !== intersect.object) { // object is not alread selected
+
+                  /*
+                  This structure handles selecting objects.
+                  It could probably use some proper handler functions, but it works for now.
+                   */
+
+                  // if there is no selected object or the clicked on object is not selected
+                  if (selectedObject.current === null || selectedObject.current !== intersect.object) {
+                      // if there is another selected object
                     if(selectedObject.current !== intersect.object) {
                       if (selectedObject.current instanceof THREE.Mesh &&
                           selectedObject.current.material instanceof THREE.MeshBasicMaterial
                       ) {
-                        selectedObject.current.material.color.set(0xffff00);
+                        selectedObject.current.material.color.set(0xffff00); //set the already selected object back to it's non-selected color
                       }
                     }
-                    selectedObject.current = intersect.object;
+                    selectedObject.current = intersect.object; // switch selected object to the clicked on object
+                    setNodeSelected(true);
+                    // set the color of the clicked on objet to the it's selected color
                     if (selectedObject.current instanceof THREE.Mesh &&
                         selectedObject.current.material instanceof THREE.MeshBasicMaterial
                     ) {
                       selectedObject.current.material.color.set(0x000000);
-                      setNodeSelected(true);
                     }
-                  } else { // Object is already selected
+                  }
+                  // The clicked on object is already selected (deselection when clicking on an already selected object)
+                  else {
+                      // set the color of the clicked on object to it's non-selected color
                       if (selectedObject.current instanceof THREE.Mesh &&
                           selectedObject.current.material instanceof THREE.MeshBasicMaterial
                       ) {
                         selectedObject.current.material.color.set(0xffff00);
                       }
-                    selectedObject.current = null;
+                      // clear the selected object
+                      selectedObject.current = null;
                       setNodeSelected(false);
                   }
                   updateDraggableObjects();
