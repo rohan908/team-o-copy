@@ -1,19 +1,44 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import * as THREE from "three";
+
 
 import {Box, useMantineTheme} from "@mantine/core";
 import Stats from "three/examples/jsm/libs/stats.module.js"
 import CustomCompass from "./CustomCompass.tsx";
 
-// Ok im going to carefully explain how this works for everyone else imiplemetning three JS
+
+
+// Ok im going to carefully explain how this works for everyone else implementing three JS
 export function DraggableMap() {
+  let [floor, setFloor] = useState(1);
   const theme = useMantineTheme();
+  const canvasId = 'insideMapCanvas'
+
+  const FloorManager = () => {
+
+    const fl1 = () => {
+      setFloor(1);
+    };
+
+    const fl3 = () => {
+      setFloor(3);
+    };
+
+    return (
+      <div>
+        <h1 style={{position: "absolute"}}>Floor: {floor}</h1>
+        <button onClick={fl1} style={{position: "absolute", left: "100px", top: "125px"}}>1</button>
+        <button onClick={fl3} style={{position: "absolute" , left: "100px"}} >3</button>
+      </div>
+    );
+  };
+
   // we use useEffect for the constant peripheral animation loop since it runs on every render seperate from the react render loop
   useEffect(() => {
     // we create a new scene
     const scene = new THREE.Scene();
     // we get the canvas element
-    const canvas = document.getElementById('insideMapCanvas');
+    const canvas = document.getElementById(canvasId);
     // if the canvas element is not found, we return
     if (!canvas) return;
     // we create a new renderer
@@ -60,7 +85,13 @@ export function DraggableMap() {
     scene.add(boxMesh);
     */
 
-    const mapTexture = new THREE.TextureLoader().load("/public/MapImages/OutsideMap.png");
+
+
+const texturePath= floor === 1
+    ? "./MapImages/OutsideMap.png"
+    : "./MapImages/MapSwitchTest.png"
+
+    const mapTexture = new THREE.TextureLoader().load(texturePath);
     const mapGeo = new THREE.PlaneGeometry(500, 400);
     const mapMaterial = new THREE.MeshBasicMaterial({map: mapTexture});
     const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
@@ -83,11 +114,19 @@ export function DraggableMap() {
     };
     animate();
 
-  }, []);
+    return () => {
+      renderer.dispose();
+      mapMaterial.dispose();
+      mapTexture.dispose();
+      scene.clear();
+    };
+
+  }, [floor]);
 
   return (
     <Box w="100vw" h="100vh" p={0}>
       <canvas id="insideMapCanvas" style={{width: "100%", height: "100%", position: "absolute"}}/>
+      <FloorManager></FloorManager>
     </Box>
   )
 
