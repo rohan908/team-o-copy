@@ -9,6 +9,7 @@ const containerStyle = {
   width: '100%',
   height: '100%',
 };
+
 // default lat/lng from leaflet version
 const defaultCenter = {
   lat: 42.09593582153,

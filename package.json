@@ -37,7 +37,6 @@
     "vitest": "^3.0.9"
   },
   "dependencies": {
-    "@vis.gl/react-google-maps": "^1.5.2",
     "common": "workspace:*",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
