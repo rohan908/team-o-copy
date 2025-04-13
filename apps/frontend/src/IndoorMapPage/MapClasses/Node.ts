@@ -13,12 +13,16 @@ export class Node<T extends { id: number }> {
         this.adjNodes = new Array<ConnectingNode<T>>(); //We are making an adjacency matrix to describe the graph
         this.comparator = comparator;
     }
+
+    getId(): number {
+        return this.data.id;
+    }
     /**
      * adds a new node as a neighbor
      * @param {Node<T>}node
      */
     addNewNeighbour(node: Node<T>, weight: number): void {
-        let newConnectingNode: ConnectingNode<T> = { destination: node, weight };
+        const newConnectingNode: ConnectingNode<T> = { destination: node, weight };
         this.adjNodes.push(newConnectingNode);
     }
 
@@ -28,7 +32,7 @@ export class Node<T extends { id: number }> {
      * @returns {Node<T>| null}
      */
     removeNeighbour(data: T): Node<T> | null {
-        let index: number = this.adjNodes.findIndex(
+        const index: number = this.adjNodes.findIndex(
             (edge: ConnectingNode<T>) => this.comparator(edge.destination.data, data) == 0
         );
         if (index != -1) {
