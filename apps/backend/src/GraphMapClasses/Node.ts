@@ -3,7 +3,7 @@
 
 import {ConnectingNode} from "../models/MapTypes.ts";
 
-export class Node<T> {
+export class Node<T extends {id : number}> {
   data: T;
   adjNodes: ConnectingNode<T>[];
   comparator: (a: T, b: T) => number;
