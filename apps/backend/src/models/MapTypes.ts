@@ -10,10 +10,15 @@ export interface NodeDataType {
   description?: string;
 }
 
-export interface ConnectingNode<T> {
+export interface ConnectingNode<T extends {id : number}> {
   destination: Node<T>;
   weight: number;
 }
 
+export interface PathFinderResult {
+  pathIDs: number[];
+  distance: number; //summation of the weights
+  success?: boolean;
+}
 
 

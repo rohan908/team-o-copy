@@ -1,14 +1,15 @@
-import {NodeDataType} from "../models/MapTypes.ts";
+import {NodeDataType, PathFinderResult} from "../models/MapTypes.ts";
 import {Graph} from "./Graph.ts";
 import {PathFinder} from "./PathFinder.ts";
 
 export class NavigationService {
-  private graph: Graph<NodeDataType>;
+  protected graph: Graph<NodeDataType>;
   private pathFinder: PathFinder;
 
 
   constructor(rootNode : NodeDataType) {
     this.graph = new Graph<NodeDataType>(this.nodeComparator, rootNode);
+    this.pathFinder = new PathFinder(() => this.graph);
   }
 
   private nodeComparator(node1: NodeDataType, node2: NodeDataType) : number {
@@ -32,9 +33,13 @@ export class NavigationService {
     else if (commandType === "edgeRemove") {
       this.graph.removeEdge(node1, node2ForEdge!);
     }
+    else {
+      console.error("graph command DNE");
+    }
   }
 
-
-
+  public findPath (startNodeId: number, endNodeId: number, algoType : string) : PathFinderResult {
+    return this.pathFinder.findPath(startNodeId, endNodeId, algoType);
+  }
 
 }
