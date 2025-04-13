@@ -44,21 +44,31 @@ model directory {
   @@id([dName, building])
 }
 
-model layer {
-  id                Int     @id @default(autoincrement())
-  layerIndex        Int     @unique
-  name              String
-  isConnectionLayer Boolean @default(false)
-  bitmap            Bytes // Binary representation of the bitmap
-  width             Int
-  height            Int
+model FloorMap {
+  id Int @id @default(autoincrement())
+  name String
+  nodes Node[]
+  edges Edge[]
 }
 
-/**
- * creates the graph table (strong entity)
- * bitMap requires a Json object to store a 2D array
- */
-model graph {
-  gName  String @id
-  bitMap Json
+model Node {
+  id Int @id @default(autoincrement())
+  x Int
+  y Int
+  z Int
+  map FloorMap @relation(fields: [mapId], references: [id])
+  mapId Int
+  name String
+  description String
+  nodeType String
+  edges Edge[]
 }
+
+model Edge {
+  id Int @id @default(autoincrement())
+  weight Float
+  nodes Node[]
+  map Map @relation(fields: [mapId], references: [id])
+  mapId Int
+}
+

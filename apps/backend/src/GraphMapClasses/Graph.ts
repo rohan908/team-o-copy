@@ -1,30 +1,44 @@
-import {Node, ConnectingNode} from "./Node.ts";
+import {Node} from "./Node.ts";
+import {ConnectingNode} from "../models/MapTypes.ts";
 
-export class Graph<T> {
-  nodes: Map<T, Node<T>> = new Map<T, Node<T>>();
+
+export class Graph<T extends {id : number}> {
+  nodes: Map<number, Node<T>> = new Map<number, Node<T>>(); //maps the node ids to the nodes, change from previous version that mapped NodeDataType
   comparator: (a: T, b: T) => number;
   root: Node<T>;
 
   constructor(comparator: (a: T, b: T) => number, data: T) {
     this.comparator = comparator;
     this.root = new Node<T>(data, comparator);
+    this.nodes.set(data.id, this.root);
   }
 
   /**
-   * adds a new node to the graph
+   * adds a new node to the graph AND updates a node if it already exists with the new data
    * @param {T} data
    * @returns {Node<T>}
    */
   addNewNode(data: T): Node<T> {
-    let node = this.nodes.get(data);
+    let node = this.nodes.get(data.id);
     // if the node is already in the graph, then there is no need to build it
     if (node != null) {
+      this.nodes.set(data.id, node);
       return node;
     }
     // if the node is not already in the graph, then create a node and set the node into the map of nodes
     node = new Node(data, this.comparator);
-    this.nodes.set(data, node);
+    this.nodes.set(data.id, node);
     return node;
+  }
+
+  /**
+   * get a node from a graph using ID, used to ensure SOLID principle
+   * @param {number} id
+   * @returns {Node<T> | null}
+   */
+
+  getNodeById(id : number): Node<T> | undefined {
+    return this.nodes.get(id);
   }
 
   /**
@@ -34,7 +48,7 @@ export class Graph<T> {
    */
 
   removeNode(data: T) {
-    let nodeToRemove = this.nodes.get(data);
+    let nodeToRemove = this.nodes.get(data.id);
     if (nodeToRemove){ //if node is not undefined
       nodeToRemove.adjNodes.forEach((edge: ConnectingNode<T>) => { //bc undirected, we can just look at the nodToRemove's adjacent nodes
         // remove notToRemove from each adjacent node
@@ -42,7 +56,7 @@ export class Graph<T> {
       })
     }
 
-    this.nodes.delete(data);
+    this.nodes.delete(data.id);
     return nodeToRemove;
   }
 
@@ -68,10 +82,10 @@ export class Graph<T> {
    */
   removeEdge(source: T, destination: T): void {
     //get the source node
-    let sourceNode: Node<T> | undefined = this.nodes.get(source);
+    let sourceNode: Node<T> | undefined = this.nodes.get(source.id);
     //get the destination node
     let destinationNode: Node<T> | undefined =
-      this.nodes.get(destination);
+      this.nodes.get(destination.id);
 
     //remove the destination from the list of adjacent nodes on the source node
     if (sourceNode && destinationNode) {
@@ -81,10 +95,4 @@ export class Graph<T> {
   }
 }
 
-function comparator(a: number, b: number) {
-  if (a < b) return -1;
 
-  if (a > b) return 1;
-
-  return 0;
-}
