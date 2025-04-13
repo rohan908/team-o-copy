@@ -32,6 +32,16 @@ export class Graph<T extends {id : number}> {
   }
 
   /**
+   * get a node from a graph using ID, used to ensure SOLID principle
+   * @param {number} id
+   * @returns {Node<T> | null}
+   */
+
+  getNodeById(id : number): Node<T> | undefined {
+    return this.nodes.get(id);
+  }
+
+  /**
    * remove a node from the graph
    * @param {T} data
    * @returns {Node<T> | null}

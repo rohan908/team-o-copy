@@ -1,6 +1,8 @@
 import {NodeDataType, PathFinderResult} from "../models/MapTypes.ts";
 import {Graph} from "./Graph.ts";
 import {PathFinder} from "./PathFinder.ts";
+import { BFSPathFinder } from "./PathFinders/BFSPathFinder.ts";
+import { AStarPathFinder } from "./PathFinders/AStarPathFinder.ts";
 
 export class NavigationService {
   protected graph: Graph<NodeDataType>;
@@ -9,7 +11,28 @@ export class NavigationService {
 
   constructor(rootNode : NodeDataType) {
     this.graph = new Graph<NodeDataType>(this.nodeComparator, rootNode);
-    this.pathFinder = new PathFinder(() => this.graph);
+    const graphRef = () => this.graph;
+    this.pathFinder = new BFSPathFinder(graphRef);
+  }
+
+  public setPathFinderAlgo(pathAlgo: string) {
+    if ((pathAlgo === "BFS" && this.pathFinder instanceof BFSPathFinder) ||
+        (pathAlgo === "A*" && this.pathFinder instanceof AStarPathFinder)) {
+        return;
+    } //dont want to make new objects for now reason
+
+
+    const graphRef = () => this.graph;
+    switch (pathAlgo) {
+      case "BFS":
+        this.pathFinder = new BFSPathFinder(graphRef);
+        break;
+      case "A*":
+        this.pathFinder = new AStarPathFinder(graphRef);
+        break;
+      default:
+        throw new Error(`Unknown pathfinder algorithm: ${pathAlgo}`);
+    }
   }
 
   private nodeComparator(node1: NodeDataType, node2: NodeDataType) : number {
@@ -18,28 +41,30 @@ export class NavigationService {
 
   // parses commands from the front end to change the backend graph, also used for initial population
   public executeGraphCommand(commandType: string, node1: NodeDataType, node2ForEdge?: NodeDataType, weightForEdgeAdd?: number) {
-    if (commandType === "nodeAdd") {
-      this.graph.addNewNode(node1);
-    }
-    else if (commandType === "nodeUpdate") {
-      this.graph.addNewNode(node1); //not a typo, the function updates or adds new nodes dw about it
-    }
-    else if (commandType === "nodeRemove") {
-      this.graph.removeNode(node1);
-    }
-    else if (commandType === "edgeAdd") {
-      this.graph.addEdge(node1, node2ForEdge!, weightForEdgeAdd!);
-    }
-    else if (commandType === "edgeRemove") {
-      this.graph.removeEdge(node1, node2ForEdge!);
-    }
-    else {
-      console.error("graph command DNE");
+    switch (commandType) {
+      case "nodeAdd":
+        this.graph.addNewNode(node1);
+        break;
+      case "nodeUpdate":
+        this.graph.addNewNode(node1);
+        break;  
+      case "nodeRemove":
+        this.graph.removeNode(node1);
+        break;
+      case "edgeAdd":
+        this.graph.addEdge(node1, node2ForEdge!, weightForEdgeAdd!);
+        break;
+      case "edgeRemove":
+        this.graph.removeEdge(node1, node2ForEdge!);
+        break;
+      default:
+        console.error("graph command DNE");
     }
   }
 
-  public findPath (startNodeId: number, endNodeId: number, algoType : string) : PathFinderResult {
-    return this.pathFinder.findPath(startNodeId, endNodeId, algoType);
+  public findPath (startNodeId: number, endNodeId: number, pathAlgo: string) : PathFinderResult {
+    this.setPathFinderAlgo(pathAlgo);
+    return this.pathFinder.findPath(startNodeId, endNodeId);
   }
 
 }
