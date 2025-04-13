@@ -1,45 +1,45 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
 
+export function fetchDirectoryData(building: string) {
+  const [data, setData] = useState<Record<string, string>[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-// starting state is empty array
-export let Patriot20: { title: string; slug: string, coords: number[] }[] = [];
-export let Patriot22: { title: string; slug: string, coords: number[] }[] = [];
+  /*
+    useEffect is used in order to get data from the database through an api
+    asynchronously
+   */
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("fetching");
 
-export function CreateDirectoryArraysForFrontend() {
+        // gets directory data through http query from directory.ts
+        const res = await fetch(`http://localhost:3001/directory/${building}]`);
 
-    const dirArr = useContext(DirectoryContext);
-    useEffect(() => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
 
-        const fetchData = async () => {
-            console.log("fetching");
-            // gets the department names and building through https query from directory.ts
-            await fetch(`http://localhost:3001/directory/fulldirectory`)
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
-                    }
-                    return res.json(); // parse the JSON from response body
-                })
-                .then(data => {
-                    // stores building data to be accessed
+        // gets json data from fetched data
+        const directoryData = res.json().then(res => {
+          console.log(res);
+          setData(res);
+        });
 
-                    Patriot20.splice(0, Patriot20.length, ...data[0]);
-                    Patriot22.splice(0, Patriot22.length, ...data[1]);
+      } catch (error) {
+          console.error('Error fetching directory table', error);
+          setError(error instanceof Error ? error.message : 'Failed to load table');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-
-                })
-                .catch(err => console.error("Fetch failed:", err));
-
-            // tester console outputs
-            console.log("AHHHHHHHHHHHHHH");
-            console.log(Patriot20.toString());
-            console.log(Patriot22.toString());
-            console.log("AHHHHHHHHHHHHHH");
-        };
-
-        fetchData();
-    }, []);
+    fetchData();
+  }, [data, loading, error]);
     return null;
 }
 
-export default CreateDirectoryArraysForFrontend;
+export default fetchDirectoryData;
+
+
