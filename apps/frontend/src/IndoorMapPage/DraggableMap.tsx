@@ -63,6 +63,40 @@ export function DraggableMap() {
           RIGHT: THREE.MOUSE.ROTATE,
       };
 
+      // Initialize dragControls with an empty array
+      let draggableObjects: THREE.Object3D[] = [];
+      let dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
+
+      // Set up drag control event listeners
+      dragControls.addEventListener('dragstart', function () {
+          orbitControls.enabled = false;
+      });
+
+      dragControls.addEventListener('dragend', function () {
+          setTimeout(() => {
+              orbitControls.enabled = true;
+          }, 10);
+      });
+
+      // Function to update draggable objects to make sure only selected objects can be dragged
+      const updateDraggableObjects = () => {
+          // Dispose of the old dragControls
+          dragControls.dispose();
+          // Create a new array with only the selected object (if any)
+          draggableObjects = selectedObject ? [selectedObject] : [];
+          // new dragControls with the updated array
+          dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
+          // Event listeners that enable camera movement
+          dragControls.addEventListener('dragstart', function () {
+              orbitControls.enabled = false;
+          });
+          dragControls.addEventListener('dragend', function () {
+              setTimeout(() => {
+                  orbitControls.enabled = true;
+              }, 10);
+          })
+      }
+
       // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
       const raycaster = new THREE.Raycaster();
       const pointer = new THREE.Vector2();
@@ -103,20 +137,10 @@ export function DraggableMap() {
                     selectedObject = null;
                   }
                   console.log('Selected object:', selectedObject);
+                  updateDraggableObjects();
               }
           }
       });
-
-    const dragControls = new DragControls(objects, camera, renderer.domElement);
-    dragControls.addEventListener('dragstart', function () {
-      orbitControls.enabled = false;
-    });
-
-    dragControls.addEventListener('dragend', function () {
-      setTimeout(() => {
-        orbitControls.enabled = true;
-      }, 10);
-    });
 
       // Safety net for edge cases
       const handleMouseUp = () => {
