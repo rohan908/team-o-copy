@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { useLogin } from './LoginContext';
 import { useNavigate } from 'react-router-dom';
+import { BasicOutlinedButton } from '../../common-compoents/commonButtons.tsx';
 
 const LogInBox = () => {
     const theme = useMantineTheme();
@@ -21,7 +22,6 @@ const LogInBox = () => {
     const [loginStatus, setLoginStatus] = useState<'success' | 'error' | ''>('');
     const navigate = useNavigate();
 
-
     const handleLogin = () => {
         const success: boolean = login(username, password);
         setLoginStatus(success ? 'success' : 'error');
@@ -29,10 +29,10 @@ const LogInBox = () => {
         setPassword('');
 
         if (success) {
-            setTimeout(() => {navigate('/map-API')}, 1000);
+            setTimeout(() => {
+                navigate('/map-API');
+            }, 1000);
         }
-
-
     };
 
     const handleLogout = () => {
@@ -54,22 +54,26 @@ const LogInBox = () => {
                     backdropFilter: 'blur(5px)',
                 }}
             >
-                <Title order={1} mb={{ base: 'md', sm: 'lg', md: 'xl' }} c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
+                <Title
+                    order={1}
+                    mb={{ base: 'md', sm: 'lg', md: 'xl' }}
+                    c="black"
+                    ta="left"
+                    fw={700}
+                    fz={{ sm: 'xl', md: 'xxxl' }}
+                >
                     Let's get started
                 </Title>
 
-                <Text mb="md" ta="left">Looking for directions?</Text>
+                <Text mb="md" ta="left">
+                    Looking for directions?
+                </Text>
 
                 <Flex gap="md" wrap="wrap" mb={{ base: 'xs' }}>
-                    <Button variant="outline" color="dark"
-                            onClick={()=>navigate('/map-page')}
-                            style={{
-                        borderRadius: '20px',
-                        transition: 'all 0.3s ease',
-                        fontSize: 'clamp(12px, 3vw, 18px)',
-                    }}>
-                        Find Your Way Now
-                    </Button>
+                    <BasicOutlinedButton onClick={() => navigate('/map-page')}>
+                        custom button label
+                    </BasicOutlinedButton>
+
                     <Text mb="0" ta="left" fz={{ base: 'xs' }}>
                         Use our interactive map to find departments, parking, and efficient routes
                     </Text>
@@ -96,27 +100,31 @@ const LogInBox = () => {
                             />
                         </Box>
                         {/*<Group justify="flex-start" w="100%">*/}
-                            <Button
-                                size="md"
-                                color="dark"
-                                fw="600"
-                                bg="black"
-                                onClick={handleLogin}
-                                disabled={!username || !password}
-                                style={{ borderRadius: '50px', transition: 'all 0.3s ease' }}
-                            >
-                                Login
-                            </Button>
+                        <Button
+                            size="md"
+                            color="dark"
+                            fw="600"
+                            bg="black"
+                            onClick={handleLogin}
+                            disabled={!username || !password}
+                            style={{ borderRadius: '50px', transition: 'all 0.3s ease' }}
+                        >
+                            Login
+                        </Button>
                         {/*</Group>*/}
                         {loginStatus && (
                             <Text mt="md" c={loginStatus === 'success' ? 'green' : 'red'} fw={600}>
-                                {loginStatus === 'success' ? 'Welcome back!' : 'Incorrect username or password.'}
+                                {loginStatus === 'success'
+                                    ? 'Welcome back!'
+                                    : 'Incorrect username or password.'}
                             </Text>
                         )}
                     </>
                 ) : (
                     <Group justify="space-between" mt="xl">
-                        <Text c="green" fw={600}>Logged in as admin</Text>
+                        <Text c="green" fw={600}>
+                            Logged in as admin
+                        </Text>
                         <Button
                             variant="light"
                             color="red"
