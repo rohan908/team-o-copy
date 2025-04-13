@@ -23,10 +23,10 @@ export const StandAloneFrame: React.FC<PropsWithChildren<BoxProps>> = ({
             bg="themeGold.0"
             p={{ base: 'sm', sm: 'sm', md: 'sm', lg: 'md' }}
             // w={{ base: '90%', sm: '70%', md: '600px' }}
-            maw="800px" //{{ base: '800px', sm: '600px', md: '600px', lg: '600px' }}
+            maw={{ base: '400px', sm: '400px', md: '500px', lg: '600px' }}
             pos="relative"
             display="inline-block"
-            opacity=".8"
+            opacity=".87"
             style={{
                 borderRadius: theme.radius.lg,
                 backdropFilter: 'blur(5px)',
@@ -40,18 +40,19 @@ export const StandAloneFrame: React.FC<PropsWithChildren<BoxProps>> = ({
                 px="sm"
                 c="black"
                 ta="left"
-                fw={800}
+                fw={500}
                 fz="xxxl" //{{ base: 'xxxl', xs: 'xxxl', sm: 'xxxl', md: 'xxxl' }}
             >
                 {title}
             </Title>
 
             <Text
-                px="xs"
+                px="md"
                 mb="sm"
                 ta="left"
                 fz="sm"
                 c="dimmed"
+                fw={500}
                 style={{
                     fontStyle: 'italic',
                     lineHeight: 1.5,
@@ -59,19 +60,19 @@ export const StandAloneFrame: React.FC<PropsWithChildren<BoxProps>> = ({
             >
                 {subtitle}
             </Text>
-            <Flex py="xs" px="md">
+            <Flex px="md" pb="xs">
                 {subContents}
             </Flex>
 
             <Divider
-                py="md"
                 px="xs"
                 variant={'dotted'}
                 size={'lg'}
                 // mb={'lg'}
                 color="themeGold.4 "
             />
-            <Flex py="xs" px="md">
+
+            <Flex py="xs" px="sm">
                 {children}
             </Flex>
         </Box>

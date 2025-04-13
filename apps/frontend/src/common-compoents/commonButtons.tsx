@@ -44,3 +44,35 @@ export const BasicOutlinedButton: React.FC<CustomButtonProps> = ({
         </Button>
     );
 };
+
+export const BlackButton: React.FC<CustomButtonProps> = ({ children, onClick, ...props }) => {
+    return (
+        <Button
+            size="md"
+            color="dark"
+            fw="600"
+            bg="black"
+            onClick={onClick}
+            style={{
+                // width: 'fit-content',
+                borderRadius: '50px',
+                transition: 'all 0.3s ease',
+            }}
+            {...props}
+        >
+            {children}
+        </Button>
+    );
+};
+
+// <Button
+//   size="md"
+//   color="dark"
+//   fw="600"
+//   bg="black"
+//   onClick={handleLogin}
+//   disabled={!username || !password}
+//   style={{ borderRadius: '50px', transition: 'all 0.3s ease' }}
+// >
+//   Login
+// </Button>

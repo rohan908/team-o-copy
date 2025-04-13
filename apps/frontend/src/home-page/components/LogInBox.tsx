@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { useLogin } from './LoginContext';
 import { useNavigate } from 'react-router-dom';
-import { BasicOutlinedButton } from '../../common-compoents/commonButtons.tsx';
+import { BasicOutlinedButton, BlackButton } from '../../common-compoents/commonButtons.tsx';
 import { StandAloneFrame } from '../../common-compoents/standAloneFrame.tsx';
 
 const LogInBox = () => {
@@ -45,8 +45,8 @@ const LogInBox = () => {
     return (
         <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
             <StandAloneFrame
-                title="Let's get started"
-                subtitle="Looking for directions?"
+                title="Let's Get Started"
+                subtitle="Looking for Directions?"
                 subContents={
                     <>
                         <Stack gap="0">
@@ -64,42 +64,44 @@ const LogInBox = () => {
             >
                 {!isLoggedIn ? (
                     <>
-                        <Box mb="md" ta="left">
-                            Login here for Staff:
-                            <TextInput
-                                placeholder="Username"
-                                mt="md"
-                                mb="md"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                            <TextInput
-                                placeholder="Password"
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </Box>
-                        {/*<Group justify="flex-start" w="100%">*/}
-                        <Button
-                            size="md"
-                            color="dark"
-                            fw="600"
-                            bg="black"
-                            onClick={handleLogin}
-                            disabled={!username || !password}
-                            style={{ borderRadius: '50px', transition: 'all 0.3s ease' }}
-                        >
-                            Login
-                        </Button>
-                        {/*</Group>*/}
-                        {loginStatus && (
-                            <Text mt="md" c={loginStatus === 'success' ? 'green' : 'red'} fw={600}>
-                                {loginStatus === 'success'
-                                    ? 'Welcome back!'
-                                    : 'Incorrect username or password.'}
-                            </Text>
-                        )}
+                        <Stack w="100%">
+                            <Box>
+                                <Text fz={{ base: 'lg' }}>Login here for Staff:</Text>
+                                <TextInput
+                                    placeholder="Username"
+                                    mt="md"
+                                    mb="md"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                                <TextInput
+                                    placeholder="Password"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </Box>
+                            {/*<Group justify="flex-start" w="100%">*/}
+                            <BlackButton
+                                onClick={handleLogin}
+                                disabled={!username || !password}
+                                style={{ width: 'fit-content' }}
+                            >
+                                Login
+                            </BlackButton>
+                            {/*</Group>*/}
+                            {loginStatus && (
+                                <Text
+                                    mt="md"
+                                    c={loginStatus === 'success' ? 'green' : 'red'}
+                                    fw={600}
+                                >
+                                    {loginStatus === 'success'
+                                        ? 'Welcome back!'
+                                        : 'Incorrect username or password.'}
+                                </Text>
+                            )}
+                        </Stack>
                     </>
                 ) : (
                     <Group justify="space-between" mt="xl">
