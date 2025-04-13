@@ -43,6 +43,7 @@ export function DraggableMap() {
 
     // Create node objects
     const objects = [];
+    const selectedObjects = [];
     for (let i = 0; i < 3; i++) {
       const geometry = new THREE.SphereGeometry(2, 12, 6);
       const material = new THREE.MeshBasicMaterial({color: 0xffff00});
@@ -65,7 +66,8 @@ export function DraggableMap() {
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
 
-    function onPointerMove(event) {
+
+    window.addEventListener('click', (event) => {
       // Get canvas bounds
       if(canvas) {
         const rect = canvas.getBoundingClientRect();
@@ -73,8 +75,19 @@ export function DraggableMap() {
         // (-1 to +1) for both components
         pointer.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
         pointer.y = -((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+        raycaster.setFromCamera( pointer, camera );
+        // calculate objects intersecting the picking ray
+        const intersects = raycaster.intersectObjects( objects );
+        // hover color
+        if(intersects.length > 0) {
+          const intersect = intersects[0]; // grab the first intersected object
+          selectedObjects.push(intersect);
+          if(intersect.object instanceof THREE.Mesh && intersect.object.material instanceof THREE.MeshBasicMaterial) {
+            intersect.object.material.color.set(0x000000);
+          }
+        }
       }
-    }
+    });
 
     // Mouse controls for dragging nodes
     const dragControls = new DragControls(objects, camera, renderer.domElement);
@@ -107,21 +120,10 @@ export function DraggableMap() {
     renderer.domElement.addEventListener('mouseleave', handleMouseLeave);
 
     const animate = () => {
-      raycaster.setFromCamera( pointer, camera );
-      // calculate objects intersecting the picking ray
-      const intersects = raycaster.intersectObjects( objects );
-      // hover color
-      if(intersects.length > 0) {
-        const intersect = intersects[0]; // grab the first intersected object
-        if(intersect.object instanceof THREE.Mesh && intersect.object.material instanceof THREE.MeshBasicMaterial) {
-          intersect.object.material.color.set(0xffffff);
-        }
-      }
 
       renderer.render(scene, camera);
       window.requestAnimationFrame(animate);
     };
-    window.addEventListener( 'pointermove', onPointerMove );
     animate();
   }, []);
 
