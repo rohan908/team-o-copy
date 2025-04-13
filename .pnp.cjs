@@ -66,6 +66,7 @@ const RAW_RUNTIME_STATE =
           ["@types/multer", "npm:1.4.12"],\
           ["@types/node", "npm:22.13.13"],\
           ["@types/papaparse", "npm:5.3.15"],\
+          ["@vis.gl/react-google-maps", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:1.5.2"],\
           ["@vitest/ui", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:3.0.9"],\
           ["@yarnpkg/pnpify", "npm:4.1.4"],\
           ["common", "workspace:packages/common"],\
@@ -2085,6 +2086,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/google.maps", [\
+      ["npm:3.58.1", {\
+        "packageLocation": "./.yarn/cache/@types-google.maps-npm-3.58.1-df719add21-0247c61d2a.zip/node_modules/@types/google.maps/",\
+        "packageDependencies": [\
+          ["@types/google.maps", "npm:3.58.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/history", [\
       ["npm:4.7.11", {\
         "packageLocation": "./.yarn/cache/@types-history-npm-4.7.11-fe05d7b2e1-3facf37c24.zip/node_modules/@types/history/",\
@@ -2582,6 +2592,34 @@ const RAW_RUNTIME_STATE =
           ["@typescript-eslint/visitor-keys", "npm:8.28.0"],\
           ["@typescript-eslint/types", "npm:8.28.0"],\
           ["eslint-visitor-keys", "npm:4.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vis.gl/react-google-maps", [\
+      ["npm:1.5.2", {\
+        "packageLocation": "./.yarn/cache/@vis.gl-react-google-maps-npm-1.5.2-2e542704a4-3349eb1e71.zip/node_modules/@vis.gl/react-google-maps/",\
+        "packageDependencies": [\
+          ["@vis.gl/react-google-maps", "npm:1.5.2"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:1.5.2", {\
+        "packageLocation": "./.yarn/__virtual__/@vis.gl-react-google-maps-virtual-734b47a63f/0/cache/@vis.gl-react-google-maps-npm-1.5.2-2e542704a4-3349eb1e71.zip/node_modules/@vis.gl/react-google-maps/",\
+        "packageDependencies": [\
+          ["@vis.gl/react-google-maps", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:1.5.2"],\
+          ["@types/google.maps", "npm:3.58.1"],\
+          ["@types/react", null],\
+          ["@types/react-dom", null],\
+          ["fast-deep-equal", "npm:3.1.3"],\
+          ["react", null],\
+          ["react-dom", null]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8194,6 +8232,7 @@ const RAW_RUNTIME_STATE =
           ["@types/multer", "npm:1.4.12"],\
           ["@types/node", "npm:22.13.13"],\
           ["@types/papaparse", "npm:5.3.15"],\
+          ["@vis.gl/react-google-maps", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:1.5.2"],\
           ["@vitest/ui", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:3.0.9"],\
           ["@yarnpkg/pnpify", "npm:4.1.4"],\
           ["common", "workspace:packages/common"],\
