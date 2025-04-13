@@ -1,6 +1,6 @@
 import express, { Router, RequestHandler } from 'express';
-import { NavigationService } from '../services/NavigationService';
-import { Coordinate } from '../models/types';
+import { NavigationService } from '../OldMapServices/NavigationService';
+import { Coordinate } from '../models/oldMapTypes.ts';
 import PrismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
