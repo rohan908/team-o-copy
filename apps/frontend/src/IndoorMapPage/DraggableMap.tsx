@@ -6,7 +6,10 @@ import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from "./Components/MapEditorBox.tsx";
 
 export function DraggableMap() {
-  const theme = useMantineTheme();
+    const theme = useMantineTheme();
+    const [nodeSelected, setNodeSelected] = useState(false);
+    const [nodeX, setNodeX] = useState(0);
+    const [nodeY, setNodeY] = useState(0);
 
   useEffect(() => {
       // Get canvas element
@@ -127,6 +130,7 @@ export function DraggableMap() {
                         selectedObject.material instanceof THREE.MeshBasicMaterial
                     ) {
                       selectedObject.material.color.set(0x000000);
+                      setNodeSelected(true);
                     }
                   } else { // Object is already selected
                       if (selectedObject instanceof THREE.Mesh &&
@@ -135,6 +139,7 @@ export function DraggableMap() {
                         selectedObject.material.color.set(0xffff00);
                       }
                     selectedObject = null;
+                      setNodeSelected(false);
                   }
                   console.log('Selected object:', selectedObject);
                   updateDraggableObjects();
@@ -160,6 +165,11 @@ export function DraggableMap() {
       renderer.domElement.addEventListener('mouseleave', handleMouseLeave);
 
       const animate = () => {
+          if(selectedObject !== null){
+              setNodeX(selectedObject.position.x);
+              setNodeY(selectedObject.position.y);
+          }
+
           renderer.render(scene, camera);
           window.requestAnimationFrame(animate);
       };
@@ -168,7 +178,11 @@ export function DraggableMap() {
 
   return (
     <Box w="100vw" h="100vh" p={0}>
-      <MapEditorBox/>
+        <MapEditorBox
+            nodeSelected={nodeSelected}
+            nodeX={nodeX}
+            nodeY={nodeY}
+        />
       <canvas id="insideMapCanvas" style={{width: "100%", height: "100%", position: "absolute"}}/>
     </Box>
   );

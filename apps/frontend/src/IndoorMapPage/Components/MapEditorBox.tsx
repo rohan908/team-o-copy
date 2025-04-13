@@ -10,11 +10,16 @@ import {
 } from '@mantine/core';
 import {IconArrowBadgeRight, IconArrowBadgeDown} from '@tabler/icons-react'
 
+
 interface MapEditorBoxProps {
   onCollapseChange?: (isCollapsed: boolean) => void;
+    nodeSelected?: boolean;
+    nodeX?: number;
+    nodeY?: number;
 }
 
-const MapEditorBox: React.FC<MapEditorBoxProps> = ({onCollapseChange}) => {
+
+const MapEditorBox: React.FC<MapEditorBoxProps> = ({onCollapseChange, nodeSelected = false, nodeX = 0, nodeY = 0}) => {
     const theme = useMantineTheme();
     const [collapsed, setCollapsed] = useState(false);
 
@@ -112,10 +117,10 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({onCollapseChange}) => {
             </Flex>
             <Flex direction="row" justify="space-between">
               <text>
-                x: 1232
+                x: {nodeSelected ? nodeX : "No node selected"}
               </text>
               <text>
-                y: 1232
+                y: {nodeSelected ? nodeY : "No node selected"}
               </text>
               <text>
                 floor: 1
