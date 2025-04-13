@@ -1,20 +1,6 @@
 import React, { createContext, useReducer, useCallback, ReactNode, useEffect, useContext } from 'react';
 import { DirectoryItem, DirectoryDataStore } from '../data/DirectoryDataStore';
 
-interface DirectoryState {
-  patriot20: DirectoryItem[];
-  patriot22: DirectoryItem[];
-  chestnutehill: DirectoryItem[];
-  isLoading: boolean;
-  error: string | null;
-}
-
-// Action types
-type DirectoryAction =
-  | { type: 'SET_PATRIOT20'; payload: DirectoryItem[] }
-  | { type: 'SET_PATRIOT22'; payload: DirectoryItem[] }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string };
 
 /*
     What this file does:
@@ -42,12 +28,6 @@ type DirectoryAction =
         idk tbh ts chopped </3
 
  */
-
-/*
-    define context for directory database data DirectoryContext
-
- */
-export const DirectoryContext = createContext(null);
 
 /*
     defines custom hooks so that consumer components don't directly interact
@@ -94,88 +74,40 @@ export const useChestnutHillContext = () => {
 
 
 
-// Reducer
-function directoryReducer(state: DirectoryState, action: DirectoryAction): DirectoryState {
-  switch (action.type) {
-    case 'SET_PATRIOT20':
-      DirectoryDataStore.patriot20 = action.payload;
-      return { ...state, patriot20: action.payload };
-    case 'SET_PATRIOT22':
-      DirectoryDataStore.patriot22 = action.payload;
-      return { ...state, patriot22: action.payload };
-    case 'SET_LOADING':
-      return { ...state, isLoading: action.payload };
-    case 'SET_ERROR':
-      return { ...state, error: action.payload };
-    default:
-      return state;
-  }
-}
-
-// Context
-interface DirectoryContextType extends DirectoryState {
-  fetchData: () => void;
-}
-
-export const DirectoryContext = createContext<DirectoryContextType | undefined>(undefined);
-
-// Provider
-export const DirectoryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(directoryReducer, {
-    patriot20: [],
-    patriot22: [],
-    isLoading: false,
-    error: null,
-  });
-
-  // This will fetch the data when the provider mounts
-  const fetchData = useCallback(async () => {
-    dispatch({ type: 'SET_LOADING', payload: true });
-    try {
-      const response = await fetch(`http://localhost:3001/directory/fulldirectory`);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
-      dispatch({ type: 'SET_PATRIOT20', payload: data[0] });
-      dispatch({ type: 'SET_PATRIOT22', payload: data[1] });
-    } catch (error: any) {
-      dispatch({ type: 'SET_ERROR', payload: error.message });
-    } finally {
-      dispatch({ type: 'SET_LOADING', payload: false });
-    }
-  }, []);
-
-  // Fetch data only once when the provider mounts
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  return (
-    <DirectoryContext.Provider value={{ ...state, fetchData }}>
-  {children}
-  </DirectoryContext.Provider>
-);
-};
 
 
-
-
-
-// State shape
+/*
+  This is for the reducer function.
+ */
 interface DirectoryState {
   patriot20: DirectoryItem[];
   patriot22: DirectoryItem[];
+  chestnuthill: DirectoryItem[];
   isLoading: boolean;
   error: string | null;
 }
 
-// Action types
+/*
+  This is for the reducer function too. Each of these define actions the reducer
+  can use, like setting array values, or load the state, or set an error to be
+  thrown when the context is called and doesn't have any values in it.
+ */
 type DirectoryAction =
   | { type: 'SET_PATRIOT20'; payload: DirectoryItem[] }
   | { type: 'SET_PATRIOT22'; payload: DirectoryItem[] }
+  | { type: 'SET_CHESTNUTHILL'; payload: DirectoryItem[] }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string };
 
-// Reducer
+/*
+  This is the reducer function. Based on the React docs, it is convention to use
+  switch statements, so I used that instead of if statements.
+
+  This function defines what state is returned depending on the given "action",
+  i.e "SET_PATRIOT20" which will set values for patriot20. Using this should
+  hopefully prevent some unnecessary re-renders, and also pretty cleanly
+  handles states.
+ */
 function directoryReducer(state: DirectoryState, action: DirectoryAction): DirectoryState {
   switch (action.type) {
     case 'SET_PATRIOT20':
@@ -193,33 +125,45 @@ function directoryReducer(state: DirectoryState, action: DirectoryAction): Direc
   }
 }
 
-// Context
-interface DirectoryContextType extends DirectoryState {
-  fetchData: () => void;
-}
+/*
+    define context for directory database data. This is what the custom hooks
+    (usePatriot20, etc.) use. undefined is placed there in case something goes
+    wrong with the prop used with the provider component in app.tsx
+ */
+export const DirectoryContext = createContext<DirectoryState  | undefined>(undefined);
 
-export const DirectoryContext = createContext<DirectoryContextType | undefined>(undefined);
 
-// Provider
-export const DirectoryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+/*
+  Defines the provider component to be used in app.tsx. This
+  is what allows consumer components (child components --> In our
+  projects, this is only Routing) of the provider to access the
+  context data (through use of custom hooks).
+
+  Calls the useReducer hook with our defined reducer function and default
+  "empty" values for the state
+ */
+export const DirectoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(directoryReducer, {
     patriot20: [],
     patriot22: [],
+    chestnuthill: [],
     isLoading: false,
     error: null,
   });
 
-  // This will fetch the data when the provider mounts
+
+  /*
+    This function fetches data from the database when the provider mounts
+   */
+
   const fetchData = useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await fetch(`http://localhost:3001/directory/fulldirectory`);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
+      const data = await fetchDirectoryData();
       dispatch({ type: 'SET_PATRIOT20', payload: data[0] });
       dispatch({ type: 'SET_PATRIOT22', payload: data[1] });
-    } catch (error: any) {
-      dispatch({ type: 'SET_ERROR', payload: error.message });
+    } catch (err: any) {
+      dispatch({ type: 'SET_ERROR', payload: err.message });
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
@@ -229,6 +173,12 @@ export const DirectoryProvider: React.FC<{ children: ReactNode }> = ({ children 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+
+  /*
+    Wraps child components in DirectoryContext provider so that they can
+    use the context. This
+   */
 
   return (
     <DirectoryContext.Provider value={{ ...state, fetchData }}>
