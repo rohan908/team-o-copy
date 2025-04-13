@@ -68,7 +68,7 @@ model Edge {
   id Int @id @default(autoincrement())
   weight Float
   nodes Node[]
-  map Map @relation(fields: [mapId], references: [id])
+  map FloorMap @relation(fields: [mapId], references: [id])
   mapId Int
 }
 
