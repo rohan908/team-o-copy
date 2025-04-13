@@ -1,11 +1,7 @@
 // Documentation and Methodology: https://ehizmantutored.hashnode.dev/graph-data-structures-typescript
-// Original code is for an directed, unweighted graph and then below has modified for directed, weighted graph
+// Original code is for an directed, unweighted graph and then below has modified for undirected, weighted graph
 
-export interface ConnectingNode<T> {
-  destination: Node<T>;
-  weight: number;
-}
-
+import {ConnectingNode} from "../models/MapTypes.ts";
 
 export class Node<T> {
   data: T;

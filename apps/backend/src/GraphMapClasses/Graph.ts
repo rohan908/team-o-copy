@@ -1,4 +1,6 @@
-import {Node, ConnectingNode} from "./Node.ts";
+import {Node} from "./Node.ts";
+import {ConnectingNode} from "../models/MapTypes.ts";
+
 
 export class Graph<T> {
   nodes: Map<T, Node<T>> = new Map<T, Node<T>>();
@@ -81,10 +83,4 @@ export class Graph<T> {
   }
 }
 
-function comparator(a: number, b: number) {
-  if (a < b) return -1;
 
-  if (a > b) return 1;
-
-  return 0;
-}

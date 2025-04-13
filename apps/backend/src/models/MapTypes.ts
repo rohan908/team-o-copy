@@ -1,3 +1,5 @@
+import {Node} from "../GraphMapClasses/Node.ts";
+
 export interface NodeDataType {
   x: number;
   y: number;
@@ -7,5 +9,11 @@ export interface NodeDataType {
   id: number;
   description?: string;
 }
+
+export interface ConnectingNode<T> {
+  destination: Node<T>;
+  weight: number;
+}
+
 
 
