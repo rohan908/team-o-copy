@@ -14,7 +14,7 @@ import {
 import { useLogin } from './LoginContext';
 import { useNavigate } from 'react-router-dom';
 import { BasicOutlinedButton, BlackButton } from '../../common-compoents/commonButtons.tsx';
-import { StandAloneFrame } from '../../common-compoents/standAloneFrame.tsx';
+import { TwoPartInteractiveBox } from '../../common-compoents/standAloneFrame.tsx';
 
 const LogInBox = () => {
     const theme = useMantineTheme();
@@ -44,7 +44,7 @@ const LogInBox = () => {
 
     return (
         <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
-            <StandAloneFrame
+            <TwoPartInteractiveBox
                 title="Let's Get Started"
                 subtitle="Looking for Directions?"
                 subContents={
@@ -118,7 +118,7 @@ const LogInBox = () => {
                         </Button>
                     </Group>
                 )}
-            </StandAloneFrame>
+            </TwoPartInteractiveBox>
         </Flex>
         // <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
         //     <Box

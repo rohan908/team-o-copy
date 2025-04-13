@@ -9,7 +9,7 @@ interface BoxProps extends WithChildren {
     // lowerPart;
 }
 
-export const StandAloneFrame: React.FC<PropsWithChildren<BoxProps>> = ({
+export const TwoPartInteractiveBox: React.FC<PropsWithChildren<BoxProps>> = ({
     children,
     title,
     subtitle,
