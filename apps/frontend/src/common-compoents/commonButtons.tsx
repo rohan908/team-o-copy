@@ -3,7 +3,7 @@ import { Button } from '@mantine/core';
 
 interface CustomButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     children: string;
-    onClick: () => void;
+    onClick?: () => void;
     disabled?: boolean;
 }
 
@@ -28,12 +28,15 @@ export const BasicOutlinedButton: React.FC<CustomButtonProps> = ({
     return (
         <Button
             variant="outline"
+            // display="inline-block"
+            size="compact-md"
             color="dark"
             onClick={onClick}
             style={{
+                width: 'fit-content',
                 borderRadius: '20px',
                 transition: 'all 0.3s ease',
-                fontSize: 'clamp(12px, 3vw, 18px)',
+                // fontSize: 'clamp(12px, 3vw, 18px)',
             }}
             {...props}
         >

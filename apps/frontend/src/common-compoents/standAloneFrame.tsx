@@ -1,40 +1,79 @@
-import React, { ReactNode } from 'react';
-import { Box, Divider, Flex, Title } from '@mantine/core';
+import React, { ReactNode, PropsWithChildren } from 'react';
+import { Box, Divider, Flex, Title, Text, useMantineTheme } from '@mantine/core';
+import { reactContent, WithChildren } from './props.tsx';
 
-interface BoxProps {
-    title: string;
-    subtitle;
-    lowerPart;
+interface BoxProps extends WithChildren {
+    title?: string;
+    subtitle?: string;
+    subContents?: ReactNode;
+    // lowerPart;
 }
 
-export const standAloneFrame: React.FC<BoxProps> = ({ title, ...props }) => {
+export const StandAloneFrame: React.FC<PropsWithChildren<BoxProps>> = ({
+    children,
+    title,
+    subtitle,
+    subContents,
+    ...props
+}) => {
+    const theme = useMantineTheme();
+
     return (
-        <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
-            <Box
-                bg="white"
-                p={{ base: 'xl', sm: '2rem', md: '3rem' }}
-                w="100%"
-                maw={{ base: '90%', sm: '70%', md: '600px' }}
-                pos="relative"
+        <Box
+            bg="themeGold.0"
+            p={{ base: 'sm', sm: 'sm', md: 'sm', lg: 'md' }}
+            // w={{ base: '90%', sm: '70%', md: '600px' }}
+            maw="800px" //{{ base: '800px', sm: '600px', md: '600px', lg: '600px' }}
+            pos="relative"
+            display="inline-block"
+            opacity=".8"
+            style={{
+                borderRadius: theme.radius.lg,
+                backdropFilter: 'blur(5px)',
+            }}
+        >
+            <Title
+                order={1}
+                // mb={{ base: 'md', sm: 'lg', md: 'xl' }}
+                pt="xs"
+                pb="xxs"
+                px="sm"
+                c="black"
+                ta="left"
+                fw={800}
+                fz="xxxl" //{{ base: 'xxxl', xs: 'xxxl', sm: 'xxxl', md: 'xxxl' }}
+            >
+                {title}
+            </Title>
+
+            <Text
+                px="xs"
+                mb="sm"
+                ta="left"
+                fz="sm"
+                c="dimmed"
                 style={{
-                    opacity: 0.85,
-                    borderRadius: theme.radius.lg,
-                    backdropFilter: 'blur(5px)',
+                    fontStyle: 'italic',
+                    lineHeight: 1.5,
                 }}
             >
-                <Title
-                    order={1}
-                    mb={{ base: 'md', sm: 'lg', md: 'xl' }}
-                    c="black"
-                    ta="left"
-                    fw={700}
-                    fz={{ sm: 'xl', md: 'xxxl' }}
-                >
-                    {title}
-                </Title>
+                {subtitle}
+            </Text>
+            <Flex py="xs" px="md">
+                {subContents}
+            </Flex>
 
-                <Divider variant={'dotted'} size={'lg'} mb={'lg'} />
-            </Box>
-        </Flex>
+            <Divider
+                py="md"
+                px="xs"
+                variant={'dotted'}
+                size={'lg'}
+                // mb={'lg'}
+                color="themeGold.4 "
+            />
+            <Flex py="xs" px="md">
+                {children}
+            </Flex>
+        </Box>
     );
 };
