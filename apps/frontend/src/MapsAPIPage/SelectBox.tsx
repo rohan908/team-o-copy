@@ -20,6 +20,8 @@ interface HospitalSelectBoxProps {
     onCollapseChange?: (isCollapsed: boolean) => void;
     onTriggerRoute?: () => void;
     onSetUserCoordinates?: (coordinate: {lat: number, long: number}) => void;
+    onSetTravelMode?: (mode: google.maps.TravelMode) => void;
+
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
@@ -31,10 +33,10 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     const [departmentOptions, setDepartmentOptions] = useState<
         { value: string; label: string }[]
     >([]);
-
     const hospitalCoords = new L.LatLng(42.091846, -71.266614);
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
+
     const handleFindPath = () => {
         if (hospital) {
             onSelectHospital(hospitalCoords);
@@ -135,8 +137,10 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     </Text>
 
                     <Divider variant="dotted" size="lg" mb="lg" />
+                  <Text ta="left" mb="sm" fw={500}>
+                    Insert Starting Location:
+                  </Text>
                   <TextInput
-                    label="Enter start location:"
                     ref={input}
                     mb="md"
                   />
@@ -148,6 +152,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         data={[
                             { value: '20 Patriot St', label: '20 Patriot St' },
                             { value: '22 Patriot St', label: '22 Patriot St' },
+                            { value: 'Chestnut Hill', label: 'Chestnut Hill' },
+
                         ]}
                         value={hospital}
                         onChange={setHospital}
@@ -165,6 +171,19 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         mb="md"
                         disabled={!hospital || departmentOptions.length === 0}
                     />
+                  <Text ta="left" mb="sm" fw={500}>
+                    Select Navigation Method:
+                  </Text>
+                  <Select
+                    placeholder="Navigation Method"
+                    data={[
+                      {value: "Walking", label: 'Walking'},
+                      {value: "Public Transportation", label: 'Public Transportation'},
+                      {value: "Driving", label: 'Driving'},
+                    ]}
+                    mb="md"
+                    disabled={!hospital}
+                  />
 
                     <Flex justify="flex-end" gap="md">
                         <Button
