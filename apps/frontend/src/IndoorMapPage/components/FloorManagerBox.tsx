@@ -29,7 +29,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, onColl
   return (
     <Box
       pos="fixed"
-      top={500}
+      top={450}
       left={1250}
       style={{
         zIndex: 999,
@@ -49,6 +49,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, onColl
             onChange={(value) => setFloor(parseInt(value))}
             data={
             [
+              {label: "CH 1", value: "5"},
               {label: '4', value: "4"},
               {label: '3', value: "3"},
               {label: '1', value: "1"},
@@ -62,7 +63,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, onColl
               },
               label: {
                 fontWeight: 600,
-                color: "#001D4D"
+                color: "white"
               },
               indicator: {
                 backgroundColor: "#FCB024",
