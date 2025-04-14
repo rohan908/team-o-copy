@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
 
-import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx'; //this is now static lol
+import { Patriot20, Patriot22, ChestnutHill } from '../directory/components/directorydata.tsx'; //this is now static lol
 import {
     Box,
     Text,
@@ -91,7 +91,15 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 label: dept.title,
             }));
             setDepartmentOptions(options);
-        } else {
+        }
+          else if (hospital == 'Chestnut Hill'){
+            const options = ChestnutHill.map((dept)=>({
+                value: dept.slug,
+                label: dept.title,
+            }));
+            setDepartmentOptions(options);
+        }
+          else {
             setDepartmentOptions([]);
         }
 
