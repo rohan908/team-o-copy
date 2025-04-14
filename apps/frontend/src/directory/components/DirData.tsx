@@ -1,7 +1,8 @@
-import React, { useEffect, useState, createContext, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
+import { DirectoryItem } from '../../contexts/DirectoryItem';
 
 export function fetchDirectoryData(building: string) {
-  const [data, setData] = useState<Record<string, string>[]>([]);
+  const [data, setData] = useState<DirectoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,7 +38,7 @@ export function fetchDirectoryData(building: string) {
 
     fetchData();
   }, [data, loading, error]);
-    return null;
+    return data;
 }
 
 export default fetchDirectoryData;

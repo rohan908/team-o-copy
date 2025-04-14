@@ -1,5 +1,6 @@
-import React, { createContext, useReducer, useCallback, ReactNode, useEffect, useContext } from 'react';
-import { DirectoryItem, DirectoryDataStore } from '../data/DirectoryDataStore';
+import React, { createContext, useReducer, useCallback, useEffect, useContext } from 'react';
+import { fetchDirectoryData } from '../directory/components/DirData';
+import { DirectoryItem } from './DirectoryItem';
 
 
 /*
@@ -18,16 +19,15 @@ import { DirectoryItem, DirectoryDataStore } from '../data/DirectoryDataStore';
         as well as security issues or misuse.
 
     What this needs in the future:
-        Anything that says "directory" will need to be renamed, since this context will
-        soon (probably) store the ENTIRE database's data
-
-    Who made it:
-        Joe
-
-    Why did I comment it like this:
-        idk tbh ts chopped </3
+      Implement the rest of the database data into contexts
 
  */
+
+/*
+    define context for directory database data. undefined is placed in the type in case something goes
+    wrong with the prop used with the provider component in app.tsx
+ */
+export const DirectoryContext = createContext<DirectoryState  | undefined>(undefined);
 
 /*
     defines custom hooks so that consumer components don't directly interact
@@ -72,17 +72,13 @@ export const useChestnutHillContext = () => {
   return context;
 }
 
-
-
-
-
 /*
   This is for the reducer function.
  */
 interface DirectoryState {
   patriot20: DirectoryItem[];
   patriot22: DirectoryItem[];
-  chestnuthill: DirectoryItem[];
+  chestnutHill: DirectoryItem[];
   isLoading: boolean;
   error: string | null;
 }
@@ -93,11 +89,11 @@ interface DirectoryState {
   thrown when the context is called and doesn't have any values in it.
  */
 type DirectoryAction =
-  | { type: 'SET_PATRIOT20'; payload: DirectoryItem[] }
-  | { type: 'SET_PATRIOT22'; payload: DirectoryItem[] }
-  | { type: 'SET_CHESTNUTHILL'; payload: DirectoryItem[] }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string };
+  | { type: 'SET_PATRIOT20'; data: DirectoryItem[] }
+  | { type: 'SET_PATRIOT22'; data: DirectoryItem[] }
+  | { type: 'SET_CHESTNUTHILL'; data: DirectoryItem[] }
+  | { type: 'SET_LOADING'; data: boolean }
+  | { type: 'SET_ERROR'; data: string };
 
 /*
   This is the reducer function. Based on the React docs, it is convention to use
@@ -107,31 +103,25 @@ type DirectoryAction =
   i.e "SET_PATRIOT20" which will set values for patriot20. Using this should
   hopefully prevent some unnecessary re-renders, and also pretty cleanly
   handles states.
+
+  If we need a cache for quicker page loading or some optimization, store data externally in this function
  */
 function directoryReducer(state: DirectoryState, action: DirectoryAction): DirectoryState {
   switch (action.type) {
     case 'SET_PATRIOT20':
-      DirectoryDataStore.patriot20 = action.payload;
-      return { ...state, patriot20: action.payload };
+      return { ...state, patriot20: action.data };
     case 'SET_PATRIOT22':
-      DirectoryDataStore.patriot22 = action.payload;
-      return { ...state, patriot22: action.payload };
+      return { ...state, patriot22: action.data };
+    case 'SET_CHESTNUTHILL':
+      return { ...state, chestnutHill: action.data };
     case 'SET_LOADING':
-      return { ...state, isLoading: action.payload };
+      return { ...state, isLoading: action.data };
     case 'SET_ERROR':
-      return { ...state, error: action.payload };
+      return { ...state, error: action.data };
     default:
       return state;
   }
 }
-
-/*
-    define context for directory database data. This is what the custom hooks
-    (usePatriot20, etc.) use. undefined is placed there in case something goes
-    wrong with the prop used with the provider component in app.tsx
- */
-export const DirectoryContext = createContext<DirectoryState  | undefined>(undefined);
-
 
 /*
   Defines the provider component to be used in app.tsx. This
@@ -146,26 +136,31 @@ export const DirectoryProvider = ({ children }) => {
   const [state, dispatch] = useReducer(directoryReducer, {
     patriot20: [],
     patriot22: [],
-    chestnuthill: [],
+    chestnutHill: [],
     isLoading: false,
     error: null,
   });
 
 
   /*
-    This function fetches data from the database when the provider mounts
+    This function fetches data from the database when the provider mounts.
    */
 
   const fetchData = useCallback(async () => {
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: 'SET_LOADING', data: true });
     try {
-      const data = await fetchDirectoryData();
-      dispatch({ type: 'SET_PATRIOT20', payload: data[0] });
-      dispatch({ type: 'SET_PATRIOT22', payload: data[1] });
-    } catch (err: any) {
-      dispatch({ type: 'SET_ERROR', payload: err.message });
+      // grabs data from the database for each building
+      const pat20data = await fetchDirectoryData('Patriot-20');
+      const pat22data = await fetchDirectoryData('Patriot-22');
+      const chestHilldata = await fetchDirectoryData('Chestnut-Hill');
+
+      dispatch({ type: 'SET_PATRIOT20', data: pat20data });
+      dispatch({ type: 'SET_PATRIOT22', data: pat22data });
+      dispatch({ type: 'SET_CHESTNUTHILL', data: chestHilldata });
+    } catch (err) {
+      dispatch({ type: 'SET_ERROR', data: err.message });
     } finally {
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch({ type: 'SET_LOADING', data: false });
     }
   }, []);
 
