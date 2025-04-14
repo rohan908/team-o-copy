@@ -14,14 +14,7 @@ aws ecr-public get-login-password --region us-east-1 | docker login --username A
 # Build the Docker image with production target and environment variables
 echo "Building Docker image..."
 docker build --platform=linux/amd64 --provenance=false --target production \
-  --build-arg POSTGRES_USER=$POSTGRES_USER \
-  --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD \
-  --build-arg POSTGRES_DB=$POSTGRES_DB \
-  --build-arg POSTGRES_HOST=$POSTGRES_HOST \
-  --build-arg POSTGRES_PORT=$POSTGRES_PORT \
-  --build-arg POSTGRES_URL="$POSTGRES_URL" \
   --build-arg NODE_ENV=$NODE_ENV \
-  --build-arg PORT=$PORT \
   --build-arg FRONTEND_PORT=$FRONTEND_PORT \
   --build-arg BACKEND_PORT=$BACKEND_PORT \
   -t $REPOSITORY_URI:$GIT_COMMIT_HASH \
@@ -36,4 +29,14 @@ echo "Pushing images to ECR..."
 docker push $REPOSITORY_URI:$GIT_COMMIT_HASH
 docker push $REPOSITORY_URI:latest
 
+if [[ "$ECS_CLUSTER" != *"TODO"* && "$ECS_SERVICE" != *"TODO"* ]]; then
+  # Restart ECS service
+  echo "Restarting ECS service..."
+  aws ecs update-service \
+    --cluster $ECS_CLUSTER \
+    --service $ECS_SERVICE \
+    --force-new-deployment
+fi
+
 echo "Deployment complete!"
+
