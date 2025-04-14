@@ -1,3 +1,5 @@
+// !!! THIS SHOULD BE REMOVED !!!
+
 // directoryData.ts
 export const Patriot20 = [
   { title: 'Electromyography (EMG)', slug: 'emg' },
@@ -56,7 +58,7 @@ export const Patriot22 = [
   { title: 'Rheumatology', slug: 'rheumatology' },
   { title: 'Vein Care Services', slug: 'vcs' },
   { title: 'Women\'s Health', slug: 'woman\'s-Health' },
-  { title: 'Patient Financial Services', slug: 'financial-services' },
+  { title: 'Patient Financial Services', slug: 'financial-OldMapServices' },
 ];
 
 

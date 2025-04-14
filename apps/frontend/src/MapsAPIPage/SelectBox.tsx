@@ -49,7 +49,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
           onSelectHospital(new L.LatLng(42.093429, -71.268228));
         }
         if (navigationMethod && onSetTravelMode) {
-          onSetTravelMode(navigationMethod); // ✅ Move it here
+          onSetTravelMode(navigationMethod);
         }
         setCollapsed(true);
     };
