@@ -18,14 +18,13 @@ interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
     onCollapseChange?: (isCollapsed: boolean) => void;
-    onTriggerRoute?: () => void;
     onSetUserCoordinates?: (coordinate: {lat: number, long: number}) => void;
     onSetTravelMode?: (mode: google.maps.TravelMode) => void;
 
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
-    const {onSelectHospital, onSelectDepartment, onCollapseChange, onTriggerRoute, onSetUserCoordinates} = props;
+    const {onSelectHospital, onSelectDepartment, onCollapseChange, onSetUserCoordinates, onSetTravelMode} = props;
     const theme = useMantineTheme();
     const [hospital, setHospital] = useState<string | null>(null);
     const [department, setDepartment] = useState<string | null>(null);
@@ -33,11 +32,13 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     const [departmentOptions, setDepartmentOptions] = useState<
         { value: string; label: string }[]
     >([]);
-    const hospitalCoords = new L.LatLng(42.091846, -71.266614);
+    const hospitalCoords = new L.LatLng(42.091846, -71.266614); //fixed hospital location, this needs to change
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
+    const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
 
-    const handleFindPath = () => {
+
+  const handleFindPath = () => {
         if (hospital) {
             onSelectHospital(hospitalCoords);
         }
@@ -46,6 +47,9 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         }
         if (department == "pharmacy"){
           onSelectHospital(new L.LatLng(42.093429, -71.268228));
+        }
+        if (navigationMethod && onSetTravelMode) {
+          onSetTravelMode(navigationMethod); // ✅ Move it here
         }
         setCollapsed(true);
     };
@@ -92,9 +96,9 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     return (
         <Box
             pos="fixed"
-            bottom="0"
             left={0}
             right={0}
+            bottom={0}
             style={{
                 zIndex: 999,
                 display: 'flex',
@@ -108,12 +112,12 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="100%"
                 style={{
-                    maxWidth: collapsed ? '300px' : '80%',
+                    maxWidth: collapsed ? '300px' : '50%',
                     opacity: 0.95,
                     borderRadius: theme.radius.lg,
                     backdropFilter: 'blur(5px)',
                     boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.1)',
-                    overflow: 'hidden',
+                    overflow: 'auto',
                 }}
             >
                 <Collapse in={!collapsed}>
@@ -177,10 +181,14 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                   <Select
                     placeholder="Navigation Method"
                     data={[
-                      {value: "Walking", label: 'Walking'},
-                      {value: "Public Transportation", label: 'Public Transportation'},
-                      {value: "Driving", label: 'Driving'},
+                      {value: google.maps.TravelMode.WALKING, label: 'Walking'},
+                      {value: google.maps.TravelMode.TRANSIT, label: 'Public Transportation'},
+                      {value: google.maps.TravelMode.DRIVING, label: 'Driving'},
                     ]}
+                    value={navigationMethod}
+                    onChange={(value) => {
+                      setNavigationMethod(value);
+                    }}
                     mb="md"
                     disabled={!hospital}
                   />

@@ -3,12 +3,14 @@ import {GoogleMap} from "@react-google-maps/api";
 import {Box} from '@mantine/core';
 
 interface GoogleMapProps {
-    selectedHospital: google.map.LatLngLiteral | null;
+    selectedHospital: google.maps.LatLngLiteral | null;
     userCoordinate: google.maps.LatLngLiteral | null;
+    travelMode: google.maps.TravelMode | null;
+
 }
 
 const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
-    const {selectedHospital, userCoordinate } = props;
+    const {selectedHospital, userCoordinate, travelMode } = props;
     const mapRef = useRef<google.maps.Map | null>(null);
     const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
     const [steps, setSteps] = useState<string[]>([]);
@@ -26,7 +28,7 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
         directionsService.route({
             origin: userCoordinate,
             destination: selectedHospital,
-            travelMode: google.maps.TravelMode.DRIVING,
+            travelMode: travelMode,
         },
             (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) {

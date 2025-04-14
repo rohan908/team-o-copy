@@ -1,5 +1,5 @@
 // MapAPIPage.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button } from '@mantine/core';
 import * as L from 'leaflet';
 import SelectBox from './SelectBox.tsx';
@@ -15,20 +15,29 @@ export function MapAPIPage() {
     const [isSelectBoxCollapsed, setIsSelectBoxCollapsed] = useState(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [userCoordinates, setUserCoordinates] = useState<{ lat: number; long: number } | null>(null);
+    const [travelMode, setTravelMode] = useState<google.maps.TravelMode | null>(null);
 
     const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-      // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+          // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
 
-      libraries: ['places'], //required for location autocomplete in textbox
-  });
+          libraries: ['places'], //required for location autocomplete in textbox
+      });
+      useEffect(() => {
+        if (isLoaded && !travelMode) {
+          setTravelMode(google.maps.TravelMode.DRIVING);
+        }
+      }, [isLoaded, travelMode]);
 
-    const handleSelectHospital = (coord: L.LatLng) => {
+
+
+  const handleSelectHospital = (coord: L.LatLng) => {
         setSelectedHospital(coord);
     };
-    if (!isLoaded) {
+    if (!isLoaded && !travelMode) {
     return <div>Loading Google Maps...</div>; //debugmap
   }
+
 
     return (
         <Box
@@ -52,8 +61,9 @@ export function MapAPIPage() {
                 ? { lat: userCoordinates.lat, lng: userCoordinates.long }
                 : null
             }
+            travelMode={travelMode ?? google.maps.TravelMode.DRIVING}
           />
-            <div
+            <Box
                 style={{
                     position: 'absolute',
                     top: '1rem',
@@ -64,9 +74,9 @@ export function MapAPIPage() {
                 <SelectBox onSelectHospital={handleSelectHospital}
                            onCollapseChange={setIsSelectBoxCollapsed}
                            onSetUserCoordinates={setUserCoordinates} // ← THIS IS MISSING!
-
+                           onSetTravelMode={setTravelMode}
                 />
-            </div>
+            </Box>
             {isSelectBoxCollapsed && (
                 <div
                     style={{
