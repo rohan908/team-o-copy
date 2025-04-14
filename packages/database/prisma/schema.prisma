@@ -55,20 +55,20 @@ model Node {
   id Int @id @default(autoincrement())
   x Int
   y Int
-  z Int
+  floor Int
   map FloorMap @relation(fields: [mapId], references: [id])
   mapId Int
   name String
   description String
   nodeType String
-  edges Edge[]
+  edges Int[] // ids of all edges containing this node
 }
 
 model Edge {
   id Int @id @default(autoincrement())
   weight Float
-  nodes Node[]
-  map Map @relation(fields: [mapId], references: [id])
+  map FloorMap @relation(fields: [mapId], references: [id])
   mapId Int
+  nodes Int[] // ids of both nodes in this edge
 }
 

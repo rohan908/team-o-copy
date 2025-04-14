@@ -3,15 +3,34 @@ import { Graph } from './Graph.ts';
 import { PathFinder } from './PathFinder.ts';
 import { BFSPathFinder } from './PathFinders/BFSPathFinder.ts';
 import { AStarPathFinder } from './PathFinders/AStarPathFinder.ts';
+import PrismaClient from '../bin/prisma-client.ts';
+import graph from '../routes/Graph.ts';
 
 export class NavigationService {
     protected graph: Graph<NodeDataType>;
     private pathFinder: PathFinder;
 
-    constructor(rootNode: NodeDataType) {
-        this.graph = new Graph<NodeDataType>(this.nodeComparator, rootNode);
+    constructor() {
+        this.graph = new Graph<NodeDataType>(this.nodeComparator);
         const graphRef = () => this.graph;
         this.pathFinder = new BFSPathFinder(graphRef);
+    }
+
+    public async initialize(): Promise<void> {
+        const databaseNodes = await PrismaClient.node.findMany({});
+        const databaseEdges = await PrismaClient.edge.findMany({});
+
+        databaseNodes.forEach((databaseNode) => {
+            this.executeGraphCommand('nodeAdd', databaseNode);
+        });
+
+        databaseEdges.forEach((databaseEdge) => {
+            const node1 = this.graph.getNodeById(databaseEdge.nodes[0]);
+            const node2 = this.graph.getNodeById(databaseEdge.nodes[1]);
+            if (node1?.data !== undefined) {
+                this.executeGraphCommand('edgeAdd', node1?.data, node2?.data, databaseEdge.weight);
+            }
+        });
     }
 
     public setPathFinderAlgo(pathAlgo: string) {
