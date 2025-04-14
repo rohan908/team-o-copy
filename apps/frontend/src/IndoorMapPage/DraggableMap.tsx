@@ -32,29 +32,28 @@ export function DraggableMap() {
         }
     };
 
-    const path = findPath(1, 4, 'BFS').then(async (res) => {
-        const ids = res.result.pathIDs;
-        console.log(ids);
-    });
-
-    const node = getNode(4).then(async (res) => {
-        const node = res.result.x;
-        console.log(res.result.nodeData.x);
-    });
-
     // Because THREEjs object IDs are readonly we should probably create and maintain a list that associates the THREEjs object ids with the backed node ids.
     const nodeIds: [number, number][] = [];
 
-    const createNode = (node: Node<NodeDataType>) => {
+    const createNode = (node: NodeDataType) => {
         const geometry = new THREE.SphereGeometry(2, 12, 6);
         const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
         const sphere = new THREE.Mesh(geometry, material);
-        nodeIds.push([node.data.id, sphere.id]);
-        sphere.position.x = node.data.x;
-        sphere.position.y = node.data.y;
+        nodeIds.push([node.id, sphere.id]);
+        sphere.position.x = node.x;
+        sphere.position.y = node.y;
         scene.add(sphere);
         objects.push(sphere);
     };
+
+    const path = findPath(1, 4, 'BFS').then(async (res) => {
+        const ids = res.result.pathIDs;
+        for (const id of ids) {
+            const node = getNode(id).then(async (res) => {
+                createNode(res.result.nodeData);
+            });
+        }
+    });
 
     const createEdge = (node1: Node<NodeDataType>, node2: Node<NodeDataType>) => {
         const xStart = node1.data.x;
