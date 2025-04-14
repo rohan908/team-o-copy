@@ -38,6 +38,18 @@ export async function populate() {
         data: getNodeData(),
     });
 
+    // adds all edges based on connecting nodes in each node
+    addDefaultNodes.forEach((node: any) => {
+      /*
+        const connections
+
+        const addEdge = await PrismaClient.edge.create({
+
+        })
+
+       */
+    })
+
     // then define each edge
     const addEdges = await PrismaClient.edge.createMany({
         data: [
