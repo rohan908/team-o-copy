@@ -13,6 +13,9 @@ export function DraggableMap() {
     const [nodeY, setNodeY] = useState(0);
     const [floor, setNodeFloor] = useState(0);
     const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
+    const scene = new THREE.Scene();
+    const objects: THREE.Object3D[] = [];
+    objects.push(new THREE.Object3D());
 
     // updates the selected node position from UI
     const updateNodePosition = (x: number, y: number, floor: number) => {
@@ -25,13 +28,27 @@ export function DraggableMap() {
         }
     }
 
+    const createNode = (x: number, y: number, floor: number) => {
+        const geometry = new THREE.SphereGeometry(2, 12, 6);
+        const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const sphere = new THREE.Mesh(geometry, material);
+        sphere.position.x = x;
+        sphere.position.y = y;
+        scene.add(sphere);
+        objects.push(sphere);
+    }
+
+    const createEdge = (node1: Node, node2: Node) => {
+
+    }
+
   useEffect(() => {
       // Get canvas element
       const canvas = document.getElementById('insideMapCanvas');
       // if the canvas element is not found, we return
       if (!canvas) return;
 
-      const scene = new THREE.Scene();
+
 
       // we create a new renderer
       const renderer = new THREE.WebGLRenderer({
@@ -59,16 +76,7 @@ export function DraggableMap() {
       scene.add(mapPlane);
 
       // Create node objects
-      const objects: THREE.Object3D[] = [];
-      objects.push(new THREE.Object3D());
-      for (let i = 0; i < 3; i++) {
-          const geometry = new THREE.SphereGeometry(2, 12, 6);
-          const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-          const sphere = new THREE.Mesh(geometry, material);
-          sphere.position.x = i * 10;
-          scene.add(sphere);
-          objects.push(sphere);
-      }
+      createNode(5, 5, 1)
 
       // Create edge objects
       for (let i = 0; i < 2; i++) {
