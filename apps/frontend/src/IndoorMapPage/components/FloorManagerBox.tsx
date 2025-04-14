@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
   Box,
-  Collapse,
-  Button,
-  ActionIcon,
   useMantineTheme,
-  Title,
-  Flex,
+  SegmentedControl,
 } from '@mantine/core';
-import {IconArrowBadgeRight, IconArrowBadgeDown} from '@tabler/icons-react'
+
+
+
+
 
 
 interface FloorSwitchBoxProps {
@@ -23,11 +22,6 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, onColl
   const [collapsed, setCollapsed] = useState(false);
 
 
-  const floor1 = () => setFloor(1);
-
-  const floor3 = () =>
-    setFloor(3);
-
   useEffect(() => {
     onCollapseChange?.(collapsed);
   }, [collapsed]);
@@ -35,96 +29,49 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, onColl
   return (
     <Box
       pos="fixed"
-      top={57}
-      left={250}
-      right={0}
+      top={500}
+      left={1250}
       style={{
         zIndex: 999,
         display: 'flex',
         justifyContent: 'left',
         transition: 'all 0.4s ease-in-out',
-        paddingBottom: collapsed ? 0 : '1.5rem',
       }}
     >
-      <Box
-        bg="white"
-        p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
-        w="20%"
-        style={{
-          maxWidth: collapsed ? '300px' : '80%',
-          opacity: 0.95,
-          borderRadius: theme.radius.lg,
-          backdropFilter: 'blur(5px)',
-          boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.1)',
-          overflow: 'hidden',
-        }}
-      >
-        <Collapse in={!collapsed}>
-          <Title order={2} mb="md" c="black" ta="left" fw={700} fz={{ sm: 'md', md: 'xl' }}>
-            Select a Floor
-          </Title>
-
-          <Flex direction="row" justify="sm">
-            <Button
-              onClick={floor1}
-              color="dark"
-              fw="600"
-              bg="black"
-              style={{
-                borderRadius: '50px',
-                transition: 'all 0.3s ease',
-              }}>
-              1
-            </Button>
-            <Button
-              onClick={floor3}
-              color="dark"
-              fw="600"
-              bg="black"
-              style={{
-                borderRadius: '50px',
-                transition: 'all 0.3s ease',
-              }}>
-              3
-            </Button>
-          </Flex>
-          <Flex>
-            <text>
-              Current Floor: {floor}
-            </text>
-          </Flex>
 
 
-          <ActionIcon size="input-sm" onClick={()=>setCollapsed(true)} aria-label="ActionIcon the same size as inputs">
-            <IconArrowBadgeRight/>
-          </ActionIcon>
+          <SegmentedControl
+            orientation = "vertical"
+            fullWidth
+            size = 'md'
+            color = "dark"
+            value={floor.toString()}
+            onChange={(value) => setFloor(parseInt(value))}
+            data={
+            [
+              {label: '4', value: "4"},
+              {label: '3', value: "3"},
+              {label: '1', value: "1"},
 
-
-
-          <Flex justify="flex-end" gap="md">
-          </Flex>
-        </Collapse>
-
-        {collapsed && (
-          <Box
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              width: '100%',
+            ]
+            }
+            styles = {{
+              root: {
+                borderRadius: 8,
+                backgroundColor: "#164EC5",
+              },
+              label: {
+                fontWeight: 600,
+                color: "#001D4D"
+              },
+              indicator: {
+                backgroundColor: "#FCB024",
+                borderRadius: 5,
+              }
             }}
-          >
-            <Box
-              w="100%"
-              maw={{ base: '100%', md: '400px' }}
-            >
-              <text>Floor Selection</text>
-              <ActionIcon size="input-sm" onClick={()=>setCollapsed(false)} aria-label="ActionIcon the same size as inputs">
-                <IconArrowBadgeDown/>
-              </ActionIcon>
-            </Box>
-          </Box>
-        )}
-      </Box>
+            />
+
+
     </Box>
   );
 };
