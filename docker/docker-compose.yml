@@ -15,6 +15,8 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - FRONTEND_PORT=${FRONTEND_PORT}
       - BACKEND_PORT=${BACKEND_PORT}
+      - BACKEND_SOURCE=${BACKEND_SOURCE}
+      - BACKEND_URL=${BACKEND_URL}
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80"]

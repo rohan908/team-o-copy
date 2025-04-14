@@ -17,6 +17,8 @@ docker build --platform=linux/amd64 --provenance=false --target production \
   --build-arg NODE_ENV=$NODE_ENV \
   --build-arg FRONTEND_PORT=$FRONTEND_PORT \
   --build-arg BACKEND_PORT=$BACKEND_PORT \
+  --build-arg BACKEND_SOURCE=$BACKEND_SOURCE \
+  --build-arg BACKEND_URL=$BACKEND_URL \
   -t $REPOSITORY_URI:$GIT_COMMIT_HASH \
   -f ./docker/Dockerfile .
 
