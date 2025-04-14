@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Box, Button } from '@mantine/core';
 import * as L from 'leaflet';
 import SelectBox from './SelectBox.tsx';
-import MapAPIComponent from './MapAPIComponent.tsx';
+import {LoadScript} from "@react-google-maps/api";
 import GoogleMapsAPI from "./GoogleMapsAPI.tsx";
 
 import { useMediaQuery } from '@mantine/hooks';
@@ -21,6 +21,9 @@ export function MapAPIPage() {
     };
 
     return (
+      <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} //APIProvider component requires a key,
+        // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
+                  libraries={['places']}> {/* required for location autocomplete in textbox*/}
         <Box
             style={{
                 position: 'relative',
@@ -80,6 +83,7 @@ export function MapAPIPage() {
                 </div>
             )}
         </Box>
+      </LoadScript>
     );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx';
 import {
     Box,
@@ -10,6 +10,7 @@ import {
     Select,
     useMantineTheme,
     Collapse,
+    TextInput
 } from '@mantine/core';
 import * as L from 'leaflet';
 
@@ -17,10 +18,12 @@ interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
     onCollapseChange?: (isCollapsed: boolean) => void;
+    onTriggerRoute?: () => void;
+    onSetUserCoordinates?: (coordinate: {lat: number, long: number}) => void;
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
-    const {onSelectHospital, onSelectDepartment, onCollapseChange} = props;
+    const {onSelectHospital, onSelectDepartment, onCollapseChange, onTriggerRoute, onSetUserCoordinates} = props;
     const theme = useMantineTheme();
     const [hospital, setHospital] = useState<string | null>(null);
     const [department, setDepartment] = useState<string | null>(null);
@@ -30,7 +33,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     >([]);
 
     const hospitalCoords = new L.LatLng(42.091846, -71.266614);
-
+    const input = useRef<HTMLInputElement>(null);
+    const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
     const handleFindPath = () => {
         if (hospital) {
             onSelectHospital(hospitalCoords);
@@ -47,7 +51,25 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     useEffect(() => {
         onCollapseChange?.(collapsed);
     }, [collapsed]);
-
+  useEffect(() => {
+    if (!input.current) return;
+    if (!window.google?.maps?.places) {
+      console.error("Google Maps API not loaded.");
+      return;
+    }
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
+    autocompleteRef.current.addListener("place_changed", () => {
+      const place = autocompleteRef.current?.getPlace();
+      if (place?.geometry?.location) {
+        const location = place.geometry.location;
+        const latlng = {
+          lat: location.lat(),
+          long: location.lng(),
+        };
+        onSetUserCoordinates?.(latlng);
+      }
+    });
+  }, []);
     useEffect(() => {
         if (hospital === '20 Patriot St') {
             const options = Patriot20.map((dept) => ({
@@ -117,7 +139,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     </Text>
 
                     <Divider variant="dotted" size="lg" mb="lg" />
-
+                  <TextInput
+                    label="Enter start location:"
+                    ref={input}
+                    mb="md"
+                  />
                     <Text ta="left" mb="sm" fw={500}>
                         Select Hospital:
                     </Text>
