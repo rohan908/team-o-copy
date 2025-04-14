@@ -46,29 +46,90 @@ export function DraggableMap() {
         objects.push(sphere);
     };
 
-    const path = findPath(1, 4, 'BFS').then(async (res) => {
-        const ids = res.result.pathIDs;
-        for (const id of ids) {
-            const node = getNode(id).then(async (res) => {
-                createNode(res.result.nodeData);
-            });
-        }
-    });
-
-    const createEdge = (node1: Node<NodeDataType>, node2: Node<NodeDataType>) => {
-        const xStart = node1.data.x;
-        const yStart = node1.data.y;
-        const xEnd = node2.data.x;
-        const yEnd = node2.data.y;
+    const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
+        const xStart = node1.x;
+        const yStart = node1.y;
+        const xEnd = node2.x;
+        const yEnd = node2.y;
         const path = new THREE.LineCurve3(
             new THREE.Vector3(xStart, yStart, 0),
             new THREE.Vector3(xEnd, yEnd, 0)
         );
-        const geometry = new TubeGeometry(path, 20, 2, 8);
-        const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const geometry = new TubeGeometry(path, 10, 1, 4);
+        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
         const edge = new THREE.Mesh(geometry, material);
         scene.add(edge);
     };
+
+    // Generate THREEjs objects to display a path
+    /* getNode return type:
+    {
+    "result": {
+        "nodeData": {
+            "id": 1,
+            "x": 2,
+            "y": 4,
+            "floor": 1,
+            "mapId": 1,
+            "name": "hallway",
+            "description": "hallway",
+            "nodeType": "hallway",
+            "edges": []
+        },
+        "connections": [
+            {
+                "connectedId": 2,
+                "weight": 23.3452350598575
+            }
+        ],
+        "success": true
+        }
+    }
+     */
+    /* findPath return type:
+        {
+    "result": {
+        "success": true,
+        "pathIDs": [
+            1,
+            2,
+            4
+        ],
+        "distance": 43.741313114228646
+       }
+       }
+      */
+    const firstNodeId = 1;
+    const lastNodeId = 10;
+    // Get the path
+    const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
+        const ids = pathres.result.pathIDs;
+        // For each node id in the path
+        for (const id of ids) {
+            // Get the full node from the ID
+            const node = getNode(id).then(async (noderes) => {
+                createNode(noderes.result.nodeData); //Create the node from its data
+                const connectedNodeDatas = noderes.result.connections; // list of the connected nodes "connections" data including the IDs and Weights
+                for (const connectedNodeData of connectedNodeDatas) {
+                    // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
+                    const connectedNode = getNode(connectedNodeData.connectedId).then(
+                        async (connectednoderes) => {
+                            console.log(ids);
+                            console.log(connectednoderes.result.nodeData.id);
+                            if (ids.includes(connectednoderes.result.nodeData.id)) {
+                                // If the connected node is in the path
+                                // TODO: Add another check that makes it so duplicate edge objects aren't created
+                                createEdge(
+                                    noderes.result.nodeData,
+                                    connectednoderes.result.nodeData
+                                );
+                            }
+                        }
+                    );
+                }
+            });
+        }
+    });
 
     useEffect(() => {
         // Get canvas element
