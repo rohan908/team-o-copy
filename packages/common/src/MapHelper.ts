@@ -15,5 +15,5 @@ export function edgeData(node1: any, node2: any, mapId: number) {
 // helper function to calc weight between two nodes
 // for now an elevator has a weight of 5
 export function calculateWeight(node1: any, node2: any) {
-  return node1.z !== node2.z ? 5 : (Math.sqrt(Math.pow(node1.x - node2.x, 2) + Math.pow(node1.y - node2.y, 2)));
+  return node1.z !== node2.z ? 50 : (Math.sqrt(Math.pow(node1.x - node2.x, 2) + Math.pow(node1.y - node2.y, 2)));
 }
