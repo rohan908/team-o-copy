@@ -1,6 +1,7 @@
 import React from 'react';
 import {Routing} from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import { createTheme,
     MantineProvider,
     MantineColorsTuple,
@@ -97,15 +98,16 @@ const myvariantColorResolver: VariantColorsResolver = (input) => {
 const theme = createTheme({
     /** Your theme override here */
     fontSizes: {
-        xxs: rem(14),
-        xs: rem(16),
-        sm: rem(18),
-        md: rem(20),
-        lg: rem(24),
-        xl: rem(30),
+        xxs: rem(10),
+        xs: rem(12),
+        sm: rem(14),
+        md: rem(16),
+        lg: rem(18),
+        xl: rem(28),
         xxl: rem(36),
         xxxl: rem(48),
     },
+
     fontFamily: 'Roboto, sans-serif',
     headings: { fontFamily: 'Roboto slab, sans-serif' },
     colors: {
@@ -122,7 +124,7 @@ const theme = createTheme({
 function App() {
 
     return (
-          <MantineProvider theme={theme}>
+            <MantineProvider theme={theme}>
             <Routing />
         </MantineProvider>
     );

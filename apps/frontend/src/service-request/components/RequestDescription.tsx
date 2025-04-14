@@ -4,7 +4,7 @@ const RequestDescription: React.FC<TextareaProps> = (props) => {
   return (
     <Textarea
       {...props}
-      label="Additional Details:"
+      label="Additional Details"
       placeholder="Specify additional details here"
       radius="sm"
       autosize

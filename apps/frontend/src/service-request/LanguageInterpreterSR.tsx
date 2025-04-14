@@ -1,155 +1,140 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate
-import { useMantineTheme, Box, Flex, Title, Text, Stack } from '@mantine/core';
-import DateInputForm from './components/dateEntry.tsx';
-import RoomNumberInput from './components/roomEntry.tsx'
-import TimeInput from './components/timeEntry';
-import RequestDescription from "./components/requestDescription.tsx";
-import LanguageSelect from "./components/LanguageSelect.tsx";
-import SubmitButton from './components/submitButton';
-import MyTextArea from "./StyleComponents.tsx";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  Button,
+  Flex,
+  Title,
+  Paper,
+  Box,
+  useMantineTheme,
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
 import ISO6391 from 'iso-639-1';
 
+import TimeEntry from './components/TimeEntry';
+import DateInputForm from './components/DateEntry';
+import RoomNumberInput from './components/RoomEntry';
+import RequestDescription from './components/RequestDescription';
+import LanguageSelect from './components/LanguageSelect';
+
+interface RequestData {
+  language: string;
+  date: string;
+  room: string;
+  time: string;
+  description: string;
+}
+
 function Language() {
-  const [language, setLanguageName] = useState('Error');
-  const [selectedDate, setSelectedDate] = useState('');
-  const [roomNumber, setRoomNumber] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [description, setSelectedDescription] = useState('');
-  const [requestStatus, setRequestStatus] = useState('');
-  const [showRequestFeedback, setShowRequestFeedback] = useState(false);
   const theme = useMantineTheme();
-  const navigate = useNavigate();  // Initialize navigate function
+  const navigate = useNavigate();
 
+  const form = useForm<RequestData>({
+    initialValues: {
+      language: '',
+      date: '',
+      room: '',
+      time: '',
+      description: '',
+    },
+  });
 
+  const handleSubmit = async () => {
+    const RequestData = form.values;
+    const label =
+      RequestData.language === 'asl'
+        ? 'ASL (American Sign Language)'
+        : ISO6391.getName(RequestData.language);
 
-  // Getters (handlers) for child components outside of this component
-  const handleRoomChange = (room: string) => {
-    setRoomNumber(room);
-  };
-  const handleTimeChange = (time: string) => {
-    setSelectedTime(time);
-  };
-  const handleDateChange = (date: string) => {
-    setSelectedDate(date);
-  };
-  const handleDescriptionChange = (description: string) => {
-    setSelectedDescription(description);
-  }
-
-  const handleRequestSubmit = async () => {
-    if (language != "Error" && selectedDate.trim() && selectedTime.trim() && roomNumber.trim()) {
-      setRequestStatus("Request Submitted Successfully");
-
-      console.log("sending request", {
-        language,
-        selectedDate,
-        selectedTime,
-        roomNumber,
-        description,
+    try {
+      const response = await fetch('/api/languageSR', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          label,
+          selectedDate: RequestData.date,
+          selectedTime: RequestData.time,
+          roomNumber: RequestData.room,
+          description: RequestData.description,
+        }),
       });
-      const label =
-        language === 'asl' ? 'ASL (American Sign Language)' : ISO6391.getName(language);
-      try {
-        const response = await fetch('api/languageSR/', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            label,
-            selectedDate,
-            selectedTime,
-            roomNumber,
-            description,
-          }),
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Request submitted:', data);
 
-          navigate('/submission', { state: {
-              label: language === 'asl'
-                ? 'ASL (American Sign Language)'
-                : ISO6391.getName(language),
-              selectedDate,
-              selectedTime,
-              roomNumber,
-              description,
-            }
-          });
-        }
-        else {
-          console.error('Server error:', response.statusText);
-          setRequestStatus('Server error. Please try again.');
-          setShowRequestFeedback(true);
-        }
-      } catch (err) {
-        console.error('Network error:', err);
-        setRequestStatus('Network error. Please try again.');
-        setShowRequestFeedback(true);
+      if (response.ok) {
+        navigate('/submission', {
+          state: {
+            requestData: {
+              label,
+              selectedDate: RequestData.date,
+              selectedTime: RequestData.time,
+              roomNumber: RequestData.room,
+              description: RequestData.description,
+            },
+          },
+        });
       }
-    } else {
-      setRequestStatus("Error: Please fill out all required fields.");
-      setShowRequestFeedback(true);
+    } catch (error) {
+      console.error('Request failed:', error);
     }
   };
 
-
-
   return (
-    <Flex
-      w-="100%"
-      h="100%"
-      justify="center"
-      align="center"
-    >
-      <Box
-        bg="white"
-        p={{base: 'xl', sm:'2rem', md: '3rem'}}
-        w="100%"
-        maw={{base: '90%', sm:'70%', md: '750px' }}
+    <Flex justify="center" align="center" style={{ width: '100vw', padding: '2rem' }}>
+      <Paper
+        bg="gray.2"
+        p="xl"
+        shadow="xl"
+        radius="md"
         style={{
-          opacity: 0.85,
-          borderRadius: theme.radius.lg,
-          backdropFilter: 'blur(5px)',
+          width: '100%',
+          maxWidth: '1000px',
         }}
       >
-        <Title order={1} mb = "xs" c="black">Interpreter Request</Title>
-        <Text fz ="xs" mb="xs">Please fill out the following form to request for a language interpreter</Text>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Title order={2} ta="center" mb="lg">
+            Interpreter Request Form
+          </Title>
 
-        <form onSubmit={e => e.preventDefault()}>
-          <LanguageSelect value={language} setLanguageName={setLanguageName} />
-          <DateInputForm value={selectedDate} onChange={handleDateChange} />
-          <TimeInput onTimeChange={handleTimeChange} />
-          <RoomNumberInput value={roomNumber} onRoomNumberChange={handleRoomChange} />
-          <RequestDescription value={description} onChange={handleDescriptionChange} />
-          <SubmitButton
-            language={language}
-            selectedDate={selectedDate}
-            selectedTime={selectedTime}
-            roomNumber={roomNumber}
-            onClick={handleRequestSubmit}
-          />
+          <Flex gap="lg" wrap="wrap" mb="md">
+            <Box style={{ flex: 1, minWidth: '300px' }}>
+              <LanguageSelect required {...form.getInputProps('language')} />
+              <Box mt="md">
+                <DateInputForm required {...form.getInputProps('date')} />
+              </Box>
+            </Box>
 
-          <Box
-            bg='greys.1'
-            p={{base: '1rem', sm:'1rem', md: '1rem'}}
-            style={{
-              opacity: 0.85,
-              borderRadius: theme.radius.lg,
-              backdropFilter: 'blur(5px)',
-            }}>
-            <Text fz={{base: 'xxs'}}>All required fields are marked with *</Text>
+            <Box style={{ flex: 1, minWidth: '300px' }}>
+              <TimeEntry required {...form.getInputProps('time')} />
+              <Box mt="md">
+                <RoomNumberInput required {...form.getInputProps('room')} />
+              </Box>
+            </Box>
+          </Flex>
 
+          <Box mt="md">
+            <RequestDescription {...form.getInputProps('description')} />
           </Box>
+
+          <Flex mt="xl" justify="left" gap="md">
+            <Button
+              type="submit"
+              color="blueBase.5"
+              style={{ width: '200px' }}
+            >
+              Submit Request
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              color="blueBase.5"
+              style={{ width: '200px' }}
+              onClick={() => form.reset()}
+            >
+              Clear Form
+            </Button>
+          </Flex>
         </form>
-
-        {showRequestFeedback && (
-          <Box mt="lg" p="md" bg={requestStatus.startsWith("Error") ? 'red.1' : 'green.1'} c={requestStatus.startsWith("Error") ? 'red.8' : 'green.8'} style={{ borderRadius: 8 }}>
-            {requestStatus}
-          </Box>
-        )}
-      </Box>
-
+      </Paper>
     </Flex>
   );
 }

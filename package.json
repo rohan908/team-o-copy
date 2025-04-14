@@ -37,6 +37,9 @@
     "vitest": "^3.0.9"
   },
   "dependencies": {
+    "@mantine/core": "7.17.4",
+    "@mantine/dates": "^7.17.4",
+    "@mantine/hooks": "7.17.4",
     "common": "workspace:*",
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",

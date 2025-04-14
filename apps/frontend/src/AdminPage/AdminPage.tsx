@@ -3,7 +3,7 @@ import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
 import {useMantineTheme,Collapse, Button, Divider, Center } from '@mantine/core'
 import { useNavigate } from 'react-router-dom';
-import Language from "../service-request/service.tsx";
+import Language from "../service-request/LanguageInterpreterSR.tsx";
 import LanguageRequestHistory from "./LanguageRequestHistory.tsx";
 
 export function AdminPage() {

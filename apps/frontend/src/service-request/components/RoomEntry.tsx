@@ -6,8 +6,8 @@ const RoomNumberInput: React.FC<TextInputProps> = (props) => {
       {...props}
       type="text"
       inputMode="numeric"
-      placeholder="000"
-      label="Enter the room number for interpreter:"
+      placeholder="--Room Number--"
+      label="Enter Room Number"
       radius="sm"
       mb="md"
     />
