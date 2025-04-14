@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
+
 import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx';
 import {
     Box,
@@ -14,10 +16,9 @@ import {
 } from '@mantine/core';
 import * as L from 'leaflet';
 
-interface HospitalSelectBoxProps {
+interface HospitalSelectBoxProps {        //props to pass to main map Display
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
-    onCollapseChange?: (isCollapsed: boolean) => void;
     onSetUserCoordinates?: (coordinate: {lat: number, long: number}) => void;
     onSetTravelMode?: (mode: google.maps.TravelMode) => void;
 
@@ -26,12 +27,13 @@ interface HospitalSelectBoxProps {
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     const {onSelectHospital, onSelectDepartment, onCollapseChange, onSetUserCoordinates, onSetTravelMode} = props;
     const theme = useMantineTheme();
-    const [hospital, setHospital] = useState<string | null>(null);
-    const [department, setDepartment] = useState<string | null>(null);
-    const [collapsed, setCollapsed] = useState(false);
+    const [hospital, setHospital] = useState<string | null>(null); //initialize  hospital building as null
+    const [department, setDepartment] = useState<string | null>(null); //also for department
+    const [collapsed, setCollapsed] = useState(false); //select box has 2 states, collapsed and popped up
     const [departmentOptions, setDepartmentOptions] = useState<
         { value: string; label: string }[]
-    >([]);
+    >([]); //this is needed to display department options when entered a hospital
+
     const hospitalCoords = new L.LatLng(42.091846, -71.266614); //fixed hospital location, this needs to change
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
@@ -54,10 +56,6 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         setCollapsed(true);
     };
 
-    useEffect(() => {
-        onCollapseChange?.(collapsed);
-    }, [collapsed]);
-
   useEffect(() => {
     if (!input.current) return;
     autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
@@ -73,7 +71,9 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
       }
     });
   }, []);
-    useEffect(() => {
+
+
+    useEffect(() => { //for everytime user selects new hospital, departments get displayed accordingly
         if (hospital === '20 Patriot St') {
             const options = Patriot20.map((dept) => ({
                 value: dept.slug,
@@ -105,7 +105,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 display: 'flex',
                 justifyContent: 'center',
                 transition: 'all 0.4s ease-in-out',
-                paddingBottom: collapsed ? 0 : '1.5rem',
+                paddingBottom: collapsed ? 1 : '1.5rem',
+                pointerEvents: 'none',
             }}
         >
             <Box
@@ -118,6 +119,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     borderRadius: theme.radius.lg,
                     backdropFilter: 'blur(5px)',
                     boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.1)',
+                    pointerEvents: 'auto',
                 }}
             >
                 <Collapse in={!collapsed}>
@@ -212,32 +214,51 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 {collapsed && (
                     <Box
                         style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            width: '100%',
+                            position: 'fixed',
+                            zIndex: 9999,
+                            bottom: '0.5rem',
+                            pointerEvents: 'auto',
+
                         }}
                     >
-                        <Box
-                            w="100%"
-                            maw={{ base: '100%', md: '400px' }}
-                        >
-                            <Button
+                      <Flex justify="space-between" align="center" gap="md">
+
+                      <Button
                                 variant="subtle"
-                                fullWidth
                                 size="md"
                                 onClick={() => setCollapsed(false)}
                                 style={{
-                                    borderRadius: 0,
+                                    borderRadius: '50px',
                                     height: '3rem',
                                     fontWeight: 600,
                                     fontSize: '1rem',
+                                    width: 'fit-content',
                                     backgroundColor: theme.colors.gray[1],
                                     borderTop: `1px solid ${theme.colors.gray[3]}`,
                                 }}
                             >
                                 Expand Directions Menu
                             </Button>
-                        </Box>
+                      <Button
+                        color="green"
+                        size="md"
+                        fw={600}
+                        component={Link}
+                        to="/IndoorMapPage"
+                        style={{
+                          borderRadius: '50px',
+                          padding: '0.5rem 1.25rem',
+                          fontSize: '0.9rem',
+                          marginLeft: 'auto',
+                          backgroundColor: 'green',
+                          color: 'white',
+                          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                          transition: 'all 0.3s ease',
+                        }}
+                      >
+                        I've Arrived
+                      </Button>
+                      </Flex>
                     </Box>
                 )}
             </Box>

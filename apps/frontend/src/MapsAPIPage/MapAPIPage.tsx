@@ -72,45 +72,10 @@ export function MapAPIPage() {
                 }}
             >
                 <SelectBox onSelectHospital={handleSelectHospital}
-                           onCollapseChange={setIsSelectBoxCollapsed}
-                           onSetUserCoordinates={setUserCoordinates} // ← THIS IS MISSING!
+                           onSetUserCoordinates={setUserCoordinates}
                            onSetTravelMode={setTravelMode}
                 />
             </Box>
-            {isSelectBoxCollapsed && (
-                <div
-                    style={{
-                        position: 'fixed',
-                        zIndex: 9999,
-                        bottom: isMobile ? '5rem' : '0rem', // mobile vs desktop
-                        pointerEvents: 'auto',
-                        right: isMobile ? '13rem' : '5rem',
-
-                        ...(window.innerWidth <= 768 && {
-                            bottom: '4rem', // On mobile, float above SelectBox
-                        }),
-                    }}
-                >
-                    <Button
-                        color="dark"
-                        size="lg"
-                        fw={600}
-                        bg="green"
-                        component={Link}
-                        to={"/IndoorMapPage"}
-                        style={{
-                            borderRadius: '50px',
-                            padding: '0.5rem 1rem',
-                            fontSize: '0.85rem',
-                            backgroundColor: 'green',
-                            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                            transition: 'all 0.3s ease',
-                        }}
-                    >
-                        I've Arrived
-                    </Button>
-                </div>
-            )}
         </Box>
     );
 }
