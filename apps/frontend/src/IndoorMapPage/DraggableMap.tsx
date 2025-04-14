@@ -4,6 +4,7 @@ import { Box, useMantineTheme } from "@mantine/core";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from "./Components/MapEditorBox.tsx";
+import {TubeGeometry} from "three";
 
 export function DraggableMap() {
     const theme = useMantineTheme();
@@ -69,9 +70,21 @@ export function DraggableMap() {
           objects.push(sphere);
       }
 
+      // Create edge objects
+      for (let i = 0; i < 2; i++) {
+          const path = new THREE.LineCurve3(
+              new THREE.Vector3(0, 0, 0),
+              new THREE.Vector3(5, 5, 0)
+          );
+          const geometry = new TubeGeometry(path, 20, 2, 8);
+          const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+          const edge = new THREE.Mesh( geometry, material );
+          scene.add(edge);
+      }
+
       // Camera controls
       const orbitControls = new OrbitControls(camera, renderer.domElement);
-      orbitControls.enableRotate = false;
+      //orbitControls.enableRotate = false;
       orbitControls.mouseButtons = {
           LEFT: THREE.MOUSE.PAN,
           MIDDLE: THREE.MOUSE.DOLLY,
