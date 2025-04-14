@@ -3,6 +3,7 @@ import {Graph} from "./Graph.ts";
 import {PathFinder} from "./PathFinder.ts";
 import { BFSPathFinder } from "./PathFinders/BFSPathFinder.ts";
 import { AStarPathFinder } from "./PathFinders/AStarPathFinder.ts";
+import PrismaClient from "../bin/prisma-client.ts";
 
 export class NavigationService {
   protected graph: Graph<NodeDataType>;
@@ -13,6 +14,11 @@ export class NavigationService {
     this.graph = new Graph<NodeDataType>(this.nodeComparator, rootNode);
     const graphRef = () => this.graph;
     this.pathFinder = new BFSPathFinder(graphRef);
+  }
+
+  public async initialize(): Promise<void> {
+
+    const databaseNodes = await PrismaClient.node.findMany({})
   }
 
   public setPathFinderAlgo(pathAlgo: string) {
