@@ -33,7 +33,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     const [departmentOptions, setDepartmentOptions] = useState<
         { value: string; label: string }[]
     >([]); //this is needed to display department options when entered a hospital
-
+    const [userStartLocation, setUserStartLocation] = useState<{lat: number, long: number} | null>(null); // store user location input
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
     const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
@@ -55,6 +55,9 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         if (department == "pharmacy"){
           onSelectHospital(new L.LatLng(42.093429, -71.268228)); //this is fixed location for pharmacy, should route to specific parking lot
         }
+        if (userStartLocation && onSetUserCoordinates) {
+          onSetUserCoordinates(userStartLocation);
+        }
         if (navigationMethod && onSetTravelMode) {
           onSetTravelMode(navigationMethod);
         }
@@ -72,7 +75,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
           lat: location.lat(),
           long: location.lng(),
         };
-        onSetUserCoordinates?.(latlng);
+        setUserStartLocation(latlng);
       }
     });
   }, []);
@@ -123,7 +126,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
             }}
         >
             <Box
-                bg="white"
+                bg="#FFF8EB"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="100%"
                 style={{
@@ -155,7 +158,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         navigate your route efficiently.
                     </Text>
 
-                    <Divider variant="dotted" size="lg" mb="lg" />
+                    <Divider variant="dotted" size="lg" mb="lg" color="#FCB024" />
                   <Text ta="left" mb="sm" fw={500}>
                     Insert Starting Location:
                   </Text>
@@ -167,6 +170,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         Select Hospital:
                     </Text>
                     <Select
+                        color="gray"
                         placeholder="Hospital"
                         data={[
                             { value: '20 Patriot Pl', label: '20 Patriot Pl' },
@@ -183,6 +187,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         Select Department:
                     </Text>
                     <Select
+                        color="gray"
                         placeholder="Department"
                         data={departmentOptions}
                         value={department}
@@ -194,6 +199,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     Select Navigation Method:
                   </Text>
                   <Select
+                    color="gray"
                     placeholder="Navigation Method"
                     data={[
                       {value: google.maps.TravelMode.WALKING, label: 'Walking'},
@@ -211,9 +217,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     <Flex justify="flex-end" gap="md">
                         <Button
                             onClick={handleFindPath}
-                            color="dark"
                             fw="600"
-                            bg="black"
+                            color= "#001D4D"
                             style={{
                                 borderRadius: '50px',
                                 transition: 'all 0.3s ease',
