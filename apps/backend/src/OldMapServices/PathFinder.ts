@@ -1,4 +1,4 @@
-import { Coordinate, NavigationNode, PathFindingResult } from '../models/types';
+import { Coordinate, NavigationNode, PathFindingResult } from '../models/oldMapTypes.ts';
 
 export class PathFinder {
     private navigationGrid: NavigationNode[][][];

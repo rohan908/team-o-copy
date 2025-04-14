@@ -1,4 +1,4 @@
-import { FloorMap, NavigationNode } from '../models/types';
+import { FloorMap, NavigationNode } from '../models/oldMapTypes.ts';
 import { BitmapService } from './BitmapService';
 
 export class NavigationGridBuilder {

@@ -1,5 +1,5 @@
 import PrismaClient from '../bin/prisma-client';
-import { Coordinate, FloorMap, PathFindingResult, NavigationNode } from '../models/types';
+import { Coordinate, FloorMap, PathFindingResult, NavigationNode } from '../models/oldMapTypes.ts';
 import { NavigationGridBuilder } from './NavigationGridBuilder';
 import { PathFinder } from './PathFinder';
 

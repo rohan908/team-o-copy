@@ -1,112 +1,250 @@
-import {useEffect} from 'react';
+import { useEffect, useState, useRef } from 'react';
 import * as THREE from "three";
+import { Box, useMantineTheme } from "@mantine/core";
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { DragControls } from 'three/addons/controls/DragControls.js';
+import MapEditorBox from "./Components/MapEditorBox.tsx";
+import {TubeGeometry} from "three";
+import {Node} from "./MapClasses/Node.ts"
+import {findPath} from "./FindPathRouting.ts"
+import {NodeDataType} from "./MapClasses/MapTypes.ts";
 
-import {Box, useMantineTheme} from "@mantine/core";
-import Stats from "three/examples/jsm/libs/stats.module.js"
-import CustomCompass from "./CustomCompass.tsx";
-
-// Ok im going to carefully explain how this works for everyone else imiplemetning three JS
 export function DraggableMap() {
-  const theme = useMantineTheme();
-  // we use useEffect for the constant peripheral animation loop since it runs on every render seperate from the react render loop
-  useEffect(() => {
-    // we create a new scene
+    const theme = useMantineTheme();
+    const [nodeSelected, setNodeSelected] = useState(false);
+    const [nodeX, setNodeX] = useState(0);
+    const [nodeY, setNodeY] = useState(0);
+    const [floor, setNodeFloor] = useState(0);
+    const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
     const scene = new THREE.Scene();
-    // we get the canvas element
-    const canvas = document.getElementById('insideMapCanvas');
-    // if the canvas element is not found, we return
-    if (!canvas) return;
-    // we create a new renderer
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvas as HTMLCanvasElement,
-      antialias: true //makes objects look smooth
-    });
-    // we set the size of the renderer to the size of the canvas (this is decided by the size of the box component as seen below)
-    renderer.setSize(canvas!.clientWidth, canvas!.clientHeight);
-    // we set the pixel ratio of the renderer to the device pixel ratio
-    renderer.setPixelRatio(window.devicePixelRatio);
+    const objects: THREE.Object3D[] = [];
+    objects.push(new THREE.Object3D());
 
-    // This creates a perspective camera that is used for 3D viewing, so we can manipulate this in the future for 3D instead of the current 2D
-    const camera = new THREE.PerspectiveCamera(
-      50, //FOV
-      canvas!.clientWidth / canvas!.clientHeight, //aspect ratio
-      1, //near clipping plane (sets the closest objects that will render to the camera)
-      1000 //far clipping plane
-    );
-    camera.position.set(0, 0, 300);
+    // updates the selected node position from UI
+    const updateNodePosition = (x: number, y: number, floor: number) => {
+        setNodeX(x);
+        setNodeY(y);
+        if(selectedObject.current) {
+            selectedObject.current.position.x = x;
+            selectedObject.current.position.y = y;
+            console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
+        }
+    }
 
-    const compass : CustomCompass = new CustomCompass(camera, renderer, {
-      maxZoom: 200, //sets the maximum zoom level 
-      minZoom: 400, //sets the minimum zoom level
-      step: 0.04 //sets the step size for the zoom
-    });
-    compass.setAllEvents();
+    const path = findPath(1, 4, "BFS")
+    console.log(path);
+
+    // Because THREEjs object IDs are readonly we should probably create and maintain a list that associates the THREEjs object ids with the backed node ids.
+    const nodeIds: [number, number][] = [];
+
+    const createNode = (node: Node<NodeDataType>) => {
+        const geometry = new THREE.SphereGeometry(2, 12, 6);
+        const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const sphere = new THREE.Mesh(geometry, material);
+        nodeIds.push([node.data.id, sphere.id]);
+        sphere.position.x = node.data.x;
+        sphere.position.y = node.data.y;
+        scene.add(sphere);
+        objects.push(sphere);
+    }
+
+    const createEdge = (node1: Node<NodeDataType>, node2: Node<NodeDataType>) => {
+        const xStart = node1.data.x;
+        const yStart = node1.data.y;
+        const xEnd = node2.data.x;
+        const yEnd = node2.data.y;
+        const path = new THREE.LineCurve3(
+            new THREE.Vector3(xStart, yStart, 0),
+            new THREE.Vector3(xEnd, yEnd, 0)
+        );
+        const geometry = new TubeGeometry(path, 20, 2, 8);
+        const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        const edge = new THREE.Mesh( geometry, material );
+        scene.add(edge);
+    }
+
+  useEffect(() => {
+      // Get canvas element
+      const canvas = document.getElementById('insideMapCanvas');
+      // if the canvas element is not found, we return
+      if (!canvas) return;
 
 
-    scene.background = new THREE.Color(theme.colors.terquAccet[8]);
-    // Taken from https://github.com/lo-th/Oimo.js/blob/dc745bb86c25767b2df59dee4b63c16bf86c3171/examples/test_basic.html
-    // background
-    /*
-    const backGeometry = new THREE.IcosahedronGeometry(3000,2)
-    const back = new THREE.Mesh( backGeometry, new THREE.MeshBasicMaterial( { map:gradTexture([[0.75,0.6,0.4,0.25], [theme.colors.terquAccet[9],theme.colors.terquAccet[8],theme.colors.terquAccet[7], theme.colors.terquAccet[6]]]), side:THREE.BackSide, depthWrite: false, fog:false }  ));
-    //back.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(15*ToRad));
-    scene.add( back );
-     */
 
-    /* toy box for testing
-    const boxGeo = new THREE.BoxGeometry(16, 16, 16);
-    const boxMat = new THREE.MeshNormalMaterial();
-    const boxMesh = new THREE.Mesh(boxGeo, boxMat);
-    scene.add(boxMesh);
-    */
+      // we create a new renderer
+      const renderer = new THREE.WebGLRenderer({
+          canvas: canvas as HTMLCanvasElement,
+          antialias: true, //makes objects look smooth
+      });
+      renderer.setSize(canvas!.clientWidth, canvas!.clientHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
 
-    const mapTexture = new THREE.TextureLoader().load("/public/MapImages/OutsideMap.png");
-    const mapGeo = new THREE.PlaneGeometry(500, 400);
-    const mapMaterial = new THREE.MeshBasicMaterial({map: mapTexture});
-    const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
-    mapPlane.position.set(0, 0, 0);
-    scene.add(mapPlane);
+      // Create camera
+      const camera = new THREE.PerspectiveCamera(
+          45,
+          canvas.clientWidth / canvas.clientHeight,
+          1,
+          10000
+      );
+      camera.position.set(0, 0, 300);
 
-    //you can get rid of this later but its for debugging to see that im not eating a huge amount into the browser lol, shows stats in the top left
-    /*const stats = Stats();
-    document.body.appendChild(stats.domElement); */
+      // Setup map plane
+      const mapTexture = new THREE.TextureLoader().load('/public/MapImages/OutsideMap.png');
+      const mapGeo = new THREE.PlaneGeometry(500, 400);
+      const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
+      const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
+      mapPlane.position.set(0, 0, 0);
+      scene.add(mapPlane);
 
-    const animate = () => {
-      /*
-      boxMesh.rotation.x += 0.01;
-      boxMesh.rotation.y += 0.01;
-      */
+      // Camera controls
+      const orbitControls = new OrbitControls(camera, renderer.domElement);
+      //orbitControls.enableRotate = false;
+      orbitControls.mouseButtons = {
+          LEFT: THREE.MOUSE.PAN,
+          MIDDLE: THREE.MOUSE.DOLLY,
+          RIGHT: THREE.MOUSE.ROTATE,
+      };
 
-      //stats.update();
-      renderer.render(scene, camera);
-      window.requestAnimationFrame(animate);
-    };
-    animate();
+      // Initialize dragControls with an empty array
+      let draggableObjects: THREE.Object3D[] = [];
+      let dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
 
+      // Set up drag control event listeners
+      dragControls.addEventListener('dragstart', function () {
+          orbitControls.enabled = false;
+      });
+
+      dragControls.addEventListener('dragend', function () {
+          setTimeout(() => {
+              orbitControls.enabled = true;
+          }, 10);
+      });
+
+      // Function to update draggable objects to make sure only selected objects can be dragged
+      const updateDraggableObjects = () => {
+          // Dispose of the old dragControls
+          dragControls.dispose();
+          // Create a new array with only the selected object (if any)
+          draggableObjects = [];
+          if (selectedObject.current) {
+              draggableObjects.push(selectedObject.current);
+          }
+          // new dragControls with the updated array
+          dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
+          // Event listeners that enable camera movement
+          dragControls.addEventListener('dragstart', function () {
+              orbitControls.enabled = false;
+          });
+          dragControls.addEventListener('dragend', function () {
+              setTimeout(() => {
+                  orbitControls.enabled = true;
+              }, 10);
+          })
+      }
+
+      // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+
+      window.addEventListener('click', (event) => {
+          // Get canvas bounds
+          if (canvas) {
+              const rect = canvas.getBoundingClientRect();
+              // Calculate pointer position in normalized device coordinates
+              // (-1 to +1) for both components
+              pointer.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+              pointer.y = -((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+              raycaster.setFromCamera(pointer, camera);
+              // calculate objects intersecting the picking ray
+              const intersects = raycaster.intersectObjects(objects);
+              if (intersects.length > 0) {
+                  const intersect = intersects[0]; // grab the first intersected object
+
+                  /*
+                  This structure handles selecting objects.
+                  It could probably use some proper handler functions, but it works for now.
+                   */
+
+                  // if there is no selected object or the clicked on object is not selected
+                  if (selectedObject.current === null || selectedObject.current !== intersect.object) {
+                      // if there is another selected object
+                    if(selectedObject.current !== intersect.object) {
+                      if (selectedObject.current instanceof THREE.Mesh &&
+                          selectedObject.current.material instanceof THREE.MeshBasicMaterial
+                      ) {
+                        selectedObject.current.material.color.set(0xffff00); //set the already selected object back to it's non-selected color
+                      }
+                    }
+                    selectedObject.current = intersect.object; // switch selected object to the clicked on object
+                    setNodeSelected(true);
+                    // set the color of the clicked on objet to the it's selected color
+                    if (selectedObject.current instanceof THREE.Mesh &&
+                        selectedObject.current.material instanceof THREE.MeshBasicMaterial
+                    ) {
+                      selectedObject.current.material.color.set(0x000000);
+                    }
+                  }
+                  // The clicked on object is already selected (deselection when clicking on an already selected object)
+                  else {
+                      // set the color of the clicked on object to it's non-selected color
+                      if (selectedObject.current instanceof THREE.Mesh &&
+                          selectedObject.current.material instanceof THREE.MeshBasicMaterial
+                      ) {
+                        selectedObject.current.material.color.set(0xffff00);
+                      }
+                      // clear the selected object
+                      selectedObject.current = null;
+                      setNodeSelected(false);
+                  }
+                  updateDraggableObjects();
+              }
+          }
+      });
+
+      // Safety net for edge cases
+      const handleMouseUp = () => {
+          setTimeout(() => {
+              orbitControls.enabled = true;
+          }, 10);
+      };
+
+      const handleMouseLeave = () => {
+          setTimeout(() => {
+              orbitControls.enabled = true;
+          }, 10);
+      };
+
+      window.addEventListener('mouseup', handleMouseUp);
+
+      renderer.domElement.addEventListener('mouseleave', handleMouseLeave);
+
+      const animate = () => {
+          if(selectedObject.current){
+              // selected object use state position for passing to UI
+              setNodeX(selectedObject.current.position.x);
+              setNodeY(selectedObject.current.position.y);
+              setNodeFloor(1); //TODO: Setup floor handling with floor switcher, may not want this functionality at all.
+          }
+
+          renderer.render(scene, camera);
+          window.requestAnimationFrame(animate);
+      };
+      animate();
   }, []);
 
   return (
     <Box w="100vw" h="100vh" p={0}>
+        <MapEditorBox
+            // Pass selected node data to the ui
+            nodeSelected={nodeSelected}
+            nodeX={nodeX}
+            nodeY={nodeY}
+            floor={floor}
+
+            // handle updating the node position from ui
+            updateNodePosition={updateNodePosition}
+        />
       <canvas id="insideMapCanvas" style={{width: "100%", height: "100%", position: "absolute"}}/>
     </Box>
-  )
-
+  );
 }
-
-/* unable to debug this rn...
-    // Taken from https://github.com/lo-th/Oimo.js/blob/dc745bb86c25767b2df59dee4b63c16bf86c3171/examples/test_basic.html
-function gradTexture(color : [number[], string[]]) {
-  const c = document.createElement("canvas");
-  const ct = c.getContext("2d");
-  const size = 1024;
-  c.width = 16; c.height = size;
-  const gradient = ct!.createLinearGradient(0,0,0,size);
-  let  i = color[0].length;
-  while(i--){ gradient.addColorStop(color[0][i],color[1][i]); }
-  ct!.fillStyle = gradient;
-  ct!.fillRect(0,0,16,size);
-  const texture = new THREE.CanvasTexture(c);
-  texture.needsUpdate = true;
-  return texture;
-}
-*/
