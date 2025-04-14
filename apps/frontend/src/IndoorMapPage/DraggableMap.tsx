@@ -5,6 +5,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from "./Components/MapEditorBox.tsx";
 import {TubeGeometry} from "three";
+import {Node} from "./MapClasses/Node.ts"
+import {findPath} from "./FindPathRouting.ts"
+import {NodeDataType} from "./MapClasses/MapTypes.ts";
 
 export function DraggableMap() {
     const theme = useMantineTheme();
@@ -28,18 +31,35 @@ export function DraggableMap() {
         }
     }
 
-    const createNode = (x: number, y: number, floor: number) => {
+    //const path = findPath()
+
+    // Because THREEjs object IDs are readonly we should probably create and maintain a list that associates the THREEjs object ids with the backed node ids.
+    const nodeIds: [number, number][] = [];
+
+    const createNode = (node: Node<NodeDataType>) => {
         const geometry = new THREE.SphereGeometry(2, 12, 6);
         const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
         const sphere = new THREE.Mesh(geometry, material);
-        sphere.position.x = x;
-        sphere.position.y = y;
+        nodeIds.push([node.data.id, sphere.id]);
+        sphere.position.x = node.data.x;
+        sphere.position.y = node.data.y;
         scene.add(sphere);
         objects.push(sphere);
     }
 
-    const createEdge = (node1: Node, node2: Node) => {
-
+    const createEdge = (node1: Node<NodeDataType>, node2: Node<NodeDataType>) => {
+        const xStart = node1.data.x;
+        const yStart = node1.data.y;
+        const xEnd = node2.data.x;
+        const yEnd = node2.data.y;
+        const path = new THREE.LineCurve3(
+            new THREE.Vector3(xStart, yStart, 0),
+            new THREE.Vector3(xEnd, yEnd, 0)
+        );
+        const geometry = new TubeGeometry(path, 20, 2, 8);
+        const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        const edge = new THREE.Mesh( geometry, material );
+        scene.add(edge);
     }
 
   useEffect(() => {
@@ -74,21 +94,6 @@ export function DraggableMap() {
       const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
       mapPlane.position.set(0, 0, 0);
       scene.add(mapPlane);
-
-      // Create node objects
-      createNode(5, 5, 1)
-
-      // Create edge objects
-      for (let i = 0; i < 2; i++) {
-          const path = new THREE.LineCurve3(
-              new THREE.Vector3(0, 0, 0),
-              new THREE.Vector3(5, 5, 0)
-          );
-          const geometry = new TubeGeometry(path, 20, 2, 8);
-          const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-          const edge = new THREE.Mesh( geometry, material );
-          scene.add(edge);
-      }
 
       // Camera controls
       const orbitControls = new OrbitControls(camera, renderer.domElement);
