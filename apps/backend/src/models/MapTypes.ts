@@ -1,24 +1,22 @@
-import {Node} from "../GraphMapClasses/Node.ts";
+import { Node } from '../GraphMapClasses/Node.ts';
 
 export interface NodeDataType {
-  x: number;
-  y: number;
-  floor: number;
-  nodeType: string;
-  name?: string;
-  id: number;
-  description?: string;
+    x: number;
+    y: number;
+    floor: number;
+    nodeType: string;
+    name?: string;
+    id: number;
+    description?: string;
 }
 
-export interface ConnectingNode<T extends {id : number}> {
-  destination: Node<T>;
-  weight: number;
+export interface ConnectingNode<T extends { id: number }> {
+    destination: Node<T>;
+    weight: number;
 }
 
 export interface PathFinderResult {
-  pathIDs: number[];
-  distance: number; //summation of the weights
-  success?: boolean;
+    pathIDs: number[];
+    distance: number; //summation of the weights
+    success?: boolean;
 }
-
-

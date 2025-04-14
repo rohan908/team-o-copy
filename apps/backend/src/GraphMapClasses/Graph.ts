@@ -4,12 +4,9 @@ import { ConnectingNode } from '../models/MapTypes.ts';
 export class Graph<T extends { id: number }> {
     nodes: Map<number, Node<T>> = new Map<number, Node<T>>(); //maps the node ids to the nodes, change from previous version that mapped NodeDataType
     comparator: (a: T, b: T) => number;
-    root: Node<T>;
 
-    constructor(comparator: (a: T, b: T) => number, data: T) {
+    constructor(comparator: (a: T, b: T) => number) {
         this.comparator = comparator;
-        this.root = new Node<T>(data, comparator);
-        this.nodes.set(data.id, this.root);
     }
 
     /**
