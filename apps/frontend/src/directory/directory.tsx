@@ -16,8 +16,8 @@ type DirectoryLink = {
 
 export function Directory() {
     // starting state is empty array
-    const [Patriot20, setPatriot20] = useState<any[]>([]);
-    const [Patriot22, setPatriot22] = useState<any[]>([]);
+    const [Patriot20, setPatriot20] = useState<[]>([]);
+    const [Patriot22, setPatriot22] = useState<[]>([]);
 
     const [linkedPatriot20, setPatriot20Links] = useState<DirectoryLink[]>([]);
     const [linkedPatriot22, setPatriot22Links] = useState<DirectoryLink[]>([]);

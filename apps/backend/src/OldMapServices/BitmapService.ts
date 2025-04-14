@@ -1,4 +1,4 @@
-import { FloorMap } from '../models/types';
+import { FloorMap } from '../models/oldMapTypes.ts';
 
 export class BitmapService {
     /**
