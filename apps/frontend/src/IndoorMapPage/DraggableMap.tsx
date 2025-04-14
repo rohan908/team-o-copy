@@ -21,6 +21,14 @@ export function DraggableMap() {
     const objects: THREE.Object3D[] = [];
     objects.push(new THREE.Object3D());
 
+    // Parameters for THREEjs objects and path display
+    const firstNodeId = 1; // start node
+    const lastNodeId = 10; // destination node
+    const nodeColor = { color: 0xffff00 };
+    const edgeColor = { color: 0xff0000 };
+    const nodeRadius = 2;
+    const edgeRadius = 1.5;
+
     // updates the selected node position from UI
     const updateNodePosition = (x: number, y: number, floor: number) => {
         setNodeX(x);
@@ -36,8 +44,12 @@ export function DraggableMap() {
     const nodeIds: [number, number][] = [];
 
     const createNode = (node: NodeDataType) => {
-        const geometry = new THREE.SphereGeometry(2, 12, 6);
-        const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const geometry = new THREE.SphereGeometry(
+            nodeRadius,
+            Math.round(nodeRadius * 6), // Vibe based adaptive segmentation
+            Math.round(nodeRadius * 3)
+        );
+        const material = new THREE.MeshBasicMaterial(nodeColor);
         const sphere = new THREE.Mesh(geometry, material);
         nodeIds.push([node.id, sphere.id]);
         sphere.position.x = node.x;
@@ -55,8 +67,8 @@ export function DraggableMap() {
             new THREE.Vector3(xStart, yStart, 0),
             new THREE.Vector3(xEnd, yEnd, 0)
         );
-        const geometry = new TubeGeometry(path, 10, 1, 4);
-        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const geometry = new TubeGeometry(path, 1, edgeRadius, Math.round(edgeRadius * 4));
+        const material = new THREE.MeshBasicMaterial(edgeColor);
         const edge = new THREE.Mesh(geometry, material);
         scene.add(edge);
     };
@@ -99,8 +111,6 @@ export function DraggableMap() {
        }
        }
       */
-    const firstNodeId = 1;
-    const lastNodeId = 10;
     // Get the path
     const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
         const ids = pathres.result.pathIDs;
@@ -114,8 +124,6 @@ export function DraggableMap() {
                     // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
                     const connectedNode = getNode(connectedNodeData.connectedId).then(
                         async (connectednoderes) => {
-                            console.log(ids);
-                            console.log(connectednoderes.result.nodeData.id);
                             if (ids.includes(connectednoderes.result.nodeData.id)) {
                                 // If the connected node is in the path
                                 // TODO: Add another check that makes it so duplicate edge objects aren't created
