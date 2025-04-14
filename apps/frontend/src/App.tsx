@@ -1,7 +1,7 @@
 import React from 'react';
 import {Routing} from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
-import CreateDirectoryArraysForFrontend from "./directory/components/DirData.tsx";
+
 
 import { createTheme,
     MantineProvider,
@@ -125,7 +125,6 @@ function App() {
 
     return (
         <MantineProvider theme={theme}>
-            <CreateDirectoryArraysForFrontend />
             <Routing />
         </MantineProvider>
     );

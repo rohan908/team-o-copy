@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import BuildingBox from "./components/BuildingBox";
 import { Patriot20, Patriot22 } from './components/DirData';
 import CreateDirectoryArraysForFrontend from "./components/DirData";
