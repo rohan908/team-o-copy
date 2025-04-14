@@ -1,4 +1,4 @@
-import { Node } from '../GraphMapClasses/Node.ts';
+import { Node } from './Node.ts';
 
 export interface NodeDataType {
     x: number;
