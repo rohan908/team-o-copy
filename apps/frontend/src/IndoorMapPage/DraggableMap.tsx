@@ -169,8 +169,23 @@ export function DraggableMap() {
         const camera = new THREE.PerspectiveCamera(50, 1920 / 1080, 250, 1000);
         camera.position.set(0, 0, 300);
 
+        // Load floor-specific map image
+        let texturePath: string = '';
+        if (floor === 1) {
+            texturePath = '../../public/MapImages/Patriot Place Floor 1.png';
+        }
+        if (floor === 3) {
+            texturePath = '../../public/MapImages/Patriot Place Floor 3.png';
+        }
+        if (floor === 4) {
+            texturePath = '../../public/MapImages/Patriot Place Floor 4.png';
+        }
+        if (floor === 5) {
+            texturePath = '../../public/MapImages/Chestnut Hill Floor 1.png';
+        }
+
         // Setup map plane
-        const mapTexture = new THREE.TextureLoader().load('/public/MapImages/OutsideMap.png');
+        const mapTexture = new THREE.TextureLoader().load(texturePath);
         mapTexture.colorSpace = THREE.SRGBColorSpace;
         const mapGeo = new THREE.PlaneGeometry(500, 400);
         const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
@@ -188,21 +203,6 @@ export function DraggableMap() {
             MIDDLE: THREE.MOUSE.DOLLY,
             RIGHT: THREE.MOUSE.ROTATE,
         };
-
-        // Load floor-specific map image
-        let texturePath: string = '';
-        if (floor === 1) {
-            texturePath = './MapImages/Patriot Place Floor 1.png';
-        }
-        if (floor === 3) {
-            texturePath = './MapImages/Patriot Place Floor 3.png';
-        }
-        if (floor === 4) {
-            texturePath = './MapImages/Patriot Place Floor 4.png';
-        }
-        if (floor === 5) {
-            texturePath = './MapImages/Chestnut Hill Floor 1.png';
-        }
 
         // Optional: Add extra stuff per floor
         /*
