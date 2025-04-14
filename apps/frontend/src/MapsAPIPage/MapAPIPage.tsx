@@ -4,7 +4,7 @@ import { Box, Button } from '@mantine/core';
 import * as L from 'leaflet';
 import SelectBox from './SelectBox.tsx';
 import GoogleMapsAPI from "./GoogleMapsAPI.tsx";
-import {LoadScript} from "@react-google-maps/api";
+import {useJsApiLoader } from "@react-google-maps/api"; //this is better than LoadScript
 
 import { useMediaQuery } from '@mantine/hooks';
 import {Link} from "react-router-dom";
@@ -16,15 +16,21 @@ export function MapAPIPage() {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [userCoordinates, setUserCoordinates] = useState<{ lat: number; long: number } | null>(null);
 
+    const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+      // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
 
-  const handleSelectHospital = (coord: L.LatLng) => {
+      libraries: ['places'], //required for location autocomplete in textbox
+  });
+
+    const handleSelectHospital = (coord: L.LatLng) => {
         setSelectedHospital(coord);
     };
+    if (!isLoaded) {
+    return <div>Loading Google Maps...</div>; //debugmap
+  }
 
     return (
-      <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} //APIProvider component requires a key,
-        // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
-                  libraries={['places']}> {/* required for location autocomplete in textbox*/}
         <Box
             style={{
                 position: 'relative',
@@ -96,7 +102,6 @@ export function MapAPIPage() {
                 </div>
             )}
         </Box>
-        </LoadScript>
     );
 }
 

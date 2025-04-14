@@ -31,6 +31,10 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
             (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) {
                     directionsRendererRef.current.setDirections(result)
+                    const newSteps = result.routes[0].legs[0].steps.map(
+                        (step) => step.instructions
+                    );
+                    setSteps(newSteps);
                 }
                 else{
                     console.error("Routing failed:", status);
@@ -39,16 +43,47 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
         )
     }, [userCoordinate, selectedHospital]);
 
-    return(
-      <Box style={{position: 'relative', width: '100%', height: '100%'}} >
-      <GoogleMap
-        mapContainerStyle={{ width: '100%', height: '100%' }}
-        zoom={10}
-        center={selectedHospital ?? { lat: 42.093429, lng: -71.268228 }}
-        onLoad={handleMapLoad}
-      />
-    </Box>
-  )
+    return (
+        <>
+            <Box style={{ position: 'relative', width: '100%', height: '100%' }}>
+                <GoogleMap
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    zoom={10}
+                    center={selectedHospital ?? { lat: 42.093429, lng: -71.268228 }}
+                    onLoad={handleMapLoad}
+                />
+            </Box>
+
+            {steps.length > 0 && (
+                <Box
+                    style={{
+                        position: 'absolute',
+                        top: '3rem',
+                        right: '2rem',
+                        maxHeight: '500px',
+                        width: '300px',
+                        overflowY: 'auto',
+                        backgroundColor: 'white',
+                        padding: '1rem',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                        zIndex: 9999,
+                    }}
+                >
+                    <strong>Directions:</strong>
+                    <ol style={{ paddingLeft: '1.2rem', marginTop: '0.5rem' }}>
+                        {steps.map((step, index) => (
+                            <li
+                                key={index}
+                                dangerouslySetInnerHTML={{ __html: step }}
+                                style={{ marginBottom: '0.5rem' }}
+                            />
+                        ))}
+                    </ol>
+                </Box>
+            )}
+        </>
+    );
 }
 
 export default GoogleMapsAPI;
