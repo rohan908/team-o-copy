@@ -7,7 +7,6 @@ import GoogleMapsAPI from "./GoogleMapsAPI.tsx";
 import {useJsApiLoader } from "@react-google-maps/api"; //this is better than LoadScript
 
 import { useMediaQuery } from '@mantine/hooks';
-import {Link} from "react-router-dom";
 
 export function MapAPIPage() {
     // Store hospital coordinate from the user

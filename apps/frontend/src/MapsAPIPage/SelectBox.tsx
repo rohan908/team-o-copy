@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
 
-import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx';
+import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx'; //this is now static lol
 import {
     Box,
     Text,
@@ -25,7 +25,7 @@ interface HospitalSelectBoxProps {        //props to pass to main map Display
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
-    const {onSelectHospital, onSelectDepartment, onCollapseChange, onSetUserCoordinates, onSetTravelMode} = props;
+    const {onSelectHospital, onSelectDepartment, onSetUserCoordinates, onSetTravelMode} = props;
     const theme = useMantineTheme();
     const [hospital, setHospital] = useState<string | null>(null); //initialize  hospital building as null
     const [department, setDepartment] = useState<string | null>(null); //also for department
@@ -34,21 +34,26 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         { value: string; label: string }[]
     >([]); //this is needed to display department options when entered a hospital
 
-    const hospitalCoords = new L.LatLng(42.091846, -71.266614); //fixed hospital location, this needs to change
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
     const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
 
 
   const handleFindPath = () => {
-        if (hospital) {
-            onSelectHospital(hospitalCoords);
+        if (hospital == "Chestnut Hill") {
+            onSelectHospital(new L.LatLng(42.32624893122403, -71.14948990068949));
+        }
+        else if(hospital =="20 Patriot Pl"){
+          onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
+        }
+        else if(hospital =="22 Patriot Pl"){
+          onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
         }
         if (department && onSelectDepartment) {
             onSelectDepartment(department);
         }
         if (department == "pharmacy"){
-          onSelectHospital(new L.LatLng(42.093429, -71.268228));
+          onSelectHospital(new L.LatLng(42.093429, -71.268228)); //this is fixed location for pharmacy, should route to specific parking lot
         }
         if (navigationMethod && onSetTravelMode) {
           onSetTravelMode(navigationMethod);
@@ -56,7 +61,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         setCollapsed(true);
     };
 
-  useEffect(() => {
+  useEffect(() => { //use effect to render google autocomplete
     if (!input.current) return;
     autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
     autocompleteRef.current.addListener("place_changed", () => {
@@ -74,13 +79,13 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
 
 
     useEffect(() => { //for everytime user selects new hospital, departments get displayed accordingly
-        if (hospital === '20 Patriot St') {
+        if (hospital === '20 Patriot Pl') {
             const options = Patriot20.map((dept) => ({
                 value: dept.slug,
                 label: dept.title,
             }));
             setDepartmentOptions(options);
-        } else if (hospital === '22 Patriot St') {
+        } else if (hospital === '22 Patriot Pl') {
             const options = Patriot22.map((dept) => ({
                 value: dept.slug,
                 label: dept.title,
@@ -156,8 +161,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     <Select
                         placeholder="Hospital"
                         data={[
-                            { value: '20 Patriot St', label: '20 Patriot St' },
-                            { value: '22 Patriot St', label: '22 Patriot St' },
+                            { value: '20 Patriot Pl', label: '20 Patriot Pl' },
+                            { value: '22 Patriot Pl', label: '22 Patriot Pl' },
                             { value: 'Chestnut Hill', label: 'Chestnut Hill' },
 
                         ]}
