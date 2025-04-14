@@ -69,9 +69,9 @@ const findPathHandler: RequestHandler<
             });
             return; // Return void
         }
-        res.json({
-            result,
-        });
+
+        res.send({ result });
+
         return; // Return void explicitly
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
