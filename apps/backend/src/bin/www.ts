@@ -2,7 +2,7 @@ import app from '../app.ts';
 import http from 'http';
 import { AddressInfo } from 'net';
 import { createHttpTerminator } from 'http-terminator';
-import { BitmapLoaderService } from '../services/BitmapLoaderService';
+import { BitmapLoaderService } from '../OldMapServices/BitmapLoaderService';
 import { exportToCSV } from '../directoryBackup/ExportToCSV.ts';
 
 // Attempt a database connection
@@ -15,13 +15,6 @@ try {
     exportToCSV();
 
     console.log('Successfully connected to the database');
-
-    // Load bitmap files into the database after connection
-    const bitmapLoader = new BitmapLoaderService();
-    bitmapLoader
-        .loadBitmaps()
-        .then(() => console.log('Floor maps loaded successfully'))
-        .catch((error) => console.error('Failed to load floor maps:', error));
 } catch (error) {
     // Log any errors
     console.error(`Unable to establish database connection:
