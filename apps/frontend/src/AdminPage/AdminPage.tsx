@@ -23,7 +23,7 @@ export function AdminPage() {
                 padding: '2rem',
             }}
         >
-            <div className="max-w-4xl mx-auto bg-white/90 p-4 sm:p-6 md:p-10 rounded-xl shadow-lg backdrop-b lur-sm">
+            <div className="max-w-4xl mx-auto bg-[#FDF0D5]/90 p-4 sm:p-6 md:p-10 rounded-xl shadow-lg backdrop-b lur-sm">
                 <Title order={1} className="mb-4 text-center" fw={600}>
                     Admin Page
                 </Title>
@@ -56,8 +56,8 @@ export function AdminPage() {
                 <Divider
                     my="md"
                     size="sm"
-                    color="#153A90"
-                    className="border-t border-dotted border-#153A90"
+                    color="#FCB024"
+                    className="border-t border-dotted border-#FCB024"
                 />
                 <br />
                 {/* CSV Import/Export Controls */}
@@ -67,14 +67,14 @@ export function AdminPage() {
                 <Center mt="md">
                     <Button
                         variant="outline"
-                        color="#153A90"
+                        color="#FCB024"
                         onClick={() => setShowPreview((prev) => !prev)}
                         className="nav-element hover-shadow"
                         size="md"
                         styles={{
                             root: {
                                 color: '#153A90',
-                                boderColor: 'black',
+                                borderColor: '#153A90',
                                 backgroundColor: 'transparent',
                             },
                         }}
