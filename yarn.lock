@@ -1722,7 +1722,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/google.maps@npm:3.58.1":
+"@types/google.maps@npm:3.58.1, @types/google.maps@npm:^3.58.1":
   version: 3.58.1
   resolution: "@types/google.maps@npm:3.58.1"
   checksum: 10c0/0247c61d2aeb216d04ab9392602ef41d58328c6336ed4e9a4e9e69834002e82c116a34def2bf4ceb31c4292f14899815058da4bb8d803147295c6b47c1162621
@@ -2931,7 +2931,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camera-controls@npm:^2.10.1":
+"camera-controls@npm:^2.10.1, camera-controls@npm:^2.9.0":
   version: 2.10.1
   resolution: "camera-controls@npm:2.10.1"
   peerDependencies:
@@ -7216,6 +7216,7 @@ __metadata:
     "@react-three/drei": "npm:^10.0.6"
     "@react-three/fiber": "npm:^9.1.2"
     "@types/cors": "npm:^2"
+    "@types/google.maps": "npm:^3.58.1"
     "@types/multer": "npm:^1"
     "@types/node": "npm:^22.14.0"
     "@types/papaparse": "npm:^5.3.15"

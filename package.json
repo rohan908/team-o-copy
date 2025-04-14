@@ -50,8 +50,8 @@
     "multer": "^1.4.5-lts.2",
     "papaparse": "^5.5.2",
     "tailwindcss": "^4.1.0",
-    "workspace": "^0.0.1-preview.2",
-    "three": "^0.175.0"
+    "three": "^0.175.0",
+    "workspace": "^0.0.1-preview.2"
   },
   "resolutions": {
     "dotenv": "^16.4.7",

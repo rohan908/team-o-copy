@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import * as THREE from 'three';
-import FloorSwitchBox from "./components/FloorManagerBox.tsx";
 import { Box, useMantineTheme } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
@@ -10,13 +9,14 @@ import { Node } from './MapClasses/Node.ts';
 import { findPath } from './FindPathRouting.ts';
 import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
+import FloorSwitchBox from './components/FloorManagerBox.tsx';
 
 export function DraggableMap() {
     const theme = useMantineTheme();
     const [nodeSelected, setNodeSelected] = useState(false);
     const [nodeX, setNodeX] = useState(0);
     const [nodeY, setNodeY] = useState(0);
-    const [floor, setNodeFloor] = useState(1);
+    const [floor, setFloor] = useState(1);
     const [isFading, setIsFading] = useState(false);
     const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
     const scene = new THREE.Scene();
@@ -73,6 +73,17 @@ export function DraggableMap() {
         const material = new THREE.MeshBasicMaterial(edgeColor);
         const edge = new THREE.Mesh(geometry, material);
         scene.add(edge);
+    };
+
+    const handleFloorChange = (newFloor: number) => {
+        if (newFloor === floor) return;
+        setIsFading(true);
+        setTimeout(() => {
+            setFloor(newFloor);
+            setTimeout(() => {
+                setIsFading(false);
+            }, 200); // Fade-in duration
+        }, 200); // Fade-out duration
     };
 
     // Generate THREEjs objects to display a path
@@ -144,31 +155,30 @@ export function DraggableMap() {
     useEffect(() => {
         // Get canvas element
         const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
+        if (!canvas) return;
 
         // we create a new renderer
         const renderer = new THREE.WebGLRenderer({
             canvas: canvas as HTMLCanvasElement,
-            antialias: true
-      
-          });
-          renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-          renderer.setPixelRatio(window.devicePixelRatio);
+            antialias: true,
+        });
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
 
         // Create camera
         const camera = new THREE.PerspectiveCamera(50, 1920 / 1080, 250, 1000);
         camera.position.set(0, 0, 300);
-    
 
         // Setup map plane
         const mapTexture = new THREE.TextureLoader().load('/public/MapImages/OutsideMap.png');
+        mapTexture.colorSpace = THREE.SRGBColorSpace;
         const mapGeo = new THREE.PlaneGeometry(500, 400);
         const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
         const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
         mapPlane.position.set(0, 0, 0);
         scene.add(mapPlane);
 
-        scene.background = new THREE.Color("#2FBCC7")
+        scene.background = new THREE.Color('#2FBCC7');
 
         // Camera controls
         const orbitControls = new OrbitControls(camera, renderer.domElement);
@@ -180,30 +190,22 @@ export function DraggableMap() {
         };
 
         // Load floor-specific map image
-    let texturePath: string = ""
-    if(floor === 1){
-    texturePath = "./MapImages/Patriot Place Floor 1.png"
-    }
-    if(floor === 3){
-      texturePath = "./MapImages/Patriot Place Floor 3.png"
-    }
-    if(floor === 4){
-      texturePath = "./MapImages/Patriot Place Floor 4.png"
-    }
-    if(floor === 5){
-      texturePath = "./MapImages/Chestnut Hill Floor 1.png"
-    }
+        let texturePath: string = '';
+        if (floor === 1) {
+            texturePath = './MapImages/Patriot Place Floor 1.png';
+        }
+        if (floor === 3) {
+            texturePath = './MapImages/Patriot Place Floor 3.png';
+        }
+        if (floor === 4) {
+            texturePath = './MapImages/Patriot Place Floor 4.png';
+        }
+        if (floor === 5) {
+            texturePath = './MapImages/Chestnut Hill Floor 1.png';
+        }
 
-    const mapTexture = new THREE.TextureLoader().load(texturePath);
-    mapTexture.colorSpace = THREE.SRGBColorSpace
-    const mapGeo = new THREE.PlaneGeometry(500, 400);
-    const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
-    const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
-    mapPlane.position.set(0, 0, 0);
-    scene.add(mapPlane);
-
-    // Optional: Add extra stuff per floor
-    /*
+        // Optional: Add extra stuff per floor
+        /*
     if (floor === 2) {
       const cube = new THREE.Mesh(
         new THREE.BoxGeometry(30, 30, 30),
@@ -213,10 +215,6 @@ export function DraggableMap() {
       scene.add(cube);
     }
       */
-
-    const animate = () => {
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
 
         // Initialize dragControls with an empty array
         let draggableObjects: THREE.Object3D[] = [];
@@ -342,44 +340,35 @@ export function DraggableMap() {
                 // selected object use state position for passing to UI
                 setNodeX(selectedObject.current.position.x);
                 setNodeY(selectedObject.current.position.y);
-                setNodeFloor(1); //TODO: Setup floor handling with floor switcher, may not want this functionality at all.
+                setFloor(1); //TODO: Setup floor handling with floor switcher, may not want this functionality at all.
             }
 
             renderer.render(scene, camera);
             window.requestAnimationFrame(animate);
+            //requestAnimationFrame(animate);
 
             return () => {
                 renderer.dispose();
                 mapMaterial.dispose();
                 mapTexture.dispose();
                 scene.traverse((obj) => {
-                  if ((obj as THREE.Mesh).material) {
-                    ((obj as THREE.Mesh).material as THREE.Material).dispose();
-                  }
-                  if ((obj as THREE.Mesh).geometry) {
-                    ((obj as THREE.Mesh).geometry as THREE.BufferGeometry).dispose();
-                  }
+                    if ((obj as THREE.Mesh).material) {
+                        ((obj as THREE.Mesh).material as THREE.Material).dispose();
+                    }
+                    if ((obj as THREE.Mesh).geometry) {
+                        ((obj as THREE.Mesh).geometry as THREE.BufferGeometry).dispose();
+                    }
                 });
                 scene.clear();
-              };
+            };
         };
         animate();
     }, [floor]);
 
-    const handleFloorChange = (newFloor: number) => {
-        if (newFloor === floor) return;
-        setIsFading(true);
-        setTimeout(() => {
-          setFloor(newFloor);
-          setTimeout(() => {
-            setIsFading(false);
-          }, 200); // Fade-in duration
-        }, 200); // Fade-out duration
-      };
-  return (
-    <Box w="100vw" h="100vh" p={0}>
-      <FloorSwitchBox floor={floor} setFloor={handleFloorChange} />
-      <MapEditorBox
+    return (
+        <Box w="100vw" h="100vh" p={0}>
+            <FloorSwitchBox floor={floor} setFloor={handleFloorChange} />
+            <MapEditorBox
                 // Pass selected node data to the ui
                 nodeSelected={nodeSelected}
                 nodeX={nodeX}
@@ -388,22 +377,25 @@ export function DraggableMap() {
                 // handle updating the node position from ui
                 updateNodePosition={updateNodePosition}
             />
-      <canvas id="insideMapCanvas" style={{ width: "100%", height: "100%", position: "absolute" }} />
+            <canvas
+                id="insideMapCanvas"
+                style={{ width: '100%', height: '100%', position: 'absolute' }}
+            />
 
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#000",
-          opacity: isFading ? 1 : 0,
-          transition: "opacity 0.3s ease-in-out",
-          pointerEvents: "none",
-          zIndex: 5
-        }}
-        />
-    </Box>
-  );
+            <div
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: '#000',
+                    opacity: isFading ? 1 : 0,
+                    transition: 'opacity 0.3s ease-in-out',
+                    pointerEvents: 'none',
+                    zIndex: 5,
+                }}
+            />
+        </Box>
+    );
 }
