@@ -1,6 +1,6 @@
 import express, { Router, RequestHandler } from 'express';
-import { NavigationService } from '../services/NavigationService';
-import { Coordinate } from '../models/types';
+import { NavigationService } from '../GraphMapClasses/NavigationService';
+import { Coordinate } from '../models/oldMapTypes.ts';
 import PrismaClient from '../bin/prisma-client';
 
 const router: Router = express.Router();
@@ -17,21 +17,17 @@ const navigationService = new NavigationService();
 
 // Define types for request body
 interface PathFindingRequestBody {
-    startX: number;
-    startY: number;
-    startZ: number;
-    endX: number;
-    endY: number;
-    endZ: number;
+    startID: number;
+    endID: number;
+    pathAlgo: string;
 }
 
 // Define types for response body
 interface PathFindingSuccessResponse {
-    success: true;
     result: {
-        path: Coordinate[];
+        pathIDs: number[];
         distance: number;
-        layersTraversed: number[];
+        success?: boolean;
     };
 }
 
@@ -49,10 +45,10 @@ const findPathHandler: RequestHandler<
     PathFindingRequestBody // Request body
 > = (req, res) => {
     try {
-        const { startX, startY, startZ, endX, endY, endZ } = req.body;
+        const { startID, endID, pathAlgo } = req.body;
 
         // Validate input
-        if ([startX, startY, startZ, endX, endY, endZ].some((param) => param === undefined)) {
+        if ([startID, endID, pathAlgo].some((param) => param === undefined)) {
             res.status(400).json({
                 success: false,
                 error: 'Missing required parameters',
@@ -60,30 +56,20 @@ const findPathHandler: RequestHandler<
             return; // Return void
         }
 
-        const start: Coordinate = {
-            x: Number(startX),
-            y: Number(startY),
-            z: Number(startZ),
-        };
+        const start = Number(startID);
+        const end = Number(endID);
+        const algo = String(pathAlgo);
 
-        const end: Coordinate = {
-            x: Number(endX),
-            y: Number(endY),
-            z: Number(endZ),
-        };
+        const result = navigationService.findPath(start, end, algo);
 
-        const result = navigationService.findPath(start, end);
-
-        if (result.path.length === 0) {
+        if (result.distance === 0) {
             res.status(404).json({
                 success: false,
                 error: 'No path found between the specified points',
             });
             return; // Return void
         }
-
         res.json({
-            success: true,
             result,
         });
         return; // Return void explicitly
@@ -99,18 +85,13 @@ const findPathHandler: RequestHandler<
     }
 };
 
-// Debug endpoint to get information about the navigation grid
-/*
+// Debug endpoint to get test the pathfinding between nodes
 router.get('/debug', (req: any, res: any) => {
-    if (!navigationService.isInitialized()) {
-        return res.status(500).json({ error: 'Navigation service not initialized' });
-    }
-
     // Get the grid dimensions and some sample walkable points
-    const debug = navigationService.getDebugInfo();
-    res.json(debug);
+    const path = navigationService.findPath(1, 5, 'BFS');
+    res.json(path);
 });
-*/
+
 // Register the handler with the router
 router.post('/findPath', findPathHandler);
 
