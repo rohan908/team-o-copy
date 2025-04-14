@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { BasicOutlinedButton } from '../../common-compoents/commonButtons.tsx';
+import { BasicOutlinedButton, BlackButton } from '../../common-compoents/commonButtons.tsx';
 import {
     Box,
     Collapse,
@@ -33,7 +33,10 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
 }) => {
     const theme = useMantineTheme();
     const [collapsed, setCollapsed] = useState(false);
-
+    const [hoverAddNode, setHoverAddNode] = useState(setTimeout(function () {}, 1000));
+    const [hoverRemoveNode, setHoverRemoveNode] = useState(setTimeout(function () {}, 1000));
+    const [hoverAddEdge, setHoverAddEdge] = useState(setTimeout(function () {}, 1000));
+    const [hoverRemoveEdge, setHoverRemoveEdge] = useState(setTimeout(function () {}, 1000));
     const handleAddNode = () => null;
     const handleAddEdge = () => null;
     const handleRemoveNode = () => null;
@@ -67,6 +70,305 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
         },
     });
 
+    function switchAddNodeLabel(hovering: boolean) {
+        const addNode = document.getElementById('addNode');
+        if (hovering && addNode != null) {
+            clearInterval(hoverAddNode);
+            setHoverAddNode(
+                setInterval(function () {
+                    switch (addNode.innerText) {
+                        case '+':
+                            addNode.innerText = 'A';
+                            break;
+                        case 'A':
+                            addNode.innerText = 'Ad';
+                            break;
+                        case 'Ad':
+                            addNode.innerText = 'Add';
+                            break;
+                        case 'Add':
+                            addNode.innerText = 'Add N';
+                            break;
+                        case 'Add N':
+                            addNode.innerText = 'Add No';
+                            break;
+                        case 'Add No':
+                            addNode.innerText = 'Add Nod';
+                            break;
+                        case 'Add Nod':
+                            addNode.innerText = 'Add Node';
+                            clearInterval(hoverAddNode);
+                            break;
+                    }
+                }, 20)
+            );
+        } else if (addNode != null) {
+            clearInterval(hoverAddNode);
+            setHoverAddNode(
+                setInterval(function () {
+                    switch (addNode.innerText) {
+                        case 'A':
+                            addNode.innerText = '+';
+                            clearInterval(hoverAddNode);
+                            break;
+                        case 'Ad':
+                            addNode.innerText = 'A';
+                            break;
+                        case 'Add':
+                            addNode.innerText = 'Ad';
+                            break;
+                        case 'Add N':
+                            addNode.innerText = 'Add';
+                            break;
+                        case 'Add No':
+                            addNode.innerText = 'Add N';
+                            break;
+                        case 'Add Nod':
+                            addNode.innerText = 'Add No';
+                            break;
+                        case 'Add Node':
+                            addNode.innerText = 'Add Nod';
+                            break;
+                    }
+                }, 20)
+            );
+        }
+    }
+
+    function switchRemoveNodeLabel(hovering: boolean) {
+        const removeNode = document.getElementById('removeNode');
+        if (hovering && removeNode != null) {
+            clearInterval(hoverRemoveNode);
+            setHoverRemoveNode(
+                setInterval(function () {
+                    switch (removeNode.innerText) {
+                        case '-':
+                            removeNode.innerText = 'R';
+                            break;
+                        case 'R':
+                            removeNode.innerText = 'Re';
+                            break;
+                        case 'Re':
+                            removeNode.innerText = 'Rem';
+                            break;
+                        case 'Rem':
+                            removeNode.innerText = 'Remo';
+                            break;
+                        case 'Remo':
+                            removeNode.innerText = 'Remov';
+                            break;
+                        case 'Remov':
+                            removeNode.innerText = 'Remove';
+                            break;
+                        case 'Remove':
+                            removeNode.innerText = 'Remove N';
+                            break;
+                        case 'Remove N':
+                            removeNode.innerText = 'Remove No';
+                            break;
+                        case 'Remove No':
+                            removeNode.innerText = 'Remove Nod';
+                            break;
+                        case 'Remove Nod':
+                            removeNode.innerText = 'Remove Node';
+                            clearInterval(hoverRemoveNode);
+                            break;
+                    }
+                }, 20)
+            );
+        } else if (removeNode != null) {
+            clearInterval(hoverRemoveNode);
+            setHoverRemoveNode(
+                setInterval(function () {
+                    switch (removeNode.innerText) {
+                        case 'R':
+                            removeNode.innerText = '-';
+                            clearInterval(hoverRemoveNode);
+                            break;
+                        case 'Re':
+                            removeNode.innerText = 'R';
+                            break;
+                        case 'Rem':
+                            removeNode.innerText = 'Re';
+                            break;
+                        case 'Remo':
+                            removeNode.innerText = 'Rem';
+                            break;
+                        case 'Remov':
+                            removeNode.innerText = 'Remo';
+                            break;
+                        case 'Remove':
+                            removeNode.innerText = 'Remov';
+                            break;
+                        case 'Remove N':
+                            removeNode.innerText = 'Remove';
+                            break;
+                        case 'Remove No':
+                            removeNode.innerText = 'Remove N';
+                            break;
+                        case 'Remove Nod':
+                            removeNode.innerText = 'Remove No';
+                            break;
+                        case 'Remove Node':
+                            removeNode.innerText = 'Remove Nod';
+                            break;
+                    }
+                }, 20)
+            );
+        }
+    }
+
+    function switchAddEdgeLabel(hovering: boolean) {
+        const addEdge = document.getElementById('addEdge');
+        if (hovering && addEdge != null) {
+            clearInterval(hoverAddEdge);
+            setHoverAddEdge(
+                setInterval(function () {
+                    switch (addEdge.innerText) {
+                        case '+':
+                            addEdge.innerText = 'A';
+                            break;
+                        case '':
+                            addEdge.innerText = 'A';
+                            break;
+                        case 'A':
+                            addEdge.innerText = 'Ad';
+                            break;
+                        case 'Ad':
+                            addEdge.innerText = 'Add';
+                            break;
+                        case 'Add':
+                            addEdge.innerText = 'Add E';
+                            break;
+                        case 'Add E':
+                            addEdge.innerText = 'Add Ed';
+                            break;
+                        case 'Add Ed':
+                            addEdge.innerText = 'Add Edg';
+                            break;
+                        case 'Add Edg':
+                            addEdge.innerText = 'Add Edge';
+                            clearInterval(hoverAddEdge);
+                            break;
+                    }
+                }, 20)
+            );
+        } else if (addEdge != null) {
+            clearInterval(hoverAddEdge);
+            setHoverAddEdge(
+                setInterval(function () {
+                    switch (addEdge.innerText) {
+                        case 'A':
+                            addEdge.innerText = '+';
+                            clearInterval(hoverAddEdge);
+                            break;
+                        case 'Ad':
+                            addEdge.innerText = 'A';
+                            break;
+                        case 'Add':
+                            addEdge.innerText = 'Ad';
+                            break;
+                        case 'Add E':
+                            addEdge.innerText = 'Add';
+                            break;
+                        case 'Add Ed':
+                            addEdge.innerText = 'Add E';
+                            break;
+                        case 'Add Edg':
+                            addEdge.innerText = 'Add Ed';
+                            break;
+                        case 'Add Edge':
+                            addEdge.innerText = 'Add Edg';
+                            break;
+                    }
+                }, 20)
+            );
+        }
+    }
+
+    function switchRemoveEdgeLabel(hovering: boolean) {
+        const removeEdge = document.getElementById('removeEdge');
+        if (hovering && removeEdge != null) {
+            clearInterval(hoverRemoveEdge);
+            setHoverRemoveEdge(
+                setInterval(function () {
+                    switch (removeEdge.innerText) {
+                        case '-':
+                            removeEdge.innerText = 'R';
+                            break;
+                        case 'R':
+                            removeEdge.innerText = 'Re';
+                            break;
+                        case 'Re':
+                            removeEdge.innerText = 'Rem';
+                            break;
+                        case 'Rem':
+                            removeEdge.innerText = 'Remo';
+                            break;
+                        case 'Remo':
+                            removeEdge.innerText = 'Remov';
+                            break;
+                        case 'Remov':
+                            removeEdge.innerText = 'Remove';
+                            break;
+                        case 'Remove':
+                            removeEdge.innerText = 'Remove E';
+                            break;
+                        case 'Remove E':
+                            removeEdge.innerText = 'Remove Ed';
+                            break;
+                        case 'Remove Ed':
+                            removeEdge.innerText = 'Remove Edg';
+                            break;
+                        case 'Remove Edg':
+                            removeEdge.innerText = 'Remove Edge';
+                            clearInterval(hoverRemoveEdge);
+                            break;
+                    }
+                }, 20)
+            );
+        } else if (removeEdge != null) {
+            clearInterval(hoverRemoveEdge);
+            setHoverRemoveEdge(
+                setInterval(function () {
+                    switch (removeEdge.innerText) {
+                        case 'R':
+                            removeEdge.innerText = '-';
+                            clearInterval(hoverRemoveEdge);
+                            break;
+                        case 'Re':
+                            removeEdge.innerText = 'R';
+                            break;
+                        case 'Rem':
+                            removeEdge.innerText = 'Re';
+                            break;
+                        case 'Remo':
+                            removeEdge.innerText = 'Rem';
+                            break;
+                        case 'Remov':
+                            removeEdge.innerText = 'Remo';
+                            break;
+                        case 'Remove':
+                            removeEdge.innerText = 'Remov';
+                            break;
+                        case 'Remove E':
+                            removeEdge.innerText = 'Remove';
+                            break;
+                        case 'Remove Ed':
+                            removeEdge.innerText = 'Remove E';
+                            break;
+                        case 'Remove Edg':
+                            removeEdge.innerText = 'Remove Ed';
+                            break;
+                        case 'Remove Edge':
+                            removeEdge.innerText = 'Remove Edg';
+                            break;
+                    }
+                }, 20)
+            );
+        }
+    }
+
     useEffect(() => {
         if (nodeSelected) {
             form.setValues({
@@ -95,7 +397,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
             }}
         >
             <Box
-                bg="themeGold.0"
+                bg="themeGold.2"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="37%"
                 style={{
@@ -120,14 +422,66 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                     </Title>
                     <Flex direction="column" justify="space-evenly" gap="xs">
                         <Flex direction="row" justify="space-around" gap="xs">
-                            <BasicOutlinedButton>Add Node</BasicOutlinedButton>
-                            <BasicOutlinedButton>Add Edge</BasicOutlinedButton>
+                            <Title
+                                order={2}
+                                mb="md"
+                                c="black"
+                                ta="center"
+                                fw={700}
+                                fz={{ sm: 'md', md: 'xl' }}
+                            >
+                                Node:
+                            </Title>
+                            <BlackButton
+                                id="addNode"
+                                bg="blueBase.8"
+                                onClick={handleAddNode}
+                                onMouseEnter={() => switchAddNodeLabel(true)}
+                                onMouseLeave={() => switchAddNodeLabel(false)}
+                            >
+                                +
+                            </BlackButton>
+                            <BlackButton
+                                id="removeNode"
+                                bg="blueBase.8"
+                                onClick={handleRemoveNode}
+                                onMouseEnter={() => switchRemoveNodeLabel(true)}
+                                onMouseLeave={() => switchRemoveNodeLabel(false)}
+                            >
+                                -
+                            </BlackButton>
                         </Flex>
-                        <Flex direction="row" justify="space-evenly" gap="xl">
-                            <BasicOutlinedButton>Remove Node</BasicOutlinedButton>
-                            <BasicOutlinedButton>Remove Edge</BasicOutlinedButton>
+                        <Flex direction="row" justify="space-around" gap="xl">
+                            <Title
+                                order={2}
+                                mb="md"
+                                c="black"
+                                ta="center"
+                                fw={700}
+                                fz={{ sm: 'md', md: 'xl' }}
+                            >
+                                Edge:
+                            </Title>
+                            <BlackButton
+                                id="addEdge"
+                                bg="blueBase.8"
+                                onClick={handleAddEdge}
+                                onMouseEnter={() => switchAddEdgeLabel(true)}
+                                onMouseLeave={() => switchAddEdgeLabel(false)}
+                            >
+                                +
+                            </BlackButton>
+                            <BlackButton
+                                id="removeEdge"
+                                bg="blueBase.8"
+                                onClick={handleRemoveEdge}
+                                onMouseEnter={() => switchRemoveEdgeLabel(true)}
+                                onMouseLeave={() => switchRemoveEdgeLabel(false)}
+                            >
+                                -
+                            </BlackButton>
                         </Flex>
-                        <Flex direction="row" justify="space-around" gap="xs">
+                        <Flex direction="row" justify="space-between" gap="xs">
                             <TextInput
                                 label="X Position"
                                 placeholder="Select a node"
@@ -150,12 +504,15 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                                 {...form.getInputProps('floor')}
                             ></TextInput>
                         </Flex>
-                        <Grid>
-                            <Grid.Col span={11}>
-                                <BasicOutlinedButton>Update Position</BasicOutlinedButton>
+                        <Grid align="center">
+                            <Grid.Col span={10}>
+                                <BlackButton bg="blueBase.8" onClick={handleUpdateNodePosition}>
+                                    Update Position
+                                </BlackButton>
                             </Grid.Col>
-                            <Grid.Col span={1}>
+                            <Grid.Col span={2}>
                                 <ActionIcon
+                                    bg="blueBase.8"
                                     size="input-sm"
                                     onClick={() => setCollapsed(true)}
                                     aria-label="ActionIcon the same size as inputs"
@@ -195,6 +552,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                                 </Grid.Col>
                                 <Grid.Col span={'content'}>
                                     <ActionIcon
+                                        bg="blueBase.8"
                                         size="input-sm"
                                         onClick={() => setCollapsed(false)}
                                         aria-label="ActionIcon the same size as inputs"
