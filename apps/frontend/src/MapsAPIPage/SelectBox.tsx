@@ -57,6 +57,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     useEffect(() => {
         onCollapseChange?.(collapsed);
     }, [collapsed]);
+
   useEffect(() => {
     if (!input.current) return;
     autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
@@ -117,7 +118,6 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     borderRadius: theme.radius.lg,
                     backdropFilter: 'blur(5px)',
                     boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.1)',
-                    overflow: 'auto',
                 }}
             >
                 <Collapse in={!collapsed}>

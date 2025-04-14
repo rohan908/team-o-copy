@@ -31,7 +31,7 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
             travelMode: travelMode,
         },
             (result, status) => {
-                if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) {
+                if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) { //make
                     directionsRendererRef.current.setDirections(result)
                     const newSteps = result.routes[0].legs[0].steps.map(
                         (step) => step.instructions
