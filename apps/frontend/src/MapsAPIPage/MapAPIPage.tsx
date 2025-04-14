@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Box, Button } from '@mantine/core';
 import * as L from 'leaflet';
 import SelectBox from './SelectBox.tsx';
-import {LoadScript} from "@react-google-maps/api";
 import GoogleMapsAPI from "./GoogleMapsAPI.tsx";
+import {LoadScript} from "@react-google-maps/api";
 
 import { useMediaQuery } from '@mantine/hooks';
 import {Link} from "react-router-dom";
@@ -14,9 +14,10 @@ export function MapAPIPage() {
     const [selectedHospital, setSelectedHospital] = useState<L.LatLng | null>(null);
     const [isSelectBoxCollapsed, setIsSelectBoxCollapsed] = useState(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
+    const [userCoordinates, setUserCoordinates] = useState<{ lat: number; long: number } | null>(null);
 
 
-    const handleSelectHospital = (coord: L.LatLng) => {
+  const handleSelectHospital = (coord: L.LatLng) => {
         setSelectedHospital(coord);
     };
 
@@ -34,8 +35,18 @@ export function MapAPIPage() {
             }}
         >
             {/* Map behind */}
-            <GoogleMapsAPI/>
-
+          <GoogleMapsAPI
+            selectedHospital={
+              selectedHospital
+                ? { lat: selectedHospital.lat, lng: selectedHospital.lng }
+                : null
+            }
+            userCoordinate={
+              userCoordinates
+                ? { lat: userCoordinates.lat, lng: userCoordinates.long }
+                : null
+            }
+          />
             <div
                 style={{
                     position: 'absolute',
@@ -46,6 +57,8 @@ export function MapAPIPage() {
             >
                 <SelectBox onSelectHospital={handleSelectHospital}
                            onCollapseChange={setIsSelectBoxCollapsed}
+                           onSetUserCoordinates={setUserCoordinates} // ← THIS IS MISSING!
+
                 />
             </div>
             {isSelectBoxCollapsed && (
@@ -83,7 +96,7 @@ export function MapAPIPage() {
                 </div>
             )}
         </Box>
-      </LoadScript>
+        </LoadScript>
     );
 }
 

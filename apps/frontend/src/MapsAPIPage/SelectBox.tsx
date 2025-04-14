@@ -53,10 +53,6 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     }, [collapsed]);
   useEffect(() => {
     if (!input.current) return;
-    if (!window.google?.maps?.places) {
-      console.error("Google Maps API not loaded.");
-      return;
-    }
     autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
     autocompleteRef.current.addListener("place_changed", () => {
       const place = autocompleteRef.current?.getPlace();
