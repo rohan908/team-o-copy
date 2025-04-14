@@ -137,7 +137,7 @@ const getNodeHandler: RequestHandler<
             return;
         }
 
-        // Extract the connections as a simple array of IDs and weights
+        // Returning the full connected nodes seems to create infinite loops. Instead return the ids of connected nodes
         const connections = result.node.adjNodes.map((adjNode) => ({
             connectedId: adjNode.destination.data.id,
             weight: adjNode.weight,

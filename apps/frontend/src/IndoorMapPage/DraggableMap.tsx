@@ -35,9 +35,11 @@ export function DraggableMap() {
     const path = findPath(1, 4, 'BFS').then(async (res) => {
         const ids = res.result.pathIDs;
         console.log(ids);
-        for (const id of ids) {
-            createNode(await getNode(id));
-        }
+    });
+
+    const node = getNode(4).then(async (res) => {
+        const node = res.result.x;
+        console.log(res.result.nodeData.x);
     });
 
     // Because THREEjs object IDs are readonly we should probably create and maintain a list that associates the THREEjs object ids with the backed node ids.
