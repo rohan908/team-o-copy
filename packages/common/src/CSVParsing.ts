@@ -100,25 +100,36 @@ export function parseImportedCSV(csvString: string) {
   const headers = lines[0].split(';;');
 
   return lines.slice(1).map((line) => {
-    console.log(line);
+    console.log(line, "first line");
 
     // must format absoluteCoords correctly
     // can support any number of coords in format x1,x2,x3...
-    const separator = line.indexOf('\\');
-    line =
-      line.slice(0, separator) + line.slice(separator, line.length - 1).replace(/;;/g, ',');
-    line = line.replace(/\\/g, '');
-    console.log(line);
+    if(line.includes('\\')) {
+      const separator = line.indexOf('\\');
+      line =
+        line.slice(0, separator) + line.slice(separator, line.length - 1).replace(/;;/g, ',');
+      line = line.replace(/\\/g, '');
+    }
+    console.log(line, "replace last line");
     const values = line.split(';;');
 
     const obj: any = {};
 
-    console.log(values);
+    console.log(values, "SPLITTING THE LINE");
 
+    // modify the datatype based on the header
     headers.forEach((header, i) => {
-      if (header == 'absoluteCoords') {
-        obj[header] = values[i].split(',').map((item) => +item);
-      } else obj[header] = values[i];
+      if (header == 'connectingNodes') {
+        if(values[i].includes(','))
+          obj[header] = values[i].split(',').map((item) => +item);
+        else if(values[i] == '')
+          obj[header] = [];
+        else
+          obj[header] = [Number(values[i])];
+      } else if (header == 'name' || header == 'description' || header == 'nodeType') {
+          obj[header] = values[i];
+      } else
+          obj[header] = Number(values[i]);
     });
     return obj;
   });

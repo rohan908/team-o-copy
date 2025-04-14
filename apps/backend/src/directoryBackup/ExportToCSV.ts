@@ -13,7 +13,11 @@ export async function exportToCSV() {
         fs.writeFileSync(BACKUP_PATHS.directoryBackup, '');
 
         // query to get data from directory table
-        const directoryData = await PrismaClient.node.findMany({});
+        const directoryData = await PrismaClient.node.findMany({
+            where: {
+                nodeType: 'directory',
+            },
+        });
 
         const csvContent = formatBeforeWriteToBackupCSV(directoryData);
 
