@@ -1,5 +1,5 @@
 import { Node } from './Node.ts';
-import { ConnectingNode } from '../models/MapTypes.ts';
+import { ConnectingNode } from './MapTypes.ts';
 
 export class Graph<T extends { id: number }> {
     nodes: Map<number, Node<T>> = new Map<number, Node<T>>(); //maps the node ids to the nodes, change from previous version that mapped NodeDataType
