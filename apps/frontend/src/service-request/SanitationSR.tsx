@@ -30,25 +30,12 @@ interface RequestData {
   description: string;
 }
 
-function Language() {
+function SanitationSR() {
   const theme = useMantineTheme();
   const navigate = useNavigate();
   const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
 
 
-  const form = useForm<RequestData>({
-    initialValues: {
-      language: '',
-      date: '',
-      department: '',
-      time: '',
-      employeeName: '',
-      hospital: '',
-      priority: '',
-      status: '',
-      description: '',
-    },
-  });
 // logic for dependant department slection
   const handleHospitalChange = (hospital: string | null) => {
     form.setFieldValue('hospital', hospital || '');
@@ -69,16 +56,28 @@ function Language() {
 
     form.setFieldValue('department', '');
   }
-    const langREQ = useLanguageRequestContext();
-    console.log('TESTER CODE FOR CONTEXT!!!!');
-    console.log(langREQ);
+  const langREQ = useLanguageRequestContext();
+  console.log('TESTER CODE FOR CONTEXT!!!!');
+  console.log(langREQ);
 
-    const handleSubmit = async () => {
-        const RequestData = form.values;
-        const label =
-            RequestData.language === 'asl'
-                ? 'ASL (American Sign Language)'
-                : ISO6391.getName(RequestData.language);
+  const form = useForm<RequestData>({
+    initialValues: {
+      language: '',
+      date: '',
+      room: '',
+      time: '',
+      hospital: '',
+      priority: '',
+      description: '',
+    },
+  });
+
+  const handleSubmit = async () => {
+    const RequestData = form.values;
+    const label =
+      RequestData.language === 'asl'
+        ? 'ASL (American Sign Language)'
+        : ISO6391.getName(RequestData.language);
 
     try {
       const response = await fetch('/api/languageSR', {
@@ -133,7 +132,7 @@ function Language() {
             Interpreter Request Form
           </Title>
 
-            <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
+          <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
             <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
               <NameEntry required {...form.getInputProps("employeeName")} />
               <HospitalSelect
@@ -164,11 +163,11 @@ function Language() {
           <Flex mt="xl" justify="left" gap="md">
 
             <Button
-                type="button"
-                variant="outline"
-                color="blueBase.5"
-                style={{ width: '200px' }}
-                onClick={() => form.reset()}
+              type="button"
+              variant="outline"
+              color="blueBase.5"
+              style={{ width: '200px' }}
+              onClick={() => form.reset()}
             >
               Clear Form
             </Button>
@@ -188,4 +187,4 @@ function Language() {
   );
 }
 
-export default Language;
+export default SanitationSR;
