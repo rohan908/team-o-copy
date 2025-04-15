@@ -123,7 +123,7 @@ function Language() {
   };
 
   return (
-    <Flex justify="center" align="center" style={{ width: '100vw', padding: '2rem' }}>
+    <Flex justify="center" align="center" p="xl" >
       <Paper
         bg="gray.2"
         p="xl"
@@ -144,19 +144,18 @@ function Language() {
                 value={form.values.hospital}
                 onChange={handleHospitalChange}
               />
-
-              <PriorityButtons {...form.getInputProps('priority')} />
+              <DepartmentSelect
+                required
+                departments={departmentOptions.map((department) => department.title)}
+                {...form.getInputProps('department')}
+              />
               <LanguageSelect required {...form.getInputProps('language')} />
             </Box>
 
             <Box flex="1" miw = "300px"> {/* column 2!!!*/}
               <DateInputForm required {...form.getInputProps('date')} />
               <TimeEntry required {...form.getInputProps('time')} />
-              <DepartmentSelect
-                required
-                departments={departmentOptions.map((department) => department.title)}
-                {...form.getInputProps('department')}
-              />
+              <PriorityButtons {...form.getInputProps('priority')} />
               <StatusSelect required {...form.getInputProps('status')} />
             </Box>
           </Flex>
