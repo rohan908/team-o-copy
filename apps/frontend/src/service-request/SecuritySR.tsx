@@ -126,6 +126,14 @@ function Security() {
                     <Title order={2} ta="center" mb="lg">
                         Interpreter Request Form
                     </Title>
+                    <p
+                        style={{
+                            textAlign: 'center',
+                            fontSize: '16px',
+                        }}
+                    >
+                        Ethan Ramoth and Camden Brayton
+                    </p>
 
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
