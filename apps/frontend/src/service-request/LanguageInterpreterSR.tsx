@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -21,6 +21,8 @@ import PriorityButtons from "./components/PriorityButtons.tsx";
 import StatusSelect from "./components/StatusSelect.tsx";
 import NameEntry from "./components/NameEntry.tsx";
 import DepartmentSelect from "./components/DepartmentSelect.tsx";
+import { ChestnutHill, Patriot20, Patriot22, HospitalDepartment } from '../directory/components/directorydata';
+
 
 interface RequestData {
   language: string;
@@ -37,6 +39,8 @@ interface RequestData {
 function Language() {
   const theme = useMantineTheme();
   const navigate = useNavigate();
+  const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
+
 
   const form = useForm<RequestData>({
     initialValues: {
@@ -51,6 +55,26 @@ function Language() {
       description: '',
     },
   });
+// logic for dependant department slection
+  const handleHospitalChange = (hospital: string | null) => {
+    form.setFieldValue('hospital', hospital || '');
+
+    switch (hospital) {
+      case 'Chestnut Hill':
+        setDepartmentOptions(ChestnutHill);
+        break;
+      case '20 Patriot Place':
+        setDepartmentOptions(Patriot20);
+        break;
+      case '22 Patriot Place':
+        setDepartmentOptions(Patriot22);
+        break;
+      default:
+        setDepartmentOptions([]);
+    }
+
+    form.setFieldValue('department', '');
+  }
 
   const handleSubmit = async () => {
     const RequestData = form.values;
@@ -67,7 +91,7 @@ function Language() {
           label,
           selectedDate: RequestData.date,
           selectedTime: RequestData.time,
-          department: RequestData.department,
+            department: RequestData.department,
           priority: RequestData.priority,
           employeeName: RequestData.employeeName,
           status: RequestData.status,
@@ -115,7 +139,12 @@ function Language() {
             <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
             <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
               <NameEntry required {...form.getInputProps("employeeName")} />
-              <HospitalSelect required {...form.getInputProps("hospital")} />
+              <HospitalSelect
+                required
+                value={form.values.hospital}
+                onChange={handleHospitalChange}
+              />
+
               <PriorityButtons {...form.getInputProps('priority')} />
               <LanguageSelect required {...form.getInputProps('language')} />
             </Box>
@@ -123,7 +152,11 @@ function Language() {
             <Box flex="1" miw = "300px"> {/* column 2!!!*/}
               <DateInputForm required {...form.getInputProps('date')} />
               <TimeEntry required {...form.getInputProps('time')} />
-              <DepartmentSelect required hospital={form.values.hospital} {...form.getInputProps('department')} />
+              <DepartmentSelect
+                required
+                departments={departmentOptions.map((department) => department.title)}
+                {...form.getInputProps('department')}
+              />
               <StatusSelect required {...form.getInputProps('status')} />
             </Box>
           </Flex>

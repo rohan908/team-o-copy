@@ -1,19 +1,32 @@
-import {Select, SelectProps } from '@mantine/core';
+import { Select, SelectProps } from '@mantine/core';
+import React from 'react';
 
-const HospitalSelect: React.FC<SelectProps> = (props) => {
-  return (
-      <Select
-          label="Choose the Hospital Needed"
-          placeholder="--Select a Hospital--"
-          searchable
-          data={['22 Patriot Place', '20 Patriot Place', 'Chestnut Hill']}
-          nothingFoundMessage="Hospital not found"
-          radius="sm"
-          mb="sm"
-          size = "xs"
-          {...props}
-      />
-  );
+interface HospitalSelectProps extends SelectProps {
+    value: string;
+    onChange: (value: string) => void;
+}
+
+const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...props }) => {
+    return (
+        <Select
+            label="Choose the Hospital Needed *"
+            placeholder="--Select a Hospital--"
+            searchable
+            data={[
+                '20 Patriot Place',
+                '22 Patriot Place',
+                'Chestnut Hill',
+            ]}
+            value={value}
+            onChange={(val) => onChange(val || '')} // fallback for null values
+            nothingFoundMessage="Hospital not found"
+            radius="sm"
+            mb="sm"
+            size="xs"
+            required
+            {...props}
+        />
+    );
 };
 
 export default HospitalSelect;

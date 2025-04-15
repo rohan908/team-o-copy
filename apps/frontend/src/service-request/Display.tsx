@@ -60,7 +60,7 @@ export function Display() {
         <Text mb="sm"><strong>Language:</strong> {requestData.label}</Text>
         <Text mb="sm"><strong>Date:</strong> {formatDate(requestData.selectedDate)}</Text>
         <Text mb="sm"><strong>Time:</strong> {formatTime(requestData.selectedTime)}</Text>
-        <Text mb="sm"><strong>Room:</strong> {requestData.roomNumber}</Text>
+        <Text mb="sm"><strong>Department:</strong> {requestData.department}</Text>
         <Text mb="sm"><strong>Priority:</strong> {requestData.priority}</Text>
         <Text mb="sm"><strong>Status:</strong> {requestData.status}</Text>
         <Text><strong>Details:</strong> {requestData.description || 'N/A'}</Text>
