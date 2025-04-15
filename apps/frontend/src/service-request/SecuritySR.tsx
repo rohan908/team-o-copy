@@ -2,18 +2,17 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import ISO6391 from 'iso-639-1';
 
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
 import RoomNumberInput from './components/RoomEntry';
 import RequestDescription from './components/RequestDescription';
-import LanguageSelect from './components/LanguageSelect';
+import SecuritySelect from './components/SecuritySelect';
 import HospitalSelect from './components/HospitalEntry.tsx';
 import PriorityButtons from './components/PriorityButtons.tsx';
 
 interface RequestData {
-    language: string;
+    service: string;
     date: string;
     room: string;
     time: string;
@@ -22,13 +21,13 @@ interface RequestData {
     description: string;
 }
 
-function Language() {
+function Security() {
     const theme = useMantineTheme();
     const navigate = useNavigate();
 
     const form = useForm<RequestData>({
         initialValues: {
-            language: '',
+            service: '',
             date: '',
             room: '',
             time: '',
@@ -40,10 +39,7 @@ function Language() {
 
     const handleSubmit = async () => {
         const RequestData = form.values;
-        const label =
-            RequestData.language === 'asl'
-                ? 'ASL (American Sign Language)'
-                : ISO6391.getName(RequestData.language);
+        const label = RequestData.service === 'Escort';
 
         try {
             const response = await fetch('/api/languageSR', {
@@ -85,8 +81,16 @@ function Language() {
             <Paper bg="gray.2" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Title order={2} ta="center" mb="lg">
-                        Interpreter Request Form
+                        Security Request Form
                     </Title>
+                    <p
+                        style={{
+                            textAlign: 'center',
+                            fontSize: '16px',
+                        }}
+                    >
+                        Ethan Ramoth and Camden Brayton
+                    </p>
 
                     <Flex gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
@@ -94,7 +98,7 @@ function Language() {
                             {/*< column 1!!!*/}
                             <HospitalSelect required {...form.getInputProps('hospital')} />
                             <PriorityButtons {...form.getInputProps('priority')} />
-                            <LanguageSelect required {...form.getInputProps('language')} />
+                            <SecuritySelect required {...form.getInputProps('security')} />
                         </Box>
 
                         <Box flex="1" miw="300px">
@@ -131,4 +135,4 @@ function Language() {
     );
 }
 
-export default Language;
+export default Security;
