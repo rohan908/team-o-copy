@@ -3,7 +3,7 @@ import {Button, Flex, Image, Box, Group, Anchor, Burger, UnstyledButton, Tabs, M
 import { useState, useEffect } from 'react';
 import "../home-style.css";
 import { useLogin } from './LoginContext'; // adjust path if needed
-import Service from '../../service-request/service.tsx';
+import Service from '../../service-request/LanguageInterpreterSR.tsx';
 import AdminPage from "../../AdminPage/AdminPage.tsx";
 
 import {useDisclosure} from "@mantine/hooks";
