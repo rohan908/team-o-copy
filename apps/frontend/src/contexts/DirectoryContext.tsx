@@ -89,7 +89,7 @@ export const useChestnutHillContext = () => {
         );
     }
 
-    return context;
+    return context.chestnutHill;
 };
 
 /*

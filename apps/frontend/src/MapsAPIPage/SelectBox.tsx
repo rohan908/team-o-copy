@@ -41,6 +41,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
 
+    console.log(Patriot)
+
 
   const handleFindPath = () => {
         if (hospital) {
