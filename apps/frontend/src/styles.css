@@ -18,9 +18,14 @@
     color: #FCCD6F;
 }
 
+
+.LoggoutButton {
+  color: white;
+}
+
 .LoggoutButton:hover {
-    background-color: #a7342e;
-    color: white;
+    background-color: #0043ad;
+    color: red;
 }
 
 
