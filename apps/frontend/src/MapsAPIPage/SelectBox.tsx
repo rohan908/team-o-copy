@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
 import {BlackButton} from "../common-compoents/commonButtons.tsx"
 import {TwoPartInteractiveBox} from "../common-compoents/standAloneFrame.tsx";
-import {HospitalDepartment, Patriot20, Patriot22, ChestnutHill} from '../directory/components/directorydata.tsx'; //this is now static lol
+import { DirectoryItem } from '../contexts/DirectoryItem.ts';
 
 import {
     Box,
@@ -17,6 +17,7 @@ import {
     TextInput
 } from '@mantine/core';
 import * as L from 'leaflet';
+import { usePatriotContext, useChestnutHillContext} from '../contexts/DirectoryContext.js';
 
 interface HospitalSelectBoxProps {        //props to pass to main map Display
     onSelectHospital: (coordinate: L.LatLng) => void;
@@ -40,20 +41,25 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
     const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
 
-    const MapDepartment = (department: HospitalDepartment[]) =>
-      department.map((department) =>({
-        value: department.slug,
-        label: department.title,
+    const Patriot = usePatriotContext();
+    const Chestnut = useChestnutHillContext();
+
+    console.log(Chestnut);
+
+    const MapDepartment = (department: DirectoryItem[]) =>
+      department.map((department: DirectoryItem) =>({
+        value: department.name,
+        label: department.name,
       }));
 
     const handleFindPath = () => {
         if (hospital == "Chestnut Hill") {
             onSelectHospital(new L.LatLng(42.32624893122403, -71.14948990068949));
         }
-        else if(hospital =="20 Patriot Pl"){
+        else if(hospital == "20 Patriot Pl"){
           onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
         }
-        else if(hospital =="22 Patriot Pl"){
+        else if(hospital == "22 Patriot Pl"){
           onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
         }
         if (department && onSelectDepartment) {
@@ -72,13 +78,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     };
 
     const setHospitalLocation = (hospital: string | null) =>{
-      if (hospital === '20 Patriot Pl') {
-        setDepartmentOptions(MapDepartment(Patriot20));
-      } else if (hospital === '22 Patriot Pl') {
-        setDepartmentOptions(MapDepartment(Patriot22));
+      if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
+        setDepartmentOptions(MapDepartment(Patriot));
       }
       else if (hospital == 'Chestnut Hill'){
-        setDepartmentOptions(MapDepartment(ChestnutHill));
+        setDepartmentOptions(MapDepartment(Chestnut));
       }
       else {
         setDepartmentOptions([]);
@@ -171,7 +175,6 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                             { value: '20 Patriot Pl', label: '20 Patriot Pl' },
                             { value: '22 Patriot Pl', label: '22 Patriot Pl' },
                             { value: 'Chestnut Hill', label: 'Chestnut Hill' },
-
                         ]}
                         value={hospital}
                         onChange={setHospitalLocation}
