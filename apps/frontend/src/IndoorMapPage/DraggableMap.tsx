@@ -268,7 +268,7 @@ export function DraggableMap() {
         const camera = new THREE.PerspectiveCamera(
             50,
             canvas!.clientWidth / canvas!.clientHeight,
-            250,
+            50,
             1000
         );
         camera.position.set(0, 0, 300);
@@ -280,7 +280,7 @@ export function DraggableMap() {
 
         // Camera controls
         const orbitControls = new OrbitControls(camera, renderer.domElement);
-        //orbitControls.enableRotate = false;
+        orbitControls.enableRotate = false;
         orbitControls.mouseButtons = {
             LEFT: THREE.MOUSE.PAN,
             MIDDLE: THREE.MOUSE.DOLLY,
