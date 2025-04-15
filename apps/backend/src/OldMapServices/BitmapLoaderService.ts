@@ -164,7 +164,11 @@ export class BitmapLoaderService {
         return null;
     }
 
-    private bitmapToGrid(bmpData: Buffer): { grid: boolean[][]; width: number; height: number } {
+    private bitmapToGrid(bmpData: Buffer): {
+        grid: boolean[][];
+        width: number;
+        height: number;
+    } {
         // Read BMP width and height from header
         const width = bmpData.readInt32LE(18);
         const height = bmpData.readInt32LE(22);

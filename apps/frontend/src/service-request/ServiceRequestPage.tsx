@@ -1,5 +1,5 @@
 import { Box, Button, Flex, SimpleGrid, Title, Stack } from '@mantine/core';
-import { IconLanguage, IconExclamationCircleFilled } from '@tabler/icons-react';
+import { IconLanguage, IconExclamationCircleFilled, IconShieldHalf } from '@tabler/icons-react';
 import HoverButton from './components/HoverButton.tsx';
 import { useNavigate } from 'react-router-dom';
 export function ServiceRequestPage() {
@@ -23,8 +23,8 @@ export function ServiceRequestPage() {
 
                             {/* button for Security Service Request */}
                             <HoverButton
-                                icon={<IconExclamationCircleFilled size={120} />}
-                                label="Type 2"
+                                icon={<IconShieldHalf size={120} />}
+                                label="Security Request"
                                 onClick={() => navigate('/security-form')}
                             />
                             {/* button for ___ Request */}
