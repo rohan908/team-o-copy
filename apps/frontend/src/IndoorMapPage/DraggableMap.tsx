@@ -32,12 +32,51 @@ export function DraggableMap() {
     const nodeRadius = 2;
     const edgeRadius = 1.5;
 
-    const scene1 = new THREE.Scene();
-    const scene2 = new THREE.Scene();
-    const scene3 = new THREE.Scene();
-    const scene4 = new THREE.Scene();
+    /*
+    Patriot Place Floor 1 -> floor1 -> scene 1
+    Patriot Place Floor 3 -> floor2 -> scene 2
+    Patriot Place Floor 4 -> floor3 -> scene 3
+    Chestnut Hill Floor 1 -> floor4 -> scene 4
+     */
 
-    const [scene, setScene] = useState(scene1);
+    // Setup scenes and map planes
+    const scene1 = new THREE.Scene();
+    const texturePath = '../../public/MapImages/Patriot Place Floor 1.png';
+    const mapTexture = new THREE.TextureLoader().load(texturePath);
+    mapTexture.colorSpace = THREE.SRGBColorSpace;
+    const mapGeo = new THREE.PlaneGeometry(500, 281);
+    const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
+    const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
+    mapPlane.position.set(0, 0, 0);
+    scene1.add(mapPlane);
+    const scene2 = new THREE.Scene();
+    const texturePath1 = '../../public/MapImages/Patriot Place Floor 3.png';
+    const mapTexture1 = new THREE.TextureLoader().load(texturePath1);
+    mapTexture.colorSpace = THREE.SRGBColorSpace;
+    const mapGeo1 = new THREE.PlaneGeometry(500, 281);
+    const mapMaterial1 = new THREE.MeshBasicMaterial({ map: mapTexture1 });
+    const mapPlane1 = new THREE.Mesh(mapGeo1, mapMaterial1);
+    mapPlane1.position.set(0, 0, 0);
+    scene2.add(mapPlane1);
+    const scene3 = new THREE.Scene();
+    const texturePath2 = '../../public/MapImages/Patriot Place Floor 4.png';
+    const mapTexture2 = new THREE.TextureLoader().load(texturePath2);
+    mapTexture.colorSpace = THREE.SRGBColorSpace;
+    const mapGeo2 = new THREE.PlaneGeometry(500, 281);
+    const mapMaterial2 = new THREE.MeshBasicMaterial({ map: mapTexture2 });
+    const mapPlane2 = new THREE.Mesh(mapGeo2, mapMaterial2);
+    mapPlane2.position.set(0, 0, 0);
+    scene3.add(mapPlane2);
+    const scene4 = new THREE.Scene();
+    const texturePath3 = '../../public/MapImages/Chestnut Hill Floor 1.png';
+    const mapTexture3 = new THREE.TextureLoader().load(texturePath3);
+    mapTexture.colorSpace = THREE.SRGBColorSpace;
+    const mapGeo3 = new THREE.PlaneGeometry(500, 281);
+    const mapMaterial3 = new THREE.MeshBasicMaterial({ map: mapTexture3 });
+    const mapPlane3 = new THREE.Mesh(mapGeo3, mapMaterial3);
+    mapPlane3.position.set(0, 0, 0);
+    scene4.add(mapPlane3);
+    const scene = useRef<THREE.Scene>(scene1);
 
     // updates the selected node position from UI
     const updateNodePosition = (x: number, y: number, floor: number) => {
@@ -64,16 +103,16 @@ export function DraggableMap() {
         sphere.position.x = node.x;
         sphere.position.y = node.y;
         const nodeFloor = node.floor;
-        if (building === 'PatriotPlace') {
-            if (nodeFloor === 1) {
-                scene1.add(sphere);
-            } else if (nodeFloor === 2) {
-                scene2.add(sphere);
-            } else if (nodeFloor === 3) {
-                scene3.add(sphere);
-            }
-        } else {
+        if (nodeFloor === 1) {
+            scene1.add(sphere);
+        } else if (nodeFloor === 2) {
+            scene2.add(sphere);
+        } else if (nodeFloor === 3) {
+            scene3.add(sphere);
+        } else if (nodeFloor === 4) {
             scene4.add(sphere);
+        } else {
+            console.error("node not added because floor doesn't exist");
         }
         //objects.push(sphere);
     };
@@ -90,16 +129,18 @@ export function DraggableMap() {
         const geometry = new TubeGeometry(path, 1, edgeRadius, Math.round(edgeRadius * 4));
         const material = new THREE.MeshBasicMaterial(edgeColor);
         const edge = new THREE.Mesh(geometry, material);
-        if (building === 'PatriotPlace') {
-            if (floor === 1) {
-                scene1.add(edge);
-            } else if (floor === 2) {
-                scene2.add(edge);
-            } else if (floor === 3) {
-                scene3.add(edge);
-            }
-        } else {
+        if (node1.floor === 1 && node2.floor === 1) {
+            scene1.add(edge);
+        } else if (node1.floor === 2 && node2.floor === 2) {
+            scene2.add(edge);
+        } else if (node1.floor === 3 && node2.floor === 3) {
+            scene3.add(edge);
+        } else if (node1.floor === 4 && node2.floor === 4) {
             scene4.add(edge);
+        } else if (node1.floor !== node2.floor) {
+            // Node spans floor, don't add an edge
+        } else {
+            console.error("edge not added because floor doesn't exist");
         }
     };
 
@@ -108,6 +149,19 @@ export function DraggableMap() {
         setIsFading(true);
         setTimeout(() => {
             setFloor(newFloor);
+            console.log(scene);
+            if (newFloor === 1) {
+                scene.current = scene1;
+                console.log('scene 1');
+            } else if (newFloor === 3) {
+                scene.current = scene2;
+                console.log('scene 2');
+            } else if (newFloor === 4) {
+                scene.current = scene3;
+                console.log('scene 3');
+            } else if (newFloor === 5) {
+                scene.current = scene4;
+            }
             setTimeout(() => {
                 setIsFading(false);
             }, 200); // Fade-in duration
@@ -194,50 +248,15 @@ export function DraggableMap() {
         renderer.setPixelRatio(window.devicePixelRatio);
 
         // Create camera
-        const camera = new THREE.PerspectiveCamera(50, 1920 / 1080, 250, 1000);
+        const camera = new THREE.PerspectiveCamera(
+            50,
+            canvas!.clientWidth / canvas!.clientHeight,
+            250,
+            1000
+        );
         camera.position.set(0, 0, 300);
 
-        const selectScene = (scene: THREE.Scene) => {
-            setScene(scene);
-        };
-
-        if (building === 'PatriotPlace') {
-            if (floor === 1) {
-                selectScene(scene1);
-            } else if (floor === 2) {
-                selectScene(scene2);
-            } else if (floor === 3) {
-                selectScene(scene3);
-            }
-        } else {
-            selectScene(scene4);
-        }
-
-        // Load floor-specific map image
-        let texturePath: string = '';
-        if (floor === 1) {
-            texturePath = '../../public/MapImages/Patriot Place Floor 1.png';
-        }
-        if (floor === 3) {
-            texturePath = '../../public/MapImages/Patriot Place Floor 3.png';
-        }
-        if (floor === 4) {
-            texturePath = '../../public/MapImages/Patriot Place Floor 4.png';
-        }
-        if (floor === 5) {
-            texturePath = '../../public/MapImages/Chestnut Hill Floor 1.png';
-        }
-
-        // Setup map plane
-        const mapTexture = new THREE.TextureLoader().load(texturePath);
-        mapTexture.colorSpace = THREE.SRGBColorSpace;
-        const mapGeo = new THREE.PlaneGeometry(500, 400);
-        const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
-        const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
-        mapPlane.position.set(0, 0, 0);
-        scene.add(mapPlane);
-
-        scene.background = new THREE.Color('#2FBCC7');
+        scene.current.background = new THREE.Color('#2FBCC7');
 
         // Camera controls
         const orbitControls = new OrbitControls(camera, renderer.domElement);
@@ -384,20 +403,10 @@ export function DraggableMap() {
                 // selected object use state position for passing to UI
                 setNodeX(selectedObject.current.position.x);
                 setNodeY(selectedObject.current.position.y);
-                setFloor(1); //TODO: Setup floor handling with floor switcher, may not want this functionality at all.
+                //setFloor(1); //TODO: Setup floor handling with floor switcher, may not want this functionality at all.
             }
-
-            if (building === 'PatriotPlace') {
-                if (floor === 1) {
-                    renderer.render(scene1, camera);
-                } else if (floor === 3) {
-                    renderer.render(scene2, camera);
-                } else if (floor === 4) {
-                    renderer.render(scene3, camera);
-                }
-            } else {
-                renderer.render(scene4, camera);
-            }
+            console.log(scene.current);
+            renderer.render(scene.current, camera);
 
             window.requestAnimationFrame(animate);
             //requestAnimationFrame(animate);
@@ -406,7 +415,7 @@ export function DraggableMap() {
                 renderer.dispose();
                 mapMaterial.dispose();
                 mapTexture.dispose();
-                scene.traverse((obj) => {
+                scene.current.traverse((obj) => {
                     if ((obj as THREE.Mesh).material) {
                         ((obj as THREE.Mesh).material as THREE.Material).dispose();
                     }
@@ -414,7 +423,7 @@ export function DraggableMap() {
                         ((obj as THREE.Mesh).geometry as THREE.BufferGeometry).dispose();
                     }
                 });
-                scene.clear();
+                scene.current.clear();
             };
         };
         animate();

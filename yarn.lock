@@ -804,15 +804,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:^7.17.3":
-  version: 7.17.3
-  resolution: "@mantine/hooks@npm:7.17.3"
-  peerDependencies:
-    react: ^18.x || ^19.x
-  checksum: 10c0/7cd922e2626f2499515929242fa41f213cca60402b98467479c650bd4e9ee6a0cec822ffaf3e2b43091d5e6f8473333e4e03555f6a86e40f4f25e6693d28276d
-  languageName: node
-  linkType: hard
-
 "@mantine/hooks@npm:7.17.4":
   version: 7.17.4
   resolution: "@mantine/hooks@npm:7.17.4"
