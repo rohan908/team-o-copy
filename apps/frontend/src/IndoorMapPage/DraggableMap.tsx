@@ -124,10 +124,35 @@ export function DraggableMap() {
         }
 
         // Only create edges on the same floor
-        if (node1.floor === node2.floor) {
-            animationRef.current.createEdge({ x: node1.x, y: node1.y }, { x: node2.x, y: node2.y });
+        if (node1.floor === node2.floor && node1.floor === 1) {
+            scene1.add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
+        } else if (node1.floor === node2.floor && node1.floor === 2) {
+            scene2.add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
+        } else if (node1.floor === node2.floor && node1.floor === 3) {
+            scene3.add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
+        } else if (node1.floor === node2.floor && node1.floor === 4) {
+            scene4.add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
         } else {
-            // Node spans floor, don't add an edge
             console.log('Skipping edge between floors', node1.floor, node2.floor);
         }
     };

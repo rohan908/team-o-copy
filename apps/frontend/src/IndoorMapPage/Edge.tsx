@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { TubeGeometry } from 'three';
+import React from 'react';
 
 export class FlowingTubeAnimation {
     private scene: React.MutableRefObject<THREE.Scene>;
@@ -123,7 +124,6 @@ export class FlowingTubeAnimation {
         const geometry = new TubeGeometry(path, tubeSegments, 0.5, 8, false);
 
         const tube = new THREE.Mesh(geometry, flowingMaterial);
-        this.scene.current.add(tube);
         this.tubes.push(tube);
 
         return tube;
