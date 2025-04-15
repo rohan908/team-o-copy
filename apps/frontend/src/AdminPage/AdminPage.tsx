@@ -146,7 +146,7 @@ export function AdminPage() {
                     my="md"
                     size="sm"
                     style={{
-                        borderTop: '1px dotted black',
+                        borderTop: '4px dotted #FCCD6F',
                     }}
                 />
                 <br />
