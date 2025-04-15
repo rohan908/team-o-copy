@@ -5,6 +5,7 @@ interface CustomButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     children: string;
     onClick?: () => void;
     disabled?: boolean;
+    bg?: string;
 }
 
 // <Button

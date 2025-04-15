@@ -143,9 +143,9 @@ const theme = createTheme({
 function App() {
     return (
         <MantineProvider theme={theme}>
-            <DirectoryNodeProvider>
+            <DirectoryProvider>
                 <Routing />
-            </DirectoryNodeProvider>
+            </DirectoryProvider>
         </MantineProvider>
     );
 }
