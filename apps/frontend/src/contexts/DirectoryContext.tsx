@@ -6,7 +6,7 @@ import {
     useContext,
     PropsWithChildren,
 } from 'react';
-import { fetchDirectoryData } from '../directory/components/DirData';
+import { fetchDirectoryData } from '../directory/components/GetDirectoryData.tsx';
 import { DirectoryItem } from './DirectoryItem';
 
 /*
@@ -70,6 +70,16 @@ export const usePatriot20Context = () => {
     return context.patriot20;
 };
 
+export const useDirectoryContext = () => {
+    const context = useContext(DirectoryContext);
+    if (!context) {
+        throw new Error(
+            'The usePatriot22Context must be used within the provider component Patriot22Provider'
+        );
+    }
+
+    return context;
+};
 export const usePatriot22Context = () => {
     const context = useContext(DirectoryContext);
     if (!context) {
@@ -191,7 +201,9 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
     // Fetch data only once when the provider mounts. maybe doesn't need useEffect because
     // there's already one used in fetchDirectoryData()...
     useEffect(() => {
-        fetchData();
+        if (fetchData) {
+            fetchData();
+        }
     }, [fetchData]);
 
     /*
