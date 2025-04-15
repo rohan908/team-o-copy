@@ -45,11 +45,15 @@ export function Display() {
         Service Request Submitted
       </Text>
       <Box
+
         bg="gray.1"
         p="xl"
         w="100%"
         maw="600px"
-        style={{ borderRadius: theme.radius.md }}
+        style={{ borderRadius: theme.radius.md ,
+          border: '3px solid',
+        borderColor: '#90EE90',
+        }}
       >
         <Text mb="sm"><strong>Name:</strong> {requestData.employeeName}</Text>
         <Text mb="sm"><strong>Hospital:</strong> {requestData.hospital}</Text>

@@ -20,11 +20,12 @@ import HospitalSelect from "./components/HospitalEntry.tsx";
 import PriorityButtons from "./components/PriorityButtons.tsx";
 import StatusSelect from "./components/StatusSelect.tsx";
 import NameEntry from "./components/NameEntry.tsx";
+import DepartmentSelect from "./components/DepartmentSelect.tsx";
 
 interface RequestData {
   language: string;
   date: string;
-  room: string;
+  department: string;
   time: string;
   employeeName: string;
   priority: string;
@@ -41,7 +42,7 @@ function Language() {
     initialValues: {
       language: '',
       date: '',
-      room: '',
+      department: '',
       time: '',
       employeeName: '',
       hospital: '',
@@ -66,7 +67,7 @@ function Language() {
           label,
           selectedDate: RequestData.date,
           selectedTime: RequestData.time,
-          roomNumber: RequestData.room,
+          department: RequestData.department,
           priority: RequestData.priority,
           employeeName: RequestData.employeeName,
           status: RequestData.status,
@@ -82,7 +83,7 @@ function Language() {
               label,
               selectedDate: RequestData.date,
               selectedTime: RequestData.time,
-              roomNumber: RequestData.room,
+              department: RequestData.department,
               priority: RequestData.priority,
               employeeName: RequestData.employeeName,
               status: RequestData.status,
@@ -111,7 +112,7 @@ function Language() {
             Interpreter Request Form
           </Title>
 
-            <Flex gap="lg" wrap="wrap" mb="md">
+            <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
             <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
               <NameEntry required {...form.getInputProps("employeeName")} />
               <HospitalSelect required {...form.getInputProps("hospital")} />
@@ -122,7 +123,7 @@ function Language() {
             <Box flex="1" miw = "300px"> {/* column 2!!!*/}
               <DateInputForm required {...form.getInputProps('date')} />
               <TimeEntry required {...form.getInputProps('time')} />
-              <RoomNumberInput required {...form.getInputProps('room')} />
+              <DepartmentSelect required hospital={form.values.hospital} {...form.getInputProps('department')} />
               <StatusSelect required {...form.getInputProps('status')} />
             </Box>
           </Flex>
