@@ -42,7 +42,7 @@ function Security() {
         const label = RequestData.service === 'Escort';
 
         try {
-            const response = await fetch('/api/languageSR', {
+            const response = await fetch('/api/SecuritySR', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
