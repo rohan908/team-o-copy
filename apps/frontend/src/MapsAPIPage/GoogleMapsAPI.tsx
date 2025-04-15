@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {GoogleMap} from "@react-google-maps/api";
-import {Box} from '@mantine/core';
+import {Box, ScrollArea, Text } from '@mantine/core';
 
 interface GoogleMapProps {
     selectedHospital: google.maps.LatLngLiteral | null;
@@ -47,32 +47,28 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
 
     return (
         <>
-            <Box style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <Box pos="relative" w="100%" h="100vh">
                 <GoogleMap
                     mapContainerStyle={{ width: '100%', height: '100%' }}
                     zoom={10}
                     center={selectedHospital ?? { lat: 42.093429, lng: -71.268228 }}
                     onLoad={handleMapLoad}
                 />
-            </Box>
-
             {steps.length > 0 && (
-                <Box
-                    style={{
-                        position: 'absolute',
-                        top: '3rem',
-                        right: '2rem',
-                        maxHeight: '500px',
-                        width: '300px',
-                        overflowY: 'auto',
-                        backgroundColor: 'white',
-                        padding: '1rem',
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                        zIndex: 9999,
-                    }}
+                <Box //custom box for directions
+                    pos="absolute"
+                    top="4rem"
+                    right="0.5rem"
+                    w={300}
+                    maw={500}
+                    bg="white"
+                    p="md"
+                    radius="md"
+                    shadow="md"
                 >
-                    <strong>Directions:</strong>
+                  <Text fw={700} mb="sm">Directions:</Text>
+                  <ScrollArea h={400}>
+
                     <ol style={{ paddingLeft: '1.2rem', marginTop: '0.5rem' }}>
                         {steps.map((step, index) => (
                             <li
@@ -82,8 +78,10 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
                             />
                         ))}
                     </ol>
+                  </ScrollArea>
                 </Box>
             )}
+          </Box>
         </>
     );
 }

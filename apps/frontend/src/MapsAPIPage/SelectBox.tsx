@@ -107,13 +107,13 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
 
 
     return (
-      <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
+      !collapsed?(
+      <Flex justify="center" align="center" h="100vh" w="100%">
+        <Box w="100%" maw={500}>
         <TwoPartInteractiveBox
             title="Find your Way!"
             subtitle="Use our interactive map to find departments, parking, and efficient routes"
         >
-          {!collapsed?(
-            <>
               <Stack w="100%">
                 <Box>
                   <Text ta="left" mb="sm" fw={500}>
@@ -168,14 +168,34 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     disabled={!hospital}
                   />
                 </Box>
+                <Box ta = "right">
+                  <BlackButton onClick={handleFindPath}>
+                    Find Path
+                  </BlackButton>
+                </Box>
               </Stack>
-              </>
-                  ) : (
-                    <Box/>
-                )}
         </TwoPartInteractiveBox>
+        </Box>
+
       </Flex>
-      );
-};
+      ) : (
+        <Box
+          pos="fixed"
+          bottom="0.5rem"
+          w="100%">
+          <Button onClick={() => setCollapsed(false)}
+                      style={{
+                        left: "40%"
+                      }}>
+                Expand Directions Menu
+              </Button>
+              <Button component={Link} to="/IndoorMapPage" color="green"
+                style={{
+                  left: '65%',
+                }}>
+                I've Arrived
+              </Button>
+            </Box>
+      ))};
 
 export default SelectBox;

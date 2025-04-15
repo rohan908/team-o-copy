@@ -38,15 +38,7 @@ export function MapAPIPage() {
 
 
     return (
-        <Box
-            style={{
-                position: 'relative',
-                width: '100%',
-                height: '100vh',
-                overflow: 'hidden',
-                zIndex: 1, // must exceed map’s z-index
-            }}
-        >
+        <Box pos="relative">
             {/* Map behind */}
           <GoogleMapsAPI
             selectedHospital={
@@ -61,19 +53,11 @@ export function MapAPIPage() {
             }
             travelMode={travelMode ?? google.maps.TravelMode.DRIVING}
           />
-            <Box
-                style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    left: '3rem',
-                    zIndex: 9999, // must exceed map’s z-index
-                }}
-            >
+
                 <SelectBox onSelectHospital={handleSelectHospital}
                            onSetUserCoordinates={setUserCoordinates}
                            onSetTravelMode={setTravelMode}
                 />
-            </Box>
         </Box>
     );
 }
