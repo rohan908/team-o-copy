@@ -39,7 +39,7 @@ export function DraggableMap() {
     Chestnut Hill Floor 1 -> floor4 -> scene 4
      */
 
-    // Setup scenes and map planes
+    // Setup scenes and map planes. This is probably the worst way to do this possible
     const scene1 = new THREE.Scene();
     const texturePath = '../../public/MapImages/Patriot Place Floor 1.png';
     const mapTexture = new THREE.TextureLoader().load(texturePath);
@@ -114,7 +114,7 @@ export function DraggableMap() {
         } else {
             console.error("node not added because floor doesn't exist");
         }
-        //objects.push(sphere);
+        objects.push(sphere);
     };
 
     const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
@@ -227,6 +227,8 @@ export function DraggableMap() {
             color1: 0x00aaff,
             color2: 0xff3300,
             flowSpeed: 0.3,
+            pulseFrequency: 2.0,
+            pulseWidth: 0.25,
         });
 
         // we create a new renderer

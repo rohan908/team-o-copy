@@ -73,7 +73,7 @@ export class FlowingTubeAnimation {
                   // Project this vector onto the tube direction to get distance along tube
                   vDistance = dot(toPosition, tubeDirection);
                   
-                  // Normalize to 0-1 range
+                  // Normalize
                   vDistance = vDistance / tubeLength;
                   
                   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
