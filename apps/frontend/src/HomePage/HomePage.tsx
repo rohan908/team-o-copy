@@ -9,7 +9,7 @@ export function HomePage() {
 
     return (
         <TimelineProvider>
-            <Flex h="100vh" p="md" justify="center" align="center" bg={theme.colors.terquAccet[1]}>
+            <Flex h="100vh" justify="center" align="center" bg={theme.colors.terquAccet[1]}>
                 <Grid h="100%" gutter="xl" justify="center" align="stretch">
                     <Grid.Col span={6} p="xl">
                         <Title order={1} size="h1">
@@ -19,11 +19,11 @@ export function HomePage() {
 
                     <Grid.Col span={6} p="xl"></Grid.Col>
 
-                    <Grid.Col span={6} p="xl">
+                    <Grid.Col span={6} p="xl" h="50%">
                         <CustomTimeline />
                     </Grid.Col>
 
-                    <Grid.Col span={6} p="xl">
+                    <Grid.Col span={6} p="xl" h="50%">
                         <ContentSwitcher />
                     </Grid.Col>
                 </Grid>

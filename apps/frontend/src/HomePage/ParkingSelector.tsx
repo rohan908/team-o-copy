@@ -7,11 +7,11 @@ const hospitalOptions = [
     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
 ];
 
-export function GmapsStartSelector({ props }: { props: any }) {
+export function ParkingSelector({ props }: { props: any }) {
     return (
         <Select
-            label="Choose your starting location"
-            placeholder="--Input a Location--"
+            label="Choose a Hospital:"
+            placeholder="--Input a Hospital--"
             searchable
             data={hospitalOptions}
             nothingFoundMessage="Location Not Available"

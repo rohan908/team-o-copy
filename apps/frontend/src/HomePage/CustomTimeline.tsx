@@ -5,6 +5,8 @@ import { useTimeline } from './TimeLineContext.tsx';
 import { GmapsStartSelector } from './GmapsStartSelector.tsx';
 import { GmapsDestinationSelector } from './GmapsDestinationSelector.tsx';
 import { useForm } from '@mantine/form';
+import { ParkingSelector } from './ParkingSelector.tsx';
+import { DepartmentSelector } from './DepartmentSelector.tsx';
 
 export const CustomTimeline = () => {
     const {
@@ -18,9 +20,10 @@ export const CustomTimeline = () => {
         setUserCoordinates,
         travelMode,
         setTravelMode,
-     } = useTimeline();
+    } = useTimeline();
     //FILL IN CONTENT HERE FOR EACH SUBSECTION
 
+    // TODO: redo the form so instead it passes the necessary context to each component and then those components have a onChange{(value) => set...(value | '')} 
     const getCurrTabContent = (i: number) => {
         switch (i) {
             case 0: //Go To Hospital (GMAPS)
@@ -32,7 +35,15 @@ export const CustomTimeline = () => {
                     </Stack>
                 );
             case 1: //Indoor Nav
-                return <Stack gap={2}>Option 2</Stack>;
+                return (
+                    <Stack gap={2}>
+                        <ParkingSelector required {...form.getInputProps('hospital')} />
+                        <DepartmentSelector
+                            required
+                            {...form.getInputProps('departmentDestination')}
+                        />
+                    </Stack>
+                );
             case 2:
                 return <Text>Please Select a Service Request</Text>;
         }
@@ -61,6 +72,9 @@ export const CustomTimeline = () => {
                 setUserCoordinates(values.startLocation);
                 setSelectedHospital(values.hospital);
                 break;
+            case 1:
+                setCurrDirectoryDestination(values.hospital);
+                break;
         }
     };
 
@@ -72,6 +86,7 @@ export const CustomTimeline = () => {
                         key={i}
                         bullet={<div onClick={() => handleClickChangeButton(i)}> {item.icon} </div>}
                         title={item.title}
+                        py = 'xxl'
                     >
                         <Transition
                             mounted={activeSection === i}

@@ -10,13 +10,12 @@ export function ContentSwitcher() {
     const content = () => {
         switch (activeSection) {
             case 0: //GMAPS
-                return <Image src="/ProofOfConceptHomePageImages/GmapsImg.png" />;
+                return <Image src="/ProofOfConceptHomePageImages/GmapsImg.png" mah="100%" maw="100%" objectFit="contain" />;
             case 1: //Indoor Nav
-                return <Image src="/ProofOfConceptHomePageImages/FloorPlanPathing.png" />;
-            case 2: //Request Services
-                return <ServiceRequestPage />;
+                return <Image src="/ProofOfConceptHomePageImages/FloorPlanPathing.png" mah="100%" maw="100%" objectFit="contain" />;
+            case 2: //Service Request
+                return <ServiceRequestPage mah="100%" maw="100%" objectFit="contain" />;
         }
     };
-
-    return <Container h="100%">{content()}</Container>;
+    return <Container h="100%" p='0'>{content()}</Container>;
 }
