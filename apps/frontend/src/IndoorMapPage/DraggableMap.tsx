@@ -1,15 +1,14 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Box, useMantineTheme } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
-import { TubeGeometry } from 'three';
-import { Node } from './MapClasses/Node.ts';
 import { findPath } from './FindPathRouting.ts';
 import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
+import { FlowingTubeAnimation } from './Edge.tsx';
 
 export function DraggableMap() {
     const theme = useMantineTheme();
@@ -23,14 +22,15 @@ export function DraggableMap() {
     const canvasId = 'insideMapCanvas';
     const objects: THREE.Object3D[] = [];
     objects.push(new THREE.Object3D());
+    // Animation related refs
+    const animationRef = useRef<FlowingTubeAnimation | null>(null);
+    const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
     // Parameters for THREEjs objects and path display
     const firstNodeId = 1; // start node
     const lastNodeId = 10; // destination node
-    const nodeColor = { color: 0xffff00 };
-    const edgeColor = { color: 0xff0000 };
-    const nodeRadius = 2;
-    const edgeRadius = 1.5;
+    const nodeColor = { color: 0xeafeff };
+    const nodeRadius = 1;
 
     /*
     Patriot Place Floor 1 -> floor1 -> scene 1
@@ -39,7 +39,7 @@ export function DraggableMap() {
     Chestnut Hill Floor 1 -> floor4 -> scene 4
      */
 
-    // Setup scenes and map planes
+    // Setup scenes and map planes. This is probably the worst way to do this possible
     const scene1 = new THREE.Scene();
     const texturePath = '../../public/MapImages/Patriot Place Floor 1.png';
     const mapTexture = new THREE.TextureLoader().load(texturePath);
@@ -114,33 +114,46 @@ export function DraggableMap() {
         } else {
             console.error("node not added because floor doesn't exist");
         }
-        //objects.push(sphere);
+        objects.push(sphere);
     };
 
     const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
-        const xStart = node1.x;
-        const yStart = node1.y;
-        const xEnd = node2.x;
-        const yEnd = node2.y;
-        const path = new THREE.LineCurve3(
-            new THREE.Vector3(xStart, yStart, 0),
-            new THREE.Vector3(xEnd, yEnd, 0)
-        );
-        const geometry = new TubeGeometry(path, 1, edgeRadius, Math.round(edgeRadius * 4));
-        const material = new THREE.MeshBasicMaterial(edgeColor);
-        const edge = new THREE.Mesh(geometry, material);
-        if (node1.floor === 1 && node2.floor === 1) {
-            scene1.add(edge);
-        } else if (node1.floor === 2 && node2.floor === 2) {
-            scene2.add(edge);
-        } else if (node1.floor === 3 && node2.floor === 3) {
-            scene3.add(edge);
-        } else if (node1.floor === 4 && node2.floor === 4) {
-            scene4.add(edge);
-        } else if (node1.floor !== node2.floor) {
-            // Node spans floor, don't add an edge
+        if (!animationRef.current) {
+            console.error('Animation reference not initialized');
+            return;
+        }
+
+        // Only create edges on the same floor
+        if (node1.floor === node2.floor && node1.floor === 1) {
+            scene1.add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
+        } else if (node1.floor === node2.floor && node1.floor === 2) {
+            scene2.add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
+        } else if (node1.floor === node2.floor && node1.floor === 3) {
+            scene3.add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
+        } else if (node1.floor === node2.floor && node1.floor === 4) {
+            scene4.add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
         } else {
-            console.error("edge not added because floor doesn't exist");
+            console.log('Skipping edge between floors', node1.floor, node2.floor);
         }
     };
 
@@ -235,6 +248,14 @@ export function DraggableMap() {
         const canvas = document.getElementById(canvasId);
         if (!canvas) return;
 
+        animationRef.current = new FlowingTubeAnimation(scene, {
+            color1: 0x00aaff,
+            color2: 0xff3300,
+            flowSpeed: 0.3,
+            pulseFrequency: 2.0,
+            pulseWidth: 0.25,
+        });
+
         // we create a new renderer
         const renderer = new THREE.WebGLRenderer({
             canvas: canvas as HTMLCanvasElement,
@@ -247,33 +268,24 @@ export function DraggableMap() {
         const camera = new THREE.PerspectiveCamera(
             50,
             canvas!.clientWidth / canvas!.clientHeight,
-            250,
+            50,
             1000
         );
         camera.position.set(0, 0, 300);
+
+        // Initialize clock for animation timing
+        clockRef.current = new THREE.Clock();
 
         scene.current.background = new THREE.Color('#2FBCC7');
 
         // Camera controls
         const orbitControls = new OrbitControls(camera, renderer.domElement);
-        //orbitControls.enableRotate = false;
+        orbitControls.enableRotate = false;
         orbitControls.mouseButtons = {
             LEFT: THREE.MOUSE.PAN,
             MIDDLE: THREE.MOUSE.DOLLY,
             RIGHT: THREE.MOUSE.ROTATE,
         };
-
-        // Optional: Add extra stuff per floor
-        /*
-    if (floor === 2) {
-      const cube = new THREE.Mesh(
-        new THREE.BoxGeometry(30, 30, 30),
-        new THREE.MeshStandardMaterial({ color: "orange" })
-      );
-      cube.position.set(-150, 0, 0);
-      scene.add(cube);
-    }
-      */
 
         // Initialize dragControls with an empty array
         let draggableObjects: THREE.Object3D[] = [];
@@ -396,15 +408,22 @@ export function DraggableMap() {
 
         const animate = () => {
             if (selectedObject.current) {
-                // selected object use state position for passing to UI
+                // Update state with selected object position
                 setNodeX(selectedObject.current.position.x);
                 setNodeY(selectedObject.current.position.y);
-                //setFloor(1); //TODO: Setup floor handling with floor switcher, may not want this functionality at all.
             }
-            renderer.render(scene.current, camera);
 
+            // Get delta time for animation
+            const deltaTime = clockRef.current.getDelta();
+
+            // Update flowing animation
+            if (animationRef.current) {
+                animationRef.current.update(deltaTime);
+            }
+
+            // Render the current scene
+            renderer.render(scene.current, camera);
             window.requestAnimationFrame(animate);
-            //requestAnimationFrame(animate);
 
             return () => {
                 renderer.dispose();
