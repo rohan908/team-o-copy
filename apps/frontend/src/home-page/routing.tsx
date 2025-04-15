@@ -14,8 +14,9 @@ import {ServiceRequestPage} from "../service-request/ServiceRequestPage.tsx"
 
 import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import LanguageRequestHistory from "../AdminPage/LanguageRequestHistory.tsx";
-import {DraggableMap} from "../IndoorMapPage/DraggableMap.tsx";
+import LanguageRequestHistory from '../AdminPage/LanguageRequestHistory.tsx';
+import { DraggableMap } from '../IndoorMapPage/DraggableMap.tsx';
+import {NodeDirectory} from "../NodeDirectoryPage/NodeDirectory.tsx";
 
 
 export function Routing() {
@@ -26,18 +27,22 @@ export function Routing() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<NavBar />}>
-                        <Route index element={<HomePage/>} />
-                        <Route path="map-page" element={<MapPage/>} />
-                        <Route path="map-API" element={<MapAPIPage/>} />
+                        <Route index element={<HomePage />} />
+                        <Route path="map-page" element={<MapPage />} />
+                        <Route path="map-API" element={<MapAPIPage />} />
                         <Route path="/submission" element={<Display />} />
-                        <Route path="directory" element={<Directory/>}/>
+                        <Route path="directory" element={<Directory />} />
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
+                        <Route path="/IndoorMapPage" element={<DraggableMap />} />
                         <Route path="/service-request-page" element={<ServiceRequestPage />} />
                         <Route path="/language-form" element={<Language />} />
                         <Route path="/IndoorMapPage" element={<DraggableMap/>} />
                         <Route path="/admin-page" element={<AdminPage />} />
-                      <Route path="/language-request-history" element={<LanguageRequestHistory />} />
-                 </Route>
+                        <Route
+                            path="/language-request-history"
+                            element={<LanguageRequestHistory />}
+                        />
+                    </Route>
                 </Routes>
             </BrowserRouter>
         </>

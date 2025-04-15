@@ -43,16 +43,17 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^7.4.4",
+    "frontend": "workspace:^",
     "iso-639-1": "^3.1.5",
     "multer": "^1.4.5-lts.2",
     "papaparse": "^5.5.2",
     "tailwindcss": "^4.1.0",
-    "three": "^0.175.0"
+    "three": "^0.175.0",
+    "workspace": "^0.0.1-preview.2"
   },
   "resolutions": {
     "dotenv": "^16.4.7",
     "dotenv-cli": "^7.4.4",
-    "@types/node": "^22.13.13",
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
     "typescript": "^5.8.2",

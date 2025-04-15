@@ -8,20 +8,23 @@ export async function findPath(
     pathFindingType: string
 ): Promise<Node<NodeDataType>[]> {
     try {
-        const response = await axios.post('http://localhost:3001/graph/findPath', {
-            startNodeId: startNodeId,
-            endNodeId: endNodeId,
-            algoType: pathFindingType,
-        });
+        const response = await axios
+          .post(`api/graph/findPath`, {
+            startID: startNodeId,
+            endID: endNodeId,
+            pathAlgo: pathFindingType,
+          })
 
-        const data = response.data;
+        return response.data;
 
+        /* this error handler is buggin
         if (!data.success) {
             throw new Error(data.error || 'Failed to find path');
         }
 
         // Return just the path array from the result
         return data.result.path;
+        */
     } catch (error) {
         console.error('Error finding path:', error);
         throw error;
