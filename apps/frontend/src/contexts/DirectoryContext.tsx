@@ -89,7 +89,7 @@ export const useChestnutHillContext = () => {
         );
     }
 
-    return context;
+    return context.chestnutHill;
 };
 
 /*
@@ -167,8 +167,14 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
             const patData = await fetchDirectoryData('1');
             const chestHilldata = await fetchDirectoryData('2');
 
-            dispatch({ type: 'SET_PATRIOT', data: patData });
-            dispatch({ type: 'SET_CHESTNUTHILL', data: chestHilldata });
+            const setPatData = await patData.json().then((data) => {
+              dispatch({ type: 'SET_PATRIOT', data: data });
+            })
+
+            const setChestnutData = await chestHilldata.json().then((data) => {
+              dispatch({ type: 'SET_CHESTNUTHILL', data: data });
+            })
+
         } catch (err) {
             // I made if statements for this to fix " err is of type unknown"
             if (err instanceof Error) {
