@@ -7,7 +7,7 @@ import directoryRouter from './routes/Directory.ts';
 import languageServiceRequestRouter from './routes/LanguageServiceRequest.ts';
 import exportRoute from './routes/ExportRoute.ts';
 import graphRouter from './routes/Graph.ts';
-
+import MaintenanceRouter from "./routes/MaintenanceRouter.ts";
 import { API_ROUTES } from 'common/src/constants';
 import PrismaClient from './bin/prisma-client.ts';
 
@@ -41,6 +41,7 @@ app.use(cookieParser()); // Cookie parser
 app.use(API_ROUTES.HEALTHCHECK, healthcheckRouter);
 app.use(API_ROUTES.DIRECTORY, directoryRouter);
 app.use(API_ROUTES.LANGUAGESR, languageServiceRequestRouter);
+app.use(API_ROUTES.MAINTENANCESR, MaintenanceRouter);
 app.use(API_ROUTES.GRAPH, graphRouter);
 
 // adding route for file exporting

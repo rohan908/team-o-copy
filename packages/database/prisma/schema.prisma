@@ -72,3 +72,13 @@ model Edge {
   nodes Int[] // ids of both nodes in this edge
 }
 
+model MaintenanceServiceRequest {
+  requestID   Int      @id @default(autoincrement())
+  room        String
+  createdAt   DateTime @default(now())
+  date        String
+  time        String
+  maintenanceType    String
+  status      String
+  description String?
+}

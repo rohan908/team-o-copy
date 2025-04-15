@@ -11,6 +11,7 @@ export const API_ROUTES = {
     GRAPH: '/api/graph',
     LANGUAGESR: '/api/languageSR',
     EXPORTROUTE: '/api/exportRoute',
+    MAINTENANCESR: '/api/maintenance',
 };
 
 // file paths for backup files

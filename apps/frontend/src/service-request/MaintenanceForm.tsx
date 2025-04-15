@@ -15,46 +15,43 @@ import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
 import RoomNumberInput from './components/RoomEntry';
 import RequestDescription from './components/RequestDescription';
-import LanguageSelect from './components/LanguageSelect';
 import HospitalSelect from "./components/HospitalEntry.tsx";
 import PriorityButtons from "./components/PriorityButtons.tsx";
-import Maintenance from "./MaintenanceForm.tsx";
+import StatusSelect from "./components/StatusSelect.tsx"
 
 interface RequestData {
-  language: string;
+  status: string;
   date: string;
   room: string;
   time: string;
   priority: string;
   hospital: string;
   description: string;
+  maintenanceType: string;
 }
 
-function Language() {
+function Maintenance() {
   const theme = useMantineTheme();
   const navigate = useNavigate();
 
   const form = useForm<RequestData>({
     initialValues: {
-      language: '',
+      status: '',
       date: '',
       room: '',
       time: '',
       hospital: '',
       priority: '',
       description: '',
+      maintenanceType: '',
     },
   });
 
   const handleSubmit = async () => {
     const RequestData = form.values;
-    const label =
-      RequestData.language === 'asl'
-        ? 'ASL (American Sign Language)'
-        : ISO6391.getName(RequestData.language);
-
+    const label = RequestData.maintenanceType;
     try {
-      const response = await fetch('/api/languageSR', {
+      const response = await fetch('/api/maintenance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -99,20 +96,24 @@ function Language() {
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Title order={2} ta="center" mb="lg">
-            Interpreter Request Form
+            Maintenance Request Form
+          </Title>
+          <Title order={5} ta="center" mb="lg">
+            Yanding Mario and Connor Daly
           </Title>
 
-            <Flex gap="lg" wrap="wrap" mb="md">
+
+          <Flex gap="lg" wrap="wrap" mb="md">
             <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
               <HospitalSelect required {...form.getInputProps("hospital")} />
               <PriorityButtons {...form.getInputProps('priority')} />
-              <LanguageSelect required {...form.getInputProps('language')} />
             </Box>
 
             <Box flex="1" miw = "300px"> {/* column 2!!!*/}
               <DateInputForm required {...form.getInputProps('date')} />
               <TimeEntry required {...form.getInputProps('time')} />
               <RoomNumberInput required {...form.getInputProps('room')} />
+              <StatusSelect required {...form.getInputProps('status')} />
             </Box>
           </Flex>
 
@@ -123,11 +124,11 @@ function Language() {
           <Flex mt="xl" justify="left" gap="md">
 
             <Button
-                type="button"
-                variant="outline"
-                color="blueBase.5"
-                style={{ width: '200px' }}
-                onClick={() => form.reset()}
+              type="button"
+              variant="outline"
+              color="blueBase.5"
+              style={{ width: '200px' }}
+              onClick={() => form.reset()}
             >
               Clear Form
             </Button>
@@ -143,9 +144,8 @@ function Language() {
           </Flex>
         </form>
       </Paper>
-      <Maintenance/>
     </Flex>
   );
 }
 
-export default Language;
+export default Maintenance;
