@@ -1,4 +1,5 @@
-import { DirectoryItem } from '../../contexts/DirectoryItem';
+// MOVE THIS INTO SEPARATE FOLDER ON FRONTEND, LIKE DATABASE FETCHING OR
+// SOMETHING.
 
 export async function fetchDirectoryData(mapID: string) {
     try {

@@ -1,15 +1,9 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Button,
-  Flex,
-  Title,
-  Paper,
-  Box,
-  useMantineTheme,
-} from '@mantine/core';
+import { Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import ISO6391 from 'iso-639-1';
+import { useLanguageRequestContext } from '../contexts/LanguageRequestContext.tsx';
 
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
@@ -75,13 +69,28 @@ function Language() {
 
     form.setFieldValue('department', '');
   }
+    const langREQ = useLanguageRequestContext();
+    console.log('TESTER CODE FOR CONTEXT!!!!');
+    console.log(langREQ);
 
-  const handleSubmit = async () => {
-    const RequestData = form.values;
-    const label =
-      RequestData.language === 'asl'
-        ? 'ASL (American Sign Language)'
-        : ISO6391.getName(RequestData.language);
+    const form = useForm<RequestData>({
+        initialValues: {
+            language: '',
+            date: '',
+            room: '',
+            time: '',
+            hospital: '',
+            priority: '',
+            description: '',
+        },
+    });
+
+    const handleSubmit = async () => {
+        const RequestData = form.values;
+        const label =
+            RequestData.language === 'asl'
+                ? 'ASL (American Sign Language)'
+                : ISO6391.getName(RequestData.language);
 
     try {
       const response = await fetch('/api/languageSR', {
@@ -190,4 +199,5 @@ function Language() {
     </Flex>
   );
 }
+
 export default Language;
