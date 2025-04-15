@@ -1,8 +1,9 @@
 import React from 'react';
-import {Routing} from './home-page/routing.tsx';
+import { Routing } from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
+import { LanguageRequestProvider } from './contexts/LanguageRequestContext.tsx';
 import {
     createTheme,
     MantineProvider,
@@ -145,7 +146,9 @@ function App() {
     return (
         <MantineProvider theme={theme}>
             <DirectoryProvider>
-                <Routing />
+                <LanguageRequestProvider>
+                    <Routing />
+                </LanguageRequestProvider>
             </DirectoryProvider>
         </MantineProvider>
     );

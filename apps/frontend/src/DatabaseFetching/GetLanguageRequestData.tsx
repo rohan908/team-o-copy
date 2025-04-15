@@ -1,26 +1,27 @@
-import { DirectoryItem } from '../../contexts/DirectoryItem';
+// MOVE THIS INTO SEPARATE FOLDER ON FRONTEND, LIKE DATABASE FETCHING OR
+// SOMETHING.
 
-export async function fetchDirectoryData(mapID: string) {
+export async function fetchLanguageRequestData() {
     try {
         console.log('fetching');
 
         // gets directory data through http query from directory.ts
-        const res = await fetch(`/api/directory/${mapID}`);
+        const res = await fetch(`/api/languageSR`);
 
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
 
-        const directoryData = res.json().then((res) => {
+        const languageRequestData = res.json().then((res) => {
             console.log(res);
 
             // returns data as javascript object !!
             return res;
         });
     } catch (error) {
-        console.error('Error fetching directory table', error);
+        console.error('Error fetching language request table', error);
         return null;
     }
 }
 
-export default fetchDirectoryData;
+export default fetchLanguageRequestData;
