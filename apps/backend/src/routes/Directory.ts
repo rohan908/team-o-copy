@@ -80,17 +80,16 @@ router.get('/:mapID', async (req: Request, res: Response) => {
 });
 
 router.get('/:nodeID', async (req: Request, res: Response) => {
-  const nodeID = Number(req.params.nodeID);
+    const nodeID = Number(req.params.nodeID);
 
-  const node = await PrismaClient.node.findUnique({
-    where: {
-      id: nodeID,
-    },
-  });
+    const node = await PrismaClient.node.findUnique({
+        where: {
+            id: nodeID,
+        },
+    });
 
-  res.send(node);
+    res.send(node);
 });
-
 
 // Clears the directory database table
 router.delete('/clear', async (req: Request, res: Response) => {

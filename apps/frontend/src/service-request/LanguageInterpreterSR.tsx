@@ -18,13 +18,17 @@ import RequestDescription from './components/RequestDescription';
 import LanguageSelect from './components/LanguageSelect';
 import HospitalSelect from "./components/HospitalEntry.tsx";
 import PriorityButtons from "./components/PriorityButtons.tsx";
+import StatusSelect from "./components/StatusSelect.tsx";
+import NameEntry from "./components/NameEntry.tsx";
 
 interface RequestData {
   language: string;
   date: string;
   room: string;
   time: string;
+  employeeName: string;
   priority: string;
+  status: string;
   hospital: string;
   description: string;
 }
@@ -39,8 +43,10 @@ function Language() {
       date: '',
       room: '',
       time: '',
+      employeeName: '',
       hospital: '',
       priority: '',
+      status: '',
       description: '',
     },
   });
@@ -62,6 +68,8 @@ function Language() {
           selectedTime: RequestData.time,
           roomNumber: RequestData.room,
           priority: RequestData.priority,
+          employeeName: RequestData.employeeName,
+          status: RequestData.status,
           hospital: RequestData.hospital,
           description: RequestData.description,
         }),
@@ -76,6 +84,8 @@ function Language() {
               selectedTime: RequestData.time,
               roomNumber: RequestData.room,
               priority: RequestData.priority,
+              employeeName: RequestData.employeeName,
+              status: RequestData.status,
               hospital: RequestData.hospital,
               description: RequestData.description,
             },
@@ -103,6 +113,7 @@ function Language() {
 
             <Flex gap="lg" wrap="wrap" mb="md">
             <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
+              <NameEntry required {...form.getInputProps("employeeName")} />
               <HospitalSelect required {...form.getInputProps("hospital")} />
               <PriorityButtons {...form.getInputProps('priority')} />
               <LanguageSelect required {...form.getInputProps('language')} />
@@ -112,6 +123,7 @@ function Language() {
               <DateInputForm required {...form.getInputProps('date')} />
               <TimeEntry required {...form.getInputProps('time')} />
               <RoomNumberInput required {...form.getInputProps('room')} />
+              <StatusSelect required {...form.getInputProps('status')} />
             </Box>
           </Flex>
 
