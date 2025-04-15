@@ -2047,6 +2047,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react@npm:^19":
+  version: 19.1.2
+  resolution: "@types/react@npm:19.1.2"
+  dependencies:
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/76ffe71395c713d4adc3c759465012d3c956db00af35ab7c6d0d91bd07b274b7ce69caa0478c0760311587bd1e38c78ffc9688ebc629f2b266682a19d8750947
+  languageName: node
+  linkType: hard
+
 "@types/responselike@npm:^1.0.0":
   version: 1.0.3
   resolution: "@types/responselike@npm:1.0.3"
@@ -6815,6 +6824,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react@npm:^19.1.0":
+  version: 19.1.0
+  resolution: "react@npm:19.1.0"
+  checksum: 10c0/530fb9a62237d54137a13d2cfb67a7db6a2156faed43eecc423f4713d9b20c6f2728b026b45e28fcd72e8eadb9e9ed4b089e99f5e295d2f0ad3134251bdd3698
+  languageName: node
+  linkType: hard
+
 "readable-stream@npm:^2.2.2":
   version: 2.3.8
   resolution: "readable-stream@npm:2.3.8"
@@ -7332,6 +7348,7 @@ __metadata:
     "@types/multer": "npm:^1"
     "@types/node": "npm:^22.14.0"
     "@types/papaparse": "npm:^5.3.15"
+    "@types/react": "npm:^19"
     "@types/three": "npm:^0"
     "@vitest/ui": "npm:^3.0.9"
     "@yarnpkg/pnpify": "npm:^4.1.4"
@@ -7348,14 +7365,17 @@ __metadata:
     papaparse: "npm:^5.5.2"
     prettier: "npm:^3.5.3"
     prettier-config-custom: "workspace:*"
+    react: "npm:^19.1.0"
     tailwindcss: "npm:^4.1.0"
     three: "npm:^0.175.0"
     ts-config-custom: "workspace:*"
     ts-node: "npm:^10.9.2"
+    tunnel-rat: "npm:0.1.2"
     turbo: "npm:*"
     typescript: "npm:^5.8.3"
     vitest: "npm:^3.0.9"
     workspace: "npm:^0.0.1-preview.2"
+    zustand: "npm:4.5.6"
   languageName: unknown
   linkType: soft
 
@@ -7930,7 +7950,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tunnel-rat@npm:^0.1.2":
+"tunnel-rat@npm:0.1.2, tunnel-rat@npm:^0.1.2":
   version: 0.1.2
   resolution: "tunnel-rat@npm:0.1.2"
   dependencies:
@@ -8582,19 +8602,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:^3.7.1":
-  version: 3.7.2
-  resolution: "zustand@npm:3.7.2"
-  peerDependencies:
-    react: ">=16.8"
-  peerDependenciesMeta:
-    react:
-      optional: true
-  checksum: 10c0/6a56185ca67080c252dfe96039da02094cfd780bd7a45768708105f114dea39ae9abc80ffaa7f3f6104e6490db325bd443b857ab5eab8ebf9a697318cd163bb6
-  languageName: node
-  linkType: hard
-
-"zustand@npm:^4.3.2":
+"zustand@npm:4.5.6, zustand@npm:^4.3.2":
   version: 4.5.6
   resolution: "zustand@npm:4.5.6"
   dependencies:
@@ -8611,6 +8619,18 @@ __metadata:
     react:
       optional: true
   checksum: 10c0/5b39aff2ef57e5a8ada647261ec1115697d397be311c51461d9ea81b5b63c6d2c498b960477ad2db72dc21db6aa229a92bdf644f6a8ecf7b1d71df5b4a5e95d3
+  languageName: node
+  linkType: hard
+
+"zustand@npm:^3.7.1":
+  version: 3.7.2
+  resolution: "zustand@npm:3.7.2"
+  peerDependencies:
+    react: ">=16.8"
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 10c0/6a56185ca67080c252dfe96039da02094cfd780bd7a45768708105f114dea39ae9abc80ffaa7f3f6104e6490db325bd443b857ab5eab8ebf9a697318cd163bb6
   languageName: node
   linkType: hard
 
