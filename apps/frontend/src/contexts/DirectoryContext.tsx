@@ -59,43 +59,33 @@ export const DirectoryContext = createContext<DirectoryContextType | undefined>(
     Which looks cleaner and simpler.
  */
 
-export const usePatriot20Context = () => {
+export const usePatriotContext = () => {
     const context = useContext(DirectoryContext);
     if (!context) {
         throw new Error(
-            'The usePatriot20Context must be used within the provider component Patriot20Provider'
+            'The usePatriotContext must be used within the provider component Patriot20Provider'
         );
     }
 
-    return context.patriot20;
+    return context.patriot;
 };
 
 export const useDirectoryContext = () => {
     const context = useContext(DirectoryContext);
     if (!context) {
         throw new Error(
-            'The usePatriot22Context must be used within the provider component Patriot22Provider'
+            'The useDirectoryContext must be used within the provider component DirectoryProvider'
         );
     }
 
     return context;
-};
-export const usePatriot22Context = () => {
-    const context = useContext(DirectoryContext);
-    if (!context) {
-        throw new Error(
-            'The usePatriot22Context must be used within the provider component Patriot22Provider'
-        );
-    }
-
-    return context.patriot22;
 };
 
 export const useChestnutHillContext = () => {
     const context = useContext(DirectoryContext);
     if (!context) {
         throw new Error(
-            'The usePatriot20Context must be used within the provider component Patriot20Provider'
+            'The ChestnutContext must be used within the provider component ChestnutProvider'
         );
     }
 
@@ -106,8 +96,7 @@ export const useChestnutHillContext = () => {
   This is for the reducer function.
  */
 interface DirectoryState {
-    patriot20: DirectoryItem[];
-    patriot22: DirectoryItem[];
+    patriot: DirectoryItem[];
     chestnutHill: DirectoryItem[];
     isLoading: boolean;
     error: string | null;
@@ -119,8 +108,7 @@ interface DirectoryState {
   thrown when the context is called and doesn't have any values in it.
  */
 type DirectoryAction =
-    | { type: 'SET_PATRIOT20'; data: DirectoryItem[] }
-    | { type: 'SET_PATRIOT22'; data: DirectoryItem[] }
+    | { type: 'SET_PATRIOT'; data: DirectoryItem[] }
     | { type: 'SET_CHESTNUTHILL'; data: DirectoryItem[] }
     | { type: 'SET_LOADING'; data: boolean }
     | { type: 'SET_ERROR'; data: string };
@@ -138,10 +126,8 @@ type DirectoryAction =
  */
 function directoryReducer(state: DirectoryState, action: DirectoryAction): DirectoryState {
     switch (action.type) {
-        case 'SET_PATRIOT20':
-            return { ...state, patriot20: action.data };
-        case 'SET_PATRIOT22':
-            return { ...state, patriot22: action.data };
+        case 'SET_PATRIOT':
+            return { ...state, patriot: action.data };
         case 'SET_CHESTNUTHILL':
             return { ...state, chestnutHill: action.data };
         case 'SET_LOADING':
@@ -164,8 +150,7 @@ function directoryReducer(state: DirectoryState, action: DirectoryAction): Direc
  */
 export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [state, dispatch] = useReducer(directoryReducer, {
-        patriot20: [],
-        patriot22: [],
+        patriot: [],
         chestnutHill: [],
         isLoading: false,
         error: null,
@@ -179,12 +164,10 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
         dispatch({ type: 'SET_LOADING', data: true });
         try {
             // grabs data from the database for each building
-            const pat20data = await fetchDirectoryData('Patriot-20');
-            const pat22data = await fetchDirectoryData('Patriot-22');
-            const chestHilldata = await fetchDirectoryData('Chestnut-Hill');
+            const patData = await fetchDirectoryData('1');
+            const chestHilldata = await fetchDirectoryData('2');
 
-            dispatch({ type: 'SET_PATRIOT20', data: pat20data });
-            dispatch({ type: 'SET_PATRIOT22', data: pat22data });
+            dispatch({ type: 'SET_PATRIOT', data: patData });
             dispatch({ type: 'SET_CHESTNUTHILL', data: chestHilldata });
         } catch (err) {
             // I made if statements for this to fix " err is of type unknown"
