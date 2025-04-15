@@ -7,7 +7,7 @@ import directoryRouter from './routes/Directory.ts';
 import languageServiceRequestRouter from './routes/LanguageServiceRequest.ts';
 import exportRoute from './routes/ExportRoute.ts';
 import graphRouter from './routes/Graph.ts';
-import MaintenanceRouter from "./routes/MaintenanceRouter.ts";
+import MaintenanceRouter from './routes/MaintenanceRouter.ts';
 import { API_ROUTES } from 'common/src/constants';
 import PrismaClient from './bin/prisma-client.ts';
 

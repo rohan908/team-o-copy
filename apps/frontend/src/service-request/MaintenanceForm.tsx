@@ -18,6 +18,7 @@ import RequestDescription from './components/RequestDescription';
 import HospitalSelect from "./components/HospitalEntry.tsx";
 import PriorityButtons from "./components/PriorityButtons.tsx";
 import StatusSelect from "./components/StatusSelect.tsx"
+import EnterName from './components/EnterName.tsx';
 
 interface RequestData {
   status: string;
@@ -26,7 +27,7 @@ interface RequestData {
   time: string;
   priority: string;
   hospital: string;
-  description: string;
+  name: string;
   maintenanceType: string;
 }
 
@@ -42,7 +43,7 @@ function Maintenance() {
       time: '',
       hospital: '',
       priority: '',
-      description: '',
+      name: '',
       maintenanceType: '',
     },
   });
@@ -61,7 +62,8 @@ function Maintenance() {
           roomNumber: RequestData.room,
           priority: RequestData.priority,
           hospital: RequestData.hospital,
-          description: RequestData.description,
+          name: RequestData.name,
+          status: RequestData.status,
         }),
       });
 
@@ -75,7 +77,7 @@ function Maintenance() {
               roomNumber: RequestData.room,
               priority: RequestData.priority,
               hospital: RequestData.hospital,
-              description: RequestData.description,
+              name: RequestData.name,
             },
           },
         });
@@ -101,7 +103,9 @@ function Maintenance() {
           <Title order={5} ta="center" mb="lg">
             Yanding Mario and Connor Daly
           </Title>
-
+          <Box mt="md">
+            <EnterName{...form.getInputProps('name')} />
+          </Box>
 
           <Flex gap="lg" wrap="wrap" mb="md">
             <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
@@ -117,9 +121,6 @@ function Maintenance() {
             </Box>
           </Flex>
 
-          <Box mt="md">
-            <RequestDescription {...form.getInputProps('description')} />
-          </Box>
 
           <Flex mt="xl" justify="left" gap="md">
 

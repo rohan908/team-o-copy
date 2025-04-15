@@ -80,5 +80,5 @@ model MaintenanceServiceRequest {
   time        String
   maintenanceType    String
   status      String
-  description String?
+  name String
 }
