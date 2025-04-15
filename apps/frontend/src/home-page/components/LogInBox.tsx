@@ -50,7 +50,7 @@ const LogInBox = () => {
                 subContents={
                     <>
                         <Stack gap="0">
-                            <BasicOutlinedButton onClick={() => navigate('/map-page')}>
+                            <BasicOutlinedButton onClick={() => navigate('/map-API')}>
                                 Get Directions!
                             </BasicOutlinedButton>
 

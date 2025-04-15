@@ -20,3 +20,8 @@ export interface PathFinderResult {
     distance: number; //summation of the weights
     success?: boolean;
 }
+
+export interface GetNodeResult {
+    node: Node<NodeDataType> | undefined;
+    success?: boolean;
+}
