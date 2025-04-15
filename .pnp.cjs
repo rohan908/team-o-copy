@@ -62,6 +62,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@tabler/icons-react", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:3.31.0"],\
           ["@types/cors", "npm:2.8.17"],\
           ["@types/google.maps", "npm:3.58.1"],\
           ["@types/multer", "npm:1.4.12"],\
@@ -1804,6 +1805,20 @@ const RAW_RUNTIME_STATE =
           ["@tabler/icons-react", "npm:3.31.0"]\
         ],\
         "linkType": "SOFT"\
+      }],\
+      ["virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:3.31.0", {\
+        "packageLocation": "./.yarn/__virtual__/@tabler-icons-react-virtual-5cdd4a3e4e/0/cache/@tabler-icons-react-npm-3.31.0-9f8830aa08-aceefe1b6c.zip/node_modules/@tabler/icons-react/",\
+        "packageDependencies": [\
+          ["@tabler/icons-react", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:3.31.0"],\
+          ["@tabler/icons", "npm:3.31.0"],\
+          ["@types/react", null],\
+          ["react", null]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
       }],\
       ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.31.0", {\
         "packageLocation": "./.yarn/__virtual__/@tabler-icons-react-virtual-0ad7c583fa/0/cache/@tabler-icons-react-npm-3.31.0-9f8830aa08-aceefe1b6c.zip/node_modules/@tabler/icons-react/",\
@@ -8360,6 +8375,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["softeng-startercode-d25", "workspace:."],\
+          ["@tabler/icons-react", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:3.31.0"],\
           ["@types/cors", "npm:2.8.17"],\
           ["@types/google.maps", "npm:3.58.1"],\
           ["@types/multer", "npm:1.4.12"],\

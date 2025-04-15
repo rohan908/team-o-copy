@@ -6851,6 +6851,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-startercode-d25@workspace:."
   dependencies:
+    "@tabler/icons-react": "npm:^3.31.0"
     "@types/cors": "npm:^2"
     "@types/google.maps": "npm:^3.58.1"
     "@types/multer": "npm:^1"
