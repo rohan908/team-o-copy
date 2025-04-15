@@ -16,6 +16,7 @@ import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import LanguageRequestHistory from '../AdminPage/LanguageRequestHistory.tsx';
 import { DraggableMap } from '../IndoorMapPage/DraggableMap.tsx';
+import {NodeDirectory} from "../NodeDirectoryPage/NodeDirectory.tsx";
 
 
 export function Routing() {
