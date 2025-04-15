@@ -3,7 +3,7 @@ import {Button, Flex, Image, Box, Group, Anchor, Burger, UnstyledButton, Tabs, M
 import { useState, useEffect } from 'react';
 import "../home-style.css";
 import { useLogin } from './LoginContext'; // adjust path if needed
-import Service from '../../service-request/service.tsx';
+import Service from '../../service-request/LanguageInterpreterSR.tsx';
 import AdminPage from "../../AdminPage/AdminPage.tsx";
 
 import {useDisclosure} from "@mantine/hooks";
@@ -21,7 +21,7 @@ export const navItems: NavItem[] = [
 ];
 
 export const adminNavItems: NavItem[] = [
-    { name: "Service Request", link: "/language-form" }, //add service rec routting here logan
+    { name: "Service Request", link: "/service-request-page" }, //add service rec routting here logan
     { name: "Admin Page", link: '/admin-page' },
 
     // { name: "Profile", link: "/submission" }// potential delighter- login button can be in this

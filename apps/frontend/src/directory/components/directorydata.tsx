@@ -1,5 +1,12 @@
+// !!! THIS SHOULD BE REMOVED !!!
+
 // directoryData.ts
-export const Patriot20 = [
+export interface HospitalDepartment{
+  title: string;
+  slug: string;
+}
+
+export const Patriot20: HospitalDepartment[] = [
   { title: 'Electromyography (EMG)', slug: 'emg' },
   { title: 'Nutrition', slug: 'nutrition' },
   { title: 'Pain Medicine', slug: 'pain-medicine' },
@@ -38,7 +45,7 @@ export const Patriot20 = [
   { title: 'Urgent Care Center', slug: 'urgent-care' },
 ];
 
-export const Patriot22 = [
+export const Patriot22: HospitalDepartment[] = [
   { title: 'Blood Draw/Phlebotomy', slug: 'blood-draw' },
   { title: 'Community Room', slug: 'community' },
   { title: 'Primary Care', slug: 'primary-care' },
@@ -56,9 +63,29 @@ export const Patriot22 = [
   { title: 'Rheumatology', slug: 'rheumatology' },
   { title: 'Vein Care Services', slug: 'vcs' },
   { title: 'Women\'s Health', slug: 'woman\'s-Health' },
-  { title: 'Patient Financial Services', slug: 'financial-services' },
+  { title: 'Patient Financial Services', slug: 'financial-OldMapServices' },
 ];
 
+export const ChestnutHill: HospitalDepartment[] = [
+  { title: 'Allergy and Clinical Immunology', slug: 'allergy-immunology' },
+  { title: 'Backup Child Care Center', slug: 'child-care' },
+  { title: 'Brigham Dermatology Associates (BDA)', slug: 'dermatology' },
+  { title: 'Brigham Obstetrics and Gynecology Group (BOGG)', slug: 'obgyn' },
+  { title: 'Brigham Physicians Group (BPG)', slug: 'primary-care' },
+  { title: 'Brigham Psychiatric Specialties', slug: 'psychiatry' },
+  { title: 'Center for Pain Medicine', slug: 'pain-medicine' },
+  { title: 'Crohn’s and Colitis Center', slug: 'crohns-colitis' },
+  { title: 'Endoscopy Center', slug: 'endoscopy' },
+  { title: 'Gretchen S. and Edward A. Fish Center for Women’s Health', slug: 'womens-health' },
+  { title: 'Laboratory', slug: 'lab' },
+  { title: 'Multi-Specialty Clinic', slug: 'multi-specialty' },
+  { title: 'Osher Clinical Center for Integrative Health', slug: 'integrative-health' },
+  { title: 'Patient Financial Services', slug: 'financial' },
+  { title: 'Pharmacy', slug: 'pharmacy' },
+  { title: 'Radiology', slug: 'radiology' },
+  { title: 'Radiology MRI/CT', slug: 'radiology-mri-ct' },
+  { title: 'Rehabilitation Services', slug: 'rehab' },
+];
 
 
 

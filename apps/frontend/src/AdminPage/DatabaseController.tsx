@@ -48,7 +48,7 @@ export function DatabaseController({ table }: Props) {
 
             // Sends parsed data to the database
             const res = await axios
-                .post(`http://localhost:3001/${table}/import`, data)
+                .post(`api/${table}/import`, data)
                 .then((responseData) => {
                     console.log('Response from server:', responseData);
                 })
@@ -65,7 +65,7 @@ export function DatabaseController({ table }: Props) {
     // export function handling
     const handleExport = async () => {
         const link = document.createElement('a');
-        link.href = 'http://localhost:3001/exportRoute/static-export/backup.csv';
+        link.href = 'api/exportRoute/static-export/backup.csv';
         link.setAttribute('download', 'backup.csv');
         document.body.appendChild(link);
         link.click();
@@ -76,7 +76,7 @@ export function DatabaseController({ table }: Props) {
     const handleClear = async () => {
         if (!confirm('Are you sure you want to clear this table?')) return;
         const res = await axios
-            .get(`http://localhost:3001/${table}/clear`, {})
+            .delete(`api/${table}/clear`, {})
             .then((responseData) => {
                 console.log('Response from server:', responseData);
             });
