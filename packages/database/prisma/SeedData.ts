@@ -6,10 +6,10 @@ import {edgeData} from "../../common/src/MapHelper.ts";
 export function getNodeData() {
   return (
     [
-      { x: 2.8976, y: 4.6688, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1, edges: []},
-      { x: -21.0030, y: 8.6751, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1 },
-      { x: -44.9636, y: 15.0698, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1 },
-      { x: -25.7026, y: -12.2938, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1 },
+      { x: 2.8976, y: 4.6688, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1, connectingNodes: [2]},
+      { x: -21.0030, y: 8.6751, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1, connectingNodes: [3, 4]},
+      { x: -44.9636, y: 15.0698, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1, connectingNodes: [2]},
+      { x: -25.7026, y: -12.2938, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1, connectingNodes: [2]},
       { x: -31.6118, y: -36.3129, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1 },
       { x: -33.2244, y: -41.8766, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1 },
       { x: -72.3311, y: -31.8781, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1 },
@@ -30,7 +30,6 @@ export function getNodeData() {
       { x: -116.7063, y: 34.0961, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1 },
       { x: -132.5633, y: 38.6802, floor: 1, name: 'hallway', description: 'hallway', nodeType: 'hallway', mapId: 1 },
 
-      /*
       { x: 0, y: 0, floor: 1, name: 'Blood Draw/Phlebotomy', description: 'blood draw', nodeType: 'directory', mapId: 1 },
       { x: 0, y: 0, floor: 1, name: 'Pharmacy', description: 'Pharmacy', nodeType: 'directory', mapId: 1 },
       { x: 0, y: 0, floor: 1, name: 'Radiology', description: 'Radiology', nodeType: 'directory', mapId: 1 },
@@ -70,7 +69,6 @@ export function getNodeData() {
       { x: 0, y: 0, floor: 4, name: 'Pain Medicine', description: 'Pulmonary Function Testing', nodeType: 'directory', mapId: 4 },
       { x: 0, y: 0, floor: 4, name: 'Nutrition', description: 'Nutrition', nodeType: 'directory', mapId: 4 },
       { x: 0, y: 0, floor: 4, name: 'Electromyography (EMG)', description: 'Electromyography (EMG)', nodeType: 'directory', mapId: 4 },
-      */
     ]
   )
 }
