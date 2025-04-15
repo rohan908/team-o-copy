@@ -12,6 +12,7 @@ const DateEntry: React.FC<DateInputProps> = (props) => {
       required
       mb="sm"
       radius="sm"
+      size = "xs"
     />
   );
 };

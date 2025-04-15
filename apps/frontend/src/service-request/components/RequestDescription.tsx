@@ -8,8 +8,9 @@ const RequestDescription: React.FC<TextareaProps> = (props) => {
       placeholder="Specify additional details here"
       radius="sm"
       autosize
-      minRows={3}
-      mb="md"
+      minRows={2}
+      mb="sm"
+      size = "xs"
     />
   );
 };

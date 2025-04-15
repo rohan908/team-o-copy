@@ -18,6 +18,7 @@ const TimeEntry: React.FC<TimeInputProps> = (props) => {
       radius="sm"
       ref={ref}
       mb="sm"
+      size = "xs"
       leftSection={pickerControl}
     />
   );

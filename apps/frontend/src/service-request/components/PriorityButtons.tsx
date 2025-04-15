@@ -13,6 +13,7 @@ const PrioritySelect: React.FC<SelectProps> = (props) => {
       nothingFoundMessage="No Priority selected"
       radius="sm"
       mb="sm"
+      size = "xs"
       {...props}
     />
   );

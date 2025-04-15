@@ -101,7 +101,7 @@ function Language() {
             Interpreter Request Form
           </Title>
 
-          <Flex gap="lg" wrap="wrap" mb="md">
+            <Flex gap="lg" wrap="wrap" mb="md">
             <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
               <HospitalSelect required {...form.getInputProps("hospital")} />
               <PriorityButtons {...form.getInputProps('priority')} />

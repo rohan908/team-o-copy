@@ -10,6 +10,7 @@ const HospitalSelect: React.FC<SelectProps> = (props) => {
           nothingFoundMessage="Hospital not found"
           radius="sm"
           mb="sm"
+          size = "xs"
           {...props}
       />
   );

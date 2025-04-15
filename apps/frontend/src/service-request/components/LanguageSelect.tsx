@@ -20,6 +20,8 @@ const LanguageSelect: React.FC<SelectProps> = (props) => {
       nothingFoundMessage="Language not found"
       radius="sm"
       mb="sm"
+      size = "xs"
+
       {...props}
 
     />
