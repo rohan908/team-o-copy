@@ -1,6 +1,7 @@
 import React from 'react';
-import { Routing } from './home-page/routing.tsx';
+import {Routing} from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
 import {
     createTheme,

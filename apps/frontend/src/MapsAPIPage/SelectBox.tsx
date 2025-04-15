@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx';
 import {
     Box,
@@ -13,6 +13,7 @@ import {
     TextInput
 } from '@mantine/core';
 import * as L from 'leaflet';
+import {useChestnutHillContext, usePatriotContext} from "../contexts/DirectoryContext.tsx";
 
 interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
@@ -36,6 +37,9 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
     const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
+
+    const Patriot = usePatriotContext();
+    const Chestnut = useChestnutHillContext();
 
 
   const handleFindPath = () => {
@@ -74,16 +78,16 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     });
   }, []);
     useEffect(() => {
-        if (hospital === '20 Patriot St') {
-            const options = Patriot20.map((dept) => ({
-                value: dept.slug,
-                label: dept.title,
+        if (hospital === 'Patriot St') {
+            const options = Patriot.map((dept) => ({
+                value: dept.description,
+                label: dept.name,
             }));
             setDepartmentOptions(options);
-        } else if (hospital === '22 Patriot St') {
-            const options = Patriot22.map((dept) => ({
-                value: dept.slug,
-                label: dept.title,
+        } else if (hospital === 'Chestnut') {
+            const options = Patriot.map((dept) => ({
+                value: dept.description,
+                label: dept.name,
             }));
             setDepartmentOptions(options);
         } else {
@@ -154,10 +158,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     <Select
                         placeholder="Hospital"
                         data={[
-                            { value: '20 Patriot St', label: '20 Patriot St' },
-                            { value: '22 Patriot St', label: '22 Patriot St' },
+                            { value: 'Patriot St', label: 'Patriot St' },
                             { value: 'Chestnut Hill', label: 'Chestnut Hill' },
-
                         ]}
                         value={hospital}
                         onChange={setHospital}
