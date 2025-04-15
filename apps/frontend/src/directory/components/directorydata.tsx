@@ -1,7 +1,12 @@
 // !!! THIS SHOULD BE REMOVED !!!
 
 // directoryData.ts
-export const Patriot20 = [
+export interface HospitalDepartment{
+  title: string;
+  slug: string;
+}
+
+export const Patriot20: HospitalDepartment[] = [
   { title: 'Electromyography (EMG)', slug: 'emg' },
   { title: 'Nutrition', slug: 'nutrition' },
   { title: 'Pain Medicine', slug: 'pain-medicine' },
@@ -40,7 +45,7 @@ export const Patriot20 = [
   { title: 'Urgent Care Center', slug: 'urgent-care' },
 ];
 
-export const Patriot22 = [
+export const Patriot22: HospitalDepartment[] = [
   { title: 'Blood Draw/Phlebotomy', slug: 'blood-draw' },
   { title: 'Community Room', slug: 'community' },
   { title: 'Primary Care', slug: 'primary-care' },
@@ -61,7 +66,7 @@ export const Patriot22 = [
   { title: 'Patient Financial Services', slug: 'financial-OldMapServices' },
 ];
 
-export const ChestnutHill = [
+export const ChestnutHill: HospitalDepartment[] = [
   { title: 'Allergy and Clinical Immunology', slug: 'allergy-immunology' },
   { title: 'Backup Child Care Center', slug: 'child-care' },
   { title: 'Brigham Dermatology Associates (BDA)', slug: 'dermatology' },

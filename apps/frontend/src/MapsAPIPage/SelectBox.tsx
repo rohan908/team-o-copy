@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
 import {BlackButton} from "../common-compoents/commonButtons.tsx"
 import {TwoPartInteractiveBox} from "../common-compoents/standAloneFrame.tsx";
+import {HospitalDepartment, Patriot20, Patriot22, ChestnutHill} from '../directory/components/directorydata.tsx'; //this is now static lol
 
-
-import { Patriot20, Patriot22, ChestnutHill } from '../directory/components/directorydata.tsx'; //this is now static lol
 import {
     Box,
     Text,
@@ -41,8 +40,13 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
     const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
 
+    const MapDepartment = (department: HospitalDepartment[]) =>
+      department.map((department) =>({
+        value: department.slug,
+        label: department.title,
+      }));
 
-  const handleFindPath = () => {
+    const handleFindPath = () => {
         if (hospital == "Chestnut Hill") {
             onSelectHospital(new L.LatLng(42.32624893122403, -71.14948990068949));
         }
@@ -69,24 +73,12 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
 
     const setHospitalLocation = (hospital: string | null) =>{
       if (hospital === '20 Patriot Pl') {
-        const options = Patriot20.map((dept) => ({
-          value: dept.slug,
-          label: dept.title,
-        }));
-        setDepartmentOptions(options);
+        setDepartmentOptions(MapDepartment(Patriot20));
       } else if (hospital === '22 Patriot Pl') {
-        const options = Patriot22.map((dept) => ({
-          value: dept.slug,
-          label: dept.title,
-        }));
-        setDepartmentOptions(options);
+        setDepartmentOptions(MapDepartment(Patriot22));
       }
       else if (hospital == 'Chestnut Hill'){
-        const options = ChestnutHill.map((dept)=>({
-          value: dept.slug,
-          label: dept.title,
-        }));
-        setDepartmentOptions(options);
+        setDepartmentOptions(MapDepartment(ChestnutHill));
       }
       else {
         setDepartmentOptions([]);
