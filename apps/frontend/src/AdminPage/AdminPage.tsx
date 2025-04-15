@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
 import { useMantineTheme, Collapse, Button, Divider, Center, Flex, Title } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import Language from '../service-request/service.tsx';
-import LanguageRequestHistory from './LanguageRequestHistory.tsx';
+import Language from "../service-request/LanguageInterpreterSR.tsx";
+import LanguageRequestHistory from "./LanguageRequestHistory.tsx";
 import { BlackButton } from '../common-compoents/commonButtons.tsx';
 import { SegmentedControl } from '@mantine/core';
 
@@ -168,6 +168,7 @@ export function AdminPage() {
                 </Collapse>
             </div>
         </div>
+
     );
 }
 

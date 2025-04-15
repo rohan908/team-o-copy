@@ -759,30 +759,57 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/core@npm:^7.17.3":
-  version: 7.17.3
-  resolution: "@mantine/core@npm:7.17.3"
+"@mantine/core@npm:7.17.4":
+  version: 7.17.4
+  resolution: "@mantine/core@npm:7.17.4"
   dependencies:
     "@floating-ui/react": "npm:^0.26.28"
     clsx: "npm:^2.1.1"
     react-number-format: "npm:^5.4.3"
     react-remove-scroll: "npm:^2.6.2"
-    react-textarea-autosize: "npm:8.5.6"
+    react-textarea-autosize: "npm:8.5.9"
     type-fest: "npm:^4.27.0"
   peerDependencies:
-    "@mantine/hooks": 7.17.3
+    "@mantine/hooks": 7.17.4
     react: ^18.x || ^19.x
     react-dom: ^18.x || ^19.x
-  checksum: 10c0/bf1282d3656436e7db8a7e1b516fbe3c8ad4be44e4c742852f69a9bb4e288d85db8c825a82171ac2cc46bc784d1a9a736896cc6a2679ea6d5f9ef07e8ad17883
+  checksum: 10c0/30d3ee636d2d6b77d6c2195867b0ede907de46d65470c59ba7d49427e02cb559da3f9337d8d71c782c82dc816c0946a5224019d4c2d7590ff1c71e2f2671ed9f
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:^7.17.3":
-  version: 7.17.3
-  resolution: "@mantine/hooks@npm:7.17.3"
+"@mantine/dates@npm:7.17.4":
+  version: 7.17.4
+  resolution: "@mantine/dates@npm:7.17.4"
+  dependencies:
+    clsx: "npm:^2.1.1"
+  peerDependencies:
+    "@mantine/core": 7.17.4
+    "@mantine/hooks": 7.17.4
+    dayjs: ">=1.0.0"
+    react: ^18.x || ^19.x
+    react-dom: ^18.x || ^19.x
+  checksum: 10c0/a9d9964525be159520e272898ac090b59336fcf8c10542d571963f7a6b1b42019e1951deec78d3c08b8e6c149b2708f31222b719e651088579ef260cf108febe
+  languageName: node
+  linkType: hard
+
+"@mantine/form@npm:^7.17.4":
+  version: 7.17.4
+  resolution: "@mantine/form@npm:7.17.4"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+    klona: "npm:^2.0.6"
   peerDependencies:
     react: ^18.x || ^19.x
-  checksum: 10c0/a823d8ee7ebc56547881601e09e9625900682380b96665fd07cdbe540e95045587681c2cb2c132138045e2d02fd47125dd93e83e9022074f80e88a8114428b28
+  checksum: 10c0/7cd922e2626f2499515929242fa41f213cca60402b98467479c650bd4e9ee6a0cec822ffaf3e2b43091d5e6f8473333e4e03555f6a86e40f4f25e6693d28276d
+  languageName: node
+  linkType: hard
+
+"@mantine/hooks@npm:7.17.4":
+  version: 7.17.4
+  resolution: "@mantine/hooks@npm:7.17.4"
+  peerDependencies:
+    react: ^18.x || ^19.x
+  checksum: 10c0/e0ef1b5a53fa6a1d0be73590221422a45de715f8debc518af3f858272b108e4bcee13399a8129ab475db7af322f563f30b3ba6f839081538dda7fb11b572d8b4
   languageName: node
   linkType: hard
 
@@ -3381,6 +3408,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"dayjs@npm:^1.11.13":
+  version: 1.11.13
+  resolution: "dayjs@npm:1.11.13"
+  checksum: 10c0/a3caf6ac8363c7dade9d1ee797848ddcf25c1ace68d9fe8678ecf8ba0675825430de5d793672ec87b24a69bf04a1544b176547b2539982275d5542a7955f35b7
+  languageName: node
+  linkType: hard
+
 "debug@npm:2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -4324,8 +4358,10 @@ __metadata:
   resolution: "frontend@workspace:apps/frontend"
   dependencies:
     "@auth0/auth0-react": "npm:^2.1.1"
-    "@mantine/core": "npm:^7.17.3"
-    "@mantine/hooks": "npm:^7.17.3"
+    "@mantine/core": "npm:7.17.4"
+    "@mantine/dates": "npm:7.17.4"
+    "@mantine/form": "npm:^7.17.4"
+    "@mantine/hooks": "npm:7.17.4"
     "@react-google-maps/api": "npm:^2.20.6"
     "@react-three/drei": "npm:9.122.0"
     "@react-three/fiber": "npm:^8.0.0"
@@ -4343,6 +4379,7 @@ __metadata:
     "@vitejs/plugin-react-swc": "npm:^3.0.0"
     axios: "npm:^1.7.4"
     common: "npm:*"
+    dayjs: "npm:^1.11.13"
     dotenv: "npm:*"
     dotenv-cli: "npm:*"
     eslint: "npm:*"
@@ -5100,6 +5137,13 @@ __metadata:
   dependencies:
     json-buffer: "npm:3.0.1"
   checksum: 10c0/aa52f3c5e18e16bb6324876bb8b59dd02acf782a4b789c7b2ae21107fab95fab3890ed448d4f8dba80ce05391eeac4bfabb4f02a20221342982f806fa2cf271e
+  languageName: node
+  linkType: hard
+
+"klona@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "klona@npm:2.0.6"
+  checksum: 10c0/94eed2c6c2ce99f409df9186a96340558897b3e62a85afdc1ee39103954d2ebe1c1c4e9fe2b0952771771fa96d70055ede8b27962a7021406374fdb695fd4d01
   languageName: node
   linkType: hard
 
@@ -6719,16 +6763,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-textarea-autosize@npm:8.5.6":
-  version: 8.5.6
-  resolution: "react-textarea-autosize@npm:8.5.6"
+"react-textarea-autosize@npm:8.5.9":
+  version: 8.5.9
+  resolution: "react-textarea-autosize@npm:8.5.9"
   dependencies:
     "@babel/runtime": "npm:^7.20.13"
     use-composed-ref: "npm:^1.3.0"
     use-latest: "npm:^1.2.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/652d290d316c55a253507ecf65ca27f2162801dace10c715f2241203e81d82e9de6d282095b758b26c6bc9e1af9ca552cab5c3a361b230e5fcf25bec31e1bd25
+  checksum: 10c0/3a924db59259a6e3b834dcddc12a8661b43dcdaa1b43c41c732e0548bb2761e9a53dbc6db4e0d9e237728b4869e42c25e5417408b0391aec290c90874733a09f
   languageName: node
   linkType: hard
 

@@ -1,11 +1,11 @@
 import { DirectoryItem } from '../../contexts/DirectoryItem';
 
-export async function fetchDirectoryData(building: string) {
+export async function fetchDirectoryData(mapID: string) {
     try {
         console.log('fetching');
 
         // gets directory data through http query from directory.ts
-        const res = await fetch(`/api/directory/${building}`);
+        const res = await fetch(`/api/directory/${mapID}`);
 
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
