@@ -75,11 +75,9 @@ export function DatabaseController({ table }: Props) {
     // clear function handling
     const handleClear = async () => {
         if (!confirm('Are you sure you want to clear this table?')) return;
-        const res = await axios
-            .delete(`api/${table}/clear`, {})
-            .then((responseData) => {
-                console.log('Response from server:', responseData);
-            });
+        const res = await axios.delete(`api/${table}/clear`, {}).then((responseData) => {
+            console.log('Response from server:', responseData);
+        });
     };
 
     // used to reload the page when a button is pressed
@@ -98,13 +96,14 @@ export function DatabaseController({ table }: Props) {
                 accept=".csv"
                 onChange={setFile}
                 className="mb-4"
+                color="#FFF8EBs"
                 styles={{
-                  input: {
-                    borderColor: '000',
-                    '&:hover': {
-                      borderColor: '#93c5fd',
-                    }
-                  }
+                    input: {
+                        borderColor: '#153A90',
+                        '&:hover': {
+                            borderColor: '#93c5fd',
+                        },
+                    },
                 }}
             />
             <Flex
@@ -122,13 +121,13 @@ export function DatabaseController({ table }: Props) {
                     //leftSection={<IconArrowRight size={14} />}
                     style={{
                         root: {
-                          borderColor: '#000',
-                          '&:hover': {
-                            color: '#93c5fd',
-                            borderColor: '#93c5fd',
-                            backgroundColor: 'transparent',
-                          }
-                          }
+                            borderColor: '#000',
+                            '&:hover': {
+                                color: '#93c5fd',
+                                borderColor: '#93c5fd',
+                                backgroundColor: 'transparent',
+                            },
+                        },
                     }}
                     onClick={() => {
                         handleImport();
@@ -138,22 +137,22 @@ export function DatabaseController({ table }: Props) {
                     Import CSV
                 </Button>
                 <Button
-                  size="sm"
-                  color="dark"
-                  className="nav-element hover-shadow"
-                  bg="#153A90"
-                  fw="600"
-                  //leftSection={<IconArrowRight size={14} />}
-                  style={{
-                    root: {
-                      borderColor: '#000',
-                      '&:hover': {
-                        color: '#93c5fd',
-                        borderColor: '#93c5fd',
-                        backgroundColor: 'transparent',
-                      }
-                    }
-                  }}
+                    size="sm"
+                    color="dark"
+                    className="nav-element hover-shadow"
+                    bg="#153A90"
+                    fw="600"
+                    //leftSection={<IconArrowRight size={14} />}
+                    style={{
+                        root: {
+                            borderColor: '#000',
+                            '&:hover': {
+                                color: '#93c5fd',
+                                borderColor: '#93c5fd',
+                                backgroundColor: 'transparent',
+                            },
+                        },
+                    }}
                     onClick={handleExport}
                 >
                     Export CSV
@@ -166,14 +165,14 @@ export function DatabaseController({ table }: Props) {
                     className="nav-element hover-shadow"
                     //leftSection={<IconArrowRight size={14} />}
                     style={{
-                      root: {
-                        borderColor: '#000',
-                        '&:hover': {
-                          color: '#93c5fd',
-                          borderColor: '#93c5fd',
-                          backgroundColor: 'transparent',
-                        }
-                      }
+                        root: {
+                            borderColor: '#000',
+                            '&:hover': {
+                                color: '#93c5fd',
+                                borderColor: '#93c5fd',
+                                backgroundColor: 'transparent',
+                            },
+                        },
                     }}
                     onClick={() => {
                         handleClear();

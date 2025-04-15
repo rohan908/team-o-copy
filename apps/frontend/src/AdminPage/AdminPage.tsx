@@ -24,7 +24,7 @@ export function AdminPage() {
             }}
         >
             <div className="max-w-4xl mx-auto bg-[#FDF0D5]/90 p-4 sm:p-6 md:p-10 rounded-xl shadow-lg backdrop-b lur-sm">
-                <Title order={1} className="mb-4 text-center" fw={600}>
+                <Title order={2} className="mb-4 text-center" fw={800}>
                     Admin Page
                 </Title>
 
@@ -53,12 +53,7 @@ export function AdminPage() {
                     </Button>
                 </Center>
                 <br />
-                <Divider
-                    my="md"
-                    size="sm"
-                    color="#FCB024"
-                    className="border-t border-dotted border-#FCB024"
-                />
+                <Divider my="lg" size="lg" color="#FCB024" variant="dotted" />
                 <br />
                 {/* CSV Import/Export Controls */}
                 <DatabaseController table="directory" />
