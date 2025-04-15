@@ -40,7 +40,6 @@ if [[ "$ECS_CLUSTER" != *"TODO"* && "$ECS_SERVICE" != *"TODO"* ]]; then
     --force-new-deployment \
     --output text \
     --no-cli-pager > /dev/null \
-    --deployment-configuration maximumPercent=100,minimumHealthyPercent=0
 fi
 
 echo "Deployment complete!"
