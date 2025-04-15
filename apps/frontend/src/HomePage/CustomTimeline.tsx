@@ -7,7 +7,7 @@ import { GmapsDestinationSelector } from './GmapsDestinationSelector.tsx';
 import { useForm } from '@mantine/form';
 
 export const CustomTimeline = () => {
-    const [
+    const {
         activeSection,
         setActiveSection,
         currDirectoryDestination,
@@ -18,7 +18,7 @@ export const CustomTimeline = () => {
         setUserCoordinates,
         travelMode,
         setTravelMode,
-    ] = useTimeline();
+     } = useTimeline();
     //FILL IN CONTENT HERE FOR EACH SUBSECTION
 
     const getCurrTabContent = (i: number) => {
