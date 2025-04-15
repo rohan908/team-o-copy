@@ -16,12 +16,14 @@ type NavItem = {
 export const navItems: NavItem[] = [
 
   { name: "Navigation", link: "/map-API" },
-  { name: "Map", link: "/map-page" },
+
+  // { name: "Map", link: "/map-page" },
+  // { name: "Node Directory", link: "/NodeDirectory" },
     // { name: "Directory", link: "/directory" },
 ];
 
 export const adminNavItems: NavItem[] = [
-    { name: "Service Request", link: "/language-form" }, //add service rec routting here logan
+    { name: "Service Request", link: "/service-request-page" }, //add service rec routting here logan
     { name: "Admin Page", link: '/admin-page' },
 
     // { name: "Profile", link: "/submission" }// potential delighter- login button can be in this

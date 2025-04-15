@@ -24,7 +24,7 @@ export class NavigationService {
             });
 
             // Convert Prisma's Uint8Array to Buffer for each layer
-            const layers: FloorMap[] = prismaLayers.map((layer) => ({
+            const layers: FloorMap[] = prismaLayers.map((layer: { bitmap: any }) => ({
                 ...layer,
                 bitmap: Buffer.from(layer.bitmap),
             }));
