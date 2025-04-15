@@ -14,6 +14,7 @@ const DepartmentSelect: React.FC<DepartmentSelectProps> = ({ departments, ...pro
       data={departments}
       radius="sm"
       size="xs"
+      mb="sm"
       {...props}
     />
   );

@@ -5,7 +5,7 @@ const NameEntry: React.FC<TextInputProps> = (props) => {
     <TextInput
       {...props}
       label="Enter Employee Name"
-      placeholder="FirstName LastName"
+      placeholder="--Enter Name--"
       radius="sm"
       mb="sm"
       size = "xs"

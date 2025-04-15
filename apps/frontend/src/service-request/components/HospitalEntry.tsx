@@ -9,7 +9,7 @@ interface HospitalSelectProps extends SelectProps {
 const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...props }) => {
     return (
         <Select
-            label="Choose the Hospital Needed *"
+            label="Choose the Hospital Needed"
             placeholder="--Select a Hospital--"
             searchable
             data={[
@@ -23,7 +23,6 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
             radius="sm"
             mb="sm"
             size="xs"
-            required
             {...props}
         />
     );
