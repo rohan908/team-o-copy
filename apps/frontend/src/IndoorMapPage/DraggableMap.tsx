@@ -9,6 +9,7 @@ import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
+import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 
 interface DraggableMapProps {
     selectedHospitalName?: string | null;
@@ -32,12 +33,38 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
+    // Declares context for node information
+    const patriotNodes = usePatriotContext();
+    const chestnutNodes = useChestnutHillContext();
+
+    // gets Id for destination node
+    const getLastNodeId = () => {
+      if(selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
+        const index = patriotNodes.findIndex((element) => {return element.name == selectedDepartment});
+        return patriotNodes[index].id;
+      } else if(selectedHospitalName == 'Chestnut Hill') {
+        const index = chestnutNodes.findIndex((element) => {return element.name == selectedDepartment});
+        return chestnutNodes[index].id;
+      }
+    }
+
+    // gets id of parking lot node -> hardcoded for now
+    const findParkingLot = (): number => {
+      if(selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
+        return 1;
+      } else if(selectedHospitalName == 'Chestnut Hill') {
+        return 100;
+      }
+    };
+
     // Parameters for THREEjs objects and path display
-    const firstNodeId = 1; // start node
-    const lastNodeId = 10; // destination node
+    const firstNodeId = findParkingLot(); // start node
+    const lastNodeId = getLastNodeId(); // destination node
     const nodeColor = { color: 0xeafeff };
     const nodeRadius = 1;
 
+    console.log(firstNodeId);
+    console.log(lastNodeId);
     /*
     Patriot Place Floor 1 -> floor1 -> scene 1
     Patriot Place Floor 3 -> floor2 -> scene 2
