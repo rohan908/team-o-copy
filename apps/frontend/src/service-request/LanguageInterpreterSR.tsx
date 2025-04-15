@@ -16,12 +16,16 @@ import DateInputForm from './components/DateEntry';
 import RoomNumberInput from './components/RoomEntry';
 import RequestDescription from './components/RequestDescription';
 import LanguageSelect from './components/LanguageSelect';
+import HospitalSelect from "./components/HospitalEntry.tsx";
+import PriorityButtons from "./components/PriorityButtons.tsx";
 
 interface RequestData {
   language: string;
   date: string;
   room: string;
   time: string;
+  priority: string;
+  hospital: string;
   description: string;
 }
 
@@ -35,6 +39,8 @@ function Language() {
       date: '',
       room: '',
       time: '',
+      hospital: '',
+      priority: '',
       description: '',
     },
   });
@@ -55,6 +61,8 @@ function Language() {
           selectedDate: RequestData.date,
           selectedTime: RequestData.time,
           roomNumber: RequestData.room,
+          priority: RequestData.priority,
+          hospital: RequestData.hospital,
           description: RequestData.description,
         }),
       });
@@ -67,6 +75,8 @@ function Language() {
               selectedDate: RequestData.date,
               selectedTime: RequestData.time,
               roomNumber: RequestData.room,
+              priority: RequestData.priority,
+              hospital: RequestData.hospital,
               description: RequestData.description,
             },
           },
@@ -84,10 +94,7 @@ function Language() {
         p="xl"
         shadow="xl"
         radius="md"
-        style={{
-          width: '100%',
-          maxWidth: '1000px',
-        }}
+        w="65%"
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Title order={2} ta="center" mb="lg">
@@ -95,18 +102,16 @@ function Language() {
           </Title>
 
           <Flex gap="lg" wrap="wrap" mb="md">
-            <Box style={{ flex: 1, minWidth: '300px' }}>
+            <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
+              <HospitalSelect required {...form.getInputProps("hospital")} />
+              <PriorityButtons {...form.getInputProps('priority')} />
               <LanguageSelect required {...form.getInputProps('language')} />
-              <Box mt="md">
-                <DateInputForm required {...form.getInputProps('date')} />
-              </Box>
             </Box>
 
-            <Box style={{ flex: 1, minWidth: '300px' }}>
+            <Box flex="1" miw = "300px"> {/* column 2!!!*/}
+              <DateInputForm required {...form.getInputProps('date')} />
               <TimeEntry required {...form.getInputProps('time')} />
-              <Box mt="md">
-                <RoomNumberInput required {...form.getInputProps('room')} />
-              </Box>
+              <RoomNumberInput required {...form.getInputProps('room')} />
             </Box>
           </Flex>
 
@@ -115,6 +120,17 @@ function Language() {
           </Box>
 
           <Flex mt="xl" justify="left" gap="md">
+
+            <Button
+                type="button"
+                variant="outline"
+                color="blueBase.5"
+                style={{ width: '200px' }}
+                onClick={() => form.reset()}
+            >
+              Clear Form
+            </Button>
+
             <Button
               type="submit"
               color="blueBase.5"
@@ -123,15 +139,6 @@ function Language() {
               Submit Request
             </Button>
 
-            <Button
-              type="button"
-              variant="outline"
-              color="blueBase.5"
-              style={{ width: '200px' }}
-              onClick={() => form.reset()}
-            >
-              Clear Form
-            </Button>
           </Flex>
         </form>
       </Paper>

@@ -51,10 +51,11 @@ export function Display() {
         maw="600px"
         style={{ borderRadius: theme.radius.md }}
       >
-        <Text mb="sm"><strong>Language:</strong> {requestData.label || 'Not specified'}</Text>
+        <Text mb="sm"><strong>Hospital:</strong> {requestData.hospital}</Text>
+        <Text mb="sm"><strong>Language:</strong> {requestData.label}</Text>
         <Text mb="sm"><strong>Date:</strong> {formatDate(requestData.selectedDate)}</Text>
         <Text mb="sm"><strong>Time:</strong> {formatTime(requestData.selectedTime)}</Text>
-        <Text mb="sm"><strong>Room:</strong> {requestData.roomNumber || 'Not specified'}</Text>
+        <Text mb="sm"><strong>Room:</strong> {requestData.roomNumber}</Text>
         <Text><strong>Details:</strong> {requestData.description || 'N/A'}</Text>
       </Box>
     </Flex>

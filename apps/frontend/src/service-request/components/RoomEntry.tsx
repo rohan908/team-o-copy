@@ -9,7 +9,6 @@ const RoomNumberInput: React.FC<TextInputProps> = (props) => {
       placeholder="--Room Number--"
       label="Enter Room Number"
       radius="sm"
-      mb="md"
     />
   );
 };
