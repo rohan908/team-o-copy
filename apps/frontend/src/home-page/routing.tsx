@@ -18,6 +18,7 @@ import LanguageRequestHistory from '../AdminPage/LanguageRequestHistory.tsx';
 import { DraggableMap } from '../IndoorMapPage/DraggableMap.tsx';
 import {NodeDirectory} from "../NodeDirectoryPage/NodeDirectory.tsx";
 
+
 export function Routing() {
     const [opened, { toggle }] = useDisclosure();
 
@@ -31,7 +32,6 @@ export function Routing() {
                         <Route path="map-API" element={<MapAPIPage />} />
                         <Route path="/submission" element={<Display />} />
                         <Route path="directory" element={<Directory />} />
-                        <Route path="/NodeDirectory" element={<NodeDirectory />} />
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
                         <Route path="/IndoorMapPage" element={<DraggableMap />} />
                         <Route path="/service-request-page" element={<ServiceRequestPage />} />
