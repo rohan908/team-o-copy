@@ -250,6 +250,11 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
     });
 
     useEffect(() => {
+        // This has to be in a useEffect to prevent infinite looping
+        // TODO: Maybe intialize this earlier in its own useEffect to prevent rough scene change
+        if (selectedHospitalName === 'Chestnut Hill') {
+            handleFloorChange(5);
+        }
         // Get canvas element
         const canvas = document.getElementById(canvasId);
         if (!canvas) return;
