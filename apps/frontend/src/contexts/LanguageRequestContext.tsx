@@ -6,7 +6,6 @@ import {
     useContext,
     PropsWithChildren,
 } from 'react';
-import { fetchDirectoryData } from '../DatabaseFetching/GetDirectoryData.tsx';
 import { LanguageRequestItem } from './DirectoryItem';
 import fetchLanguageRequestData from '../DatabaseFetching/GetLanguageRequestData.tsx';
 
