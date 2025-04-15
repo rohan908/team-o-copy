@@ -12,7 +12,11 @@ import { FlowingTubeAnimation } from './Edge.tsx';
 
 export function DraggableMap() {
     const theme = useMantineTheme();
-    const building = 'PatriotPlace';
+    enum building {
+        'PatriotPlace' = 0,
+        'ChestnutHill' = 1,
+    }
+    const selectedBuilding = 'PatriotPlace';
     const [nodeSelected, setNodeSelected] = useState(false);
     const [nodeX, setNodeX] = useState(0);
     const [nodeY, setNodeY] = useState(0);
@@ -109,7 +113,7 @@ export function DraggableMap() {
             scene2.add(sphere);
         } else if (nodeFloor === 3) {
             scene3.add(sphere);
-        } else if (nodeFloor === 4) {
+        } else if (node.floor === 4) {
             scene4.add(sphere);
         } else {
             console.error("node not added because floor doesn't exist");
@@ -445,7 +449,11 @@ export function DraggableMap() {
 
     return (
         <Box w="100vw" h="100vh" p={0}>
-            <FloorSwitchBox floor={floor} setFloor={handleFloorChange} />
+            <FloorSwitchBox
+                floor={floor}
+                setFloor={handleFloorChange}
+                building={selectedBuilding}
+            />
             <MapEditorBox
                 // Pass selected node data to the ui
                 nodeSelected={nodeSelected}
