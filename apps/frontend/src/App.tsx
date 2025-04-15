@@ -2,6 +2,7 @@ import React from 'react';
 import {Routing} from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
 import {
     createTheme,
     MantineProvider,
@@ -120,7 +121,6 @@ const theme = createTheme({
         xxl: rem(36),
         xxxl: rem(48),
     },
-
     fontFamily: 'Roboto, sans-serif',
 
     headings: {
@@ -140,13 +140,13 @@ const theme = createTheme({
     defaultRadius: 30,
 
     // variantColorResolver: myvariantColorResolver(theme)
-
 });
 function App() {
-
     return (
         <MantineProvider theme={theme}>
-            <Routing />
+            <DirectoryProvider>
+                <Routing />
+            </DirectoryProvider>
         </MantineProvider>
     );
 }
