@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
-import {BlackButton} from "../common-compoents/commonButtons.tsx"
-import {TwoPartInteractiveBox} from "../common-compoents/standAloneFrame.tsx";
+import { Link } from 'react-router-dom'; //use ive arrived button to direct to /indoor
+import { BlackButton } from '../common-compoents/commonButtons.tsx';
+import { TwoPartInteractiveBox } from '../common-compoents/standAloneFrame.tsx';
 import { DirectoryItem } from '../contexts/DirectoryItem.ts';
 
 import {
@@ -17,7 +17,7 @@ import {
     TextInput,
 } from '@mantine/core';
 import * as L from 'leaflet';
-import { usePatriotContext, useChestnutHillContext} from '../contexts/DirectoryContext.js';
+import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 
 interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
@@ -57,10 +57,10 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     console.log(Chestnut);
 
     const MapDepartment = (department: DirectoryItem[]) =>
-      department.map((department: DirectoryItem) =>({
-        value: department.name,
-        label: department.name,
-      }));
+        department.map((department: DirectoryItem) => ({
+            value: department.name,
+            label: department.name,
+        }));
 
     const handleFindPath = () => {
         if (hospital && onSetSelectedHospitalName) {
@@ -72,18 +72,16 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
             onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
         } else if (hospital == '22 Patriot Pl') {
             onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
+        } else if (hospital == '20 Patriot Pl') {
+            onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
+        } else if (hospital == '22 Patriot Pl') {
+            onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
         }
-        else if(hospital == "20 Patriot Pl"){
-          onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
+        if (selectedDepartment && onSetSelectedDepartment) {
+            onSetSelectedDepartment(selectedDepartment);
         }
-        else if(hospital == "22 Patriot Pl"){
-          onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
-        }
-        if (department && onSelectDepartment) {
-            onSelectDepartment(department);
-        }
-        if (department == "pharmacy"){
-          onSelectHospital(new L.LatLng(42.093429, -71.268228)); //this is fixed location for pharmacy, should route to specific parking lot
+        if (selectedDepartment == 'pharmacy') {
+            onSelectHospital(new L.LatLng(42.093429, -71.268228)); //this is fixed location for pharmacy, should route to specific parking lot
         }
         if (userStartLocation && onSetUserCoordinates) {
             onSetUserCoordinates(userStartLocation);
@@ -94,36 +92,36 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         setCollapsed(true);
     };
 
-    const setHospitalLocation = (hospital: string | null) =>{
-      if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
-        setDepartmentOptions(MapDepartment(Patriot));
-      }
-      else if (hospital == 'Chestnut Hill'){
-        setDepartmentOptions(MapDepartment(Chestnut));
-      }
-      else {
-        setDepartmentOptions([]);
-      }
-      setHospital(hospital);
-      setDepartment(null);
-    }
+    const setHospitalLocation = (hospital: string | null) => {
+        if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
+            setDepartmentOptions(MapDepartment(Patriot));
+        } else if (hospital == 'Chestnut Hill') {
+            setDepartmentOptions(MapDepartment(Chestnut));
+        } else {
+            setDepartmentOptions([]);
+        }
+        setHospital(hospital);
+        setSelectedDepartment(null);
+    };
 
-  useEffect(() => { //use effect to render google autocomplete
-    if (!input.current) return;
-    autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
-    autocompleteRef.current.addListener("place_changed", () => {
-      const place = autocompleteRef.current?.getPlace();
-      if (place?.geometry?.location) {
-        const location = place.geometry.location;
-        const latlng = {
-          lat: location.lat(),
-          long: location.lng(),
-        };
-        setUserStartLocation(latlng);
-      }
-    });
-  }, []);
-
+    useEffect(() => {
+        //use effect to render google autocomplete
+        if (!input.current) return;
+        autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {
+            types: ['geocode'],
+        });
+        autocompleteRef.current.addListener('place_changed', () => {
+            const place = autocompleteRef.current?.getPlace();
+            if (place?.geometry?.location) {
+                const location = place.geometry.location;
+                const latlng = {
+                    lat: location.lat(),
+                    long: location.lng(),
+                };
+                setUserStartLocation(latlng);
+            }
+        });
+    }, []);
 
     useEffect(() => {
         //use effect to render google autocomplete
