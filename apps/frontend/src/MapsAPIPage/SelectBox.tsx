@@ -1,5 +1,9 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Patriot20, Patriot22 } from '../directory/components/directorydata.tsx';
+import React, { useState, useEffect, useRef } from 'react';
+import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
+import {BlackButton} from "../common-compoents/commonButtons.tsx"
+import {TwoPartInteractiveBox} from "../common-compoents/standAloneFrame.tsx";
+import {HospitalDepartment, Patriot20, Patriot22, ChestnutHill} from '../directory/components/directorydata.tsx'; //this is now static lol
+
 import {
     Box,
     Text,
@@ -13,44 +17,53 @@ import {
     TextInput
 } from '@mantine/core';
 import * as L from 'leaflet';
-import {useChestnutHillContext, usePatriotContext} from "../contexts/DirectoryContext.tsx";
 
-interface HospitalSelectBoxProps {
+interface HospitalSelectBoxProps {        //props to pass to main map Display
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
-    onCollapseChange?: (isCollapsed: boolean) => void;
     onSetUserCoordinates?: (coordinate: {lat: number, long: number}) => void;
     onSetTravelMode?: (mode: google.maps.TravelMode) => void;
 
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
-    const {onSelectHospital, onSelectDepartment, onCollapseChange, onSetUserCoordinates, onSetTravelMode} = props;
+    const {onSelectHospital, onSelectDepartment, onSetUserCoordinates, onSetTravelMode} = props;
     const theme = useMantineTheme();
-    const [hospital, setHospital] = useState<string | null>(null);
-    const [department, setDepartment] = useState<string | null>(null);
-    const [collapsed, setCollapsed] = useState(false);
+    const [hospital, setHospital] = useState<string | null>(null); //initialize  hospital building as null
+    const [department, setDepartment] = useState<string | null>(null); //also for department
+    const [collapsed, setCollapsed] = useState(false); //select box has 2 states, collapsed and popped up
     const [departmentOptions, setDepartmentOptions] = useState<
         { value: string; label: string }[]
-    >([]);
-    const hospitalCoords = new L.LatLng(42.091846, -71.266614); //fixed hospital location, this needs to change
+    >([]); //this is needed to display department options when entered a hospital
+    const [userStartLocation, setUserStartLocation] = useState<{lat: number, long: number} | null>(null); // store user location input
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
     const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
 
-    const Patriot = usePatriotContext();
-    const Chestnut = useChestnutHillContext();
+    const MapDepartment = (department: HospitalDepartment[]) =>
+      department.map((department) =>({
+        value: department.slug,
+        label: department.title,
+      }));
 
-
-  const handleFindPath = () => {
-        if (hospital) {
-            onSelectHospital(hospitalCoords);
+    const handleFindPath = () => {
+        if (hospital == "Chestnut Hill") {
+            onSelectHospital(new L.LatLng(42.32624893122403, -71.14948990068949));
+        }
+        else if(hospital =="20 Patriot Pl"){
+          onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
+        }
+        else if(hospital =="22 Patriot Pl"){
+          onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
         }
         if (department && onSelectDepartment) {
             onSelectDepartment(department);
         }
         if (department == "pharmacy"){
-          onSelectHospital(new L.LatLng(42.093429, -71.268228));
+          onSelectHospital(new L.LatLng(42.093429, -71.268228)); //this is fixed location for pharmacy, should route to specific parking lot
+        }
+        if (userStartLocation && onSetUserCoordinates) {
+          onSetUserCoordinates(userStartLocation);
         }
         if (navigationMethod && onSetTravelMode) {
           onSetTravelMode(navigationMethod);
@@ -58,11 +71,23 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         setCollapsed(true);
     };
 
-    useEffect(() => {
-        onCollapseChange?.(collapsed);
-    }, [collapsed]);
+    const setHospitalLocation = (hospital: string | null) =>{
+      if (hospital === '20 Patriot Pl') {
+        setDepartmentOptions(MapDepartment(Patriot20));
+      } else if (hospital === '22 Patriot Pl') {
+        setDepartmentOptions(MapDepartment(Patriot22));
+      }
+      else if (hospital == 'Chestnut Hill'){
+        setDepartmentOptions(MapDepartment(ChestnutHill));
+      }
+      else {
+        setDepartmentOptions([]);
+      }
+      setHospital(hospital);
+      setDepartment(null);
+    }
 
-  useEffect(() => {
+  useEffect(() => { //use effect to render google autocomplete
     if (!input.current) return;
     autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
     autocompleteRef.current.addListener("place_changed", () => {
@@ -73,30 +98,12 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
           lat: location.lat(),
           long: location.lng(),
         };
-        onSetUserCoordinates?.(latlng);
+        setUserStartLocation(latlng);
       }
     });
   }, []);
-    useEffect(() => {
-        if (hospital === 'Patriot St') {
-            const options = Patriot.map((dept) => ({
-                value: dept.description,
-                label: dept.name,
-            }));
-            setDepartmentOptions(options);
-        } else if (hospital === 'Chestnut') {
-            const options = Patriot.map((dept) => ({
-                value: dept.description,
-                label: dept.name,
-            }));
-            setDepartmentOptions(options);
-        } else {
-            setDepartmentOptions([]);
-        }
 
-        // Reset department when hospital changes
-        setDepartment(null);
-    }, [hospital]);
+
 
     return (
         <Box
@@ -109,11 +116,12 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 display: 'flex',
                 justifyContent: 'center',
                 transition: 'all 0.4s ease-in-out',
-                paddingBottom: collapsed ? 0 : '1.5rem',
+                paddingBottom: collapsed ? 1 : '1.5rem',
+                pointerEvents: 'none',
             }}
         >
             <Box
-                bg="white"
+                bg="#FFF8EB"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="100%"
                 style={{
@@ -122,6 +130,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     borderRadius: theme.radius.lg,
                     backdropFilter: 'blur(5px)',
                     boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.1)',
+                    pointerEvents: 'auto',
                 }}
             >
                 <Collapse in={!collapsed}>
@@ -144,7 +153,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         navigate your route efficiently.
                     </Text>
 
-                    <Divider variant="dotted" size="lg" mb="lg" />
+                    <Divider variant="dotted" size="lg" mb="lg" color="#FCB024" />
                   <Text ta="left" mb="sm" fw={500}>
                     Insert Starting Location:
                   </Text>
@@ -156,13 +165,16 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         Select Hospital:
                     </Text>
                     <Select
+                        color="gray"
                         placeholder="Hospital"
                         data={[
-                            { value: 'Patriot St', label: 'Patriot St' },
+                            { value: '20 Patriot Pl', label: '20 Patriot Pl' },
+                            { value: '22 Patriot Pl', label: '22 Patriot Pl' },
                             { value: 'Chestnut Hill', label: 'Chestnut Hill' },
+
                         ]}
                         value={hospital}
-                        onChange={setHospital}
+                        onChange={setHospitalLocation}
                         mb="md"
                     />
 
@@ -170,6 +182,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         Select Department:
                     </Text>
                     <Select
+                        color="gray"
                         placeholder="Department"
                         data={departmentOptions}
                         value={department}
@@ -181,6 +194,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     Select Navigation Method:
                   </Text>
                   <Select
+                    color="gray"
                     placeholder="Navigation Method"
                     data={[
                       {value: google.maps.TravelMode.WALKING, label: 'Walking'},
@@ -196,50 +210,61 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                   />
 
                     <Flex justify="flex-end" gap="md">
-                        <Button
-                            onClick={handleFindPath}
-                            color="dark"
-                            fw="600"
-                            bg="black"
-                            style={{
-                                borderRadius: '50px',
-                                transition: 'all 0.3s ease',
-                            }}
-                        >
+                        <BlackButton
+                            onClick={handleFindPath}>
                             Find Path
-                        </Button>
+                        </BlackButton>
                     </Flex>
                 </Collapse>
 
                 {collapsed && (
                     <Box
                         style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            width: '100%',
+                            position: 'fixed',
+                            zIndex: 9999,
+                            bottom: '0.5rem',
+                            pointerEvents: 'auto',
+
                         }}
                     >
-                        <Box
-                            w="100%"
-                            maw={{ base: '100%', md: '400px' }}
-                        >
-                            <Button
+                      <Flex justify="space-between" align="center" gap="md">
+
+                      <Button
                                 variant="subtle"
-                                fullWidth
                                 size="md"
                                 onClick={() => setCollapsed(false)}
                                 style={{
-                                    borderRadius: 0,
+                                    borderRadius: '50px',
                                     height: '3rem',
                                     fontWeight: 600,
                                     fontSize: '1rem',
+                                    width: 'fit-content',
                                     backgroundColor: theme.colors.gray[1],
                                     borderTop: `1px solid ${theme.colors.gray[3]}`,
                                 }}
                             >
                                 Expand Directions Menu
                             </Button>
-                        </Box>
+                      <Button
+                        color="green"
+                        size="md"
+                        fw={600}
+                        component={Link}
+                        to="/IndoorMapPage"
+                        style={{
+                          borderRadius: '50px',
+                          padding: '0.5rem 1.25rem',
+                          fontSize: '0.9rem',
+                          marginLeft: 'auto',
+                          backgroundColor: 'green',
+                          color: 'white',
+                          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                          transition: 'all 0.3s ease',
+                        }}
+                      >
+                        I've Arrived
+                      </Button>
+                      </Flex>
                     </Box>
                 )}
             </Box>

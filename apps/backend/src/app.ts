@@ -3,7 +3,7 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import healthcheckRouter from './routes/HealthCheck.ts';
-import directoryRouter from './routes/Directory.ts';
+import directoryRouter from './routes/directory.ts';
 import languageServiceRequestRouter from './routes/LanguageServiceRequest.ts';
 import exportRoute from './routes/ExportRoute.ts';
 import graphRouter from './routes/Graph.ts';
