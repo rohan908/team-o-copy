@@ -8,18 +8,18 @@ interface WaveAnimationProps {
 
 const COLORS = {
     WAVE_COLORS: [ //backup wave colors bc mantine doesnt work or smth idk it breaks sometimes
-        '#ebfeff',
-        '#d7fbfd',
-        '#aaf7fc',
-        '#7df3fb',
-        '#61f0fb',
-        '#56effa',
-        '#4deefb',
-        '#40d3df',
-        '#2fbcc7',
-        '#00a3ad'
+      '#99E5F4',
+      '#88D3EC',
+      '#77C1E4',
+      '#66AFDC',
+      '#559DD5',
+      '#448BCD',
+      '#3379C5',
+      '#2267BD',
+      '#1155B5',
+      '#0043AD',
     ],
-    BACKGROUND_COLOR: '#ebfeff' //lighest mantine tuquoise color
+    BACKGROUND_COLOR: '#AAF7FC' //lighest mantine tuquoise color
 };
 
 // Wave animation configuration
@@ -39,7 +39,7 @@ export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationPro
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animationRef = useRef<number>(0);
     const theme = useMantineTheme();
-    const waveColors = theme.colors?.terquAccet || COLORS.WAVE_COLORS;
+    const waveColors = COLORS.WAVE_COLORS;
     
     // function to interpolate between two hex colors (we have 10+ waves but only 20 colors), pulled this algo off stack overflow
     const interpolateColor = (color1: string, color2: string, factor: number): string => {

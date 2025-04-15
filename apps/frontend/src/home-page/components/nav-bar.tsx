@@ -38,7 +38,7 @@ export function NavBar() {
     return (
         <>
             <nav>
-                <Group h="100%" px="md" py="sm">
+                <Group h="100%" px="md" py="sm" bg="blueBase.9">
 
                     <Menu  shadow="lg"  onClose={toggle} transitionProps={{ transition: 'rotate-right', duration: 200 }} >
                         <Menu.Target>
@@ -50,7 +50,7 @@ export function NavBar() {
                                 <>
                                 <Menu.Item
                                     key={index}
-                                    color="grey.3"
+                                    color="white"
                                     component={Link}
                                     to={item.link}
                                     px="md"
@@ -64,7 +64,7 @@ export function NavBar() {
                                     {adminNavItems.map((item, index) => (
                                         <Menu.Item
                                             key={index}
-                                            color="grey.3"
+                                            color="white"
                                             component={Link}
                                             to={item.link}
                                             px="md"
@@ -94,7 +94,7 @@ export function NavBar() {
                                 <Link to="/">
                                     <Image
                                         className={"rounded"}
-                                        src={"/logoMassGeneralBrigham.png"}
+                                        src={"/logoMassGeneralBrighamWhiteText.png"}
                                         alt={"Home"}
                                         h='xl'
                                     />
@@ -104,8 +104,8 @@ export function NavBar() {
                         <Group ml="xl" gap="md" visibleFrom="sm">
                             {/* Dynamically Render Buttons */}
                             {navItems.map((item, index) => (
-                                <Button variant="outline"
-                                        color="black"
+                                <Button variant="filled"
+                                        color="baseBlue.9"
                                         className="navButton"
                                         justify="flex-end"
                                         component={Link}
@@ -118,8 +118,8 @@ export function NavBar() {
                             { isLoggedIn && (
                                 <>
                                     {adminNavItems.map((item, index) => (
-                                    <Button variant="outline"
-                                            color="black"
+                                    <Button variant="filled"
+                                            color="baseBlue.9"
                                             className="navButton"
                                             justify="flex-end"
                                             component={Link}
@@ -130,8 +130,8 @@ export function NavBar() {
                                     </Button>
                                     ))}
                                     {/* Logout Button */}
-                                    <Button variant="outline"
-                                            color="red"
+                                    <Button variant="filled"
+                                            color="baseBlue.9"
                                             className="LoggoutButton"
                                             justify="flex-end"
                                             onClick={logout}
@@ -139,7 +139,7 @@ export function NavBar() {
                                             to={'/'}
                                             size="xs"
                                     >
-                                        Logout
+                                        Log Out
                                     </Button>
                                 </>
                             )}
