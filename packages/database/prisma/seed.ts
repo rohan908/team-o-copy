@@ -38,7 +38,23 @@ export async function populate() {
         data: getNodeData(),
     });
 
-    // then define each edge
+    // adds all edges based on connecting nodes in each node
+    for(const node of addDefaultNodes) {
+        const connections = node.connectingNodes
+
+        for(const connectingID of connections) {
+            const nodeToConnect = await PrismaClient.node.findUnique({
+                where: {id: connectingID},
+            })
+
+            const addEdge = await PrismaClient.edge.createMany({
+                data: edgeData(node, nodeToConnect, 1),
+                skipDuplicates: true,
+            })
+        }
+    }
+
+    // then define each edge -> will not need this eventually
     const addEdges = await PrismaClient.edge.createMany({
         data: [
             edgeData(addDefaultNodes.at(0), addDefaultNodes.at(1), 1),
