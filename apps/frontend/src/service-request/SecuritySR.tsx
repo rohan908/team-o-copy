@@ -46,7 +46,7 @@ function Security() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    label,
+                    service: RequestData.service,
                     selectedDate: RequestData.date,
                     selectedTime: RequestData.time,
                     roomNumber: RequestData.room,
@@ -60,7 +60,7 @@ function Security() {
                 navigate('/submission', {
                     state: {
                         requestData: {
-                            label,
+                            service: RequestData.service,
                             selectedDate: RequestData.date,
                             selectedTime: RequestData.time,
                             roomNumber: RequestData.room,
@@ -98,7 +98,7 @@ function Security() {
                             {/*< column 1!!!*/}
                             <HospitalSelect required {...form.getInputProps('hospital')} />
                             <PriorityButtons {...form.getInputProps('priority')} />
-                            <SecuritySelect required {...form.getInputProps('security')} />
+                            <SecuritySelect required {...form.getInputProps('service')} />
                         </Box>
 
                         <Box flex="1" miw="300px">
