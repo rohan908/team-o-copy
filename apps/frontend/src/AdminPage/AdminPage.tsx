@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
 import { useMantineTheme, Collapse, Button, Divider, Center, Flex, Title } from '@mantine/core';
