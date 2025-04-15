@@ -40,7 +40,6 @@ model sanitationServiceRequest {
   requestID    Int      @id @default(autoincrement())
   employeeName String
   department   String
-  room         String
   createdAt    DateTime @default(now())
   date         String
   time         String

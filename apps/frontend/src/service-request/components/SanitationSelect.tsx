@@ -11,7 +11,9 @@ const SanitationSelect: React.FC<SelectProps> = (props) => {
                 'General Room Cleaning',
                 'Waste Removal',
                 'Floor Cleaning (mop, vacuum, etc.)',
-                '',
+                'Restroom Cleaning',
+                'Spill Cleanup',
+                'Equipment Cleaning',
             ]}
             nothingFoundMessage="Cleanup Type not found"
             radius="sm"

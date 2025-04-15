@@ -73,18 +73,6 @@ function Language() {
     console.log('TESTER CODE FOR CONTEXT!!!!');
     console.log(langREQ);
 
-    const form = useForm<RequestData>({
-        initialValues: {
-            language: '',
-            date: '',
-            room: '',
-            time: '',
-            hospital: '',
-            priority: '',
-            description: '',
-        },
-    });
-
     const handleSubmit = async () => {
         const RequestData = form.values;
         const label =

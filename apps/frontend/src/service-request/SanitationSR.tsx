@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
+import { Text, Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import ISO6391 from 'iso-639-1';
 import { useLanguageRequestContext } from '../contexts/LanguageRequestContext.tsx';
 
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
 import RoomNumberInput from './components/RoomEntry';
 import RequestDescription from './components/RequestDescription';
-import LanguageSelect from './components/LanguageSelect';
+import SanitationSelect from './components/SanitationSelect.tsx';
 import HospitalSelect from './components/HospitalEntry.tsx';
 import PriorityButtons from './components/PriorityButtons.tsx';
 import StatusSelect from './components/StatusSelect.tsx';
@@ -72,23 +71,20 @@ function Sanitation() {
 
         form.setFieldValue('department', '');
     };
+
     const langREQ = useLanguageRequestContext();
     console.log('TESTER CODE FOR CONTEXT!!!!');
     console.log(langREQ);
 
     const handleSubmit = async () => {
         const RequestData = form.values;
-        const label =
-            RequestData.cleanupType === 'asl'
-                ? 'ASL (American Sign Language)'
-                : ISO6391.getName(RequestData.cleanupType);
 
         try {
-            const response = await fetch('/api/languageSR', {
+            const response = await fetch('/api/sanitationSR', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    label,
+                    cleanupType: RequestData.cleanupType,
                     selectedDate: RequestData.date,
                     selectedTime: RequestData.time,
                     department: RequestData.department,
@@ -104,7 +100,7 @@ function Sanitation() {
                 navigate('/submission', {
                     state: {
                         requestData: {
-                            label,
+                            cleanupType: RequestData.cleanupType,
                             selectedDate: RequestData.date,
                             selectedTime: RequestData.time,
                             department: RequestData.department,
@@ -126,10 +122,14 @@ function Sanitation() {
         <Flex justify="center" align="center" p="xl">
             <Paper bg="gray.2" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <Title order={2} ta="center" mb="lg">
-                        Interpreter Request Form
-                    </Title>
-
+                    <Flex direction="column" ta="center" justify="center">
+                        <Title order={2} mb="sm">
+                            Sanitation Request Form
+                        </Title>
+                        <Text mb="md" fz="xxxs">
+                            Logan W. and Joe A.
+                        </Text>
+                    </Flex>
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
                             {' '}
@@ -147,7 +147,7 @@ function Sanitation() {
                                 )}
                                 {...form.getInputProps('department')}
                             />
-                            <LanguageSelect required {...form.getInputProps('language')} />
+                            <SanitationSelect required {...form.getInputProps('cleanupType')} />
                         </Box>
 
                         <Box flex="1" miw="300px">
@@ -155,7 +155,7 @@ function Sanitation() {
                             {/* column 2!!!*/}
                             <DateInputForm required {...form.getInputProps('date')} />
                             <TimeEntry required {...form.getInputProps('time')} />
-                            <PriorityButtons {...form.getInputProps('priority')} />
+                            <PriorityButtons required {...form.getInputProps('priority')} />
                             <StatusSelect required {...form.getInputProps('status')} />
                         </Box>
                     </Flex>
