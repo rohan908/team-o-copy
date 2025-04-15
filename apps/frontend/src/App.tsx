@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routing } from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
-import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
+import { DirectoryNodeProvider } from './contexts/DirectoryNode.tsx';
 import {
     createTheme,
     MantineProvider,
@@ -143,9 +143,9 @@ const theme = createTheme({
 function App() {
     return (
         <MantineProvider theme={theme}>
-            <DirectoryProvider>
+            <DirectoryNodeProvider>
                 <Routing />
-            </DirectoryProvider>
+            </DirectoryNodeProvider>
         </MantineProvider>
     );
 }

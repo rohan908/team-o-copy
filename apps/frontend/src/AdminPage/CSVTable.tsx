@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Table, Title, Loader, Center, ScrollArea, Text } from '@mantine/core';
-import { useDirectoryContext } from '../contexts/DirectoryContext.tsx';
+import { useDirectoryContext } from '../contexts/DirectoryNode.tsx';
 
 type Props = {
     table: string;

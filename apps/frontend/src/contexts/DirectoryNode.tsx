@@ -7,14 +7,14 @@ import {
     PropsWithChildren,
 } from 'react';
 import { fetchDirectoryData } from '../directory/components/GetDirectoryData.tsx';
-import { DirectoryItem } from './DirectoryItem';
+import { DirectoryNodeItem } from './DirectoryNodeItem.ts';
 
 /*
     What this file does:
-        This file defines the DirectoryContext context, provider, and
+        This file defines the DirectoryNode context, provider, and
         custom hook.
 
-        DirectoryContext is used to store directory database data on the frontend.
+        DirectoryNode is used to store directory database data on the frontend.
 
         DirectoryContextProvider is a wrapper component that allows all of its
         children to access the context object data (our database data). This is
@@ -33,7 +33,7 @@ import { DirectoryItem } from './DirectoryItem';
   Adds fetchdata value to value prop, that way consumers can update context data
   by asking it to re-fetch data from the database after its been updated
  */
-interface DirectoryContextType extends DirectoryState {
+interface DirectoryNodeContextType extends DirectoryNodeState {
     fetchData: () => void;
 }
 
@@ -41,7 +41,7 @@ interface DirectoryContextType extends DirectoryState {
     define context for directory database data. undefined is placed in the type in case something goes
     wrong with the prop used with the provider component in app.tsx
  */
-export const DirectoryContext = createContext<DirectoryContextType | undefined>(undefined);
+export const DirectoryNode = createContext<DirectoryNodeContextType | undefined>(undefined);
 
 /*
     defines custom hooks so that consumer components don't directly interact
@@ -60,7 +60,7 @@ export const DirectoryContext = createContext<DirectoryContextType | undefined>(
  */
 
 export const usePatriotContext = () => {
-    const context = useContext(DirectoryContext);
+    const context = useContext(DirectoryNode);
     if (!context) {
         throw new Error(
             'The usePatriotContext must be used within the provider component Patriot20Provider'
@@ -71,7 +71,7 @@ export const usePatriotContext = () => {
 };
 
 export const useDirectoryContext = () => {
-    const context = useContext(DirectoryContext);
+    const context = useContext(DirectoryNode);
     if (!context) {
         throw new Error(
             'The useDirectoryContext must be used within the provider component DirectoryProvider'
@@ -82,7 +82,7 @@ export const useDirectoryContext = () => {
 };
 
 export const useChestnutHillContext = () => {
-    const context = useContext(DirectoryContext);
+    const context = useContext(DirectoryNode);
     if (!context) {
         throw new Error(
             'The ChestnutContext must be used within the provider component ChestnutProvider'
@@ -95,9 +95,9 @@ export const useChestnutHillContext = () => {
 /*
   This is for the reducer function.
  */
-interface DirectoryState {
-    patriot: DirectoryItem[];
-    chestnutHill: DirectoryItem[];
+interface DirectoryNodeState {
+    patriot: DirectoryNodeItem[];
+    chestnutHill: DirectoryNodeItem[];
     isLoading: boolean;
     error: string | null;
 }
@@ -108,8 +108,8 @@ interface DirectoryState {
   thrown when the context is called and doesn't have any values in it.
  */
 type DirectoryAction =
-    | { type: 'SET_PATRIOT'; data: DirectoryItem[] }
-    | { type: 'SET_CHESTNUTHILL'; data: DirectoryItem[] }
+    | { type: 'SET_PATRIOT'; data: DirectoryNodeItem[] }
+    | { type: 'SET_CHESTNUTHILL'; data: DirectoryNodeItem[] }
     | { type: 'SET_LOADING'; data: boolean }
     | { type: 'SET_ERROR'; data: string };
 
@@ -124,7 +124,7 @@ type DirectoryAction =
 
   If we need a cache for quicker page loading or some optimization, store data externally in this function
  */
-function directoryReducer(state: DirectoryState, action: DirectoryAction): DirectoryState {
+function directoryReducer(state: DirectoryNodeState, action: DirectoryAction): DirectoryState {
     switch (action.type) {
         case 'SET_PATRIOT':
             return { ...state, patriot: action.data };
@@ -148,7 +148,7 @@ function directoryReducer(state: DirectoryState, action: DirectoryAction): Direc
   Calls the useReducer hook with our defined reducer function and default
   "empty" values for the state
  */
-export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => {
+export const DirectoryNodeProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [state, dispatch] = useReducer(directoryReducer, {
         patriot: [],
         chestnutHill: [],
@@ -190,13 +190,11 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
     }, [fetchData]);
 
     /*
-    Wraps child components in DirectoryContext provider so that they can
+    Wraps child components in DirectoryNode provider so that they can
     use the context.
    */
 
     return (
-        <DirectoryContext.Provider value={{ ...state, fetchData }}>
-            {children}
-        </DirectoryContext.Provider>
+        <DirectoryNode.Provider value={{ ...state, fetchData }}>{children}</DirectoryNode.Provider>
     );
 };

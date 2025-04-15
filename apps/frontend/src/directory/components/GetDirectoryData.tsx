@@ -1,4 +1,4 @@
-import { DirectoryItem } from '../../contexts/DirectoryItem';
+import { DirectoryItem } from '../../contexts/DirectoryNodeItem.ts';
 
 export async function fetchDirectoryData(mapID: string) {
     try {

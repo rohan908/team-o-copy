@@ -10,52 +10,56 @@ import {
     Select,
     useMantineTheme,
     Collapse,
-    TextInput
+    TextInput,
 } from '@mantine/core';
 import * as L from 'leaflet';
-import {useChestnutHillContext, usePatriotContext} from "../contexts/DirectoryContext.tsx";
+import { useChestnutHillContext, usePatriotContext } from '../contexts/DirectoryNode.tsx';
 
 interface HospitalSelectBoxProps {
     onSelectHospital: (coordinate: L.LatLng) => void;
     onSelectDepartment?: (dept: string) => void;
     onCollapseChange?: (isCollapsed: boolean) => void;
-    onSetUserCoordinates?: (coordinate: {lat: number, long: number}) => void;
+    onSetUserCoordinates?: (coordinate: { lat: number; long: number }) => void;
     onSetTravelMode?: (mode: google.maps.TravelMode) => void;
-
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
-    const {onSelectHospital, onSelectDepartment, onCollapseChange, onSetUserCoordinates, onSetTravelMode} = props;
+    const {
+        onSelectHospital,
+        onSelectDepartment,
+        onCollapseChange,
+        onSetUserCoordinates,
+        onSetTravelMode,
+    } = props;
     const theme = useMantineTheme();
     const [hospital, setHospital] = useState<string | null>(null);
     const [department, setDepartment] = useState<string | null>(null);
     const [collapsed, setCollapsed] = useState(false);
-    const [departmentOptions, setDepartmentOptions] = useState<
-        { value: string; label: string }[]
-    >([]);
+    const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>(
+        []
+    );
     const hospitalCoords = new L.LatLng(42.091846, -71.266614); //fixed hospital location, this needs to change
     const input = useRef<HTMLInputElement>(null);
-    const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
+    const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
     const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
 
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
 
-    console.log(Patriot)
+    console.log(Patriot);
 
-
-  const handleFindPath = () => {
+    const handleFindPath = () => {
         if (hospital) {
             onSelectHospital(hospitalCoords);
         }
         if (department && onSelectDepartment) {
             onSelectDepartment(department);
         }
-        if (department == "pharmacy"){
-          onSelectHospital(new L.LatLng(42.093429, -71.268228));
+        if (department == 'pharmacy') {
+            onSelectHospital(new L.LatLng(42.093429, -71.268228));
         }
         if (navigationMethod && onSetTravelMode) {
-          onSetTravelMode(navigationMethod);
+            onSetTravelMode(navigationMethod);
         }
         setCollapsed(true);
     };
@@ -64,21 +68,23 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         onCollapseChange?.(collapsed);
     }, [collapsed]);
 
-  useEffect(() => {
-    if (!input.current) return;
-    autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
-    autocompleteRef.current.addListener("place_changed", () => {
-      const place = autocompleteRef.current?.getPlace();
-      if (place?.geometry?.location) {
-        const location = place.geometry.location;
-        const latlng = {
-          lat: location.lat(),
-          long: location.lng(),
-        };
-        onSetUserCoordinates?.(latlng);
-      }
-    });
-  }, []);
+    useEffect(() => {
+        if (!input.current) return;
+        autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {
+            types: ['geocode'],
+        });
+        autocompleteRef.current.addListener('place_changed', () => {
+            const place = autocompleteRef.current?.getPlace();
+            if (place?.geometry?.location) {
+                const location = place.geometry.location;
+                const latlng = {
+                    lat: location.lat(),
+                    long: location.lng(),
+                };
+                onSetUserCoordinates?.(latlng);
+            }
+        });
+    }, []);
     useEffect(() => {
         if (hospital === 'Patriot St') {
             const options = Patriot.map((dept) => ({
@@ -127,7 +133,14 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 }}
             >
                 <Collapse in={!collapsed}>
-                    <Title order={2} mb="md" c="#001D4D" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
+                    <Title
+                        order={2}
+                        mb="md"
+                        c="#001D4D"
+                        ta="left"
+                        fw={700}
+                        fz={{ sm: 'xl', md: 'xxxl' }}
+                    >
                         Find your Way!
                     </Title>
 
@@ -142,18 +155,15 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                             maxWidth: '90%',
                         }}
                     >
-                        Use our interactive map to locate hospital departments, find the best parking spots, and
-                        navigate your route efficiently.
+                        Use our interactive map to locate hospital departments, find the best
+                        parking spots, and navigate your route efficiently.
                     </Text>
 
                     <Divider variant="dotted" size="lg" mb="lg" />
-                  <Text ta="left" mb="sm" fw={500}>
-                    Insert Starting Location:
-                  </Text>
-                  <TextInput
-                    ref={input}
-                    mb="md"
-                  />
+                    <Text ta="left" mb="sm" fw={500}>
+                        Insert Starting Location:
+                    </Text>
+                    <TextInput ref={input} mb="md" />
                     <Text ta="left" mb="sm" fw={500}>
                         Select Hospital:
                     </Text>
@@ -179,23 +189,26 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         mb="md"
                         disabled={!hospital || departmentOptions.length === 0}
                     />
-                  <Text ta="left" mb="sm" fw={500}>
-                    Select Navigation Method:
-                  </Text>
-                  <Select
-                    placeholder="Navigation Method"
-                    data={[
-                      {value: google.maps.TravelMode.WALKING, label: 'Walking'},
-                      {value: google.maps.TravelMode.TRANSIT, label: 'Public Transportation'},
-                      {value: google.maps.TravelMode.DRIVING, label: 'Driving'},
-                    ]}
-                    value={navigationMethod}
-                    onChange={(value) => {
-                      setNavigationMethod(value);
-                    }}
-                    mb="md"
-                    disabled={!hospital}
-                  />
+                    <Text ta="left" mb="sm" fw={500}>
+                        Select Navigation Method:
+                    </Text>
+                    <Select
+                        placeholder="Navigation Method"
+                        data={[
+                            { value: google.maps.TravelMode.WALKING, label: 'Walking' },
+                            {
+                                value: google.maps.TravelMode.TRANSIT,
+                                label: 'Public Transportation',
+                            },
+                            { value: google.maps.TravelMode.DRIVING, label: 'Driving' },
+                        ]}
+                        value={navigationMethod}
+                        onChange={(value) => {
+                            setNavigationMethod(value);
+                        }}
+                        mb="md"
+                        disabled={!hospital}
+                    />
 
                     <Flex justify="flex-end" gap="md">
                         <Button
@@ -221,10 +234,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                             width: '100%',
                         }}
                     >
-                        <Box
-                            w="100%"
-                            maw={{ base: '100%', md: '400px' }}
-                        >
+                        <Box w="100%" maw={{ base: '100%', md: '400px' }}>
                             <Button
                                 variant="subtle"
                                 fullWidth
