@@ -3,19 +3,19 @@ import { useLocation } from 'react-router-dom';
 import { Box, Flex, useMantineTheme, Text } from '@mantine/core';
 
 export function Display() {
-  const theme = useMantineTheme();
-  const location = useLocation();
+    const theme = useMantineTheme();
+    const location = useLocation();
 
-  // Safely handle missing state
-  if (!location.state?.requestData) {
-    return (
-      <Flex justify="center" align="center" h="100vh">
-        <Text>No submission data found. Please submit the form again.</Text>
-      </Flex>
-    );
-  }
+    // Safely handle missing state
+    if (!location.state?.requestData) {
+        return (
+            <Flex justify="center" align="center" h="100vh">
+                <Text>No submission data found. Please submit the form again.</Text>
+            </Flex>
+        );
+    }
 
-  const { requestData } = location.state;
+    const { requestData } = location.state;
 
     // Format date because it is a date object
     const formatDate = (date: Date | string): string => {
@@ -33,40 +33,52 @@ export function Display() {
         return time;
     };
 
-  return (
-    <Flex
-      w="100%"
-      h="100vh"
-      align="center"
-      direction="column"
-      p="xl"
-    >
-      <Text size="xl" fw={700} mb="lg">
-        Service Request Submitted
-      </Text>
-      <Box
-
-        bg="gray.1"
-        p="xl"
-        w="100%"
-        maw="600px"
-        style={{ borderRadius: theme.radius.md ,
-          border: '3px solid',
-        borderColor: '#90EE90',
-        }}
-      >
-        <Text mb="sm"><strong>Name:</strong> {requestData.employeeName}</Text>
-        <Text mb="sm"><strong>Hospital:</strong> {requestData.hospital}</Text>
-        <Text mb="sm"><strong>Language:</strong> {requestData.label}</Text>
-        <Text mb="sm"><strong>Date:</strong> {formatDate(requestData.selectedDate)}</Text>
-        <Text mb="sm"><strong>Time:</strong> {formatTime(requestData.selectedTime)}</Text>
-        <Text mb="sm"><strong>Department:</strong> {requestData.department}</Text>
-        <Text mb="sm"><strong>Priority:</strong> {requestData.priority}</Text>
-        <Text mb="sm"><strong>Status:</strong> {requestData.status}</Text>
-        <Text><strong>Details:</strong> {requestData.description || 'N/A'}</Text>
-      </Box>
-    </Flex>
-  );
+    return (
+        <Flex w="100%" h="100vh" align="center" direction="column" p="xl">
+            <Text size="xl" fw={700} mb="lg">
+                Service Request Submitted
+            </Text>
+            <Box
+                bg="gray.1"
+                p="xl"
+                w="100%"
+                maw="600px"
+                style={{
+                    borderRadius: theme.radius.md,
+                    border: '3px solid',
+                    borderColor: '#90EE90',
+                }}
+            >
+                <Text mb="sm">
+                    <strong>Name:</strong> {requestData.employeeName}
+                </Text>
+                <Text mb="sm">
+                    <strong>Hospital:</strong> {requestData.hospital}
+                </Text>
+                <Text mb="sm">
+                    <strong>Language:</strong> {requestData.label}
+                </Text>
+                <Text mb="sm">
+                    <strong>Date:</strong> {formatDate(requestData.selectedDate)}
+                </Text>
+                <Text mb="sm">
+                    <strong>Time:</strong> {formatTime(requestData.selectedTime)}
+                </Text>
+                <Text mb="sm">
+                    <strong>Department:</strong> {requestData.department}
+                </Text>
+                <Text mb="sm">
+                    <strong>Priority:</strong> {requestData.priority}
+                </Text>
+                <Text mb="sm">
+                    <strong>Status:</strong> {requestData.status}
+                </Text>
+                <Text>
+                    <strong>Details:</strong> {requestData.description || 'N/A'}
+                </Text>
+            </Box>
+        </Flex>
+    );
     return (
         <Flex w="100%" h="100vh" align="center" direction="column" p="xl">
             <Text size="xl" fw={700} mb="lg">
@@ -77,7 +89,7 @@ export function Display() {
                     <strong>Hospital:</strong> {requestData.hospital}
                 </Text>
                 <Text mb="sm">
-                    <strong>Service:</strong> {requestData.service}
+                    <strong>Language:</strong> {requestData.label}
                 </Text>
                 <Text mb="sm">
                     <strong>Date:</strong> {formatDate(requestData.selectedDate)}

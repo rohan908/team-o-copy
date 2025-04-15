@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -10,13 +10,26 @@ import RequestDescription from './components/RequestDescription';
 import SecuritySelect from './components/SecuritySelect';
 import HospitalSelect from './components/HospitalEntry.tsx';
 import PriorityButtons from './components/PriorityButtons.tsx';
+import NameEntry from './components/NameEntry.tsx';
+import LanguageSelect from './components/LanguageSelect.tsx';
+import StatusSelect from './components/StatusSelect.tsx';
+import DepartmentSelect from './components/DepartmentSelect.tsx';
+import {
+    ChestnutHill,
+    Patriot20,
+    Patriot22,
+    HospitalDepartment,
+} from '../directory/components/directorydata';
 
 interface RequestData {
     service: string;
     date: string;
+    department: string;
     room: string;
     time: string;
+    employeeName: string;
     priority: string;
+    status: string;
     hospital: string;
     description: string;
 }
@@ -24,19 +37,43 @@ interface RequestData {
 function Security() {
     const theme = useMantineTheme();
     const navigate = useNavigate();
+    const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
 
     const form = useForm<RequestData>({
         initialValues: {
             service: '',
             date: '',
+            department: '',
             room: '',
             time: '',
             hospital: '',
             priority: '',
+            employeeName: '',
+            status: '',
             description: '',
         },
     });
 
+    // logic for dependant department slection
+    const handleHospitalChange = (hospital: string | null) => {
+        form.setFieldValue('hospital', hospital || '');
+
+        switch (hospital) {
+            case 'Chestnut Hill':
+                setDepartmentOptions(ChestnutHill);
+                break;
+            case '20 Patriot Place':
+                setDepartmentOptions(Patriot20);
+                break;
+            case '22 Patriot Place':
+                setDepartmentOptions(Patriot22);
+                break;
+            default:
+                setDepartmentOptions([]);
+        }
+
+        form.setFieldValue('department', '');
+    };
     const handleSubmit = async () => {
         const RequestData = form.values;
         const label = RequestData.service === '';
@@ -50,7 +87,10 @@ function Security() {
                     selectedDate: RequestData.date,
                     selectedTime: RequestData.time,
                     roomNumber: RequestData.room,
+                    department: RequestData.department,
                     priority: RequestData.priority,
+                    employeeName: RequestData.employeeName,
+                    status: RequestData.status,
                     hospital: RequestData.hospital,
                     description: RequestData.description,
                 }),
@@ -64,7 +104,10 @@ function Security() {
                             selectedDate: RequestData.date,
                             selectedTime: RequestData.time,
                             roomNumber: RequestData.room,
+                            department: RequestData.department,
                             priority: RequestData.priority,
+                            employeeName: RequestData.employeeName,
+                            status: RequestData.status,
                             hospital: RequestData.hospital,
                             description: RequestData.description,
                         },
@@ -77,27 +120,30 @@ function Security() {
     };
 
     return (
-        <Flex justify="center" align="center" style={{ width: '100vw', padding: '2rem' }}>
+        <Flex justify="center" align="center" p="xl">
             <Paper bg="gray.2" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Title order={2} ta="center" mb="lg">
-                        Security Request Form
+                        Interpreter Request Form
                     </Title>
-                    <p
-                        style={{
-                            textAlign: 'center',
-                            fontSize: '16px',
-                        }}
-                    >
-                        Ethan Ramoth and Camden Brayton
-                    </p>
 
-                    <Flex gap="lg" wrap="wrap" mb="md">
+                    <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
                             {' '}
                             {/*< column 1!!!*/}
-                            <HospitalSelect required {...form.getInputProps('hospital')} />
-                            <PriorityButtons {...form.getInputProps('priority')} />
+                            <NameEntry required {...form.getInputProps('employeeName')} />
+                            <HospitalSelect
+                                required
+                                value={form.values.hospital}
+                                onChange={handleHospitalChange}
+                            />
+                            <DepartmentSelect
+                                required
+                                departments={departmentOptions.map(
+                                    (department) => department.title
+                                )}
+                                {...form.getInputProps('department')}
+                            />
                             <SecuritySelect required {...form.getInputProps('service')} />
                         </Box>
 
@@ -106,7 +152,8 @@ function Security() {
                             {/* column 2!!!*/}
                             <DateInputForm required {...form.getInputProps('date')} />
                             <TimeEntry required {...form.getInputProps('time')} />
-                            <RoomNumberInput required {...form.getInputProps('room')} />
+                            <PriorityButtons {...form.getInputProps('priority')} />
+                            <StatusSelect required {...form.getInputProps('status')} />
                         </Box>
                     </Flex>
 
