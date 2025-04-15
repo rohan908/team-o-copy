@@ -1,4 +1,4 @@
-id,x,y,floor,mapId,name,description,nodeType,connectingNodes
+id,x,y,floor,mapId,name,description,nodeType,edges
 24,0,0,1,1,Blood Draw/Phlebotomy,blood draw,directory,
 25,0,0,1,1,Pharmacy,Pharmacy,directory,
 26,0,0,1,1,Radiology,Radiology,directory,

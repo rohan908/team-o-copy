@@ -35,50 +35,20 @@ export async function populate() {
     });
 
     // adds all edges based on connecting nodes in each node
-    for(const node of addDefaultNodes) {
-        const connections = node.connectingNodes
+    for (const node of addDefaultNodes) {
+        const connections = node.connectingNodes;
 
-        for(const connectingID of connections) {
+        for (const connectingID of connections) {
             const nodeToConnect = await PrismaClient.node.findUnique({
-                where: {id: connectingID},
-            })
+                where: { id: connectingID },
+            });
 
             const addEdge = await PrismaClient.edge.createMany({
                 data: edgeData(node, nodeToConnect, 1),
                 skipDuplicates: true,
-            })
+            });
         }
     }
-
-    // then define each edge -> will not need this eventually
-    const addEdges = await PrismaClient.edge.createMany({
-        data: [
-            edgeData(addDefaultNodes.at(0), addDefaultNodes.at(1), 1),
-            edgeData(addDefaultNodes.at(1), addDefaultNodes.at(2), 1),
-            edgeData(addDefaultNodes.at(1), addDefaultNodes.at(3), 1),
-            edgeData(addDefaultNodes.at(4), addDefaultNodes.at(3), 1),
-            edgeData(addDefaultNodes.at(5), addDefaultNodes.at(4), 1),
-            edgeData(addDefaultNodes.at(6), addDefaultNodes.at(5), 1),
-            edgeData(addDefaultNodes.at(7), addDefaultNodes.at(4), 1),
-            edgeData(addDefaultNodes.at(8), addDefaultNodes.at(6), 1),
-            edgeData(addDefaultNodes.at(9), addDefaultNodes.at(8), 1),
-            edgeData(addDefaultNodes.at(10), addDefaultNodes.at(9), 1),
-            edgeData(addDefaultNodes.at(11), addDefaultNodes.at(10), 1),
-            edgeData(addDefaultNodes.at(12), addDefaultNodes.at(10), 1),
-            edgeData(addDefaultNodes.at(13), addDefaultNodes.at(12), 1),
-            edgeData(addDefaultNodes.at(14), addDefaultNodes.at(13), 1),
-            edgeData(addDefaultNodes.at(15), addDefaultNodes.at(14), 1),
-            edgeData(addDefaultNodes.at(16), addDefaultNodes.at(14), 1),
-            edgeData(addDefaultNodes.at(17), addDefaultNodes.at(14), 1),
-            edgeData(addDefaultNodes.at(17), addDefaultNodes.at(8), 1),
-            edgeData(addDefaultNodes.at(18), addDefaultNodes.at(15), 1),
-            edgeData(addDefaultNodes.at(19), addDefaultNodes.at(16), 1),
-            edgeData(addDefaultNodes.at(20), addDefaultNodes.at(17), 1),
-            edgeData(addDefaultNodes.at(20), addDefaultNodes.at(17), 1),
-            edgeData(addDefaultNodes.at(21), addDefaultNodes.at(2), 1),
-            edgeData(addDefaultNodes.at(22), addDefaultNodes.at(21), 1),
-        ],
-    });
 
     console.log('\nSuccessfully populated tables\n');
 }

@@ -10,7 +10,16 @@ router.post('/', async (req: Request, res: Response) => {
 
     try {
         // For inputting a request form, adds entry
-        const { label, selectedDate, selectedTime, roomNumber, description } = req.body;
+        const {
+            label,
+            selectedDate,
+            selectedTime,
+            department,
+            description,
+            priority,
+            status,
+            employeeName,
+        } = req.body;
 
         // creating request to get data from frontend
         const request = await PrismaClient.langaugeServiceRequest.create({
@@ -18,8 +27,11 @@ router.post('/', async (req: Request, res: Response) => {
                 language: label,
                 date: selectedDate,
                 time: convertTo24Hour(selectedTime),
-                room: roomNumber,
+                department,
                 description,
+                priority,
+                status,
+                employeeName,
             },
         });
 
