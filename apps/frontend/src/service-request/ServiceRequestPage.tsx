@@ -1,6 +1,6 @@
 import { Box, Button, Flex, SimpleGrid, Stack } from '@mantine/core';
 import { IconLanguage, IconExclamationCircleFilled } from '@tabler/icons-react';
-
+import HoverButton from './components/HoverButton.tsx';
 import { useNavigate } from 'react-router-dom';
 export function ServiceRequestPage() {
     const navigate = useNavigate();
@@ -11,101 +11,43 @@ export function ServiceRequestPage() {
                     {/* basic grid for button layout*/}
                     <SimpleGrid cols={3} spacing="50">
                         {/* button for language interpreter request*/}
-                        <Button
-                            key={'Interpreter Request'}
-                            style={{
-                                width: 300,
-                                height: 300,
-                                padding: '1.5rem',
-                                backgroundColor: '#003A97',
-                            }}
+                        <HoverButton
+                            icon={<IconLanguage size={120} />}
+                            label="Interpreter Request"
                             onClick={() => navigate('/language-form')}
-                        >
-                            <Stack align="center">
-                                <IconLanguage size={120} />
-                                <span>{'Interpreter Request'}</span>
-                            </Stack>
-                        </Button>
+                        />
                         {/* button for ___ Request */}
-                        <Button
-                            key={'Type'}
-                            style={{
-                                width: 300,
-                                height: 300,
-                                padding: '1.5rem',
-                                backgroundColor: '#003A97',
-                            }}
+                        <HoverButton
+                            icon={<IconExclamationCircleFilled size={120} />}
+                            label="Type 2"
                             onClick={() => navigate('/')}
-                        >
-                            <Stack align="center">
-                                <IconExclamationCircleFilled size={120} />
-                                <span>{'Type'}</span>
-                            </Stack>
-                        </Button>
+                        />
                         {/* button for ___ Request */}
-                        <Button
-                            key={'Type'}
-                            style={{
-                                width: 300,
-                                height: 300,
-                                padding: '1.5rem',
-                                backgroundColor: '#003A97',
-                            }}
+                        <HoverButton
+                            icon={<IconExclamationCircleFilled size={120} />}
+                            label="Type 3"
                             onClick={() => navigate('/')}
-                        >
-                            <Stack align="center">
-                                <IconExclamationCircleFilled size={120} />
-                                <span>{'Type'}</span>
-                            </Stack>
-                        </Button>
+                        />
                         {/* button for ___ Request */}
-                        <Button
-                            key={'Type'}
-                            style={{
-                                width: 300,
-                                height: 300,
-                                padding: '1.5rem',
-                                backgroundColor: '#003A97',
-                            }}
+                        <HoverButton
+                            icon={<IconExclamationCircleFilled size={120} />}
+                            label="Type 4"
                             onClick={() => navigate('/')}
-                        >
-                            <Stack align="center">
-                                <IconExclamationCircleFilled size={120} />
-                                <span>{'Type'}</span>
-                            </Stack>
-                        </Button>
+                        />
                         {/* button for ___ Request */}
-                        <Button
-                            key={'Type'}
-                            style={{
-                                width: 300,
-                                height: 300,
-                                padding: '1.5rem',
-                                backgroundColor: '#003A97',
-                            }}
+                        <HoverButton
+                            icon={<IconExclamationCircleFilled size={120} />}
+                            label="Type 5"
+                            onClick={() => navigate('/')}
                             disabled={true}
-                        >
-                            <Stack align="center">
-                                <IconExclamationCircleFilled size={120} />
-                                <span>{'Type'}</span>
-                            </Stack>
-                        </Button>
+                        />
                         {/* button for ___ Request */}
-                        <Button
-                            key={'Type'}
-                            style={{
-                                width: 300,
-                                height: 300,
-                                padding: '1.5rem',
-                                backgroundColor: '#003A97',
-                            }}
+                        <HoverButton
+                            icon={<IconExclamationCircleFilled size={120} />}
+                            label="Type 6"
+                            onClick={() => navigate('/')}
                             disabled={true}
-                        >
-                            <Stack align="center">
-                                <IconExclamationCircleFilled size={120} />
-                                <span>{'Type'}</span>
-                            </Stack>
-                        </Button>
+                        />
                     </SimpleGrid>
                 </Flex>
             </Box>
