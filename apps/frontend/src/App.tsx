@@ -2,7 +2,9 @@ import React from 'react';
 import {Routing} from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
-import { createTheme,
+import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
+import {
+    createTheme,
     MantineProvider,
     MantineColorsTuple,
     rem,
@@ -14,6 +16,18 @@ import { createTheme,
     darken,
     MantineRadiusValues,
 } from '@mantine/core';
+const themeGold: MantineColorsTuple = [
+    '#FFF8EB',
+    '#FDF0D5',
+    '#FCDFA4',
+    '#FCCD6F',
+    '#FCBE45',
+    '#FCB024',
+    '#DB993C',
+    '#D9932E',
+    '#AC7018',
+    '#96600A',
+];
 
 const blueBase: MantineColorsTuple = [
     '#ebf2ff',
@@ -25,7 +39,7 @@ const blueBase: MantineColorsTuple = [
     '#2a68f7',
     '#1f58dc',
     '#164ec5',
-    '#0043ad'
+    '#0043ad',
 ];
 
 const terquAccet: MantineColorsTuple = [
@@ -38,7 +52,7 @@ const terquAccet: MantineColorsTuple = [
     '#4deefb',
     '#40d3df',
     '#2fbcc7',
-    '#00a3ad'
+    '#00a3ad',
 ];
 
 const greys: MantineColorsTuple = [
@@ -51,7 +65,7 @@ const greys: MantineColorsTuple = [
     '#777c91',
     '#656a7e',
     '#595e72',
-    '#4a5167'
+    '#4a5167',
 ];
 
 const myvariantColorResolver: VariantColorsResolver = (input) => {
@@ -98,34 +112,41 @@ const myvariantColorResolver: VariantColorsResolver = (input) => {
 const theme = createTheme({
     /** Your theme override here */
     fontSizes: {
-        xxs: rem(10),
-        xs: rem(12),
-        sm: rem(14),
-        md: rem(16),
-        lg: rem(18),
-        xl: rem(28),
+        xxs: rem(14),
+        xs: rem(16),
+        sm: rem(18),
+        md: rem(20),
+        lg: rem(24),
+        xl: rem(30),
         xxl: rem(36),
         xxxl: rem(48),
     },
-
     fontFamily: 'Roboto, sans-serif',
-    headings: { fontFamily: 'Roboto slab, sans-serif' },
+
+    headings: {
+        fontFamily: 'Roboto Slab, sans-serif',
+        fontWeight: '500',
+        sizes: {
+            h1: { fontSize: 'rem(48)' },
+        },
+    },
     colors: {
         blueBase,
         terquAccet,
         greys,
+        themeGold,
     },
     primaryShade: { light: 6, dark: 9 },
     defaultRadius: 30,
 
     // variantColorResolver: myvariantColorResolver(theme)
-
 });
 function App() {
-
     return (
-            <MantineProvider theme={theme}>
-            <Routing />
+        <MantineProvider theme={theme}>
+            <DirectoryProvider>
+                <Routing />
+            </DirectoryProvider>
         </MantineProvider>
     );
 }

@@ -11,7 +11,6 @@ const languageOptions = [
 ];
 
 const LanguageSelect: React.FC<SelectProps> = (props) => {
-  const theme = useMantineTheme();
   return (
     <Select
       label="Choose the Language Needed"
@@ -20,7 +19,9 @@ const LanguageSelect: React.FC<SelectProps> = (props) => {
       data={languageOptions}
       nothingFoundMessage="Language not found"
       radius="sm"
-      mb="md"
+      mb="sm"
+      size = "xs"
+
       {...props}
 
     />

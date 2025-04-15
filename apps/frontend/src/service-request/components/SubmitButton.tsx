@@ -6,7 +6,7 @@ interface SubmitButtonProps {
   onClick: () => void;
 }
 
-const SubmitButton: React.FC<SubmitButtonProps> = ({onClick,}) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({onClick}) => {
 
   return (
     <Button

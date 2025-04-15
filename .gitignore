@@ -39,3 +39,5 @@ out
 
 **/.prettiercache
 **/.vite
+
+apps/backend/src/directoryBackup/backup.csv

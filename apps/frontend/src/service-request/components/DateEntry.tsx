@@ -7,22 +7,12 @@ const DateEntry: React.FC<DateInputProps> = (props) => {
   return (
     <DateInput
       {...props}
-      placeholder="Select a date"
+      placeholder="--Select a date--"
       label="Enter Date"
       required
+      mb="sm"
       radius="sm"
-      popoverProps={{
-        shadow: 'md',
-        radius: 'md',
-        withArrow: true,
-        withinPortal: true,
-        styles: {
-          dropdown: {
-            padding: '0.75rem',
-            maxWidth: '22rem',
-          },
-        },
-      }}
+      size = "xs"
     />
   );
 };

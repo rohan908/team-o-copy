@@ -9,9 +9,12 @@ import {
     Flex,
     Text,
     Divider,
+    Stack,
 } from '@mantine/core';
 import { useLogin } from './LoginContext';
 import { useNavigate } from 'react-router-dom';
+import { BasicOutlinedButton, BlackButton } from '../../common-compoents/commonButtons.tsx';
+import { TwoPartInteractiveBox } from '../../common-compoents/standAloneFrame.tsx';
 
 const LogInBox = () => {
     const theme = useMantineTheme();
@@ -21,7 +24,6 @@ const LogInBox = () => {
     const [loginStatus, setLoginStatus] = useState<'success' | 'error' | ''>('');
     const navigate = useNavigate();
 
-
     const handleLogin = () => {
         const success: boolean = login(username, password);
         setLoginStatus(success ? 'success' : 'error');
@@ -29,10 +31,10 @@ const LogInBox = () => {
         setPassword('');
 
         if (success) {
-            setTimeout(() => {navigate('/map-API')}, 1000);
+            setTimeout(() => {
+                navigate('/map-API');
+            }, 1000);
         }
-
-
     };
 
     const handleLogout = () => {
@@ -42,81 +44,70 @@ const LogInBox = () => {
 
     return (
         <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
-            <Box
-                bg="white"
-                p={{ base: 'xl', sm: '2rem', md: '3rem' }}
-                w="100%"
-                maw={{ base: '90%', sm: '70%', md: '600px' }}
-                pos="relative"
-                style={{
-                    opacity: 0.85,
-                    borderRadius: theme.radius.lg,
-                    backdropFilter: 'blur(5px)',
-                }}
+            <TwoPartInteractiveBox
+                title="Let's Get Started"
+                subtitle="Looking for Directions?"
+                subContents={
+                    <>
+                        <Stack gap="0">
+                            <BasicOutlinedButton onClick={() => navigate('/map-page')}>
+                                Get Directions!
+                            </BasicOutlinedButton>
+
+                            <Text py="xs" ta="left" fz={{ base: 'md' }}>
+                                Use our interactive map to find departments, parking, and efficient
+                                routes
+                            </Text>
+                        </Stack>
+                    </>
+                }
             >
-                <Title order={1} mb={{ base: 'md', sm: 'lg', md: 'xl' }} c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
-                    Let's get started
-                </Title>
-
-                <Text mb="md" ta="left">Looking for directions?</Text>
-
-                <Flex gap="md" wrap="wrap" mb={{ base: 'xs' }}>
-                    <Button variant="outline" color="dark"
-                            onClick={()=>navigate('/map-page')}
-                            style={{
-                        borderRadius: '20px',
-                        transition: 'all 0.3s ease',
-                        fontSize: 'clamp(12px, 3vw, 18px)',
-                    }}>
-                        Find Your Way Now
-                    </Button>
-                    <Text mb="0" ta="left" fz={{ base: 'xs' }}>
-                        Use our interactive map to find departments, parking, and efficient routes
-                    </Text>
-                </Flex>
-
-                <Divider variant={'dotted'} size={'lg'} mb={'lg'} />
-
                 {!isLoggedIn ? (
                     <>
-                        <Box mb="md" ta="left">
-                            Login here for Staff:
-                            <TextInput
-                                placeholder="Username"
-                                mt="md"
-                                mb="md"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                            <TextInput
-                                placeholder="Password"
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </Box>
-                        {/*<Group justify="flex-start" w="100%">*/}
-                            <Button
-                                size="md"
-                                color="dark"
-                                fw="600"
-                                bg="black"
+                        <Stack w="100%">
+                            <Box>
+                                <Text fz={{ base: 'lg' }}>Login here for Staff:</Text>
+                                <TextInput
+                                    placeholder="Username"
+                                    mt="md"
+                                    mb="md"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                                <TextInput
+                                    placeholder="Password"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </Box>
+                            {/*<Group justify="flex-start" w="100%">*/}
+                            <BlackButton
                                 onClick={handleLogin}
                                 disabled={!username || !password}
-                                style={{ borderRadius: '50px', transition: 'all 0.3s ease' }}
+                                style={{ width: 'fit-content' }}
                             >
                                 Login
-                            </Button>
-                        {/*</Group>*/}
-                        {loginStatus && (
-                            <Text mt="md" c={loginStatus === 'success' ? 'green' : 'red'} fw={600}>
-                                {loginStatus === 'success' ? 'Welcome back!' : 'Incorrect username or password.'}
-                            </Text>
-                        )}
+                            </BlackButton>
+                            {/*</Group>*/}
+                            {loginStatus && (
+                                <Text
+                                    mt="md"
+                                    c={loginStatus === 'success' ? 'green' : 'red'}
+                                    fw={600}
+                                >
+                                    {loginStatus === 'success'
+                                        ? 'Welcome back!'
+                                        : 'Incorrect username or password.'}
+                                </Text>
+                            )}
+                        </Stack>
                     </>
                 ) : (
                     <Group justify="space-between" mt="xl">
-                        <Text c="green" fw={600}>Logged in as admin</Text>
+                        <Text c="green" fw={600}>
+                            Logged in as admin
+                        </Text>
                         <Button
                             variant="light"
                             color="red"
@@ -127,7 +118,7 @@ const LogInBox = () => {
                         </Button>
                     </Group>
                 )}
-            </Box>
+            </TwoPartInteractiveBox>
         </Flex>
     );
 };

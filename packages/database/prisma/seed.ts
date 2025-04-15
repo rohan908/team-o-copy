@@ -1,63 +1,97 @@
 import PrismaClient from '../../../apps/backend/src/bin/prisma-client';
 import { calculateWeight, edgeData } from '../../common/src/MapHelper.ts';
-import { getNodeData } from './SeedData.ts'
+import { getNodeData } from './SeedData.ts';
 
 /*
     Create all initial database values here
     Run "yarn workspace database seed" to populate the table
  */
 export async function populate() {
-
     // !!! NEED TO ADD EMPLOYEE DATA BACK !!!
 
     // clears all map data for seeding
-    const truncateNodes = await PrismaClient.$queryRaw`TRUNCATE TABLE "Node" RESTART IDENTITY CASCADE`;
-    const truncateEdges = await PrismaClient.$queryRaw`TRUNCATE TABLE "Edge" RESTART IDENTITY CASCADE`;
-    const truncateMaps = await PrismaClient.$queryRaw`TRUNCATE TABLE "FloorMap" RESTART IDENTITY CASCADE`;
+    const truncateNodes =
+        await PrismaClient.$queryRaw`TRUNCATE TABLE "Node" RESTART IDENTITY CASCADE`;
+    const truncateEdges =
+        await PrismaClient.$queryRaw`TRUNCATE TABLE "Edge" RESTART IDENTITY CASCADE`;
+    const truncateMaps =
+        await PrismaClient.$queryRaw`TRUNCATE TABLE "FloorMap" RESTART IDENTITY CASCADE`;
 
     // ------------------------------------------- //
     // Example floor map and node set up. Writing a script on the front end so we can paste will be much better
 
     // defines floor maps for each building floor
     const floorMaps = await PrismaClient.floorMap.createMany({
-      data: [
-        { name: 'Patriot-20-1', id: 1 },
-        { name: 'Patriot-22-1', id: 2 },
-        { name: 'Patriot-22-2', id: 3 },
-        { name: 'Patriot-22-3', id: 4 },
-      ],
-      skipDuplicates: true,
+        data: [
+            { name: 'Patriot', id: 1 },
+            { name: 'Chestnut', id: 2 },
+        ],
+        skipDuplicates: true,
     });
 
     // adds all node data from /SeedData.ts
     const addDefaultNodes = await PrismaClient.node.createManyAndReturn({
-      data: getNodeData(),
-    })
-
-    // then define each edge
-    const addEdges = await PrismaClient.edge.createMany({
-      data: [
-        edgeData(addDefaultNodes.at(0), addDefaultNodes.at(1), 1),
-        edgeData(addDefaultNodes.at(1), addDefaultNodes.at(2), 1),
-        edgeData(addDefaultNodes.at(2), addDefaultNodes.at(3), 1),
-        edgeData(addDefaultNodes.at(3), addDefaultNodes.at(4), 1),
-        edgeData(addDefaultNodes.at(1), addDefaultNodes.at(4), 1),
-      ]
+        data: getNodeData(),
     });
 
-    console.log("\nSuccessfully populated tables\n");
+    // adds all edges based on connecting nodes in each node
+    for(const node of addDefaultNodes) {
+        const connections = node.connectingNodes
+
+        for(const connectingID of connections) {
+            const nodeToConnect = await PrismaClient.node.findUnique({
+                where: {id: connectingID},
+            })
+
+            const addEdge = await PrismaClient.edge.createMany({
+                data: edgeData(node, nodeToConnect, 1),
+                skipDuplicates: true,
+            })
+        }
+    }
+
+    // then define each edge -> will not need this eventually
+    const addEdges = await PrismaClient.edge.createMany({
+        data: [
+            edgeData(addDefaultNodes.at(0), addDefaultNodes.at(1), 1),
+            edgeData(addDefaultNodes.at(1), addDefaultNodes.at(2), 1),
+            edgeData(addDefaultNodes.at(1), addDefaultNodes.at(3), 1),
+            edgeData(addDefaultNodes.at(4), addDefaultNodes.at(3), 1),
+            edgeData(addDefaultNodes.at(5), addDefaultNodes.at(4), 1),
+            edgeData(addDefaultNodes.at(6), addDefaultNodes.at(5), 1),
+            edgeData(addDefaultNodes.at(7), addDefaultNodes.at(4), 1),
+            edgeData(addDefaultNodes.at(8), addDefaultNodes.at(6), 1),
+            edgeData(addDefaultNodes.at(9), addDefaultNodes.at(8), 1),
+            edgeData(addDefaultNodes.at(10), addDefaultNodes.at(9), 1),
+            edgeData(addDefaultNodes.at(11), addDefaultNodes.at(10), 1),
+            edgeData(addDefaultNodes.at(12), addDefaultNodes.at(10), 1),
+            edgeData(addDefaultNodes.at(13), addDefaultNodes.at(12), 1),
+            edgeData(addDefaultNodes.at(14), addDefaultNodes.at(13), 1),
+            edgeData(addDefaultNodes.at(15), addDefaultNodes.at(14), 1),
+            edgeData(addDefaultNodes.at(16), addDefaultNodes.at(14), 1),
+            edgeData(addDefaultNodes.at(17), addDefaultNodes.at(14), 1),
+            edgeData(addDefaultNodes.at(17), addDefaultNodes.at(8), 1),
+            edgeData(addDefaultNodes.at(18), addDefaultNodes.at(15), 1),
+            edgeData(addDefaultNodes.at(19), addDefaultNodes.at(16), 1),
+            edgeData(addDefaultNodes.at(20), addDefaultNodes.at(17), 1),
+            edgeData(addDefaultNodes.at(20), addDefaultNodes.at(17), 1),
+            edgeData(addDefaultNodes.at(21), addDefaultNodes.at(2), 1),
+            edgeData(addDefaultNodes.at(22), addDefaultNodes.at(21), 1),
+        ],
+    });
+
+    console.log('\nSuccessfully populated tables\n');
 }
 
 // Runs populate on the prisma client
 populate()
     .then(async () => {
-        await PrismaClient.$disconnect()
+        await PrismaClient.$disconnect();
     })
     .catch(async (e) => {
-        console.error(e)
-        await PrismaClient.$disconnect()
-    })
-
+        console.error(e);
+        await PrismaClient.$disconnect();
+    });
 
 /*
 // All old directory data:

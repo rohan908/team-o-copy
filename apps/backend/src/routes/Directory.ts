@@ -22,10 +22,14 @@ router.post('/import', async (req: Request, res: Response) => {
     const dataToAdd = parseImportedCSV(dataString);
 
     // clears directory database for new input data
-    const prismaClear = await PrismaClient.directory.deleteMany({});
+    const prismaClear = await PrismaClient.node.deleteMany({
+        where: {
+            nodeType: 'directory',
+        },
+    });
 
     // adds the imported file data to Prisma
-    const prismaCreate = await PrismaClient.directory.createMany({
+    const prismaCreate = await PrismaClient.node.createMany({
         data: dataToAdd,
         skipDuplicates: true,
     });
@@ -47,31 +51,51 @@ router.post('/import', async (req: Request, res: Response) => {
 router.get('/export', async (req: Request, res: Response) => {
     const csvData = fs.readFileSync('./src/directoryBackup/backup.csv', 'utf-8');
 
-    const directoryData = await PrismaClient.directory.findMany({});
+    const directoryData = await PrismaClient.node.findMany({
+        where: {
+            nodeType: 'directory',
+        },
+    });
 
     res.send(directoryData);
 });
 
 /*
-    Retrieves all directories in a specified building
-    Ex: api/directory/Patriot-22
+    Retrieves all directories in a specified building ->
+      1 = Patriot
+      2 = Chestnut
+    Ex: api/directory/1
  */
-router.get('/:building', async (req: Request, res: Response) => {
-    const building = req.params.building;
+router.get('/:mapID', async (req: Request, res: Response) => {
+    const mapID = Number(req.params.mapID);
 
-    const directories = await PrismaClient.directory.findMany({
+    const directories = await PrismaClient.node.findMany({
         where: {
-            building: building,
+            nodeType: 'directory',
+            mapId: mapID,
         },
     });
 
     res.send(directories);
 });
 
+router.get('/:nodeID', async (req: Request, res: Response) => {
+  const nodeID = Number(req.params.nodeID);
+
+  const node = await PrismaClient.node.findUnique({
+    where: {
+      id: nodeID,
+    },
+  });
+
+  res.send(node);
+});
+
+
 // Clears the directory database table
 router.delete('/clear', async (req: Request, res: Response) => {
     // Add removal from CSV file
-    const deleteData = await PrismaClient.directory.deleteMany({});
+    const deleteData = await PrismaClient.node.deleteMany({});
 
     res.status(200).json({
         message: 'Table cleared successfully',
