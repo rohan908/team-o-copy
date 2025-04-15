@@ -19,7 +19,7 @@ const HoverButton: React.FC<HoverButtonProps> = ({ icon, label, onClick, disable
             onMouseLeave={() => setHovered(false)}
             style={{
                 width: 300,
-                height: 300,
+                height: 250,
                 padding: '1.5rem',
                 backgroundColor: hovered ? '#002B70' : '#003A97',
             }}

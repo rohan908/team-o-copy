@@ -1,13 +1,16 @@
-import { Box, Button, Flex, SimpleGrid, Stack } from '@mantine/core';
+import { Box, Button, Flex, SimpleGrid, Title, Stack } from '@mantine/core';
 import { IconLanguage, IconExclamationCircleFilled } from '@tabler/icons-react';
 import HoverButton from './components/HoverButton.tsx';
 import { useNavigate } from 'react-router-dom';
 export function ServiceRequestPage() {
     const navigate = useNavigate();
     return (
-        <>
+        <div>
             <Box bg="themeGold.0">
-                <Flex w="100%" h="100vh" justify="center" align="center">
+                <Title order={2} ta="center" c={'#001D4D'}>
+                    Select Request Type:
+                </Title>
+                <Flex w="100%" h="85.5vh" justify="center" align="center">
                     {/* basic grid for button layout*/}
                     <SimpleGrid cols={3} spacing="50">
                         {/* button for language interpreter request*/}
@@ -51,7 +54,7 @@ export function ServiceRequestPage() {
                     </SimpleGrid>
                 </Flex>
             </Box>
-        </>
+        </div>
     );
 }
 export default ServiceRequestPage;
