@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
+import {BlackButton} from "../common-compoents/commonButtons.tsx"
+import {TwoPartInteractiveBox} from "../common-compoents/standAloneFrame.tsx";
+
 
 import { Patriot20, Patriot22, ChestnutHill } from '../directory/components/directorydata.tsx'; //this is now static lol
 import {
@@ -64,6 +67,34 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         setCollapsed(true);
     };
 
+    const setHospitalLocation = (hospital: string | null) =>{
+      if (hospital === '20 Patriot Pl') {
+        const options = Patriot20.map((dept) => ({
+          value: dept.slug,
+          label: dept.title,
+        }));
+        setDepartmentOptions(options);
+      } else if (hospital === '22 Patriot Pl') {
+        const options = Patriot22.map((dept) => ({
+          value: dept.slug,
+          label: dept.title,
+        }));
+        setDepartmentOptions(options);
+      }
+      else if (hospital == 'Chestnut Hill'){
+        const options = ChestnutHill.map((dept)=>({
+          value: dept.slug,
+          label: dept.title,
+        }));
+        setDepartmentOptions(options);
+      }
+      else {
+        setDepartmentOptions([]);
+      }
+      setHospital(hospital);
+      setDepartment(null);
+    }
+
   useEffect(() => { //use effect to render google autocomplete
     if (!input.current) return;
     autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
@@ -81,34 +112,6 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
   }, []);
 
 
-    useEffect(() => { //for everytime user selects new hospital, departments get displayed accordingly
-        if (hospital === '20 Patriot Pl') {
-            const options = Patriot20.map((dept) => ({
-                value: dept.slug,
-                label: dept.title,
-            }));
-            setDepartmentOptions(options);
-        } else if (hospital === '22 Patriot Pl') {
-            const options = Patriot22.map((dept) => ({
-                value: dept.slug,
-                label: dept.title,
-            }));
-            setDepartmentOptions(options);
-        }
-          else if (hospital == 'Chestnut Hill'){
-            const options = ChestnutHill.map((dept)=>({
-                value: dept.slug,
-                label: dept.title,
-            }));
-            setDepartmentOptions(options);
-        }
-          else {
-            setDepartmentOptions([]);
-        }
-
-        // Reset department when hospital changes
-        setDepartment(null);
-    }, [hospital]);
 
     return (
         <Box
@@ -179,7 +182,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
 
                         ]}
                         value={hospital}
-                        onChange={setHospital}
+                        onChange={setHospitalLocation}
                         mb="md"
                     />
 
@@ -215,17 +218,10 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                   />
 
                     <Flex justify="flex-end" gap="md">
-                        <Button
-                            onClick={handleFindPath}
-                            fw="600"
-                            color= "#001D4D"
-                            style={{
-                                borderRadius: '50px',
-                                transition: 'all 0.3s ease',
-                            }}
-                        >
+                        <BlackButton
+                            onClick={handleFindPath}>
                             Find Path
-                        </Button>
+                        </BlackButton>
                     </Flex>
                 </Collapse>
 
