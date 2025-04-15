@@ -3,10 +3,11 @@ import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
 import { useMantineTheme, Collapse, Button, Divider, Center, Flex, Title } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import Language from "../service-request/LanguageInterpreterSR.tsx";
-import LanguageRequestHistory from "./LanguageRequestHistory.tsx";
+import Language from '../service-request/LanguageInterpreterSR.tsx';
+import LanguageRequestHistory from './LanguageRequestHistory.tsx';
 import { BlackButton } from '../common-compoents/commonButtons.tsx';
 import { SegmentedControl } from '@mantine/core';
+import SecurityRequestHistory from './SecurityRequestHistory.tsx';
 
 export function AdminPage() {
     const navigate = useNavigate();
@@ -81,7 +82,7 @@ export function AdminPage() {
                             onChange={setStringDisplayNum}
                             data={[
                                 { label: 'LanguageRequest', value: '0' },
-                                { label: 'MachineRequest', value: '1', disabled: true },
+                                { label: 'SecurityRequest', value: '1' },
                                 { label: 'SanitationRequest', value: '2', disabled: true },
                                 { label: 'StaffRequest', value: '3', disabled: true },
                             ]}
@@ -112,7 +113,7 @@ export function AdminPage() {
                         </Collapse>
                         <Collapse in={displayTableNumber == 1}>
                             <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
-                                {/*Machine Request*/}
+                                <SecurityRequestHistory />
                             </div>
                         </Collapse>
                         <Collapse in={displayTableNumber == 2}>
@@ -168,7 +169,6 @@ export function AdminPage() {
                 </Collapse>
             </div>
         </div>
-
     );
 }
 

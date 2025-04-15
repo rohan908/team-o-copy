@@ -39,7 +39,7 @@ function Security() {
 
     const handleSubmit = async () => {
         const RequestData = form.values;
-        const label = RequestData.service === 'Escort';
+        const label = RequestData.service === '';
 
         try {
             const response = await fetch('/api/SecuritySR', {
