@@ -3,6 +3,7 @@
   used in map pathfinding and database management
  */
 
+
 // creates a database entry for the "Edge" table
 export function edgeData(node1: any, node2: any, mapId: number) {
   return ({
