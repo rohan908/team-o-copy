@@ -37,8 +37,6 @@
     "vitest": "^3.0.9"
   },
   "dependencies": {
-    "@tabler/icons-react": "^3.31.0",
-    "@types/google.maps": "^3.58.1",
     "common": "workspace:*",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
