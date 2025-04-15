@@ -5,7 +5,6 @@ import * as L from 'leaflet';
 import SelectBox from './SelectBox.tsx';
 import GoogleMapsAPI from "./GoogleMapsAPI.tsx";
 import {useJsApiLoader } from "@react-google-maps/api"; //this is better than LoadScript
-
 import { useMediaQuery } from '@mantine/hooks';
 
 export function MapAPIPage() {

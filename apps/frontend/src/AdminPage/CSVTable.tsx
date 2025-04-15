@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Table, Title, Loader, Center, ScrollArea, Text } from '@mantine/core';
+import { useDirectoryContext } from '../contexts/DirectoryContext.tsx';
 
 type Props = {
     table: string;
@@ -20,11 +21,10 @@ export function CSVTable({ table }: Props) {
                     throw new Error(`HTTP error!: ${res.status}`);
                 }
                 // gets json data from fetched data
-                const directoryData = res.json().then(res => {
-                  console.log(res);
-                  setData(res);
+                const directoryData = res.json().then((res) => {
+                    console.log(res);
+                    setData(res);
                 });
-
             } catch (error) {
                 console.error('Error fetching directory table', error);
                 setError(error instanceof Error ? error.message : 'Failed to load table');

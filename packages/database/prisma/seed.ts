@@ -23,12 +23,8 @@ export async function populate() {
     // defines floor maps for each building floor
     const floorMaps = await PrismaClient.floorMap.createMany({
         data: [
-            { name: 'Patriot-20-1', id: 1 },
-            { name: 'Patriot-20-2', id: 2 },
-            { name: 'Patriot-20-3', id: 3 },
-            { name: 'Patriot-20-4', id: 4 },
-            { name: 'Patriot-22-3', id: 5 },
-            { name: 'Patriot-22-4', id: 6 },
+            { name: 'Patriot', id: 1 },
+            { name: 'Chestnut', id: 2 },
         ],
         skipDuplicates: true,
     });
@@ -38,7 +34,23 @@ export async function populate() {
         data: getNodeData(),
     });
 
-    // then define each edge
+    // adds all edges based on connecting nodes in each node
+    for(const node of addDefaultNodes) {
+        const connections = node.connectingNodes
+
+        for(const connectingID of connections) {
+            const nodeToConnect = await PrismaClient.node.findUnique({
+                where: {id: connectingID},
+            })
+
+            const addEdge = await PrismaClient.edge.createMany({
+                data: edgeData(node, nodeToConnect, 1),
+                skipDuplicates: true,
+            })
+        }
+    }
+
+    // then define each edge -> will not need this eventually
     const addEdges = await PrismaClient.edge.createMany({
         data: [
             edgeData(addDefaultNodes.at(0), addDefaultNodes.at(1), 1),
