@@ -4,7 +4,7 @@ import { convertTo24Hour } from './helperFunctions.ts';
 
 const router: Router = express.Router();
 
-// uploads the language request service form to the database table
+// uploads the sanitation request service form to the database table
 router.post('/', async (req: Request, res: Response) => {
     console.log('Incoming POST to /api/sanitationSR');
     console.log('Request body:', req.body);
@@ -45,7 +45,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
 });
 
-// Retrieves all language service request forms
+// Retrieves all sanitation service request forms
 // this will be for posting on the website
 router.get('/', async (req: Request, res: Response) => {
     const allServiceRequests = await PrismaClient.sanitationServiceRequest.findMany({});

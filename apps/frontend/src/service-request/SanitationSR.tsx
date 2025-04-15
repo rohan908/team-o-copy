@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Text, Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useLanguageRequestContext } from '../contexts/LanguageRequestContext.tsx';
-
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
 import RoomNumberInput from './components/RoomEntry';
@@ -71,10 +69,6 @@ function Sanitation() {
 
         form.setFieldValue('department', '');
     };
-
-    const langREQ = useLanguageRequestContext();
-    console.log('TESTER CODE FOR CONTEXT!!!!');
-    console.log(langREQ);
 
     const handleSubmit = async () => {
         const RequestData = form.values;
