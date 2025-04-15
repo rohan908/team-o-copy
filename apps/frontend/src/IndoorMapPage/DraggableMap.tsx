@@ -13,13 +13,13 @@ import FloorSwitchBox from './components/FloorManagerBox.tsx';
 
 export function DraggableMap() {
     const theme = useMantineTheme();
+    const building = 'PatriotPlace';
     const [nodeSelected, setNodeSelected] = useState(false);
     const [nodeX, setNodeX] = useState(0);
     const [nodeY, setNodeY] = useState(0);
     const [floor, setFloor] = useState(1);
     const [isFading, setIsFading] = useState(false);
     const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
-    const scene = new THREE.Scene();
     const canvasId = 'insideMapCanvas';
     const objects: THREE.Object3D[] = [];
     objects.push(new THREE.Object3D());
@@ -31,6 +31,13 @@ export function DraggableMap() {
     const edgeColor = { color: 0xff0000 };
     const nodeRadius = 2;
     const edgeRadius = 1.5;
+
+    const scene1 = new THREE.Scene();
+    const scene2 = new THREE.Scene();
+    const scene3 = new THREE.Scene();
+    const scene4 = new THREE.Scene();
+
+    const [scene, setScene] = useState(scene1);
 
     // updates the selected node position from UI
     const updateNodePosition = (x: number, y: number, floor: number) => {
@@ -56,8 +63,19 @@ export function DraggableMap() {
         nodeIds.push([node.id, sphere.id]);
         sphere.position.x = node.x;
         sphere.position.y = node.y;
-        scene.add(sphere);
-        objects.push(sphere);
+        const nodeFloor = node.floor;
+        if (building === 'PatriotPlace') {
+            if (nodeFloor === 1) {
+                scene1.add(sphere);
+            } else if (nodeFloor === 2) {
+                scene2.add(sphere);
+            } else if (nodeFloor === 3) {
+                scene3.add(sphere);
+            }
+        } else {
+            scene4.add(sphere);
+        }
+        //objects.push(sphere);
     };
 
     const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
@@ -72,7 +90,17 @@ export function DraggableMap() {
         const geometry = new TubeGeometry(path, 1, edgeRadius, Math.round(edgeRadius * 4));
         const material = new THREE.MeshBasicMaterial(edgeColor);
         const edge = new THREE.Mesh(geometry, material);
-        scene.add(edge);
+        if (building === 'PatriotPlace') {
+            if (floor === 1) {
+                scene1.add(edge);
+            } else if (floor === 2) {
+                scene2.add(edge);
+            } else if (floor === 3) {
+                scene3.add(edge);
+            }
+        } else {
+            scene4.add(edge);
+        }
     };
 
     const handleFloorChange = (newFloor: number) => {
@@ -168,6 +196,22 @@ export function DraggableMap() {
         // Create camera
         const camera = new THREE.PerspectiveCamera(50, 1920 / 1080, 250, 1000);
         camera.position.set(0, 0, 300);
+
+        const selectScene = (scene: THREE.Scene) => {
+            setScene(scene);
+        };
+
+        if (building === 'PatriotPlace') {
+            if (floor === 1) {
+                selectScene(scene1);
+            } else if (floor === 2) {
+                selectScene(scene2);
+            } else if (floor === 3) {
+                selectScene(scene3);
+            }
+        } else {
+            selectScene(scene4);
+        }
 
         // Load floor-specific map image
         let texturePath: string = '';
@@ -343,7 +387,18 @@ export function DraggableMap() {
                 setFloor(1); //TODO: Setup floor handling with floor switcher, may not want this functionality at all.
             }
 
-            renderer.render(scene, camera);
+            if (building === 'PatriotPlace') {
+                if (floor === 1) {
+                    renderer.render(scene1, camera);
+                } else if (floor === 3) {
+                    renderer.render(scene2, camera);
+                } else if (floor === 4) {
+                    renderer.render(scene3, camera);
+                }
+            } else {
+                renderer.render(scene4, camera);
+            }
+
             window.requestAnimationFrame(animate);
             //requestAnimationFrame(animate);
 
