@@ -149,16 +149,12 @@ export function DraggableMap() {
         setIsFading(true);
         setTimeout(() => {
             setFloor(newFloor);
-            console.log(scene);
             if (newFloor === 1) {
                 scene.current = scene1;
-                console.log('scene 1');
             } else if (newFloor === 3) {
                 scene.current = scene2;
-                console.log('scene 2');
             } else if (newFloor === 4) {
                 scene.current = scene3;
-                console.log('scene 3');
             } else if (newFloor === 5) {
                 scene.current = scene4;
             }
@@ -405,7 +401,6 @@ export function DraggableMap() {
                 setNodeY(selectedObject.current.position.y);
                 //setFloor(1); //TODO: Setup floor handling with floor switcher, may not want this functionality at all.
             }
-            console.log(scene.current);
             renderer.render(scene.current, camera);
 
             window.requestAnimationFrame(animate);
