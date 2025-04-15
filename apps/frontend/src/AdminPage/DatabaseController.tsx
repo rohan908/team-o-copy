@@ -10,6 +10,7 @@ import {
     Title,
     Flex,
     Text,
+    Modal,
     Divider,
 } from '@mantine/core';
 
@@ -19,6 +20,7 @@ type Props = {
 export function DatabaseController({ table }: Props) {
     // useState variables -> might need to change types
     const [file, setFile] = useState<File | null>(null);
+    const [opened, setOpened] = useState(false);
 
     // reads the given file and returns as string
     async function getData(datafile: File) {
@@ -55,6 +57,7 @@ export function DatabaseController({ table }: Props) {
                 .catch((err) => console.log(err));
 
             console.log('imported file');
+            setOpened(false);
         } catch (error) {
             console.log(error);
         }
@@ -75,11 +78,9 @@ export function DatabaseController({ table }: Props) {
     // clear function handling
     const handleClear = async () => {
         if (!confirm('Are you sure you want to clear this table?')) return;
-        const res = await axios
-            .delete(`api/${table}/clear`, {})
-            .then((responseData) => {
-                console.log('Response from server:', responseData);
-            });
+        const res = await axios.delete(`api/${table}/clear`, {}).then((responseData) => {
+            console.log('Response from server:', responseData);
+        });
     };
 
     // used to reload the page when a button is pressed
@@ -88,71 +89,110 @@ export function DatabaseController({ table }: Props) {
     }
 
     return (
-        <div>
+        <div className="w-full max-w-md mx-auto">
             {/**/}
             {/*Input for import csv*/}
-            <FileInput
-                label="Import File Here"
-                radius="sm"
-                placeholder="Choose a CSV file"
-                accept=".csv"
-                onChange={setFile}
-                color="black"
-                className="w-full sm:max-w-sm mx-auto"
-            />
+            <Modal
+                opened={opened}
+                onClose={() => setOpened(false)}
+                title="Import CSV File"
+                centered
+            >
+                <FileInput
+                    label="Select CSV file"
+                    placeholder="Choose a CSV file"
+                    accept=".csv"
+                    onChange={setFile}
+                    mb="md"
+                    className="mb-4"
+                    color="#FDF0D5"
+                    style={(theme) => ({
+                        modal: {
+                            backgroundColor: '#FDF0D5',
+                        },
+                        header: {
+                            backgroundColor: '#FDF0D5',
+                            borderBottom: `1px solid ${theme.colors.gray[3]}`,
+                        },
+                        title: {
+                            color: '#153A90',
+                            fontweight: 600,
+                        },
+                    })}
+                />
+                <Button fullWidth onClick={handleImport} color="dark" bg="#153A90">
+                    Submit
+                </Button>
+            </Modal>
+
             <Flex
-                gap="sm"
+                gap="md"
                 justify="center"
                 align="center"
                 direction={{ base: 'column', sm: 'row' }}
                 wrap="wrap"
-                py="md"
             >
                 <Button
-                    size="md"
+                    size="sm"
                     color="dark"
-                    fw="600"
-                    bg="black"
+                    bg="#153A90"
+                    className="nav-element hover-shadow"
                     //leftSection={<IconArrowRight size={14} />}
                     style={{
-                        borderRadius: '50px',
-                        transition: 'all 0.3s ease',
+                        root: {
+                            borderColor: '#000',
+                            '&:hover': {
+                                color: '#93c5fd',
+                                borderColor: '#93c5fd',
+                                backgroundColor: 'transparent',
+                            },
+                        },
                     }}
                     onClick={() => {
-                        handleImport();
-                        reloadPage();
+                        setOpened(true);
                     }}
                 >
                     Import CSV
                 </Button>
                 <Button
-                    size="md"
+                    size="sm"
                     color="dark"
+                    className="nav-element hover-shadow"
+                    bg="#153A90"
                     fw="600"
-                    bg="black"
                     //leftSection={<IconArrowRight size={14} />}
                     style={{
-                        borderRadius: '50px',
-                        transition: 'all 0.3s ease',
+                        root: {
+                            borderColor: '#000',
+                            '&:hover': {
+                                color: '#93c5fd',
+                                borderColor: '#93c5fd',
+                                backgroundColor: 'transparent',
+                            },
+                        },
                     }}
                     onClick={handleExport}
                 >
                     Export CSV
                 </Button>
                 <Button
-                    size="md"
+                    size="sm"
                     color="dark"
                     fw="600"
                     bg="red"
+                    className="nav-element hover-shadow"
                     //leftSection={<IconArrowRight size={14} />}
                     style={{
-                        borderRadius: '50px',
-                        transition: 'all 0.3s ease',
+                        root: {
+                            borderColor: '#000',
+                            '&:hover': {
+                                color: '#93c5fd',
+                                borderColor: '#93c5fd',
+                                backgroundColor: 'transparent',
+                            },
+                        },
                     }}
-                    onClick={() => {
-                        handleClear();
-                        reloadPage();
-                    }}
+                    onClick={handleClear}
                 >
                     Clear Table
                 </Button>
