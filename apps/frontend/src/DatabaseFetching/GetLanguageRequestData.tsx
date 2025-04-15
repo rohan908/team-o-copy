@@ -1,12 +1,9 @@
-// MOVE THIS INTO SEPARATE FOLDER ON FRONTEND, LIKE DATABASE FETCHING OR
-// SOMETHING.
-
 export async function fetchLanguageRequestData() {
     try {
         console.log('fetching');
 
         // gets directory data through http query from directory.ts
-        const res = await fetch(`/api/languageSR`);
+        const res = await fetch('/api/languageSR');
 
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
