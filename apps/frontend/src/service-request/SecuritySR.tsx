@@ -20,7 +20,7 @@ interface RequestData {
     hospital: string;
     description: string;
 }
-
+//Needed simple edit. Ignore this.
 function Security() {
     const theme = useMantineTheme();
     const navigate = useNavigate();
