@@ -37,10 +37,6 @@ const RAW_RUNTIME_STATE =
     {\
       "name": "common",\
       "reference": "workspace:packages/common"\
-    },\
-    {\
-      "name": "database",\
-      "reference": "workspace:packages/database"\
     }\
   ],\
   "enableTopLevelFallback": true,\
@@ -48,7 +44,6 @@ const RAW_RUNTIME_STATE =
   "fallbackExclusionList": [\
     ["backend", ["workspace:apps/backend"]],\
     ["common", ["workspace:packages/common"]],\
-    ["database", ["workspace:packages/database"]],\
     ["eslint-config-custom", ["workspace:configs/eslint-config-custom"]],\
     ["frontend", ["workspace:apps/frontend"]],\
     ["prettier-config-custom", ["workspace:configs/prettier-config-custom"]],\
@@ -1220,96 +1215,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["@prisma/client", [\
-      ["npm:6.5.0", {\
-        "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-88e779ba37/node_modules/@prisma/client/",\
-        "packageDependencies": [\
-          ["@prisma/client", "npm:6.5.0"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:6.5.0", {\
-        "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-88e779ba37/node_modules/@prisma/client/",\
-        "packageDependencies": [\
-          ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:6.5.0"],\
-          ["@types/prisma", null],\
-          ["@types/typescript", null],\
-          ["prisma", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:6.5.0"],\
-          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
-        ],\
-        "packagePeers": [\
-          "@types/prisma",\
-          "@types/typescript",\
-          "prisma",\
-          "typescript"\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@prisma/config", [\
-      ["npm:6.5.0", {\
-        "packageLocation": "./.yarn/cache/@prisma-config-npm-6.5.0-0a59a0d8c9-6096e946aa.zip/node_modules/@prisma/config/",\
-        "packageDependencies": [\
-          ["@prisma/config", "npm:6.5.0"],\
-          ["esbuild", "npm:0.25.1"],\
-          ["esbuild-register", "virtual:0a59a0d8c9e71cffad0e4ed5628cb8dc80c6c9b7edfdcaefd39e18b94852b70326bef20b7860d4c5906bb098c4ad1c6418e7985c3d9a3d40b03883a859bcc08b#npm:3.6.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@prisma/debug", [\
-      ["npm:6.5.0", {\
-        "packageLocation": "./.yarn/cache/@prisma-debug-npm-6.5.0-a1b6093f91-e33ba57506.zip/node_modules/@prisma/debug/",\
-        "packageDependencies": [\
-          ["@prisma/debug", "npm:6.5.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@prisma/engines", [\
-      ["npm:6.5.0", {\
-        "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-6.5.0-78437e29e7/node_modules/@prisma/engines/",\
-        "packageDependencies": [\
-          ["@prisma/engines", "npm:6.5.0"],\
-          ["@prisma/debug", "npm:6.5.0"],\
-          ["@prisma/engines-version", "npm:6.5.0-73.173f8d54f8d52e692c7e27e72a88314ec7aeff60"],\
-          ["@prisma/fetch-engine", "npm:6.5.0"],\
-          ["@prisma/get-platform", "npm:6.5.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@prisma/engines-version", [\
-      ["npm:6.5.0-73.173f8d54f8d52e692c7e27e72a88314ec7aeff60", {\
-        "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-6.5.0-73.173f8d54f8d52e692c7e27e72a88314ec7aeff60-322c95b528-92792c7f4e.zip/node_modules/@prisma/engines-version/",\
-        "packageDependencies": [\
-          ["@prisma/engines-version", "npm:6.5.0-73.173f8d54f8d52e692c7e27e72a88314ec7aeff60"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@prisma/fetch-engine", [\
-      ["npm:6.5.0", {\
-        "packageLocation": "./.yarn/cache/@prisma-fetch-engine-npm-6.5.0-2d1c8c893d-4f26fb07fd.zip/node_modules/@prisma/fetch-engine/",\
-        "packageDependencies": [\
-          ["@prisma/fetch-engine", "npm:6.5.0"],\
-          ["@prisma/debug", "npm:6.5.0"],\
-          ["@prisma/engines-version", "npm:6.5.0-73.173f8d54f8d52e692c7e27e72a88314ec7aeff60"],\
-          ["@prisma/get-platform", "npm:6.5.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@prisma/get-platform", [\
-      ["npm:6.5.0", {\
-        "packageLocation": "./.yarn/cache/@prisma-get-platform-npm-6.5.0-3a43325563-45033d8c20.zip/node_modules/@prisma/get-platform/",\
-        "packageDependencies": [\
-          ["@prisma/get-platform", "npm:6.5.0"],\
-          ["@prisma/debug", "npm:6.5.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["@react-google-maps/api", [\
       ["npm:2.20.6", {\
         "packageLocation": "./.yarn/cache/@react-google-maps-api-npm-2.20.6-a54679ed46-7541bf1b7b.zip/node_modules/@react-google-maps/api/",\
@@ -1811,20 +1716,6 @@ const RAW_RUNTIME_STATE =
           ["@tabler/icons", "npm:3.31.0"],\
           ["@types/react", "npm:18.3.20"],\
           ["react", "npm:18.3.1"]\
-        ],\
-        "packagePeers": [\
-          "@types/react",\
-          "react"\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:3.31.0", {\
-        "packageLocation": "./.yarn/__virtual__/@tabler-icons-react-virtual-7d3a560bb1/0/cache/@tabler-icons-react-npm-3.31.0-9f8830aa08-aceefe1b6c.zip/node_modules/@tabler/icons-react/",\
-        "packageDependencies": [\
-          ["@tabler/icons-react", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:3.31.0"],\
-          ["@tabler/icons", "npm:3.31.0"],\
-          ["@types/react", null],\
-          ["react", null]\
         ],\
         "packagePeers": [\
           "@types/react",\
@@ -3293,7 +3184,7 @@ const RAW_RUNTIME_STATE =
           ["common", "workspace:packages/common"],\
           ["cookie-parser", "npm:1.4.7"],\
           ["cors", "npm:2.8.5"],\
-          ["database", "workspace:packages/database"],\
+          ["database", "npm:0.0.2"],\
           ["dotenv", "npm:16.4.7"],\
           ["dotenv-cli", "npm:7.4.4"],\
           ["eslint", "virtual:19a1bbfd66c0a8b6e4e9b4eb3053d58c46601ff49b62144208f9d27690e7d3dafa1ec4b1cf3db192de427911ae217357531df59f991426daf174c7b5b2cfb34e#npm:9.23.0"],\
@@ -3991,26 +3882,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["database", [\
-      ["workspace:packages/database", {\
-        "packageLocation": "./packages/database/",\
+      ["npm:0.0.2", {\
+        "packageLocation": "./.yarn/cache/database-npm-0.0.2-eaec5d63e0-5d2f895cf2.zip/node_modules/database/",\
         "packageDependencies": [\
-          ["database", "workspace:packages/database"],\
-          ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:6.5.0"],\
-          ["@tabler/icons-react", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:3.31.0"],\
-          ["@types/node", "npm:22.13.13"],\
-          ["@yarnpkg/pnpify", "npm:4.1.4"],\
-          ["dotenv", "npm:16.4.7"],\
-          ["dotenv-cli", "npm:7.4.4"],\
-          ["eslint", "virtual:19a1bbfd66c0a8b6e4e9b4eb3053d58c46601ff49b62144208f9d27690e7d3dafa1ec4b1cf3db192de427911ae217357531df59f991426daf174c7b5b2cfb34e#npm:9.23.0"],\
-          ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
-          ["prettier", "npm:3.5.3"],\
-          ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-          ["prisma", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:6.5.0"],\
-          ["ts-config-custom", "workspace:configs/ts-config-custom"],\
-          ["ts-node", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:9.1.1"],\
-          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
+          ["database", "npm:0.0.2"]\
         ],\
-        "linkType": "SOFT"\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["debug", [\
@@ -4436,29 +4313,6 @@ const RAW_RUNTIME_STATE =
           ["@esbuild/win32-arm64", "npm:0.25.1"],\
           ["@esbuild/win32-ia32", "npm:0.25.1"],\
           ["@esbuild/win32-x64", "npm:0.25.1"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["esbuild-register", [\
-      ["npm:3.6.0", {\
-        "packageLocation": "./.yarn/cache/esbuild-register-npm-3.6.0-72017fa8ae-77193b7ca3.zip/node_modules/esbuild-register/",\
-        "packageDependencies": [\
-          ["esbuild-register", "npm:3.6.0"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:0a59a0d8c9e71cffad0e4ed5628cb8dc80c6c9b7edfdcaefd39e18b94852b70326bef20b7860d4c5906bb098c4ad1c6418e7985c3d9a3d40b03883a859bcc08b#npm:3.6.0", {\
-        "packageLocation": "./.yarn/__virtual__/esbuild-register-virtual-ae11c2ddcb/0/cache/esbuild-register-npm-3.6.0-72017fa8ae-77193b7ca3.zip/node_modules/esbuild-register/",\
-        "packageDependencies": [\
-          ["esbuild-register", "virtual:0a59a0d8c9e71cffad0e4ed5628cb8dc80c6c9b7edfdcaefd39e18b94852b70326bef20b7860d4c5906bb098c4ad1c6418e7985c3d9a3d40b03883a859bcc08b#npm:3.6.0"],\
-          ["@types/esbuild", null],\
-          ["debug", "virtual:9310e910a96f055c7aceb5045d2a053665adbd932f55922395f6e6a8677c17d080a22ba7d5b06705026a3e0930b878563b55a01608cafa10ecf484910b771955#npm:4.4.0"],\
-          ["esbuild", "npm:0.25.1"]\
-        ],\
-        "packagePeers": [\
-          "@types/esbuild",\
-          "esbuild"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7401,31 +7255,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "SOFT"\
       }]\
     ]],\
-    ["prisma", [\
-      ["npm:6.5.0", {\
-        "packageLocation": "./.yarn/unplugged/prisma-virtual-1ec8c0b7fd/node_modules/prisma/",\
-        "packageDependencies": [\
-          ["prisma", "npm:6.5.0"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:6.5.0", {\
-        "packageLocation": "./.yarn/unplugged/prisma-virtual-1ec8c0b7fd/node_modules/prisma/",\
-        "packageDependencies": [\
-          ["prisma", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:6.5.0"],\
-          ["@prisma/config", "npm:6.5.0"],\
-          ["@prisma/engines", "npm:6.5.0"],\
-          ["@types/typescript", null],\
-          ["fsevents", "patch:fsevents@npm%3A2.3.3#optional!builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"],\
-          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
-        ],\
-        "packagePeers": [\
-          "@types/typescript",\
-          "typescript"\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["proc-log", [\
       ["npm:5.0.0", {\
         "packageLocation": "./.yarn/cache/proc-log-npm-5.0.0-405173f9b4-bbe5edb944.zip/node_modules/proc-log/",\
@@ -8402,31 +8231,11 @@ const RAW_RUNTIME_STATE =
         "linkType": "SOFT"\
       }]\
     ]],\
-    ["source-map", [\
-      ["npm:0.6.1", {\
-        "packageLocation": "./.yarn/cache/source-map-npm-0.6.1-1a3621db16-ab55398007.zip/node_modules/source-map/",\
-        "packageDependencies": [\
-          ["source-map", "npm:0.6.1"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["source-map-js", [\
       ["npm:1.2.1", {\
         "packageLocation": "./.yarn/cache/source-map-js-npm-1.2.1-b9a47d7e1a-7bda1fc4c1.zip/node_modules/source-map-js/",\
         "packageDependencies": [\
           ["source-map-js", "npm:1.2.1"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["source-map-support", [\
-      ["npm:0.5.21", {\
-        "packageLocation": "./.yarn/cache/source-map-support-npm-0.5.21-09ca99e250-9ee09942f4.zip/node_modules/source-map-support/",\
-        "packageDependencies": [\
-          ["source-map-support", "npm:0.5.21"],\
-          ["buffer-from", "npm:1.1.2"],\
-          ["source-map", "npm:0.6.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8907,13 +8716,6 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["npm:9.1.1", {\
-        "packageLocation": "./.yarn/cache/ts-node-npm-9.1.1-4ad31da228-e0f904090a.zip/node_modules/ts-node/",\
-        "packageDependencies": [\
-          ["ts-node", "npm:9.1.1"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
       ["virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:10.9.2", {\
         "packageLocation": "./.yarn/__virtual__/ts-node-virtual-1c05f64ff3/0/cache/ts-node-npm-10.9.2-3f3890b9ac-5f29938489.zip/node_modules/ts-node/",\
         "packageDependencies": [\
@@ -8981,25 +8783,6 @@ const RAW_RUNTIME_STATE =
           "@types/node",\
           "@types/swc__core",\
           "@types/swc__wasm",\
-          "@types/typescript",\
-          "typescript"\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:9.1.1", {\
-        "packageLocation": "./.yarn/__virtual__/ts-node-virtual-2334f96b1c/0/cache/ts-node-npm-9.1.1-4ad31da228-e0f904090a.zip/node_modules/ts-node/",\
-        "packageDependencies": [\
-          ["ts-node", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:9.1.1"],\
-          ["@types/typescript", null],\
-          ["arg", "npm:4.1.3"],\
-          ["create-require", "npm:1.1.1"],\
-          ["diff", "npm:4.0.2"],\
-          ["make-error", "npm:1.3.6"],\
-          ["source-map-support", "npm:0.5.21"],\
-          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
-          ["yn", "npm:3.1.1"]\
-        ],\
-        "packagePeers": [\
           "@types/typescript",\
           "typescript"\
         ],\
