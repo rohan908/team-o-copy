@@ -10,18 +10,20 @@ import { NodeDataType } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 
-export function DraggableMap() {
+interface DraggableMapProps {
+    selectedHospitalName?: string | null;
+    selectedDepartment?: string | null;
+}
+
+export function DraggableMap({ selectedHospitalName, selectedDepartment }: DraggableMapProps) {
     const theme = useMantineTheme();
-    enum building {
-        'PatriotPlace' = 0,
-        'ChestnutHill' = 1,
-    }
-    const selectedBuilding = 'PatriotPlace';
     const [nodeSelected, setNodeSelected] = useState(false);
     const [nodeX, setNodeX] = useState(0);
     const [nodeY, setNodeY] = useState(0);
     const [floor, setFloor] = useState(1);
     const [isFading, setIsFading] = useState(false);
+    console.log(selectedDepartment);
+    console.log(selectedHospitalName);
     const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
     const canvasId = 'insideMapCanvas';
     const objects: THREE.Object3D[] = [];
@@ -452,7 +454,7 @@ export function DraggableMap() {
             <FloorSwitchBox
                 floor={floor}
                 setFloor={handleFloorChange}
-                building={selectedBuilding}
+                building={selectedHospitalName || ''}
             />
             <MapEditorBox
                 // Pass selected node data to the ui
