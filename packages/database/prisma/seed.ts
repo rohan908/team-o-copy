@@ -23,12 +23,8 @@ export async function populate() {
     // defines floor maps for each building floor
     const floorMaps = await PrismaClient.floorMap.createMany({
         data: [
-            { name: 'Patriot-20-1', id: 1 },
-            { name: 'Patriot-20-2', id: 2 },
-            { name: 'Patriot-20-3', id: 3 },
-            { name: 'Patriot-20-4', id: 4 },
-            { name: 'Patriot-22-3', id: 5 },
-            { name: 'Patriot-22-4', id: 6 },
+            { name: 'Patriot', id: 1 },
+            { name: 'Chestnut', id: 2 },
         ],
         skipDuplicates: true,
     });
