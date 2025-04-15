@@ -39,7 +39,7 @@ if [[ "$ECS_CLUSTER" != *"TODO"* && "$ECS_SERVICE" != *"TODO"* ]]; then
     --service $ECS_SERVICE \
     --force-new-deployment \
     --output text \
-    --no-cli-pager > /dev/null \
+    --no-cli-pager > /dev/null
 fi
 
 echo "Deployment complete!"
