@@ -10,6 +10,7 @@ import {
     Title,
     Flex,
     Text,
+    Modal,
     Divider,
 } from '@mantine/core';
 
@@ -19,6 +20,7 @@ type Props = {
 export function DatabaseController({ table }: Props) {
     // useState variables -> might need to change types
     const [file, setFile] = useState<File | null>(null);
+    const [opened, setOpened] = useState(false);
 
     // reads the given file and returns as string
     async function getData(datafile: File) {
@@ -55,6 +57,7 @@ export function DatabaseController({ table }: Props) {
                 .catch((err) => console.log(err));
 
             console.log('imported file');
+            setOpened(false);
         } catch (error) {
             console.log(error);
         }
@@ -89,23 +92,39 @@ export function DatabaseController({ table }: Props) {
         <div className="w-full max-w-md mx-auto">
             {/**/}
             {/*Input for import csv*/}
-            <FileInput
-                label="Import File Here"
-                radius="md"
-                placeholder="Choose a CSV file"
-                accept=".csv"
-                onChange={setFile}
-                className="mb-4"
-                color="#FFF8EBs"
-                styles={{
-                    input: {
-                        borderColor: '#153A90',
-                        '&:hover': {
-                            borderColor: '#93c5fd',
+            <Modal
+                opened={opened}
+                onClose={() => setOpened(false)}
+                title="Import CSV File"
+                centered
+            >
+                <FileInput
+                    label="Select CSV file"
+                    placeholder="Choose a CSV file"
+                    accept=".csv"
+                    onChange={setFile}
+                    mb="md"
+                    className="mb-4"
+                    color="#FDF0D5"
+                    style={(theme) => ({
+                        modal: {
+                            backgroundColor: '#FDF0D5',
                         },
-                    },
-                }}
-            />
+                        header: {
+                            backgroundColor: '#FDF0D5',
+                            borderBottom: `1px solid ${theme.colors.gray[3]}`,
+                        },
+                        title: {
+                            color: '#153A90',
+                            fontweight: 600,
+                        },
+                    })}
+                />
+                <Button fullWidth onClick={handleImport} color="dark" bg="#153A90">
+                    Submit
+                </Button>
+            </Modal>
+
             <Flex
                 gap="md"
                 justify="center"
@@ -130,8 +149,7 @@ export function DatabaseController({ table }: Props) {
                         },
                     }}
                     onClick={() => {
-                        handleImport();
-                        reloadPage();
+                        setOpened(true);
                     }}
                 >
                     Import CSV
@@ -174,10 +192,7 @@ export function DatabaseController({ table }: Props) {
                             },
                         },
                     }}
-                    onClick={() => {
-                        handleClear();
-                        reloadPage();
-                    }}
+                    onClick={handleClear}
                 >
                     Clear Table
                 </Button>
