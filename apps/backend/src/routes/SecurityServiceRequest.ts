@@ -10,12 +10,13 @@ router.post('/', async (req: Request, res: Response) => {
 
     try {
         // For inputting a request form, adds entry
-        const { label, selectedDate, selectedTime, roomNumber, description } = req.body;
+        const { service, selectedDate, selectedTime, roomNumber, priority, hospital, description } =
+            req.body;
 
         // creating request to get data from frontend
         const request = await PrismaClient.securityServiceRequest.create({
             data: {
-                service: label,
+                service: service,
                 date: selectedDate,
                 time: convertTo24Hour(selectedTime),
                 room: roomNumber,
