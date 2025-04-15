@@ -14,7 +14,8 @@ import {
     Select,
     useMantineTheme,
     Collapse,
-    TextInput
+    TextInput,
+    Stack
 } from '@mantine/core';
 import * as L from 'leaflet';
 
@@ -106,170 +107,75 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
 
 
     return (
-        <Box
-            pos="fixed"
-            left={0}
-            right={0}
-            bottom={0}
-            style={{
-                zIndex: 999,
-                display: 'flex',
-                justifyContent: 'center',
-                transition: 'all 0.4s ease-in-out',
-                paddingBottom: collapsed ? 1 : '1.5rem',
-                pointerEvents: 'none',
-            }}
+      <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
+        <TwoPartInteractiveBox
+            title="Find your Way!"
+            subtitle="Use our interactive map to find departments, parking, and efficient routes"
         >
-            <Box
-                bg="#FFF8EB"
-                p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
-                w="100%"
-                style={{
-                    maxWidth: collapsed ? '300px' : '50%',
-                    opacity: 0.95,
-                    borderRadius: theme.radius.lg,
-                    backdropFilter: 'blur(5px)',
-                    boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.1)',
-                    pointerEvents: 'auto',
-                }}
-            >
-                <Collapse in={!collapsed}>
-                    <Title order={2} mb="md" c="#001D4D" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
-                        Find your Way!
-                    </Title>
-
-                    <Text
-                        mb="sm"
-                        ta="left"
-                        fz="sm"
-                        c="dimmed"
-                        style={{
-                            fontStyle: 'italic',
-                            lineHeight: 1.5,
-                            maxWidth: '90%',
-                        }}
-                    >
-                        Use our interactive map to locate hospital departments, find the best parking spots, and
-                        navigate your route efficiently.
-                    </Text>
-
-                    <Divider variant="dotted" size="lg" mb="lg" color="#FCB024" />
+          {!collapsed?(
+            <>
+              <Stack w="100%">
+                <Box>
                   <Text ta="left" mb="sm" fw={500}>
                     Insert Starting Location:
                   </Text>
                   <TextInput
+                    color = "#A5A7AC"
                     ref={input}
-                    mb="md"
+                    placeholder ="--Enter a Location--"
                   />
-                    <Text ta="left" mb="sm" fw={500}>
-                        Select Hospital:
-                    </Text>
-                    <Select
-                        color="gray"
-                        placeholder="Hospital"
-                        data={[
-                            { value: '20 Patriot Pl', label: '20 Patriot Pl' },
-                            { value: '22 Patriot Pl', label: '22 Patriot Pl' },
-                            { value: 'Chestnut Hill', label: 'Chestnut Hill' },
-
-                        ]}
-                        value={hospital}
-                        onChange={setHospitalLocation}
-                        mb="md"
-                    />
-
-                    <Text ta="left" mb="sm" fw={500}>
-                        Select Department:
-                    </Text>
-                    <Select
-                        color="gray"
-                        placeholder="Department"
-                        data={departmentOptions}
-                        value={department}
-                        onChange={setDepartment}
-                        mb="md"
-                        disabled={!hospital || departmentOptions.length === 0}
-                    />
+                </Box>
+                <Box>
+                  <Text ta="left" mb="sm" fw={500}>
+                    Select Hospital:
+                  </Text>
+                  <Select
+                    color = "#A5A7AC"
+                    placeholder ="--Select Hospital--"
+                    data={[
+                        { value: '20 Patriot Pl', label: '20 Patriot Pl' },
+                        { value: '22 Patriot Pl', label: '22 Patriot Pl' },
+                        { value: 'Chestnut Hill', label: 'Chestnut Hill' }]}
+                    value = {hospital}
+                    onChange={setHospitalLocation}/>
+                </Box>
+                <Box>
+                  <Text ta="left" mb="sm" fw={500}>
+                    Select Department:
+                  </Text>
+                  <Select
+                    color = "#A5A7AC"
+                    placeholder ="--Select Department--"
+                    data = {departmentOptions}
+                    value={department}
+                    onChange={setDepartment}
+                    disabled={!hospital || departmentOptions.length === 0}/>
+                </Box>
+                <Box>
                   <Text ta="left" mb="sm" fw={500}>
                     Select Navigation Method:
                   </Text>
                   <Select
-                    color="gray"
-                    placeholder="Navigation Method"
-                    data={[
+                    color = "#A5A7AC"
+                    placeholder ="--Select Navigation Method--"
+                    data = {[
                       {value: google.maps.TravelMode.WALKING, label: 'Walking'},
                       {value: google.maps.TravelMode.TRANSIT, label: 'Public Transportation'},
                       {value: google.maps.TravelMode.DRIVING, label: 'Driving'},
                     ]}
-                    value={navigationMethod}
-                    onChange={(value) => {
-                      setNavigationMethod(value);
-                    }}
-                    mb="md"
+                    value = {navigationMethod}
+                    onChange = {setNavigationMethod}
                     disabled={!hospital}
                   />
-
-                    <Flex justify="flex-end" gap="md">
-                        <BlackButton
-                            onClick={handleFindPath}>
-                            Find Path
-                        </BlackButton>
-                    </Flex>
-                </Collapse>
-
-                {collapsed && (
-                    <Box
-                        style={{
-                            position: 'fixed',
-                            zIndex: 9999,
-                            bottom: '0.5rem',
-                            pointerEvents: 'auto',
-
-                        }}
-                    >
-                      <Flex justify="space-between" align="center" gap="md">
-
-                      <Button
-                                variant="subtle"
-                                size="md"
-                                onClick={() => setCollapsed(false)}
-                                style={{
-                                    borderRadius: '50px',
-                                    height: '3rem',
-                                    fontWeight: 600,
-                                    fontSize: '1rem',
-                                    width: 'fit-content',
-                                    backgroundColor: theme.colors.gray[1],
-                                    borderTop: `1px solid ${theme.colors.gray[3]}`,
-                                }}
-                            >
-                                Expand Directions Menu
-                            </Button>
-                      <Button
-                        color="green"
-                        size="md"
-                        fw={600}
-                        component={Link}
-                        to="/IndoorMapPage"
-                        style={{
-                          borderRadius: '50px',
-                          padding: '0.5rem 1.25rem',
-                          fontSize: '0.9rem',
-                          marginLeft: 'auto',
-                          backgroundColor: 'green',
-                          color: 'white',
-                          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                          transition: 'all 0.3s ease',
-                        }}
-                      >
-                        I've Arrived
-                      </Button>
-                      </Flex>
-                    </Box>
+                </Box>
+              </Stack>
+              </>
+                  ) : (
+                    <Box/>
                 )}
-            </Box>
-        </Box>
-    );
+        </TwoPartInteractiveBox>
+      </Flex>
+      );
 };
 
 export default SelectBox;
