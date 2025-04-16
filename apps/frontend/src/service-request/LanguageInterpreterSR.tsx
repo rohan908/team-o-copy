@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
+import { Button, Flex, Title, Paper, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import ISO6391 from 'iso-639-1';
 import { useLanguageRequestContext } from '../contexts/LanguageRequestContext.tsx';
@@ -35,7 +35,6 @@ interface RequestData {
 }
 
 function Language() {
-    const theme = useMantineTheme();
     const navigate = useNavigate();
     const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
 
