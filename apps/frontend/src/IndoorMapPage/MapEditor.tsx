@@ -20,6 +20,7 @@ export function MapEditor() {
     const canvasId = 'insideMapCanvas';
 
     const allNodes = useAllNodesContext();
+    const addedNodes = [];
 
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
@@ -74,28 +75,32 @@ export function MapEditor() {
     const scene = useRef<THREE.Scene>(scene1);
 
     const createNode = (node: NodeDataType) => {
-        const geometry = new THREE.SphereGeometry(
-            nodeRadius,
-            Math.round(nodeRadius * 12), // Vibe based adaptive segmentation
-            Math.round(nodeRadius * 6)
-        );
-        const material = new THREE.MeshBasicMaterial({ color: nodeColor });
-        const sphere = new THREE.Mesh(geometry, material);
-        sphere.position.x = node.x;
-        sphere.position.y = node.y;
-        const nodeFloor = node.floor;
-        if (nodeFloor === 1) {
-            scene1.add(sphere);
-        } else if (nodeFloor === 2) {
-            scene2.add(sphere);
-        } else if (nodeFloor === 3) {
-            scene3.add(sphere);
-        } else if (nodeFloor === 4) {
-            scene4.add(sphere);
-        } else {
-            console.error("node not added because floor doesn't exist");
+        if (!addedNodes.includes(node)) {
+            // TODO: This shouldn't be necessary but something is creating duplicated nodes and I don't know what.
+            addedNodes.push(node);
+            const geometry = new THREE.SphereGeometry(
+                nodeRadius,
+                Math.round(nodeRadius * 12), // Vibe based adaptive segmentation
+                Math.round(nodeRadius * 6)
+            );
+            const material = new THREE.MeshBasicMaterial({ color: nodeColor });
+            const sphere = new THREE.Mesh(geometry, material);
+            sphere.position.x = node.x;
+            sphere.position.y = node.y;
+            const nodeFloor = node.floor;
+            if (nodeFloor === 1) {
+                scene1.add(sphere);
+            } else if (nodeFloor === 2) {
+                scene2.add(sphere);
+            } else if (nodeFloor === 3) {
+                scene3.add(sphere);
+            } else if (nodeFloor === 4) {
+                scene4.add(sphere);
+            } else {
+                console.error("node not added because floor doesn't exist");
+            }
+            objectsRef.current.push(sphere);
         }
-        objectsRef.current.push(sphere);
     };
 
     const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
