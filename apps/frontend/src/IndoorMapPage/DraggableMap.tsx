@@ -165,7 +165,7 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
             scene1.add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
+                    { x: node2.x, y: node2.y },
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 2) {
@@ -496,15 +496,6 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
             setFloor={handleFloorChange}
             onCollapseChange={() => true}
             building={selectedHospitalName || ''}
-          />
-          <MapEditorBox
-            // Pass selected node data to the ui
-            nodeSelected={nodeSelected}
-            nodeX={nodeX}
-            nodeY={nodeY}
-            floor={floor}
-            // handle updating the node position from ui
-            updateNodePosition={updateNodePosition}
           />
         <canvas
           id="insideMapCanvas"
