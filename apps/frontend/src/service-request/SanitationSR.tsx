@@ -71,7 +71,13 @@ function Sanitation() {
     };
 
     const handleSubmit = async () => {
-        const RequestData = form.values;
+        const rawData = form.values;
+
+        // truncating the time so just the date gets passed in
+        const RequestData = {
+            ...rawData,
+            date: new Date(rawData.date).toISOString().split('T')[0],
+        };
 
         try {
             const response = await fetch('/api/sanitationSR', {
@@ -93,17 +99,17 @@ function Sanitation() {
             if (response.ok) {
                 navigate('/submission', {
                     state: {
-                        requestData: {
-                            cleanupType: RequestData.cleanupType,
-                            selectedDate: RequestData.date,
-                            selectedTime: RequestData.time,
-                            department: RequestData.department,
-                            priority: RequestData.priority,
-                            employeeName: RequestData.employeeName,
-                            status: RequestData.status,
-                            hospital: RequestData.hospital,
-                            description: RequestData.description,
-                        },
+                        requestData: [
+                            { title: 'Cleanup Type', value: RequestData.cleanupType },
+                            { title: 'Date', value: RequestData.date },
+                            { title: 'Time', value: RequestData.time },
+                            { title: 'Department', value: RequestData.department },
+                            { title: 'Priority', value: RequestData.priority },
+                            { title: 'Employee Name', value: RequestData.employeeName },
+                            { title: 'Status', value: RequestData.status },
+                            { title: 'Hospital', value: RequestData.hospital },
+                            { title: 'Details', value: RequestData.description },
+                        ],
                     },
                 });
             }

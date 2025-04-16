@@ -5,6 +5,7 @@ import { Box, Flex, useMantineTheme, Text } from '@mantine/core';
 export function Display() {
     const theme = useMantineTheme();
     const location = useLocation();
+    const requestData: { title: string; value: string }[] = location.state.requestData;
 
     // Safely handle missing state
     if (!location.state?.requestData) {
@@ -14,24 +15,6 @@ export function Display() {
             </Flex>
         );
     }
-
-    const { requestData } = location.state;
-
-    // Format date because it is a date object
-    const formatDate = (date: any) => {
-        if (date instanceof Date) {
-            return date.toLocaleDateString();
-        }
-        return date; // Return as-is if already string
-    };
-
-    // Format time because  it's a Date object
-    const formatTime = (time: any) => {
-        if (time instanceof Date) {
-            return time.toLocaleTimeString();
-        }
-        return time;
-    };
 
     return (
         <Flex w="100%" h="100vh" align="center" direction="column" p="xl">
@@ -49,9 +32,9 @@ export function Display() {
                     borderColor: '#90EE90',
                 }}
             >
-                {Object.entries(requestData).map(([key, value]) => (
-                    <Text key={key} mb="sm">
-                        <strong>{fieldLabels[key] || key}:</strong> {formatValue(key, value)}
+                {requestData.map((item, idx) => (
+                    <Text mb="sm" key={idx}>
+                        <strong>{item.title}:</strong> {item.value}
                     </Text>
                 ))}
             </Box>
