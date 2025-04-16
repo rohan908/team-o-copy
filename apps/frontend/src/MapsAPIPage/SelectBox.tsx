@@ -159,7 +159,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         >
             <Box
                 bg="#FFF8EB"
-                p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
+                p={collapsed ? 0 : { base: 'md', sm: '2rem' }}
                 w="100%"
                 style={{
                     maxWidth: collapsed ? '300px' : '50%',
@@ -173,11 +173,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 <Collapse in={!collapsed}>
                     <Title
                         order={2}
-                        mb="md"
+                        mb="sm"
                         c="#001D4D"
                         ta="left"
                         fw={700}
-                        fz={{ sm: 'xl', md: 'xxxl' }}
+                        fz={{ sm: 'xl', md: 'xxl' }}
                     >
                         Find your Way!
                     </Title>
@@ -198,11 +198,12 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     </Text>
 
                     <Divider variant="dotted" size="lg" mb="lg" color="#FCB024" />
-                    <Text ta="left" mb="sm" fw={500}>
+                    <Text fz="sm" ta="left" mb="xxs" fw={500}>
                         Insert Starting Location:
                     </Text>
                     <TextInput ref={input} mb="md" />
-                    <Text ta="left" mb="sm" fw={500}>
+
+                    <Text fz="sm" ta="left" mb="xxs" fw={500}>
                         Select Hospital:
                     </Text>
                     <Select
@@ -215,10 +216,10 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         ]}
                         value={hospital}
                         onChange={setHospitalLocation}
-                        mb="md"
+                        mb="sm"
                     />
 
-                    <Text ta="left" mb="sm" fw={500}>
+                    <Text fz="sm" ta="left" mb="xxs" fw={500}>
                         Select Department:
                     </Text>
                     <Select
@@ -230,7 +231,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         mb="md"
                         disabled={!hospital || departmentOptions.length === 0}
                     />
-                    <Text ta="left" mb="sm" fw={500}>
+                    <Text fz="sm" ta="left" mb="xxs" fw={500}>
                         Select Navigation Method:
                     </Text>
                     <Select
@@ -248,11 +249,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                         onChange={(value) => {
                             setNavigationMethod(value);
                         }}
-                        mb="md"
+                        mb="sm"
                         disabled={!hospital}
                     />
 
-                    <Flex justify="flex-end" gap="md">
+                    <Flex justify="flex-end" gap="sm">
                         <BlackButton onClick={handleFindPath}>Find Path</BlackButton>
                     </Flex>
                 </Collapse>
