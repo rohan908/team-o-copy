@@ -21,14 +21,15 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
         onCollapseChange?.(collapsed);
     }, [collapsed]);
     // TODO: In the future these should re-suse a react component.
-    if (building === '22 Patriot Pl' || building === '20 Patriot Pl' || true) {
+    if (building === '22 Patriot Pl' || building === '20 Patriot Pl') {
         return (
             <Box
                 bg="themeGold.5"
                 style={{
                     zIndex: 999,
-                    position: 'sticky',
-                    justifyContent: 'left',
+                    position: 'fixed',
+                    left:"93%",
+                    bottom:"2%",
                     transition: 'all 0.4s ease-in-out',
                 }}
             >
@@ -64,12 +65,12 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
     } else {
       return (
         <Box
-          bg="themeGold.5"
+          bg="terquAccet.8"
           style={{
             zIndex: 999,
             position: 'fixed',
-            left:"20%",
-            bottom:"10%",
+            left:"93%",
+            bottom:"2%",
             transition: 'all 0.4s ease-in-out',
           }}
         >
