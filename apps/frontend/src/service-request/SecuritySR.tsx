@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
+import { Text, Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
-
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
 import RoomNumberInput from './components/RoomEntry';
 import RequestDescription from './components/RequestDescription';
-import SecuritySelect from './components/SecuritySelect';
+import SanitationSelect from './components/SanitationSelect.tsx';
 import HospitalSelect from './components/HospitalEntry.tsx';
 import PriorityButtons from './components/PriorityButtons.tsx';
-import NameEntry from './components/NameEntry.tsx';
-import LanguageSelect from './components/LanguageSelect.tsx';
 import StatusSelect from './components/StatusSelect.tsx';
+import NameEntry from './components/NameEntry.tsx';
 import DepartmentSelect from './components/DepartmentSelect.tsx';
 import {
     ChestnutHill,
@@ -20,12 +18,12 @@ import {
     Patriot22,
     HospitalDepartment,
 } from '../directory/components/directorydata';
+import SecuritySelect from './components/SecuritySelect.tsx';
 
 interface RequestData {
-    service: string;
+    security: string;
     date: string;
     department: string;
-    room: string;
     time: string;
     employeeName: string;
     priority: string;
@@ -33,7 +31,7 @@ interface RequestData {
     hospital: string;
     description: string;
 }
-//Needed simple edit. Ignore this.
+
 function Security() {
     const theme = useMantineTheme();
     const navigate = useNavigate();
@@ -41,19 +39,17 @@ function Security() {
 
     const form = useForm<RequestData>({
         initialValues: {
-            service: '',
+            security: '',
             date: '',
             department: '',
-            room: '',
             time: '',
+            employeeName: '',
             hospital: '',
             priority: '',
-            employeeName: '',
             status: '',
             description: '',
         },
     });
-
     // logic for dependant department slection
     const handleHospitalChange = (hospital: string | null) => {
         form.setFieldValue('hospital', hospital || '');
@@ -74,19 +70,24 @@ function Security() {
 
         form.setFieldValue('department', '');
     };
+
     const handleSubmit = async () => {
-        const RequestData = form.values;
-        const label = RequestData.service === '';
+        const rawData = form.values;
+
+        // truncating the time so just the date gets passed in
+        const RequestData = {
+            ...rawData,
+            date: new Date(rawData.date).toISOString().split('T')[0],
+        };
 
         try {
-            const response = await fetch('/api/SecuritySR', {
+            const response = await fetch('/api/securitySR', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    service: RequestData.service,
+                    security: RequestData.security,
                     selectedDate: RequestData.date,
                     selectedTime: RequestData.time,
-                    roomNumber: RequestData.room,
                     department: RequestData.department,
                     priority: RequestData.priority,
                     employeeName: RequestData.employeeName,
@@ -99,18 +100,17 @@ function Security() {
             if (response.ok) {
                 navigate('/submission', {
                     state: {
-                        requestData: {
-                            service: RequestData.service,
-                            selectedDate: RequestData.date,
-                            selectedTime: RequestData.time,
-                            roomNumber: RequestData.room,
-                            department: RequestData.department,
-                            priority: RequestData.priority,
-                            employeeName: RequestData.employeeName,
-                            status: RequestData.status,
-                            hospital: RequestData.hospital,
-                            description: RequestData.description,
-                        },
+                        requestData: [
+                            { title: 'Security', value: RequestData.security },
+                            { title: 'Date', value: RequestData.date },
+                            { title: 'Time', value: RequestData.time },
+                            { title: 'Department', value: RequestData.department },
+                            { title: 'Priority', value: RequestData.priority },
+                            { title: 'Employee Name', value: RequestData.employeeName },
+                            { title: 'Status', value: RequestData.status },
+                            { title: 'Hospital', value: RequestData.hospital },
+                            { title: 'Details', value: RequestData.description },
+                        ],
                     },
                 });
             }
@@ -123,18 +123,14 @@ function Security() {
         <Flex justify="center" align="center" p="xl">
             <Paper bg="gray.2" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <Title order={2} ta="center" mb="lg">
-                        Interpreter Request Form
-                    </Title>
-                    <p
-                        style={{
-                            textAlign: 'center',
-                            fontSize: '16px',
-                        }}
-                    >
-                        Ethan Ramoth and Camden Brayton
-                    </p>
-
+                    <Flex direction="column" ta="center" justify="center">
+                        <Title order={2} mb="sm">
+                            Sanitation Request Form
+                        </Title>
+                        <Text mb="md" fz="xxxs">
+                            Logan W. and Joe A.
+                        </Text>
+                    </Flex>
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
                             {' '}
@@ -152,7 +148,7 @@ function Security() {
                                 )}
                                 {...form.getInputProps('department')}
                             />
-                            <SecuritySelect required {...form.getInputProps('service')} />
+                            <SecuritySelect required {...form.getInputProps('security')} />
                         </Box>
 
                         <Box flex="1" miw="300px">
@@ -160,7 +156,7 @@ function Security() {
                             {/* column 2!!!*/}
                             <DateInputForm required {...form.getInputProps('date')} />
                             <TimeEntry required {...form.getInputProps('time')} />
-                            <PriorityButtons {...form.getInputProps('priority')} />
+                            <PriorityButtons required {...form.getInputProps('priority')} />
                             <StatusSelect required {...form.getInputProps('status')} />
                         </Box>
                     </Flex>
