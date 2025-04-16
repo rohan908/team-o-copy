@@ -4,11 +4,10 @@ import { Box } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
-import { findPath } from './FindPathRouting.ts';
 import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
-import {useAllNodesContext} from "../contexts/DirectoryContext.tsx";
+import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 
 export function MapEditor() {
     const [nodeSelected, setNodeSelected] = useState(false);
@@ -72,7 +71,6 @@ export function MapEditor() {
     const mapPlane3 = new THREE.Mesh(mapGeo3, mapMaterial3);
     mapPlane3.position.set(0, 0, 0);
     scene4.add(mapPlane3);
-    const scene = useRef<THREE.Scene>(scene1);
 
     const createNode = (node: NodeDataType) => {
         const geometry = new THREE.SphereGeometry(
@@ -118,6 +116,21 @@ export function MapEditor() {
         }
     };
 
+    // populate all nodes and edges once (in use effect)
+    for (const node of allNodes) {
+        if (node.x !== 0 && node.y !== 0) {
+            createNode(node); //Create the nodes
+            for (const connectingNodeId of node.connectingNodes) {
+                // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
+                const connectedNode = getNode(connectingNodeId).then(async (connectednoderes) => {
+                    // TODO: Add another check that makes it so duplicate edge objects aren't created
+                    createEdge(node, connectednoderes.result.nodeData);
+                });
+            }
+        }
+    }
+    const scene = useRef<THREE.Scene>(scene1);
+
     const handleFloorChange = (newFloor: number) => {
         if (newFloor === floor) return;
         setIsFading(true);
@@ -125,16 +138,12 @@ export function MapEditor() {
             setFloor(newFloor);
             if (newFloor === 1) {
                 scene.current = scene1;
-                console.log('scene 1');
             } else if (newFloor === 3) {
                 scene.current = scene2;
-                console.log('scene 2');
             } else if (newFloor === 4) {
                 scene.current = scene3;
-                console.log('scene 3');
             } else if (newFloor === 5) {
                 scene.current = scene4;
-                console.log('scene 4');
             }
             setTimeout(() => {
                 setIsFading(false);
@@ -152,57 +161,6 @@ export function MapEditor() {
             console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
         }
     };
-
-    // populate all nodes and edges once (in use effect)
-    const ids: number[] = [];
-    ids.push(1);
-    ids.push(2);
-    ids.push(3);
-    ids.push(4);
-    ids.push(5);
-    ids.push(6);
-    ids.push(7);
-    ids.push(8);
-    ids.push(9);
-    ids.push(10);
-    ids.push(11);
-    ids.push(12);
-    ids.push(13);
-    ids.push(14);
-    ids.push(15);
-    ids.push(16);
-    ids.push(17);
-    ids.push(18);
-    ids.push(19);
-    ids.push(20);
-    ids.push(21);
-    ids.push(22);
-    ids.push(23);
-    ids.push(24);
-    ids.push(25);
-    ids.push(26);
-    ids.push(27);
-    ids.push(28);
-    ids.push(29);
-    for (const id of ids) {
-        // Get the full node from the ID
-        const node = getNode(id).then(async (noderes) => {
-            createNode(noderes.result.nodeData); //Create the node from its data
-            const connectedNodeDatas = noderes.result.connections; // list of the connected nodes "connections" data including the IDs and Weights
-            for (const connectedNodeData of connectedNodeDatas) {
-                // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
-                const connectedNode = getNode(connectedNodeData.connectedId).then(
-                    async (connectednoderes) => {
-                        if (ids.includes(connectednoderes.result.nodeData.id)) {
-                            // If the connected node is in the path
-                            // TODO: Add another check that makes it so duplicate edge objects aren't created
-                            createEdge(noderes.result.nodeData, connectednoderes.result.nodeData);
-                        }
-                    }
-                );
-            }
-        });
-    }
 
     // This useEffect runs every time the floor changes
     useEffect(() => {

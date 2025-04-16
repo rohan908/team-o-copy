@@ -325,20 +325,7 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
             renderer.render(scene.current, camera);
             window.requestAnimationFrame(animate);
 
-            return () => {
-                renderer.dispose();
-                mapMaterial.dispose();
-                mapTexture.dispose();
-                scene.current.traverse((obj) => {
-                    if ((obj as THREE.Mesh).material) {
-                        ((obj as THREE.Mesh).material as THREE.Material).dispose();
-                    }
-                    if ((obj as THREE.Mesh).geometry) {
-                        ((obj as THREE.Mesh).geometry as THREE.BufferGeometry).dispose();
-                    }
-                });
-                scene.current.clear();
-            };
+            return () => {};
         };
         animate();
     }, [floor]);
