@@ -10,16 +10,14 @@ import HospitalSelect from './components/HospitalEntry.tsx';
 import PriorityButtons from './components/PriorityButtons.tsx';
 import StatusSelect from './components/StatusSelect.tsx';
 import DepartmentSelect from './components/DepartmentSelect.tsx';
-
+import NameEntry from './components/NameEntry.tsx';
+import MaintenanceSelect from './components/MaintenanceSelect.tsx';
 import {
     ChestnutHill,
     Patriot20,
     Patriot22,
     HospitalDepartment,
 } from '../directory/components/directorydata';
-import SanitationSelect from './components/SanitationSelect.tsx';
-import NameEntry from './components/NameEntry.tsx';
-import MaintenanceSelect from './components/MaintenanceSelect.tsx';
 
 interface RequestData {
     employeeName: string;
@@ -118,8 +116,14 @@ function Maintenance() {
     };
 
     return (
-        <Flex justify="center" align="center" p="md">
-            <Paper bg="gray.2" p="xl" shadow="xl" radius="md" w="65%">
+        <Flex
+            className="min-h-screen w-full"
+            bg="terquAccet.2"
+            justify="center"
+            align="center"
+            p="xl"
+        >
+            <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Flex direction="column" ta="center" justify="center">
                         <Title order={2} ta="center" mb="md">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Text, Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
+import { Text, Button, Flex, Title, Paper, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
@@ -31,7 +31,6 @@ interface RequestData {
 }
 
 function Sanitation() {
-    const theme = useMantineTheme();
     const navigate = useNavigate();
     const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
 
@@ -118,7 +117,13 @@ function Sanitation() {
     };
 
     return (
-        <Flex className="min-h-screen w-full" bg="terquAccet.2" justify="center" align="center" p="xl">
+        <Flex
+            className="min-h-screen w-full"
+            bg="terquAccet.2"
+            justify="center"
+            align="center"
+            p="xl"
+        >
             <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Flex direction="column" ta="center" justify="center">

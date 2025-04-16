@@ -14,24 +14,7 @@ export function Display() {
             </Flex>
         );
     }
-
     const { requestData } = location.state;
-
-    // Format date because it is a date object
-    const formatDate = (date: any) => {
-        if (date instanceof Date) {
-            return date.toLocaleDateString();
-        }
-        return date; // Return as-is if already string
-    };
-
-    // Format time because  it's a Date object
-    const formatTime = (time: any) => {
-        if (time instanceof Date) {
-            return time.toLocaleTimeString();
-        }
-        return time;
-    };
 
     return (
         <Flex w="100%" h="100vh" align="center" direction="column" p="xl">
