@@ -14,7 +14,7 @@ import {
 // Type-safe interface for request data
 interface SanitationRequest {
     RequestID: number;
-    language: string;
+    sanitation: string;
     createdAt: string;
     room?: string;
     date?: string;
@@ -157,7 +157,7 @@ export function SanitationRequestHistory() {
                                         >
                                             {col === 'createdAt'
                                                 ? timeAgo(row[col] as string)
-                                                : String(row[col] ?? 'N/A')}
+                                                : String(row[col] ?? '')}
                                         </td>
                                     ))}
                                 </tr>
