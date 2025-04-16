@@ -7,17 +7,24 @@ import MapEditorBox from './Components/MapEditorBox.tsx';
 import { findPath } from './FindPathRouting.ts';
 import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
-import FloorSwitchBox from './components/FloorManagerBox.tsx';
+import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
+import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 
-export function DraggableMap() {
+interface DraggableMapProps {
+    selectedHospitalName?: string | null;
+    selectedDepartment?: string | null;
+}
+
+export function DraggableMap({ selectedHospitalName, selectedDepartment }: DraggableMapProps) {
     const theme = useMantineTheme();
-    const building = 'PatriotPlace';
     const [nodeSelected, setNodeSelected] = useState(false);
     const [nodeX, setNodeX] = useState(0);
     const [nodeY, setNodeY] = useState(0);
     const [floor, setFloor] = useState(1);
     const [isFading, setIsFading] = useState(false);
+    console.log(selectedDepartment);
+    console.log(selectedHospitalName);
     const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
     const canvasId = 'insideMapCanvas';
     const objects: THREE.Object3D[] = [];
@@ -26,12 +33,42 @@ export function DraggableMap() {
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
+    // Declares context for node information
+    const patriotNodes = usePatriotContext();
+    const chestnutNodes = useChestnutHillContext();
+
+    // gets Id for destination node
+    const getLastNodeId = () => {
+        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
+            const index = patriotNodes.findIndex((element) => {
+                return element.name == selectedDepartment;
+            });
+            return patriotNodes[index].id;
+        } else if (selectedHospitalName == 'Chestnut Hill') {
+            const index = chestnutNodes.findIndex((element) => {
+                return element.name == selectedDepartment;
+            });
+            return chestnutNodes[index].id;
+        }
+    };
+
+    // gets id of parking lot node -> hardcoded for now
+    const findParkingLot = (): number => {
+        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
+            return 1;
+        } else if (selectedHospitalName == 'Chestnut Hill') {
+            return 100;
+        }
+    };
+
     // Parameters for THREEjs objects and path display
-    const firstNodeId = 1; // start node
-    const lastNodeId = 10; // destination node
+    const firstNodeId = findParkingLot(); // start node
+    const lastNodeId = getLastNodeId(); // destination node
     const nodeColor = { color: 0xeafeff };
     const nodeRadius = 1;
 
+    console.log(firstNodeId);
+    console.log(lastNodeId);
     /*
     Patriot Place Floor 1 -> floor1 -> scene 1
     Patriot Place Floor 3 -> floor2 -> scene 2
@@ -164,12 +201,16 @@ export function DraggableMap() {
             setFloor(newFloor);
             if (newFloor === 1) {
                 scene.current = scene1;
+                console.log('scene 1');
             } else if (newFloor === 3) {
                 scene.current = scene2;
+                console.log('scene 2');
             } else if (newFloor === 4) {
                 scene.current = scene3;
+                console.log('scene 3');
             } else if (newFloor === 5) {
                 scene.current = scene4;
+                console.log('scene 4');
             }
             setTimeout(() => {
                 setIsFading(false);
@@ -244,6 +285,11 @@ export function DraggableMap() {
     });
 
     useEffect(() => {
+        // This has to be in a useEffect to prevent infinite looping
+        // TODO: Maybe intialize this earlier in its own useEffect to prevent rough scene change
+        if (selectedHospitalName === 'Chestnut Hill') {
+            handleFloorChange(5);
+        }
         // Get canvas element
         const canvas = document.getElementById(canvasId);
         if (!canvas) return;
@@ -445,7 +491,11 @@ export function DraggableMap() {
 
     return (
         <Box w="100vw" h="100vh" p={0}>
-            <FloorSwitchBox floor={floor} setFloor={handleFloorChange} />
+            <FloorSwitchBox
+                floor={floor}
+                setFloor={handleFloorChange}
+                building={selectedHospitalName || ''}
+            />
             <MapEditorBox
                 // Pass selected node data to the ui
                 nodeSelected={nodeSelected}

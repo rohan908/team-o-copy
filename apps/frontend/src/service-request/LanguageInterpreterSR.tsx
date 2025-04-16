@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
+import { Button, Flex, Title, Paper, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import ISO6391 from 'iso-639-1';
-import { useLanguageRequestContext } from '../contexts/LanguageRequestContext.tsx';
+import { useLanguageRequestContext } from '../contexts/RequestContext.tsx';
 
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
-import RoomNumberInput from './components/RoomEntry';
 import RequestDescription from './components/RequestDescription';
 import LanguageSelect from './components/LanguageSelect';
 import HospitalSelect from './components/HospitalEntry.tsx';
@@ -23,19 +22,19 @@ import {
 } from '../directory/components/directorydata';
 
 interface RequestData {
-    language: string;
-    date: string;
-    department: string;
-    time: string;
     employeeName: string;
+    language: string;
+    hospital: string;
+    department: string;
+    date: string;
+    time: string;
     priority: string;
     status: string;
-    hospital: string;
+
     description: string;
 }
 
 function Language() {
-    const theme = useMantineTheme();
     const navigate = useNavigate();
     const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
 
@@ -77,7 +76,14 @@ function Language() {
     console.log(langREQ);
 
     const handleSubmit = async () => {
-        const RequestData = form.values;
+        const rawData = form.values;
+
+        // truncating the time so just the date gets passed in
+        const RequestData = {
+            ...rawData,
+            date: new Date(rawData.date).toISOString().split('T')[0],
+        };
+        // turning the language key into the language label so it is clear what is being submitted
         const label =
             RequestData.language === 'asl'
                 ? 'ASL (American Sign Language)'
@@ -103,17 +109,17 @@ function Language() {
             if (response.ok) {
                 navigate('/submission', {
                     state: {
-                        requestData: {
-                            label,
-                            selectedDate: RequestData.date,
-                            selectedTime: RequestData.time,
-                            department: RequestData.department,
-                            priority: RequestData.priority,
-                            employeeName: RequestData.employeeName,
-                            status: RequestData.status,
-                            hospital: RequestData.hospital,
-                            description: RequestData.description,
-                        },
+                        requestData: [
+                            { title: 'Name', value: RequestData.employeeName },
+                            { title: 'Hospital', value: RequestData.hospital },
+                            { title: 'Language', value: label },
+                            { title: 'Date', value: RequestData.date },
+                            { title: 'Time', value: RequestData.time },
+                            { title: 'Department', value: RequestData.department },
+                            { title: 'Priority', value: RequestData.priority },
+                            { title: 'Status', value: RequestData.status },
+                            { title: 'Details', value: RequestData.description },
+                        ],
                     },
                 });
             }

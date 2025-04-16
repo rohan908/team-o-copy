@@ -7,7 +7,7 @@ import {
     PropsWithChildren,
 } from 'react';
 import { LanguageRequestItem } from './DirectoryItem';
-import fetchLanguageRequestData from '../DatabaseFetching/GetLanguageRequestData.tsx';
+import fetchRequestData from '../DatabaseFetching/GetRequestData.tsx';
 
 /*
     What this file does:
@@ -33,7 +33,7 @@ import fetchLanguageRequestData from '../DatabaseFetching/GetLanguageRequestData
   Adds fetchdata value to value prop, that way consumers can update context data
   by asking it to re-fetch data from the database after its been updated
  */
-interface LanguageRequestContextType extends LanguageRequestState {
+interface RequestContextType extends RequestState {
     fetchData: () => void;
 }
 
@@ -41,7 +41,7 @@ interface LanguageRequestContextType extends LanguageRequestState {
     define context for directory database data. undefined is placed in the type in case something goes
     wrong with the prop used with the provider component in app.tsx
  */
-export const LanguageRequestContext = createContext<LanguageRequestContextType | undefined>(
+export const RequestContext = createContext<RequestContextType | undefined>(
     undefined
 );
 
@@ -55,21 +55,33 @@ export const LanguageRequestContext = createContext<LanguageRequestContextType |
 
  */
 
-export const useLanguageRequestContext = () => {
-    const context = useContext(LanguageRequestContext);
+export const useRequestContext = () => {
+    const context = useContext(RequestContext);
     if (!context) {
         throw new Error(
-            'The useLanguageRequestContext must be used within the provider component DirectoryProvider'
+            'The useRequestContext must be used within the provider component DirectoryProvider'
         );
     }
 
     return context;
 };
 
+// Context for language request
+export const useLanguageRequestContext = () => {
+  const context = useContext(RequestContext);
+  if (!context) {
+    throw new Error(
+      'The useRequestContext must be used within the provider component DirectoryProvider'
+    );
+  }
+
+  return context.languageRequest;
+};
+
 /*
   This is for the reducer function.
  */
-interface LanguageRequestState {
+interface RequestState {
     languageRequest: LanguageRequestItem[];
     isLoading: boolean;
     error: string | null;
@@ -96,10 +108,10 @@ type DirectoryAction =
 
   If we need a cache for quicker page loading or some optimization, store data externally in this function
  */
-function languageRequestReducer(
-    state: LanguageRequestState,
+function RequestReducer(
+    state: RequestState,
     action: DirectoryAction
-): LanguageRequestState {
+): RequestState {
     switch (action.type) {
         case 'SET_LANGUAGE_REQUEST':
             return { ...state, languageRequest: action.data };
@@ -121,8 +133,8 @@ function languageRequestReducer(
   Calls the useReducer hook with our defined reducer function and default
   "empty" values for the state
  */
-export const LanguageRequestProvider: React.FC<PropsWithChildren> = ({ children }) => {
-    const [state, dispatch] = useReducer(languageRequestReducer, {
+export const RequestProvider: React.FC<PropsWithChildren> = ({ children }) => {
+    const [state, dispatch] = useReducer(RequestReducer, {
         languageRequest: [],
         isLoading: false,
         error: null,
@@ -136,9 +148,11 @@ export const LanguageRequestProvider: React.FC<PropsWithChildren> = ({ children 
         dispatch({ type: 'SET_LOADING', data: true });
         try {
             // grabs data from the database for each building
-            const langReqdata = await fetchLanguageRequestData();
+            const langReqdata = await fetchRequestData('languageSR');
+            const setLangReqData = await langReqdata.json().then((data) => {
+              dispatch({ type: 'SET_LANGUAGE_REQUEST', data: data });
+            });
 
-            dispatch({ type: 'SET_LANGUAGE_REQUEST', data: langReqdata });
         } catch (err) {
             // I made if statements for this to fix " err is of type unknown"
             if (err instanceof Error) {
@@ -160,13 +174,13 @@ export const LanguageRequestProvider: React.FC<PropsWithChildren> = ({ children 
     }, [fetchData]);
 
     /*
-  Wraps child components in LanguageRequestContext provider so that they can
+  Wraps child components in RequestContext provider so that they can
   use the context.
  */
 
     return (
-        <LanguageRequestContext.Provider value={{ ...state, fetchData }}>
+        <RequestContext.Provider value={{ ...state, fetchData }}>
             {children}
-        </LanguageRequestContext.Provider>
+        </RequestContext.Provider>
     );
 };

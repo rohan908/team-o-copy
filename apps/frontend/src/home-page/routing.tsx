@@ -10,6 +10,7 @@ import { MapAPIPage } from '../MapsAPIPage/MapAPIPage.tsx';
 import Language from '../service-request/LanguageInterpreterSR.tsx';
 import { BSFMapPage } from '../BFSMapPages-OLD/components/BSFMapPage.tsx';
 import { ServiceRequestPage } from '../service-request/ServiceRequestPage.tsx';
+import { useState } from 'react';
 
 import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -17,9 +18,14 @@ import LanguageRequestHistory from '../AdminPage/LanguageRequestHistory.tsx';
 import { DraggableMap } from '../IndoorMapPage/DraggableMap.tsx';
 import { NodeDirectory } from '../NodeDirectoryPage/NodeDirectory.tsx';
 import Security from '../service-request/SecuritySR.tsx';
+import Sanitation from '../service-request/SanitationSR.tsx';
+
+// TODO: switch this to a useContext once the router is less bad or pass information through the url
 
 export function Routing() {
     const [opened, { toggle }] = useDisclosure();
+    const [selectedHospitalName, setSelectedHospitalName] = useState<string | null>(null);
+    const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
 
     return (
         <>
@@ -28,7 +34,15 @@ export function Routing() {
                     <Route path="/" element={<NavBar />}>
                         <Route index element={<HomePage />} />
                         <Route path="map-page" element={<MapPage />} />
-                        <Route path="map-API" element={<MapAPIPage />} />
+                        <Route
+                            path="map-API"
+                            element={
+                                <MapAPIPage
+                                    onSelectHospital={setSelectedHospitalName}
+                                    onDepartmentSelect={setSelectedDepartment}
+                                />
+                            }
+                        />
                         <Route path="/submission" element={<Display />} />
                         <Route path="directory" element={<Directory />} />
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
@@ -37,6 +51,17 @@ export function Routing() {
                         <Route path="/language-form" element={<Language />} />
                         <Route path="/security-form" element={<Security />} />
                         <Route path="/IndoorMapPage" element={<DraggableMap />} />
+                      <Route path="/sanitation-form" element={<Sanitation />} />
+
+                      <Route
+                            path="/IndoorMapPage"
+                            element={
+                                <DraggableMap
+                                    selectedHospitalName={selectedHospitalName}
+                                    selectedDepartment={selectedDepartment}
+                                />
+                            }
+                        />
                         <Route path="/admin-page" element={<AdminPage />} />
                         <Route
                             path="/language-request-history"

@@ -57,7 +57,7 @@ export function AdminPage() {
         <div
             className="min-h-screen w-full"
             style={{
-                background: 'linear-gradient(160deg, #56effa 0%, #e4e8f0 100%)',
+                background: 'linear-gradient(160deg, #aaf7fc 0%, #aaf7fc 100%)',
                 padding: '2rem',
             }}
         >
@@ -147,7 +147,7 @@ export function AdminPage() {
                     my="md"
                     size="sm"
                     style={{
-                        borderTop: '1px dotted black',
+                        borderTop: '4px dotted #FCCD6F',
                     }}
                 />
                 <br />

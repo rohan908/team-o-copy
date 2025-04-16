@@ -5,6 +5,7 @@ import { Box, Flex, useMantineTheme, Text } from '@mantine/core';
 export function Display() {
     const theme = useMantineTheme();
     const location = useLocation();
+    const requestData: { title: string; value: string }[] = location.state.requestData;
 
     // Safely handle missing state
     if (!location.state?.requestData) {
@@ -14,24 +15,6 @@ export function Display() {
             </Flex>
         );
     }
-
-    const { requestData } = location.state;
-
-    // Format date because it is a date object
-    const formatDate = (date: Date | string): string => {
-        if (date instanceof Date) {
-            return date.toLocaleDateString();
-        }
-        return date; // Return as-is if already string
-    };
-
-    // Format time because  it's a Date object
-    const formatTime = (time: Date | string): string => {
-        if (time instanceof Date) {
-            return time.toLocaleTimeString();
-        }
-        return time;
-    };
 
     return (
         <Flex w="100%" h="100vh" align="center" direction="column" p="xl">
@@ -49,60 +32,11 @@ export function Display() {
                     borderColor: '#90EE90',
                 }}
             >
-                <Text mb="sm">
-                    <strong>Name:</strong> {requestData.employeeName}
-                </Text>
-                <Text mb="sm">
-                    <strong>Hospital:</strong> {requestData.hospital}
-                </Text>
-                <Text mb="sm">
-                    <strong>Language:</strong> {requestData.label}
-                </Text>
-                <Text mb="sm">
-                    <strong>Date:</strong> {formatDate(requestData.selectedDate)}
-                </Text>
-                <Text mb="sm">
-                    <strong>Time:</strong> {formatTime(requestData.selectedTime)}
-                </Text>
-                <Text mb="sm">
-                    <strong>Department:</strong> {requestData.department}
-                </Text>
-                <Text mb="sm">
-                    <strong>Priority:</strong> {requestData.priority}
-                </Text>
-                <Text mb="sm">
-                    <strong>Status:</strong> {requestData.status}
-                </Text>
-                <Text>
-                    <strong>Details:</strong> {requestData.description || 'N/A'}
-                </Text>
-            </Box>
-        </Flex>
-    );
-    return (
-        <Flex w="100%" h="100vh" align="center" direction="column" p="xl">
-            <Text size="xl" fw={700} mb="lg">
-                Service Request Submitted
-            </Text>
-            <Box bg="gray.1" p="xl" w="100%" maw="600px" style={{ borderRadius: theme.radius.md }}>
-                <Text mb="sm">
-                    <strong>Hospital:</strong> {requestData.hospital}
-                </Text>
-                <Text mb="sm">
-                    <strong>Language:</strong> {requestData.label}
-                </Text>
-                <Text mb="sm">
-                    <strong>Date:</strong> {formatDate(requestData.selectedDate)}
-                </Text>
-                <Text mb="sm">
-                    <strong>Time:</strong> {formatTime(requestData.selectedTime)}
-                </Text>
-                <Text mb="sm">
-                    <strong>Room:</strong> {requestData.roomNumber}
-                </Text>
-                <Text>
-                    <strong>Details:</strong> {requestData.description || 'N/A'}
-                </Text>
+                {requestData.map((item, idx) => (
+                    <Text mb="sm" key={idx}>
+                        <strong>{item.title}:</strong> {item.value}
+                    </Text>
+                ))}
             </Box>
         </Flex>
     );

@@ -10,6 +10,7 @@ export const API_ROUTES = {
     DIRECTORY: '/api/directory',
     GRAPH: '/api/graph',
     LANGUAGESR: '/api/languageSR',
+    SANITATIONSR: '/api/sanitationSR',
     EXPORTROUTE: '/api/exportRoute',
     SECURITY: '/api/SecuritySR',
 };
