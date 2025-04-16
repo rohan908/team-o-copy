@@ -6,21 +6,21 @@ import {
     useContext,
     PropsWithChildren,
 } from 'react';
-import { fetchDirectoryData } from '../DatabaseFetching/GetDirectoryData.tsx';
-import { DirectoryNodeItem } from './DirectoryItem';
+import { LanguageRequestItem } from './DirectoryItem';
+import fetchRequestData from '../DatabaseFetching/GetRequestData.tsx';
 
 /*
     What this file does:
-        This file defines the DirectoryContext context, provider, and
+        This file defines the LanguageRequestContext context, provider, and
         custom hook.
 
-        DirectoryContext is used to store directory database data on the frontend.
+        LanguageRequestContext is used to store directory database data on the frontend.
 
-        DirectoryContextProvider is a wrapper component that allows all of its
+        LanguageRequestContextProvider is a wrapper component that allows all of its
         children to access the context object data (our database data). This is
         called in App.tsx.
 
-        UseDirectoryContext is a custom hook which almost equivalent to
+        useLanguageRequestContext is a custom hook which almost equivalent to
         useContext, but prevents modification of internal data in the context,
         as well as security issues or misuse.
 
@@ -33,7 +33,7 @@ import { DirectoryNodeItem } from './DirectoryItem';
   Adds fetchdata value to value prop, that way consumers can update context data
   by asking it to re-fetch data from the database after its been updated
  */
-interface DirectoryContextType extends DirectoryState {
+interface RequestContextType extends RequestState {
     fetchData: () => void;
 }
 
@@ -41,7 +41,9 @@ interface DirectoryContextType extends DirectoryState {
     define context for directory database data. undefined is placed in the type in case something goes
     wrong with the prop used with the provider component in app.tsx
  */
-export const DirectoryContext = createContext<DirectoryContextType | undefined>(undefined);
+export const RequestContext = createContext<RequestContextType | undefined>(
+    undefined
+);
 
 /*
     defines custom hooks so that consumer components don't directly interact
@@ -49,49 +51,38 @@ export const DirectoryContext = createContext<DirectoryContextType | undefined>(
 
     To use them to access database data, follow this example:
 
-    const patriot = usePatriotContext();
+    const { patriot20, patriot22 } = usePatriotContext();
 
  */
 
-export const usePatriotContext = () => {
-    const context = useContext(DirectoryContext);
+export const useRequestContext = () => {
+    const context = useContext(RequestContext);
     if (!context) {
         throw new Error(
-            'The usePatriotContext must be used within the provider component Patriot20Provider'
-        );
-    }
-
-    return context.patriot;
-};
-
-export const useDirectoryContext = () => {
-    const context = useContext(DirectoryContext);
-    if (!context) {
-        throw new Error(
-            'The useDirectoryContext must be used within the provider component DirectoryProvider'
+            'The useRequestContext must be used within the provider component DirectoryProvider'
         );
     }
 
     return context;
 };
 
-export const useChestnutHillContext = () => {
-    const context = useContext(DirectoryContext);
-    if (!context) {
-        throw new Error(
-            'The ChestnutContext must be used within the provider component ChestnutProvider'
-        );
-    }
+// Context for language request
+export const useLanguageRequestContext = () => {
+  const context = useContext(RequestContext);
+  if (!context) {
+    throw new Error(
+      'The useRequestContext must be used within the provider component DirectoryProvider'
+    );
+  }
 
-    return context.chestnutHill;
+  return context.languageRequest;
 };
 
 /*
   This is for the reducer function.
  */
-interface DirectoryState {
-    patriot: DirectoryNodeItem[];
-    chestnutHill: DirectoryNodeItem[];
+interface RequestState {
+    languageRequest: LanguageRequestItem[];
     isLoading: boolean;
     error: string | null;
 }
@@ -102,8 +93,7 @@ interface DirectoryState {
   thrown when the context is called and doesn't have any values in it.
  */
 type DirectoryAction =
-    | { type: 'SET_PATRIOT'; data: DirectoryNodeItem[] }
-    | { type: 'SET_CHESTNUTHILL'; data: DirectoryNodeItem[] }
+    | { type: 'SET_LANGUAGE_REQUEST'; data: LanguageRequestItem[] }
     | { type: 'SET_LOADING'; data: boolean }
     | { type: 'SET_ERROR'; data: string };
 
@@ -118,12 +108,13 @@ type DirectoryAction =
 
   If we need a cache for quicker page loading or some optimization, store data externally in this function
  */
-function directoryReducer(state: DirectoryState, action: DirectoryAction): DirectoryState {
+function RequestReducer(
+    state: RequestState,
+    action: DirectoryAction
+): RequestState {
     switch (action.type) {
-        case 'SET_PATRIOT':
-            return { ...state, patriot: action.data };
-        case 'SET_CHESTNUTHILL':
-            return { ...state, chestnutHill: action.data };
+        case 'SET_LANGUAGE_REQUEST':
+            return { ...state, languageRequest: action.data };
         case 'SET_LOADING':
             return { ...state, isLoading: action.data };
         case 'SET_ERROR':
@@ -142,32 +133,25 @@ function directoryReducer(state: DirectoryState, action: DirectoryAction): Direc
   Calls the useReducer hook with our defined reducer function and default
   "empty" values for the state
  */
-export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => {
-    const [state, dispatch] = useReducer(directoryReducer, {
-        patriot: [],
-        chestnutHill: [],
+export const RequestProvider: React.FC<PropsWithChildren> = ({ children }) => {
+    const [state, dispatch] = useReducer(RequestReducer, {
+        languageRequest: [],
         isLoading: false,
         error: null,
     });
 
     /*
-    This variable fetches data from the database when the provider mounts.
-   */
+  This variable fetches data from the database when the provider mounts.
+ */
 
     const fetchData = useCallback(async () => {
         dispatch({ type: 'SET_LOADING', data: true });
         try {
             // grabs data from the database for each building
-            const patData = await fetchDirectoryData('1');
-            const chestHilldata = await fetchDirectoryData('2');
-
-            const setPatData = await patData.json().then((data) => {
-              dispatch({ type: 'SET_PATRIOT', data: data });
-            })
-
-            const setChestnutData = await chestHilldata.json().then((data) => {
-              dispatch({ type: 'SET_CHESTNUTHILL', data: data });
-            })
+            const langReqdata = await fetchRequestData('languageSR');
+            const setLangReqData = await langReqdata.json().then((data) => {
+              dispatch({ type: 'SET_LANGUAGE_REQUEST', data: data });
+            });
 
         } catch (err) {
             // I made if statements for this to fix " err is of type unknown"
@@ -181,8 +165,8 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
         }
     }, []);
 
-    // Fetch data only once when the provider mounts. maybe doesn't need useEffect because
-    // there's already one used in fetchDirectoryData()...
+    // In theory --> re-renders components if context is updated via "fetchdata"
+    // which is given in the provider as a prop
     useEffect(() => {
         if (fetchData) {
             fetchData();
@@ -190,13 +174,13 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
     }, [fetchData]);
 
     /*
-    Wraps child components in DirectoryContext provider so that they can
-    use the context.
-   */
+  Wraps child components in RequestContext provider so that they can
+  use the context.
+ */
 
     return (
-        <DirectoryContext.Provider value={{ ...state, fetchData }}>
+        <RequestContext.Provider value={{ ...state, fetchData }}>
             {children}
-        </DirectoryContext.Provider>
+        </RequestContext.Provider>
     );
 };
