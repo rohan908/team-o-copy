@@ -96,7 +96,7 @@ export class FlowingTubeAnimation {
                 void main() {
                   // Calculate wave pattern based on actual world-space distance
                   // wavesPerUnit controls how many waves per world-space unit
-                  float waveFrequency = wavesPerUnit * tubeLength * 6.28318; // 2π per wave
+                  float waveFrequency = wavesPerUnit * tubeLength * 6.28318; // 2 per wave
                   
                   // Flow effect along the tube
                   float flowOffset = time * speed;
@@ -138,15 +138,5 @@ export class FlowingTubeAnimation {
                 tube.material.uniforms.time.value = this.time;
             }
         });
-    }
-
-    dispose() {
-        // Clean up resources when no longer needed
-        this.tubes.forEach((tube) => {
-            this.scene.current.remove(tube);
-            if (tube.geometry) tube.geometry.dispose();
-            if (tube.material instanceof THREE.Material) tube.material.dispose();
-        });
-        this.tubes = [];
     }
 }

@@ -16,16 +16,16 @@ export function MapEditor() {
     const [floor, setFloor] = useState(1);
     const [isFading, setIsFading] = useState(false);
     const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
+    const objectsRef = useRef<THREE.Object3D[]>([new THREE.Object3D()]);
     const canvasId = 'insideMapCanvas';
-    const objects: THREE.Object3D[] = [];
-    objects.push(new THREE.Object3D());
 
     const allNodes = useAllNodesContext();
 
     // Parameters for THREEjs objects and path display
-    const nodeColor = { color: 0xeafeff };
-    const edgeColor = { color: 0x2a68f7 };
-    const nodeRadius = 1;
+    const nodeColor = 0xeafeff;
+    const selectedNodeColor = 0x56effa;
+    const edgeColor = 0x2a68f7;
+    const nodeRadius = 1.5;
     const edgeRad = 0.75;
     /*
   Patriot Place Floor 1 -> floor1 -> scene 1
@@ -71,6 +71,7 @@ export function MapEditor() {
     const mapPlane3 = new THREE.Mesh(mapGeo3, mapMaterial3);
     mapPlane3.position.set(0, 0, 0);
     scene4.add(mapPlane3);
+    const scene = useRef<THREE.Scene>(scene1);
 
     const createNode = (node: NodeDataType) => {
         const geometry = new THREE.SphereGeometry(
@@ -78,7 +79,7 @@ export function MapEditor() {
             Math.round(nodeRadius * 12), // Vibe based adaptive segmentation
             Math.round(nodeRadius * 6)
         );
-        const material = new THREE.MeshBasicMaterial(nodeColor);
+        const material = new THREE.MeshBasicMaterial({ color: nodeColor });
         const sphere = new THREE.Mesh(geometry, material);
         sphere.position.x = node.x;
         sphere.position.y = node.y;
@@ -94,16 +95,15 @@ export function MapEditor() {
         } else {
             console.error("node not added because floor doesn't exist");
         }
-        objects.push(sphere);
+        objectsRef.current.push(sphere);
     };
 
-    // TODO: re-create edges without animation
     const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
         const startPoint = new THREE.Vector3(node1.x, node1.y, 0);
         const endPoint = new THREE.Vector3(node2.x, node2.y, 0);
         const path = new THREE.LineCurve3(startPoint, endPoint);
         const geometry = new THREE.TubeGeometry(path, 1, edgeRad, edgeRad * 4, false);
-        const material = new THREE.MeshBasicMaterial(edgeColor);
+        const material = new THREE.MeshBasicMaterial({ color: edgeColor });
         const mesh = new THREE.Mesh(geometry, material);
         if (node1.floor === node2.floor && node1.floor === 1) {
             scene1.add(mesh);
@@ -115,21 +115,6 @@ export function MapEditor() {
             scene4.add(mesh);
         }
     };
-
-    // populate all nodes and edges once (in use effect)
-    for (const node of allNodes) {
-        if (node.x !== 0 && node.y !== 0) {
-            createNode(node); //Create the nodes
-            for (const connectingNodeId of node.connectingNodes) {
-                // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
-                const connectedNode = getNode(connectingNodeId).then(async (connectednoderes) => {
-                    // TODO: Add another check that makes it so duplicate edge objects aren't created
-                    createEdge(node, connectednoderes.result.nodeData);
-                });
-            }
-        }
-    }
-    const scene = useRef<THREE.Scene>(scene1);
 
     const handleFloorChange = (newFloor: number) => {
         if (newFloor === floor) return;
@@ -161,6 +146,20 @@ export function MapEditor() {
             console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
         }
     };
+
+    // populate all nodes and edges once (in use effect)
+    for (const node of allNodes) {
+        if (node.x !== 0 && node.y !== 0) {
+            createNode(node); //Create the nodes
+            for (const connectingNodeId of node.connectingNodes) {
+                // iterate over each connected node. TODO: Set up function for getting connected nodes from context
+                const connectedNode = getNode(connectingNodeId).then(async (connectednoderes) => {
+                    // TODO: Add another check that makes it so duplicate edge objects aren't created
+                    createEdge(node, connectednoderes.result.nodeData);
+                });
+            }
+        }
+    }
 
     // This useEffect runs every time the floor changes
     useEffect(() => {
@@ -245,10 +244,10 @@ export function MapEditor() {
                 pointer.y = -((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
                 raycaster.setFromCamera(pointer, camera);
                 // calculate objects intersecting the picking ray
-                const intersects = raycaster.intersectObjects(objects);
+                const intersects = raycaster.intersectObjects(objectsRef.current);
+                console.log('intersect: ', intersects);
                 if (intersects.length > 0) {
                     const intersect = intersects[0]; // grab the first intersected object
-
                     /*
         This structure handles selecting objects.
         It could probably use some proper handler functions, but it works for now.
@@ -265,7 +264,7 @@ export function MapEditor() {
                                 selectedObject.current instanceof THREE.Mesh &&
                                 selectedObject.current.material instanceof THREE.MeshBasicMaterial
                             ) {
-                                selectedObject.current.material.color.set(0xffff00); //set the already selected object back to it's non-selected color
+                                selectedObject.current.material.color.set(nodeColor); //set the already selected object back to it's non-selected color
                             }
                         }
                         selectedObject.current = intersect.object; // switch selected object to the clicked on object
@@ -275,7 +274,7 @@ export function MapEditor() {
                             selectedObject.current instanceof THREE.Mesh &&
                             selectedObject.current.material instanceof THREE.MeshBasicMaterial
                         ) {
-                            selectedObject.current.material.color.set(0x000000);
+                            selectedObject.current.material.color.set(selectedNodeColor);
                         }
                     }
                     // The clicked on object is already selected (deselection when clicking on an already selected object)
@@ -285,7 +284,7 @@ export function MapEditor() {
                             selectedObject.current instanceof THREE.Mesh &&
                             selectedObject.current.material instanceof THREE.MeshBasicMaterial
                         ) {
-                            selectedObject.current.material.color.set(0xffff00);
+                            selectedObject.current.material.color.set(nodeColor);
                         }
                         // clear the selected object
                         selectedObject.current = null;
