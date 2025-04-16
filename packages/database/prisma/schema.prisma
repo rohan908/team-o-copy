@@ -80,8 +80,8 @@ model securityServiceRequest {
   hospital     String
   description  String
 }
-//added hospital^^
 
+//added hospital^^
 
 // creates the directory table (strong entity)
 model directory {

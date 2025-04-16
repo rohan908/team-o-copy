@@ -19,6 +19,7 @@ router.post('/', async (req: Request, res: Response) => {
             description,
             priority,
             status,
+            hospital,
             employeeName,
         } = req.body;
 
@@ -33,6 +34,7 @@ router.post('/', async (req: Request, res: Response) => {
                 employeeName,
                 status,
                 priority,
+                hospital,
             },
         });
 

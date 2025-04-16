@@ -149,7 +149,11 @@ export function AdminPage() {
 
                 {/* Toggle Button */}
                 <div className="flex justify-center mt-4">
-                    <Button variant="outline" onClick={() => setShowPreview((prev) => !prev)}>
+                    <Button
+                        color="#153A90"
+                        variant="outline"
+                        onClick={() => setShowPreview((prev) => !prev)}
+                    >
                         {showPreview ? 'Hide Directory Preview' : 'Preview Directory'}
                     </Button>
                 </div>
