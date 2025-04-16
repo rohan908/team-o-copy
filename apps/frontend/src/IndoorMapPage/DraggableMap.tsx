@@ -250,7 +250,7 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
             handleFloorChange(5);
         }
 
-        animationRef.current = new FlowingTubeAnimation(scene, {
+        animationRef.current = new FlowingTubeAnimation({
             color1: 0x00aaff,
             color2: 0xff3300,
             flowSpeed: 0.3,
