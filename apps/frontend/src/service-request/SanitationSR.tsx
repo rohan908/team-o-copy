@@ -30,7 +30,7 @@ interface RequestData {
   description: string;
 }
 
-function Language() {
+function Sanitation() {
   const theme = useMantineTheme();
   const navigate = useNavigate();
   const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
@@ -69,16 +69,16 @@ function Language() {
 
     form.setFieldValue('department', '');
   }
-    const langREQ = useLanguageRequestContext();
-    console.log('TESTER CODE FOR CONTEXT!!!!');
-    console.log(langREQ);
+  const langREQ = useLanguageRequestContext();
+  console.log('TESTER CODE FOR CONTEXT!!!!');
+  console.log(langREQ);
 
-    const handleSubmit = async () => {
-        const RequestData = form.values;
-        const label =
-            RequestData.language === 'asl'
-                ? 'ASL (American Sign Language)'
-                : ISO6391.getName(RequestData.language);
+  const handleSubmit = async () => {
+    const RequestData = form.values;
+    const label =
+      RequestData.language === 'asl'
+        ? 'ASL (American Sign Language)'
+        : ISO6391.getName(RequestData.language);
 
     try {
       const response = await fetch('/api/languageSR', {
@@ -120,9 +120,9 @@ function Language() {
   };
 
   return (
-    <Flex justify="center" align="center"  bg="terquAccet.2" style={{ width: '100vw', padding: '2rem' }}>
+    <Flex justify="center" align="center" p="xl" >
       <Paper
-        bg="themeGold.1"
+        bg="gray.2"
         p="xl"
         shadow="xl"
         radius="md"
@@ -133,7 +133,7 @@ function Language() {
             Interpreter Request Form
           </Title>
 
-            <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
+          <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
             <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
               <NameEntry required {...form.getInputProps("employeeName")} />
               <HospitalSelect
@@ -164,11 +164,11 @@ function Language() {
           <Flex mt="xl" justify="left" gap="md">
 
             <Button
-                type="button"
-                variant="outline"
-                color="blueBase.5"
-                style={{ width: '200px' }}
-                onClick={() => form.reset()}
+              type="button"
+              variant="outline"
+              color="blueBase.5"
+              style={{ width: '200px' }}
+              onClick={() => form.reset()}
             >
               Clear Form
             </Button>
@@ -188,4 +188,4 @@ function Language() {
   );
 }
 
-export default Language;
+export default Sanitation;
