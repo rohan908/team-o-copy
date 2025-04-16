@@ -129,8 +129,8 @@ function Language() {
     };
 
     return (
-        <Flex justify="center" align="center" p="xl">
-            <Paper bg="gray.2" p="xl" shadow="xl" radius="md" w="65%">
+        <Flex className="min-h-screen w-full" bg="terquAccet.2" justify="center" align="center" p="xl">
+            <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Title order={2} ta="center" mb="lg">
                         Interpreter Request Form

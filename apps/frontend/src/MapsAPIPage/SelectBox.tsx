@@ -283,25 +283,28 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                             >
                                 Expand Directions Menu
                             </Button>
+                          <Collapse in={selectedDepartment != null}>
                             <Button
-                                color="green"
-                                size="md"
-                                fw={600}
-                                component={Link}
-                                to="/IndoorMapPage"
-                                style={{
-                                    borderRadius: '50px',
-                                    padding: '0.5rem 1.25rem',
-                                    fontSize: '0.9rem',
-                                    marginLeft: 'auto',
-                                    backgroundColor: 'green',
-                                    color: 'white',
-                                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                                    transition: 'all 0.3s ease',
-                                }}
+                              color="green"
+                              size="md"
+                              fw={600}
+                              component={Link}
+                              to="/IndoorMapPage"
+                              disabled={selectedDepartment == null}
+                              style={{
+                                borderRadius: '50px',
+                                padding: '0.5rem 1.25rem',
+                                fontSize: '0.9rem',
+                                marginLeft: 'auto',
+                                backgroundColor: 'green',
+                                color: 'white',
+                                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                                transition: 'all 0.3s ease',
+                              }}
                             >
-                                I've Arrived
+                              I've Arrived
                             </Button>
+                          </Collapse>
                         </Flex>
                     </Box>
                 )}
