@@ -5,7 +5,7 @@ import {
   Center,
   Flex,
   useMantineTheme,
-  Group, Avatar, Text, Box
+  Group, Avatar, Text, Box, Title
 } from '@mantine/core';
 
 
@@ -93,7 +93,7 @@ export function NodeDirectory() {
 
   function AccordionLabel({ label, image }: AccordionLabelProps) {
     return (
-      <Group wrap="nowrap">
+      <Group wrap="nowrap" bg="themeGold.1">
         <Avatar src={image} radius="xl" size="lg" />
           <Text>{label}</Text>
       </Group>
@@ -118,28 +118,30 @@ export function NodeDirectory() {
 
   const nodes = nodeList.map((item) => (
     <Accordion.Item key={item.id} value={item.name}>
-      <Accordion.Control>
+      <Accordion.Control bg={"themeGold.1"}>
         <AccordionLabel label={item.name} image={mapTypesToIcons(item.type)}></AccordionLabel>
       </Accordion.Control>
-      <Accordion.Panel>X Coordinate: {item.x}</Accordion.Panel>
-      <Accordion.Panel>Y Coordinate:{item.y}</Accordion.Panel>
-      <Accordion.Panel>Floor: {item.floor}</Accordion.Panel>
-      <Accordion.Panel>Node Type: {item.type}</Accordion.Panel>
-      <Accordion.Panel>Description: {item.description}</Accordion.Panel>
-      <Accordion.Panel>Connections: {returnNodeNames(item.connectingNodes)}</Accordion.Panel>
+      <Accordion.Panel bg="blueBase.1">X Coordinate: {item.x}</Accordion.Panel>
+      <Accordion.Panel bg="blueBase.1">Y Coordinate:{item.y}</Accordion.Panel>
+      <Accordion.Panel bg="blueBase.1">Floor: {item.floor}</Accordion.Panel>
+      <Accordion.Panel bg="blueBase.1">Node Type: {item.type}</Accordion.Panel>
+      <Accordion.Panel bg="blueBase.1">Description: {item.description}</Accordion.Panel>
+      <Accordion.Panel bg="blueBase.1">Connections: {returnNodeNames(item.connectingNodes)}</Accordion.Panel>
     </Accordion.Item>
   ));
 
   return (
-    <Box>
+    <Box className="min-h-screen w-full" bg="terquAccet.2">
       <Center>
-        <Text>
-          Node Directory Listing
-        </Text>
+        <Flex direction={"column"}>
+          <Title order={2} ta="center" mb="lg">
+            Node Directory Listing
+          </Title>
+          <Accordion>
+            {nodes}
+          </Accordion>
+        </Flex>
       </Center>
-        <Accordion>
-          {nodes}
-        </Accordion>
     </Box>
   );
 
