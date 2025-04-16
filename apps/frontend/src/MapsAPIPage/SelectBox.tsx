@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
-import {BlackButton} from "../common-compoents/commonButtons.tsx"
+import {BlackButton, BasicOutlinedButton} from "../common-compoents/commonButtons.tsx"
 import {TwoPartInteractiveBox} from "../common-compoents/standAloneFrame.tsx";
-import {HospitalDepartment, Patriot20, Patriot22, ChestnutHill} from '../directory/components/directorydata.tsx'; //this is now static lol
+import {HospitalDepartment, Patriot20, Patriot22, ChestnutHill, } from '../directory/components/directorydata.tsx'; //this is now static lol
 
 import {
     Box,

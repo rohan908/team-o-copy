@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {GoogleMap} from "@react-google-maps/api";
-import {Box, ScrollArea, Text } from '@mantine/core';
+import {Box, ScrollArea, Text, List,  useMantineTheme} from '@mantine/core';
 
 interface GoogleMapProps {
     selectedHospital: google.maps.LatLngLiteral | null;
@@ -18,7 +18,9 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
     const handleMapLoad = (map: google.maps.Map) => {
         mapRef.current = map;
     };
-    useEffect(() => {
+    const theme = useMantineTheme();
+
+   useEffect(() => {
         if (!userCoordinate || !selectedHospital || !mapRef.current) return;
         const directionsService = new google.maps.DirectionsService();
         if (!directionsRendererRef.current) {
@@ -65,19 +67,21 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
                     p="md"
                     radius="md"
                     shadow="md"
+                    style={{
+                      borderRadius: theme.radius.lg,
+                      backdropFilter: 'blur(5px)',
+                    }}
                 >
                   <Text fw={700} mb="sm">Directions:</Text>
                   <ScrollArea h={400}>
 
-                    <ol style={{ paddingLeft: '1.2rem', marginTop: '0.5rem' }}>
-                        {steps.map((step, index) => (
-                            <li
-                                key={index}
-                                dangerouslySetInnerHTML={{ __html: step }}
-                                style={{ marginBottom: '0.5rem' }}
-                            />
+                    <List type="ordered" pl="md" mt="sm">
+                      {steps.map((step, index) => (
+                        <List.Item key={index}>
+                          <Box dangerouslySetInnerHTML={{ __html: step }} mb="sm" />
+                        </List.Item>
                         ))}
-                    </ol>
+                    </List>
                   </ScrollArea>
                 </Box>
             )}
