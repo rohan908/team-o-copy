@@ -6,7 +6,12 @@ import {
     useContext,
     PropsWithChildren,
 } from 'react';
-import { LanguageRequestItem } from './DirectoryItem';
+import {
+    LanguageRequestItem,
+    SanitationRequestItem,
+    SecurityRequestItem,
+    MaintenanceRequestItem,
+} from './DirectoryItem';
 import fetchRequestData from '../DatabaseFetching/GetRequestData.tsx';
 
 /*
@@ -41,9 +46,7 @@ interface RequestContextType extends RequestState {
     define context for directory database data. undefined is placed in the type in case something goes
     wrong with the prop used with the provider component in app.tsx
  */
-export const RequestContext = createContext<RequestContextType | undefined>(
-    undefined
-);
+export const RequestContext = createContext<RequestContextType | undefined>(undefined);
 
 /*
     defines custom hooks so that consumer components don't directly interact
@@ -68,21 +71,24 @@ export const useRequestContext = () => {
 
 // Context for language request
 export const useLanguageRequestContext = () => {
-  const context = useContext(RequestContext);
-  if (!context) {
-    throw new Error(
-      'The useRequestContext must be used within the provider component DirectoryProvider'
-    );
-  }
+    const context = useContext(RequestContext);
+    if (!context) {
+        throw new Error(
+            'The useRequestContext must be used within the provider component DirectoryProvider'
+        );
+    }
 
-  return context.languageRequest;
+    return context.languageRequest;
 };
 
 /*
-  This is for the reducer function.
+  This defines the state (data) stored in the context
  */
 interface RequestState {
     languageRequest: LanguageRequestItem[];
+    sanitationRequest: SanitationRequestItem[];
+    securityRequest: SecurityRequestItem[];
+    maintenanceRequest: MaintenanceRequestItem[];
     isLoading: boolean;
     error: string | null;
 }
@@ -92,8 +98,11 @@ interface RequestState {
   can use, like setting array values, or load the state, or set an error to be
   thrown when the context is called and doesn't have any values in it.
  */
-type DirectoryAction =
+type RequestAction =
     | { type: 'SET_LANGUAGE_REQUEST'; data: LanguageRequestItem[] }
+    | { type: 'SET_SANITATION_REQUEST'; data: SanitationRequestItem[] }
+    | { type: 'SET_SECURITY_REQUEST'; data: SecurityRequestItem[] }
+    | { type: 'SET_MAINTENANCE_REQUEST'; data: MaintenanceRequestItem[] }
     | { type: 'SET_LOADING'; data: boolean }
     | { type: 'SET_ERROR'; data: string };
 
@@ -108,13 +117,16 @@ type DirectoryAction =
 
   If we need a cache for quicker page loading or some optimization, store data externally in this function
  */
-function RequestReducer(
-    state: RequestState,
-    action: DirectoryAction
-): RequestState {
+function RequestReducer(state: RequestState, action: RequestAction): RequestState {
     switch (action.type) {
         case 'SET_LANGUAGE_REQUEST':
             return { ...state, languageRequest: action.data };
+        case 'SET_SANITATION_REQUEST':
+            return { ...state, sanitationRequest: action.data };
+        case 'SET_SECURITY_REQUEST':
+            return { ...state, securityRequest: action.data };
+        case 'SET_MAINTENANCE_REQUEST':
+            return { ...state, maintenanceRequest: action.data };
         case 'SET_LOADING':
             return { ...state, isLoading: action.data };
         case 'SET_ERROR':
@@ -136,6 +148,9 @@ function RequestReducer(
 export const RequestProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [state, dispatch] = useReducer(RequestReducer, {
         languageRequest: [],
+        sanitationRequest: [],
+        securityRequest: [],
+        maintenanceRequest: [],
         isLoading: false,
         error: null,
     });
@@ -149,10 +164,22 @@ export const RequestProvider: React.FC<PropsWithChildren> = ({ children }) => {
         try {
             // grabs data from the database for each building
             const langReqdata = await fetchRequestData('languageSR');
-            const setLangReqData = await langReqdata.json().then((data) => {
-              dispatch({ type: 'SET_LANGUAGE_REQUEST', data: data });
-            });
+            const sanitReqdata = await fetchRequestData('sanitationSR');
+            const securReqdata = await fetchRequestData('securitySR');
+            const maintReqdata = await fetchRequestData('maintenanceSR');
 
+            const setLangReqData = await langReqdata?.json().then((data) => {
+                dispatch({ type: 'SET_LANGUAGE_REQUEST', data: data });
+            });
+            const setSanitReqData = await sanitReqdata?.json().then((data) => {
+                dispatch({ type: 'SET_SANITATION_REQUEST', data: data });
+            });
+            const setSecurReqData = await securReqdata?.json().then((data) => {
+                dispatch({ type: 'SET_SECURITY_REQUEST', data: data });
+            });
+            const setMaintReqData = await maintReqdata?.json().then((data) => {
+                dispatch({ type: 'SET_MAINTENANCE_REQUEST', data: data });
+            });
         } catch (err) {
             // I made if statements for this to fix " err is of type unknown"
             if (err instanceof Error) {
