@@ -39,22 +39,26 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
 
     // gets Id for destination node
     const getLastNodeId = () => {
-      if(selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
-        const index = patriotNodes.findIndex((element) => {return element.name == selectedDepartment});
-        return patriotNodes[index].id;
-      } else if(selectedHospitalName == 'Chestnut Hill') {
-        const index = chestnutNodes.findIndex((element) => {return element.name == selectedDepartment});
-        return chestnutNodes[index].id;
-      }
-    }
+        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
+            const index = patriotNodes.findIndex((element) => {
+                return element.name == selectedDepartment;
+            });
+            return patriotNodes[index].id;
+        } else if (selectedHospitalName == 'Chestnut Hill') {
+            const index = chestnutNodes.findIndex((element) => {
+                return element.name == selectedDepartment;
+            });
+            return chestnutNodes[index].id;
+        }
+    };
 
     // gets id of parking lot node -> hardcoded for now
     const findParkingLot = (): number => {
-      if(selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
-        return 1;
-      } else if(selectedHospitalName == 'Chestnut Hill') {
-        return 100;
-      }
+        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
+            return 1;
+        } else if (selectedHospitalName == 'Chestnut Hill') {
+            return 100;
+        }
     };
 
     // Parameters for THREEjs objects and path display
@@ -142,7 +146,7 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
             scene2.add(sphere);
         } else if (nodeFloor === 3) {
             scene3.add(sphere);
-        } else if (node.floor === 4) {
+        } else if (nodeFloor === 4) {
             scene4.add(sphere);
         } else {
             console.error("node not added because floor doesn't exist");
@@ -197,12 +201,16 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
             setFloor(newFloor);
             if (newFloor === 1) {
                 scene.current = scene1;
+                console.log('scene 1');
             } else if (newFloor === 3) {
                 scene.current = scene2;
+                console.log('scene 2');
             } else if (newFloor === 4) {
                 scene.current = scene3;
+                console.log('scene 3');
             } else if (newFloor === 5) {
                 scene.current = scene4;
+                console.log('scene 4');
             }
             setTimeout(() => {
                 setIsFading(false);
