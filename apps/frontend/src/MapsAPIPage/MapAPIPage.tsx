@@ -7,10 +7,18 @@ import GoogleMapsAPI from "./GoogleMapsAPI.tsx";
 import {useJsApiLoader } from "@react-google-maps/api"; //this is better than LoadScript
 import { useMediaQuery } from '@mantine/hooks';
 
-export function MapAPIPage() {
+interface MapAPIPageProps {
+  onSelectHospital: (hospital: string | null) => void;
+  onDepartmentSelect: (department: string | null) => void;
+}
+
+
+export function MapAPIPage({ onSelectHospital, onDepartmentSelect }: MapAPIPageProps) {
     // Store hospital coordinate from the user
     const [selectedHospital, setSelectedHospital] = useState<L.LatLng | null>(null);
     const [isSelectBoxCollapsed, setIsSelectBoxCollapsed] = useState(false);
+    const [selectedHospitalName, setSelectedHospitalName] = useState<string | null>(null);
+    const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [userCoordinates, setUserCoordinates] = useState<{ lat: number; long: number } | null>(null);
     const [travelMode, setTravelMode] = useState<google.maps.TravelMode | null>(null);
@@ -36,7 +44,10 @@ export function MapAPIPage() {
     return <div>Loading Google Maps...</div>; //debugmap
   }
 
-
+  const handleSelectHospitalName = (name: string | null) => {
+    setSelectedHospitalName(name);
+    onSelectHospital(name); // Pass hospital name to parent
+  };
     return (
       <Box  pos="relative" w="100%" h="100vh">
         <Box
@@ -59,7 +70,13 @@ export function MapAPIPage() {
         </Box>
           <SelectBox onSelectHospital={handleSelectHospital}
                            onSetUserCoordinates={setUserCoordinates}
-                           onSetTravelMode={setTravelMode}/>
+                           onSetTravelMode={setTravelMode}
+                           onSetSelectedHospitalName={handleSelectHospitalName}
+                           onSetSelectedDepartment={(dept) => {
+                             setSelectedDepartment(dept);
+                             onDepartmentSelect(dept);
+                     }}
+          />
       </Box>
     );
 }

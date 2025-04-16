@@ -3,6 +3,8 @@ import {Link} from "react-router-dom"; //use ive arrived button to direct to /in
 import {BlackButton, BasicOutlinedButton} from "../common-compoents/commonButtons.tsx"
 import {TwoPartInteractiveBox} from "../common-compoents/standAloneFrame.tsx";
 import {HospitalDepartment, Patriot20, Patriot22, ChestnutHill, } from '../directory/components/directorydata.tsx'; //this is now static lol
+import { DirectoryItem } from '../contexts/DirectoryItem.ts';
+import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 
 import {
     Box,
@@ -21,33 +23,37 @@ import * as L from 'leaflet';
 
 interface HospitalSelectBoxProps {        //props to pass to main map Display
     onSelectHospital: (coordinate: L.LatLng) => void;
-    onSelectDepartment?: (dept: string) => void;
     onSetUserCoordinates?: (coordinate: {lat: number, long: number}) => void;
     onSetTravelMode?: (mode: google.maps.TravelMode) => void;
-
+    onSetSelectedHospitalName?: (name: string | null) => void;
+    onSetSelectedDepartment?: (department: string | null) => void;
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
-    const {onSelectHospital, onSelectDepartment, onSetUserCoordinates, onSetTravelMode} = props;
+    const {onSelectHospital, onSetSelectedDepartment, onSetUserCoordinates, onSetTravelMode, onSetSelectedHospitalName} = props;
     const theme = useMantineTheme();
     const [hospital, setHospital] = useState<string | null>(null); //initialize  hospital building as null
-    const [department, setDepartment] = useState<string | null>(null); //also for department
-    const [collapsed, setCollapsed] = useState(false); //select box has 2 states, collapsed and popped up
-    const [departmentOptions, setDepartmentOptions] = useState<
-        { value: string; label: string }[]
-    >([]); //this is needed to display department options when entered a hospital
+  const [selectedHospitalName, setSelectedHospitalName] = useState<string | null>(null);
+  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);    const [collapsed, setCollapsed] = useState(false); //select box has 2 states, collapsed and popped up
+    const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>([]); //this is needed to display department options when entered a hospital
     const [userStartLocation, setUserStartLocation] = useState<{lat: number, long: number} | null>(null); // store user location input
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
     const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
+    const Patriot = usePatriotContext();
+    const Chestnut = useChestnutHillContext();
+    console.log(Chestnut);
 
-    const MapDepartment = (department: HospitalDepartment[]) =>
-      department.map((department) =>({
-        value: department.slug,
-        label: department.title,
+    const MapDepartment = (department: DirectoryItem[]) =>
+      department.map((department: DirectoryItem) => ({
+        value: department.name,
+        label: department.name,
       }));
 
     const handleFindPath = () => {
+        if (hospital && onSetSelectedHospitalName) {
+          onSetSelectedHospitalName(hospital);
+        }
         if (hospital == "Chestnut Hill") {
             onSelectHospital(new L.LatLng(42.32624893122403, -71.14948990068949));
         }
@@ -57,10 +63,10 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         else if(hospital =="22 Patriot Pl"){
           onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
         }
-        if (department && onSelectDepartment) {
-            onSelectDepartment(department);
+        if (selectedDepartment && onSetSelectedDepartment) {
+          onSetSelectedDepartment(selectedDepartment);
         }
-        if (department == "pharmacy"){
+        if (selectedDepartment == "pharmacy"){
           onSelectHospital(new L.LatLng(42.093429, -71.268228)); //this is fixed location for pharmacy, should route to specific parking lot
         }
         if (userStartLocation && onSetUserCoordinates) {
@@ -73,19 +79,14 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     };
 
     const setHospitalLocation = (hospital: string | null) =>{
-      if (hospital === '20 Patriot Pl') {
-        setDepartmentOptions(MapDepartment(Patriot20));
-      } else if (hospital === '22 Patriot Pl') {
-        setDepartmentOptions(MapDepartment(Patriot22));
+      if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
+        setDepartmentOptions(MapDepartment(Patriot));
       }
       else if (hospital == 'Chestnut Hill'){
-        setDepartmentOptions(MapDepartment(ChestnutHill));
-      }
-      else {
-        setDepartmentOptions([]);
+        setDepartmentOptions(MapDepartment(Chestnut));
       }
       setHospital(hospital);
-      setDepartment(null);
+      setSelectedDepartment(null);
     }
 
   useEffect(() => { //use effect to render google autocomplete
@@ -158,8 +159,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     color = "#A5A7AC"
                     placeholder ="--Select Department--"
                     data = {departmentOptions}
-                    value={department}
-                    onChange={setDepartment}
+                    value={selectedDepartment}
+                    onChange={setSelectedDepartment}
                     disabled={!hospital || departmentOptions.length === 0}/>
                 </Box>
 
