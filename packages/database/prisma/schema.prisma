@@ -32,6 +32,7 @@ model langaugeServiceRequest {
   priority     String
   status       String
   language     String
+  hospital     String
   description  String?
 }
 
@@ -46,7 +47,23 @@ model sanitationServiceRequest {
   priority     String
   status       String
   cleanupType  String
+  hospital     String
   description  String?
+}
+
+// creates the maintenanceServiceRequest table (strong entity)
+model maintenanceServiceRequest {
+  requestID       Int      @id @default(autoincrement())
+  employeeName    String
+  department      String
+  createdAt       DateTime @default(now())
+  date            String
+  time            String
+  priority        String
+  status          String
+  maintenanceType String
+  hospital        String
+  description     String?
 }
 
 // creates the securityServiceRequest table (strong entity)
@@ -60,8 +77,11 @@ model securityServiceRequest {
   security     String
   status       String
   priority     String
+  hospital     String
   description  String
 }
+
+//added hospital^^
 
 // creates the directory table (strong entity)
 model directory {

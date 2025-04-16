@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
-import { useMantineTheme, Collapse, Button, Divider, Center, Flex, Title } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
-import Language from '../service-request/LanguageInterpreterSR.tsx';
+import { Collapse, Button, Divider, Center, Flex, Title } from '@mantine/core';
 import LanguageRequestHistory from './LanguageRequestHistory.tsx';
-import { BlackButton } from '../common-compoents/commonButtons.tsx';
 import { SegmentedControl } from '@mantine/core';
 import SecurityRequestHistory from './SecurityRequestHistory.tsx';
 import SanitationRequestHistory from './SanitationRequestHistory.tsx';
+import MaintenanceRequestHistory from './MaintenanceHistory.tsx';
 
 export function AdminPage() {
-    const navigate = useNavigate();
-
-    const handleButtonSwitchers = () => {
-        navigate('/language-request-history');
-    };
-
     const [showPreview, setShowPreview] = useState(false); // state to control the collapsible section
     const [displayTableNumber, setDisplayTableNumber] = useState(-1);
     const [stringDisplayNum, setStringDisplayNum] = useState('');
@@ -85,7 +77,7 @@ export function AdminPage() {
                                 { label: 'LanguageRequest', value: '0' },
                                 { label: 'SecurityRequest', value: '1' },
                                 { label: 'SanitationRequest', value: '2' },
-                                { label: 'MaintenanceRequest', value: '3', disabled: true },
+                                { label: 'MaintenanceRequest', value: '3' },
                             ]}
                             onClick={() => setStringDisplayNum('-1')}
                             styles={(theme) => ({
@@ -124,7 +116,7 @@ export function AdminPage() {
                         </Collapse>
                         <Collapse in={displayTableNumber == 3}>
                             <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
-                                {/*Staff Request*/}
+                                <MaintenanceRequestHistory />
                             </div>
                         </Collapse>
                     </Flex>
@@ -157,7 +149,11 @@ export function AdminPage() {
 
                 {/* Toggle Button */}
                 <div className="flex justify-center mt-4">
-                    <Button variant="outline" onClick={() => setShowPreview((prev) => !prev)}>
+                    <Button
+                        color="#153A90"
+                        variant="outline"
+                        onClick={() => setShowPreview((prev) => !prev)}
+                    >
                         {showPreview ? 'Hide Directory Preview' : 'Preview Directory'}
                     </Button>
                 </div>

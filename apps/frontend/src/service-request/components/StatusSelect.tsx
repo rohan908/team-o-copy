@@ -1,6 +1,6 @@
 import {Select, SelectProps } from '@mantine/core';
 
-const HospitalSelect: React.FC<SelectProps> = (props) => {
+const StatusSelect: React.FC<SelectProps> = (props) => {
   return (
     <Select
       label="What is the Status "
@@ -16,4 +16,4 @@ const HospitalSelect: React.FC<SelectProps> = (props) => {
   );
 };
 
-export default HospitalSelect;
+export default StatusSelect;

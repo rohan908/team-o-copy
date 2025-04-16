@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Text, Button, Flex, Title, Paper, Box } from '@mantine/core';
+import { Button, Flex, Title, Paper, Box } from '@mantine/core';
 import { useForm } from '@mantine/form';
+
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
 import RequestDescription from './components/RequestDescription';
 import HospitalSelect from './components/HospitalEntry.tsx';
 import PriorityButtons from './components/PriorityButtons.tsx';
 import StatusSelect from './components/StatusSelect.tsx';
-import NameEntry from './components/NameEntry.tsx';
 import DepartmentSelect from './components/DepartmentSelect.tsx';
-import SecuritySelect from './components/SecuritySelect.tsx';
-
+import NameEntry from './components/NameEntry.tsx';
+import MaintenanceSelect from './components/MaintenanceSelect.tsx';
 import {
     ChestnutHill,
     Patriot20,
@@ -20,35 +20,34 @@ import {
 } from '../directory/components/directorydata';
 
 interface RequestData {
-    security: string;
-    date: string;
-    department: string;
-    time: string;
     employeeName: string;
+    department: string;
+    hospital: string;
     priority: string;
     status: string;
-    hospital: string;
+    date: string;
+    time: string;
     description: string;
+    maintenanceType: string;
 }
 
-function Security() {
+function Maintenance() {
     const navigate = useNavigate();
     const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
-
     const form = useForm<RequestData>({
         initialValues: {
-            security: '',
-            date: '',
-            department: '',
-            time: '',
             employeeName: '',
+            department: '',
             hospital: '',
             priority: '',
             status: '',
+            date: '',
+            time: '',
             description: '',
+            maintenanceType: '',
         },
     });
-    // logic for dependant department slection
+    // logic for dependant department selection
     const handleHospitalChange = (hospital: string | null) => {
         form.setFieldValue('hospital', hospital || '');
 
@@ -77,21 +76,20 @@ function Security() {
             ...rawData,
             date: new Date(rawData.date).toISOString().split('T')[0],
         };
-
         try {
-            const response = await fetch('/api/securitySR', {
+            const response = await fetch('/api/maintenanceSR', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    security: RequestData.security,
-                    selectedDate: RequestData.date,
-                    selectedTime: RequestData.time,
-                    department: RequestData.department,
-                    priority: RequestData.priority,
                     employeeName: RequestData.employeeName,
-                    status: RequestData.status,
-                    hospital: RequestData.hospital,
+                    date: RequestData.date,
+                    time: RequestData.time,
+                    department: RequestData.department,
                     description: RequestData.description,
+                    priority: RequestData.priority,
+                    hospital: RequestData.hospital,
+                    maintenanceType: RequestData.maintenanceType,
+                    status: RequestData.status,
                 }),
             });
 
@@ -99,14 +97,14 @@ function Security() {
                 navigate('/submission', {
                     state: {
                         requestData: [
-                            { title: 'Security', value: RequestData.security },
+                            { title: 'Name', value: RequestData.employeeName },
+                            { title: 'Maintenance Type', value: RequestData.maintenanceType },
+                            { title: 'Hospital', value: RequestData.hospital },
+                            { title: 'Department', value: RequestData.department },
                             { title: 'Date', value: RequestData.date },
                             { title: 'Time', value: RequestData.time },
-                            { title: 'Department', value: RequestData.department },
                             { title: 'Priority', value: RequestData.priority },
-                            { title: 'Employee Name', value: RequestData.employeeName },
                             { title: 'Status', value: RequestData.status },
-                            { title: 'Hospital', value: RequestData.hospital },
                             { title: 'Details', value: RequestData.description },
                         ],
                     },
@@ -128,16 +126,16 @@ function Security() {
             <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Flex direction="column" ta="center" justify="center">
-                        <Title order={2} mb="sm">
-                            Security Request
+                        <Title order={2} ta="center" mb="md">
+                            Maintenance Request Form
                         </Title>
-                        <Text mb="md" fz="xxxs">
-                            Ethan R. & Camden B.
-                        </Text>
+                        <Title mb="md" fz="xxxs">
+                            Yanding Mario and Connor Daly
+                        </Title>
                     </Flex>
+
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
-                            {' '}
                             {/*< column 1!!!*/}
                             <NameEntry required {...form.getInputProps('employeeName')} />
                             <HospitalSelect
@@ -152,23 +150,23 @@ function Security() {
                                 )}
                                 {...form.getInputProps('department')}
                             />
-                            <SecuritySelect required {...form.getInputProps('security')} />
+                            <MaintenanceSelect
+                                required
+                                {...form.getInputProps('maintenanceType')}
+                            />
                         </Box>
 
                         <Box flex="1" miw="300px">
-                            {' '}
                             {/* column 2!!!*/}
                             <DateInputForm required {...form.getInputProps('date')} />
                             <TimeEntry required {...form.getInputProps('time')} />
-                            <PriorityButtons required {...form.getInputProps('priority')} />
+                            <PriorityButtons {...form.getInputProps('priority')} />
                             <StatusSelect required {...form.getInputProps('status')} />
                         </Box>
                     </Flex>
-
                     <Box mt="md">
                         <RequestDescription {...form.getInputProps('description')} />
                     </Box>
-
                     <Flex mt="xl" justify="left" gap="md">
                         <Button
                             type="button"
@@ -190,4 +188,4 @@ function Security() {
     );
 }
 
-export default Security;
+export default Maintenance;

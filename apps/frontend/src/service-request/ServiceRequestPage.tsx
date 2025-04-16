@@ -4,6 +4,7 @@ import {
     IconExclamationCircleFilled,
     IconShieldHalf,
     IconTrash,
+    IconBellExclamation,
 } from '@tabler/icons-react';
 import HoverButton from './components/HoverButton.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -40,9 +41,9 @@ export function ServiceRequestPage() {
                             />
                             {/* button for ___ Request */}
                             <HoverButton
-                                icon={<IconExclamationCircleFilled size={120} />}
-                                label="Type 4"
-                                onClick={() => navigate('/')}
+                                icon={<IconBellExclamation stroke={2} size={120} />}
+                                label="Maintenance Request"
+                                onClick={() => navigate('/maintenance-form')}
                             />
                             {/* button for ___ Request */}
                             <HoverButton
