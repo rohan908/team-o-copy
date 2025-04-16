@@ -4,6 +4,7 @@ import { Text, Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine
 import { useForm } from '@mantine/form';
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
+import RoomNumberInput from './components/RoomEntry';
 import RequestDescription from './components/RequestDescription';
 import SanitationSelect from './components/SanitationSelect.tsx';
 import HospitalSelect from './components/HospitalEntry.tsx';
@@ -17,9 +18,10 @@ import {
     Patriot22,
     HospitalDepartment,
 } from '../directory/components/directorydata';
+import SecuritySelect from './components/SecuritySelect.tsx';
 
 interface RequestData {
-    cleanupType: string;
+    security: string;
     date: string;
     department: string;
     time: string;
@@ -30,14 +32,14 @@ interface RequestData {
     description: string;
 }
 
-function Sanitation() {
+function Security() {
     const theme = useMantineTheme();
     const navigate = useNavigate();
     const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
 
     const form = useForm<RequestData>({
         initialValues: {
-            cleanupType: '',
+            security: '',
             date: '',
             department: '',
             time: '',
@@ -79,11 +81,11 @@ function Sanitation() {
         };
 
         try {
-            const response = await fetch('/api/sanitationSR', {
+            const response = await fetch('/api/securitySR', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    cleanupType: RequestData.cleanupType,
+                    security: RequestData.security,
                     selectedDate: RequestData.date,
                     selectedTime: RequestData.time,
                     department: RequestData.department,
@@ -99,14 +101,14 @@ function Sanitation() {
                 navigate('/submission', {
                     state: {
                         requestData: [
-                            { title: 'Name', value: RequestData.employeeName },
-                            { title: 'Cleanup Type', value: RequestData.cleanupType },
-                            { title: 'Hospital', value: RequestData.hospital },
-                            { title: 'Department', value: RequestData.department },
+                            { title: 'Security', value: RequestData.security },
                             { title: 'Date', value: RequestData.date },
                             { title: 'Time', value: RequestData.time },
+                            { title: 'Department', value: RequestData.department },
                             { title: 'Priority', value: RequestData.priority },
+                            { title: 'Employee Name', value: RequestData.employeeName },
                             { title: 'Status', value: RequestData.status },
+                            { title: 'Hospital', value: RequestData.hospital },
                             { title: 'Details', value: RequestData.description },
                         ],
                     },
@@ -123,15 +125,15 @@ function Sanitation() {
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Flex direction="column" ta="center" justify="center">
                         <Title order={2} mb="sm">
-                            Sanitation Request Form
+                            Security Request
                         </Title>
                         <Text mb="md" fz="xxxs">
-                            Logan Winters and Joe Abata
+                            Ethan R. & Camden B.
                         </Text>
                     </Flex>
-
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
+                            {' '}
                             {/*< column 1!!!*/}
                             <NameEntry required {...form.getInputProps('employeeName')} />
                             <HospitalSelect
@@ -146,10 +148,11 @@ function Sanitation() {
                                 )}
                                 {...form.getInputProps('department')}
                             />
-                            <SanitationSelect required {...form.getInputProps('cleanupType')} />
+                            <SecuritySelect required {...form.getInputProps('security')} />
                         </Box>
 
                         <Box flex="1" miw="300px">
+                            {' '}
                             {/* column 2!!!*/}
                             <DateInputForm required {...form.getInputProps('date')} />
                             <TimeEntry required {...form.getInputProps('time')} />
@@ -183,4 +186,4 @@ function Sanitation() {
     );
 }
 
-export default Sanitation;
+export default Security;

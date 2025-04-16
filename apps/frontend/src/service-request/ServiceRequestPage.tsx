@@ -1,5 +1,11 @@
 import { Box, Button, Flex, SimpleGrid, Title, Stack } from '@mantine/core';
-import { IconLanguage, IconExclamationCircleFilled } from '@tabler/icons-react';
+import {
+    IconLanguage,
+    IconExclamationCircleFilled,
+    IconShieldHalf,
+    IconTrash,
+    IconBellExclamation,
+} from '@tabler/icons-react';
 import HoverButton from './components/HoverButton.tsx';
 import { useNavigate } from 'react-router-dom';
 export function ServiceRequestPage() {
@@ -21,22 +27,22 @@ export function ServiceRequestPage() {
                                 onClick={() => navigate('/language-form')}
                             />
 
-                            {/* button for ___ Request */}
+                            {/* button for Security Service Request */}
                             <HoverButton
-                                icon={<IconExclamationCircleFilled size={120} />}
-                                label="Type 2"
-                                onClick={() => navigate('/')}
+                                icon={<IconShieldHalf size={120} />}
+                                label="Security Request"
+                                onClick={() => navigate('/security-form')}
                             />
-                            {/* button for ___ Request */}
+                            {/* button for Sanitization Request */}
                             <HoverButton
-                                icon={<IconExclamationCircleFilled size={120} />}
-                                label="Type 3"
+                                icon={<IconTrash stroke={2} size={120} />}
+                                label="Sanitization Request"
                                 onClick={() => navigate('/sanitation-form')}
                             />
                             {/* button for ___ Request */}
                             <HoverButton
-                                icon={<IconExclamationCircleFilled size={120} />}
-                                label="Type 4"
+                                icon={<IconBellExclamation stroke={2} size={120} />}
+                                label="Maintenance Request"
                                 onClick={() => navigate('/maintenance-form')}
                             />
                             {/* button for ___ Request */}

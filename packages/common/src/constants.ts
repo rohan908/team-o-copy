@@ -12,6 +12,7 @@ export const API_ROUTES = {
     LANGUAGESR: '/api/languageSR',
     SANITATIONSR: '/api/sanitationSR',
     MAINTENANCESR: '/api/maintenanceSR',
+    SECURITYSR: '/api/securitySR',
     EXPORTROUTE: '/api/exportRoute',
 };
 
