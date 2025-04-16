@@ -46,14 +46,14 @@ export class FlowingTubeAnimation {
         const flowingShader = {
             uniforms: {
                 time: { value: 0.0 },
-                colorA: { value: new THREE.Color(0x2a68f7) }, // Blue
-                colorB: { value: new THREE.Color(0x4deefb) }, // Teal
+                colorA: { value: new THREE.Color(0x2a68f7) },
+                colorB: { value: new THREE.Color(0x4deefb) },
                 speed: { value: 2 },
                 amplitude: { value: 0.5 },
                 tubeLength: { value: tubeLength },
                 startPoint: { value: startPoint },
                 tubeDirection: { value: normalizedDirection },
-                wavesPerUnit: { value: 0.05 }, // Number of waves per unit length (adjust as needed)
+                wavesPerUnit: { value: 0.05 }, // Frequency of nodes
             },
             vertexShader: `
                 uniform vec3 startPoint;
@@ -71,7 +71,7 @@ export class FlowingTubeAnimation {
                   // Calculate the vector from start point to current position
                   vec3 toPosition = position - startPoint;
                   
-                  // Project this vector onto the tube direction to get distance along tube
+                  // get distance along tube
                   vDistance = dot(toPosition, tubeDirection);
                   
                   // Normalize
@@ -93,33 +93,31 @@ export class FlowingTubeAnimation {
                 varying vec3 vNormal;
                 varying float vDistance;
                 
-                void main() {
-                  // Calculate wave pattern based on actual world-space distance
-                  // wavesPerUnit controls how many waves per world-space unit
-                  float waveFrequency = wavesPerUnit * tubeLength * 6.28318; // 2 per wave
+                void main() { 
+                  float waveFrequency = wavesPerUnit * tubeLength * 6.28318; // 2pi per wave
                   
                   // Flow effect along the tube
                   float flowOffset = time * speed;
                   
-                  // Create waves with consistent world-space frequency
+                  // Create waves 
                   float wave = sin((vDistance * waveFrequency) - flowOffset) * amplitude;
                   
-                  // Center wave around 0.5 for better color mixing
+                  // Center wave around 0.5
                   float colorMix = 0.5 + wave;
                   
-                  // Create a smooth transition between colors
+                  // smooth transition between colors
                   vec3 finalColor = mix(colorA, colorB, clamp(colorMix, 0.0, 1.0));
                   
-                  // Output the final color
+                  // final color
                   gl_FragColor = vec4(finalColor, 1.0);
                 }
             `,
         };
 
-        // Create flowing shader material with distinct pulses
+        // Create flowing shader material
         const flowingMaterial = new THREE.ShaderMaterial(flowingShader);
 
-        // Create tube geometry with enough segments for smooth appearance
+        // Create tube geometry
         const tubeSegments = Math.max(16, Math.ceil(tubeLength * 4)); // More segments for longer tubes
         const geometry = new TubeGeometry(path, tubeSegments, 0.5, 8, false);
 
@@ -132,7 +130,7 @@ export class FlowingTubeAnimation {
     update(deltaTime: number) {
         this.time += deltaTime;
 
-        // Update time uniform for all tube materials
+        // Update time for all tube materials
         this.tubes.forEach((tube) => {
             if (tube.material instanceof THREE.ShaderMaterial) {
                 tube.material.uniforms.time.value = this.time;
