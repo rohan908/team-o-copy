@@ -2,18 +2,15 @@ import createError, { HttpError } from 'http-errors';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import graphRouter from './routes/Graph.ts';
 import healthcheckRouter from './routes/HealthCheck.ts';
 import directoryRouter from './routes/directory.ts';
 import languageServiceRequestRouter from './routes/LanguageServiceRequest.ts';
 import sanitationServiceRequestRouter from './routes/SanitationServiceRequest.ts';
 import maintenanceServiceRequestRouter from './routes/MaintenanceServiceRequest.ts';
-
-import exportRoute from './routes/ExportRoute.ts';
-import graphRouter from './routes/Graph.ts';
 import securityServiceRequestRouter from './routes/SecurityServiceRequest.ts';
-
+import exportRoute from './routes/ExportRoute.ts';
 import { API_ROUTES } from 'common/src/constants';
-import PrismaClient from './bin/prisma-client.ts';
 
 const cors = require('cors');
 const app: Express = express(); // Setup the backend

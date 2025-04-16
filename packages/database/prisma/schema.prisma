@@ -77,9 +77,11 @@ model securityServiceRequest {
   security     String
   status       String
   priority     String
-  hospital     String //added
+  hospital     String
   description  String
 }
+//added hospital^^
+
 
 // creates the directory table (strong entity)
 model directory {
