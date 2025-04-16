@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import {Box, Flex, Transition, useMantineTheme} from '@mantine/core';
+import { Box, Flex, Transition, useMantineTheme } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
@@ -25,10 +25,10 @@ export function DraggableMap({
     setSelectedDepartment,
     setSelectedHospitalName,
 }: DraggableMapProps) {
-  const theme = useMantineTheme();
-  const [nodeSelected, setNodeSelected] = useState(false);
-  const [nodeX, setNodeX] = useState(0);
-  const [nodeY, setNodeY] = useState(0);
+    const theme = useMantineTheme();
+    const [nodeSelected, setNodeSelected] = useState(false);
+    const [nodeX, setNodeX] = useState(0);
+    const [nodeY, setNodeY] = useState(0);
     const [floor, setFloor] = useState(1);
     const [isFading, setIsFading] = useState(false);
     const [currPathAlgo, setCurrPathAlgo] = useState<string>('BFS');
@@ -184,7 +184,7 @@ export function DraggableMap({
             scene1.add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y },
+                    { x: node2.x, y: node2.y }
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 2) {
@@ -276,34 +276,34 @@ export function DraggableMap({
        }
       */
     // Get the path
-  if(firstNodeId && lastNodeId) {
-    const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
-      const ids = pathres.result.pathIDs;
-      // For each node id in the path
-      for (const id of ids) {
-        // Get the full node from the ID
-        const node = getNode(id).then(async (noderes) => {
-          createNode(noderes.result.nodeData); //Create the node from its data
-          const connectedNodeDatas = noderes.result.connections; // list of the connected nodes "connections" data including the IDs and Weights
-          for (const connectedNodeData of connectedNodeDatas) {
-            // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
-            const connectedNode = getNode(connectedNodeData.connectedId).then(
-              async (connectednoderes) => {
-                if (ids.includes(connectednoderes.result.nodeData.id)) {
-                  // If the connected node is in the path
-                  // TODO: Add another check that makes it so duplicate edge objects aren't created
-                  createEdge(
-                    noderes.result.nodeData,
-                    connectednoderes.result.nodeData
-                  );
-                }
-              }
-            );
-          }
+    if (firstNodeId && lastNodeId) {
+        const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
+            const ids = pathres.result.pathIDs;
+            // For each node id in the path
+            for (const id of ids) {
+                // Get the full node from the ID
+                const node = getNode(id).then(async (noderes) => {
+                    createNode(noderes.result.nodeData); //Create the node from its data
+                    const connectedNodeDatas = noderes.result.connections; // list of the connected nodes "connections" data including the IDs and Weights
+                    for (const connectedNodeData of connectedNodeDatas) {
+                        // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
+                        const connectedNode = getNode(connectedNodeData.connectedId).then(
+                            async (connectednoderes) => {
+                                if (ids.includes(connectednoderes.result.nodeData.id)) {
+                                    // If the connected node is in the path
+                                    // TODO: Add another check that makes it so duplicate edge objects aren't created
+                                    createEdge(
+                                        noderes.result.nodeData,
+                                        connectednoderes.result.nodeData
+                                    );
+                                }
+                            }
+                        );
+                    }
+                });
+            }
         });
-      }
-    });
-  }
+    }
 
     useEffect(() => {
         // This has to be in a useEffect to prevent infinite looping
@@ -511,7 +511,7 @@ export function DraggableMap({
     }, [floor]);
 
     return (
-        <Box w="100%" h="100%" p={0}>
+        <Box w="100%" h="100%" p={0} pos={'relative'}>
             <FloorSwitchBox
                 floor={floor}
                 onCollapseChange={() => true}
@@ -531,9 +531,9 @@ export function DraggableMap({
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'absolute' }}
             />
-            <div
+            <div //fade in and out transition
                 style={{
-                    position: 'relative',
+                    position: 'absolute',
                     top: 0,
                     left: 0,
                     width: '100%',
@@ -542,7 +542,7 @@ export function DraggableMap({
                     opacity: isFading ? 1 : 0,
                     transition: 'opacity 0.3s ease-in-out',
                     pointerEvents: 'none',
-                    zIndex: 10,
+                    zIndex: 10000,
                 }}
             />
         </Box>
