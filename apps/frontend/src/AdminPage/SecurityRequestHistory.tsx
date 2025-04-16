@@ -16,10 +16,6 @@ interface SecurityRequest {
     RequestID: number;
     security: string;
     createdAt: string;
-    room?: string;
-    date?: string;
-    time?: string;
-    description?: string;
     [key: string]: unknown;
 }
 

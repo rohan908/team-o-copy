@@ -30,7 +30,6 @@ interface RequestData {
     time: string;
     priority: string;
     status: string;
-
     description: string;
 }
 
@@ -111,11 +110,11 @@ function Language() {
                     state: {
                         requestData: [
                             { title: 'Name', value: RequestData.employeeName },
-                            { title: 'Hospital', value: RequestData.hospital },
                             { title: 'Language', value: label },
+                            { title: 'Hospital', value: RequestData.hospital },
+                            { title: 'Department', value: RequestData.department },
                             { title: 'Date', value: RequestData.date },
                             { title: 'Time', value: RequestData.time },
-                            { title: 'Department', value: RequestData.department },
                             { title: 'Priority', value: RequestData.priority },
                             { title: 'Status', value: RequestData.status },
                             { title: 'Details', value: RequestData.description },
@@ -132,13 +131,12 @@ function Language() {
         <Flex className="min-h-screen w-full" bg="terquAccet.2" justify="center" align="center" p="xl">
             <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <Title order={2} ta="center" mb="lg">
+                    <Title order={2} ta="center" mb="md">
                         Interpreter Request Form
                     </Title>
 
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
-                            {' '}
                             {/*< column 1!!!*/}
                             <NameEntry required {...form.getInputProps('employeeName')} />
                             <HospitalSelect
@@ -157,7 +155,6 @@ function Language() {
                         </Box>
 
                         <Box flex="1" miw="300px">
-                            {' '}
                             {/* column 2!!!*/}
                             <DateInputForm required {...form.getInputProps('date')} />
                             <TimeEntry required {...form.getInputProps('time')} />
