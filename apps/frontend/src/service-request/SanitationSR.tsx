@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Text, Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';

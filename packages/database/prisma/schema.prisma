@@ -76,7 +76,7 @@ model Node {
   name        String
   description String
   nodeType    String
-  edges       Int[] // ids of all edges containing this node
+  connectingNodes       Int[] // ids of all edges containing this node
 }
 
 model Edge {
