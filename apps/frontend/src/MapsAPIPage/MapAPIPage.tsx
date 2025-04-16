@@ -38,8 +38,7 @@ export function MapAPIPage() {
 
 
     return (
-        <Box pos="relative">
-            {/* Map behind */}
+        <Box>
           <GoogleMapsAPI
             selectedHospital={
               selectedHospital
@@ -56,8 +55,7 @@ export function MapAPIPage() {
 
                 <SelectBox onSelectHospital={handleSelectHospital}
                            onSetUserCoordinates={setUserCoordinates}
-                           onSetTravelMode={setTravelMode}
-                />
+                           onSetTravelMode={setTravelMode}/>
         </Box>
     );
 }
