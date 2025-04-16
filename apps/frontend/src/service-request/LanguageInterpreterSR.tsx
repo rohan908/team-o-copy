@@ -18,7 +18,6 @@ import RequestDescription from './components/RequestDescription';
 import LanguageSelect from './components/LanguageSelect';
 import HospitalSelect from "./components/HospitalEntry.tsx";
 import PriorityButtons from "./components/PriorityButtons.tsx";
-import Maintenance from "./MaintenanceForm.tsx";
 
 interface RequestData {
   language: string;
@@ -143,7 +142,6 @@ function Language() {
           </Flex>
         </form>
       </Paper>
-      <Maintenance/>
     </Flex>
   );
 }

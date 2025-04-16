@@ -74,11 +74,13 @@ model Edge {
 
 model MaintenanceServiceRequest {
   requestID   Int      @id @default(autoincrement())
+  Name        String
+  Location    String
+  Priority    String
+  status      String
   room        String
   createdAt   DateTime @default(now())
   date        String
   time        String
-  maintenanceType    String
-  status      String
-  name String
+  maintenanceType  String
 }

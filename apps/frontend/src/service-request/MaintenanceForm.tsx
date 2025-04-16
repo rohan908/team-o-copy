@@ -21,13 +21,13 @@ import StatusSelect from "./components/StatusSelect.tsx"
 import EnterName from './components/EnterName.tsx';
 
 interface RequestData {
-  status: string;
-  date: string;
-  room: string;
+  Name: string;
+  Location: string;
+  Priority: string;
+  Status: string;
+  Date: string;
   time: string;
-  priority: string;
-  hospital: string;
-  name: string;
+  room: string;
   maintenanceType: string;
 }
 
@@ -37,13 +37,13 @@ function Maintenance() {
 
   const form = useForm<RequestData>({
     initialValues: {
-      status: '',
-      date: '',
-      room: '',
+      Name: '',
+      Location: '',
+      Priority: '',
+      Status: '',
+      Date: '',
       time: '',
-      hospital: '',
-      priority: '',
-      name: '',
+      room: '',
       maintenanceType: '',
     },
   });
@@ -57,13 +57,13 @@ function Maintenance() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           label,
-          selectedDate: RequestData.date,
+          selectedDate: RequestData.Date,
           selectedTime: RequestData.time,
           roomNumber: RequestData.room,
-          priority: RequestData.priority,
-          hospital: RequestData.hospital,
-          name: RequestData.name,
-          status: RequestData.status,
+          priority: RequestData.Priority,
+          location: RequestData.Location,
+          Name: RequestData.Name,
+          status: RequestData.Status,
         }),
       });
 
@@ -72,12 +72,13 @@ function Maintenance() {
           state: {
             requestData: {
               label,
-              selectedDate: RequestData.date,
+              Name: RequestData.Name,
+              selectedDate: RequestData.Date,
               selectedTime: RequestData.time,
               roomNumber: RequestData.room,
-              priority: RequestData.priority,
-              hospital: RequestData.hospital,
-              name: RequestData.name,
+              priority: RequestData.Priority,
+              location: RequestData.Location,
+              status: RequestData.Status,
             },
           },
         });
@@ -104,20 +105,20 @@ function Maintenance() {
             Yanding Mario and Connor Daly
           </Title>
           <Box mt="md">
-            <EnterName{...form.getInputProps('name')} />
+            <EnterName{...form.getInputProps('Name')} />
           </Box>
 
           <Flex gap="lg" wrap="wrap" mb="md">
             <Box flex="1" miw = "300px">  {/*< column 1!!!*/}
-              <HospitalSelect required {...form.getInputProps("hospital")} />
-              <PriorityButtons {...form.getInputProps('priority')} />
+              <HospitalSelect required {...form.getInputProps("Location")} />
+              <PriorityButtons {...form.getInputProps('Priority')} />
             </Box>
 
             <Box flex="1" miw = "300px"> {/* column 2!!!*/}
-              <DateInputForm required {...form.getInputProps('date')} />
+              <DateInputForm required {...form.getInputProps('Date')} />
               <TimeEntry required {...form.getInputProps('time')} />
               <RoomNumberInput required {...form.getInputProps('room')} />
-              <StatusSelect required {...form.getInputProps('status')} />
+              <StatusSelect required {...form.getInputProps('Status')} />
             </Box>
           </Flex>
 

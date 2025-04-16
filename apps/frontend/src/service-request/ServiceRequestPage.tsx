@@ -23,9 +23,9 @@ export function ServiceRequestPage() {
 
               {/* button for ___ Request */}
               <HoverButton
-                icon={<IconExclamationCircleFilled size={120} />}
+                icon={<IconExclamationCircleFilled   size={120} />}
                 label="Type 2"
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/maintenance-form')}
               />
               {/* button for ___ Request */}
               <HoverButton
