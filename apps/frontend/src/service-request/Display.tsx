@@ -5,7 +5,6 @@ import { Box, Flex, useMantineTheme, Text } from '@mantine/core';
 export function Display() {
     const theme = useMantineTheme();
     const location = useLocation();
-    const requestData: { title: string; value: string }[] = location.state.requestData;
 
     // Safely handle missing state
     if (!location.state?.requestData) {
@@ -15,6 +14,7 @@ export function Display() {
             </Flex>
         );
     }
+    const { requestData } = location.state;
 
     return (
         <Flex w="100%" h="100vh" align="center" direction="column" p="xl">

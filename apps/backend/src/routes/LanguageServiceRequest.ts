@@ -20,6 +20,7 @@ router.post('/', async (req: Request, res: Response) => {
             priority,
             status,
             employeeName,
+            hospital,
         } = req.body;
 
         // creating request to get data from frontend
@@ -33,6 +34,7 @@ router.post('/', async (req: Request, res: Response) => {
                 priority,
                 status,
                 employeeName,
+                hospital,
             },
         });
 

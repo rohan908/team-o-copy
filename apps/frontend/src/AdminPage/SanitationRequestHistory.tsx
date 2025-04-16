@@ -12,9 +12,9 @@ import {
 } from '@mantine/core';
 
 // Type-safe interface for request data
-interface LanguageRequest {
+interface SanitationRequest {
     RequestID: number;
-    language: string;
+    sanitation: string;
     createdAt: string;
     [key: string]: unknown;
 }
@@ -38,10 +38,10 @@ function timeAgo(dateString: string): string {
     return `${diffDay}d ago`;
 }
 
-export function LanguageRequestHistory() {
+export function SanitationRequestHistory() {
     const theme = useMantineTheme();
 
-    const [data, setData] = useState<LanguageRequest[]>([]);
+    const [data, setData] = useState<SanitationRequest[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
@@ -49,7 +49,7 @@ export function LanguageRequestHistory() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`/api/languageSR`);
+                const res = await fetch(`/api/sanitationSR`);
                 if (!res.ok) throw new Error(`HTTP error!: ${res.status}`);
                 const json = await res.json();
                 setData(json);
@@ -73,7 +73,7 @@ export function LanguageRequestHistory() {
     if (error) return <Text color="red">{error}</Text>;
     if (!data.length) return <Text>No request form data found.</Text>;
 
-    const summaryColumns = ['requestID', 'language', 'createdAt'];
+    const summaryColumns = ['requestID', 'cleanupType', 'createdAt'];
 
     return (
         <Box
@@ -90,7 +90,7 @@ export function LanguageRequestHistory() {
             }}
         >
             <Title order={1} mb="sm" c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
-                Language Service Requests
+                Sanitation Service Requests
             </Title>
             <Text c="black" ta="left" mb="sm" fw={500} fz={{ sm: 'xxs', md: 'xs' }}>
                 Click on a row to find out more information
@@ -153,7 +153,7 @@ export function LanguageRequestHistory() {
                                         >
                                             {col === 'createdAt'
                                                 ? timeAgo(row[col] as string)
-                                                : String(row[col] ?? 'N/A')}
+                                                : String(row[col] ?? '')}
                                         </td>
                                     ))}
                                 </tr>
@@ -205,4 +205,4 @@ export function LanguageRequestHistory() {
     );
 }
 
-export default LanguageRequestHistory;
+export default SanitationRequestHistory;
