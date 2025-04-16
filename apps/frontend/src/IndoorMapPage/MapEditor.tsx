@@ -74,8 +74,8 @@ export function MapEditor() {
     const createNode = (node: NodeDataType) => {
         const geometry = new THREE.SphereGeometry(
             nodeRadius,
-            Math.round(nodeRadius * 6), // Vibe based adaptive segmentation
-            Math.round(nodeRadius * 3)
+            Math.round(nodeRadius * 12), // Vibe based adaptive segmentation
+            Math.round(nodeRadius * 6)
         );
         const material = new THREE.MeshBasicMaterial(nodeColor);
         const sphere = new THREE.Mesh(geometry, material);
@@ -104,7 +104,9 @@ export function MapEditor() {
         const geometry = new THREE.TubeGeometry(path, 1, edgeRad, edgeRad * 4, false);
         const material = new THREE.MeshBasicMaterial(edgeColor);
         const mesh = new THREE.Mesh(geometry, material);
-        scene.current.add(mesh);
+        if (node1.floor === node2.floor) {
+            scene.current.add(mesh);
+        }
     };
 
     const handleFloorChange = (newFloor: number) => {
@@ -142,6 +144,7 @@ export function MapEditor() {
         }
     };
 
+    // This useEffect runs only once
     useEffect(() => {
         // populate all nodes and edges once (in use effect)
         const ids: number[] = [];
@@ -196,6 +199,10 @@ export function MapEditor() {
                 }
             });
         }
+    }, []);
+
+    // This useEffect runs every time the floor changes
+    useEffect(() => {
         // Get canvas element
         const canvas = document.getElementById(canvasId);
         if (!canvas) return;
