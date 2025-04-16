@@ -6,7 +6,7 @@ import {
     useContext,
     PropsWithChildren,
 } from 'react';
-import { fetchDirectoryData } from '../DatabaseFetching/GetDirectoryData.tsx';
+import { fetchDirectoryData, fetchAllNodeData } from '../DatabaseFetching/GetDirectoryData.tsx';
 import { DirectoryNodeItem } from './DirectoryItem';
 
 /*
@@ -53,6 +53,28 @@ export const DirectoryContext = createContext<DirectoryContextType | undefined>(
 
  */
 
+export const useDirectoryContext = () => {
+  const context = useContext(DirectoryContext);
+  if (!context) {
+    throw new Error(
+      'The useDirectoryContext must be used within the provider component DirectoryProvider'
+    );
+  }
+
+  return context;
+};
+
+export const useAllNodesContext = () => {
+  const context = useContext(DirectoryContext);
+  if (!context) {
+    throw new Error(
+      'The useDirectoryContext must be used within the provider component DirectoryProvider'
+    );
+  }
+
+  return context.allNodes;
+};
+
 export const usePatriotContext = () => {
     const context = useContext(DirectoryContext);
     if (!context) {
@@ -62,17 +84,6 @@ export const usePatriotContext = () => {
     }
 
     return context.patriot;
-};
-
-export const useDirectoryContext = () => {
-    const context = useContext(DirectoryContext);
-    if (!context) {
-        throw new Error(
-            'The useDirectoryContext must be used within the provider component DirectoryProvider'
-        );
-    }
-
-    return context;
 };
 
 export const useChestnutHillContext = () => {
@@ -92,6 +103,7 @@ export const useChestnutHillContext = () => {
 interface DirectoryState {
     patriot: DirectoryNodeItem[];
     chestnutHill: DirectoryNodeItem[];
+    allNodes: DirectoryNodeItem[];
     isLoading: boolean;
     error: string | null;
 }
@@ -104,6 +116,7 @@ interface DirectoryState {
 type DirectoryAction =
     | { type: 'SET_PATRIOT'; data: DirectoryNodeItem[] }
     | { type: 'SET_CHESTNUTHILL'; data: DirectoryNodeItem[] }
+    | { type: 'SET_ALLNODES'; data: DirectoryNodeItem[] }
     | { type: 'SET_LOADING'; data: boolean }
     | { type: 'SET_ERROR'; data: string };
 
@@ -124,6 +137,8 @@ function directoryReducer(state: DirectoryState, action: DirectoryAction): Direc
             return { ...state, patriot: action.data };
         case 'SET_CHESTNUTHILL':
             return { ...state, chestnutHill: action.data };
+        case 'SET_ALLNODES':
+            return { ...state, allNodes: action.data };
         case 'SET_LOADING':
             return { ...state, isLoading: action.data };
         case 'SET_ERROR':
@@ -146,6 +161,7 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
     const [state, dispatch] = useReducer(directoryReducer, {
         patriot: [],
         chestnutHill: [],
+        allNodes: [],
         isLoading: false,
         error: null,
     });
@@ -160,13 +176,18 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
             // grabs data from the database for each building
             const patData = await fetchDirectoryData('1');
             const chestHilldata = await fetchDirectoryData('2');
+            const allNodeData = await fetchAllNodeData();
 
-            const setPatData = await patData.json().then((data) => {
+            const setPatData = await patData?.json().then((data) => {
               dispatch({ type: 'SET_PATRIOT', data: data });
             })
 
-            const setChestnutData = await chestHilldata.json().then((data) => {
+            const setChestnutData = await chestHilldata?.json().then((data) => {
               dispatch({ type: 'SET_CHESTNUTHILL', data: data });
+            })
+
+            const setAllNodeData = await allNodeData?.json().then((data) => {
+              dispatch({ type: 'SET_ALLNODES', data: data });
             })
 
         } catch (err) {

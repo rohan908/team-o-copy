@@ -8,6 +8,7 @@ import { findPath } from './FindPathRouting.ts';
 import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
+import {useAllNodesContext} from "../contexts/DirectoryContext.tsx";
 
 export function MapEditor() {
     const [nodeSelected, setNodeSelected] = useState(false);
@@ -19,6 +20,8 @@ export function MapEditor() {
     const canvasId = 'insideMapCanvas';
     const objects: THREE.Object3D[] = [];
     objects.push(new THREE.Object3D());
+
+    const allNodes = useAllNodesContext();
 
     // Parameters for THREEjs objects and path display
     const nodeColor = { color: 0xeafeff };

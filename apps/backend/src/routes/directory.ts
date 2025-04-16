@@ -60,6 +60,13 @@ router.get('/export', async (req: Request, res: Response) => {
     res.send(directoryData);
 });
 
+// Exports all nodes in the database
+router.get('/allNodes', async (req: Request, res: Response) => {
+  const nodeData = await PrismaClient.node.findMany({});
+
+  res.send(nodeData);
+});
+
 /*
     Retrieves all departments in a specified building ->
       1 = Patriot
