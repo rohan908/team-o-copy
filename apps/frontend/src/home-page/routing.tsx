@@ -52,7 +52,6 @@ export function Routing() {
                         <Route path="/language-form" element={<Language />} />
                         <Route path="/sanitation-form" element={<Sanitation />} />
                         <Route path="/security-form" element={<Security />} />
-                        <Route path="/IndoorMapPage" element={<DraggableMap />} />
                       <Route path="/sanitation-form" element={<Sanitation />} />
 
                       <Route
