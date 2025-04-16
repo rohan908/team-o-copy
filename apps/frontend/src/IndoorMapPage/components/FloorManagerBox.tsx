@@ -63,6 +63,47 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
                 />
             </Box>
         );
+    } else if (building === 'admin') {
+        <Box
+            pos="fixed"
+            top={450}
+            left={1250}
+            style={{
+                zIndex: 999,
+                display: 'flex',
+                justifyContent: 'left',
+                transition: 'all 0.4s ease-in-out',
+            }}
+        >
+            <SegmentedControl
+                orientation="vertical"
+                fullWidth
+                size="md"
+                color="dark"
+                value={floor.toString()}
+                onChange={(value) => setFloor(parseInt(value))}
+                data={[
+                    { label: 'SH1', value: '5' },
+                    { label: 'PP4', value: '4' },
+                    { label: 'PP3', value: '3' },
+                    { label: 'PP1', value: '1' },
+                ]}
+                styles={{
+                    root: {
+                        borderRadius: 8,
+                        backgroundColor: '#164EC5',
+                    },
+                    label: {
+                        fontWeight: 600,
+                        color: 'white',
+                    },
+                    indicator: {
+                        backgroundColor: '#FCB024',
+                        borderRadius: 5,
+                    },
+                }}
+            />
+        </Box>;
     }
 };
 

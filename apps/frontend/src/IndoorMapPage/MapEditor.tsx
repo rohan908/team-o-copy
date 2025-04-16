@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Box, useMantineTheme } from '@mantine/core';
+import { Box } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
@@ -8,64 +8,23 @@ import { findPath } from './FindPathRouting.ts';
 import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
-import { FlowingTubeAnimation } from './Edge.tsx';
-import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 
-interface DraggableMapProps {
-    selectedHospitalName?: string | null;
-    selectedDepartment?: string | null;
-}
-
-export function MapEditor({ selectedHospitalName, selectedDepartment }: DraggableMapProps) {
-    const theme = useMantineTheme();
+export function MapEditor() {
     const [nodeSelected, setNodeSelected] = useState(false);
     const [nodeX, setNodeX] = useState(0);
     const [nodeY, setNodeY] = useState(0);
     const [floor, setFloor] = useState(1);
     const [isFading, setIsFading] = useState(false);
-    console.log(selectedDepartment);
-    console.log(selectedHospitalName);
     const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
     const canvasId = 'insideMapCanvas';
     const objects: THREE.Object3D[] = [];
     objects.push(new THREE.Object3D());
-    // Animation related refs
-    const animationRef = useRef<FlowingTubeAnimation | null>(null);
-    const clockRef = useRef<THREE.Clock>(new THREE.Clock());
-
-    // Declares context for node information
-    const patriotNodes = usePatriotContext();
-    const chestnutNodes = useChestnutHillContext();
-
-    // gets Id for destination node
-    const getLastNodeId = () => {
-        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
-            const index = patriotNodes.findIndex((element) => {
-                return element.name == selectedDepartment;
-            });
-            return patriotNodes[index].id;
-        } else if (selectedHospitalName == 'Chestnut Hill') {
-            const index = chestnutNodes.findIndex((element) => {
-                return element.name == selectedDepartment;
-            });
-            return chestnutNodes[index].id;
-        }
-    };
-
-    // gets id of parking lot node -> hardcoded for now
-    const findParkingLot = (): number => {
-        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
-            return 1;
-        } else if (selectedHospitalName == 'Chestnut Hill') {
-            return 100;
-        }
-    };
 
     // Parameters for THREEjs objects and path display
-    const firstNodeId = findParkingLot(); // start node
-    const lastNodeId = getLastNodeId(); // destination node
     const nodeColor = { color: 0xeafeff };
-    const nodeRadius = 0.5;
+    const edgeColor = { color: 0x2a68f7 };
+    const nodeRadius = 1;
+    const edgeRad = 0.75;
     /*
   Patriot Place Floor 1 -> floor1 -> scene 1
   Patriot Place Floor 3 -> floor2 -> scene 2
@@ -137,44 +96,15 @@ export function MapEditor({ selectedHospitalName, selectedDepartment }: Draggabl
         objects.push(sphere);
     };
 
+    // TODO: re-create edges without animation
     const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
-        if (!animationRef.current) {
-            console.error('Animation reference not initialized');
-            return;
-        }
-
-        // Only create edges on the same floor
-        if (node1.floor === node2.floor && node1.floor === 1) {
-            scene1.add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
-        } else if (node1.floor === node2.floor && node1.floor === 2) {
-            scene2.add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
-        } else if (node1.floor === node2.floor && node1.floor === 3) {
-            scene3.add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
-        } else if (node1.floor === node2.floor && node1.floor === 4) {
-            scene4.add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
-        } else {
-            console.log('Skipping edge between floors', node1.floor, node2.floor);
-        }
+        const startPoint = new THREE.Vector3(node1.x, node1.y, 0);
+        const endPoint = new THREE.Vector3(node2.x, node2.y, 0);
+        const path = new THREE.LineCurve3(startPoint, endPoint);
+        const geometry = new THREE.TubeGeometry(path, 1, edgeRad, edgeRad * 4, false);
+        const material = new THREE.MeshBasicMaterial(edgeColor);
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.current.add(mesh);
     };
 
     const handleFloorChange = (newFloor: number) => {
@@ -201,48 +131,49 @@ export function MapEditor({ selectedHospitalName, selectedDepartment }: Draggabl
         }, 200); // Fade-out duration
     };
 
-    // Generate THREEjs objects to display a path
-    /* getNode return type:
-  {
-  "result": {
-      "nodeData": {
-          "id": 1,
-          "x": 2,
-          "y": 4,
-          "floor": 1,
-          "mapId": 1,
-          "name": "hallway",
-          "description": "hallway",
-          "nodeType": "hallway",
-          "edges": []
-      },
-      "connections": [
-          {
-              "connectedId": 2,
-              "weight": 23.3452350598575
-          }
-      ],
-      "success": true
-      }
-  }
-   */
-    /* findPath return type:
-      {
-  "result": {
-      "success": true,
-      "pathIDs": [
-          1,
-          2,
-          4
-      ],
-      "distance": 43.741313114228646
-     }
-     }
-    */
-    // Get the path
-    const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
-        const ids = pathres.result.pathIDs;
-        // For each node id in the path
+    // updates the selected node position from UI
+    const updateNodePosition = (x: number, y: number, floor: number) => {
+        setNodeX(x);
+        setNodeY(y);
+        if (selectedObject.current) {
+            selectedObject.current.position.x = x;
+            selectedObject.current.position.y = y;
+            console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
+        }
+    };
+
+    useEffect(() => {
+        // populate all nodes and edges once (in use effect)
+        const ids: number[] = [];
+        ids.push(1);
+        ids.push(2);
+        ids.push(3);
+        ids.push(4);
+        ids.push(5);
+        ids.push(6);
+        ids.push(7);
+        ids.push(8);
+        ids.push(9);
+        ids.push(10);
+        ids.push(11);
+        ids.push(12);
+        ids.push(13);
+        ids.push(14);
+        ids.push(15);
+        ids.push(16);
+        ids.push(17);
+        ids.push(18);
+        ids.push(19);
+        ids.push(20);
+        ids.push(21);
+        ids.push(22);
+        ids.push(23);
+        ids.push(24);
+        ids.push(25);
+        ids.push(26);
+        ids.push(27);
+        ids.push(28);
+        ids.push(29);
         for (const id of ids) {
             // Get the full node from the ID
             const node = getNode(id).then(async (noderes) => {
@@ -265,25 +196,9 @@ export function MapEditor({ selectedHospitalName, selectedDepartment }: Draggabl
                 }
             });
         }
-    });
-
-    useEffect(() => {
-        // This has to be in a useEffect to prevent infinite looping
-        // TODO: Maybe intialize this earlier in its own useEffect to prevent rough scene change
-        if (selectedHospitalName === 'Chestnut Hill') {
-            handleFloorChange(5);
-        }
         // Get canvas element
         const canvas = document.getElementById(canvasId);
         if (!canvas) return;
-
-        animationRef.current = new FlowingTubeAnimation(scene, {
-            color1: 0x00aaff,
-            color2: 0xff3300,
-            flowSpeed: 0.3,
-            pulseFrequency: 2.0,
-            pulseWidth: 0.25,
-        });
 
         // we create a new renderer
         const renderer = new THREE.WebGLRenderer({
@@ -301,9 +216,6 @@ export function MapEditor({ selectedHospitalName, selectedDepartment }: Draggabl
             1000
         );
         camera.position.set(0, 0, 300);
-
-        // Initialize clock for animation timing
-        clockRef.current = new THREE.Clock();
 
         scene.current.background = new THREE.Color('#2FBCC7');
 
@@ -436,23 +348,16 @@ export function MapEditor({ selectedHospitalName, selectedDepartment }: Draggabl
         renderer.domElement.addEventListener('mouseleave', handleMouseLeave);
 
         const animate = () => {
+            requestAnimationFrame(animate);
+
             if (selectedObject.current) {
                 // Update state with selected object position
                 setNodeX(selectedObject.current.position.x);
                 setNodeY(selectedObject.current.position.y);
             }
 
-            // Get delta time for animation
-            const deltaTime = clockRef.current.getDelta();
-
-            // Update flowing animation
-            if (animationRef.current) {
-                animationRef.current.update(deltaTime);
-            }
-
             // Render the current scene
             renderer.render(scene.current, camera);
-            window.requestAnimationFrame(animate);
 
             return () => {
                 renderer.dispose();
@@ -474,11 +379,7 @@ export function MapEditor({ selectedHospitalName, selectedDepartment }: Draggabl
 
     return (
         <Box w="100vw" h="100vh" p={0}>
-            <FloorSwitchBox
-                floor={floor}
-                setFloor={handleFloorChange}
-                building={selectedHospitalName || ''}
-            />
+            <FloorSwitchBox floor={floor} setFloor={handleFloorChange} building={'admin'} />
             <MapEditorBox
                 // Pass selected node data to the ui
                 nodeSelected={nodeSelected}
