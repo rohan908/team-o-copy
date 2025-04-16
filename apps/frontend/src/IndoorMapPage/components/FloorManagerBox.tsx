@@ -21,15 +21,13 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
         onCollapseChange?.(collapsed);
     }, [collapsed]);
     // TODO: In the future these should re-suse a react component.
-    if (building === '22 Patriot Pl' || building == '20 Patriot Pl') {
+    if (building === '22 Patriot Pl' || building === '20 Patriot Pl' || true) {
         return (
             <Box
-                pos="fixed"
-                top={450}
-                left={1250}
+                bg="themeGold.5"
                 style={{
                     zIndex: 999,
-                    display: 'flex',
+                    position: 'sticky',
                     justifyContent: 'left',
                     transition: 'all 0.4s ease-in-out',
                 }}
@@ -63,6 +61,48 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
                 />
             </Box>
         );
+    } else {
+      return (
+        <Box
+          bg="themeGold.5"
+          style={{
+            zIndex: 999,
+            position: 'fixed',
+            left:"20%",
+            bottom:"10%",
+            transition: 'all 0.4s ease-in-out',
+          }}
+        >
+          <SegmentedControl
+            orientation="vertical"
+            fullWidth
+            size="md"
+            color="dark"
+            value={floor.toString()}
+            onChange={(value) => setFloor(parseInt(value))}
+            data={[
+              { label: 'CH', value: '5'},
+              { label: '4', value: '4' },
+              { label: '3', value: '3' },
+              { label: '1', value: '1' },
+            ]}
+            styles={{
+              root: {
+                borderRadius: 8,
+                backgroundColor: '#164EC5',
+              },
+              label: {
+                fontWeight: 600,
+                color: 'white',
+              },
+              indicator: {
+                backgroundColor: '#FCB024',
+                borderRadius: 5,
+              },
+            }}
+          />
+        </Box>
+      );
     }
 };
 

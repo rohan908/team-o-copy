@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Box, useMantineTheme } from '@mantine/core';
+import {Box, Flex, Transition, useMantineTheme} from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
@@ -86,28 +86,31 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
     const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
     mapPlane.position.set(0, 0, 0);
     scene1.add(mapPlane);
+
     const scene2 = new THREE.Scene();
     const texturePath1 = '../../public/MapImages/Patriot Place Floor 3.png';
     const mapTexture1 = new THREE.TextureLoader().load(texturePath1);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
+    mapTexture1.colorSpace = THREE.SRGBColorSpace;
     const mapGeo1 = new THREE.PlaneGeometry(500, 281);
     const mapMaterial1 = new THREE.MeshBasicMaterial({ map: mapTexture1 });
     const mapPlane1 = new THREE.Mesh(mapGeo1, mapMaterial1);
     mapPlane1.position.set(0, 0, 0);
     scene2.add(mapPlane1);
+
     const scene3 = new THREE.Scene();
     const texturePath2 = '../../public/MapImages/Patriot Place Floor 4.png';
     const mapTexture2 = new THREE.TextureLoader().load(texturePath2);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
+    mapTexture2.colorSpace = THREE.SRGBColorSpace;
     const mapGeo2 = new THREE.PlaneGeometry(500, 281);
     const mapMaterial2 = new THREE.MeshBasicMaterial({ map: mapTexture2 });
     const mapPlane2 = new THREE.Mesh(mapGeo2, mapMaterial2);
     mapPlane2.position.set(0, 0, 0);
     scene3.add(mapPlane2);
+
     const scene4 = new THREE.Scene();
     const texturePath3 = '../../public/MapImages/Chestnut Hill Floor 1.png';
     const mapTexture3 = new THREE.TextureLoader().load(texturePath3);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
+    mapTexture3.colorSpace = THREE.SRGBColorSpace;
     const mapGeo3 = new THREE.PlaneGeometry(500, 281);
     const mapMaterial3 = new THREE.MeshBasicMaterial({ map: mapTexture3 });
     const mapPlane3 = new THREE.Mesh(mapGeo3, mapMaterial3);
@@ -214,7 +217,7 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
             }
             setTimeout(() => {
                 setIsFading(false);
-            }, 200); // Fade-in duration
+            }, 400); // Fade-in duration
         }, 200); // Fade-out duration
     };
 
@@ -322,7 +325,7 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
         // Initialize clock for animation timing
         clockRef.current = new THREE.Clock();
 
-        scene.current.background = new THREE.Color('#2FBCC7');
+        scene.current.background = new THREE.Color('#2fbcc7');
 
         // Camera controls
         const orbitControls = new OrbitControls(camera, renderer.domElement);
@@ -490,40 +493,40 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
     }, [floor]);
 
     return (
-        <Box w="100vw" h="100vh" p={0}>
-            <FloorSwitchBox
-                floor={floor}
-                setFloor={handleFloorChange}
-                building={selectedHospitalName || ''}
-            />
-            <MapEditorBox
-                // Pass selected node data to the ui
-                nodeSelected={nodeSelected}
-                nodeX={nodeX}
-                nodeY={nodeY}
-                floor={floor}
-                // handle updating the node position from ui
-                updateNodePosition={updateNodePosition}
-            />
-            <canvas
-                id="insideMapCanvas"
-                style={{ width: '100%', height: '100%', position: 'absolute' }}
-            />
-
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: '#000',
-                    opacity: isFading ? 1 : 0,
-                    transition: 'opacity 0.3s ease-in-out',
-                    pointerEvents: 'none',
-                    zIndex: 5,
-                }}
-            />
-        </Box>
+      <Box w="100vw" h="100vh">
+          <FloorSwitchBox
+            floor={floor}
+            setFloor={handleFloorChange}
+            onCollapseChange={() => true}
+            building={selectedHospitalName || ''}
+          />
+          <MapEditorBox
+            // Pass selected node data to the ui
+            nodeSelected={nodeSelected}
+            nodeX={nodeX}
+            nodeY={nodeY}
+            floor={floor}
+            // handle updating the node position from ui
+            updateNodePosition={updateNodePosition}
+          />
+        <canvas
+          id="insideMapCanvas"
+          style={{width: '100%', height: '100%', position: 'absolute'}}
+        />
+        <div
+            style={{
+                position: 'relative',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: '#2fbcc7',
+                opacity: isFading ? 1 : 0,
+                transition: 'opacity 0.3s ease-in-out',
+                pointerEvents: 'none',
+                zIndex: 10,
+            }}
+        />
+      </Box>
     );
 }
