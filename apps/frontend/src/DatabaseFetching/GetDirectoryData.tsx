@@ -1,22 +1,20 @@
-import { DirectoryItem } from '../../contexts/DirectoryItem';
+// MOVE THIS INTO SEPARATE FOLDER ON FRONTEND, LIKE DATABASE FETCHING OR
+// SOMETHING.
 
 export async function fetchDirectoryData(mapID: string) {
     try {
         console.log('fetching');
 
-        // gets directory data through http query from directory.ts
+        // gets directory data through http query from Directory.ts
         const res = await fetch(`/api/directory/${mapID}`);
 
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
 
-        const directoryData = res.json().then((res) => {
-            console.log(res);
+        // returns data as promise !!
+        return res;
 
-            // returns data as javascript object !!
-            return res;
-        });
     } catch (error) {
         console.error('Error fetching directory table', error);
         return null;

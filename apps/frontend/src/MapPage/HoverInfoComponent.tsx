@@ -3,6 +3,7 @@ import {useState} from 'react';
 import './MapPageStyles.css';
 import {Simulate} from "react-dom/test-utils";
 import mouseOver = Simulate.mouseOver;
+import { Box } from '@mantine/core';
 
 const HoverInfoComponent = () => {
     const [hoverInfo, setHoverInfo] = useState("");
@@ -163,8 +164,9 @@ const HoverInfoComponent = () => {
             if (!canvas) return;
             const context = canvas.getContext('2d');
             if (!context) return;
-            
             context.clearRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = "#aaf7fc";
+            context.fill();
             context.drawImage(image, 0, 0, canvas.width, canvas.height);
         });
     }
@@ -324,15 +326,15 @@ const HoverInfoComponent = () => {
     }, []);
 
     return (
-        <div>
-            <div className="bg-gray-100 rounded-lg shadow-md p-6 hoverInfoBar">
-                <div className="text-2xl font-bold mb-4 text-center py-2 rounded">
+        <Box bg="terquAccet.2">
+            <Box className="bg-gray-100 rounded-lg shadow-md p-6 hoverInfoBar" bg="themeGold.1">
+                <Box className="text-2xl font-bold mb-4 text-center rounded" bg="themeGold.1">
                     {!isHovering || isOverTransparent ? `Hover over a map region to learn more` : `Area Information: ${hoverInfo}`}
-                </div>
-            </div>
+                </Box>
+            </Box>
             <div className="mapContainer" ref={mapContainerRef}>
                 <img
-                    src="public/MapImages/Whole_Floor_Plan.png"
+                    src="public/MapImages/Whole_Floor_PlanTurqoiseBackground.png"
                     alt="MainMapImage"
                     className="mainMapImage"
                 />
@@ -355,7 +357,7 @@ const HoverInfoComponent = () => {
                         onMouseLeave={() => handleMouseExit()}
                         onMouseMove={(event) => handleMouseOver(event)}/>
             </div>
-        </div>
+        </Box>
     );
 }
 

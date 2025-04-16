@@ -5,6 +5,8 @@ import logger from 'morgan';
 import healthcheckRouter from './routes/HealthCheck.ts';
 import directoryRouter from './routes/directory.ts';
 import languageServiceRequestRouter from './routes/LanguageServiceRequest.ts';
+import sanitationServiceRequestRouter from './routes/SanitationServiceRequest.ts';
+
 import exportRoute from './routes/ExportRoute.ts';
 import graphRouter from './routes/Graph.ts';
 
@@ -41,6 +43,7 @@ app.use(cookieParser()); // Cookie parser
 app.use(API_ROUTES.HEALTHCHECK, healthcheckRouter);
 app.use(API_ROUTES.DIRECTORY, directoryRouter);
 app.use(API_ROUTES.LANGUAGESR, languageServiceRequestRouter);
+app.use(API_ROUTES.SANITATIONSR, sanitationServiceRequestRouter);
 app.use(API_ROUTES.GRAPH, graphRouter);
 
 // adding route for file exporting
