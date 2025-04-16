@@ -4,37 +4,37 @@ import { convertTo24Hour } from './helperFunctions.ts';
 
 const router: Router = express.Router();
 
-// uploads the sanitation request service form to the database table
+// uploads the language request service form to the database table
 router.post('/', async (req: Request, res: Response) => {
-    console.log('Incoming POST to /api/sanitationSR');
+    console.log('Incoming POST to /api/maintenance');
     console.log('Request body:', req.body);
 
     try {
         // For inputting a request form, adds entry
         const {
-            cleanupType,
-            selectedDate,
-            selectedTime,
+            maintenanceType,
+            date,
+            time,
+            employeeName,
+            status,
             department,
             description,
             priority,
-            status,
-            employeeName,
             hospital,
         } = req.body;
 
         // creating request to get data from frontend
-        const request = await PrismaClient.sanitationServiceRequest.create({
+        const request = await PrismaClient.maintenanceServiceRequest.create({
             data: {
-                cleanupType: cleanupType,
-                date: selectedDate,
-                time: convertTo24Hour(selectedTime),
+                employeeName,
                 department,
                 description,
                 priority,
                 status,
-                employeeName,
+                date,
+                maintenanceType,
                 hospital,
+                time: convertTo24Hour(time),
             },
         });
 
@@ -47,11 +47,10 @@ router.post('/', async (req: Request, res: Response) => {
     }
 });
 
-// Retrieves all sanitation service request forms
+// Retrieves all  service request forms
 // this will be for posting on the website
 router.get('/', async (req: Request, res: Response) => {
-    const allServiceRequests = await PrismaClient.sanitationServiceRequest.findMany({});
-
+    const allServiceRequests = await PrismaClient.maintenanceServiceRequest.findMany({});
     res.json(allServiceRequests);
 });
 
