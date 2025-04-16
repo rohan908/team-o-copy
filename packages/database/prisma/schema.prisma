@@ -35,6 +35,7 @@ model langaugeServiceRequest {
   priority     String
   status       String
   language     String
+  hospital     String
   description  String?
 }
 
@@ -49,7 +50,23 @@ model sanitationServiceRequest {
   priority     String
   status       String
   cleanupType  String
+  hospital     String
   description  String?
+}
+
+// creates the maintenanceServiceRequest table (strong entity)
+model maintenanceServiceRequest {
+  requestID       Int      @id @default(autoincrement())
+  employeeName    String
+  department      String
+  createdAt       DateTime @default(now())
+  date            String
+  time            String
+  priority        String
+  status          String
+  maintenanceType String
+  hospital        String
+  description     String?
 }
 
 // creates the directory table (strong entity)
@@ -70,16 +87,16 @@ model FloorMap {
 }
 
 model Node {
-  id          Int      @id @default(autoincrement())
-  x           Int
-  y           Int
-  floor       Int
-  map         FloorMap @relation(fields: [mapId], references: [id])
-  mapId       Int
-  name        String
-  description String
-  nodeType    String
-  connectingNodes       Int[] // ids of all edges containing this node
+  id              Int      @id @default(autoincrement())
+  x               Int
+  y               Int
+  floor           Int
+  map             FloorMap @relation(fields: [mapId], references: [id])
+  mapId           Int
+  name            String
+  description     String
+  nodeType        String
+  connectingNodes Int[] // ids of all edges containing this node
 }
 
 model Edge {
@@ -88,17 +105,4 @@ model Edge {
   map    FloorMap @relation(fields: [mapId], references: [id])
   mapId  Int
   nodes  Int[] // ids of both nodes in this edge
-}
-
-model MaintenanceServiceRequest {
-  requestID    Int      @id @default(autoincrement())
-  employeeName String
-  department   String
-  createdAt    DateTime @default(now())
-  date         String
-  time         String
-  priority     String
-  status       String
-  maintenaneType     String
-  description  String?
 }

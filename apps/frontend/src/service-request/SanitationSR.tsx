@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Text, Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
-import RoomNumberInput from './components/RoomEntry';
 import RequestDescription from './components/RequestDescription';
 import SanitationSelect from './components/SanitationSelect.tsx';
 import HospitalSelect from './components/HospitalEntry.tsx';
@@ -100,14 +99,14 @@ function Sanitation() {
                 navigate('/submission', {
                     state: {
                         requestData: [
+                            { title: 'Name', value: RequestData.employeeName },
                             { title: 'Cleanup Type', value: RequestData.cleanupType },
+                            { title: 'Hospital', value: RequestData.hospital },
+                            { title: 'Department', value: RequestData.department },
                             { title: 'Date', value: RequestData.date },
                             { title: 'Time', value: RequestData.time },
-                            { title: 'Department', value: RequestData.department },
                             { title: 'Priority', value: RequestData.priority },
-                            { title: 'Employee Name', value: RequestData.employeeName },
                             { title: 'Status', value: RequestData.status },
-                            { title: 'Hospital', value: RequestData.hospital },
                             { title: 'Details', value: RequestData.description },
                         ],
                     },
@@ -127,12 +126,12 @@ function Sanitation() {
                             Sanitation Request Form
                         </Title>
                         <Text mb="md" fz="xxxs">
-                            Logan W. and Joe A.
+                            Logan Winters and Joe Abata
                         </Text>
                     </Flex>
+
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
-                            {' '}
                             {/*< column 1!!!*/}
                             <NameEntry required {...form.getInputProps('employeeName')} />
                             <HospitalSelect
@@ -151,7 +150,6 @@ function Sanitation() {
                         </Box>
 
                         <Box flex="1" miw="300px">
-                            {' '}
                             {/* column 2!!!*/}
                             <DateInputForm required {...form.getInputProps('date')} />
                             <TimeEntry required {...form.getInputProps('time')} />

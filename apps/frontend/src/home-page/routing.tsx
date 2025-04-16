@@ -10,7 +10,7 @@ import { MapAPIPage } from '../MapsAPIPage/MapAPIPage.tsx';
 import Language from '../service-request/LanguageInterpreterSR.tsx';
 import { BSFMapPage } from '../BFSMapPages-OLD/components/BSFMapPage.tsx';
 import { ServiceRequestPage } from '../service-request/ServiceRequestPage.tsx';
-import Maintenance from '../service-request/MaintenanceForm.tsx'
+import Maintenance from '../service-request/MaintenanceSR.tsx';
 import { useState } from 'react';
 
 import { AppShell, Burger } from '@mantine/core';
@@ -50,8 +50,8 @@ export function Routing() {
                         <Route path="/IndoorMapPage" element={<DraggableMap />} />
                         <Route path="/service-request-page" element={<ServiceRequestPage />} />
                         <Route path="/language-form" element={<Language />} />
-                      <Route path="/sanitation-form" element={<Sanitation />} />
-                        <Route path="/maintenance-form" element={<Maintenance/>} />
+                        <Route path="/sanitation-form" element={<Sanitation />} />
+                        <Route path="/maintenance-form" element={<Maintenance />} />
                         <Route
                             path="/IndoorMapPage"
                             element={
