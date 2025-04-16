@@ -77,7 +77,7 @@ export function SecurityRequestHistory() {
     if (error) return <Text color="red">{error}</Text>;
     if (!data.length) return <Text>No request form data found.</Text>;
 
-    const summaryColumns = ['requestID', 'service', 'createdAt'];
+    const summaryColumns = ['requestID', 'security', 'createdAt'];
 
     return (
         <Box
