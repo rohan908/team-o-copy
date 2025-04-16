@@ -49,7 +49,7 @@ export const DirectoryContext = createContext<DirectoryContextType | undefined>(
 
     To use them to access database data, follow this example:
 
-    const { patriot20, patriot22 } = usePatriotContext();
+    const patriot = usePatriotContext();
 
  */
 
