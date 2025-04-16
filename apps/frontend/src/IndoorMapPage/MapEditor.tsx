@@ -107,8 +107,14 @@ export function MapEditor() {
         const geometry = new THREE.TubeGeometry(path, 1, edgeRad, edgeRad * 4, false);
         const material = new THREE.MeshBasicMaterial(edgeColor);
         const mesh = new THREE.Mesh(geometry, material);
-        if (node1.floor === node2.floor) {
-            scene.current.add(mesh);
+        if (node1.floor === node2.floor && node1.floor === 1) {
+            scene1.add(mesh);
+        } else if (node1.floor === node2.floor && node1.floor === 2) {
+            scene2.add(mesh);
+        } else if (node1.floor === node2.floor && node1.floor === 3) {
+            scene3.add(mesh);
+        } else if (node1.floor === node2.floor && node1.floor === 4) {
+            scene4.add(mesh);
         }
     };
 
@@ -147,62 +153,56 @@ export function MapEditor() {
         }
     };
 
-    // This useEffect runs only once
-    useEffect(() => {
-        // populate all nodes and edges once (in use effect)
-        const ids: number[] = [];
-        ids.push(1);
-        ids.push(2);
-        ids.push(3);
-        ids.push(4);
-        ids.push(5);
-        ids.push(6);
-        ids.push(7);
-        ids.push(8);
-        ids.push(9);
-        ids.push(10);
-        ids.push(11);
-        ids.push(12);
-        ids.push(13);
-        ids.push(14);
-        ids.push(15);
-        ids.push(16);
-        ids.push(17);
-        ids.push(18);
-        ids.push(19);
-        ids.push(20);
-        ids.push(21);
-        ids.push(22);
-        ids.push(23);
-        ids.push(24);
-        ids.push(25);
-        ids.push(26);
-        ids.push(27);
-        ids.push(28);
-        ids.push(29);
-        for (const id of ids) {
-            // Get the full node from the ID
-            const node = getNode(id).then(async (noderes) => {
-                createNode(noderes.result.nodeData); //Create the node from its data
-                const connectedNodeDatas = noderes.result.connections; // list of the connected nodes "connections" data including the IDs and Weights
-                for (const connectedNodeData of connectedNodeDatas) {
-                    // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
-                    const connectedNode = getNode(connectedNodeData.connectedId).then(
-                        async (connectednoderes) => {
-                            if (ids.includes(connectednoderes.result.nodeData.id)) {
-                                // If the connected node is in the path
-                                // TODO: Add another check that makes it so duplicate edge objects aren't created
-                                createEdge(
-                                    noderes.result.nodeData,
-                                    connectednoderes.result.nodeData
-                                );
-                            }
+    // populate all nodes and edges once (in use effect)
+    const ids: number[] = [];
+    ids.push(1);
+    ids.push(2);
+    ids.push(3);
+    ids.push(4);
+    ids.push(5);
+    ids.push(6);
+    ids.push(7);
+    ids.push(8);
+    ids.push(9);
+    ids.push(10);
+    ids.push(11);
+    ids.push(12);
+    ids.push(13);
+    ids.push(14);
+    ids.push(15);
+    ids.push(16);
+    ids.push(17);
+    ids.push(18);
+    ids.push(19);
+    ids.push(20);
+    ids.push(21);
+    ids.push(22);
+    ids.push(23);
+    ids.push(24);
+    ids.push(25);
+    ids.push(26);
+    ids.push(27);
+    ids.push(28);
+    ids.push(29);
+    for (const id of ids) {
+        // Get the full node from the ID
+        const node = getNode(id).then(async (noderes) => {
+            createNode(noderes.result.nodeData); //Create the node from its data
+            const connectedNodeDatas = noderes.result.connections; // list of the connected nodes "connections" data including the IDs and Weights
+            for (const connectedNodeData of connectedNodeDatas) {
+                // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
+                const connectedNode = getNode(connectedNodeData.connectedId).then(
+                    async (connectednoderes) => {
+                        if (ids.includes(connectednoderes.result.nodeData.id)) {
+                            // If the connected node is in the path
+                            // TODO: Add another check that makes it so duplicate edge objects aren't created
+                            createEdge(noderes.result.nodeData, connectednoderes.result.nodeData);
                         }
-                    );
-                }
-            });
-        }
-    }, []);
+                    }
+                );
+            }
+        });
+    }
 
     // This useEffect runs every time the floor changes
     useEffect(() => {
@@ -226,8 +226,6 @@ export function MapEditor() {
             1000
         );
         camera.position.set(0, 0, 300);
-
-        scene.current.background = new THREE.Color('#2FBCC7');
 
         // Camera controls
         const orbitControls = new OrbitControls(camera, renderer.domElement);
@@ -369,20 +367,7 @@ export function MapEditor() {
             // Render the current scene
             renderer.render(scene.current, camera);
 
-            return () => {
-                renderer.dispose();
-                mapMaterial.dispose();
-                mapTexture.dispose();
-                scene.current.traverse((obj) => {
-                    if ((obj as THREE.Mesh).material) {
-                        ((obj as THREE.Mesh).material as THREE.Material).dispose();
-                    }
-                    if ((obj as THREE.Mesh).geometry) {
-                        ((obj as THREE.Mesh).geometry as THREE.BufferGeometry).dispose();
-                    }
-                });
-                scene.current.clear();
-            };
+            return () => {};
         };
         animate();
     }, [floor]);
