@@ -8,6 +8,7 @@ export interface NodeDataType {
     name?: string;
     id: number;
     description?: string;
+    connectingNodes: number[];
 }
 
 export interface ConnectingNode<T extends { id: number }> {
