@@ -77,7 +77,7 @@ export function SanitationRequestHistory() {
     if (error) return <Text color="red">{error}</Text>;
     if (!data.length) return <Text>No request form data found.</Text>;
 
-    const summaryColumns = ['requestID', 'sanitation', 'createdAt'];
+    const summaryColumns = ['requestID', 'cleanupType', 'createdAt'];
 
     return (
         <Box
