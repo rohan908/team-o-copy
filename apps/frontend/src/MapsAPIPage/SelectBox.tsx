@@ -66,17 +66,13 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         if (hospital && onSetSelectedHospitalName) {
             onSetSelectedHospitalName(hospital);
         }
-        if (hospital == 'Chestnut Hill') {
-            onSelectHospital(new L.LatLng(42.32624893122403, -71.14948990068949));
-        } else if (hospital == '20 Patriot Pl') {
-            onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
-        } else if (hospital == '22 Patriot Pl') {
-            onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
-        } else if (hospital == '20 Patriot Pl') {
-            onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
-        } else if (hospital == '22 Patriot Pl') {
-            onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
-        }
+      if (hospital == 'Chestnut Hill') {
+        onSelectHospital(new L.LatLng(42.32624893122403, -71.14948990068949));
+      } else if (hospital == '20 Patriot Pl') {
+        onSelectHospital(new L.LatLng(42.09158568558272, -71.26680527197173));
+      } else if (hospital == '22 Patriot Pl') {
+        onSelectHospital(new L.LatLng(42.09158568558272, -71.26680527197173));
+      }
         if (selectedDepartment && onSetSelectedDepartment) {
             onSetSelectedDepartment(selectedDepartment);
         }
