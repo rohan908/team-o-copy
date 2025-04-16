@@ -1,4 +1,3 @@
-// MapAPIPage.tsx
 import React, { useState, useEffect } from 'react';
 import { Box, Button } from '@mantine/core';
 import * as L from 'leaflet';
@@ -16,7 +15,6 @@ interface MapAPIPageProps {
 export function MapAPIPage({ onSelectHospital, onDepartmentSelect }: MapAPIPageProps) {
     // Store hospital coordinate from the user
     const [selectedHospital, setSelectedHospital] = useState<L.LatLng | null>(null);
-    const [isSelectBoxCollapsed, setIsSelectBoxCollapsed] = useState(false);
     const [selectedHospitalName, setSelectedHospitalName] = useState<string | null>(null);
     const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
     const isMobile = useMediaQuery('(max-width: 768px)');
@@ -29,14 +27,6 @@ export function MapAPIPage({ onSelectHospital, onDepartmentSelect }: MapAPIPageP
 
           libraries: ['places'], //required for location autocomplete in textbox
       });
-      useEffect(() => {
-        if (isLoaded && !travelMode) {
-          setTravelMode(google.maps.TravelMode.DRIVING);
-        }
-      }, [isLoaded, travelMode]);
-
-
-
   const handleSelectHospital = (coord: L.LatLng) => {
         setSelectedHospital(coord);
     };
@@ -56,17 +46,10 @@ export function MapAPIPage({ onSelectHospital, onDepartmentSelect }: MapAPIPageP
           h="100%">
         <GoogleMapsAPI
             selectedHospital={
-              selectedHospital
-                ? { lat: selectedHospital.lat, lng: selectedHospital.lng }
-                : null
-            }
+              selectedHospital? { lat: selectedHospital.lat, lng: selectedHospital.lng } : null}
             userCoordinate={
-              userCoordinates
-                ? { lat: userCoordinates.lat, lng: userCoordinates.long }
-                : null
-            }
-            travelMode={travelMode ?? google.maps.TravelMode.DRIVING}
-          />
+              userCoordinates ? { lat: userCoordinates.lat, lng: userCoordinates.long } : null}
+            travelMode={travelMode ?? google.maps.TravelMode.DRIVING}/>
         </Box>
           <SelectBox onSelectHospital={handleSelectHospital}
                            onSetUserCoordinates={setUserCoordinates}
@@ -74,9 +57,7 @@ export function MapAPIPage({ onSelectHospital, onDepartmentSelect }: MapAPIPageP
                            onSetSelectedHospitalName={handleSelectHospitalName}
                            onSetSelectedDepartment={(dept) => {
                              setSelectedDepartment(dept);
-                             onDepartmentSelect(dept);
-                     }}
-          />
+                             onDepartmentSelect(dept);}}/>
       </Box>
     );
 }

@@ -88,14 +88,19 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
       setHospital(hospital);
       setSelectedDepartment(null);
     }
-
-  useEffect(() => { //use effect to render google autocomplete
+  //use effect to render google autocomplete
+  useEffect(() => {
+    //initialize only when the box is not collapsed
     if (collapsed || !input.current) return;
+
+    //if previous instance of autocompleteRef exits, then clear it for re initialization
     if (autocompleteRef.current) {
       autocompleteRef.current.unbindAll?.();
       autocompleteRef.current = null;
     }
     autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
+
+    // .addListener is a callback function that triggers when user selects one location in the autocomplete
     autocompleteRef.current.addListener("place_changed", () => {
       const place = autocompleteRef.current?.getPlace();
       if (place?.geometry?.location) {
@@ -106,10 +111,9 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         };
         setUserStartLocation(latlng);
       }
-    });
+    }
+    );
   }, [collapsed]);
-
-
 
     return (
       <>
@@ -126,7 +130,6 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
           <TwoPartInteractiveBox
             title="Find your Way!"
             subtitle="Use our interactive map to find departments, parking, and efficient routes">
-
               <Stack w="100%">
                 <Box>
                   <Text ta="left" mb="sm" fw={500}>
@@ -195,7 +198,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         </Box>
         </Collapse>
 
-        {collapsed && (
+        {collapsed && ( //when collapsed, transfrom into a box that contains the 2 buttons
         <Box pos="absolute" bottom="1rem" left={0} right={0}>
 
             <Box mx="auto" w="fit-content"> {/* force this to be on the center*/}
@@ -204,7 +207,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
             </Button>
             </Box>
 
-            <Box pos="absolute" right="6rem" bottom={0}> {/* force this to be on the right*/}
+            <Box pos="absolute" right="6rem" bottom={0}> {/* this ensures button is in the right right*/}
             <Button component={Link} to="/IndoorMapPage" color="green">
               I've Arrived
             </Button>

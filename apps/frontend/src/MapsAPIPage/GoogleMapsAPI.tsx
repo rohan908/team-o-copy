@@ -30,9 +30,9 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
         directionsService.route({
             origin: userCoordinate,
             destination: selectedHospital,
-            travelMode: travelMode ?? google.maps.TravelMode.DRIVING,
-        },
-            (result, status) => {
+            travelMode: travelMode ?? google.maps.TravelMode.DRIVING
+          },
+          (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) { //make
                     directionsRendererRef.current.setDirections(result)
                     const newSteps = result.routes[0].legs[0].steps.map(
