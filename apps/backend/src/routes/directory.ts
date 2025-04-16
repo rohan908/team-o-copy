@@ -61,7 +61,7 @@ router.get('/export', async (req: Request, res: Response) => {
 });
 
 /*
-    Retrieves all directories in a specified building ->
+    Retrieves all departments in a specified building ->
       1 = Patriot
       2 = Chestnut
     Ex: api/directory/1
@@ -71,7 +71,7 @@ router.get('/:mapID', async (req: Request, res: Response) => {
 
     const directories = await PrismaClient.node.findMany({
         where: {
-            nodeType: 'directory',
+            nodeType: 'department',
             mapId: mapID,
         },
     });
@@ -80,17 +80,16 @@ router.get('/:mapID', async (req: Request, res: Response) => {
 });
 
 router.get('/:nodeID', async (req: Request, res: Response) => {
-  const nodeID = Number(req.params.nodeID);
+    const nodeID = Number(req.params.nodeID);
 
-  const node = await PrismaClient.node.findUnique({
-    where: {
-      id: nodeID,
-    },
-  });
+    const node = await PrismaClient.node.findUnique({
+        where: {
+            id: nodeID,
+        },
+    });
 
-  res.send(node);
+    res.send(node);
 });
-
 
 // Clears the directory database table
 router.delete('/clear', async (req: Request, res: Response) => {
