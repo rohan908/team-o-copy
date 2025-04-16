@@ -9,6 +9,7 @@ import sanitationServiceRequestRouter from './routes/SanitationServiceRequest.ts
 
 import exportRoute from './routes/ExportRoute.ts';
 import graphRouter from './routes/Graph.ts';
+import securityServiceRequestRouter from './routes/SecurityServiceRequest.ts';
 
 import { API_ROUTES } from 'common/src/constants';
 import PrismaClient from './bin/prisma-client.ts';
@@ -45,6 +46,7 @@ app.use(API_ROUTES.DIRECTORY, directoryRouter);
 app.use(API_ROUTES.LANGUAGESR, languageServiceRequestRouter);
 app.use(API_ROUTES.SANITATIONSR, sanitationServiceRequestRouter);
 app.use(API_ROUTES.GRAPH, graphRouter);
+app.use(API_ROUTES.SECURITYSR, securityServiceRequestRouter);
 
 // adding route for file exporting
 app.use(API_ROUTES.EXPORTROUTE, exportRoute);
