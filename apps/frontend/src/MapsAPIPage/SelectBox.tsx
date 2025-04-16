@@ -117,7 +117,6 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
           top="50%"
           left="50%"
           style={{ transform: 'translate(-50%, -50%)' }}
-          w="100%"
           maw={500}
         >  {/* this  is supposed to render always to the center regardless of laptop screen*/}
           <TwoPartInteractiveBox
@@ -135,6 +134,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     placeholder ="--Enter a Location--"
                   />
                 </Box>
+
                 <Box>
                   <Text ta="left" mb="sm" fw={500}>
                     Select Hospital:
@@ -149,6 +149,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     value = {hospital}
                     onChange={setHospitalLocation}/>
                 </Box>
+
                 <Box>
                   <Text ta="left" mb="sm" fw={500}>
                     Select Department:
@@ -161,6 +162,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     onChange={setDepartment}
                     disabled={!hospital || departmentOptions.length === 0}/>
                 </Box>
+
                 <Box>
                   <Text ta="left" mb="sm" fw={500}>
                     Select Navigation Method:
@@ -178,6 +180,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                     disabled={!hospital}
                   />
                 </Box>
+
                 <Box ta = "right">
                   <BlackButton onClick={handleFindPath}>
                     Find Path
@@ -188,18 +191,18 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         </Box>
           ) : (
         <Box pos="absolute" bottom="1rem" left={0} right={0}>
-          <Box pos="relative" w="100%">
             <Box mx="auto" w="fit-content"> {/* force this to be on the center*/}
             <Button onClick={() => setCollapsed(false)}>
               Expand Directions Menu
             </Button>
             </Box>
+
             <Box pos="absolute" right="6rem" bottom={0}> {/* force this to be on the right*/}
             <Button component={Link} to="/IndoorMapPage" color="green">
               I've Arrived
             </Button>
             </Box>
-        </Box>
+
         </Box>
       ))};
 

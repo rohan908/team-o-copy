@@ -30,7 +30,7 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
         directionsService.route({
             origin: userCoordinate,
             destination: selectedHospital,
-            travelMode: travelMode,
+            travelMode: travelMode ?? google.maps.TravelMode.DRIVING,
         },
             (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) { //make
@@ -61,19 +61,16 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
                     pos="absolute"
                     top="4rem"
                     right="0.5rem"
-                    w={300}
-                    maw={500}
+                    maw={250}
                     bg="white"
                     p="md"
                     radius="md"
                     shadow="md"
-                    style={{
-                      borderRadius: theme.radius.lg,
-                      backdropFilter: 'blur(5px)',
-                    }}
+                    bd ="1px solid white"
+                    style={{borderRadius: "10px"}}
                 >
                   <Text fw={700} mb="sm">Directions:</Text>
-                  <ScrollArea h={400}>
+                  <ScrollArea h={250}>
 
                     <List type="ordered" pl="md" mt="sm">
                       {steps.map((step, index) => (
