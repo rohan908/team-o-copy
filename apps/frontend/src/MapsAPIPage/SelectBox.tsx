@@ -283,7 +283,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                             >
                                 Expand Directions Menu
                             </Button>
-                          <Collapse in={selectedDepartment = null}>
+                          <Collapse in={selectedDepartment != null}>
                             <Button
                               color="green"
                               size="md"
