@@ -5,7 +5,6 @@ import {TwoPartInteractiveBox} from "../common-compoents/standAloneFrame.tsx";
 import {HospitalDepartment, Patriot20, Patriot22, ChestnutHill, } from '../directory/components/directorydata.tsx'; //this is now static lol
 import { DirectoryItem } from '../contexts/DirectoryItem.ts';
 import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
-
 import {
     Box,
     Text,
@@ -13,6 +12,7 @@ import {
     Flex,
     Button,
     Divider,
+    Transition,
     Select,
     useMantineTheme,
     Collapse,
@@ -112,18 +112,21 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
 
 
     return (
-      !collapsed?(
+      <>
+        <Collapse in={!collapsed} animateOpacity={true}>
+
         <Box
           pos="absolute"
           top="50%"
           left="50%"
-          style={{ transform: 'translate(-50%, -50%)' }}
-          maw={500}
-        >  {/* this  is supposed to render always to the center regardless of laptop screen*/}
+          style={{ transform: 'translate(-50%, -50%)',
+                  pointerEvents: collapsed ? 'none' : 'auto',}} //when collapsed, this box becomes unclickable
+          maw={500}>  {/* this  is supposed to render always to the center regardless of laptop screen*/}
+
           <TwoPartInteractiveBox
             title="Find your Way!"
-            subtitle="Use our interactive map to find departments, parking, and efficient routes"
-        >
+            subtitle="Use our interactive map to find departments, parking, and efficient routes">
+
               <Stack w="100%">
                 <Box>
                   <Text ta="left" mb="sm" fw={500}>
@@ -190,8 +193,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
               </Stack>
         </TwoPartInteractiveBox>
         </Box>
-          ) : (
+        </Collapse>
+
+        {collapsed && (
         <Box pos="absolute" bottom="1rem" left={0} right={0}>
+
             <Box mx="auto" w="fit-content"> {/* force this to be on the center*/}
             <Button onClick={() => setCollapsed(false)}>
               Expand Directions Menu
@@ -205,6 +211,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
             </Box>
 
         </Box>
-      ))};
+      )}
+        </>)}
 
 export default SelectBox;
