@@ -49,7 +49,7 @@ export function Routing() {
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
                         <Route path="/service-request-page" element={<ServiceRequestPage />} />
                         <Route path="/language-form" element={<Language />} />
-                      <Route path="/sanitation-form" element={<Sanitation />} />
+                        <Route path="/sanitation-form" element={<Sanitation />} />
 
                       <Route
                             path="/IndoorMapPage"
