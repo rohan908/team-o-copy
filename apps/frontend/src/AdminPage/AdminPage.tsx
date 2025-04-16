@@ -53,78 +53,120 @@ export function AdminPage() {
     }, [stringDisplayNum]);
 
     return (
-        <div className="p-4 sm:p-6 md:p-10 max-w-4xl mx-auto w-full">
-            <h1 className="font-bold text-xl mb-4 text-center">Admin Page</h1>
-            <Center>
-                <Flex direction="column" justify="center" align="center">
-                    <Title
-                        order={3}
-                        mb="md"
-                        c="black"
-                        ta="center"
-                        fw={700}
-                        fz={{ sm: 'xl', md: 'xl' }}
-                    >
-                        Select Request Form Type to View
-                    </Title>
-                    <SegmentedControl
-                        value={stringDisplayNum}
-                        onChange={setStringDisplayNum}
-                        data={[
-                            { label: 'LanguageRequest', value: '0' },
-                            { label: 'MachineRequest', value: '1', disabled: true },
-                            { label: 'SanitationRequest', value: '2', disabled: true },
-                            { label: 'StaffRequest', value: '3', disabled: true },
-                        ]}
-                        onClick={() => setStringDisplayNum('-1')}
-                    ></SegmentedControl>
-                    <Collapse in={displayTableNumber == 0}>
-                        <LanguageRequestHistory />
-                    </Collapse>
-                    <Collapse in={displayTableNumber == 1}>{/*Machine Request*/}</Collapse>
-                    <Collapse in={displayTableNumber == 2}>{/*Sanitation Request*/}</Collapse>
-                    <Collapse in={displayTableNumber == 3}>{/*Staff Request*/}</Collapse>
-                </Flex>
-                {/*<Button*/}
-                {/*    size="md"*/}
-                {/*    color="dark"*/}
-                {/*    fw="600"*/}
-                {/*    bg="black"*/}
-                {/*    mt="sm"*/}
-                {/*    style={{*/}
-                {/*      borderRadius: '50px',*/}
-                {/*      transition: 'all 0.3s ease',*/}
-                {/*    }}*/}
-                {/*    onClick= {handleClick}*/}
-                {/*  >*/}
-                {/*    Language Request Form History*/}
-                {/*  </Button>*/}
-            </Center>
-            <br />
-            <Divider
-                my="md"
-                size="sm"
-                style={{
-                    borderTop: '1px dotted black',
-                }}
-            />
-            <br />
-            {/* CSV Import/Export Controls */}
-            <DatabaseController table="directory" />
+        <div
+            className="min-h-screen w-full"
+            style={{
+                background: 'linear-gradient(160deg, #aaf7fc 0%, #aaf7fc 100%)',
+                padding: '2rem',
+            }}
+        >
+            <div className="max-w-4xl mx-auto bg-[#FDF0D5]/90 p-4 sm:p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-sm">
+                <Title order={2} className="mb-4 text-center" fw={600}>
+                    Admin Page
+                </Title>
+                <Center>
+                    <Flex direction="column" justify="center" align="center">
+                        <Title
+                            order={3}
+                            mb="md"
+                            c="#153A90"
+                            ta="center"
+                            fw={700}
+                            fz={{ sm: 'xl', md: 'xl' }}
+                        >
+                            Select Request Form Type to View
+                        </Title>
+                        <SegmentedControl
+                            value={stringDisplayNum}
+                            onChange={setStringDisplayNum}
+                            data={[
+                                { label: 'LanguageRequest', value: '0' },
+                                { label: 'MachineRequest', value: '1', disabled: true },
+                                { label: 'SanitationRequest', value: '2', disabled: true },
+                                { label: 'StaffRequest', value: '3', disabled: true },
+                            ]}
+                            onClick={() => setStringDisplayNum('-1')}
+                            styles={(theme) => ({
+                                root: {
+                                    backgroundColor: '#FDF0D5',
+                                    padding: 4,
+                                    borderRadius: theme.radius.md,
+                                },
+                                label: {
+                                    color: theme.colors.dark[9],
+                                    fontWeight: 600,
+                                },
+                                control: {
+                                    border: 'none',
+                                },
+                                active: {
+                                    backgroundColor: theme.white,
+                                    boxShadow: theme.shadows.sm,
+                                },
+                            })}
+                        ></SegmentedControl>
+                        <Collapse in={displayTableNumber == 0}>
+                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
+                                <LanguageRequestHistory />
+                            </div>
+                        </Collapse>
+                        <Collapse in={displayTableNumber == 1}>
+                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
+                                {/*Machine Request*/}
+                            </div>
+                        </Collapse>
+                        <Collapse in={displayTableNumber == 2}>
+                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
+                                {/*Sanitation Request*/}
+                            </div>
+                        </Collapse>
+                        <Collapse in={displayTableNumber == 3}>
+                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
+                                {/*Staff Request*/}
+                            </div>
+                        </Collapse>
+                    </Flex>
+                    {/*<Button*/}
+                    {/*    size="md"*/}
+                    {/*    color="dark"*/}
+                    {/*    fw="600"*/}
+                    {/*    bg="black"*/}
+                    {/*    mt="sm"*/}
+                    {/*    style={{*/}
+                    {/*      borderRadius: '50px',*/}
+                    {/*      transition: 'all 0.3s ease',*/}
+                    {/*    }}*/}
+                    {/*    onClick= {handleClick}*/}
+                    {/*  >*/}
+                    {/*    Language Request Form History*/}
+                    {/*  </Button>*/}
+                </Center>
+                <br />
+                <Divider
+                    my="md"
+                    size="sm"
+                    style={{
+                        borderTop: '4px dotted #FCCD6F',
+                    }}
+                />
+                <br />
+                {/* CSV Import/Export Controls */}
+                <DatabaseController table="directory" />
 
-            {/* Toggle Button */}
-            <div className="flex justify-center mt-4">
-                <Button variant="outline" onClick={() => setShowPreview((prev) => !prev)}>
-                    {showPreview ? 'Hide Directory Preview' : 'Preview Directory'}
-                </Button>
-            </div>
-
-            {/* Collapsible CSV Table */}
-            <Collapse in={showPreview} transitionDuration={200}>
-                <div className="mt-4">
-                    <CSVTable table="directory" />
+                {/* Toggle Button */}
+                <div className="flex justify-center mt-4">
+                    <Button variant="outline" onClick={() => setShowPreview((prev) => !prev)}>
+                        {showPreview ? 'Hide Directory Preview' : 'Preview Directory'}
+                    </Button>
                 </div>
-            </Collapse>
+
+                {/* Collapsible CSV Table */}
+                <Collapse in={showPreview} transitionDuration={200}>
+                    <div className="mt-4">
+                        <CSVTable table="directory" />
+                    </div>
+                </Collapse>
+            </div>
         </div>
 
     );

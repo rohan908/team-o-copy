@@ -89,9 +89,9 @@ function Language() {
   };
 
   return (
-    <Flex justify="center" align="center" style={{ width: '100vw', padding: '2rem' }}>
+    <Flex justify="center" align="center"  bg="terquAccet.2" style={{ width: '100vw', padding: '2rem' }}>
       <Paper
-        bg="gray.2"
+        bg="themeGold.1"
         p="xl"
         shadow="xl"
         radius="md"

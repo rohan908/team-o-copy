@@ -1,4 +1,4 @@
-import { NodeDataType, PathFinderResult } from '../models/MapTypes.ts';
+import { GetNodeResult, NodeDataType, PathFinderResult } from '../models/MapTypes.ts';
 import { Graph } from './Graph.ts';
 import { PathFinder } from './PathFinder.ts';
 import { BFSPathFinder } from './PathFinders/BFSPathFinder.ts';
@@ -89,5 +89,13 @@ export class NavigationService {
     public findPath(startNodeId: number, endNodeId: number, pathAlgo: string): PathFinderResult {
         this.setPathFinderAlgo(pathAlgo);
         return this.pathFinder.findPath(startNodeId, endNodeId);
+    }
+
+    public getNode(nodeId: number): GetNodeResult {
+        const node = this.graph.getNodeById(nodeId);
+        return {
+            node,
+            success: node !== undefined,
+        };
     }
 }
