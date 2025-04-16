@@ -8,15 +8,25 @@ import { NodeDataType } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
+import { PathPickerBox } from './components/PathPickerBox.tsx';
 
 interface DraggableMapProps {
     selectedHospitalName?: string | null;
     selectedDepartment?: string | null;
+    setSelectedDepartment: (selectedDepartment: string | null) => void;
+    setSelectedHospitalName: (selectedHospitalName: string | null) => void;
 }
 
-export function DraggableMap({ selectedHospitalName, selectedDepartment }: DraggableMapProps) {
+export function DraggableMap({
+    selectedHospitalName,
+    selectedDepartment,
+    setSelectedDepartment,
+    setSelectedHospitalName,
+}: DraggableMapProps) {
     const [floor, setFloor] = useState(1);
     const [isFading, setIsFading] = useState(false);
+    const [currPathAlgo, setCurrPathAlgo] = useState<string>('BFS');
+
     console.log(selectedDepartment);
     console.log(selectedHospitalName);
     const canvasId = 'insideMapCanvas';
@@ -35,13 +45,14 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
             const index = patriotNodes.findIndex((element) => {
                 return element.name == selectedDepartment;
             });
-            return patriotNodes[index].id;
+            return index >= 0 ? patriotNodes[index].id : undefined;
         } else if (selectedHospitalName == 'Chestnut Hill') {
             const index = chestnutNodes.findIndex((element) => {
                 return element.name == selectedDepartment;
             });
-            return chestnutNodes[index].id;
+            return index >= 0 ? chestnutNodes[index].id : undefined; //make sure nodeId exists
         }
+        return undefined;
     };
 
     // gets id of parking lot node -> hardcoded for now
@@ -61,6 +72,14 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
 
     console.log(firstNodeId);
     console.log(lastNodeId);
+
+    const handleDepartmentChange = (newDep: string) => {
+        setSelectedDepartment(newDep);
+    };
+
+    const handleFadingChange = (newHos: string) => {
+        setSelectedHospitalName(newHos);
+    };
     /*
   Patriot Place Floor 1 -> floor1 -> scene 1
   Patriot Place Floor 3 -> floor2 -> scene 2
@@ -235,7 +254,7 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
     */
     // Get the path
     if (firstNodeId && lastNodeId) {
-        const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
+        const path = findPath(firstNodeId, lastNodeId, currPathAlgo).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
             // For each node id in the path
             for (const id of ids) {
@@ -331,12 +350,21 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
     }, [floor]);
 
     return (
-        <Box w="100vw" h="100vh" p={0}>
+        <Box w="100%" h="100%" p={0}>
             <FloorSwitchBox
                 floor={floor}
                 setFloor={handleFloorChange}
                 building={selectedHospitalName || ''}
             />
+            <PathPickerBox
+                currAlgo={currPathAlgo}
+                setPathAlgo={setCurrPathAlgo}
+                currHospital={selectedHospitalName}
+                setSelectedHospitalName={setSelectedHospitalName}
+                selectedDepartment={selectedDepartment}
+                setSelectedDepartment={setSelectedDepartment}
+            />
+
             <canvas
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'absolute' }}

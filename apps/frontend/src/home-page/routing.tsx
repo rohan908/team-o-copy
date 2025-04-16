@@ -57,6 +57,8 @@ export function Routing() {
                                 <DraggableMap
                                     selectedHospitalName={selectedHospitalName}
                                     selectedDepartment={selectedDepartment}
+                                    setSelectedDepartment={setSelectedDepartment}
+                                    setSelectedHospitalName={setSelectedHospitalName}
                                 />
                             }
                         />

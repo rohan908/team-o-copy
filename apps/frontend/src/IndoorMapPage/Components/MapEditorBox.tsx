@@ -401,7 +401,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="37%"
                 style={{
-                    maxWidth: collapsed ? '350px' : '80%', // ✅ Collapse mode limits width
+                    maxWidth: collapsed ? '350px' : '80%',
                     opacity: collapsed ? 0.8 : 0.95,
                     borderRadius: theme.radius.lg,
                     backdropFilter: 'blur(5px)',

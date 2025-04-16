@@ -8,6 +8,8 @@ import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
+import { useLogin } from '../home-page/components/LoginContext.tsx';
+import { PathPickerBox } from './components/PathPickerBox.tsx';
 
 export function MapEditor() {
     const [nodeSelected, setNodeSelected] = useState(false);
@@ -15,6 +17,7 @@ export function MapEditor() {
     const [nodeY, setNodeY] = useState(0);
     const [floor, setFloor] = useState(1);
     const [isFading, setIsFading] = useState(false);
+    const { isLoggedIn } = useLogin();
     const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
     const canvasId = 'insideMapCanvas';
     const objects: THREE.Object3D[] = [];
@@ -342,6 +345,7 @@ export function MapEditor() {
                 // handle updating the node position from ui
                 updateNodePosition={updateNodePosition}
             />
+
             <canvas
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'absolute' }}

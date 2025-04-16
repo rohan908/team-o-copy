@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom'; //use ive arrived button to direct to /indoor
 import { BlackButton } from '../common-compoents/commonButtons.tsx';
 import { TwoPartInteractiveBox } from '../common-compoents/standAloneFrame.tsx';
-import { DirectoryItem } from '../contexts/DirectoryItem.ts';
+import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 
 import {
     Box,
@@ -56,8 +56,8 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
 
     console.log(Chestnut);
 
-    const MapDepartment = (department: DirectoryItem[]) =>
-        department.map((department: DirectoryItem) => ({
+    const MapDepartment = (department: DirectoryNodeItem[]) =>
+        department.map((department: DirectoryNodeItem) => ({
             value: department.name,
             label: department.name,
         }));
