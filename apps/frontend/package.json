@@ -23,6 +23,7 @@
         "@tabler/icons-react": "^3.31.0",
         "@tailwindcss/vite": "^4.0.17",
         "axios": "^1.7.4",
+        "camera-controls": "^2.10.1",
         "common": "*",
         "dayjs": "^1.11.13",
         "dotenv": "*",

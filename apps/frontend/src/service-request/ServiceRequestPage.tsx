@@ -6,7 +6,7 @@ export function ServiceRequestPage() {
   const navigate = useNavigate();
   return (
     <div>
-      <Box bg="themeGold.0" py="xl">
+      <Box bg="terquAccet.2" py="xl">
         <Flex w="100%" h="85.5vh" justify="center" align="center">
           <Stack>
             <Title order={2} ta="left" c={'#001D4D'} mb="lg">
