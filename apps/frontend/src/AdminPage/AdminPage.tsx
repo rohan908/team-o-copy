@@ -8,6 +8,7 @@ import LanguageRequestHistory from './LanguageRequestHistory.tsx';
 import { BlackButton } from '../common-compoents/commonButtons.tsx';
 import { SegmentedControl } from '@mantine/core';
 import SecurityRequestHistory from './SecurityRequestHistory.tsx';
+import SanitationRequestHistory from './SanitationRequestHistory.tsx';
 
 export function AdminPage() {
     const navigate = useNavigate();
@@ -83,8 +84,8 @@ export function AdminPage() {
                             data={[
                                 { label: 'LanguageRequest', value: '0' },
                                 { label: 'SecurityRequest', value: '1' },
-                                { label: 'SanitationRequest', value: '2', disabled: true },
-                                { label: 'StaffRequest', value: '3', disabled: true },
+                                { label: 'SanitationRequest', value: '2' },
+                                { label: 'MaintenanceRequest', value: '3', disabled: true },
                             ]}
                             onClick={() => setStringDisplayNum('-1')}
                             styles={(theme) => ({
@@ -118,7 +119,7 @@ export function AdminPage() {
                         </Collapse>
                         <Collapse in={displayTableNumber == 2}>
                             <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
-                                {/*Sanitation Request*/}
+                                <SanitationRequestHistory />
                             </div>
                         </Collapse>
                         <Collapse in={displayTableNumber == 3}>

@@ -125,10 +125,10 @@ function Security() {
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Flex direction="column" ta="center" justify="center">
                         <Title order={2} mb="sm">
-                            Sanitation Request Form
+                            Security Request
                         </Title>
                         <Text mb="md" fz="xxxs">
-                            Logan W. and Joe A.
+                            Ethan R. & Camden B.
                         </Text>
                     </Flex>
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
