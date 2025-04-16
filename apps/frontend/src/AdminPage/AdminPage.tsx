@@ -3,10 +3,12 @@ import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
 import { useMantineTheme, Collapse, Button, Divider, Center, Flex, Title } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import Language from "../service-request/LanguageInterpreterSR.tsx";
-import LanguageRequestHistory from "./LanguageRequestHistory.tsx";
+import Language from '../service-request/LanguageInterpreterSR.tsx';
+import LanguageRequestHistory from './LanguageRequestHistory.tsx';
 import { BlackButton } from '../common-compoents/commonButtons.tsx';
 import { SegmentedControl } from '@mantine/core';
+import SecurityRequestHistory from './SecurityRequestHistory.tsx';
+import SanitationRequestHistory from './SanitationRequestHistory.tsx';
 
 export function AdminPage() {
     const navigate = useNavigate();
@@ -56,7 +58,7 @@ export function AdminPage() {
         <div
             className="min-h-screen w-full"
             style={{
-                background: 'linear-gradient(160deg, #56effa 0%, #e4e8f0 100%)',
+                background: 'linear-gradient(160deg, #aaf7fc 0%, #aaf7fc 100%)',
                 padding: '2rem',
             }}
         >
@@ -81,9 +83,9 @@ export function AdminPage() {
                             onChange={setStringDisplayNum}
                             data={[
                                 { label: 'LanguageRequest', value: '0' },
-                                { label: 'MachineRequest', value: '1', disabled: true },
-                                { label: 'SanitationRequest', value: '2', disabled: true },
-                                { label: 'StaffRequest', value: '3', disabled: true },
+                                { label: 'SecurityRequest', value: '1' },
+                                { label: 'SanitationRequest', value: '2' },
+                                { label: 'MaintenanceRequest', value: '3', disabled: true },
                             ]}
                             onClick={() => setStringDisplayNum('-1')}
                             styles={(theme) => ({
@@ -112,12 +114,12 @@ export function AdminPage() {
                         </Collapse>
                         <Collapse in={displayTableNumber == 1}>
                             <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
-                                {/*Machine Request*/}
+                                <SecurityRequestHistory />
                             </div>
                         </Collapse>
                         <Collapse in={displayTableNumber == 2}>
                             <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
-                                {/*Sanitation Request*/}
+                                <SanitationRequestHistory />
                             </div>
                         </Collapse>
                         <Collapse in={displayTableNumber == 3}>
@@ -146,7 +148,7 @@ export function AdminPage() {
                     my="md"
                     size="sm"
                     style={{
-                        borderTop: '1px dotted black',
+                        borderTop: '4px dotted #FCCD6F',
                     }}
                 />
                 <br />
@@ -168,7 +170,6 @@ export function AdminPage() {
                 </Collapse>
             </div>
         </div>
-
     );
 }
 

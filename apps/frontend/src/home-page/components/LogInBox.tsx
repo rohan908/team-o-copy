@@ -50,11 +50,11 @@ const LogInBox = () => {
                 subContents={
                     <>
                         <Stack gap="0">
-                            <BasicOutlinedButton onClick={() => navigate('/map-page')}>
+                            <BasicOutlinedButton onClick={() => navigate('/map-API')}>
                                 Get Directions!
                             </BasicOutlinedButton>
 
-                            <Text py="xs" ta="left" fz={{ base: 'md' }}>
+                            <Text fw={500} py="xs" ta="left" fz={{ base: 'sm' }}>
                                 Use our interactive map to find departments, parking, and efficient
                                 routes
                             </Text>
@@ -64,19 +64,20 @@ const LogInBox = () => {
             >
                 {!isLoggedIn ? (
                     <>
-                        <Stack w="100%">
+                        <Stack gap='sm' w="100%">
                             <Box>
-                                <Text fz={{ base: 'lg' }}>Login here for Staff:</Text>
+                                <Text fw={700} mb="sm" fz={{ base: 'md' }}>Login here for Staff:</Text>
                                 <TextInput
                                     placeholder="Username"
                                     mt="md"
-                                    mb="md"
+                                    mb="sm"
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
                                 />
                                 <TextInput
                                     placeholder="Password"
                                     type="password"
+                                    mb="sm"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />

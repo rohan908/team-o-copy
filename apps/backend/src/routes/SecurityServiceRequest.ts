@@ -6,13 +6,13 @@ const router: Router = express.Router();
 
 // uploads the language request service form to the database table
 router.post('/', async (req: Request, res: Response) => {
-    console.log('Incoming POST to /api/LanguageSR');
+    console.log('Incoming POST to /api/SecuritySR');
     console.log('Request body:', req.body);
 
     try {
         // For inputting a request form, adds entry
         const {
-            label,
+            security,
             selectedDate,
             selectedTime,
             department,
@@ -23,16 +23,16 @@ router.post('/', async (req: Request, res: Response) => {
         } = req.body;
 
         // creating request to get data from frontend
-        const request = await PrismaClient.langaugeServiceRequest.create({
+        const request = await PrismaClient.securityServiceRequest.create({
             data: {
-                language: label,
+                security: security,
                 date: selectedDate,
                 time: convertTo24Hour(selectedTime),
                 department,
                 description,
-                priority,
-                status,
                 employeeName,
+                status,
+                priority,
             },
         });
 
@@ -48,7 +48,7 @@ router.post('/', async (req: Request, res: Response) => {
 // Retrieves all language service request forms
 // this will be for posting on the website
 router.get('/', async (req: Request, res: Response) => {
-    const allServiceRequests = await PrismaClient.langaugeServiceRequest.findMany({});
+    const allServiceRequests = await PrismaClient.securityServiceRequest.findMany({});
 
     res.json(allServiceRequests);
 });

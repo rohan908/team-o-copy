@@ -6,8 +6,8 @@ import {
     useContext,
     PropsWithChildren,
 } from 'react';
-import { fetchDirectoryData } from '../directory/components/GetDirectoryData.tsx';
-import { DirectoryItem } from './DirectoryItem';
+import { fetchDirectoryData, fetchAllNodeData } from '../DatabaseFetching/GetDirectoryData.tsx';
+import { DirectoryNodeItem } from './DirectoryItem';
 
 /*
     What this file does:
@@ -47,17 +47,33 @@ export const DirectoryContext = createContext<DirectoryContextType | undefined>(
     defines custom hooks so that consumer components don't directly interact
     with any contexts, that way no internal data can be modified.
 
-    There are 3 separate ones for the same context so that it is easier
-    to read in a frontend file; looks simpler than doing:
+    To use them to access database data, follow this example:
 
-    const { patriot20 } = useDirectoryContext();
+    const patriot = usePatriotContext();
 
-    This seems slightly harder to read/understand than just:
-
-    const Patriot20 = usePatriot20Context;
-
-    Which looks cleaner and simpler.
  */
+
+export const useDirectoryContext = () => {
+  const context = useContext(DirectoryContext);
+  if (!context) {
+    throw new Error(
+      'The useDirectoryContext must be used within the provider component DirectoryProvider'
+    );
+  }
+
+  return context;
+};
+
+export const useAllNodesContext = () => {
+  const context = useContext(DirectoryContext);
+  if (!context) {
+    throw new Error(
+      'The useDirectoryContext must be used within the provider component DirectoryProvider'
+    );
+  }
+
+  return context.allNodes;
+};
 
 export const usePatriotContext = () => {
     const context = useContext(DirectoryContext);
@@ -70,17 +86,6 @@ export const usePatriotContext = () => {
     return context.patriot;
 };
 
-export const useDirectoryContext = () => {
-    const context = useContext(DirectoryContext);
-    if (!context) {
-        throw new Error(
-            'The useDirectoryContext must be used within the provider component DirectoryProvider'
-        );
-    }
-
-    return context;
-};
-
 export const useChestnutHillContext = () => {
     const context = useContext(DirectoryContext);
     if (!context) {
@@ -89,15 +94,16 @@ export const useChestnutHillContext = () => {
         );
     }
 
-    return context;
+    return context.chestnutHill;
 };
 
 /*
   This is for the reducer function.
  */
 interface DirectoryState {
-    patriot: DirectoryItem[];
-    chestnutHill: DirectoryItem[];
+    patriot: DirectoryNodeItem[];
+    chestnutHill: DirectoryNodeItem[];
+    allNodes: DirectoryNodeItem[];
     isLoading: boolean;
     error: string | null;
 }
@@ -108,8 +114,9 @@ interface DirectoryState {
   thrown when the context is called and doesn't have any values in it.
  */
 type DirectoryAction =
-    | { type: 'SET_PATRIOT'; data: DirectoryItem[] }
-    | { type: 'SET_CHESTNUTHILL'; data: DirectoryItem[] }
+    | { type: 'SET_PATRIOT'; data: DirectoryNodeItem[] }
+    | { type: 'SET_CHESTNUTHILL'; data: DirectoryNodeItem[] }
+    | { type: 'SET_ALLNODES'; data: DirectoryNodeItem[] }
     | { type: 'SET_LOADING'; data: boolean }
     | { type: 'SET_ERROR'; data: string };
 
@@ -130,6 +137,8 @@ function directoryReducer(state: DirectoryState, action: DirectoryAction): Direc
             return { ...state, patriot: action.data };
         case 'SET_CHESTNUTHILL':
             return { ...state, chestnutHill: action.data };
+        case 'SET_ALLNODES':
+            return { ...state, allNodes: action.data };
         case 'SET_LOADING':
             return { ...state, isLoading: action.data };
         case 'SET_ERROR':
@@ -152,6 +161,7 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
     const [state, dispatch] = useReducer(directoryReducer, {
         patriot: [],
         chestnutHill: [],
+        allNodes: [],
         isLoading: false,
         error: null,
     });
@@ -166,9 +176,20 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
             // grabs data from the database for each building
             const patData = await fetchDirectoryData('1');
             const chestHilldata = await fetchDirectoryData('2');
+            const allNodeData = await fetchAllNodeData();
 
-            dispatch({ type: 'SET_PATRIOT', data: patData });
-            dispatch({ type: 'SET_CHESTNUTHILL', data: chestHilldata });
+            const setPatData = await patData?.json().then((data) => {
+              dispatch({ type: 'SET_PATRIOT', data: data });
+            })
+
+            const setChestnutData = await chestHilldata?.json().then((data) => {
+              dispatch({ type: 'SET_CHESTNUTHILL', data: data });
+            })
+
+            const setAllNodeData = await allNodeData?.json().then((data) => {
+              dispatch({ type: 'SET_ALLNODES', data: data });
+            })
+
         } catch (err) {
             // I made if statements for this to fix " err is of type unknown"
             if (err instanceof Error) {

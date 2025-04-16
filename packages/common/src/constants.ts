@@ -10,10 +10,12 @@ export const API_ROUTES = {
     DIRECTORY: '/api/directory',
     GRAPH: '/api/graph',
     LANGUAGESR: '/api/languageSR',
+    SANITATIONSR: '/api/sanitationSR',
+    SECURITYSR: '/api/securitySR',
     EXPORTROUTE: '/api/exportRoute',
 };
 
 // file paths for backup files
 export const BACKUP_PATHS = {
-  directoryBackup: './src/directoryBackup/backup.csv',
-}
+    directoryBackup: './src/directoryBackup/backup.csv',
+};
