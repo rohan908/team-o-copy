@@ -89,7 +89,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     }
 
   useEffect(() => { //use effect to render google autocomplete
-    if (!input.current) return;
+    if (collapsed || !input.current) return;
+    if (autocompleteRef.current) {
+      autocompleteRef.current.unbindAll?.();
+      autocompleteRef.current = null;
+    }
     autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
     autocompleteRef.current.addListener("place_changed", () => {
       const place = autocompleteRef.current?.getPlace();
@@ -102,15 +106,21 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         setUserStartLocation(latlng);
       }
     });
-  }, []);
+  }, [collapsed]);
 
 
 
     return (
       !collapsed?(
-      <Flex justify="center" align="center" h="100vh" w="100%">
-        <Box w="100%" maw={500}>
-        <TwoPartInteractiveBox
+        <Box
+          pos="absolute"
+          top="50%"
+          left="50%"
+          style={{ transform: 'translate(-50%, -50%)' }}
+          w="100%"
+          maw={500}
+        >
+          <TwoPartInteractiveBox
             title="Find your Way!"
             subtitle="Use our interactive map to find departments, parking, and efficient routes"
         >
@@ -176,26 +186,21 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
               </Stack>
         </TwoPartInteractiveBox>
         </Box>
-
-      </Flex>
-      ) : (
-        <Box
-          pos="fixed"
-          bottom="0.5rem"
-          w="100%">
-          <Button onClick={() => setCollapsed(false)}
-                      style={{
-                        left: "40%"
-                      }}>
-                Expand Directions Menu
-              </Button>
-              <Button component={Link} to="/IndoorMapPage" color="green"
-                style={{
-                  left: '65%',
-                }}>
-                I've Arrived
-              </Button>
+          ) : (
+        <Box pos="absolute" bottom="1rem" left={0} right={0}>
+          <Box pos="relative" w="100%">
+            <Box mx="auto" w="fit-content">
+            <Button onClick={() => setCollapsed(false)}>
+              Expand Directions Menu
+            </Button>
             </Box>
+            <Box pos="absolute" right="1rem" bottom={0}>
+            <Button component={Link} to="/IndoorMapPage" color="green">
+              I've Arrived
+            </Button>
+            </Box>
+        </Box>
+        </Box>
       ))};
 
 export default SelectBox;

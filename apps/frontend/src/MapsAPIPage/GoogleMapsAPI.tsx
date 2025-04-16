@@ -21,7 +21,7 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
     const theme = useMantineTheme();
 
    useEffect(() => {
-        if (!userCoordinate || !selectedHospital || !mapRef.current) return;
+      if (!userCoordinate || !selectedHospital || !mapRef.current) return;
         const directionsService = new google.maps.DirectionsService();
         if (!directionsRendererRef.current) {
             directionsRendererRef.current = new google.maps.DirectionsRenderer();
@@ -45,7 +45,7 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
                 }
             }
         )
-    }, [userCoordinate, selectedHospital]);
+    }, [userCoordinate, selectedHospital, travelMode]);
 
     return (
         <>

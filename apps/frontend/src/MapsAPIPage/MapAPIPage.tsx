@@ -38,7 +38,11 @@ export function MapAPIPage() {
 
 
     return (
-      <Box pos='relative'>
+      <Box  pos="relative" w="100%" h="100vh">
+        <Box
+          pos="absolute"
+          w="100%"
+          h="100%">
         <GoogleMapsAPI
             selectedHospital={
               selectedHospital
@@ -52,11 +56,10 @@ export function MapAPIPage() {
             }
             travelMode={travelMode ?? google.maps.TravelMode.DRIVING}
           />
-        <Box pos="absolute">
-                <SelectBox onSelectHospital={handleSelectHospital}
+        </Box>
+          <SelectBox onSelectHospital={handleSelectHospital}
                            onSetUserCoordinates={setUserCoordinates}
                            onSetTravelMode={setTravelMode}/>
-        </Box>
       </Box>
     );
 }
