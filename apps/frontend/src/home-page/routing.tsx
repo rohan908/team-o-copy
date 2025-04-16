@@ -17,8 +17,10 @@ import { useDisclosure } from '@mantine/hooks';
 import LanguageRequestHistory from '../AdminPage/LanguageRequestHistory.tsx';
 import { DraggableMap } from '../IndoorMapPage/DraggableMap.tsx';
 import { NodeDirectory } from '../NodeDirectoryPage/NodeDirectory.tsx';
+import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import Sanitation from '../service-request/SanitationSR.tsx';
 
+// cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
 
 export function Routing() {
@@ -45,10 +47,9 @@ export function Routing() {
                         <Route path="/submission" element={<Display />} />
                         <Route path="directory" element={<Directory />} />
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
-                        <Route path="/IndoorMapPage" element={<DraggableMap />} />
                         <Route path="/service-request-page" element={<ServiceRequestPage />} />
                         <Route path="/language-form" element={<Language />} />
-                      <Route path="/sanitation-form" element={<Sanitation />} />
+                        <Route path="/sanitation-form" element={<Sanitation />} />
 
                       <Route
                             path="/IndoorMapPage"
@@ -59,6 +60,7 @@ export function Routing() {
                                 />
                             }
                         />
+                        <Route path="/map-editor" element={<MapEditor />} />
                         <Route path="/admin-page" element={<AdminPage />} />
                         <Route
                             path="/language-request-history"
