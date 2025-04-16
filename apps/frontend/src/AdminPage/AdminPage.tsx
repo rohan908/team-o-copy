@@ -50,11 +50,11 @@ export function AdminPage() {
         <div
             className="min-h-screen w-full"
             style={{
-                background: 'linear-gradient(160deg, #aaf7fc 0%, #aaf7fc 100%)',
+                background: '#eaf0f6',
                 padding: '2rem',
             }}
         >
-            <div className="max-w-4xl mx-auto bg-[#FDF0D5]/90 p-4 sm:p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-sm">
+            <div className="max-w-4xl mx-auto bg-[#FFF8EB]/90 p-4 sm:p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-sm">
                 <Title order={2} className="mb-4 text-center" fw={600}>
                     Admin Page
                 </Title>

@@ -12,10 +12,10 @@ export function ServiceRequestPage() {
     const navigate = useNavigate();
     return (
         <div>
-            <Box bg="terquAccet.2" py="xl">
+            <Box bg="#eaf0f6" py="xl">
                 <Flex w="100%" h="85.5vh" justify="center" align="center">
                     <Stack>
-                        <Title order={2} ta="left" c={'#001D4D'} mb="lg">
+                        <Title order={2} ta="left" c={'blueBase.9'} mb="lg">
                             Select Request Type:
                         </Title>
                         {/* basic grid for button layout*/}
