@@ -113,6 +113,7 @@ const myvariantColorResolver: VariantColorsResolver = (input) => {
 const theme = createTheme({
     /** Your theme override here */
     fontSizes: {
+        xxxs: rem(12),
         xxs: rem(14),
         xs: rem(16),
         sm: rem(18),

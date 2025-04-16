@@ -11,9 +11,6 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-// haven't ironed out what is necessary for an employee or request, for now
-// there are NO null values allowed in any attribute
-
 // creates the employee table
 model Employee {
   employeeid  Int    @id @default(autoincrement())
@@ -35,6 +32,20 @@ model langaugeServiceRequest {
   priority     String
   status       String
   language     String
+  description  String?
+}
+
+// creates the langauageServiceRequest table (strong entity)
+model sanitationServiceRequest {
+  requestID    Int      @id @default(autoincrement())
+  employeeName String
+  department   String
+  createdAt    DateTime @default(now())
+  date         String
+  time         String
+  priority     String
+  status       String
+  cleanupType  String
   description  String?
 }
 
