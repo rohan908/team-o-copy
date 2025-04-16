@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Flex, Title, Paper, Box } from '@mantine/core';
+import { Text, Button, Flex, Title, Paper, Box, useMantineTheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import ISO6391 from 'iso-639-1';
-import { useLanguageRequestContext } from '../contexts/RequestContext.tsx';
-
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
+import RoomNumberInput from './components/RoomEntry';
 import RequestDescription from './components/RequestDescription';
-import LanguageSelect from './components/LanguageSelect';
+import SanitationSelect from './components/SanitationSelect.tsx';
 import HospitalSelect from './components/HospitalEntry.tsx';
 import PriorityButtons from './components/PriorityButtons.tsx';
 import StatusSelect from './components/StatusSelect.tsx';
@@ -22,25 +20,25 @@ import {
 } from '../directory/components/directorydata';
 
 interface RequestData {
-    employeeName: string;
-    language: string;
-    hospital: string;
-    department: string;
+    cleanupType: string;
     date: string;
+    department: string;
     time: string;
+    employeeName: string;
     priority: string;
     status: string;
-
+    hospital: string;
     description: string;
 }
 
-function Language() {
+function Sanitation() {
+    const theme = useMantineTheme();
     const navigate = useNavigate();
     const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
 
     const form = useForm<RequestData>({
         initialValues: {
-            language: '',
+            cleanupType: '',
             date: '',
             department: '',
             time: '',
@@ -71,9 +69,6 @@ function Language() {
 
         form.setFieldValue('department', '');
     };
-    const langREQ = useLanguageRequestContext();
-    console.log('TESTER CODE FOR CONTEXT!!!!');
-    console.log(langREQ);
 
     const handleSubmit = async () => {
         const rawData = form.values;
@@ -83,18 +78,13 @@ function Language() {
             ...rawData,
             date: new Date(rawData.date).toISOString().split('T')[0],
         };
-        // turning the language key into the language label so it is clear what is being submitted
-        const label =
-            RequestData.language === 'asl'
-                ? 'ASL (American Sign Language)'
-                : ISO6391.getName(RequestData.language);
 
         try {
-            const response = await fetch('/api/languageSR', {
+            const response = await fetch('/api/sanitationSR', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    label,
+                    cleanupType: RequestData.cleanupType,
                     selectedDate: RequestData.date,
                     selectedTime: RequestData.time,
                     department: RequestData.department,
@@ -110,14 +100,14 @@ function Language() {
                 navigate('/submission', {
                     state: {
                         requestData: [
-                            { title: 'Name', value: RequestData.employeeName },
-                            { title: 'Hospital', value: RequestData.hospital },
-                            { title: 'Language', value: label },
+                            { title: 'Cleanup Type', value: RequestData.cleanupType },
                             { title: 'Date', value: RequestData.date },
                             { title: 'Time', value: RequestData.time },
                             { title: 'Department', value: RequestData.department },
                             { title: 'Priority', value: RequestData.priority },
+                            { title: 'Employee Name', value: RequestData.employeeName },
                             { title: 'Status', value: RequestData.status },
+                            { title: 'Hospital', value: RequestData.hospital },
                             { title: 'Details', value: RequestData.description },
                         ],
                     },
@@ -132,10 +122,14 @@ function Language() {
         <Flex justify="center" align="center" p="xl">
             <Paper bg="gray.2" p="xl" shadow="xl" radius="md" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <Title order={2} ta="center" mb="lg">
-                        Interpreter Request Form
-                    </Title>
-
+                    <Flex direction="column" ta="center" justify="center">
+                        <Title order={2} mb="sm">
+                            Sanitation Request Form
+                        </Title>
+                        <Text mb="md" fz="xxxs">
+                            Logan W. and Joe A.
+                        </Text>
+                    </Flex>
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
                             {' '}
@@ -153,7 +147,7 @@ function Language() {
                                 )}
                                 {...form.getInputProps('department')}
                             />
-                            <LanguageSelect required {...form.getInputProps('language')} />
+                            <SanitationSelect required {...form.getInputProps('cleanupType')} />
                         </Box>
 
                         <Box flex="1" miw="300px">
@@ -161,7 +155,7 @@ function Language() {
                             {/* column 2!!!*/}
                             <DateInputForm required {...form.getInputProps('date')} />
                             <TimeEntry required {...form.getInputProps('time')} />
-                            <PriorityButtons {...form.getInputProps('priority')} />
+                            <PriorityButtons required {...form.getInputProps('priority')} />
                             <StatusSelect required {...form.getInputProps('status')} />
                         </Box>
                     </Flex>
@@ -191,4 +185,4 @@ function Language() {
     );
 }
 
-export default Language;
+export default Sanitation;

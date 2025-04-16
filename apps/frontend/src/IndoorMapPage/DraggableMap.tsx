@@ -7,7 +7,7 @@ import MapEditorBox from './Components/MapEditorBox.tsx';
 import { findPath } from './FindPathRouting.ts';
 import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
-import FloorSwitchBox from './components/FloorManagerBox.tsx';
+import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 
