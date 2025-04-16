@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { Box } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
-import MapEditorBox from './Components/MapEditorBox.tsx';
+import MapEditorBox from './components/MapEditorBox.tsx';
 import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
