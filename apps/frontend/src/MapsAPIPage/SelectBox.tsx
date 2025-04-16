@@ -119,7 +119,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
           style={{ transform: 'translate(-50%, -50%)' }}
           w="100%"
           maw={500}
-        >
+        >  {/* this  is supposed to render always to the center regardless of laptop screen*/}
           <TwoPartInteractiveBox
             title="Find your Way!"
             subtitle="Use our interactive map to find departments, parking, and efficient routes"
@@ -189,12 +189,12 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
           ) : (
         <Box pos="absolute" bottom="1rem" left={0} right={0}>
           <Box pos="relative" w="100%">
-            <Box mx="auto" w="fit-content">
+            <Box mx="auto" w="fit-content"> {/* force this to be on the center*/}
             <Button onClick={() => setCollapsed(false)}>
               Expand Directions Menu
             </Button>
             </Box>
-            <Box pos="absolute" right="1rem" bottom={0}>
+            <Box pos="absolute" right="6rem" bottom={0}> {/* force this to be on the right*/}
             <Button component={Link} to="/IndoorMapPage" color="green">
               I've Arrived
             </Button>
