@@ -8,19 +8,6 @@ interface CustomButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     bg?: string;
 }
 
-// <Button
-//   variant="outline"
-//   color="dark"
-//   onClick={() => navigate('/map-page')}
-//   style={{
-//     borderRadius: '20px',
-//     transition: 'all 0.3s ease',
-//     fontSize: 'clamp(12px, 3vw, 18px)',
-//   }}
-// >
-//   Find Your Way Now
-// </Button>
-
 export const BasicOutlinedButton: React.FC<CustomButtonProps> = ({
     children,
     onClick,
@@ -29,15 +16,13 @@ export const BasicOutlinedButton: React.FC<CustomButtonProps> = ({
     return (
         <Button
             variant="outline"
-            // display="inline-block"
             size="compact-md"
             color="dark"
             onClick={onClick}
+            fullWidth={false}
             style={{
-                width: 'fit-content',
-                borderRadius: '20px',
+                borderRadius: 'md',
                 transition: 'all 0.3s ease',
-                // fontSize: 'clamp(12px, 3vw, 18px)',
             }}
             {...props}
         >
@@ -54,9 +39,9 @@ export const BlackButton: React.FC<CustomButtonProps> = ({ children, onClick, ..
             fw="600"
             bg="black"
             onClick={onClick}
+            fullWidth={false}
             style={{
-                // width: 'fit-content',
-                borderRadius: '50px',
+                borderRadius: 'md',
                 transition: 'all 0.3s ease',
             }}
             {...props}
@@ -65,15 +50,3 @@ export const BlackButton: React.FC<CustomButtonProps> = ({ children, onClick, ..
         </Button>
     );
 };
-
-// <Button
-//   size="md"
-//   color="dark"
-//   fw="600"
-//   bg="black"
-//   onClick={handleLogin}
-//   disabled={!username || !password}
-//   style={{ borderRadius: '50px', transition: 'all 0.3s ease' }}
-// >
-//   Login
-// </Button>

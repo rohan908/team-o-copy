@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {GoogleMap} from "@react-google-maps/api";
-import {Box} from '@mantine/core';
+import {Box, ScrollArea, Text, List,  useMantineTheme} from '@mantine/core';
 
 interface GoogleMapProps {
     selectedHospital: google.maps.LatLngLiteral | null;
@@ -18,8 +18,10 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
     const handleMapLoad = (map: google.maps.Map) => {
         mapRef.current = map;
     };
-    useEffect(() => {
-        if (!userCoordinate || !selectedHospital || !mapRef.current) return;
+    const theme = useMantineTheme();
+
+   useEffect(() => {
+      if (!userCoordinate || !selectedHospital || !mapRef.current) return;
         const directionsService = new google.maps.DirectionsService();
         if (!directionsRendererRef.current) {
             directionsRendererRef.current = new google.maps.DirectionsRenderer();
@@ -28,9 +30,9 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
         directionsService.route({
             origin: userCoordinate,
             destination: selectedHospital,
-            travelMode: travelMode,
-        },
-            (result, status) => {
+            travelMode: travelMode ?? google.maps.TravelMode.DRIVING
+          },
+          (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) { //make
                     directionsRendererRef.current.setDirections(result)
                     const newSteps = result.routes[0].legs[0].steps.map(
@@ -43,47 +45,44 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
                 }
             }
         )
-    }, [userCoordinate, selectedHospital]);
+    }, [userCoordinate, selectedHospital, travelMode]);
 
     return (
         <>
-            <Box style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <Box pos="relative" w="100%" h="100vh">
                 <GoogleMap
                     mapContainerStyle={{ width: '100%', height: '100%' }}
                     zoom={10}
                     center={selectedHospital ?? { lat: 42.093429, lng: -71.268228 }}
                     onLoad={handleMapLoad}
                 />
-            </Box>
-
             {steps.length > 0 && (
-                <Box
-                    style={{
-                        position: 'absolute',
-                        top: '3rem',
-                        right: '2rem',
-                        maxHeight: '500px',
-                        width: '300px',
-                        overflowY: 'auto',
-                        backgroundColor: 'white',
-                        padding: '1rem',
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                        zIndex: 9999,
-                    }}
+                <Box //custom box for directions
+                    pos="absolute"
+                    top="4rem"
+                    right="0.5rem"
+                    maw={250}
+                    bg="white"
+                    p="md"
+                    radius="md"
+                    shadow="md"
+                    bd ="1px solid white"
+                    style={{borderRadius: "10px"}}
                 >
-                    <strong>Directions:</strong>
-                    <ol style={{ paddingLeft: '1.2rem', marginTop: '0.5rem' }}>
-                        {steps.map((step, index) => (
-                            <li
-                                key={index}
-                                dangerouslySetInnerHTML={{ __html: step }}
-                                style={{ marginBottom: '0.5rem' }}
-                            />
+                  <Text fw={700} mb="sm">Directions:</Text>
+                  <ScrollArea h={250}>
+
+                    <List type="ordered" pl="md" mt="sm">
+                      {steps.map((step, index) => (
+                        <List.Item key={index}>
+                          <Box dangerouslySetInnerHTML={{ __html: step }} mb="sm" />
+                        </List.Item>
                         ))}
-                    </ol>
+                    </List>
+                  </ScrollArea>
                 </Box>
             )}
+          </Box>
         </>
     );
 }

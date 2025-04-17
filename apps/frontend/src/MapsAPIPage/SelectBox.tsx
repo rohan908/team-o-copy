@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom'; //use ive arrived button to direct to /indoor
-import { BlackButton } from '../common-compoents/commonButtons.tsx';
-import { TwoPartInteractiveBox } from '../common-compoents/standAloneFrame.tsx';
-import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
-
+import {Link} from "react-router-dom"; //use ive arrived button to direct to /indoor
+import {BlackButton, BasicOutlinedButton} from "../common-compoents/commonButtons.tsx"
+import {TwoPartInteractiveBox} from "../common-compoents/standAloneFrame.tsx";
+import {HospitalDepartment, Patriot20, Patriot22, ChestnutHill, } from '../directory/components/directorydata.tsx'; //this is now static lol
+import { DirectoryItem } from '../contexts/DirectoryItem.ts';
+import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 import {
     Box,
     Text,
@@ -11,49 +12,36 @@ import {
     Flex,
     Button,
     Divider,
+    Transition,
     Select,
     useMantineTheme,
     Collapse,
     TextInput,
+    Stack
 } from '@mantine/core';
 import * as L from 'leaflet';
-import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 
-interface HospitalSelectBoxProps {
+interface HospitalSelectBoxProps {        //props to pass to main map Display
     onSelectHospital: (coordinate: L.LatLng) => void;
-    onSetUserCoordinates?: (coordinate: { lat: number; long: number }) => void;
+    onSetUserCoordinates?: (coordinate: {lat: number, long: number}) => void;
     onSetTravelMode?: (mode: google.maps.TravelMode) => void;
     onSetSelectedHospitalName?: (name: string | null) => void;
     onSetSelectedDepartment?: (department: string | null) => void;
 }
 
 const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
-    const {
-        onSelectHospital,
-        onSetUserCoordinates,
-        onSetTravelMode,
-        onSetSelectedHospitalName,
-        onSetSelectedDepartment,
-    } = props;
+    const {onSelectHospital, onSetSelectedDepartment, onSetUserCoordinates, onSetTravelMode, onSetSelectedHospitalName} = props;
     const theme = useMantineTheme();
     const [hospital, setHospital] = useState<string | null>(null); //initialize  hospital building as null
-    const [selectedHospitalName, setSelectedHospitalName] = useState<string | null>(null);
-    const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
-    const [collapsed, setCollapsed] = useState(false); //select box has 2 states, collapsed and popped up
-    const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>(
-        []
-    ); //this is needed to display department options when entered a hospital
-    const [userStartLocation, setUserStartLocation] = useState<{
-        lat: number;
-        long: number;
-    } | null>(null); // store user location input
+  const [selectedHospitalName, setSelectedHospitalName] = useState<string | null>(null);
+  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);    const [collapsed, setCollapsed] = useState(false); //select box has 2 states, collapsed and popped up
+    const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>([]); //this is needed to display department options when entered a hospital
+    const [userStartLocation, setUserStartLocation] = useState<{lat: number, long: number} | null>(null); // store user location input
     const input = useRef<HTMLInputElement>(null);
-    const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+    const autocompleteRef = useRef<google.maps.places.Autocomplete|null>(null);
     const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
-
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
-
     console.log(Chestnut);
 
     const MapDepartment = (department: DirectoryNodeItem[]) =>
@@ -64,254 +52,169 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
 
     const handleFindPath = () => {
         if (hospital && onSetSelectedHospitalName) {
-            onSetSelectedHospitalName(hospital);
+          onSetSelectedHospitalName(hospital);
         }
-        if (hospital == 'Chestnut Hill') {
+        if (hospital == "Chestnut Hill") {
             onSelectHospital(new L.LatLng(42.32624893122403, -71.14948990068949));
-        } else if (hospital == '20 Patriot Pl') {
-            onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
-        } else if (hospital == '22 Patriot Pl') {
-            onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
-        } else if (hospital == '20 Patriot Pl') {
-            onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
-        } else if (hospital == '22 Patriot Pl') {
-            onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
+        }
+        else if(hospital =="20 Patriot Pl"){
+          onSelectHospital(new L.LatLng(42.092759710546595, -71.26611460791148));
+        }
+        else if(hospital =="22 Patriot Pl"){
+          onSelectHospital(new L.LatLng(42.09304546224412, -71.26680481859991));
         }
         if (selectedDepartment && onSetSelectedDepartment) {
-            onSetSelectedDepartment(selectedDepartment);
+          onSetSelectedDepartment(selectedDepartment);
         }
-        if (selectedDepartment == 'pharmacy') {
-            onSelectHospital(new L.LatLng(42.093429, -71.268228)); //this is fixed location for pharmacy, should route to specific parking lot
+        if (selectedDepartment == "pharmacy"){
+          onSelectHospital(new L.LatLng(42.093429, -71.268228)); //this is fixed location for pharmacy, should route to specific parking lot
         }
         if (userStartLocation && onSetUserCoordinates) {
-            onSetUserCoordinates(userStartLocation);
+          onSetUserCoordinates(userStartLocation);
         }
         if (navigationMethod && onSetTravelMode) {
-            onSetTravelMode(navigationMethod);
+          onSetTravelMode(navigationMethod);
         }
         setCollapsed(true);
     };
 
-    const setHospitalLocation = (hospital: string | null) => {
-        if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
-            setDepartmentOptions(MapDepartment(Patriot));
-        } else if (hospital == 'Chestnut Hill') {
-            setDepartmentOptions(MapDepartment(Chestnut));
-        } else {
-            setDepartmentOptions([]);
-        }
-        setHospital(hospital);
-        setSelectedDepartment(null);
-    };
+    const setHospitalLocation = (hospital: string | null) =>{
+      if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
+        setDepartmentOptions(MapDepartment(Patriot));
+      }
+      else if (hospital == 'Chestnut Hill'){
+        setDepartmentOptions(MapDepartment(Chestnut));
+      }
+      setHospital(hospital);
+      setSelectedDepartment(null);
+    }
+  //use effect to render google autocomplete
+  useEffect(() => {
+    //initialize only when the box is not collapsed
+    if (collapsed || !input.current) return;
 
-    useEffect(() => {
-        //use effect to render google autocomplete
-        if (!input.current) return;
-        autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {
-            types: ['geocode'],
-        });
-        autocompleteRef.current.addListener('place_changed', () => {
-            const place = autocompleteRef.current?.getPlace();
-            if (place?.geometry?.location) {
-                const location = place.geometry.location;
-                const latlng = {
-                    lat: location.lat(),
-                    long: location.lng(),
-                };
-                setUserStartLocation(latlng);
-            }
-        });
-    }, []);
+    //if previous instance of autocompleteRef exits, then clear it for re initialization
+    if (autocompleteRef.current) {
+      autocompleteRef.current.unbindAll?.();
+      autocompleteRef.current = null;
+    }
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {types: ['geocode']});
 
-    useEffect(() => {
-        //use effect to render google autocomplete
-        if (!input.current) return;
-        autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, {
-            types: ['geocode'],
-        });
-        autocompleteRef.current.addListener('place_changed', () => {
-            const place = autocompleteRef.current?.getPlace();
-            if (place?.geometry?.location) {
-                const location = place.geometry.location;
-                const latlng = {
-                    lat: location.lat(),
-                    long: location.lng(),
-                };
-                setUserStartLocation(latlng);
-            }
-        });
-    }, []);
+    // .addListener is a callback function that triggers when user selects one location in the autocomplete
+    autocompleteRef.current.addListener("place_changed", () => {
+      const place = autocompleteRef.current?.getPlace();
+      if (place?.geometry?.location) {
+        const location = place.geometry.location;
+        const latlng = {
+          lat: location.lat(),
+          long: location.lng(),
+        };
+        setUserStartLocation(latlng);
+      }
+    }
+    );
+  }, [collapsed]);
 
     return (
+      <>
+        <Collapse in={!collapsed} animateOpacity={true}>
+
         <Box
-            pos="fixed"
-            left={0}
-            right={0}
-            bottom={0}
-            style={{
-                zIndex: 999,
-                display: 'flex',
-                justifyContent: 'center',
-                transition: 'all 0.4s ease-in-out',
-                paddingBottom: collapsed ? 1 : '1.5rem',
-                pointerEvents: 'none',
-            }}
-        >
-            <Box
-                bg="#FFF8EB"
-                p={collapsed ? 0 : { base: 'md', sm: '2rem' }}
-                w="100%"
-                style={{
-                    maxWidth: collapsed ? '300px' : '50%',
-                    opacity: 0.95,
-                    borderRadius: theme.radius.lg,
-                    backdropFilter: 'blur(5px)',
-                    boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.1)',
-                    pointerEvents: 'auto',
-                }}
-            >
-                <Collapse in={!collapsed}>
-                    <Title
-                        order={2}
-                        mb="sm"
-                        c="#001D4D"
-                        ta="left"
-                        fw={700}
-                        fz={{ sm: 'xl', md: 'xxl' }}
-                    >
-                        Find your Way!
-                    </Title>
+          pos="absolute"
+          top="50%"
+          left="50%"
+          style={{ transform: 'translate(-50%, -50%)',
+                  pointerEvents: collapsed ? 'none' : 'auto',}} //when collapsed, this box becomes unclickable
+          maw={500}>  {/* this  is supposed to render always to the center regardless of laptop screen*/}
 
-                    <Text
-                        mb="sm"
-                        ta="left"
-                        fz="sm"
-                        c="dimmed"
-                        style={{
-                            fontStyle: 'italic',
-                            lineHeight: 1.5,
-                            maxWidth: '90%',
-                        }}
-                    >
-                        Use our interactive map to locate hospital departments, find the best
-                        parking spots, and navigate your route efficiently.
-                    </Text>
+          <TwoPartInteractiveBox
+            title="Find your Way!"
+            subtitle="Use our interactive map to find departments, parking, and efficient routes">
+              <Stack w="100%">
+                <Box>
+                  <Text ta="left" mb="sm" fw={500}>
+                    Insert Starting Location:
+                  </Text>
+                  <TextInput
+                    color = "#A5A7AC"
+                    ref={input}
+                    placeholder ="--Enter a Location--"
+                  />
+                </Box>
 
-                    <Divider variant="dotted" size="lg" mb="lg" color="#FCB024" />
-                    <Text fz="sm" ta="left" mb="xxs" fw={500}>
-                        Insert Starting Location:
-                    </Text>
-                    <TextInput ref={input} mb="md" />
+                <Box>
+                  <Text ta="left" mb="sm" fw={500}>
+                    Select Hospital:
+                  </Text>
+                  <Select
+                    color = "#A5A7AC"
+                    placeholder ="--Select Hospital--"
+                    data={[
+                        { value: '20 Patriot Pl', label: '20 Patriot Pl' },
+                        { value: '22 Patriot Pl', label: '22 Patriot Pl' },
+                        { value: 'Chestnut Hill', label: 'Chestnut Hill' }]}
+                    value = {hospital}
+                    onChange={setHospitalLocation}/>
+                </Box>
 
-                    <Text fz="sm" ta="left" mb="xxs" fw={500}>
-                        Select Hospital:
-                    </Text>
-                    <Select
-                        color="gray"
-                        placeholder="Hospital"
-                        data={[
-                            { value: '20 Patriot Pl', label: '20 Patriot Pl' },
-                            { value: '22 Patriot Pl', label: '22 Patriot Pl' },
-                            { value: 'Chestnut Hill', label: 'Chestnut Hill' },
-                        ]}
-                        value={hospital}
-                        onChange={setHospitalLocation}
-                        mb="sm"
-                    />
+                <Box>
+                  <Text ta="left" mb="sm" fw={500}>
+                    Select Department:
+                  </Text>
+                  <Select
+                    color = "#A5A7AC"
+                    placeholder ="--Select Department--"
+                    data = {departmentOptions}
+                    value={selectedDepartment}
+                    onChange={setSelectedDepartment}
+                    disabled={!hospital || departmentOptions.length === 0}/>
+                </Box>
 
-                    <Text fz="sm" ta="left" mb="xxs" fw={500}>
-                        Select Department:
-                    </Text>
-                    <Select
-                        color="gray"
-                        placeholder="Department"
-                        data={departmentOptions}
-                        value={selectedDepartment}
-                        onChange={setSelectedDepartment}
-                        mb="md"
-                        disabled={!hospital || departmentOptions.length === 0}
-                    />
-                    <Text fz="sm" ta="left" mb="xxs" fw={500}>
-                        Select Navigation Method:
-                    </Text>
-                    <Select
-                        color="gray"
-                        placeholder="Navigation Method"
-                        data={[
-                            { value: google.maps.TravelMode.WALKING, label: 'Walking' },
-                            {
-                                value: google.maps.TravelMode.TRANSIT,
-                                label: 'Public Transportation',
-                            },
-                            { value: google.maps.TravelMode.DRIVING, label: 'Driving' },
-                        ]}
-                        value={navigationMethod}
-                        onChange={(value) => {
-                            setNavigationMethod(value);
-                        }}
-                        mb="sm"
-                        disabled={!hospital}
-                    />
+                <Box>
+                  <Text ta="left" mb="sm" fw={500}>
+                    Select Navigation Method:
+                  </Text>
+                  <Select
+                    color = "#A5A7AC"
+                    placeholder ="--Select Navigation Method--"
+                    data = {[
+                      {value: google.maps.TravelMode.WALKING, label: 'Walking'},
+                      {value: google.maps.TravelMode.TRANSIT, label: 'Public Transportation'},
+                      {value: google.maps.TravelMode.DRIVING, label: 'Driving'},
+                    ]}
+                    value = {navigationMethod}
+                    onChange = {setNavigationMethod}
+                    disabled={!hospital}
+                  />
+                </Box>
 
-                    <Flex justify="flex-end" gap="sm">
-                        <BlackButton onClick={handleFindPath}>Find Path</BlackButton>
-                    </Flex>
-                </Collapse>
-
-                {collapsed && (
-                    <Box
-                        style={{
-                            position: 'fixed',
-                            zIndex: 9999,
-                            bottom: '0.5rem',
-                            pointerEvents: 'auto',
-                        }}
-                    >
-                        <Flex justify="space-between" align="center" gap="md">
-                            <Button
-                                variant="subtle"
-                                size="md"
-                                onClick={() => setCollapsed(false)}
-                                style={{
-                                    borderRadius: '50px',
-                                    height: '3rem',
-                                    fontWeight: 600,
-                                    fontSize: '1rem',
-                                    width: 'fit-content',
-                                    backgroundColor: theme.colors.gray[1],
-                                    borderTop: `1px solid ${theme.colors.gray[3]}`,
-                                }}
-                            >
-                                Expand Directions Menu
-                            </Button>
-                          <Collapse in={selectedDepartment != null}>
-                            <Button
-                              color="green"
-                              size="md"
-                              fw={600}
-                              component={Link}
-                              to="/IndoorMapPage"
-                              disabled={selectedDepartment == null}
-                              style={{
-                                borderRadius: '50px',
-                                padding: '0.5rem 1.25rem',
-                                fontSize: '0.9rem',
-                                marginLeft: 'auto',
-                                backgroundColor: 'green',
-                                color: 'white',
-                                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                                transition: 'all 0.3s ease',
-                              }}
-                            >
-                              I've Arrived
-                            </Button>
-                          </Collapse>
-                        </Flex>
-                    </Box>
-                )}
-            </Box>
+                <Box ta = "right">
+                  <BlackButton onClick={handleFindPath}>
+                    Find Path
+                  </BlackButton>
+                </Box>
+              </Stack>
+        </TwoPartInteractiveBox>
         </Box>
-    );
-};
+        </Collapse>
+
+        {collapsed && ( //when collapsed, transfrom into a box that contains the 2 buttons
+        <Box pos="absolute" bottom="1rem" left={0} right={0}>
+
+            <Box mx="auto" w="fit-content"> {/* force this to be on the center*/}
+            <Button onClick={() => setCollapsed(false)}>
+              Expand Directions Menu
+            </Button>
+            </Box>
+
+            <Box pos="absolute" right="6rem" bottom={0}> {/* this ensures button is in the right right*/}
+            <Button component={Link} to="/IndoorMapPage" color="green">
+              I've Arrived
+            </Button>
+            </Box>
+
+        </Box>
+      )}
+        </>)}
 
 export default SelectBox;

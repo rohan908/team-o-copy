@@ -2,16 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Box, Flex, Transition, useMantineTheme } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { DragControls } from 'three/addons/controls/DragControls.js';
-import MapEditorBox from './Components/MapEditorBox.tsx';
-import { findPath } from './FindPathRouting.ts';
 import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
-import FloorSwitchBox from './Components/FloorManagerBox.tsx';
+import FloorSwitchBox from './components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 import { PathPickerBox } from './components/PathPickerBox.tsx';
+import { findPath } from './FindPathRouting.ts';
 
+const canvasId = 'insideMapCanvas';
+
+// Pass in props for the selected hospital and department
+// TODO: change this to a useContext
 interface DraggableMapProps {
     selectedHospitalName?: string | null;
     selectedDepartment?: string | null;
@@ -43,7 +45,7 @@ export function DraggableMap({
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
-    // Declares context for node information
+    // Declares context for start and end node information
     const patriotNodes = usePatriotContext();
     const chestnutNodes = useChestnutHillContext();
 
@@ -64,11 +66,12 @@ export function DraggableMap({
     };
 
     // gets id of parking lot node -> hardcoded for now
+    // TODO: Search for nodes with type parking lot, allow user to select which parking lot they parked in
     const findParkingLot = (): number => {
-        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
-            return 1;
-        } else if (selectedHospitalName == 'Chestnut Hill') {
-            return 100;
+        if (selectedHospitalName === '20 Patriot Pl' || selectedHospitalName === '22 Patriot Pl') {
+            return 1; // Node 1 for Patriot Place
+        } else {
+            return 100; // Node 100 for Chestnut Hill
         }
     };
 
@@ -95,58 +98,27 @@ export function DraggableMap({
     Chestnut Hill Floor 1 -> floor4 -> scene 4
      */
 
-    // Setup scenes and map planes. This is probably the worst way to do this possible
-    const scene1 = new THREE.Scene();
-    const texturePath = '../../public/MapImages/Patriot Place Floor 1.png';
-    const mapTexture = new THREE.TextureLoader().load(texturePath);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
-    const mapGeo = new THREE.PlaneGeometry(500, 281);
-    const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
-    const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
-    mapPlane.position.set(0, 0, 0);
-    scene1.add(mapPlane);
-    const scene2 = new THREE.Scene();
-    const texturePath1 = '../../public/MapImages/Patriot Place Floor 3.png';
-    const mapTexture1 = new THREE.TextureLoader().load(texturePath1);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
-    const mapGeo1 = new THREE.PlaneGeometry(500, 281);
-    const mapMaterial1 = new THREE.MeshBasicMaterial({ map: mapTexture1 });
-    const mapPlane1 = new THREE.Mesh(mapGeo1, mapMaterial1);
-    mapPlane1.position.set(0, 0, 0);
-    scene2.add(mapPlane1);
-    const scene3 = new THREE.Scene();
-    const texturePath2 = '../../public/MapImages/Patriot Place Floor 4.png';
-    const mapTexture2 = new THREE.TextureLoader().load(texturePath2);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
-    const mapGeo2 = new THREE.PlaneGeometry(500, 281);
-    const mapMaterial2 = new THREE.MeshBasicMaterial({ map: mapTexture2 });
-    const mapPlane2 = new THREE.Mesh(mapGeo2, mapMaterial2);
-    mapPlane2.position.set(0, 0, 0);
-    scene3.add(mapPlane2);
-    const scene4 = new THREE.Scene();
-    const texturePath3 = '../../public/MapImages/Chestnut Hill Floor 1.png';
-    const mapTexture3 = new THREE.TextureLoader().load(texturePath3);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
-    const mapGeo3 = new THREE.PlaneGeometry(500, 281);
-    const mapMaterial3 = new THREE.MeshBasicMaterial({ map: mapTexture3 });
-    const mapPlane3 = new THREE.Mesh(mapGeo3, mapMaterial3);
-    mapPlane3.position.set(0, 0, 0);
-    scene4.add(mapPlane3);
+    // function for simplifying creating new scenes (floors)
+    function createMapScene(texturePath: string) {
+        const scene = new THREE.Scene();
+        const mapTexture = new THREE.TextureLoader().load(texturePath);
+        mapTexture.colorSpace = THREE.SRGBColorSpace;
+        const mapGeo = new THREE.PlaneGeometry(500, 281);
+        const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
+        const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
+        mapPlane.position.set(0, 0, 0);
+        scene.add(mapPlane);
+        return scene;
+    }
+
+    // Setup scenes and map planes.
+    const scene1 = createMapScene('../../public/MapImages/Patriot Place Floor 1.png');
+    const scene2 = createMapScene('../../public/MapImages/Patriot Place Floor 3.png');
+    const scene3 = createMapScene('../../public/MapImages/Patriot Place Floor 4.png');
+    const scene4 = createMapScene('../../public/MapImages/Chestnut Hill Floor 1.png');
     const scene = useRef<THREE.Scene>(scene1);
 
-    // updates the selected node position from UI
-    const updateNodePosition = (x: number, y: number, floor: number) => {
-        setNodeX(x);
-        setNodeY(y);
-        if (selectedObject.current) {
-            selectedObject.current.position.x = x;
-            selectedObject.current.position.y = y;
-            console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
-        }
-    };
-    // Because THREEjs object IDs are readonly we should probably create and maintain a list that associates the THREEjs object ids with the backed node ids.
-    const nodeIds: [number, number][] = [];
-
+    // Function for populating nodes as THREEjs sphere objects
     const createNode = (node: NodeDataType) => {
         const geometry = new THREE.SphereGeometry(
             nodeRadius,
@@ -155,7 +127,6 @@ export function DraggableMap({
         );
         const material = new THREE.MeshBasicMaterial(nodeColor);
         const sphere = new THREE.Mesh(geometry, material);
-        nodeIds.push([node.id, sphere.id]);
         sphere.position.x = node.x;
         sphere.position.y = node.y;
         const nodeFloor = node.floor;
@@ -170,9 +141,9 @@ export function DraggableMap({
         } else {
             console.error("node not added because floor doesn't exist");
         }
-        objects.push(sphere);
     };
 
+    // Function for populating edges. Creating the edge objects are done in a class to simplify implementation of the direction animation
     const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
         if (!animationRef.current) {
             console.error('Animation reference not initialized');
@@ -208,11 +179,10 @@ export function DraggableMap({
                     { x: node2.x, y: node2.y }
                 )
             );
-        } else {
-            console.log('Skipping edge between floors', node1.floor, node2.floor);
         }
     };
 
+    // Handle switching to other floors
     const handleFloorChange = (newFloor: number) => {
         if (newFloor === floor) return;
         setIsFading(true);
@@ -275,28 +245,26 @@ export function DraggableMap({
        }
        }
       */
-    // Get the path
-    if (firstNodeId && lastNodeId) {
-        const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
-            const ids = pathres.result.pathIDs;
-            // For each node id in the path
-            for (const id of ids) {
-                // Get the full node from the ID
-                const node = getNode(id).then(async (noderes) => {
-                    createNode(noderes.result.nodeData); //Create the node from its data
-                    const connectedNodeDatas = noderes.result.connections; // list of the connected nodes "connections" data including the IDs and Weights
-                    for (const connectedNodeData of connectedNodeDatas) {
-                        // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
-                        const connectedNode = getNode(connectedNodeData.connectedId).then(
-                            async (connectednoderes) => {
-                                if (ids.includes(connectednoderes.result.nodeData.id)) {
-                                    // If the connected node is in the path
-                                    // TODO: Add another check that makes it so duplicate edge objects aren't created
-                                    createEdge(
-                                        noderes.result.nodeData,
-                                        connectednoderes.result.nodeData
-                                    );
-                                }
+    // Get the path TODO: Switch get node api calls to useContext
+    const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
+        const ids = pathres.result.pathIDs;
+        // For each node id in the path
+        for (const id of ids) {
+            // Get the full node from the ID
+            const node = getNode(id).then(async (noderes) => {
+                createNode(noderes.result.nodeData); //Create the node from its data
+                const connectedNodeDatas = noderes.result.connections; // list of the connected nodes "connections" data including the IDs and Weights
+                for (const connectedNodeData of connectedNodeDatas) {
+                    // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
+                    const connectedNode = getNode(connectedNodeData.connectedId).then(
+                        async (connectednoderes) => {
+                            if (ids.includes(connectednoderes.result.nodeData.id)) {
+                                // If the connected node is in the path
+                                // TODO: Add another check that makes it so duplicate edge objects aren't created
+                                createEdge(
+                                    noderes.result.nodeData,
+                                    connectednoderes.result.nodeData
+                                );
                             }
                         );
                     }
@@ -311,24 +279,24 @@ export function DraggableMap({
         if (selectedHospitalName === 'Chestnut Hill') {
             handleFloorChange(5);
         }
-        // Get canvas element
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
 
-        animationRef.current = new FlowingTubeAnimation(scene, {
-            color1: 0x00aaff,
-            color2: 0xff3300,
-            flowSpeed: 0.3,
-            pulseFrequency: 2.0,
-            pulseWidth: 0.25,
+        animationRef.current = new FlowingTubeAnimation({
+            color1: 0x2a68f7,
+            color2: 0x4deefb,
+            flowSpeed: 2,
+            pulseFrequency: 0.5,
         });
+
+        const canvas = document.getElementById(canvasId);
 
         // we create a new renderer
         const renderer = new THREE.WebGLRenderer({
             canvas: canvas as HTMLCanvasElement,
             antialias: true,
         });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        if (canvas) {
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        }
         renderer.setPixelRatio(window.devicePixelRatio);
 
         // Create camera
@@ -354,132 +322,7 @@ export function DraggableMap({
             RIGHT: THREE.MOUSE.ROTATE,
         };
 
-        // Initialize dragControls with an empty array
-        let draggableObjects: THREE.Object3D[] = [];
-        let dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
-
-        // Set up drag control event listeners
-        dragControls.addEventListener('dragstart', function () {
-            orbitControls.enabled = false;
-        });
-
-        dragControls.addEventListener('dragend', function () {
-            setTimeout(() => {
-                orbitControls.enabled = true;
-            }, 10);
-        });
-
-        // Function to update draggable objects to make sure only selected objects can be dragged
-        const updateDraggableObjects = () => {
-            // Dispose of the old dragControls
-            dragControls.dispose();
-            // Create a new array with only the selected object (if any)
-            draggableObjects = [];
-            if (selectedObject.current) {
-                draggableObjects.push(selectedObject.current);
-            }
-            // new dragControls with the updated array
-            dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
-            // Event listeners that enable camera movement
-            dragControls.addEventListener('dragstart', function () {
-                orbitControls.enabled = false;
-            });
-            dragControls.addEventListener('dragend', function () {
-                setTimeout(() => {
-                    orbitControls.enabled = true;
-                }, 10);
-            });
-        };
-
-        // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
-        const raycaster = new THREE.Raycaster();
-        const pointer = new THREE.Vector2();
-
-        window.addEventListener('click', (event) => {
-            // Get canvas bounds
-            if (canvas) {
-                const rect = canvas.getBoundingClientRect();
-                // Calculate pointer position in normalized device coordinates
-                // (-1 to +1) for both components
-                pointer.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
-                pointer.y = -((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
-                raycaster.setFromCamera(pointer, camera);
-                // calculate objects intersecting the picking ray
-                const intersects = raycaster.intersectObjects(objects);
-                if (intersects.length > 0) {
-                    const intersect = intersects[0]; // grab the first intersected object
-
-                    /*
-                  This structure handles selecting objects.
-                  It could probably use some proper handler functions, but it works for now.
-                   */
-
-                    // if there is no selected object or the clicked on object is not selected
-                    if (
-                        selectedObject.current === null ||
-                        selectedObject.current !== intersect.object
-                    ) {
-                        // if there is another selected object
-                        if (selectedObject.current !== intersect.object) {
-                            if (
-                                selectedObject.current instanceof THREE.Mesh &&
-                                selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                            ) {
-                                selectedObject.current.material.color.set(0xffff00); //set the already selected object back to it's non-selected color
-                            }
-                        }
-                        selectedObject.current = intersect.object; // switch selected object to the clicked on object
-                        setNodeSelected(true);
-                        // set the color of the clicked on objet to the it's selected color
-                        if (
-                            selectedObject.current instanceof THREE.Mesh &&
-                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                        ) {
-                            selectedObject.current.material.color.set(0x000000);
-                        }
-                    }
-                    // The clicked on object is already selected (deselection when clicking on an already selected object)
-                    else {
-                        // set the color of the clicked on object to it's non-selected color
-                        if (
-                            selectedObject.current instanceof THREE.Mesh &&
-                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                        ) {
-                            selectedObject.current.material.color.set(0xffff00);
-                        }
-                        // clear the selected object
-                        selectedObject.current = null;
-                        setNodeSelected(false);
-                    }
-                    updateDraggableObjects();
-                }
-            }
-        });
-
-        // Safety net for edge cases
-        const handleMouseUp = () => {
-            setTimeout(() => {
-                orbitControls.enabled = true;
-            }, 10);
-        };
-
-        const handleMouseLeave = () => {
-            setTimeout(() => {
-                orbitControls.enabled = true;
-            }, 10);
-        };
-
-        window.addEventListener('mouseup', handleMouseUp);
-
-        renderer.domElement.addEventListener('mouseleave', handleMouseLeave);
-
         const animate = () => {
-            if (selectedObject.current) {
-                // Update state with selected object position
-                setNodeX(selectedObject.current.position.x);
-                setNodeY(selectedObject.current.position.y);
-            }
-
             // Get delta time for animation
             const deltaTime = clockRef.current.getDelta();
 
@@ -492,23 +335,10 @@ export function DraggableMap({
             renderer.render(scene.current, camera);
             window.requestAnimationFrame(animate);
 
-            return () => {
-                renderer.dispose();
-                mapMaterial.dispose();
-                mapTexture.dispose();
-                scene.current.traverse((obj) => {
-                    if ((obj as THREE.Mesh).material) {
-                        ((obj as THREE.Mesh).material as THREE.Material).dispose();
-                    }
-                    if ((obj as THREE.Mesh).geometry) {
-                        ((obj as THREE.Mesh).geometry as THREE.BufferGeometry).dispose();
-                    }
-                });
-                scene.current.clear();
-            };
+            return () => {};
         };
         animate();
-    }, [floor]);
+    });
 
     return (
         <Box w="100%" h="100%" p={0} pos={'relative'}>
@@ -527,6 +357,13 @@ export function DraggableMap({
                 setSelectedDepartment={setSelectedDepartment}
             />
 
+        <Box w="100vw" h="100vh">
+            <FloorSwitchBox
+                floor={floor}
+                setFloor={handleFloorChange}
+                onCollapseChange={() => true}
+                building={selectedHospitalName || ''}
+            />
             <canvas
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'absolute' }}
