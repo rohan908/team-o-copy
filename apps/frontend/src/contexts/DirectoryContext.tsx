@@ -53,26 +53,27 @@ export const DirectoryContext = createContext<DirectoryContextType | undefined>(
 
  */
 
+// this gets ALL node table data
 export const useDirectoryContext = () => {
-  const context = useContext(DirectoryContext);
-  if (!context) {
-    throw new Error(
-      'The useDirectoryContext must be used within the provider component DirectoryProvider'
-    );
-  }
+    const context = useContext(DirectoryContext);
+    if (!context) {
+        throw new Error(
+            'The useDirectoryContext must be used within the provider component DirectoryProvider'
+        );
+    }
 
-  return context;
+    return context;
 };
 
 export const useAllNodesContext = () => {
-  const context = useContext(DirectoryContext);
-  if (!context) {
-    throw new Error(
-      'The useDirectoryContext must be used within the provider component DirectoryProvider'
-    );
-  }
+    const context = useContext(DirectoryContext);
+    if (!context) {
+        throw new Error(
+            'The useDirectoryContext must be used within the provider component DirectoryProvider'
+        );
+    }
 
-  return context.allNodes;
+    return context.allNodes;
 };
 
 export const usePatriotContext = () => {
@@ -179,17 +180,16 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
             const allNodeData = await fetchAllNodeData();
 
             const setPatData = await patData?.json().then((data) => {
-              dispatch({ type: 'SET_PATRIOT', data: data });
-            })
+                dispatch({ type: 'SET_PATRIOT', data: data });
+            });
 
             const setChestnutData = await chestHilldata?.json().then((data) => {
-              dispatch({ type: 'SET_CHESTNUTHILL', data: data });
-            })
+                dispatch({ type: 'SET_CHESTNUTHILL', data: data });
+            });
 
             const setAllNodeData = await allNodeData?.json().then((data) => {
-              dispatch({ type: 'SET_ALLNODES', data: data });
-            })
-
+                dispatch({ type: 'SET_ALLNODES', data: data });
+            });
         } catch (err) {
             // I made if statements for this to fix " err is of type unknown"
             if (err instanceof Error) {
