@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
-import { Collapse, Button, Divider, Center, Flex, Title } from '@mantine/core';
+import { Collapse, Button, Divider, Center, Flex, Title, Box } from '@mantine/core';
 import LanguageRequestHistory from './LanguageRequestHistory.tsx';
 import { SegmentedControl } from '@mantine/core';
 import SecurityRequestHistory from './SecurityRequestHistory.tsx';
@@ -47,14 +47,23 @@ export function AdminPage() {
     }, [stringDisplayNum]);
 
     return (
-        <div
+        <Box
             className="min-h-screen w-full"
             style={{
                 background: 'linear-gradient(160deg, #aaf7fc 0%, #aaf7fc 100%)',
                 padding: '2rem',
             }}
         >
-            <div className="max-w-4xl mx-auto bg-[#FDF0D5]/90 p-4 sm:p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-sm">
+            <Box
+              maw="60%"
+              mx="auto"
+              bg="themeGold.1"
+              p="2.5%"
+              style={{
+                borderRadius: "15px",
+                boxShadow: 'var(--shadow-lg)',
+              }}
+            >
                 <Title order={2} className="mb-4 text-center" fw={600}>
                     Admin Page
                 </Title>
@@ -100,24 +109,52 @@ export function AdminPage() {
                             })}
                         ></SegmentedControl>
                         <Collapse in={displayTableNumber == 0}>
-                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
+                          <Box
+                            bg="themeGold.0"
+                            p="10px"
+                            mt="10px"
+                            style={{
+                              borderRadius: "15px"
+                            }}
+                          >
                                 <LanguageRequestHistory />
-                            </div>
+                            </Box>
                         </Collapse>
                         <Collapse in={displayTableNumber == 1}>
-                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
+                          <Box
+                            bg="themeGold.0"
+                            p="10px"
+                            mt="10px"
+                            style={{
+                              borderRadius: "15px"
+                            }}
+                          >
                                 <SecurityRequestHistory />
-                            </div>
+                            </Box>
                         </Collapse>
                         <Collapse in={displayTableNumber == 2}>
-                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
+                            <Box
+                              bg="themeGold.0"
+                              p="10px"
+                              mt="10px"
+                              style={{
+                                borderRadius: "15px"
+                              }}
+                            >
                                 <SanitationRequestHistory />
-                            </div>
+                            </Box>
                         </Collapse>
                         <Collapse in={displayTableNumber == 3}>
-                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
+                            <Box
+                              bg="themeGold.0"
+                              p="10px"
+                              mt="10px"
+                              style={{
+                                borderRadius: "15px"
+                              }}
+                            >
                                 <MaintenanceRequestHistory />
-                            </div>
+                            </Box>
                         </Collapse>
                     </Flex>
                     {/*<Button*/}
@@ -148,7 +185,10 @@ export function AdminPage() {
                 <DatabaseController table="directory" />
 
                 {/* Toggle Button */}
-                <div className="flex justify-center mt-4">
+                <Flex
+                  justify="center"
+                  mt="10px"
+                >
                     <Button
                         color="#153A90"
                         variant="outline"
@@ -156,7 +196,7 @@ export function AdminPage() {
                     >
                         {showPreview ? 'Hide Directory Preview' : 'Preview Directory'}
                     </Button>
-                </div>
+                </Flex>
 
                 {/* Collapsible CSV Table */}
                 <Collapse in={showPreview} transitionDuration={200}>
@@ -164,8 +204,8 @@ export function AdminPage() {
                         <CSVTable table="directory" />
                     </div>
                 </Collapse>
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }
 
