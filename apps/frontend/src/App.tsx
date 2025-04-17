@@ -147,9 +147,7 @@ function App() {
     return (
         <MantineProvider theme={theme}>
             <DirectoryProvider>
-                <RequestProvider>
-                    <Routing />
-                </RequestProvider>
+                <Routing />
             </DirectoryProvider>
         </MantineProvider>
     );
