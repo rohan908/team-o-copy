@@ -15,8 +15,8 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 14,92,-15,1,1,staircase-1,stairs,staircase,"13,15"
 15,94,-15,2,1,staircase-2,stairs,staircase,"14,16,25"
 16,87,-18,2,1,hallway,hallway,hallway,"15,17,19"
-17,84,100,2,1,hallway,hallway,hallway,"16,18"
-18,80,100,2,1,Vein Care Services,department,department,17
+17,84,-20,2,1,hallway,hallway,hallway,"16,18"
+18,80,-18,2,1,Vein Care Services,department,department,17
 19,88,-24,2,1,hallway,hallway,hallway,"16,20"
 20,72,-28,2,1,hallway,hallway,hallway,"19,21"
 21,69,-23,2,1,hallway,hallway,hallway,"20,22"
@@ -46,39 +46,3 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 114,31,-18,4,2,hallway,hallway,hallway,"113,115"
 115,33,-25,4,2,hallway,hallway,hallway,"114,116"
 116,57,-25,4,2,Radiology,department,department,"115,111"
-31,0,0,1,1,Blood Draw/Phlebotomy,blood draw,directory,
-32,0,0,1,1,Pharmacy,Pharmacy,directory,
-33,0,0,1,1,Radiology,Radiology,directory,
-34,0,0,1,1,Cardiovascular Services,Cardiovascular Services,directory,
-35,0,0,1,1,Urology,Urology,directory,
-36,0,0,1,1,Urgent Care Center,Urgent Care Center,directory,
-37,0,0,2,1,Surgi-Care,Surgi-Care,directory,
-38,0,0,2,1,Clinical Lab,Clinical Lab,directory,
-39,0,0,2,1,Speech - Language,Speech - Language,directory,
-40,0,0,2,1,Physical Therapy,Physical Therapy,directory,
-41,0,0,2,1,Upper Extremity,Upper Extremity,directory,
-42,0,0,2,1,Hand Therapy,Hand Therapy,directory,
-43,0,0,2,1,Occupational Therapy,Occupational Therapy,directory,
-44,0,0,2,1,Cardiac Rehab,Cardiac Rehab,directory,
-45,0,0,2,1,Rehabilitation Services,Rehabilitation Services,directory,
-46,0,0,2,1,Podiatry,Podiatry,directory,
-47,0,0,2,1,Physiatry,Physiatry,directory,
-48,0,0,2,1,Pediatric Trauma,Pediatric Trauma,directory,
-49,0,0,2,1,Arthroplasty,Arthroplasty,directory,
-50,0,0,2,1,Hand and Upper Extremity,Hand and Upper Extremity,directory,
-51,0,0,2,1,Orthopaedics,Orthopaedics,directory,
-52,0,0,3,1,X-Ray Suite,X-Ray Suite,directory,
-53,0,0,3,1,Sports Medicine Center,Sports Medicine Center,directory,
-54,0,0,3,1,Weight Management and Wellness,Weight Management and Wellness,directory,
-55,0,0,3,1,Vascular Surgery,Vascular Surgery,directory,
-56,0,0,3,1,Thoracic Surgery,Thoracic Surgery,directory,
-57,0,0,3,1,Plastic Surgery,Plastic Surgery,directory,
-58,0,0,3,1,General and Gastrointestinal Surgery,General and Gastrointestinal Surgery,directory,
-59,0,0,3,1,ENT,ENT,directory,
-60,0,0,3,1,Audiology,Audiology,directory,
-61,0,0,4,1,Surgical Specialties,Surgical Specialties,directory,
-62,0,0,4,1,Day Surgery Center,Day Surgery Center,directory,
-63,0,0,4,1,Pulmonary Function Testing,Pulmonary Function Testing,directory,
-64,0,0,4,1,Pain Medicine,Pulmonary Function Testing,directory,
-65,0,0,4,1,Nutrition,Nutrition,directory,
-66,0,0,4,1,Electromyography (EMG),Electromyography (EMG),directory,

@@ -1,11 +1,9 @@
-import { edgeData } from '../../common/src/MapHelper.ts';
-
-// returns object with all the data required for seeding the "Node" table
-// will replace contents of this file with information exported from frontend
-// bounds are -250 to 250 for x, -200 to 200 for y, z
+import { edgeData } from '../../common/src/MapHelper.ts'; // returns object with all the data required for seeding the "Node" table will replace contents of this file with
+// information exported from frontend
+/* bounds are -250 to 250 for x, -200 to 200 for y, z */
 export function getNodeData() {
     return [
-        // floor 1 Patriot-20
+        /* floor 1 Patriot-20 */
         {
             x: 86.6,
             y: 82.0,
@@ -117,7 +115,7 @@ export function getNodeData() {
             connectingNodes: [10],
         },
 
-        // floor 1 Patriot-22 (stairs to get to floors 3-4)
+        /* floor 1 Patriot-22 (stairs to get to floors 3-4) */
         {
             x: 115.2,
             y: 14.7,
@@ -149,7 +147,7 @@ export function getNodeData() {
             connectingNodes: [13, 15],
         },
 
-        // floor 3 Patriot-22 (listed as 2 for pathfinding)
+        /* floor 3 Patriot-22 (listed as 2 for pathfinding) */
         {
             x: 94.8,
             y: -15.5,
@@ -251,7 +249,7 @@ export function getNodeData() {
             connectingNodes: [23],
         },
 
-        // floor 4 Patriot-22 (listed as 3 for pathfinding)
+        /* floor 4 Patriot-22 (listed as 3 for pathfinding) */
         {
             x: 94.6,
             y: -15.3,
@@ -314,7 +312,7 @@ export function getNodeData() {
         },
 
         // starting at node ID 100 -->
-        // floor 1 Chestnut hill
+        /* floor 1 Chestnut hill */
         {
             id: 100,
             x: -34.6,
@@ -501,327 +499,6 @@ export function getNodeData() {
             nodeType: 'department',
             mapId: 2,
             connectingNodes: [115, 111],
-        },
-
-        // add directory data
-        {
-            x: 0,
-            y: 0,
-            floor: 1,
-            name: 'Blood Draw/Phlebotomy',
-            description: 'blood draw',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 1,
-            name: 'Pharmacy',
-            description: 'Pharmacy',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 1,
-            name: 'Radiology',
-            description: 'Radiology',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 1,
-            name: 'Cardiovascular Services',
-            description: 'Cardiovascular Services',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 1,
-            name: 'Urology',
-            description: 'Urology',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 1,
-            name: 'Urgent Care Center',
-            description: 'Urgent Care Center',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Surgi-Care',
-            description: 'Surgi-Care',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Clinical Lab',
-            description: 'Clinical Lab',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Speech - Language',
-            description: 'Speech - Language',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Physical Therapy',
-            description: 'Physical Therapy',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Upper Extremity',
-            description: 'Upper Extremity',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Hand Therapy',
-            description: 'Hand Therapy',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Occupational Therapy',
-            description: 'Occupational Therapy',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Cardiac Rehab',
-            description: 'Cardiac Rehab',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Rehabilitation Services',
-            description: 'Rehabilitation Services',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Podiatry',
-            description: 'Podiatry',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Physiatry',
-            description: 'Physiatry',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Pediatric Trauma',
-            description: 'Pediatric Trauma',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Arthroplasty',
-            description: 'Arthroplasty',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Hand and Upper Extremity',
-            description: 'Hand and Upper Extremity',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 2,
-            name: 'Orthopaedics',
-            description: 'Orthopaedics',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-
-        {
-            x: 0,
-            y: 0,
-            floor: 3,
-            name: 'X-Ray Suite',
-            description: 'X-Ray Suite',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 3,
-            name: 'Sports Medicine Center',
-            description: 'Sports Medicine Center',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 3,
-            name: 'Weight Management and Wellness',
-            description: 'Weight Management and Wellness',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 3,
-            name: 'Vascular Surgery',
-            description: 'Vascular Surgery',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 3,
-            name: 'Thoracic Surgery',
-            description: 'Thoracic Surgery',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 3,
-            name: 'Plastic Surgery',
-            description: 'Plastic Surgery',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 3,
-            name: 'General and Gastrointestinal Surgery',
-            description: 'General and Gastrointestinal Surgery',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        { x: 0, y: 0, floor: 3, name: 'ENT', description: 'ENT', nodeType: 'directory', mapId: 1 },
-        {
-            x: 0,
-            y: 0,
-            floor: 3,
-            name: 'Audiology',
-            description: 'Audiology',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-
-        {
-            x: 0,
-            y: 0,
-            floor: 4,
-            name: 'Surgical Specialties',
-            description: 'Surgical Specialties',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 4,
-            name: 'Day Surgery Center',
-            description: 'Day Surgery Center',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 4,
-            name: 'Pulmonary Function Testing',
-            description: 'Pulmonary Function Testing',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 4,
-            name: 'Pain Medicine',
-            description: 'Pulmonary Function Testing',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 4,
-            name: 'Nutrition',
-            description: 'Nutrition',
-            nodeType: 'directory',
-            mapId: 1,
-        },
-        {
-            x: 0,
-            y: 0,
-            floor: 4,
-            name: 'Electromyography (EMG)',
-            description: 'Electromyography (EMG)',
-            nodeType: 'directory',
-            mapId: 1,
         },
     ];
 }
