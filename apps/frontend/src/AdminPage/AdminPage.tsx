@@ -64,7 +64,7 @@ export function AdminPage() {
                 boxShadow: 'var(--shadow-lg)',
               }}
             >
-                <Title order={2} className="mb-4 text-center" fw={600}>
+                <Title order={2} mb="4px" ta="center" fw={600}>
                     Admin Page
                 </Title>
                 <Center>

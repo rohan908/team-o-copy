@@ -103,60 +103,56 @@ export function LanguageRequestHistory() {
                     striped
                     withColumnBorders
                     highlightOnHover
-                    style={{
-                        width: '100%',
-                        tableLayout: 'auto',
-                    }}
+                    width="100%"
+                    layout='auto'
                 >
-                    <thead>
-                        <tr style={{ backgroundColor: "#164ec5", color: 'white' }}>
+                    <Table.Thead>
+                        <Table.Tr
+                          bg="#164ec5"
+                          c="white"
+                        >
                             {summaryColumns.map((col) => (
-                                <th
+                                <Table.Th
                                     key={col}
-                                    style={{
-                                        padding: '12px',
-                                        textTransform: 'capitalize',
-                                        whiteSpace: 'nowrap',
-                                        textAlign: 'left',
-                                    }}
+                                    p="12px"
+                                    tt="capitalize"
+                                    ta={"left"}
                                 >
                                     {col === 'createdAt'
                                         ? 'Submitted'
                                         : col === 'RequestID'
                                           ? 'Request ID'
                                           : col.charAt(0).toUpperCase() + col.slice(1)}
-                                </th>
+                                </Table.Th>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
                         {data.map((row, idx) => (
                             <React.Fragment key={idx}>
-                                <tr
+                                <Table.Tr
                                     onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
+                                    bg="#c8cad3"
+                                    //Cursor and Border Radius are only possible through style={}
                                     style={{
                                         cursor: 'pointer',
-                                        backgroundColor: "#c8cad3",
                                         borderRadius: '12px',
                                     }}
                                 >
                                     {summaryColumns.map((col) => (
-                                        <td
+                                        <Table.Td
                                             key={col}
-                                            style={{
-                                                padding: '12px',
-                                                fontWeight: 500,
-                                                whiteSpace: 'nowrap',
-                                            }}
+                                            p="12px"
+                                            fw="500"
                                         >
                                             {col === 'createdAt'
                                                 ? timeAgo(row[col] as string)
                                                 : String(row[col] ?? 'N/A')}
-                                        </td>
+                                        </Table.Td>
                                     ))}
-                                </tr>
-                                <tr>
-                                    <td colSpan={summaryColumns.length} style={{ padding: 0 }}>
+                                </Table.Tr>
+                                <Table.Tr>
+                                    <Table.Td colSpan={summaryColumns.length} p="0px">
                                         <Transition
                                             mounted={expandedRow === idx}
                                             transition="scale-y"
@@ -165,14 +161,14 @@ export function LanguageRequestHistory() {
                                         >
                                             {(styles) => (
                                                 <Box
+                                                    bg="#a9adb9"
+                                                    p="md"
+                                                    mt="xs"
+                                                    mb="md"
+                                                    mx="sm"
+                                                    //...styles is needed for Transition Data, shadow and radius are styles only
                                                     style={{
                                                         ...styles,
-                                                        overflow: 'hidden',
-                                                        backgroundColor: "#a9adb9",
-                                                        padding: theme.spacing.md,
-                                                        marginTop: theme.spacing.xs,
-                                                        marginBottom: theme.spacing.md,
-                                                        marginInline: theme.spacing.sm,
                                                         boxShadow: theme.shadows.xs,
                                                         borderRadius: theme.radius.md,
                                                     }}
@@ -192,11 +188,11 @@ export function LanguageRequestHistory() {
                                                 </Box>
                                             )}
                                         </Transition>
-                                    </td>
-                                </tr>
+                                    </Table.Td>
+                                </Table.Tr>
                             </React.Fragment>
                         ))}
-                    </tbody>
+                    </Table.Tbody>
                 </Table>
             </ScrollArea>
         </Box>
