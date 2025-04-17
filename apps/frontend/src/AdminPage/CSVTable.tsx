@@ -1,46 +1,23 @@
-import { useEffect, useState } from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import { Table, Title, Loader, Center, ScrollArea, Text } from '@mantine/core';
-import { useDirectoryContext } from '../contexts/DirectoryContext.tsx';
+import {useAllNodesContext, useDirectoryContext} from '../contexts/DirectoryContext.tsx';
 
 type Props = {
     table: string;
 };
 
 export function CSVTable({ table }: Props) {
-    const [data, setData] = useState<Record<string, string>[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // This is where you pull the directory data
-                const res = await fetch(`/api/${table}/export`);
+    const data = useAllNodesContext();
 
-                if (!res.ok) {
-                    throw new Error(`HTTP error!: ${res.status}`);
-                }
-                // gets json data from fetched data
-                const directoryData = res.json().then((res) => {
-                    console.log(res);
-                    setData(res);
-                });
-            } catch (error) {
-                console.error('Error fetching directory table', error);
-                setError(error instanceof Error ? error.message : 'Failed to load table');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [table]);
-
-    if (loading) {
-        return (
-            <Center>
-                <Loader />
-            </Center>
-        );
+    if(!data) {
+      return (
+        <Center>
+          <Loader />
+        </Center>
+      );
     }
 
     if (error) {
@@ -53,7 +30,7 @@ export function CSVTable({ table }: Props) {
 
     const columns = Object.keys(data[0]);
 
-    return (
+  return (
         <ScrollArea type="auto" offsetScrollbars>
             <Title order={4} mb="sm" ta="center">
                 {table.toUpperCase()}
@@ -98,9 +75,7 @@ export function CSVTable({ table }: Props) {
                                         fontSize: '14px',
                                     }}
                                 >
-                                    {typeof row[col] === 'object'
-                                        ? JSON.stringify(row[col])
-                                        : String(row[col])}
+                                  {JSON.stringify(row[col])}
                                 </td>
                             ))}
                         </tr>
