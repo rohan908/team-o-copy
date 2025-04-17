@@ -77,22 +77,19 @@ export function LanguageRequestHistory() {
 
     return (
         <Box
-            bg="white"
+            bg="themeGold.0"
             p="md"
             w="100%"
             h="100vh"
-            style={{
-                opacity: 0.95,
-                backdropFilter: 'blur(5px)',
-                borderRadius: theme.radius.lg,
-                display: 'flex',
-                flexDirection: 'column',
-            }}
+            opacity="0.95"
+            bd="lg"
+            flex="column"
+            bga='blur(5px)'
         >
             <Title order={1} mb="sm" c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
                 Language Service Requests
             </Title>
-            <Text c="black" ta="left" mb="sm" fw={500} fz={{ sm: 'xxs', md: 'xs' }}>
+            <Text c="black" ta="center" mb="sm" fw={500} fz={{ sm: 'xxs', md: 'xs' }}>
                 Click on a row to find out more information
             </Text>
             <ScrollArea
@@ -102,6 +99,7 @@ export function LanguageRequestHistory() {
                 style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden' }}
             >
                 <Table
+                    bg="themeGold.0"
                     striped
                     withColumnBorders
                     highlightOnHover
@@ -111,7 +109,7 @@ export function LanguageRequestHistory() {
                     }}
                 >
                     <thead>
-                        <tr style={{ backgroundColor: theme.colors.dark[6], color: 'white' }}>
+                        <tr style={{ backgroundColor: "#164ec5", color: 'white' }}>
                             {summaryColumns.map((col) => (
                                 <th
                                     key={col}
@@ -138,7 +136,7 @@ export function LanguageRequestHistory() {
                                     onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
                                     style={{
                                         cursor: 'pointer',
-                                        backgroundColor: theme.colors.gray[1],
+                                        backgroundColor: "#c8cad3",
                                         borderRadius: '12px',
                                     }}
                                 >
@@ -170,7 +168,7 @@ export function LanguageRequestHistory() {
                                                     style={{
                                                         ...styles,
                                                         overflow: 'hidden',
-                                                        backgroundColor: theme.colors.gray[2],
+                                                        backgroundColor: "#a9adb9",
                                                         padding: theme.spacing.md,
                                                         marginTop: theme.spacing.xs,
                                                         marginBottom: theme.spacing.md,

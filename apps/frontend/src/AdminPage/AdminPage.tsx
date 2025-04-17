@@ -82,7 +82,7 @@ export function AdminPage() {
                             onClick={() => setStringDisplayNum('-1')}
                             styles={(theme) => ({
                                 root: {
-                                    backgroundColor: '#FDF0D5',
+                                    backgroundColor: 'themeGold.1',
                                     padding: 4,
                                     borderRadius: theme.radius.md,
                                 },
@@ -94,7 +94,7 @@ export function AdminPage() {
                                     border: 'none',
                                 },
                                 active: {
-                                    backgroundColor: theme.white,
+                                    backgroundColor: "themeGold.2",
                                     boxShadow: theme.shadows.sm,
                                 },
                             })}
