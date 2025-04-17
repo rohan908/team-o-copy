@@ -13,13 +13,9 @@ export async function exportToCSV() {
         fs.writeFileSync(BACKUP_PATHS.directoryBackup, '');
 
         // query to get data from directory table
-        const directoryData = await PrismaClient.node.findMany({
-            where: {
-                nodeType: 'directory',
-            },
-        });
+        const nodeData = await PrismaClient.node.findMany({});
 
-        const csvContent = formatBeforeWriteToBackupCSV(directoryData);
+        const csvContent = formatBeforeWriteToBackupCSV(nodeData);
 
         // write to backup.csv file, creates files if doesn't exist (should exist already tho)
         fs.writeFileSync(BACKUP_PATHS.directoryBackup, csvContent);

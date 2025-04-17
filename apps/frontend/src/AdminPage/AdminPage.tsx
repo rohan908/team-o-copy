@@ -120,20 +120,6 @@ export function AdminPage() {
                             </div>
                         </Collapse>
                     </Flex>
-                    {/*<Button*/}
-                    {/*    size="md"*/}
-                    {/*    color="dark"*/}
-                    {/*    fw="600"*/}
-                    {/*    bg="black"*/}
-                    {/*    mt="sm"*/}
-                    {/*    style={{*/}
-                    {/*      borderRadius: '50px',*/}
-                    {/*      transition: 'all 0.3s ease',*/}
-                    {/*    }}*/}
-                    {/*    onClick= {handleClick}*/}
-                    {/*  >*/}
-                    {/*    Language Request Form History*/}
-                    {/*  </Button>*/}
                 </Center>
                 <br />
                 <Divider
