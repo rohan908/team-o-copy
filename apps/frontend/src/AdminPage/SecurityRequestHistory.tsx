@@ -11,7 +11,6 @@ import {
     Transition,
 } from '@mantine/core';
 
-// Type-safe interface for request data
 interface SecurityRequest {
     RequestID: number;
     security: string;
@@ -19,7 +18,6 @@ interface SecurityRequest {
     [key: string]: unknown;
 }
 
-// basic calculator to show how long ago request was made
 function timeAgo(dateString: string): string {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
