@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { Box, useMantineTheme } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { getNode } from './GetNodeRouting.ts';
-import { NodeDataType } from './MapClasses/MapTypes.ts';
+import { NodeDataType, DraggableMapProps } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 import {
@@ -16,15 +16,6 @@ import { findPath } from './FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 
 const canvasId = 'insideMapCanvas';
-
-// Pass in props for the selected hospital and department
-// TODO: change this to a useContext
-interface DraggableMapProps {
-    selectedHospitalName?: string | null;
-    selectedDepartment?: string | null;
-    setSelectedDepartment: (selectedDepartment: string | null) => void;
-    setSelectedHospitalName: (selectedHospitalName: string | null) => void;
-}
 
 export function DraggableMap({
     selectedHospitalName,
