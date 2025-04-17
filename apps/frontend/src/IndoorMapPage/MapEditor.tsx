@@ -20,7 +20,7 @@ export function MapEditor() {
     const canvasId = 'insideMapCanvas';
 
     const allNodes = useAllNodesContext();
-    const addedNodes = [];
+    const addedNodes: NodeDataType[] = [];
 
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
@@ -29,49 +29,29 @@ export function MapEditor() {
     const nodeRadius = 1.5;
     const edgeRad = 0.75;
     /*
-  Patriot Place Floor 1 -> floor1 -> scene 1
-  Patriot Place Floor 3 -> floor2 -> scene 2
-  Patriot Place Floor 4 -> floor3 -> scene 3
-  Chestnut Hill Floor 1 -> floor4 -> scene 4
-   */
+    Patriot Place Floor 1 -> floor1 -> scene 1
+    Patriot Place Floor 3 -> floor2 -> scene 2
+    Patriot Place Floor 4 -> floor3 -> scene 3
+    Chestnut Hill Floor 1 -> floor4 -> scene 4
+     */
 
-    // Setup scenes and map planes. This is probably the worst way to do this possible
-    const scene1 = new THREE.Scene();
-    const texturePath = '../../public/MapImages/Patriot Place Floor 1.png';
-    const mapTexture = new THREE.TextureLoader().load(texturePath);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
-    const mapGeo = new THREE.PlaneGeometry(500, 281);
-    const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
-    const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
-    mapPlane.position.set(0, 0, 0);
-    scene1.add(mapPlane);
-    const scene2 = new THREE.Scene();
-    const texturePath1 = '../../public/MapImages/Patriot Place Floor 3.png';
-    const mapTexture1 = new THREE.TextureLoader().load(texturePath1);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
-    const mapGeo1 = new THREE.PlaneGeometry(500, 281);
-    const mapMaterial1 = new THREE.MeshBasicMaterial({ map: mapTexture1 });
-    const mapPlane1 = new THREE.Mesh(mapGeo1, mapMaterial1);
-    mapPlane1.position.set(0, 0, 0);
-    scene2.add(mapPlane1);
-    const scene3 = new THREE.Scene();
-    const texturePath2 = '../../public/MapImages/Patriot Place Floor 4.png';
-    const mapTexture2 = new THREE.TextureLoader().load(texturePath2);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
-    const mapGeo2 = new THREE.PlaneGeometry(500, 281);
-    const mapMaterial2 = new THREE.MeshBasicMaterial({ map: mapTexture2 });
-    const mapPlane2 = new THREE.Mesh(mapGeo2, mapMaterial2);
-    mapPlane2.position.set(0, 0, 0);
-    scene3.add(mapPlane2);
-    const scene4 = new THREE.Scene();
-    const texturePath3 = '../../public/MapImages/Chestnut Hill Floor 1.png';
-    const mapTexture3 = new THREE.TextureLoader().load(texturePath3);
-    mapTexture.colorSpace = THREE.SRGBColorSpace;
-    const mapGeo3 = new THREE.PlaneGeometry(500, 281);
-    const mapMaterial3 = new THREE.MeshBasicMaterial({ map: mapTexture3 });
-    const mapPlane3 = new THREE.Mesh(mapGeo3, mapMaterial3);
-    mapPlane3.position.set(0, 0, 0);
-    scene4.add(mapPlane3);
+    function createMapScene(texturePath: string) {
+        const scene = new THREE.Scene();
+        const mapTexture = new THREE.TextureLoader().load(texturePath);
+        mapTexture.colorSpace = THREE.SRGBColorSpace;
+        const mapGeo = new THREE.PlaneGeometry(500, 281);
+        const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
+        const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
+        mapPlane.position.set(0, 0, 0);
+        scene.add(mapPlane);
+        return scene;
+    }
+
+    // Setup scenes and map planes.
+    const scene1 = createMapScene('../../public/MapImages/Patriot Place Floor 1.png');
+    const scene2 = createMapScene('../../public/MapImages/Patriot Place Floor 3.png');
+    const scene3 = createMapScene('../../public/MapImages/Patriot Place Floor 4.png');
+    const scene4 = createMapScene('../../public/MapImages/Chestnut Hill Floor 1.png');
     const scene = useRef<THREE.Scene>(scene1);
 
     const createNode = (node: NodeDataType) => {
@@ -103,6 +83,7 @@ export function MapEditor() {
         }
     };
 
+    // basic edge creation
     const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
         const startPoint = new THREE.Vector3(node1.x, node1.y, 0);
         const endPoint = new THREE.Vector3(node2.x, node2.y, 0);
@@ -152,7 +133,7 @@ export function MapEditor() {
         }
     };
 
-    // populate all nodes and edges once (in use effect)
+    // populate all nodes and edges
     for (const node of allNodes) {
         if (node.x !== 0 && node.y !== 0) {
             createNode(node); //Create the nodes
@@ -166,7 +147,6 @@ export function MapEditor() {
         }
     }
 
-    // This useEffect runs every time the floor changes
     useEffect(() => {
         // Get canvas element
         const canvas = document.getElementById(canvasId);
@@ -198,11 +178,11 @@ export function MapEditor() {
             RIGHT: THREE.MOUSE.ROTATE,
         };
 
-        // Initialize dragControls with an empty array
+        // dragControls are used for node movement with mouse
         let draggableObjects: THREE.Object3D[] = [];
         let dragControls = new DragControls(draggableObjects, camera, renderer.domElement);
 
-        // Set up drag control event listeners
+        // Disable map movement when dragging a node so both don't move together
         dragControls.addEventListener('dragstart', function () {
             orbitControls.enabled = false;
         });
@@ -215,8 +195,6 @@ export function MapEditor() {
 
         // Function to update draggable objects to make sure only selected objects can be dragged
         const updateDraggableObjects = () => {
-            // Dispose of the old dragControls
-            dragControls.dispose();
             // Create a new array with only the selected object (if any)
             draggableObjects = [];
             if (selectedObject.current) {
@@ -240,73 +218,67 @@ export function MapEditor() {
         const pointer = new THREE.Vector2();
 
         window.addEventListener('click', (event) => {
-            // Get canvas bounds
-            if (canvas) {
-                const rect = canvas.getBoundingClientRect();
-                // Calculate pointer position in normalized device coordinates
-                // (-1 to +1) for both components
-                pointer.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
-                pointer.y = -((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
-                raycaster.setFromCamera(pointer, camera);
-                // calculate objects intersecting the picking ray
-                const intersects = raycaster.intersectObjects(objectsRef.current);
-                console.log('intersect: ', intersects);
-                if (intersects.length > 0) {
-                    const intersect = intersects[0]; // grab the first intersected object
-                    /*
-        This structure handles selecting objects.
-        It could probably use some proper handler functions, but it works for now.
-         */
+            const rect = canvas.getBoundingClientRect();
+            // normalize pointer position (-1 to 1 in x and y)
+            pointer.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+            pointer.y = -((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+            raycaster.setFromCamera(pointer, camera);
+            // calculate objects intersecting the picking ray
+            const intersects = raycaster.intersectObjects(objectsRef.current);
+            if (intersects.length > 0) {
+                const intersect = intersects[0]; // grab the first intersected object
 
-                    // if there is no selected object or the clicked on object is not selected
+                /*
+                    This structure handles selecting objects.
+                    It could probably use some proper handler functions, but it works for now.
+                     */
+                // if there is no selected object or the clicked on object is not selected
+                if (
+                    selectedObject.current === null ||
+                    selectedObject.current !== intersect.object
+                ) {
+                    // if there is another selected object
+                    if (selectedObject.current !== intersect.object) {
+                        if (
+                            selectedObject.current instanceof THREE.Mesh &&
+                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
+                        ) {
+                            selectedObject.current.material.color.set(nodeColor); //set the already selected object back to it's non-selected color
+                        }
+                    }
+                    selectedObject.current = intersect.object; // switch selected object to the clicked on object
+                    setNodeSelected(true);
+                    // set the color of the clicked on objet to it's selected color
                     if (
-                        selectedObject.current === null ||
-                        selectedObject.current !== intersect.object
+                        selectedObject.current instanceof THREE.Mesh &&
+                        selectedObject.current.material instanceof THREE.MeshBasicMaterial
                     ) {
-                        // if there is another selected object
-                        if (selectedObject.current !== intersect.object) {
-                            if (
-                                selectedObject.current instanceof THREE.Mesh &&
-                                selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                            ) {
-                                selectedObject.current.material.color.set(nodeColor); //set the already selected object back to it's non-selected color
-                            }
-                        }
-                        selectedObject.current = intersect.object; // switch selected object to the clicked on object
-                        setNodeSelected(true);
-                        // set the color of the clicked on objet to the it's selected color
-                        if (
-                            selectedObject.current instanceof THREE.Mesh &&
-                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                        ) {
-                            selectedObject.current.material.color.set(selectedNodeColor);
-                        }
+                        selectedObject.current.material.color.set(selectedNodeColor);
                     }
-                    // The clicked on object is already selected (deselection when clicking on an already selected object)
-                    else {
-                        // set the color of the clicked on object to it's non-selected color
-                        if (
-                            selectedObject.current instanceof THREE.Mesh &&
-                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                        ) {
-                            selectedObject.current.material.color.set(nodeColor);
-                        }
-                        // clear the selected object
-                        selectedObject.current = null;
-                        setNodeSelected(false);
-                    }
-                    updateDraggableObjects();
                 }
+                // The clicked on object is already selected (deselection when clicking on an already selected object)
+                else {
+                    // set the color of the clicked on object to it's non-selected color
+                    if (
+                        selectedObject.current instanceof THREE.Mesh &&
+                        selectedObject.current.material instanceof THREE.MeshBasicMaterial
+                    ) {
+                        selectedObject.current.material.color.set(nodeColor);
+                    }
+                    // clear the selected object
+                    selectedObject.current = null;
+                    setNodeSelected(false);
+                }
+                updateDraggableObjects();
             }
         });
 
-        // Safety net for edge cases
+        // make sure map movement is re-enabled for some edge cases
         const handleMouseUp = () => {
             setTimeout(() => {
                 orbitControls.enabled = true;
             }, 10);
         };
-
         const handleMouseLeave = () => {
             setTimeout(() => {
                 orbitControls.enabled = true;
@@ -332,7 +304,7 @@ export function MapEditor() {
             return () => {};
         };
         animate();
-    }, [floor]);
+    });
 
     return (
         <Box w="100vw" h="100vh" p={0}>
