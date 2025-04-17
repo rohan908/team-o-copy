@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Box, useMantineTheme, SegmentedControl } from '@mantine/core';
+import {MantineProvider} from '@mantine/core';
 
 interface FloorSwitchBoxProps {
   floor: number;
@@ -11,25 +12,17 @@ interface FloorSwitchBoxProps {
 const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
     floor,
     setFloor,
-    onCollapseChange,
     building,
 }) => {
   const theme = useMantineTheme();
-  const [collapsed, setCollapsed] = useState(false);
 
-  useEffect(() => {
-    onCollapseChange?.(collapsed);
-  }, [collapsed]);
   // TODO: In the future these should re-suse a react component.
   if (building === '22 Patriot Pl' || building == '20 Patriot Pl') {
     return (
       <Box
-        bg="themeGold.5"
+        bg="themeGold.5" pos = "fixed" left = "93%" bottom = "2%"
         style={{
           zIndex: 999,
-          position: 'fixed',
-          left:"93%",
-          bottom:"2%",
           transition: 'all 0.4s ease-in-out',
         }}
       >
@@ -37,7 +30,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
           orientation="vertical"
           fullWidth
           size="md"
-          color="dark"
+          color="#FCB024"
           value={floor.toString()}
           onChange={(value) => setFloor(parseInt(value))}
           data={[
@@ -55,7 +48,6 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
               color: 'white',
             },
             indicator: {
-              backgroundColor: '#FCB024',
               borderRadius: 5,
             },
           }}
@@ -65,20 +57,19 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
   } else if (building === 'admin'){
     return (
       <Box
-        bg="terquAccet.8"
-        style={{
-          zIndex: 999,
-          position: 'fixed',
-          left:"93%",
-          bottom:"2%",
-          transition: 'all 0.4s ease-in-out',
-        }}
-      >
+    bg="terquAccet.8"
+    pos = "fixed"
+    left = "93%"
+    bottom = "2%"
+    style={{
+      zIndex: 999,
+      transition: 'all 0.4s ease-in-out',
+    }}
+  >
         <SegmentedControl
           orientation="vertical"
-          fullWidth
           size="md"
-          color="dark"
+          color = "#FCB024"
           value={floor.toString()}
           onChange={(value) => setFloor(parseInt(value))}
           data={[
@@ -87,7 +78,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
             { label: '3', value: '3' },
             { label: '1', value: '1' },
           ]}
-          styles={{
+          styles = {{
             root: {
               borderRadius: 8,
               backgroundColor: '#164EC5',
@@ -97,10 +88,9 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
               color: 'white',
             },
             indicator: {
-              backgroundColor: '#FCB024',
               borderRadius: 5,
-            },
-          }}
+            }
+            }}
         />
       </Box>
     );
