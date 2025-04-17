@@ -1,9 +1,11 @@
-import { edgeData } from '../../common/src/MapHelper.ts'; // returns object with all the data required for seeding the "Node" table will replace contents of this file with
+import { edgeData } from '../../common/src/MapHelper.ts';
+
+// returns object with all the data required for seeding the "Node" table will replace contents of this file with
 // information exported from frontend
-/* bounds are -250 to 250 for x, -200 to 200 for y, z */
+// bounds are -250 to 250 for x, -200 to 200 for y, z
 export function getNodeData() {
     return [
-        /* floor 1 Patriot-20 */
+        // floor 1 Patriot-20
         {
             x: 86.6,
             y: 82.0,
@@ -115,7 +117,7 @@ export function getNodeData() {
             connectingNodes: [10],
         },
 
-        /* floor 1 Patriot-22 (stairs to get to floors 3-4) */
+        // floor 1 Patriot-22 (stairs to get to floors 3-4)
         {
             x: 115.2,
             y: 14.7,
@@ -249,7 +251,7 @@ export function getNodeData() {
             connectingNodes: [23],
         },
 
-        /* floor 4 Patriot-22 (listed as 3 for pathfinding) */
+        // floor 4 Patriot-22 (listed as 3 for pathfinding)
         {
             x: 94.6,
             y: -15.3,
@@ -312,7 +314,7 @@ export function getNodeData() {
         },
 
         // starting at node ID 100 -->
-        /* floor 1 Chestnut hill */
+        // floor 1 Chestnut hill
         {
             id: 100,
             x: -34.6,
