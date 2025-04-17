@@ -251,11 +251,10 @@ export function DraggableMap({ selectedHospitalName, selectedDepartment }: Dragg
         }
 
         animationRef.current = new FlowingTubeAnimation({
-            color1: 0x00aaff,
-            color2: 0xff3300,
-            flowSpeed: 0.3,
-            pulseFrequency: 2.0,
-            pulseWidth: 0.25,
+            color1: 0x2a68f7,
+            color2: 0x4deefb,
+            flowSpeed: 2,
+            pulseFrequency: 0.5,
         });
 
         const canvas = document.getElementById(canvasId);
