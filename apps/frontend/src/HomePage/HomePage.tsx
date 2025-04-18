@@ -9,7 +9,7 @@ export function HomePage() {
 
     return (
         <TimelineProvider>
-            <Flex h="100vh" justify="center" align="center" bg={theme.colors.terquAccet[1]}>
+            <Flex h="100%" justify="center" align="center" bg={theme.colors.terquAccet[1]}>
                 <Grid h="100%" gutter="xl" justify="center" align="stretch">
                     <Grid.Col span={6} p="xl">
                         <Title order={1} size="h1">
