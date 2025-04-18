@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-
 // function for simplifying creating new scenes (floors)
 function createMapScene(texturePath: string) {
     const scene = new THREE.Scene();
@@ -10,7 +9,8 @@ function createMapScene(texturePath: string) {
     const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
     mapPlane.position.set(0, 0, 0);
     scene.add(mapPlane);
-    scene.background = new THREE.Color('#2FBCC7');
+    for (const colorElement of (scene.background = new THREE.Color('#2FBCC7'))) {
+    }
 
     return scene;
 }

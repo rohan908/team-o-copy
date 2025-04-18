@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Box, useMantineTheme } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { NodeDataType, DraggableMapProps } from './MapClasses/MapTypes.ts';
+import { DraggableMapProps } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './INDOORMAPScomponents/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 import {
@@ -49,6 +49,9 @@ export function DraggableMap({
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
+    // camera ref for when we want to start moving the camera around
+    const cameraRef = useRef<THREE.PerspectiveCamera>(new THREE.PerspectiveCamera());
+
     /*
       stores scene references in useRef
 
@@ -68,6 +71,33 @@ export function DraggableMap({
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
     const canvasRef = useRef<HTMLElement | null>(null);
 
+    const renderScene = (floor: number) => {
+        // Create camera
+        cameraRef.current = new THREE.PerspectiveCamera(
+            50,
+            canvasRef.current!.clientWidth / canvasRef.current!.clientHeight,
+            50,
+            1000
+        );
+        cameraRef.current.position.set(0, 0, 300);
+
+        // we create a new renderer
+        rendererRef.current = new THREE.WebGLRenderer({
+            canvas: canvasRef.current as HTMLCanvasElement,
+            antialias: true,
+        });
+
+        if (canvasRef.current) {
+            rendererRef.current.setSize(
+                canvasRef.current.clientWidth,
+                canvasRef.current.clientHeight
+            );
+        }
+        rendererRef.current.setPixelRatio(window.devicePixelRatio);
+
+        rendererRef.current.render(scenesRef.current[floor], cameraRef.current);
+    };
+
     useEffect(() => {
         console.log('rendering');
         console.log('selectedHospital:', selectedHospitalName);
@@ -82,59 +112,24 @@ export function DraggableMap({
 
         canvasRef.current = document.getElementById(canvasId);
 
-        // we create a new renderer
-        rendererRef.current = new THREE.WebGLRenderer({
-            canvas: canvasRef.current as HTMLCanvasElement,
-            antialias: true,
-        });
-
-        if (canvasRef) {
-            rendererRef.current.setSize(
-                canvasRef.current.clientWidth,
-                canvasRef.current.clientHeight
-            );
-        }
-        rendererRef.current.setPixelRatio(window.devicePixelRatio);
-
-        // Create camera
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvasRef.current!.clientWidth / canvasRef.current!.clientHeight,
-            50,
-            1000
-        );
-        camera.position.set(0, 0, 300);
-
         // Initialize clock for animation timing
         clockRef.current = new THREE.Clock();
 
         // Camera controls
-        const orbitControls = new OrbitControls(camera, rendererRef.current.domElement);
-        orbitControls.enableRotate = false;
-        orbitControls.mouseButtons = {
-            LEFT: THREE.MOUSE.PAN,
-            MIDDLE: THREE.MOUSE.DOLLY,
-            RIGHT: THREE.MOUSE.ROTATE,
-        };
+        if (rendererRef.current) {
+            const orbitControls = new OrbitControls(
+                cameraRef.current,
+                rendererRef.current.domElement
+            );
+            orbitControls.enableRotate = false;
+            orbitControls.mouseButtons = {
+                LEFT: THREE.MOUSE.PAN,
+                MIDDLE: THREE.MOUSE.DOLLY,
+                RIGHT: THREE.MOUSE.ROTATE,
+            };
+        }
 
-        const sceneArr = createAllScenes();
-
-        const animate = () => {
-            // Get delta time for animation
-            const deltaTime = clockRef.current.getDelta();
-
-            // Update flowing animation
-            if (animationRef.current) {
-                animationRef.current.update(deltaTime);
-            }
-
-            // Render the current scene
-            rendererRef.current.render(scenesRef.current[0], camera);
-            window.requestAnimationFrame(animate);
-
-            return () => {};
-        };
-        animate();
+        scenesRef.current = createAllScenes();
     }, []);
 
     // gets Id for destination node
@@ -182,7 +177,7 @@ export function DraggableMap({
 
     // Function for populating edges. Creating the edge objects are done in a class to simplify implementation of the direction animation
     // TO DO CHANGE NAME TO SPECIFY IT IS ONLY FOR ANIMATION NOT DATABASDE
-    const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
+    const createEdge = (node1: DirectoryNodeItem, node2: DirectoryNodeItem) => {
         if (!animationRef.current) {
             console.error('Animation reference not initialized');
             return;
@@ -288,11 +283,32 @@ export function DraggableMap({
                 }
             }
         });
-    }, [selectedHospitalName, selectedDepartment]);
+        console.log('floorState', floorState);
+        console.log('scene', scenesRef.current[sceneIndexState]);
+        const animate = () => {
+            // Get delta time for animation
+            const deltaTime = clockRef.current.getDelta();
+
+            // Update flowing animation
+            if (animationRef.current) {
+                animationRef.current.update(deltaTime);
+            }
+
+            // Render the current scene
+            if (rendererRef.current) {
+                rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
+            }
+            window.requestAnimationFrame(animate);
+
+            return () => {};
+        };
+        animate();
+        //renderScene(sceneIndexState);
+    }, [selectedHospitalName, selectedDepartment, floorState]);
 
     return (
         <Box w="100%" h="100%" p={0} pos={'absolute'}>
-            <FloorSwitchBox
+            <FloorSwitchBoxRef
                 floor={floorState}
                 onCollapseChange={() => true}
                 setFloor={handleFloorChange}
