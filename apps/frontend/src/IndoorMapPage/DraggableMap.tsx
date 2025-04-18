@@ -29,13 +29,6 @@ export function DraggableMap({
       References that exist outside renders, changeable floor state, and properties like theme
      */
 
-    const theme = useMantineTheme();
-
-    /*
-  Sets changeable fade state, currently selected path algorithm (e.g BFS, A*), sets
-  allNodes to the nodes context values to access all the nodes
- */
-
     const [isFading, setIsFading] = useState(false);
     const [currPathAlgo, setCurrPathAlgo] = useState<string>('BFS');
     const allNodes = useAllNodesContext();
@@ -71,33 +64,6 @@ export function DraggableMap({
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
     const canvasRef = useRef<HTMLElement | null>(null);
 
-    const renderScene = (floor: number) => {
-        // Create camera
-        cameraRef.current = new THREE.PerspectiveCamera(
-            50,
-            canvasRef.current!.clientWidth / canvasRef.current!.clientHeight,
-            50,
-            1000
-        );
-        cameraRef.current.position.set(0, 0, 300);
-
-        // we create a new renderer
-        rendererRef.current = new THREE.WebGLRenderer({
-            canvas: canvasRef.current as HTMLCanvasElement,
-            antialias: true,
-        });
-
-        if (canvasRef.current) {
-            rendererRef.current.setSize(
-                canvasRef.current.clientWidth,
-                canvasRef.current.clientHeight
-            );
-        }
-        rendererRef.current.setPixelRatio(window.devicePixelRatio);
-
-        rendererRef.current.render(scenesRef.current[floor], cameraRef.current);
-    };
-
     useEffect(() => {
         console.log('rendering');
         console.log('selectedHospital:', selectedHospitalName);
@@ -114,6 +80,28 @@ export function DraggableMap({
 
         // Initialize clock for animation timing
         clockRef.current = new THREE.Clock();
+        // Initialize camera
+        cameraRef.current = new THREE.PerspectiveCamera(
+            50,
+            canvasRef.current!.clientWidth / canvasRef.current!.clientHeight,
+            50,
+            1000
+        );
+        cameraRef.current.position.set(0, 0, 300);
+
+        // Initialize renderer
+        rendererRef.current = new THREE.WebGLRenderer({
+            canvas: canvasRef.current as HTMLCanvasElement,
+            antialias: true,
+        });
+
+        if (canvasRef.current) {
+            rendererRef.current.setSize(
+                canvasRef.current.clientWidth,
+                canvasRef.current.clientHeight
+            );
+        }
+        rendererRef.current.setPixelRatio(window.devicePixelRatio);
 
         // Camera controls
         if (rendererRef.current) {
@@ -237,7 +225,6 @@ export function DraggableMap({
         }, 200); // Fade-out duration
     };
 
-    // Get the path TODO: Switch get node api calls to useContext
     useEffect(() => {
         const firstNodeId = findParkingLot(); // start node
         const lastNodeId = getLastNodeId(); // destination node
@@ -303,12 +290,11 @@ export function DraggableMap({
             return () => {};
         };
         animate();
-        //renderScene(sceneIndexState);
     }, [selectedHospitalName, selectedDepartment, floorState]);
 
     return (
         <Box w="100%" h="100%" p={0} pos={'absolute'}>
-            <FloorSwitchBoxRef
+            <FloorSwitchBox
                 floor={floorState}
                 onCollapseChange={() => true}
                 setFloor={handleFloorChange}
