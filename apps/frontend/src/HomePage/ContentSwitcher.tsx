@@ -19,7 +19,13 @@ export function ContentSwitcher() {
                     />
                 );
             case 1: //Indoor Nav
-                return <DraggableMap />;
+                return (
+                    <Image
+                        src={'/ProofOfConceptHomePageImages/FloorPlanPathing.png'}
+                        mah={'100%'}
+                        maw="100%"
+                    />
+                );
             case 2: //Service Request
                 return <ServiceRequestPage mah="100%" maw="100%" objectFit="contain" />;
         }

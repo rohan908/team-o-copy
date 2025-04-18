@@ -7,6 +7,7 @@ import { GmapsDestinationSelector } from './GmapsDestinationSelector.tsx';
 import { useForm } from '@mantine/form';
 import { ParkingSelector } from './ParkingSelector.tsx';
 import { DepartmentSelector } from './DepartmentSelector.tsx';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const CustomTimeline = () => {
     const {
@@ -21,9 +22,11 @@ export const CustomTimeline = () => {
         travelMode,
         setTravelMode,
     } = useTimeline();
+
+    const navigate = useNavigate();
     //FILL IN CONTENT HERE FOR EACH SUBSECTION
 
-    // TODO: redo the form so instead it passes the necessary context to each component and then those components have a onChange{(value) => set...(value | '')} 
+    // TODO: redo the form so instead it passes the necessary context to each component and then those components have a onChange{(value) => set...(value | '')}
     const getCurrTabContent = (i: number) => {
         switch (i) {
             case 0: //Go To Hospital (GMAPS)
@@ -32,6 +35,9 @@ export const CustomTimeline = () => {
                         <GmapsStartSelector required {...form.getInputProps('startLocation')} />
                         <GmapsDestinationSelector required {...form.getInputProps('hospital')} />
                         <Button type="submit">Submit</Button>
+                        <Link to="log-in-page">
+                            <Button>Temp nav to old login page</Button>
+                        </Link>
                     </Stack>
                 );
             case 1: //Indoor Nav
@@ -86,7 +92,7 @@ export const CustomTimeline = () => {
                         key={i}
                         bullet={<div onClick={() => handleClickChangeButton(i)}> {item.icon} </div>}
                         title={item.title}
-                        py = 'xxl'
+                        py="xxl"
                     >
                         <Transition
                             mounted={activeSection === i}
