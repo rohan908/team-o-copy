@@ -1,7 +1,6 @@
 import express, { Router, RequestHandler } from 'express';
 import { NavigationService } from '../GraphMapClasses/NavigationService';
 import { Node } from '../GraphMapClasses/Node';
-import { Coordinate } from '../models/oldMapTypes.ts';
 import PrismaClient from '../bin/prisma-client';
 import { NodeDataType, PathFinderResult, GetNodeResult } from '../models/MapTypes.ts';
 
