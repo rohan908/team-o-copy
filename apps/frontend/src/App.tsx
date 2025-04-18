@@ -1,8 +1,9 @@
 import React from 'react';
-import {Routing} from './home-page/routing.tsx';
+import { Routing } from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
+import { RequestProvider } from './contexts/RequestContext.tsx';
 import {
     createTheme,
     MantineProvider,
@@ -112,6 +113,7 @@ const myvariantColorResolver: VariantColorsResolver = (input) => {
 const theme = createTheme({
     /** Your theme override here */
     fontSizes: {
+        xxxs: rem(12),
         xxs: rem(14),
         xs: rem(16),
         sm: rem(18),
@@ -145,7 +147,9 @@ function App() {
     return (
         <MantineProvider theme={theme}>
             <DirectoryProvider>
-                <Routing />
+                <RequestProvider>
+                    <Routing />
+                </RequestProvider>
             </DirectoryProvider>
         </MantineProvider>
     );

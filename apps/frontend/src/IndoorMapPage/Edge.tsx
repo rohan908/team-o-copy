@@ -1,60 +1,61 @@
 import * as THREE from 'three';
 import { TubeGeometry } from 'three';
-import React from 'react';
 
 export class FlowingTubeAnimation {
-    private scene: React.MutableRefObject<THREE.Scene>;
     private tubes: THREE.Mesh[] = [];
     private time: number = 0;
     private options: {
-        color1: number;
-        color2: number;
-        flowSpeed: number;
+        color1?: number;
+        color2?: number;
+        flowSpeed?: number;
         pulseFrequency?: number;
-        pulseWidth?: number;
     };
 
     constructor(
-        scene: React.MutableRefObject<THREE.Scene>,
-        options = {
-            color1: 0x00aaff,
-            color2: 0xff3300,
-            flowSpeed: 0.3,
-            pulseFrequency: 2.0,
-            pulseWidth: 0.25,
-        }
+        options: {
+            color1?: number;
+            color2?: number;
+            flowSpeed?: number;
+            pulseFrequency?: number;
+        } = {}
     ) {
-        this.scene = scene;
-        this.options = options;
+        // Default values
+        this.options = {
+            color1: options.color1 ?? 0x2a68f7, // base color
+            color2: options.color2 ?? 0x4deefb, // secondary color that will "flow"
+            flowSpeed: options.flowSpeed ?? 2, // speed of flow
+            pulseFrequency: options.pulseFrequency ?? 0.01, // frequency of "pulses"
+        };
     }
 
     // Creates a tube between two nodes
     createEdge(node1: { x: number; y: number }, node2: { x: number; y: number }) {
-        // Create start and end points
         const startPoint = new THREE.Vector3(node1.x, node1.y, 0);
         const endPoint = new THREE.Vector3(node2.x, node2.y, 0);
 
-        // Calculate direction vector and length
-        const direction = new THREE.Vector3().subVectors(startPoint, endPoint);
-        const tubeLength = direction.length();
+        // represent the tube as a vector
+        const tubeVector = new THREE.Vector3().subVectors(startPoint, endPoint);
+        const tubeLength = tubeVector.length();
 
-        // Normalize direction for shader
-        const normalizedDirection = direction.clone().normalize();
+        // normalized the vector for direction
+        const normalizedTubeVector = tubeVector.clone().normalize();
 
         const path = new THREE.LineCurve3(startPoint, endPoint);
 
         const flowingShader = {
             uniforms: {
                 time: { value: 0.0 },
-                colorA: { value: new THREE.Color(0x2a68f7) }, // Blue
-                colorB: { value: new THREE.Color(0x4deefb) }, // Teal
-                speed: { value: 2 },
-                amplitude: { value: 0.5 },
+                colorA: { value: new THREE.Color(this.options.color1) },
+                colorB: { value: new THREE.Color(this.options.color2) },
+                speed: { value: this.options.flowSpeed },
+                amplitude: { value: 1 }, // amplitude effects the balance of colors. 1 means the secondary color will be just as prominent as the primary.
                 tubeLength: { value: tubeLength },
                 startPoint: { value: startPoint },
-                tubeDirection: { value: normalizedDirection },
-                wavesPerUnit: { value: 0.05 }, // Number of waves per unit length (adjust as needed)
+                tubeDirection: { value: normalizedTubeVector },
+                wavesPerUnit: { value: this.options.pulseFrequency },
             },
+            // Adapted from this simple implementation: https://observablehq.com/@troywatt/simple-vertex-shader-using-three-js
+            // Basically the vertex shader
             vertexShader: `
                 uniform vec3 startPoint;
                 uniform vec3 tubeDirection;
@@ -62,16 +63,14 @@ export class FlowingTubeAnimation {
                 
                 varying vec3 vPosition;
                 varying vec3 vNormal;
-                varying float vDistance; // Distance along tube in world space
+                varying float vDistance; // Distance along tube
                 
                 void main() {
                   vPosition = position;
                   vNormal = normalize(normalMatrix * normal);
-                  
-                  // Calculate the vector from start point to current position
                   vec3 toPosition = position - startPoint;
                   
-                  // Project this vector onto the tube direction to get distance along tube
+                  // get distance along tube
                   vDistance = dot(toPosition, tubeDirection);
                   
                   // Normalize
@@ -93,34 +92,26 @@ export class FlowingTubeAnimation {
                 varying vec3 vNormal;
                 varying float vDistance;
                 
-                void main() {
-                  // Calculate wave pattern based on actual world-space distance
-                  // wavesPerUnit controls how many waves per world-space unit
-                  float waveFrequency = wavesPerUnit * tubeLength * 6.28318; // 2π per wave
+                void main() { 
+                  float waveFrequency = wavesPerUnit * tubeLength; // correct for tube length
                   
-                  // Flow effect along the tube
-                  float flowOffset = time * speed;
+                  float flowOffset = time * speed; // position along tube
                   
-                  // Create waves with consistent world-space frequency
-                  float wave = sin((vDistance * waveFrequency) - flowOffset) * amplitude;
+                  // Create waves with a sin function. Flow offset shifts the wave "moving" it. The amplitude effects the amount of the secondary color introduced.
+                  float wave = sin((vDistance * waveFrequency) - flowOffset) * amplitude; 
                   
-                  // Center wave around 0.5 for better color mixing
-                  float colorMix = 0.5 + wave;
+                  vec3 finalColor = mix(colorA, colorB, clamp(wave, 0.0, 1.0)); // smooth transitions between colors
                   
-                  // Create a smooth transition between colors
-                  vec3 finalColor = mix(colorA, colorB, clamp(colorMix, 0.0, 1.0));
-                  
-                  // Output the final color
                   gl_FragColor = vec4(finalColor, 1.0);
                 }
             `,
         };
 
-        // Create flowing shader material with distinct pulses
+        // Create shader material
         const flowingMaterial = new THREE.ShaderMaterial(flowingShader);
 
-        // Create tube geometry with enough segments for smooth appearance
-        const tubeSegments = Math.max(16, Math.ceil(tubeLength * 4)); // More segments for longer tubes
+        // Create tube geometry
+        const tubeSegments = Math.max(16, Math.ceil(tubeLength * 4)); // longer tubes need more segments to keep animation looking consistent
         const geometry = new TubeGeometry(path, tubeSegments, 0.5, 8, false);
 
         const tube = new THREE.Mesh(geometry, flowingMaterial);
@@ -129,24 +120,14 @@ export class FlowingTubeAnimation {
         return tube;
     }
 
+    // Update animation time for all tubes
     update(deltaTime: number) {
         this.time += deltaTime;
 
-        // Update time uniform for all tube materials
         this.tubes.forEach((tube) => {
             if (tube.material instanceof THREE.ShaderMaterial) {
                 tube.material.uniforms.time.value = this.time;
             }
         });
-    }
-
-    dispose() {
-        // Clean up resources when no longer needed
-        this.tubes.forEach((tube) => {
-            this.scene.current.remove(tube);
-            if (tube.geometry) tube.geometry.dispose();
-            if (tube.material instanceof THREE.Material) tube.material.dispose();
-        });
-        this.tubes = [];
     }
 }

@@ -1,12 +1,15 @@
 import React from 'react';
 import HoverInfoComponent from './HoverInfoComponent.tsx';
+import {Box, Title} from "@mantine/core";
 
 export function MapPage() {
     return (
-        <div className="p-10">
-            <h1 className="font-bold text-xl pb-4">Map Page</h1>
+        <Box bg="terquAccet.2">
+            <Title order={2} ta="center" mb="lg">
+              Map Page
+            </Title>
             <HoverInfoComponent></HoverInfoComponent>
-        </div>
+        </Box>
     );
 }
 

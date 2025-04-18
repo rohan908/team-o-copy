@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
-import { useMantineTheme, Collapse, Button, Divider, Center, Flex, Title } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
-import Language from "../service-request/LanguageInterpreterSR.tsx";
-import LanguageRequestHistory from "./LanguageRequestHistory.tsx";
-import { BlackButton } from '../common-compoents/commonButtons.tsx';
+import { Collapse, Button, Divider, Center, Flex, Title, Box } from '@mantine/core';
+import LanguageRequestHistory from './LanguageRequestHistory.tsx';
 import { SegmentedControl } from '@mantine/core';
+import SecurityRequestHistory from './SecurityRequestHistory.tsx';
+import SanitationRequestHistory from './SanitationRequestHistory.tsx';
+import MaintenanceRequestHistory from './MaintenanceHistory.tsx';
 
 export function AdminPage() {
-    const navigate = useNavigate();
-
-    const handleButtonSwitchers = () => {
-        navigate('/language-request-history');
-    };
-
     const [showPreview, setShowPreview] = useState(false); // state to control the collapsible section
     const [displayTableNumber, setDisplayTableNumber] = useState(-1);
     const [stringDisplayNum, setStringDisplayNum] = useState('');
@@ -53,15 +47,24 @@ export function AdminPage() {
     }, [stringDisplayNum]);
 
     return (
-        <div
+        <Box
             className="min-h-screen w-full"
             style={{
-                background: 'linear-gradient(160deg, #56effa 0%, #e4e8f0 100%)',
+                background: 'linear-gradient(160deg, #aaf7fc 0%, #aaf7fc 100%)',
                 padding: '2rem',
             }}
         >
-            <div className="max-w-4xl mx-auto bg-[#FDF0D5]/90 p-4 sm:p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-sm">
-                <Title order={2} className="mb-4 text-center" fw={600}>
+            <Box
+              maw="60%"
+              mx="auto"
+              bg="themeGold.1"
+              p="2.5%"
+              style={{
+                borderRadius: "15px",
+                boxShadow: 'var(--shadow-lg)',
+              }}
+            >
+                <Title order={2} mb="4px" ta="center" fw={600}>
                     Admin Page
                 </Title>
                 <Center>
@@ -81,14 +84,14 @@ export function AdminPage() {
                             onChange={setStringDisplayNum}
                             data={[
                                 { label: 'LanguageRequest', value: '0' },
-                                { label: 'MachineRequest', value: '1', disabled: true },
-                                { label: 'SanitationRequest', value: '2', disabled: true },
-                                { label: 'StaffRequest', value: '3', disabled: true },
+                                { label: 'SecurityRequest', value: '1' },
+                                { label: 'SanitationRequest', value: '2' },
+                                { label: 'MaintenanceRequest', value: '3' },
                             ]}
                             onClick={() => setStringDisplayNum('-1')}
                             styles={(theme) => ({
                                 root: {
-                                    backgroundColor: '#FDF0D5',
+                                    backgroundColor: 'themeGold.1',
                                     padding: 4,
                                     borderRadius: theme.radius.md,
                                 },
@@ -100,53 +103,67 @@ export function AdminPage() {
                                     border: 'none',
                                 },
                                 active: {
-                                    backgroundColor: theme.white,
+                                    backgroundColor: "themeGold.2",
                                     boxShadow: theme.shadows.sm,
                                 },
                             })}
                         ></SegmentedControl>
                         <Collapse in={displayTableNumber == 0}>
-                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
+                          <Box
+                            bg="themeGold.0"
+                            p="10px"
+                            mt="10px"
+                            style={{
+                              borderRadius: "15px"
+                            }}
+                          >
                                 <LanguageRequestHistory />
-                            </div>
+                            </Box>
                         </Collapse>
                         <Collapse in={displayTableNumber == 1}>
-                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
-                                {/*Machine Request*/}
-                            </div>
+                          <Box
+                            bg="themeGold.0"
+                            p="10px"
+                            mt="10px"
+                            style={{
+                              borderRadius: "15px"
+                            }}
+                          >
+                                <SecurityRequestHistory />
+                            </Box>
                         </Collapse>
                         <Collapse in={displayTableNumber == 2}>
-                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
-                                {/*Sanitation Request*/}
-                            </div>
+                            <Box
+                              bg="themeGold.0"
+                              p="10px"
+                              mt="10px"
+                              style={{
+                                borderRadius: "15px"
+                              }}
+                            >
+                                <SanitationRequestHistory />
+                            </Box>
                         </Collapse>
                         <Collapse in={displayTableNumber == 3}>
-                            <div className="bg-[#FDF0D5] p-4 rounded-lg mt-2">
-                                {/*Staff Request*/}
-                            </div>
+                            <Box
+                              bg="themeGold.0"
+                              p="10px"
+                              mt="10px"
+                              style={{
+                                borderRadius: "15px"
+                              }}
+                            >
+                                <MaintenanceRequestHistory />
+                            </Box>
                         </Collapse>
                     </Flex>
-                    {/*<Button*/}
-                    {/*    size="md"*/}
-                    {/*    color="dark"*/}
-                    {/*    fw="600"*/}
-                    {/*    bg="black"*/}
-                    {/*    mt="sm"*/}
-                    {/*    style={{*/}
-                    {/*      borderRadius: '50px',*/}
-                    {/*      transition: 'all 0.3s ease',*/}
-                    {/*    }}*/}
-                    {/*    onClick= {handleClick}*/}
-                    {/*  >*/}
-                    {/*    Language Request Form History*/}
-                    {/*  </Button>*/}
                 </Center>
                 <br />
                 <Divider
                     my="md"
                     size="sm"
                     style={{
-                        borderTop: '1px dotted black',
+                        borderTop: '4px dotted #FCCD6F',
                     }}
                 />
                 <br />
@@ -154,11 +171,18 @@ export function AdminPage() {
                 <DatabaseController table="directory" />
 
                 {/* Toggle Button */}
-                <div className="flex justify-center mt-4">
-                    <Button variant="outline" onClick={() => setShowPreview((prev) => !prev)}>
+                <Flex
+                  justify="center"
+                  mt="10px"
+                >
+                    <Button
+                        color="#153A90"
+                        variant="outline"
+                        onClick={() => setShowPreview((prev) => !prev)}
+                    >
                         {showPreview ? 'Hide Directory Preview' : 'Preview Directory'}
                     </Button>
-                </div>
+                </Flex>
 
                 {/* Collapsible CSV Table */}
                 <Collapse in={showPreview} transitionDuration={200}>
@@ -166,9 +190,8 @@ export function AdminPage() {
                         <CSVTable table="directory" />
                     </div>
                 </Collapse>
-            </div>
-        </div>
-
+            </Box>
+        </Box>
     );
 }
 

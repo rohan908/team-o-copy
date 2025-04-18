@@ -23,7 +23,7 @@ export const TwoPartInteractiveBox: React.FC<PropsWithChildren<BoxProps>> = ({
             bg="themeGold.0"
             p={{ base: 'sm', sm: 'sm', md: 'sm', lg: 'md' }}
             // w={{ base: '90%', sm: '70%', md: '600px' }}
-            maw={{ base: '400px', sm: '400px', md: '500px', lg: '600px' }}
+            maw={{ base: '300px', sm: '300px', md: '450px', lg: '450px' }}
             pos="relative"
             display="inline-block"
             opacity=".87"
@@ -40,8 +40,8 @@ export const TwoPartInteractiveBox: React.FC<PropsWithChildren<BoxProps>> = ({
                 px="sm"
                 c="black"
                 ta="left"
-                fw={500}
-                fz="xxxl" //{{ base: 'xxxl', xs: 'xxxl', sm: 'xxxl', md: 'xxxl' }}
+                fw={700}
+                fz="xxl" //{{ base: 'xxxl', xs: 'xxxl', sm: 'xxxl', md: 'xxxl' }}
             >
                 {title}
             </Title>

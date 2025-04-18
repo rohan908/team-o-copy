@@ -32,7 +32,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
     updateNodePosition,
 }) => {
     const theme = useMantineTheme();
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
     const [hoverAddNode, setHoverAddNode] = useState(setTimeout(function () {}, 1000));
     const [hoverRemoveNode, setHoverRemoveNode] = useState(setTimeout(function () {}, 1000));
     const [hoverAddEdge, setHoverAddEdge] = useState(setTimeout(function () {}, 1000));
@@ -388,24 +388,22 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
             pos="fixed"
             left={20}
             right={0}
+            display="flex"
+            ta="left"
+            pb={collapsed ? 0 : '1.5rem'}
             style={{
                 zIndex: 999,
-                display: 'flex',
-                justifyContent: 'left',
                 transition: 'all 0.4s ease-in-out',
-                paddingBottom: collapsed ? 0 : '1.5rem',
             }}
         >
             <Box
                 bg="themeGold.2"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="37%"
+                maw={collapsed ? 350 : '80%'}
+                opacity={collapsed ? 0.8 : 0.95}
                 style={{
-                    maxWidth: collapsed ? '350px' : '80%', // ✅ Collapse mode limits width
-                    opacity: collapsed ? 0.8 : 0.95,
                     borderRadius: theme.radius.lg,
-                    backdropFilter: 'blur(5px)',
-                    boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.1)',
                     overflow: 'hidden',
                 }}
             >
@@ -526,15 +524,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                 </Collapse>
 
                 {collapsed && (
-                    <Box
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            width: '100%',
-                            opacity: 1.0,
-                            verticalAlign: 'middle',
-                        }}
-                    >
+                    <Box display="flex" w="100%" ta="center" opacity={1.0}>
                         <Box w="100%" maw={{ base: '100%', md: '700px' }}>
                             <Grid justify="space-evenly" align="center">
                                 <Grid.Col span={'content'}>

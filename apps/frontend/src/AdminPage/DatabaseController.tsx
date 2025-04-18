@@ -62,7 +62,7 @@ export function DatabaseController({ table }: Props) {
             console.log(error);
         }
 
-        //setMessage(await res.statusText);
+        reloadPage();
     };
 
     // export function handling
@@ -81,6 +81,8 @@ export function DatabaseController({ table }: Props) {
         const res = await axios.delete(`api/${table}/clear`, {}).then((responseData) => {
             console.log('Response from server:', responseData);
         });
+
+        reloadPage();
     };
 
     // used to reload the page when a button is pressed

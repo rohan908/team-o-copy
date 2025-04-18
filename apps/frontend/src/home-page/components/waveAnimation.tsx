@@ -7,20 +7,19 @@ interface WaveAnimationProps {
 }
 
 const COLORS = {
-    WAVE_COLORS: [
-        //backup wave colors bc mantine doesnt work or smth idk it breaks sometimes
-        '#ebfeff',
-        '#d7fbfd',
-        '#aaf7fc',
-        '#7df3fb',
-        '#61f0fb',
-        '#56effa',
-        '#4deefb',
-        '#40d3df',
-        '#2fbcc7',
-        '#00a3ad',
+    WAVE_COLORS: [ //backup wave colors bc mantine doesnt work or smth idk it breaks sometimes
+      '#99E5F4',
+      '#88D3EC',
+      '#77C1E4',
+      '#66AFDC',
+      '#559DD5',
+      '#448BCD',
+      '#3379C5',
+      '#2267BD',
+      '#1155B5',
+      '#0043AD',
     ],
-    BACKGROUND_COLOR: '#ebfeff', //lighest mantine tuquoise color
+    BACKGROUND_COLOR: '#AAF7FC' //lighest mantine tuquoise color
 };
 
 // Wave animation configuration
@@ -28,40 +27,40 @@ const WAVE_CONFIG = {
     NUM_WAVES: 20,
     WAVE_HEIGHT: 0.05, //wave amplitude factor
     WAVE_LENGTH_FACTOR: 100,
-    CONTROL_POINTS: 40, // number of control points for the shared spline
-    PATH_AMPLITUDE: 0.6, // amplitude of the main path
-    OSCILLATION_RANGE: 0.05, // how far waves can deviate from the main path (another factor that is effected by wave index)
+    CONTROL_POINTS: 40,            // number of control points for the shared spline
+    PATH_AMPLITUDE: 0.6,        // amplitude of the main path
+    OSCILLATION_RANGE: 0.05    // how far waves can deviate from the main path (another factor that is effected by wave index)
 };
 
 /**
  * Creates a colorful flowing wave animation similar to the OAKSUN website
  */
-export function WaveAnimation({ id = 'waveCanvas', className }: WaveAnimationProps) {
+export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animationRef = useRef<number>(0);
     const theme = useMantineTheme();
-    const waveColors = theme.colors?.terquAccet || COLORS.WAVE_COLORS;
-
+    const waveColors = COLORS.WAVE_COLORS;
+    
     // function to interpolate between two hex colors (we have 10+ waves but only 20 colors), pulled this algo off stack overflow
     const interpolateColor = (color1: string, color2: string, factor: number): string => {
         const hex1 = color1.replace('#', '');
         const hex2 = color2.replace('#', '');
-
+        
         const r1 = parseInt(hex1.substring(0, 2), 16);
         const g1 = parseInt(hex1.substring(2, 4), 16);
         const b1 = parseInt(hex1.substring(4, 6), 16);
-
+        
         const r2 = parseInt(hex2.substring(0, 2), 16);
         const g2 = parseInt(hex2.substring(2, 4), 16);
         const b2 = parseInt(hex2.substring(4, 6), 16);
-
+        
         const r = Math.round(r1 + (r2 - r1) * factor);
         const g = Math.round(g1 + (g2 - g1) * factor);
         const b = Math.round(b1 + (b2 - b1) * factor);
-
+        
         return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
     };
-
+    
     // gets the wave color gradient based on position. Designed for mutability and changing settings, probably could be optimized in final edition
     const getGradientColor = (index: number, total: number): string => {
         const colorCount = waveColors.length;
@@ -70,10 +69,10 @@ export function WaveAnimation({ id = 'waveCanvas', className }: WaveAnimationPro
         const lowerIndex = Math.floor(colorIndex);
         const upperIndex = Math.min(lowerIndex + 1, colorCount - 1);
         const factor = colorIndex - lowerIndex;
-
+        
         return interpolateColor(waveColors[lowerIndex], waveColors[upperIndex], factor);
     };
-
+    
     // main animation init and loop
     useEffect(() => {
         console.log('WaveAnimation useEffect running');
