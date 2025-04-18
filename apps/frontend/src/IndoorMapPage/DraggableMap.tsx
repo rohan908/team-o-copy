@@ -259,9 +259,7 @@ export function DraggableMap({
         }
 
         // gets list of path node IDs
-        const path = findPath(firstNodeId, lastNodeId, currPathAlgo);
-
-        const pathCreation = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
+        const path = findPath(firstNodeId, lastNodeId, currPathAlgo).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
             // For each node id in the path
             for (const id of ids) {
