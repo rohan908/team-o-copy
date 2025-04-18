@@ -3,14 +3,14 @@ import * as THREE from 'three';
 import { Box, useMantineTheme } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { NodeDataType, DraggableMapProps } from './MapClasses/MapTypes.ts';
-import FloorSwitchBox from './components/FloorManagerBox.tsx';
+import FloorSwitchBox from './INDOORMAPScomponents/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 import {
     usePatriotContext,
     useChestnutHillContext,
     useAllNodesContext,
 } from '../contexts/DirectoryContext.js';
-import { PathPickerBox } from './components/PathPickerBox.tsx';
+import { PathPickerBox } from './INDOORMAPScomponents/PathPickerBox.tsx';
 import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';

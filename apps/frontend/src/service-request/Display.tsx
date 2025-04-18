@@ -17,19 +17,19 @@ export function Display() {
     const { requestData } = location.state;
 
     return (
-        <Flex w="100%" h="100vh" align="center" direction="column" p="xl">
+        <Flex w="100%" h="100vh" align="center" direction="column" p="xl" bg="terquAccet.2">
             <Text size="xl" fw={700} mb="lg">
                 Service Request Submitted
             </Text>
             <Box
-                bg="gray.1"
+                bg="themeGold.1"
                 p="xl"
                 w="100%"
                 maw="600px"
+                bd='3px solid'
+                /*Border Radius is only possible through style prop afaik -Connor*/
                 style={{
                     borderRadius: theme.radius.md,
-                    border: '3px solid',
-                    borderColor: '#90EE90',
                 }}
             >
                 {requestData.map((item, idx) => (

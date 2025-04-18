@@ -8,10 +8,11 @@ import { Display } from '../service-request/Display.tsx';
 import { AdminPage } from '../AdminPage/AdminPage.tsx';
 import { MapAPIPage } from '../MapsAPIPage/MapAPIPage.tsx';
 import Language from '../service-request/LanguageInterpreterSR.tsx';
-import { BSFMapPage } from '../BFSMapPages-OLD/components/BSFMapPage.tsx';
+import { BSFMapPage } from '../BFSMapPages-OLD/INDOORMAPScomponents/BSFMapPage.tsx';
 import { ServiceRequestPage } from '../service-request/ServiceRequestPage.tsx';
 import Maintenance from '../service-request/MaintenanceSR.tsx';
 import { useState } from 'react';
+import { useLogin } from './components/LoginContext.tsx';
 
 import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -20,7 +21,7 @@ import { DraggableMap } from '../IndoorMapPage/DraggableMap.tsx';
 import { NodeDirectory } from '../NodeDirectoryPage/NodeDirectory.tsx';
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import Sanitation from '../service-request/SanitationSR.tsx';
-import Security from "../service-request/SecuritySR.tsx";
+import Security from '../service-request/SecuritySR.tsx';
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
@@ -55,7 +56,7 @@ export function Routing() {
                         <Route path="/maintenance-form" element={<Maintenance />} />
                         <Route path="/security-form" element={<Security />} />
 
-                      <Route
+                        <Route
                             path="/IndoorMapPage"
                             element={
                                 <DraggableMap

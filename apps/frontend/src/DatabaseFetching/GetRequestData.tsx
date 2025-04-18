@@ -3,7 +3,7 @@ export async function fetchRequestData(requestName: string) {
         console.log('fetching');
 
         // gets directory data through http query from directory.ts
-        const res = await fetch('/api/${requestName}');
+        const res = await fetch(`/api/${requestName}`);
 
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);

@@ -44,7 +44,7 @@ interface DirectoryContextType extends DirectoryState {
 export const DirectoryContext = createContext<DirectoryContextType | undefined>(undefined);
 
 /*
-    defines custom hooks so that consumer components don't directly interact
+    defines custom hooks so that consumer INDOORMAPScomponents don't directly interact
     with any contexts, that way no internal data can be modified.
 
     To use them to access database data, follow this example:
@@ -151,7 +151,7 @@ function directoryReducer(state: DirectoryState, action: DirectoryAction): Direc
 
 /*
   Defines the provider component to be used in app.tsx. This
-  is what allows consumer components (child components --> In our
+  is what allows consumer INDOORMAPScomponents (child INDOORMAPScomponents --> In our
   projects, this is only Routing) of the provider to access the
   context data (through use of custom hooks).
 
@@ -211,7 +211,7 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
     }, [fetchData]);
 
     /*
-    Wraps child components in DirectoryContext provider so that they can
+    Wraps child INDOORMAPScomponents in DirectoryContext provider so that they can
     use the context.
    */
 

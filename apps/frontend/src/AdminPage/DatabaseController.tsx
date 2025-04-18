@@ -62,9 +62,7 @@ export function DatabaseController({ table }: Props) {
             console.log(error);
         }
 
-        window.location.reload();
-
-        //setMessage(await res.statusText);
+        reloadPage();
     };
 
     // export function handling
@@ -84,7 +82,7 @@ export function DatabaseController({ table }: Props) {
             console.log('Response from server:', responseData);
         });
 
-        window.location.reload();
+        reloadPage();
     };
 
     // used to reload the page when a button is pressed

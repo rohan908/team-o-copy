@@ -22,11 +22,7 @@ router.post('/import', async (req: Request, res: Response) => {
     const dataToAdd = parseImportedCSV(dataString);
 
     // clears directory database for new input data
-    const prismaClear = await PrismaClient.node.deleteMany({
-        where: {
-            nodeType: 'directory',
-        },
-    });
+    const prismaClear = await PrismaClient.node.deleteMany({});
 
     // adds the imported file data to Prisma
     const prismaCreate = await PrismaClient.node.createMany({
@@ -45,19 +41,6 @@ router.post('/import', async (req: Request, res: Response) => {
     });
 
     console.log('Imported Table Successfully');
-});
-
-// Exports current directory backup CSV to frontend
-router.get('/export', async (req: Request, res: Response) => {
-    const csvData = fs.readFileSync('./src/directoryBackup/backup.csv', 'utf-8');
-
-    const directoryData = await PrismaClient.node.findMany({
-        where: {
-            nodeType: 'directory',
-        },
-    });
-
-    res.send(directoryData);
 });
 
 // Exports all nodes in the database

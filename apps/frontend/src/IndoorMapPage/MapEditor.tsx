@@ -3,13 +3,13 @@ import * as THREE from 'three';
 import { Box } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
-import MapEditorBox from './components/MapEditorBox.tsx';
+import MapEditorBox from './INDOORMAPScomponents/MapEditorBox.tsx';
 import { getNode } from './HelperFiles/GetNodeRouting.ts';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
-import FloorSwitchBox from './components/FloorManagerBox.tsx';
+import FloorSwitchBox from './INDOORMAPScomponents/FloorManagerBox.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { useLogin } from '../home-page/components/LoginContext.tsx';
-import { PathPickerBox } from './components/PathPickerBox.tsx';
+import { PathPickerBox } from './INDOORMAPScomponents/PathPickerBox.tsx';
 
 export function MapEditor() {
     const [nodeSelected, setNodeSelected] = useState(false);
