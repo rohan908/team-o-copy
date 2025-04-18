@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Box, useMantineTheme } from '@mantine/core';
+import { Box } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DraggableMapProps } from './MapClasses/MapTypes.ts';
-import FloorSwitchBox from './INDOORMAPScomponents/FloorManagerBox.tsx';
+import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 import {
     usePatriotContext,
     useChestnutHillContext,
     useAllNodesContext,
 } from '../contexts/DirectoryContext.js';
-import { PathPickerBox } from './INDOORMAPScomponents/PathPickerBox.tsx';
+import { PathPickerBox } from './Components/PathPickerBox.tsx';
 import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
@@ -32,7 +32,7 @@ export function DraggableMap({
     const [isFading, setIsFading] = useState(false);
     const [currPathAlgo, setCurrPathAlgo] = useState<string>('BFS');
     const allNodes = useAllNodesContext();
-    const [floorState, setFloorState] = useState<number>(0);
+    const [floorState, setFloorState] = useState<number>(1);
 
     // Declares context for start and end node information
     const patriotNodes = usePatriotContext();
@@ -47,11 +47,10 @@ export function DraggableMap({
 
     /*
       stores scene references in useRef
-
-    Patriot Place Floor 1 -> floor1 -> scene 1
-    Patriot Place Floor 3 -> floor2 -> scene 2
-    Patriot Place Floor 4 -> floor3 -> scene 3
-    Chestnut Hill Floor 1 -> floor4 -> scene 4
+    Patriot Place Floor 1 -> floor1 -> scene 0
+    Patriot Place Floor 3 -> floor2 -> scene 1
+    Patriot Place Floor 4 -> floor3 -> scene 2
+    Chestnut Hill Floor 1 -> floor4 -> scene 3
      */
     const scenesRef = useRef<THREE.Scene[]>([]);
 
@@ -63,6 +62,40 @@ export function DraggableMap({
      */
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
     const canvasRef = useRef<HTMLElement | null>(null);
+
+    const handleHospitalChange = (newHospitalName: string | null) => {
+        if (newHospitalName) {
+            setSelectedHospitalName(newHospitalName);
+            if (newHospitalName === '20 Patriot Pl' || newHospitalName === '22 Patriot Pl') {
+                setSceneIndexState(0);
+            } else if (newHospitalName === 'Chestnut Hill') {
+                setSceneIndexState(3);
+            }
+        }
+    };
+
+    // associated floors with scenes
+    const getSceneIndexFromFloor = (floor: number): number => {
+        if (selectedHospitalName === 'Chestnut Hill') return 3;
+        if (floor === 1) return 0;
+        if (floor === 3) return 1;
+        if (floor === 4) return 2;
+        return 0;
+    };
+
+    // Handle switching to other floors
+    const handleFloorChange = (newFloor: number) => {
+        console.log('handleFloorChange', newFloor);
+        if (newFloor === floorState) return;
+        setIsFading(true);
+        setFloorState(newFloor);
+        setTimeout(() => {
+            setTimeout(() => {
+                setSceneIndexState(getSceneIndexFromFloor(newFloor));
+                setIsFading(false);
+            }, 200); // Fade-in duration
+        }, 200); // Fade-out duration
+    };
 
     useEffect(() => {
         console.log('rendering');
@@ -155,14 +188,6 @@ export function DraggableMap({
         return null;
     };
 
-    const handleDepartmentChange = (newDep: string) => {
-        setSelectedDepartment(newDep);
-    };
-
-    const handleFadingChange = (newHos: string) => {
-        setSelectedHospitalName(newHos);
-    };
-
     // Function for populating edges. Creating the edge objects are done in a class to simplify implementation of the direction animation
     // TO DO CHANGE NAME TO SPECIFY IT IS ONLY FOR ANIMATION NOT DATABASDE
     const createEdge = (node1: DirectoryNodeItem, node2: DirectoryNodeItem) => {
@@ -203,28 +228,6 @@ export function DraggableMap({
         }
     };
 
-    // Handle switching to other floors
-    const handleFloorChange = (newFloor: number) => {
-        if (newFloor === floorState) return;
-        setIsFading(true);
-        setTimeout(() => {
-            // refer to start of doc for why these number are like this (Patriot floor 3 is scene 1, etc.)
-            setFloorState(newFloor);
-            if (newFloor === 1) {
-                setSceneIndexState(0);
-            } else if (newFloor === 3) {
-                setSceneIndexState(1);
-            } else if (newFloor === 4) {
-                setSceneIndexState(2);
-            } else if (newFloor === 5) {
-                setSceneIndexState(3);
-            }
-            setTimeout(() => {
-                setIsFading(false);
-            }, 200); // Fade-in duration
-        }, 200); // Fade-out duration
-    };
-
     useEffect(() => {
         const firstNodeId = findParkingLot(); // start node
         const lastNodeId = getLastNodeId(); // destination node
@@ -233,12 +236,6 @@ export function DraggableMap({
         clearSceneObjects(scenesRef.current);
 
         console.log('finding path:', firstNodeId, lastNodeId);
-
-        if (selectedHospitalName === '20 Patriot Pl' || selectedHospitalName === '22 Patriot Pl') {
-            handleFloorChange(floorState);
-        } else {
-            handleFloorChange(floorState);
-        }
 
         // gets list of path node IDs
         const path = findPath(firstNodeId, lastNodeId, currPathAlgo).then(async (pathres) => {
@@ -290,7 +287,7 @@ export function DraggableMap({
             return () => {};
         };
         animate();
-    }, [selectedHospitalName, selectedDepartment, floorState]);
+    }, [selectedDepartment, sceneIndexState]);
 
     return (
         <Box w="100%" h="100%" p={0} pos={'absolute'}>
@@ -304,7 +301,7 @@ export function DraggableMap({
                 currAlgo={currPathAlgo}
                 setPathAlgo={setCurrPathAlgo}
                 currHospital={selectedHospitalName}
-                setSelectedHospitalName={setSelectedHospitalName}
+                setSelectedHospitalName={handleHospitalChange}
                 selectedDepartment={selectedDepartment}
                 setSelectedDepartment={setSelectedDepartment}
             />
