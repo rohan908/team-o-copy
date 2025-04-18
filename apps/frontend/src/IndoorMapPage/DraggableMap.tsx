@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Box, useMantineTheme } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { getNode } from './GetNodeRouting.ts';
 import { NodeDataType, DraggableMapProps } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
@@ -12,8 +11,11 @@ import {
     useAllNodesContext,
 } from '../contexts/DirectoryContext.js';
 import { PathPickerBox } from './components/PathPickerBox.tsx';
-import { findPath } from './FindPathRouting.ts';
+import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
+import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
+import { createAllScenes } from './HelperFiles/SceneFactory.ts';
+import { createNode } from './HelperFiles/NodeFactory.ts';
 
 const canvasId = 'insideMapCanvas';
 
@@ -23,21 +25,117 @@ export function DraggableMap({
     setSelectedDepartment,
     setSelectedHospitalName,
 }: DraggableMapProps) {
+    /*
+      References that exist outside renders, changeable floor state, and properties like theme
+     */
+
     const theme = useMantineTheme();
-    const [floor, setFloor] = useState(1);
+
+    /*
+  Sets changeable fade state, currently selected path algorithm (e.g BFS, A*), sets
+  allNodes to the nodes context values to access all the nodes
+ */
+
     const [isFading, setIsFading] = useState(false);
     const [currPathAlgo, setCurrPathAlgo] = useState<string>('BFS');
     const allNodes = useAllNodesContext();
-
-    const objects: THREE.Object3D[] = [];
-    objects.push(new THREE.Object3D());
-    // Animation related refs
-    const animationRef = useRef<FlowingTubeAnimation | null>(null);
-    const clockRef = useRef<THREE.Clock>(new THREE.Clock());
+    const [floorState, setFloorState] = useState<number>(0);
 
     // Declares context for start and end node information
     const patriotNodes = usePatriotContext();
     const chestnutNodes = useChestnutHillContext();
+
+    // Animation related refs
+    const animationRef = useRef<FlowingTubeAnimation | null>(null);
+    const clockRef = useRef<THREE.Clock>(new THREE.Clock());
+
+    /*
+      stores scene references in useRef
+
+    Patriot Place Floor 1 -> floor1 -> scene 1
+    Patriot Place Floor 3 -> floor2 -> scene 2
+    Patriot Place Floor 4 -> floor3 -> scene 3
+    Chestnut Hill Floor 1 -> floor4 -> scene 4
+     */
+    const scenesRef = useRef<THREE.Scene[]>([]);
+
+    // index is 0 since it refers to the scenesRef array of scenes, where floor 1 is index 0
+    const [sceneIndexState, setSceneIndexState] = useState<number>(0);
+
+    /*
+     stores renderer and canvas references in useRef for efficiency
+     */
+    const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+    const canvasRef = useRef<HTMLElement | null>(null);
+
+    useEffect(() => {
+        console.log('rendering');
+        console.log('selectedHospital:', selectedHospitalName);
+
+        // sets animation useRef value
+        animationRef.current = new FlowingTubeAnimation({
+            color1: 0x2a68f7,
+            color2: 0x4deefb,
+            flowSpeed: 2,
+            pulseFrequency: 0.5,
+        });
+
+        canvasRef.current = document.getElementById(canvasId);
+
+        // we create a new renderer
+        rendererRef.current = new THREE.WebGLRenderer({
+            canvas: canvasRef.current as HTMLCanvasElement,
+            antialias: true,
+        });
+
+        if (canvasRef) {
+            rendererRef.current.setSize(
+                canvasRef.current.clientWidth,
+                canvasRef.current.clientHeight
+            );
+        }
+        rendererRef.current.setPixelRatio(window.devicePixelRatio);
+
+        // Create camera
+        const camera = new THREE.PerspectiveCamera(
+            50,
+            canvasRef.current!.clientWidth / canvasRef.current!.clientHeight,
+            50,
+            1000
+        );
+        camera.position.set(0, 0, 300);
+
+        // Initialize clock for animation timing
+        clockRef.current = new THREE.Clock();
+
+        // Camera controls
+        const orbitControls = new OrbitControls(camera, rendererRef.current.domElement);
+        orbitControls.enableRotate = false;
+        orbitControls.mouseButtons = {
+            LEFT: THREE.MOUSE.PAN,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT: THREE.MOUSE.ROTATE,
+        };
+
+        const sceneArr = createAllScenes();
+
+        const animate = () => {
+            // Get delta time for animation
+            const deltaTime = clockRef.current.getDelta();
+
+            // Update flowing animation
+            if (animationRef.current) {
+                animationRef.current.update(deltaTime);
+            }
+
+            // Render the current scene
+            rendererRef.current.render(scenesRef.current[0], camera);
+            window.requestAnimationFrame(animate);
+
+            return () => {};
+        };
+        animate();
+    }, []);
 
     // gets Id for destination node
     const getLastNodeId = () => {
@@ -45,14 +143,14 @@ export function DraggableMap({
             const index = patriotNodes.findIndex((element) => {
                 return element.name == selectedDepartment;
             });
-            return index >= 0 ? patriotNodes[index].id : undefined;
+            return index >= 0 ? patriotNodes[index].id : 0;
         } else if (selectedHospitalName == 'Chestnut Hill') {
             const index = chestnutNodes.findIndex((element) => {
                 return element.name == selectedDepartment;
             });
-            return index >= 0 ? chestnutNodes[index].id : undefined; //make sure nodeId exists
+            return index >= 0 ? chestnutNodes[index].id : 0; //make sure nodeId exists
         }
-        return undefined;
+        return 0;
     };
 
     // gets id of parking lot node -> hardcoded for now
@@ -74,70 +172,12 @@ export function DraggableMap({
         return null;
     };
 
-    // Parameters for THREEjs objects and path display
-    const firstNodeId = findParkingLot(); // start node
-    const lastNodeId = getLastNodeId(); // destination node
-    const nodeColor = { color: 0xeafeff };
-    const nodeRadius = 1;
-
     const handleDepartmentChange = (newDep: string) => {
         setSelectedDepartment(newDep);
     };
 
     const handleFadingChange = (newHos: string) => {
         setSelectedHospitalName(newHos);
-    };
-    /*
-    Patriot Place Floor 1 -> floor1 -> scene 1
-    Patriot Place Floor 3 -> floor2 -> scene 2
-    Patriot Place Floor 4 -> floor3 -> scene 3
-    Chestnut Hill Floor 1 -> floor4 -> scene 4
-     */
-
-    // function for simplifying creating new scenes (floors)
-    function createMapScene(texturePath: string) {
-        const scene = new THREE.Scene();
-        const mapTexture = new THREE.TextureLoader().load(texturePath);
-        mapTexture.colorSpace = THREE.SRGBColorSpace;
-        const mapGeo = new THREE.PlaneGeometry(500, 281);
-        const mapMaterial = new THREE.MeshBasicMaterial({ map: mapTexture });
-        const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
-        mapPlane.position.set(0, 0, 0);
-        scene.add(mapPlane);
-        return scene;
-    }
-
-    // Setup scenes and map planes.
-    const scene1 = createMapScene('../../public/MapImages/Patriot Place Floor 1.png');
-    const scene2 = createMapScene('../../public/MapImages/Patriot Place Floor 3.png');
-    const scene3 = createMapScene('../../public/MapImages/Patriot Place Floor 4.png');
-    const scene4 = createMapScene('../../public/MapImages/Chestnut Hill Floor 1.png');
-    const scene = useRef<THREE.Scene>(scene1);
-
-    // Function for populating nodes as THREEjs sphere objects
-    const createNode = (node: NodeDataType) => {
-        console.log('creating node');
-        const geometry = new THREE.SphereGeometry(
-            nodeRadius,
-            Math.round(nodeRadius * 6), // Vibe based adaptive segmentation
-            Math.round(nodeRadius * 3)
-        );
-        const material = new THREE.MeshBasicMaterial(nodeColor);
-        const sphere = new THREE.Mesh(geometry, material);
-        sphere.position.x = node.x;
-        sphere.position.y = node.y;
-        const nodeFloor = node.floor;
-        if (nodeFloor === 1) {
-            scene1.add(sphere);
-        } else if (nodeFloor === 2) {
-            scene2.add(sphere);
-        } else if (nodeFloor === 3) {
-            scene3.add(sphere);
-        } else if (nodeFloor === 4) {
-            scene4.add(sphere);
-        } else {
-            console.error("node not added because floor doesn't exist");
-        }
     };
 
     // Function for populating edges. Creating the edge objects are done in a class to simplify implementation of the direction animation
@@ -150,28 +190,28 @@ export function DraggableMap({
 
         // Only create edges on the same floor
         if (node1.floor === node2.floor && node1.floor === 1) {
-            scene1.add(
+            scenesRef.current[0].add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
                     { x: node2.x, y: node2.y }
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 2) {
-            scene2.add(
+            scenesRef.current[1].add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
                     { x: node2.x, y: node2.y }
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 3) {
-            scene3.add(
+            scenesRef.current[2].add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
                     { x: node2.x, y: node2.y }
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 4) {
-            scene4.add(
+            scenesRef.current[3].add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
                     { x: node2.x, y: node2.y }
@@ -182,18 +222,19 @@ export function DraggableMap({
 
     // Handle switching to other floors
     const handleFloorChange = (newFloor: number) => {
-        if (newFloor === floor) return;
+        if (newFloor === floorState) return;
         setIsFading(true);
         setTimeout(() => {
-            setFloor(newFloor);
+            // refer to start of doc for why these number are like this (Patriot floor 3 is scene 1, etc.)
+            setFloorState(newFloor);
             if (newFloor === 1) {
-                scene.current = scene1;
+                setSceneIndexState(0);
             } else if (newFloor === 3) {
-                scene.current = scene2;
+                setSceneIndexState(1);
             } else if (newFloor === 4) {
-                scene.current = scene3;
+                setSceneIndexState(2);
             } else if (newFloor === 5) {
-                scene.current = scene4;
+                setSceneIndexState(3);
             }
             setTimeout(() => {
                 setIsFading(false);
@@ -201,61 +242,33 @@ export function DraggableMap({
         }, 200); // Fade-out duration
     };
 
-    // Generate THREEjs objects to display a path
-    /* getNode return type:
-    {
-    "result": {
-        "nodeData": {
-            "id": 1,
-            "x": 2,
-            "y": 4,
-            "floor": 1,
-            "mapId": 1,
-            "name": "hallway",
-            "description": "hallway",
-            "nodeType": "hallway",
-            "edges": []
-        },
-        "connections": [
-            {
-                "connectedId": 2,
-                "weight": 23.3452350598575
-            }
-        ],
-        "success": true
-        }
-    }
-     */
-    /* findPath return type:
-        {
-    "result": {
-        "success": true,
-        "pathIDs": [
-            1,
-            2,
-            4
-        ],
-        "distance": 43.741313114228646
-       }
-       }
-      */
     // Get the path TODO: Switch get node api calls to useContext
-
     useEffect(() => {
+        const firstNodeId = findParkingLot(); // start node
+        const lastNodeId = getLastNodeId(); // destination node
+
+        // clear previous path
+        clearSceneObjects(scenesRef.current);
+
         console.log('finding path:', firstNodeId, lastNodeId);
+
         if (selectedHospitalName === '20 Patriot Pl' || selectedHospitalName === '22 Patriot Pl') {
-            handleFloorChange(floor);
+            handleFloorChange(floorState);
         } else {
-            handleFloorChange(floor);
+            handleFloorChange(floorState);
         }
-        const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
+
+        // gets list of path node IDs
+        const path = findPath(firstNodeId, lastNodeId, currPathAlgo);
+
+        const pathCreation = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
             const ids = pathres.result.pathIDs;
             // For each node id in the path
             for (const id of ids) {
                 // Get the full node from the ID
                 const node = getNode(id);
                 if (node) {
-                    createNode(node); //Create the node from its data
+                    createNode(node, scenesRef.current); //Create the node from its data
                 } else {
                     console.error('Node id not found: ', id);
                 }
@@ -277,77 +290,12 @@ export function DraggableMap({
                 }
             }
         });
-    }, [selectedDepartment]);
-
-    useEffect(() => {
-        // This has to be in a useEffect to prevent infinite looping
-        // TODO: Maybe intialize this earlier in its own useEffect to prevent rough scene change
-        console.log('rendering');
-        console.log('selectedHospital:', selectedHospitalName);
-        animationRef.current = new FlowingTubeAnimation({
-            color1: 0x2a68f7,
-            color2: 0x4deefb,
-            flowSpeed: 2,
-            pulseFrequency: 0.5,
-        });
-
-        const canvas = document.getElementById(canvasId);
-
-        // we create a new renderer
-        const renderer = new THREE.WebGLRenderer({
-            canvas: canvas as HTMLCanvasElement,
-            antialias: true,
-        });
-        if (canvas) {
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        }
-        renderer.setPixelRatio(window.devicePixelRatio);
-
-        // Create camera
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas!.clientWidth / canvas!.clientHeight,
-            50,
-            1000
-        );
-        camera.position.set(0, 0, 300);
-
-        // Initialize clock for animation timing
-        clockRef.current = new THREE.Clock();
-
-        scene.current.background = new THREE.Color('#2FBCC7');
-
-        // Camera controls
-        const orbitControls = new OrbitControls(camera, renderer.domElement);
-        orbitControls.enableRotate = false;
-        orbitControls.mouseButtons = {
-            LEFT: THREE.MOUSE.PAN,
-            MIDDLE: THREE.MOUSE.DOLLY,
-            RIGHT: THREE.MOUSE.ROTATE,
-        };
-
-        const animate = () => {
-            // Get delta time for animation
-            const deltaTime = clockRef.current.getDelta();
-
-            // Update flowing animation
-            if (animationRef.current) {
-                animationRef.current.update(deltaTime);
-            }
-
-            // Render the current scene
-            renderer.render(scene.current, camera);
-            window.requestAnimationFrame(animate);
-
-            return () => {};
-        };
-        animate();
-    }, [selectedHospitalName, selectedDepartment, scene.current]);
+    }, [selectedHospitalName, selectedDepartment]);
 
     return (
         <Box w="100%" h="100%" p={0} pos={'absolute'}>
             <FloorSwitchBox
-                floor={floor}
+                floor={floorState}
                 onCollapseChange={() => true}
                 setFloor={handleFloorChange}
                 building={selectedHospitalName || ''}
