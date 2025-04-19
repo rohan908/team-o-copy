@@ -21,6 +21,7 @@ import { NodeDirectory } from '../NodeDirectoryPage/NodeDirectory.tsx';
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import Sanitation from '../service-request/SanitationSR.tsx';
 import Security from "../service-request/SecuritySR.tsx";
+import NotFound from "../404Page.tsx";
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
@@ -54,6 +55,7 @@ export function Routing() {
                         <Route path="/sanitation-form" element={<Sanitation />} />
                         <Route path="/maintenance-form" element={<Maintenance />} />
                         <Route path="/security-form" element={<Security />} />
+                        <Route path="/*" element={<NotFound/>} />
 
                       <Route
                             path="/IndoorMapPage"
