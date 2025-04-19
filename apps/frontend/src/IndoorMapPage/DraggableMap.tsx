@@ -73,6 +73,14 @@ export function DraggableMap({
             }
         }
     };
+    const getNode = (id: number): DirectoryNodeItem | null => {
+        for (const node of allNodes) {
+            if (node.id === id) {
+                return node;
+            }
+        }
+        return null;
+    };
 
     // associated floors with scenes
     const getSceneIndexFromFloor = (floor: number): number => {
@@ -98,9 +106,6 @@ export function DraggableMap({
     };
 
     useEffect(() => {
-        console.log('rendering');
-        console.log('selectedHospital:', selectedHospitalName);
-
         // sets animation useRef value
         animationRef.current = new FlowingTubeAnimation({
             color1: 0x2a68f7,
@@ -137,18 +142,13 @@ export function DraggableMap({
         rendererRef.current.setPixelRatio(window.devicePixelRatio);
 
         // Camera controls
-        if (rendererRef.current) {
-            const orbitControls = new OrbitControls(
-                cameraRef.current,
-                rendererRef.current.domElement
-            );
-            orbitControls.enableRotate = false;
-            orbitControls.mouseButtons = {
-                LEFT: THREE.MOUSE.PAN,
-                MIDDLE: THREE.MOUSE.DOLLY,
-                RIGHT: THREE.MOUSE.ROTATE,
-            };
-        }
+        const orbitControls = new OrbitControls(cameraRef.current, rendererRef.current.domElement);
+        orbitControls.enableRotate = false;
+        orbitControls.mouseButtons = {
+            LEFT: THREE.MOUSE.PAN,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT: THREE.MOUSE.ROTATE,
+        };
 
         scenesRef.current = createAllScenes();
     }, []);
@@ -177,15 +177,6 @@ export function DraggableMap({
         } else {
             return 100; // Node 100 for Chestnut Hill
         }
-    };
-
-    const getNode = (id: number): DirectoryNodeItem | null => {
-        for (const node of allNodes) {
-            if (node.id === id) {
-                return node;
-            }
-        }
-        return null;
     };
 
     // Function for populating edges. Creating the edge objects are done in a class to simplify implementation of the direction animation

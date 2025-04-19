@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 
 // Function for populating nodes as THREEjs sphere objects
-import { NodeDataType } from '../MapClasses/MapTypes.ts';
+import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
 
 // Parameters for THREEjs objects and path display
 const nodeColor = { color: 0xeafeff };
 const nodeRadius = 1;
 
-export const createNode = (node: NodeDataType, sceneArr: THREE.Scene[]) => {
+export const createNode = (node: DirectoryNodeItem, sceneArr: THREE.Scene[]) => {
     console.log('creating node');
 
     const geometry = new THREE.SphereGeometry(
