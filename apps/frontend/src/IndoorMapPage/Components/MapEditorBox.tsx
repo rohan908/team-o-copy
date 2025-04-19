@@ -403,8 +403,6 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                 maw={collapsed ? 350 : '80%'}
                 opacity={collapsed ? 0.8 : 0.95}
                 style={{
-                    maxWidth: collapsed ? '350px' : '80%',
-                    opacity: collapsed ? 0.8 : 0.95,
                     borderRadius: theme.radius.lg,
                     overflow: 'hidden',
                 }}

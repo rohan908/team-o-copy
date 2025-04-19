@@ -2,41 +2,25 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Box } from '@mantine/core';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { DraggableMapProps } from './MapClasses/MapTypes.ts';
-import FloorSwitchBox from './Components/FloorManagerBox.tsx';
+import { getNode } from './GetNodeRouting.ts';
+import { NodeDataType } from './MapClasses/MapTypes.ts';
+import FloorSwitchBox from './components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
-import {
-    usePatriotContext,
-    useChestnutHillContext,
-    useAllNodesContext,
-} from '../contexts/DirectoryContext.js';
-import { PathPickerBox } from './Components/PathPickerBox.tsx';
-import { findPath } from './HelperFiles/FindPathRouting.ts';
-import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
-import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
-import { createAllScenes } from './HelperFiles/SceneFactory.ts';
-import { createNode } from './HelperFiles/NodeFactory.ts';
+import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
+import { findPath } from './FindPathRouting.ts';
 
 const canvasId = 'insideMapCanvas';
 
-export function DraggableMap({
-    selectedHospitalName,
-    selectedDepartment,
-    setSelectedDepartment,
-    setSelectedHospitalName,
-}: DraggableMapProps) {
-    /*
-      References that exist outside renders, changeable floor state, and properties like theme
-     */
+// Pass in props for the selected hospital and department
+// TODO: change this to a useContext
+interface DraggableMapProps {
+    selectedHospitalName?: string | null;
+    selectedDepartment?: string | null;
+}
 
+export function DraggableMap({ selectedHospitalName, selectedDepartment }: DraggableMapProps) {
+    const [floor, setFloor] = useState(1); // controls the current visible floor and threejs scene
     const [isFading, setIsFading] = useState(false);
-    const [currPathAlgo, setCurrPathAlgo] = useState<string>('BFS');
-    const allNodes = useAllNodesContext();
-    const [floorState, setFloorState] = useState<number>(1);
-
-    // Declares context for start and end node information
-    const patriotNodes = usePatriotContext();
-    const chestnutNodes = useChestnutHillContext();
 
     // Animation related refs
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
@@ -159,14 +143,13 @@ export function DraggableMap({
             const index = patriotNodes.findIndex((element) => {
                 return element.name == selectedDepartment;
             });
-            return index >= 0 ? patriotNodes[index].id : 0;
+            return patriotNodes[index].id;
         } else if (selectedHospitalName == 'Chestnut Hill') {
             const index = chestnutNodes.findIndex((element) => {
                 return element.name == selectedDepartment;
             });
-            return index >= 0 ? chestnutNodes[index].id : 0; //make sure nodeId exists
+            return chestnutNodes[index].id;
         }
-        return 0;
     };
 
     // gets id of parking lot node -> hardcoded for now
@@ -180,8 +163,7 @@ export function DraggableMap({
     };
 
     // Function for populating edges. Creating the edge objects are done in a class to simplify implementation of the direction animation
-    // TO DO CHANGE NAME TO SPECIFY IT IS ONLY FOR ANIMATION NOT DATABASDE
-    const createEdge = (node1: DirectoryNodeItem, node2: DirectoryNodeItem) => {
+    const createEdge = (node1: NodeDataType, node2: NodeDataType) => {
         if (!animationRef.current) {
             console.error('Animation reference not initialized');
             return;
@@ -189,28 +171,28 @@ export function DraggableMap({
 
         // Only create edges on the same floor
         if (node1.floor === node2.floor && node1.floor === 1) {
-            scenesRef.current[0].add(
+            scene1.add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
                     { x: node2.x, y: node2.y }
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 2) {
-            scenesRef.current[1].add(
+            scene2.add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
                     { x: node2.x, y: node2.y }
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 3) {
-            scenesRef.current[2].add(
+            scene3.add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
                     { x: node2.x, y: node2.y }
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 4) {
-            scenesRef.current[3].add(
+            scene4.add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
                     { x: node2.x, y: node2.y }
@@ -219,47 +201,146 @@ export function DraggableMap({
         }
     };
 
-    useEffect(() => {
-        const firstNodeId = findParkingLot(); // start node
-        const lastNodeId = getLastNodeId(); // destination node
-
-        // clear previous path
-        clearSceneObjects(scenesRef.current);
-
-        console.log('finding path:', firstNodeId, lastNodeId);
-
-        // gets list of path node IDs
-        const path = findPath(firstNodeId, lastNodeId, currPathAlgo).then(async (pathres) => {
-            const ids = pathres.result.pathIDs;
-            // For each node id in the path
-            for (const id of ids) {
-                // Get the full node from the ID
-                const node = getNode(id);
-                if (node) {
-                    createNode(node, scenesRef.current); //Create the node from its data
-                } else {
-                    console.error('Node id not found: ', id);
-                }
-                const connectedNodeIds = node?.connectingNodes; // list of the connected nodes "connections" data including the IDs and Weights
-                if (connectedNodeIds) {
-                    for (const connectedNodeId of connectedNodeIds) {
-                        // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
-                        const connectedNode = getNode(connectedNodeId);
-                        if (connectedNode) {
-                            // If the connected node is in the path
-                            // TODO: Add another check that makes it so duplicate edge objects aren't created
-                            if (ids.includes(connectedNode.id)) {
-                                createEdge(node, connectedNode);
-                            }
-                        } else {
-                            console.error('Node id not found: ', connectedNodeId);
-                        }
-                    }
-                }
+    // Handle switching to other floors
+    const handleFloorChange = (newFloor: number) => {
+        if (newFloor === floor) return;
+        setIsFading(true);
+        setTimeout(() => {
+            setFloor(newFloor);
+            if (newFloor === 1) {
+                scene.current = scene1;
+                console.log('scene 1');
+            } else if (newFloor === 3) {
+                scene.current = scene2;
+                console.log('scene 2');
+            } else if (newFloor === 4) {
+                scene.current = scene3;
+                console.log('scene 3');
+            } else if (newFloor === 5) {
+                scene.current = scene4;
+                console.log('scene 4');
             }
+            setTimeout(() => {
+                setIsFading(false);
+            }, 200); // Fade-in duration
+        }, 200); // Fade-out duration
+    };
+
+    // Generate THREEjs objects to display a path
+    /* getNode return type:
+    {
+    "result": {
+        "nodeData": {
+            "id": 1,
+            "x": 2,
+            "y": 4,
+            "floor": 1,
+            "mapId": 1,
+            "name": "hallway",
+            "description": "hallway",
+            "nodeType": "hallway",
+            "edges": []
+        },
+        "connections": [
+            {
+                "connectedId": 2,
+                "weight": 23.3452350598575
+            }
+        ],
+        "success": true
+        }
+    }
+     */
+    /* findPath return type:
+        {
+    "result": {
+        "success": true,
+        "pathIDs": [
+            1,
+            2,
+            4
+        ],
+        "distance": 43.741313114228646
+       }
+       }
+      */
+    // Get the path TODO: Switch get node api calls to useContext
+    const path = findPath(firstNodeId, lastNodeId, 'BFS').then(async (pathres) => {
+        const ids = pathres.result.pathIDs;
+        // For each node id in the path
+        for (const id of ids) {
+            // Get the full node from the ID
+            const node = getNode(id).then(async (noderes) => {
+                createNode(noderes.result.nodeData); //Create the node from its data
+                const connectedNodeDatas = noderes.result.connections; // list of the connected nodes "connections" data including the IDs and Weights
+                for (const connectedNodeData of connectedNodeDatas) {
+                    // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
+                    const connectedNode = getNode(connectedNodeData.connectedId).then(
+                        async (connectednoderes) => {
+                            if (ids.includes(connectednoderes.result.nodeData.id)) {
+                                // If the connected node is in the path
+                                // TODO: Add another check that makes it so duplicate edge objects aren't created
+                                createEdge(
+                                    noderes.result.nodeData,
+                                    connectednoderes.result.nodeData
+                                );
+                            }
+                        }
+                    );
+                }
+            });
+        }
+    });
+
+    useEffect(() => {
+        // This has to be in a useEffect to prevent infinite looping
+        // TODO: Maybe intialize this earlier in its own useEffect to prevent rough scene change
+        if (selectedHospitalName === 'Chestnut Hill') {
+            handleFloorChange(5);
+        }
+
+        animationRef.current = new FlowingTubeAnimation({
+            color1: 0x2a68f7,
+            color2: 0x4deefb,
+            flowSpeed: 2,
+            pulseFrequency: 0.5,
         });
-        console.log('floorState', floorState);
-        console.log('scene', scenesRef.current[sceneIndexState]);
+
+        const canvas = document.getElementById(canvasId);
+
+        // we create a new renderer
+        const renderer = new THREE.WebGLRenderer({
+            canvas: canvas as HTMLCanvasElement,
+            antialias: true,
+        });
+        if (canvas) {
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        }
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Create camera
+        const camera = new THREE.PerspectiveCamera(
+            50,
+            canvas!.clientWidth / canvas!.clientHeight,
+            50,
+            1000
+        );
+        camera.position.set(0, 0, 300);
+
+        // Initialize clock for animation timing
+        clockRef.current = new THREE.Clock();
+
+        scene.current.background = new THREE.Color('#2FBCC7');
+
+        // Camera controls
+        const orbitControls = new OrbitControls(camera, renderer.domElement);
+        orbitControls.enableRotate = false;
+        orbitControls.mouseButtons = {
+            LEFT: THREE.MOUSE.PAN,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            RIGHT: THREE.MOUSE.ROTATE,
+        };
+
         const animate = () => {
             // Get delta time for animation
             const deltaTime = clockRef.current.getDelta();
@@ -270,40 +351,29 @@ export function DraggableMap({
             }
 
             // Render the current scene
-            if (rendererRef.current) {
-                rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
-            }
+            renderer.render(scene.current, camera);
             window.requestAnimationFrame(animate);
 
             return () => {};
         };
         animate();
-    }, [selectedDepartment, sceneIndexState]);
+    });
 
     return (
-        <Box w="100%" h="100%" p={0} pos={'absolute'}>
+        <Box w="100vw" h="100vh">
             <FloorSwitchBox
-                floor={floorState}
-                onCollapseChange={() => true}
+                floor={floor}
                 setFloor={handleFloorChange}
+                onCollapseChange={() => true}
                 building={selectedHospitalName || ''}
             />
-            <PathPickerBox
-                currAlgo={currPathAlgo}
-                setPathAlgo={setCurrPathAlgo}
-                currHospital={selectedHospitalName}
-                setSelectedHospitalName={handleHospitalChange}
-                selectedDepartment={selectedDepartment}
-                setSelectedDepartment={setSelectedDepartment}
-            />
-
             <canvas
                 id="insideMapCanvas"
-                style={{ width: '100%', height: '100%', position: 'relative' }}
+                style={{ width: '100%', height: '100%', position: 'absolute' }}
             />
-            <div //fade in and out transition
+            <div
                 style={{
-                    position: 'absolute',
+                    position: 'relative',
                     top: 0,
                     left: 0,
                     width: '100%',
@@ -312,7 +382,7 @@ export function DraggableMap({
                     opacity: isFading ? 1 : 0,
                     transition: 'opacity 0.3s ease-in-out',
                     pointerEvents: 'none',
-                    zIndex: 10000,
+                    zIndex: 10,
                 }}
             />
         </Box>

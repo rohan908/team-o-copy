@@ -18,7 +18,6 @@ export function MapEditor() {
     const [floorState, setFloorState] = useState(1);
     const [selectedHospitalName, setSelectedHospitalName] = useState('20 Patriot Pl');
     const [isFading, setIsFading] = useState(false);
-    const { isLoggedIn } = useLogin();
     const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
     const objectsRef = useRef<THREE.Object3D[]>([new THREE.Object3D()]);
     const controlRef = useRef<OrbitControls | null>(null);
@@ -327,7 +326,6 @@ export function MapEditor() {
                 // handle updating the node position from ui
                 updateNodePosition={updateNodePosition}
             />
-
             <canvas
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'absolute' }}

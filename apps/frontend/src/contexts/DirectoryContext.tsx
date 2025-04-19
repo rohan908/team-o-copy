@@ -44,7 +44,7 @@ interface DirectoryContextType extends DirectoryState {
 export const DirectoryContext = createContext<DirectoryContextType | undefined>(undefined);
 
 /*
-    defines custom hooks so that consumer INDOORMAPScomponents don't directly interact
+    defines custom hooks so that consumer components don't directly interact
     with any contexts, that way no internal data can be modified.
 
     To use them to access database data, follow this example:
@@ -53,27 +53,26 @@ export const DirectoryContext = createContext<DirectoryContextType | undefined>(
 
  */
 
-// this gets ALL node table data
 export const useDirectoryContext = () => {
-    const context = useContext(DirectoryContext);
-    if (!context) {
-        throw new Error(
-            'The useDirectoryContext must be used within the provider component DirectoryProvider'
-        );
-    }
+  const context = useContext(DirectoryContext);
+  if (!context) {
+    throw new Error(
+      'The useDirectoryContext must be used within the provider component DirectoryProvider'
+    );
+  }
 
-    return context;
+  return context;
 };
 
 export const useAllNodesContext = () => {
-    const context = useContext(DirectoryContext);
-    if (!context) {
-        throw new Error(
-            'The useDirectoryContext must be used within the provider component DirectoryProvider'
-        );
-    }
+  const context = useContext(DirectoryContext);
+  if (!context) {
+    throw new Error(
+      'The useDirectoryContext must be used within the provider component DirectoryProvider'
+    );
+  }
 
-    return context.allNodes;
+  return context.allNodes;
 };
 
 export const usePatriotContext = () => {
@@ -151,7 +150,7 @@ function directoryReducer(state: DirectoryState, action: DirectoryAction): Direc
 
 /*
   Defines the provider component to be used in app.tsx. This
-  is what allows consumer INDOORMAPScomponents (child INDOORMAPScomponents --> In our
+  is what allows consumer components (child components --> In our
   projects, this is only Routing) of the provider to access the
   context data (through use of custom hooks).
 
@@ -180,16 +179,17 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
             const allNodeData = await fetchAllNodeData();
 
             const setPatData = await patData?.json().then((data) => {
-                dispatch({ type: 'SET_PATRIOT', data: data });
-            });
+              dispatch({ type: 'SET_PATRIOT', data: data });
+            })
 
             const setChestnutData = await chestHilldata?.json().then((data) => {
-                dispatch({ type: 'SET_CHESTNUTHILL', data: data });
-            });
+              dispatch({ type: 'SET_CHESTNUTHILL', data: data });
+            })
 
             const setAllNodeData = await allNodeData?.json().then((data) => {
-                dispatch({ type: 'SET_ALLNODES', data: data });
-            });
+              dispatch({ type: 'SET_ALLNODES', data: data });
+            })
+
         } catch (err) {
             // I made if statements for this to fix " err is of type unknown"
             if (err instanceof Error) {
@@ -211,7 +211,7 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
     }, [fetchData]);
 
     /*
-    Wraps child INDOORMAPScomponents in DirectoryContext provider so that they can
+    Wraps child components in DirectoryContext provider so that they can
     use the context.
    */
 
