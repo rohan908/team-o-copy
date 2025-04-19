@@ -41,12 +41,10 @@ interface RequestContextType extends RequestState {
     define context for directory database data. undefined is placed in the type in case something goes
     wrong with the prop used with the provider component in app.tsx
  */
-export const RequestContext = createContext<RequestContextType | undefined>(
-    undefined
-);
+export const RequestContext = createContext<RequestContextType | undefined>(undefined);
 
 /*
-    defines custom hooks so that consumer components don't directly interact
+    defines custom hooks so that consumer INDOORMAPScomponents don't directly interact
     with any contexts, that way no internal data can be modified.
 
     To use them to access database data, follow this example:
@@ -68,14 +66,14 @@ export const useRequestContext = () => {
 
 // Context for language request
 export const useLanguageRequestContext = () => {
-  const context = useContext(RequestContext);
-  if (!context) {
-    throw new Error(
-      'The useRequestContext must be used within the provider component DirectoryProvider'
-    );
-  }
+    const context = useContext(RequestContext);
+    if (!context) {
+        throw new Error(
+            'The useRequestContext must be used within the provider component DirectoryProvider'
+        );
+    }
 
-  return context.languageRequest;
+    return context.languageRequest;
 };
 
 /*
@@ -108,10 +106,7 @@ type DirectoryAction =
 
   If we need a cache for quicker page loading or some optimization, store data externally in this function
  */
-function RequestReducer(
-    state: RequestState,
-    action: DirectoryAction
-): RequestState {
+function RequestReducer(state: RequestState, action: DirectoryAction): RequestState {
     switch (action.type) {
         case 'SET_LANGUAGE_REQUEST':
             return { ...state, languageRequest: action.data };
@@ -126,7 +121,7 @@ function RequestReducer(
 
 /*
   Defines the provider component to be used in app.tsx. This
-  is what allows consumer components (child components --> In our
+  is what allows consumer INDOORMAPScomponents (child INDOORMAPScomponents --> In our
   projects, this is only Routing) of the provider to access the
   context data (through use of custom hooks).
 
@@ -150,9 +145,8 @@ export const RequestProvider: React.FC<PropsWithChildren> = ({ children }) => {
             // grabs data from the database for each building
             const langReqdata = await fetchRequestData('languageSR');
             const setLangReqData = await langReqdata.json().then((data) => {
-              dispatch({ type: 'SET_LANGUAGE_REQUEST', data: data });
+                dispatch({ type: 'SET_LANGUAGE_REQUEST', data: data });
             });
-
         } catch (err) {
             // I made if statements for this to fix " err is of type unknown"
             if (err instanceof Error) {
@@ -165,7 +159,7 @@ export const RequestProvider: React.FC<PropsWithChildren> = ({ children }) => {
         }
     }, []);
 
-    // In theory --> re-renders components if context is updated via "fetchdata"
+    // In theory --> re-renders INDOORMAPScomponents if context is updated via "fetchdata"
     // which is given in the provider as a prop
     useEffect(() => {
         if (fetchData) {
@@ -174,7 +168,7 @@ export const RequestProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }, [fetchData]);
 
     /*
-  Wraps child components in RequestContext provider so that they can
+  Wraps child INDOORMAPScomponents in RequestContext provider so that they can
   use the context.
  */
 
