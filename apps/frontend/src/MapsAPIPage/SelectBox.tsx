@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from "react-router-dom";
 import { BlackButton } from "../common-compoents/commonButtons.tsx";
 import { TwoPartInteractiveBox } from "../common-compoents/standAloneFrame.tsx";
-import { DirectoryItem } from '../contexts/DirectoryItem.ts';
+import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 import {
   Box,
@@ -42,8 +42,8 @@ const SelectBox: React.FC = () => {
     "pharmacy": { lat: 42.093429, lng: -71.268228 },
   };
 
-  const MapDepartment = (department: DirectoryItem[]) =>
-    department.map((department: DirectoryItem) => ({
+  const MapDepartment = (department: DirectoryNodeItem[]) =>
+    department.map((department: DirectoryNodeItem) => ({
       value: department.name,
       label: department.name,
     }));

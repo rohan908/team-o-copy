@@ -14,7 +14,7 @@ interface TimelineContextType {
 
     // GMAPS
     selectedHospital: string | undefined;
-    setSelectedHospital: (hospital: google.maps.LatLngLiteral | undefined) => void;
+    setSelectedHospital: (hospital: string | undefined) => void;
     userCoordinates: LocationCoordinates | undefined;
     setUserCoordinates: (coords: LocationCoordinates | undefined) => void;
     travelMode: google.maps.TravelMode | undefined; //type travel mode must be googles enum, not just any string
