@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; //use ive arrived button to direct to indoor
 import { BlackButton } from "../common-compoents/commonButtons.tsx";
 import { TwoPartInteractiveBox } from "../common-compoents/standAloneFrame.tsx";
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
@@ -26,8 +26,8 @@ const SelectBox = () => {
   const [hospital, setHospital] = useState<string | null>(null);
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState(false);
-  const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>([]);
-  const [userStartLocation, setUserStartLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>([]); //this is needed to display department options when entered a hospital
+  const [userStartLocation, setUserStartLocation] = useState<{ lat: number; lng: number } | null>(null); // store user location input
   const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
   const input = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
@@ -39,7 +39,7 @@ const SelectBox = () => {
     "20 Patriot Pl": { lat: 42.092759710546595, lng: -71.26611460791148 },
     "22 Patriot Pl": { lat: 42.09304546224412, lng: -71.26680481859991 },
     "Chestnut Hill": { lat: 42.32624893122403, lng: -71.14948990068949 },
-    "pharmacy": { lat: 42.093429, lng: -71.268228 },
+    "pharmacy": { lat: 42.093429, lng: -71.268228 }, //this is fixed location for pharmacy, should route to specific parking lot
   };
 
   const MapDepartment = (department: DirectoryNodeItem[]) =>
@@ -83,16 +83,22 @@ const SelectBox = () => {
     setSelectedDepartment(null);
   };
 
+
+  //use effect to render google autocomplete
   useEffect(() => {
+    //initialize only when the box is not collapsed or has input
     if (collapsed || !input.current) return;
 
+    //if previous instance of autocompleteRef exits, then clear it for re initialization
     if (autocompleteRef.current) {
       autocompleteRef.current.unbindAll?.();
       autocompleteRef.current = null;
     }
-
     autocompleteRef.current = new window.google.maps.places.Autocomplete(input.current, { types: ['geocode'] });
 
+
+
+    // .addListener is a callback function that triggers when user selects one location in the autocomplete
     autocompleteRef.current.addListener("place_changed", () => {
       const place = autocompleteRef.current?.getPlace();
       if (place?.geometry?.location) {
@@ -115,9 +121,10 @@ const SelectBox = () => {
           left="50%"
           style={{
             transform: 'translate(-50%, -50%)',
-            pointerEvents: collapsed ? 'none' : 'auto',
+            pointerEvents: collapsed ? 'none' : 'auto',  //when collapsed, this box becomes unclickable
+
           }}
-          maw={500}
+          maw={500} {/* this  is supposed to render always to the center regardless of laptop screen*/}
         >
           <TwoPartInteractiveBox
             title="Find your Way!"
@@ -194,15 +201,15 @@ const SelectBox = () => {
         </Box>
       </Collapse>
 
-      {collapsed && (
+      {collapsed && ( //when collapsed, transfrom into a box that contains the 2 buttons
         <Box pos="absolute" bottom="1rem" left={0} right={0}>
-          <Box mx="auto" w="fit-content">
+          <Box mx="auto" w="fit-content"> {/* force this to be on the center*/}
             <Button onClick={() => setCollapsed(false)}>
               Expand Directions Menu
             </Button>
           </Box>
 
-          <Box pos="absolute" right="6rem" bottom={0}>
+          <Box pos="absolute" right="6rem" bottom={0}> {/* this ensures button is in the right right*/}
             <Button component={Link} to="/IndoorMapPage" color="green">
               I've Arrived
             </Button>

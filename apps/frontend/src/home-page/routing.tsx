@@ -7,7 +7,7 @@ import { Display } from '../service-request/Display.tsx';
 import { AdminPage } from '../AdminPage/AdminPage.tsx';
 import { MapAPIPage } from '../MapsAPIPage/MapAPIPage.tsx';
 import Language from '../service-request/LanguageInterpreterSR.tsx';
-import { BSFMapPage } from '../BFSMapPages-OLD/components/BSFMapPage.tsx';
+import { BSFMapPage } from '../BFSMapPages-OLD/INDOORMAPScomponents/BSFMapPage.tsx';
 import { ServiceRequestPage } from '../service-request/ServiceRequestPage.tsx';
 import Maintenance from '../service-request/MaintenanceSR.tsx';
 import { useState } from 'react';
@@ -61,12 +61,14 @@ export function Routing() {
                         <Route path="/maintenance-form" element={<Maintenance />} />
                         <Route path="/security-form" element={<Security />} />
 
-                      <Route
+                        <Route
                             path="/IndoorMapPage"
                             element={
                                 <DraggableMap
                                     selectedHospitalName={selectedHospitalName}
                                     selectedDepartment={selectedDepartment}
+                                    setSelectedDepartment={setSelectedDepartment}
+                                    setSelectedHospitalName={setSelectedHospitalName}
                                 />
                             }
                         />
