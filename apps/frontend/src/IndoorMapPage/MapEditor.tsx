@@ -13,14 +13,15 @@ import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 
 export function MapEditor() {
     const [nodeSelected, setNodeSelected] = useState(false);
-    const [nodeX, setNodeX] = useState(0);
-    const [nodeY, setNodeY] = useState(0);
     const [floorState, setFloorState] = useState(1);
-    const [selectedHospitalName, setSelectedHospitalName] = useState('20 Patriot Pl');
     const [isFading, setIsFading] = useState(false);
     const { isLoggedIn } = useLogin();
-    const selectedObjects = useRef<THREE.Object3D[]>([]); // useref so the selectedObject position can be set from the UI
+    const selectedObjects = useRef<THREE.Object3D[]>([]);
+    const [selectedObjectsInfo, setSelectedObjectsInfo] = useState<
+        { nodeId: string; x: number; y: number }[]
+    >([]);
     const objectsRef = useRef<THREE.Object3D[]>([]);
+    const dragControlsRef = useRef<DragControls | null>(null);
 
     const allNodes = useAllNodesContext();
 
@@ -91,10 +92,17 @@ export function MapEditor() {
     const updateNodePosition = (x: number, y: number, floor: number) => {
         setNodeX(x);
         setNodeY(y);
-        if (selectedObjects.current) {
-            selectedObjects.current.position.x = x;
-            selectedObjects.current.position.y = y;
+        if (selectedObjects.current.length === 1) {
+            selectedObjects.current[0].position.x = x;
+            selectedObjects.current[0].position.y = y;
             console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
+        }
+    };
+
+    // render function that can be called from anywhere so we can render only when needed.
+    const render = () => {
+        if (rendererRef.current && scenesRef.current && cameraRef.current) {
+            rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
         }
     };
 
@@ -118,6 +126,38 @@ export function MapEditor() {
         }
     }, [allNodes]);
 
+    const updateDragControls = () => {
+        // dispose existing drag controls if they exist
+        if (dragControlsRef.current) {
+            dragControlsRef.current.dispose();
+        }
+
+        // create drag controls if there are selected objects
+        if (selectedObjects.current.length > 0) {
+            dragControlsRef.current = new DragControls(
+                selectedObjects.current, // Use selected objects directly
+                cameraRef.current,
+                rendererRef.current.domElement
+            );
+
+            // add event listeners to enable / enable map dragging while dragging nodes
+            dragControlsRef.current.addEventListener('dragstart', function () {
+                controlRef.current.enabled = false;
+            });
+
+            dragControlsRef.current.addEventListener('drag', function () {
+                render(); // re-render during drag
+            });
+
+            dragControlsRef.current.addEventListener('dragend', function () {
+                setTimeout(() => {
+                    controlRef.current.enabled = true;
+                }, 10);
+                render(); // render after dragging as well to make the scene is up to date
+            });
+        }
+    };
+
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
             selectedObject instanceof THREE.Mesh &&
@@ -126,6 +166,8 @@ export function MapEditor() {
             selectedObject.material.color.set(selectedNodeColor);
             selectedObject.material.needsUpdate = true;
             selectedObjects.current.push(selectedObject);
+            render(); // render to show color changes
+            updateDragControls();
         }
     };
     const deselectObject = (selectedObject: THREE.Object3D) => {
@@ -138,6 +180,8 @@ export function MapEditor() {
             selectedObjects.current = selectedObjects.current.filter(
                 (object) => object !== selectedObject
             );
+            render(); // render to show color changes
+            updateDragControls();
         }
     };
 
@@ -194,23 +238,6 @@ export function MapEditor() {
 
         window.addEventListener('click', handleClick);
 
-        // Apply drag controls to selected objects
-        const dragControls = new DragControls(
-            draggableObjectsRef.current,
-            cameraRef.current,
-            rendererRef.current.domElement
-        );
-
-        // Event listeners that enable camera movement
-        dragControls.addEventListener('dragstart', function () {
-            controlRef.current.enabled = false;
-        });
-        dragControls.addEventListener('dragend', function () {
-            setTimeout(() => {
-                controlRef.current.enabled = true;
-            }, 10);
-        });
-
         // make sure map movement is re-enabled for some edge cases
         const handleMouseUp = () => {
             setTimeout(() => {
@@ -244,14 +271,12 @@ export function MapEditor() {
         const animate = () => {
             if (selectedObjects.current.length === 1) {
                 // Update state when user specifies the position
-                setNodeX(selectedObjects.current[0].position.x);
-                setNodeY(selectedObjects.current[0].position.y);
+                //setNodeX(selectedObjects.current[0].position.x);
+                //setNodeY(selectedObjects.current[0].position.y);
             }
 
             // Render the current scene
-            if (rendererRef.current) {
-                rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
-            }
+            render();
 
             animationFrameId = window.requestAnimationFrame(animate);
         };
@@ -272,8 +297,8 @@ export function MapEditor() {
             <MapEditorBox
                 // Pass selected node data to the ui
                 nodeSelected={nodeSelected}
-                nodeX={nodeX}
-                nodeY={nodeY}
+                nodeX={1}
+                nodeY={1}
                 // handle updating the node position from ui
                 updateNodePosition={updateNodePosition}
             />
