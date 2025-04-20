@@ -15,7 +15,7 @@ import {
 } from '@mantine/core';
 import { useTimeline } from '../HomePage/TimeLineContext';
 
-const SelectBox: React.FC = () => {
+const SelectBox = () => {
   const {
     setSelectedHospital,
     setCurrDirectoryDestination,

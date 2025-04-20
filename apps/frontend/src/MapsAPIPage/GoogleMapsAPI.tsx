@@ -3,7 +3,7 @@ import {GoogleMap} from "@react-google-maps/api";
 import {Box, ScrollArea, Text, List} from '@mantine/core';
 import { useTimeline } from '../HomePage/TimeLineContext';
 
-const GoogleMapsAPI: React.FC = () =>{
+const GoogleMapsAPI= () =>{
     const {selectedHospital, userCoordinates, travelMode } = useTimeline();
     const mapRef = useRef<google.maps.Map | null>(null);
     const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);

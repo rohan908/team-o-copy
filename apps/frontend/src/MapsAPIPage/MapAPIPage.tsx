@@ -6,7 +6,7 @@ import GoogleMapsAPI from "./GoogleMapsAPI.tsx";
 import {useJsApiLoader } from "@react-google-maps/api"; //this is better than LoadScript
 import {useTimeline} from '../HomePage/TimeLineContext';
 
-export function MapAPIPage() {
+ export const MapAPIPage = () => {
     const {userCoordinates, travelMode, selectedHospital} = useTimeline();
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
