@@ -1,16 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {GoogleMap} from "@react-google-maps/api";
-import {Box, ScrollArea, Text, List,  useMantineTheme} from '@mantine/core';
+import {Box, ScrollArea, Text, List} from '@mantine/core';
+import { useTimeline } from '../HomePage/TimeLineContext';
 
-interface GoogleMapProps {
-    selectedHospital: google.maps.LatLngLiteral | null;
-    userCoordinate: google.maps.LatLngLiteral | null;
-    travelMode: google.maps.TravelMode | null;
-
-}
-
-const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
-    const {selectedHospital, userCoordinate, travelMode } = props;
+const GoogleMapsAPI: React.FC = () =>{
+    const {selectedHospital, userCoordinates, travelMode } = useTimeline();
     const mapRef = useRef<google.maps.Map | null>(null);
     const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
     const [steps, setSteps] = useState<string[]>([]);
@@ -18,17 +12,16 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
     const handleMapLoad = (map: google.maps.Map) => {
         mapRef.current = map;
     };
-    const theme = useMantineTheme();
 
    useEffect(() => {
-      if (!userCoordinate || !selectedHospital || !mapRef.current) return;
+      if (!userCoordinates || !selectedHospital || !mapRef.current) return;
         const directionsService = new google.maps.DirectionsService();
         if (!directionsRendererRef.current) {
             directionsRendererRef.current = new google.maps.DirectionsRenderer();
             directionsRendererRef.current.setMap(mapRef.current);
         }
         directionsService.route({
-            origin: userCoordinate,
+            origin: userCoordinates,
             destination: selectedHospital,
             travelMode: travelMode ?? google.maps.TravelMode.DRIVING
           },
@@ -45,7 +38,7 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
                 }
             }
         )
-    }, [userCoordinate, selectedHospital, travelMode]);
+    }, [userCoordinates, selectedHospital, travelMode]);
 
     return (
         <>
