@@ -52,7 +52,7 @@ export class NavigationService {
             case 'A*':
                 this.pathFinder = new AStarPathFinder(graphRef);
                 break;
-          case 'DFS':
+            case 'DFS':
                 this.pathFinder = new DFSPathFinder(graphRef);
                 break;
             default:

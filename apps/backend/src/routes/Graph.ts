@@ -169,6 +169,7 @@ const getNodeHandler: RequestHandler<
 router.get('/debug', (req: any, res: any) => {
     // Get the grid dimensions and some sample walkable points
     const path = navigationService.findPath(1, 5, 'DFS');
+    console.log('ran files and got:', path);
     res.json(path);
 });
 

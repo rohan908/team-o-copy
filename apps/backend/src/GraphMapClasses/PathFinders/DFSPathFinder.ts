@@ -36,6 +36,7 @@ export class DFSPathFinder extends PathFinder {
             return { success: true, pathIDs: [current.data.id], distance: 0 };
         }
         for (const connectingNode of current.adjNodes) {
+            console.log('inner for loop ', connectingNode.destination);
             const result: PathFinderResult = this.dfs(
                 target,
                 connectingNode.destination,
@@ -46,10 +47,8 @@ export class DFSPathFinder extends PathFinder {
                 return {
                     success: true,
                     pathIDs: [current.data.id, ...result.pathIDs], //reorder nodes here so no reorder function cuz js of overpowered somtimes
-                    distance: result.distance + ,
+                    distance: result.distance,
                 };
-
-
             } //else, just end
         }
 
