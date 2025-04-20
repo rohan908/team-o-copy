@@ -21,11 +21,13 @@ import fetchRequestData from '../DatabaseFetching/GetRequestData.tsx';
   Adds fetchdata value to value prop, that way consumers can update context data
   by asking it to re-fetch data from the database after its been updated
  */
-interface RequestContextType extends RequestState {
+interface RequestContextType extends NavigationState {
     fetchData: () => void;
 }
 
-export const NavSelectionContext = createContext<RequestState | undefined>(undefined);
+export const NavSelectionContext = createContext<
+    { state: NavigationState; dispatch: React.Dispatch<NavigationAction> } | undefined
+>(undefined);
 
 // Context for user selected navigation data
 export const useNavSelectionContext = () => {
@@ -54,10 +56,9 @@ export const usePathContext = () => {
 /*
   This is for the reducer function.
  */
-interface RequestState {
+interface NavigationState {
     navSelectRequest: NavSelectionItem | null;
     pathSelectRequest: PathItem | null;
-    isLoading: boolean;
     error: string | null;
 }
 
@@ -66,24 +67,21 @@ interface RequestState {
   can use, like setting array values, or load the state, or set an error to be
   thrown when the context is called and doesn't have any values in it.
  */
-type DirectoryAction =
+type NavigationAction =
     | { type: 'SET_NAV_REQUEST'; data: NavSelectionItem }
     | { type: 'SET_PATH_REQUEST'; data: PathItem }
-    | { type: 'SET_LOADING'; data: boolean }
     | { type: 'SET_ERROR'; data: string };
 
 /*
   This is the reducer function. Based on the React docs, it is convention to use
   switch statements
  */
-function RequestReducer(state: RequestState, action: DirectoryAction): RequestState {
+function NavigationReducer(state: NavigationState, action: NavigationAction): NavigationState {
     switch (action.type) {
         case 'SET_NAV_REQUEST':
             return { ...state, navSelectRequest: action.data };
         case 'SET_PATH_REQUEST':
             return { ...state, pathSelectRequest: action.data };
-        case 'SET_LOADING':
-            return { ...state, isLoading: action.data };
         case 'SET_ERROR':
             return { ...state, error: action.data };
         default:
@@ -100,11 +98,10 @@ function RequestReducer(state: RequestState, action: DirectoryAction): RequestSt
   Calls the useReducer hook with our defined reducer function and default
   "empty" values for the state
  */
-export const RequestProvider: React.FC<PropsWithChildren> = ({ children }) => {
-    const [state, dispatch] = useReducer(RequestReducer, {
+export const NavigationProvider: React.FC<PropsWithChildren> = ({ children }) => {
+    const [state, dispatch] = useReducer(NavigationReducer, {
         navSelectRequest: null,
         pathSelectRequest: null,
-        isLoading: false,
         error: null,
     });
 
@@ -114,6 +111,8 @@ use the context.
 */
 
     return (
-        <NavSelectionContext.Provider value={{ ...state }}>{children}</NavSelectionContext.Provider>
+        <NavSelectionContext.Provider value={{ state, dispatch }}>
+            {children}
+        </NavSelectionContext.Provider>
     );
 };

@@ -7,6 +7,7 @@ import MapEditorBox from './Components/MapEditorBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
+import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useLogin } from '../home-page/components/LoginContext.tsx';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { createAllScenes } from './HelperFiles/SceneFactory.ts';
@@ -25,6 +26,8 @@ export function MapEditor() {
     const canvasId = 'insideMapCanvas';
 
     const allNodes = useAllNodesContext();
+    const nav = useNavSelectionContext();
+    console.log(nav);
 
     const cameraRef = useRef<THREE.PerspectiveCamera>(new THREE.PerspectiveCamera());
     const scenesRef = useRef<THREE.Scene[]>([]);
@@ -96,7 +99,6 @@ export function MapEditor() {
 
     // Handle switching to other floors
     const handleFloorChange = (newFloor: number) => {
-        console.log('handleFloorChange', newFloor);
         if (newFloor === floorState) return;
         setIsFading(true);
         setFloorState(newFloor);

@@ -1,32 +1,23 @@
 import { Box, Select, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useChestnutHillContext, usePatriotContext } from '../../contexts/DirectoryContext.tsx';
+import { useNavSelectionContext } from '../../contexts/NavigationContext.tsx';
 import { useState } from 'react';
 import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
 import { TwoPartInteractiveBox } from '../../common-compoents/standAloneFrame.tsx';
+import { NavSelectionItem } from '../../contexts/NavigationItem.ts';
 
-interface PathPickerBoxProps {
-    currAlgo?: string | null;
-    setPathAlgo: (algo: string) => void;
-    currHospital?: string | null;
-    setSelectedHospitalName: (hospital: string | null) => void;
-    selectedDepartment?: string | null;
-    setSelectedDepartment: (department: string | null) => void;
-}
-
-export function PathPickerBox({
-    currAlgo,
-    setPathAlgo,
-    currHospital,
-    setSelectedHospitalName,
-    selectedDepartment,
-    setSelectedDepartment,
-}: PathPickerBoxProps) {
+export function PathPickerBox() {
     const theme = useMantineTheme();
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
+    const NavSelection = useNavSelectionContext();
     const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>(
         []
     );
+    // keep local states so we're not setting and access the context in one file
+    const [department, setDepartment] = useState<string | null>(null);
+    const [hospital, setHospital] = useState<string | null>(null);
+    const [algo, setAlgo] = useState<string | null>(null);
 
     const MapDepartment = (department: DirectoryNodeItem[]) =>
         department.map((department: DirectoryNodeItem) => ({
@@ -35,6 +26,7 @@ export function PathPickerBox({
         }));
 
     const setHospitalLocation = (hospital: string | null) => {
+        setHospital(hospital);
         if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
             setDepartmentOptions(MapDepartment(Patriot));
         } else if (hospital == 'Chestnut Hill') {
@@ -42,8 +34,26 @@ export function PathPickerBox({
         } else {
             setDepartmentOptions([]);
         }
-        setSelectedHospitalName(hospital);
-        setSelectedDepartment(null);
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: hospital,
+                Department: null,
+            } as NavSelectionItem,
+        });
+        //setSelectedHospitalName(hospital);
+        //setSelectedDepartment(null);
+    };
+
+    const setSelectedDepartment = (department: string | null) => {
+        setDepartment(department);
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: hospital,
+                Department: department,
+            } as NavSelectionItem,
+        });
     };
 
     const lowerSelectors = (
@@ -60,7 +70,7 @@ export function PathPickerBox({
                     { value: '22 Patriot Pl', label: '22 Patriot Pl' },
                     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
                 ]}
-                value={currHospital}
+                value={hospital}
                 onChange={(value) => {
                     setHospitalLocation(value);
                 }}
@@ -72,12 +82,12 @@ export function PathPickerBox({
                 color="gray"
                 placeholder="Department"
                 data={departmentOptions}
-                value={selectedDepartment}
+                value={department}
                 onChange={(value) => {
                     setSelectedDepartment(value);
                 }}
                 mb="md"
-                disabled={!currHospital || departmentOptions.length === 0}
+                disabled={!hospital || departmentOptions.length === 0}
             />
             <Text ta="left" fw={500}>
                 Select Navigation Method:
@@ -92,9 +102,9 @@ export function PathPickerBox({
                         label: 'A Star',
                     },
                 ]}
-                value={currAlgo}
+                value={algo}
                 onChange={(value) => {
-                    setPathAlgo(value || 'BFS');
+                    setAlgo(value || 'BFS');
                 }}
             />
         </Stack>
