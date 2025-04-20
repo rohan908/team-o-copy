@@ -26,8 +26,6 @@ export function MapEditor() {
     const canvasId = 'insideMapCanvas';
 
     const allNodes = useAllNodesContext();
-    const nav = useNavSelectionContext();
-    console.log(nav);
 
     const cameraRef = useRef<THREE.PerspectiveCamera>(new THREE.PerspectiveCamera());
     const scenesRef = useRef<THREE.Scene[]>([]);
@@ -56,17 +54,6 @@ export function MapEditor() {
             }
         }
         return null;
-    };
-
-    const handleHospitalChange = (newHospitalName: string | null) => {
-        if (newHospitalName) {
-            setSelectedHospitalName(newHospitalName);
-            if (newHospitalName === '20 Patriot Pl' || newHospitalName === '22 Patriot Pl') {
-                setSceneIndexState(0);
-            } else if (newHospitalName === 'Chestnut Hill') {
-                setSceneIndexState(3);
-            }
-        }
     };
 
     // basic edge creation

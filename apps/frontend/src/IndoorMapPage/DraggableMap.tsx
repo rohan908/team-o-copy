@@ -157,7 +157,7 @@ export function DraggableMap() {
     }, [selectedDepartment, selectedAlgorithm]);
 
     useEffect(() => {
-        // sets animation useRef value
+        // Initialize animationRef
         animationRef.current = new FlowingTubeAnimation({
             color1: 0x2a68f7,
             color2: 0x4deefb,
@@ -317,7 +317,7 @@ export function DraggableMap() {
                     opacity: isFading ? 1 : 0,
                     transition: 'opacity 0.3s ease-in-out',
                     pointerEvents: 'none',
-                    zIndex: 10000,
+                    zIndex: 10,
                 }}
             />
         </Box>
