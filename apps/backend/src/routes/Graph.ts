@@ -168,7 +168,7 @@ const getNodeHandler: RequestHandler<
 // Debug endpoint to get test the pathfinding between nodes
 router.get('/debug', (req: any, res: any) => {
     // Get the grid dimensions and some sample walkable points
-    const path = navigationService.findPath(1, 5, 'BFS');
+    const path = navigationService.findPath(1, 5, 'DFS');
     res.json(path);
 });
 
