@@ -35,12 +35,12 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
     updateNodePosition,
 }) => {
     const theme = useMantineTheme();
-    const [savedStatus, setSavedStatus] = useState("");
     const [collapsed, setCollapsed] = useState(true);
     const [hoverAddNode, setHoverAddNode] = useState(setTimeout(function () {}, 1000));
     const [hoverRemoveNode, setHoverRemoveNode] = useState(setTimeout(function () {}, 1000));
     const [hoverAddEdge, setHoverAddEdge] = useState(setTimeout(function () {}, 1000));
     const [hoverRemoveEdge, setHoverRemoveEdge] = useState(setTimeout(function () {}, 1000));
+    const [saveText, setSaveText] = useState(setTimeout(function () {}, 1000));
     const handleAddNode = () => null;
     const handleAddEdge = () => null;
     const handleRemoveNode = () => null;
@@ -375,13 +375,50 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
         }
     }
 
+    function addSaveLabel() {
+        const saveLabel = document.getElementById('saved');
+        if(saveLabel != null) {
+          clearInterval(saveText);
+          setSaveText(
+            setInterval(function () {
+                switch (saveLabel.innerText) {
+                case '':
+                  saveLabel.innerText = 'S';
+                  break;
+                case 'S':
+                  saveLabel.innerText = 'Sa';
+                  break;
+                case 'Sa':
+                  saveLabel.innerText = 'Sav';
+                  break;
+                case 'Sav':
+                  saveLabel.innerText = 'Save';
+                  break;
+                case 'Save':
+                  saveLabel.innerText = 'Saved';
+                  clearInterval(saveText);
+                  break;
+              }
+            }, 20)
+          );
+        }
+    }
+
+    function removeSaveLabel() {
+      const saveLabel = document.getElementById('saved');
+      if(saveLabel != null) {
+        clearInterval(saveText);
+        saveLabel.innerText = '';
+      }
+    }
+
     // Sends all new Node data to the backend
     async function SaveAllNodes() {
         const importNodes = await axios.post('api/directory/import/direct', {
           data: newNodes,
         })
 
-        setSavedStatus(importNodes.data.statusText)
+        addSaveLabel();
 
         console.log(importNodes);
     }
@@ -398,6 +435,9 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
 
     useEffect(() => {
       setCollapsed(!hovered);
+
+      removeSaveLabel();
+
     }, [hovered]);
 
 
@@ -545,8 +585,8 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                         onClick={() => SaveAllNodes()}>
                           Save Changes
                         </BlackButton>
-                        <Title>
-                          {savedStatus}
+                        <Title
+                          id={'saved'}>
                         </Title>
                       </Flex>
                     </Flex>
