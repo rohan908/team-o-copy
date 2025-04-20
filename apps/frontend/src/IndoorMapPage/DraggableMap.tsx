@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Box } from '@mantine/core';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { DraggableMapProps } from './MapClasses/MapTypes.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 import {
@@ -15,24 +13,18 @@ import { PathPickerBox } from './Components/PathPickerBox.tsx';
 import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
-import { createAllScenes } from './HelperFiles/SceneFactory.ts';
 import { createNode } from './HelperFiles/NodeFactory.ts';
-
-const canvasId = 'insideMapCanvas';
+import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 
 export function DraggableMap() {
     /*
       References that exist outside renders, changeable floor state, and properties like theme
      */
-
-    const [isFading, setIsFading] = useState(false);
     const allNodes = useAllNodesContext();
     const navSelection = useNavSelectionContext();
     const selectedHospitalName = navSelection.state.navSelectRequest?.HospitalName;
     const selectedDepartment = navSelection.state.navSelectRequest?.Department;
     const selectedAlgorithm = navSelection.state.navSelectRequest?.AlgorithmName;
-
-    const [floorState, setFloorState] = useState<number>(1);
 
     // Declares context for start and end node information
     const patriotNodes = usePatriotContext();
@@ -42,43 +34,24 @@ export function DraggableMap() {
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
-    // camera ref for when we want to start moving the camera around
-    const cameraRef = useRef<THREE.PerspectiveCamera>(new THREE.PerspectiveCamera());
+    const [floorState, setFloorState] = useState(1);
+    const [sceneIndexState, setSceneIndexState] = useState(0);
+    const [isFading, setIsFading] = useState(false);
 
-    /*
-      stores scene references in useRef
-    Patriot Place Floor 1 -> floor1 -> scene 0
-    Patriot Place Floor 3 -> floor2 -> scene 1
-    Patriot Place Floor 4 -> floor3 -> scene 2
-    Chestnut Hill Floor 1 -> floor4 -> scene 3
-     */
-    const scenesRef = useRef<THREE.Scene[]>([]);
-
-    // index is 0 since it refers to the scenesRef array of scenes, where floor 1 is index 0
-    const [sceneIndexState, setSceneIndexState] = useState<number>(0);
-
-    /*
-     stores renderer and canvas references in useRef for efficiency
-     */
-    const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-    const canvasRef = useRef<HTMLElement | null>(null);
+    // set up map
+    const { cameraRef, rendererRef, scenesRef } = mapSetup({
+        canvasId: 'insideMapCanvas',
+    });
 
     const handleHospitalChange = (hospitalName) => {
         if (hospitalName === '20 Patriot Pl' || hospitalName === '22 Patriot Pl') {
             setSceneIndexState(0);
+            setFloorState(1);
         } else if (hospitalName === 'Chestnut Hill') {
             setSceneIndexState(3);
+            setFloorState(1); // Assuming Chestnut Hill starts at floor 1
         }
     };
-    const getNode = (id: number): DirectoryNodeItem | null => {
-        for (const node of allNodes) {
-            if (node.id === id) {
-                return node;
-            }
-        }
-        return null;
-    };
-
     // associated floors with scenes
     const getSceneIndexFromFloor = (floor: number): number => {
         if (selectedHospitalName === 'Chestnut Hill') return 3;
@@ -107,7 +80,7 @@ export function DraggableMap() {
             // For each node id in the path
             for (const id of ids) {
                 // Get the full node from the ID
-                const node = getNode(id);
+                const node = getNode(id, allNodes);
                 if (node) {
                     createNode(node, scenesRef.current); //Create the node from its data
                 } else {
@@ -117,7 +90,7 @@ export function DraggableMap() {
                 if (connectedNodeIds) {
                     for (const connectedNodeId of connectedNodeIds) {
                         // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
-                        const connectedNode = getNode(connectedNodeId);
+                        const connectedNode = getNode(connectedNodeId, allNodes);
                         if (connectedNode) {
                             // If the connected node is in the path
                             // TODO: Add another check that makes it so duplicate edge objects aren't created
@@ -157,51 +130,13 @@ export function DraggableMap() {
     }, [selectedDepartment, selectedAlgorithm]);
 
     useEffect(() => {
-        // Initialize animationRef
+        // Initialize path animation
         animationRef.current = new FlowingTubeAnimation({
             color1: 0x2a68f7,
             color2: 0x4deefb,
             flowSpeed: 2,
             pulseFrequency: 0.5,
         });
-
-        canvasRef.current = document.getElementById(canvasId);
-
-        // Initialize clock for animation timing
-        clockRef.current = new THREE.Clock();
-        // Initialize camera
-        cameraRef.current = new THREE.PerspectiveCamera(
-            50,
-            canvasRef.current!.clientWidth / canvasRef.current!.clientHeight,
-            50,
-            1000
-        );
-        cameraRef.current.position.set(0, 0, 300);
-
-        // Initialize renderer
-        rendererRef.current = new THREE.WebGLRenderer({
-            canvas: canvasRef.current as HTMLCanvasElement,
-            antialias: true,
-        });
-
-        if (canvasRef.current) {
-            rendererRef.current.setSize(
-                canvasRef.current.clientWidth,
-                canvasRef.current.clientHeight
-            );
-        }
-        rendererRef.current.setPixelRatio(window.devicePixelRatio);
-
-        // Camera controls
-        const orbitControls = new OrbitControls(cameraRef.current, rendererRef.current.domElement);
-        orbitControls.enableRotate = false;
-        orbitControls.mouseButtons = {
-            LEFT: THREE.MOUSE.PAN,
-            MIDDLE: THREE.MOUSE.DOLLY,
-            RIGHT: THREE.MOUSE.ROTATE,
-        };
-
-        scenesRef.current = createAllScenes();
     }, []);
 
     // gets Id for destination node
@@ -287,7 +222,9 @@ export function DraggableMap() {
             }
             window.requestAnimationFrame(animate);
 
-            return () => {};
+            return () => {
+                clearSceneObjects(scenesRef.current);
+            };
         };
         animate();
     }, [selectedDepartment, sceneIndexState]);

@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Box } from '@mantine/core';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
-import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useLogin } from '../home-page/components/LoginContext.tsx';
 import { createNode } from './HelperFiles/NodeFactory.ts';
-import { createAllScenes } from './HelperFiles/SceneFactory.ts';
+import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
+import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 
 export function MapEditor() {
     const [nodeSelected, setNodeSelected] = useState(false);
@@ -20,18 +19,13 @@ export function MapEditor() {
     const [selectedHospitalName, setSelectedHospitalName] = useState('20 Patriot Pl');
     const [isFading, setIsFading] = useState(false);
     const { isLoggedIn } = useLogin();
-    const selectedObject = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null); // useref so the selectedObject position can be set from the UI
+    const selectedObject = useRef<THREE.Object3D | null>(null); // useref so the selectedObject position can be set from the UI
     const objectsRef = useRef<THREE.Object3D[]>([new THREE.Object3D()]);
-    const controlRef = useRef<OrbitControls | null>(null);
-    const canvasId = 'insideMapCanvas';
 
     const allNodes = useAllNodesContext();
 
-    const cameraRef = useRef<THREE.PerspectiveCamera>(new THREE.PerspectiveCamera());
-    const scenesRef = useRef<THREE.Scene[]>([]);
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const canvasRef = useRef<HTMLElement | null>(null);
-    const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
     const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
 
     // Parameters for THREEjs objects and path display
@@ -47,14 +41,10 @@ export function MapEditor() {
     Chestnut Hill Floor 1 -> floor4 -> scene 4
      */
 
-    const getNode = (id: number): DirectoryNodeItem | null => {
-        for (const node of allNodes) {
-            if (node.id === id) {
-                return node;
-            }
-        }
-        return null;
-    };
+    // set up map
+    const { cameraRef, rendererRef, scenesRef, controlRef } = mapSetup({
+        canvasId: 'insideMapCanvas',
+    });
 
     // basic edge creation
     const createEdge = (node1: DirectoryNodeItem, node2: DirectoryNodeItem) => {
@@ -77,10 +67,10 @@ export function MapEditor() {
 
     // associated floors with scenes
     const getSceneIndexFromFloor = (floor: number): number => {
-        if (selectedHospitalName === 'Chestnut Hill') return 3;
         if (floor === 1) return 0;
         if (floor === 3) return 1;
         if (floor === 4) return 2;
+        if (floor === 5) return 3;
         return 0;
     };
 
@@ -109,49 +99,14 @@ export function MapEditor() {
     };
 
     useEffect(() => {
-        canvasRef.current = document.getElementById(canvasId);
-
-        // Create camera
-        cameraRef.current = new THREE.PerspectiveCamera(
-            50,
-            canvasRef.current!.clientWidth / canvasRef.current!.clientHeight,
-            50,
-            1000
-        );
-        cameraRef.current.position.set(0, 0, 300);
-
-        // Initialize renderer
-        rendererRef.current = new THREE.WebGLRenderer({
-            canvas: canvasRef.current as HTMLCanvasElement,
-            antialias: true,
-        });
-
-        if (canvasRef.current) {
-            rendererRef.current.setSize(
-                canvasRef.current.clientWidth,
-                canvasRef.current.clientHeight
-            );
-        }
-        rendererRef.current.setPixelRatio(window.devicePixelRatio);
-
-        // Camera controls
-        controlRef.current = new OrbitControls(cameraRef.current, rendererRef.current.domElement);
-        controlRef.current.enableRotate = false;
-        controlRef.current.mouseButtons = {
-            LEFT: THREE.MOUSE.PAN,
-            MIDDLE: THREE.MOUSE.DOLLY,
-            RIGHT: THREE.MOUSE.ROTATE,
-        };
-
-        scenesRef.current = createAllScenes();
-
+        clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
         for (const node of allNodes) {
             if (node.x !== 0 && node.y !== 0) {
                 createNode(node, scenesRef.current); //Create the nodes
                 for (const connectingNodeId of node.connectingNodes) {
                     // iterate over each connected node.
-                    const connectedNode = getNode(connectingNodeId);
+                    const connectedNode = getNode(connectingNodeId, allNodes);
                     // TODO: Add another check that makes it so duplicate edge objects aren't created
                     if (connectedNode) {
                         createEdge(node, connectedNode);
@@ -159,133 +114,130 @@ export function MapEditor() {
                 }
             }
         }
+    }, [allNodes]);
 
-        // Function to update draggable objects to make sure only selected objects can be dragged
-        const updateDraggableObjects = () => {
-            // Create a new array with only the selected object (if any)
-            if (selectedObject.current) {
-                draggableObjectsRef.current.push(selectedObject.current);
+    // Function to update draggable objects to make sure only selected objects can be dragged
+    const updateDraggableObjects = () => {
+        // Create a new array with only the selected object (if any)
+        if (selectedObject.current) {
+            draggableObjectsRef.current.push(selectedObject.current);
+        }
+        // new dragControls with the updated array
+        const dragControls = new DragControls(
+            draggableObjectsRef.current,
+            cameraRef.current,
+            rendererRef.current.domElement
+        );
+        // Event listeners that enable camera movement
+        dragControls.addEventListener('dragstart', function () {
+            controlRef.current.enabled = false;
+        });
+        dragControls.addEventListener('dragend', function () {
+            setTimeout(() => {
+                controlRef.current.enabled = true;
+            }, 10);
+        });
+    };
+
+    // dragControls are used for node movement with mouse
+    const draggableObjects: THREE.Object3D[] = [];
+    if (rendererRef.current) {
+        const dragControls = new DragControls(
+            draggableObjects,
+            cameraRef.current,
+            rendererRef.current.domElement
+        );
+        // Disable map movement when dragging a node so both don't move together
+        // Event listeners should run even when in the initialization useEffect
+        dragControls.addEventListener('dragstart', function () {
+            controlRef.current.enabled = false;
+        });
+
+        dragControls.addEventListener('dragend', function () {
+            setTimeout(() => {
+                controlRef.current.enabled = true;
+            }, 10);
+        });
+
+        // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+
+        window.addEventListener('click', (event) => {
+            if (canvasRef.current) {
+                const rect = canvasRef.current.getBoundingClientRect();
+                // normalize pointer position (-1 to 1 in x and y)
+                pointer.x = ((event.clientX - rect.left) / canvasRef.current!.clientWidth) * 2 - 1;
+                pointer.y = -((event.clientY - rect.top) / canvasRef.current!.clientHeight) * 2 + 1;
+                raycaster.setFromCamera(pointer, cameraRef.current);
+                // calculate objects intersecting the picking ray
+                const intersects = raycaster.intersectObjects(objectsRef.current);
+                if (intersects.length > 0) {
+                    const intersect = intersects[0]; // grab the first intersected object
+
+                    /*
+                    This structure handles selecting objects.
+                    It could probably use some proper handler functions, but it works for now.
+                    */
+                    // if there is no selected object or the clicked on object is not selected
+                    if (
+                        selectedObject.current === null ||
+                        selectedObject.current !== intersect.object
+                    ) {
+                        // if there is another selected object
+                        if (selectedObject.current !== intersect.object) {
+                            if (
+                                selectedObject.current instanceof THREE.Mesh &&
+                                selectedObject.current.material instanceof THREE.MeshBasicMaterial
+                            ) {
+                                selectedObject.current.material.color.set(nodeColor); //set the already selected object back to it's non-selected color
+                            }
+                        }
+                        selectedObject.current = intersect.object; // switch selected object to the clicked on object
+                        setNodeSelected(true);
+                        // set the color of the clicked on objet to it's selected color
+                        if (
+                            selectedObject.current instanceof THREE.Mesh &&
+                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
+                        ) {
+                            selectedObject.current.material.color.set(selectedNodeColor);
+                        }
+                    }
+                    // The clicked on object is already selected (deselection when clicking on an already selected object)
+                    else {
+                        // set the color of the clicked on object to it's non-selected color
+                        if (
+                            selectedObject.current instanceof THREE.Mesh &&
+                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
+                        ) {
+                            selectedObject.current.material.color.set(nodeColor);
+                        }
+                        // clear the selected object
+                        selectedObject.current = null;
+                        setNodeSelected(false);
+                    }
+                    updateDraggableObjects();
+                }
             }
-            // new dragControls with the updated array
-            const dragControls = new DragControls(
-                draggableObjectsRef.current,
-                cameraRef.current,
-                rendererRef.current.domElement
-            );
-            // Event listeners that enable camera movement
-            dragControls.addEventListener('dragstart', function () {
-                controlRef.current.enabled = false;
-            });
-            dragControls.addEventListener('dragend', function () {
-                setTimeout(() => {
-                    controlRef.current.enabled = true;
-                }, 10);
-            });
+        });
+
+        // make sure map movement is re-enabled for some edge cases
+        const handleMouseUp = () => {
+            setTimeout(() => {
+                controlRef.current.enabled = true;
+            }, 10);
+        };
+        const handleMouseLeave = () => {
+            setTimeout(() => {
+                controlRef.current.enabled = true;
+            }, 10);
         };
 
-        // dragControls are used for node movement with mouse
-        const draggableObjects: THREE.Object3D[] = [];
+        window.addEventListener('mouseup', handleMouseUp);
         if (rendererRef.current) {
-            const dragControls = new DragControls(
-                draggableObjects,
-                cameraRef.current,
-                rendererRef.current.domElement
-            );
-            // Disable map movement when dragging a node so both don't move together
-            // Event listeners should run even when in the initialization useEffect
-            dragControls.addEventListener('dragstart', function () {
-                controlRef.current.enabled = false;
-            });
-
-            dragControls.addEventListener('dragend', function () {
-                setTimeout(() => {
-                    controlRef.current.enabled = true;
-                }, 10);
-            });
-
-            // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
-            const raycaster = new THREE.Raycaster();
-            const pointer = new THREE.Vector2();
-
-            window.addEventListener('click', (event) => {
-                if (canvasRef.current) {
-                    const rect = canvasRef.current.getBoundingClientRect();
-                    // normalize pointer position (-1 to 1 in x and y)
-                    pointer.x =
-                        ((event.clientX - rect.left) / canvasRef.current!.clientWidth) * 2 - 1;
-                    pointer.y =
-                        -((event.clientY - rect.top) / canvasRef.current!.clientHeight) * 2 + 1;
-                    raycaster.setFromCamera(pointer, cameraRef.current);
-                    // calculate objects intersecting the picking ray
-                    const intersects = raycaster.intersectObjects(objectsRef.current);
-                    if (intersects.length > 0) {
-                        const intersect = intersects[0]; // grab the first intersected object
-
-                        /*
-      This structure handles selecting objects.
-      It could probably use some proper handler functions, but it works for now.
-       */
-                        // if there is no selected object or the clicked on object is not selected
-                        if (
-                            selectedObject.current === null ||
-                            selectedObject.current !== intersect.object
-                        ) {
-                            // if there is another selected object
-                            if (selectedObject.current !== intersect.object) {
-                                if (
-                                    selectedObject.current instanceof THREE.Mesh &&
-                                    selectedObject.current.material instanceof
-                                        THREE.MeshBasicMaterial
-                                ) {
-                                    selectedObject.current.material.color.set(nodeColor); //set the already selected object back to it's non-selected color
-                                }
-                            }
-                            selectedObject.current = intersect.object; // switch selected object to the clicked on object
-                            setNodeSelected(true);
-                            // set the color of the clicked on objet to it's selected color
-                            if (
-                                selectedObject.current instanceof THREE.Mesh &&
-                                selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                            ) {
-                                selectedObject.current.material.color.set(selectedNodeColor);
-                            }
-                        }
-                        // The clicked on object is already selected (deselection when clicking on an already selected object)
-                        else {
-                            // set the color of the clicked on object to it's non-selected color
-                            if (
-                                selectedObject.current instanceof THREE.Mesh &&
-                                selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                            ) {
-                                selectedObject.current.material.color.set(nodeColor);
-                            }
-                            // clear the selected object
-                            selectedObject.current = null;
-                            setNodeSelected(false);
-                        }
-                        updateDraggableObjects();
-                    }
-                }
-            });
-
-            // make sure map movement is re-enabled for some edge cases
-            const handleMouseUp = () => {
-                setTimeout(() => {
-                    controlRef.current.enabled = true;
-                }, 10);
-            };
-            const handleMouseLeave = () => {
-                setTimeout(() => {
-                    controlRef.current.enabled = true;
-                }, 10);
-            };
-
-            window.addEventListener('mouseup', handleMouseUp);
-            if (rendererRef.current) {
-                rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
-            }
+            rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
         }
-    }, []);
+    }
 
     useEffect(() => {
         const animate = () => {
@@ -300,7 +252,9 @@ export function MapEditor() {
                 rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
             }
             window.requestAnimationFrame(animate);
-            return () => {};
+            return () => {
+                clearSceneObjects(scenesRef.current);
+            };
         };
         animate();
     }, [sceneIndexState]);
