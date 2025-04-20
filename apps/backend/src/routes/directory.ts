@@ -14,8 +14,6 @@ const router: Router = express.Router();
 
 // Will update the directory backup CSV with more entries from a given CSV
 router.post('/import', async (req: Request, res: Response) => {
-    // Will need for updating directories with CSV files
-    // Need to figure out how to parse FormData once it is passed
     const { receivedData } = req.body;
     const dataString = JSON.stringify(req.body);
 
@@ -37,6 +35,37 @@ router.post('/import', async (req: Request, res: Response) => {
 
     res.status(200).json({
         status: 'success',
+        data: receivedData,
+    });
+
+    console.log('Imported Table Successfully');
+});
+
+// Will import Node data directly as node data, no CSV parsing
+router.post('/import/direct', async (req: Request, res: Response) => {
+    const { receivedData } = req.body;
+
+    /*
+    // clears directory database for new input data
+    const prismaClear = await PrismaClient.node.deleteMany({});
+
+    // adds the imported file data to Prisma
+    const prismaCreate = await PrismaClient.node.createMany({
+        data: receivedData,
+        skipDuplicates: true,
+    });
+
+     */
+  console.log(receivedData);
+
+    // updates the backup file
+    await exportToCSV();
+
+    console.log('CSV written to:', BACKUP_PATHS.directoryBackup);
+
+    res.status(200).json({
+        status: 'success',
+        statusText: 'Saved',
         data: receivedData,
     });
 

@@ -11,11 +11,14 @@ import {
     TextInput,
     Grid,
 } from '@mantine/core';
+import { useHover } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { IconArrowBadgeRight, IconArrowBadgeDown } from '@tabler/icons-react';
+import {DirectoryNodeItem} from "../../contexts/DirectoryItem.ts";
+import axios from 'axios';
 
 interface MapEditorBoxProps {
-    onCollapseChange?: (isCollapsed: boolean) => void;
+    newNodes?: DirectoryNodeItem[];
     nodeSelected?: (isSelected: boolean) => void;
     nodeX?: number;
     nodeY?: number;
@@ -24,7 +27,7 @@ interface MapEditorBoxProps {
 }
 
 const MapEditorBox: React.FC<MapEditorBoxProps> = ({
-    onCollapseChange,
+    newNodes = [],
     nodeSelected = false,
     nodeX = 0,
     nodeY = 0,
@@ -32,6 +35,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
     updateNodePosition,
 }) => {
     const theme = useMantineTheme();
+    const [savedStatus, setSavedStatus] = useState("");
     const [collapsed, setCollapsed] = useState(true);
     const [hoverAddNode, setHoverAddNode] = useState(setTimeout(function () {}, 1000));
     const [hoverRemoveNode, setHoverRemoveNode] = useState(setTimeout(function () {}, 1000));
@@ -41,6 +45,8 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
     const handleAddEdge = () => null;
     const handleRemoveNode = () => null;
     const handleRemoveEdge = () => null;
+
+    const { hovered, ref } = useHover();
 
     const handleUpdateNodePosition = () => {
         // Get values from form
@@ -369,6 +375,17 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
         }
     }
 
+    // Sends all new Node data to the backend
+    async function SaveAllNodes() {
+        const importNodes = await axios.post('api/directory/import/direct', {
+          data: newNodes,
+        })
+
+        setSavedStatus(importNodes.data.statusText)
+
+        console.log(importNodes);
+    }
+
     useEffect(() => {
         if (nodeSelected) {
             form.setValues({
@@ -380,8 +397,9 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
     }, [nodeSelected, nodeX, nodeY, floor]);
 
     useEffect(() => {
-        onCollapseChange?.(collapsed);
-    }, [collapsed]);
+      setCollapsed(!hovered);
+    }, [hovered]);
+
 
     return (
         <Box
@@ -397,6 +415,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
             }}
         >
             <Box
+                ref={ref}
                 bg="themeGold.2"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="37%"
@@ -521,6 +540,15 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                                 </ActionIcon>
                             </Grid.Col>
                         </Grid>
+                      <Flex direction="row" justify="space-between" gap="xs">
+                        <BlackButton
+                        onClick={() => SaveAllNodes()}>
+                          Save Changes
+                        </BlackButton>
+                        <Title>
+                          {savedStatus}
+                        </Title>
+                      </Flex>
                     </Flex>
                     <Flex justify="flex-end" gap="md"></Flex>
                 </Collapse>

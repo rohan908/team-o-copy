@@ -264,6 +264,8 @@ export function MapEditor() {
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
             <MapEditorBox
                 // Pass selected node data to the ui
+                //todo make a list of all new node data to pass to backend, including deletion
+                newNodes={[]}
                 nodeSelected={nodeSelected}
                 nodeX={nodeX}
                 nodeY={nodeY}
