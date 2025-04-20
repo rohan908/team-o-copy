@@ -48,6 +48,11 @@ const GoogleMapsAPI= () =>{
                     zoom={10}
                     center={selectedHospital ?? { lat: 42.093429, lng: -71.268228 }}
                     onLoad={handleMapLoad}
+                    options={{
+                      disableDefaultUI: true,
+                      mapTypeId: 'satellite',
+                      mapTypeControl: 'true',
+                    }}
                 />
             {steps.length > 0 && (
                 <Box //custom box for directions
