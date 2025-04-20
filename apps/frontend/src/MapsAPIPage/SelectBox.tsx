@@ -44,11 +44,11 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
     const Chestnut = useChestnutHillContext();
     console.log(Chestnut);
 
-    const MapDepartment = (department: DirectoryItem[]) =>
-      department.map((department: DirectoryItem) => ({
-        value: department.name,
-        label: department.name,
-      }));
+    const MapDepartment = (department: DirectoryNodeItem[]) =>
+        department.map((department: DirectoryNodeItem) => ({
+            value: department.name,
+            label: department.name,
+        }));
 
     const handleFindPath = () => {
         if (hospital && onSetSelectedHospitalName) {

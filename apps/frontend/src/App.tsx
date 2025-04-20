@@ -4,6 +4,7 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
 import { RequestProvider } from './contexts/RequestContext.tsx';
+import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import {
     createTheme,
     MantineProvider,
@@ -148,7 +149,9 @@ function App() {
         <MantineProvider theme={theme}>
             <DirectoryProvider>
                 <RequestProvider>
-                    <Routing />
+                    <NavigationProvider>
+                        <Routing />
+                    </NavigationProvider>
                 </RequestProvider>
             </DirectoryProvider>
         </MantineProvider>
