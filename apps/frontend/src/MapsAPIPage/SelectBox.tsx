@@ -8,7 +8,6 @@ import {
   Box,
   Text,
   Select,
-  useMantineTheme,
   Collapse,
   TextInput,
   Stack,

@@ -13,9 +13,9 @@ interface TimelineContextType {
     setActiveSection: (section: number) => void;
 
     // GMAPS
-  selectedHospital: google.maps.LatLngLiteral | undefined;
-  setSelectedHospital: (hospital: google.maps.LatLngLiteral | undefined) => void; //
-  userCoordinates: LocationCoordinates | undefined;
+    selectedHospital: string | undefined;
+    setSelectedHospital: (hospital: google.maps.LatLngLiteral | undefined) => void;
+    userCoordinates: LocationCoordinates | undefined;
     setUserCoordinates: (coords: LocationCoordinates | undefined) => void;
     travelMode: google.maps.TravelMode | undefined; //type travel mode must be googles enum, not just any string
     setTravelMode: (mode: google.maps.TravelMode | undefined) => void;
@@ -49,7 +49,7 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
     const [activeSection, setActiveSection] = useState<number>(0);
 
     // GMAPS
-    const [selectedHospital, setSelectedHospital] = useState<google.maps.LatLngLiteral | undefined>(undefined);
+    const [selectedHospital, setSelectedHospital] = useState<string | undefined>(undefined);
     const [userCoordinates, setUserCoordinates] = useState<LocationCoordinates | undefined>(
         undefined
     );
