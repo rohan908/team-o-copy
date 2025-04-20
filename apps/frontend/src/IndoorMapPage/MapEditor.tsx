@@ -19,13 +19,13 @@ export function MapEditor() {
     const [selectedHospitalName, setSelectedHospitalName] = useState('20 Patriot Pl');
     const [isFading, setIsFading] = useState(false);
     const { isLoggedIn } = useLogin();
-    const selectedObject = useRef<THREE.Object3D | null>(null); // useref so the selectedObject position can be set from the UI
-    const objectsRef = useRef<THREE.Object3D[]>([new THREE.Object3D()]);
+    const selectedObjects = useRef<THREE.Object3D[]>([]); // useref so the selectedObject position can be set from the UI
+    const objectsRef = useRef<THREE.Object3D[]>([]);
 
     const allNodes = useAllNodesContext();
 
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
-    const canvasRef = useRef<HTMLElement | null>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
 
     // Parameters for THREEjs objects and path display
@@ -91,9 +91,9 @@ export function MapEditor() {
     const updateNodePosition = (x: number, y: number, floor: number) => {
         setNodeX(x);
         setNodeY(y);
-        if (selectedObject.current) {
-            selectedObject.current.position.x = x;
-            selectedObject.current.position.y = y;
+        if (selectedObjects.current) {
+            selectedObjects.current.position.x = x;
+            selectedObjects.current.position.y = y;
             console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
         }
     };
@@ -103,7 +103,9 @@ export function MapEditor() {
         // populate all nodes and edges
         for (const node of allNodes) {
             if (node.x !== 0 && node.y !== 0) {
-                createNode(node, scenesRef.current, nodeRadius, { color: nodeColor }); //Create the nodes
+                createNode(node, scenesRef.current, objectsRef, nodeRadius, {
+                    color: nodeColor,
+                }); //Create the nodes
                 for (const connectingNodeId of node.connectingNodes) {
                     // iterate over each connected node.
                     const connectedNode = getNode(connectingNodeId, allNodes);
@@ -116,18 +118,89 @@ export function MapEditor() {
         }
     }, [allNodes]);
 
-    // Function to update draggable objects to make sure only selected objects can be dragged
-    const updateDraggableObjects = () => {
-        // Create a new array with only the selected object (if any)
-        if (selectedObject.current) {
-            draggableObjectsRef.current.push(selectedObject.current);
+    const selectObject = (selectedObject: THREE.Object3D) => {
+        if (
+            selectedObject instanceof THREE.Mesh &&
+            selectedObject.material instanceof THREE.MeshBasicMaterial
+        ) {
+            selectedObject.material.color.set(selectedNodeColor);
+            selectedObject.material.needsUpdate = true;
+            selectedObjects.current.push(selectedObject);
         }
-        // new dragControls with the updated array
+    };
+    const deselectObject = (selectedObject: THREE.Object3D) => {
+        if (
+            selectedObject instanceof THREE.Mesh &&
+            selectedObject.material instanceof THREE.MeshBasicMaterial
+        ) {
+            selectedObject.material.color.set(nodeColor);
+            selectedObject.material.needsUpdate = true;
+            selectedObjects.current = selectedObjects.current.filter(
+                (object) => object !== selectedObject
+            );
+        }
+    };
+
+    // Once initialized event listeners will operate continuously. Thus they can just be put in a useEffect with no dependencies that will run once.
+    useEffect(() => {
+        // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+
+        const handleClick = (event) => {
+            if (!canvasRef.current || !cameraRef.current) {
+                console.log('Canvas or camera ref not available');
+                return;
+            }
+
+            const rect = canvasRef.current.getBoundingClientRect();
+            // check if click is within canvas bounds
+            if (
+                event.clientX < rect.left ||
+                event.clientX > rect.right ||
+                event.clientY < rect.top ||
+                event.clientY > rect.bottom
+            ) {
+                return;
+            }
+
+            // normalize pointer position (-1 to 1 in x and y)
+            pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            // ray from the camera position to the pointer
+            raycaster.setFromCamera(pointer, cameraRef.current);
+
+            // check if objects were intersected
+            if (objectsRef.current.length === 0) {
+                return;
+            }
+
+            const intersects = raycaster.intersectObjects(objectsRef.current, true);
+
+            if (intersects.length > 0) {
+                const selectedObject = intersects[0].object;
+                if (selectedObjects.current.includes(selectedObject)) {
+                    deselectObject(selectedObject);
+                    console.log('Deselected:', selectedObject);
+                } else {
+                    selectObject(selectedObject);
+                    console.log('Selected:', selectedObject);
+                }
+            } else {
+                console.log('No object hit');
+            }
+        };
+
+        window.addEventListener('click', handleClick);
+
+        // Apply drag controls to selected objects
         const dragControls = new DragControls(
             draggableObjectsRef.current,
             cameraRef.current,
             rendererRef.current.domElement
         );
+
         // Event listeners that enable camera movement
         dragControls.addEventListener('dragstart', function () {
             controlRef.current.enabled = false;
@@ -136,89 +209,6 @@ export function MapEditor() {
             setTimeout(() => {
                 controlRef.current.enabled = true;
             }, 10);
-        });
-    };
-
-    // dragControls are used for node movement with mouse
-    const draggableObjects: THREE.Object3D[] = [];
-    if (rendererRef.current) {
-        const dragControls = new DragControls(
-            draggableObjects,
-            cameraRef.current,
-            rendererRef.current.domElement
-        );
-        // Disable map movement when dragging a node so both don't move together
-        // Event listeners should run even when in the initialization useEffect
-        dragControls.addEventListener('dragstart', function () {
-            controlRef.current.enabled = false;
-        });
-
-        dragControls.addEventListener('dragend', function () {
-            setTimeout(() => {
-                controlRef.current.enabled = true;
-            }, 10);
-        });
-
-        // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
-        const raycaster = new THREE.Raycaster();
-        const pointer = new THREE.Vector2();
-
-        window.addEventListener('click', (event) => {
-            if (canvasRef.current) {
-                const rect = canvasRef.current.getBoundingClientRect();
-                // normalize pointer position (-1 to 1 in x and y)
-                pointer.x = ((event.clientX - rect.left) / canvasRef.current!.clientWidth) * 2 - 1;
-                pointer.y = -((event.clientY - rect.top) / canvasRef.current!.clientHeight) * 2 + 1;
-                raycaster.setFromCamera(pointer, cameraRef.current);
-                // calculate objects intersecting the picking ray
-                const intersects = raycaster.intersectObjects(objectsRef.current);
-                if (intersects.length > 0) {
-                    const intersect = intersects[0]; // grab the first intersected object
-
-                    /*
-                    This structure handles selecting objects.
-                    It could probably use some proper handler functions, but it works for now.
-                    */
-                    // if there is no selected object or the clicked on object is not selected
-                    if (
-                        selectedObject.current === null ||
-                        selectedObject.current !== intersect.object
-                    ) {
-                        // if there is another selected object
-                        if (selectedObject.current !== intersect.object) {
-                            if (
-                                selectedObject.current instanceof THREE.Mesh &&
-                                selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                            ) {
-                                selectedObject.current.material.color.set(nodeColor); //set the already selected object back to it's non-selected color
-                            }
-                        }
-                        selectedObject.current = intersect.object; // switch selected object to the clicked on object
-                        setNodeSelected(true);
-                        // set the color of the clicked on objet to it's selected color
-                        if (
-                            selectedObject.current instanceof THREE.Mesh &&
-                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                        ) {
-                            selectedObject.current.material.color.set(selectedNodeColor);
-                        }
-                    }
-                    // The clicked on object is already selected (deselection when clicking on an already selected object)
-                    else {
-                        // set the color of the clicked on object to it's non-selected color
-                        if (
-                            selectedObject.current instanceof THREE.Mesh &&
-                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                        ) {
-                            selectedObject.current.material.color.set(nodeColor);
-                        }
-                        // clear the selected object
-                        selectedObject.current = null;
-                        setNodeSelected(false);
-                    }
-                    updateDraggableObjects();
-                }
-            }
         });
 
         // make sure map movement is re-enabled for some edge cases
@@ -237,26 +227,43 @@ export function MapEditor() {
         if (rendererRef.current) {
             rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
         }
-    }
 
+        return () => {
+            window.removeEventListener('click', handleClick); // stop listening to click on dismount
+        };
+    }, []);
+
+    /*
+      OK the way animations work is that calling animate() will start an animation loop that runs continuously. However,
+      if you want the actual renderer to change, i.e. change the scene or camera, you need to restart the animation loop.
+      That's why the scene is in the useEffect dependency.
+     */
     useEffect(() => {
+        let animationFrameId: number;
+
         const animate = () => {
-            if (selectedObject.current) {
-                // Update state with selected object position
-                setNodeX(selectedObject.current.position.x);
-                setNodeY(selectedObject.current.position.y);
+            if (selectedObjects.current.length === 1) {
+                // Update state when user specifies the position
+                setNodeX(selectedObjects.current[0].position.x);
+                setNodeY(selectedObjects.current[0].position.y);
             }
 
             // Render the current scene
             if (rendererRef.current) {
                 rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
             }
-            window.requestAnimationFrame(animate);
-            return () => {
-                clearSceneObjects(scenesRef.current);
-            };
+
+            animationFrameId = window.requestAnimationFrame(animate);
         };
+
+        // Start the animation
         animate();
+
+        return () => {
+            if (animationFrameId) {
+                window.cancelAnimationFrame(animationFrameId); // stop animation on dismount
+            }
+        };
     }, [sceneIndexState]);
 
     return (
@@ -272,6 +279,7 @@ export function MapEditor() {
             />
 
             <canvas
+                ref={canvasRef}
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'absolute' }}
             />
