@@ -103,7 +103,7 @@ export function MapEditor() {
         // populate all nodes and edges
         for (const node of allNodes) {
             if (node.x !== 0 && node.y !== 0) {
-                createNode(node, scenesRef.current); //Create the nodes
+                createNode(node, scenesRef.current, nodeRadius, { color: nodeColor }); //Create the nodes
                 for (const connectingNodeId of node.connectingNodes) {
                     // iterate over each connected node.
                     const connectedNode = getNode(connectingNodeId, allNodes);
