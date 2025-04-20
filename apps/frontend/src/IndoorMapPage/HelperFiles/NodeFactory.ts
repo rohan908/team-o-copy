@@ -22,6 +22,7 @@ export const createNode = (
     const sphere = new THREE.Mesh(geometry, material);
     sphere.position.x = node.x;
     sphere.position.y = node.y;
+    sphere.userData.nodeId = node.id;
     const nodeFloor = node.floor;
     if (nodeFloor === 1) {
         sceneArr[0].add(sphere);

@@ -22,6 +22,13 @@ export function MapEditor() {
     >([]);
     const objectsRef = useRef<THREE.Object3D[]>([]);
     const dragControlsRef = useRef<DragControls | null>(null);
+    const edgeMeshesRef = useRef<
+        {
+            mesh: THREE.Mesh;
+            startNodeId: number;
+            endNodeId: number;
+        }[]
+    >([]);
 
     const allNodes = useAllNodesContext();
 
@@ -55,6 +62,11 @@ export function MapEditor() {
         const geometry = new THREE.TubeGeometry(path, 1, edgeRad, edgeRad * 4, false);
         const material = new THREE.MeshBasicMaterial({ color: edgeColor });
         const mesh = new THREE.Mesh(geometry, material);
+        edgeMeshesRef.current.push({
+            mesh,
+            startNodeId: node1.id,
+            endNodeId: node2.id,
+        });
         if (node1.floor === node2.floor && node1.floor === 1) {
             scenesRef.current[0].add(mesh);
         } else if (node1.floor === node2.floor && node1.floor === 2) {
@@ -97,6 +109,56 @@ export function MapEditor() {
             selectedObjects.current[0].position.y = y;
             console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
         }
+    };
+
+    const updateEdges = (movedNodeId: number, newPosition: THREE.Vector3) => {
+        edgeMeshesRef.current.forEach((edge) => {
+            if (edge.startNodeId === movedNodeId || edge.endNodeId === movedNodeId) {
+                // new start and end positions
+                let startPos, endPos;
+
+                if (edge.startNodeId === movedNodeId) {
+                    // selected node is the edge's start node
+                    // update the start position
+                    startPos = newPosition;
+                    // find the end node by comparing threejs Id with node Id
+                    const endNode = objectsRef.current.find(
+                        (obj) => obj.userData.nodeId === edge.endNodeId
+                    );
+                    // get the existing position of the end node
+                    if (endNode) {
+                        endPos = new THREE.Vector3(
+                            endNode.position.x,
+                            endNode.position.y,
+                            endNode.position.z
+                        );
+                    }
+                } else {
+                    endPos = newPosition;
+                    // selected node is the edge's end node
+                    const startNode = objectsRef.current.find(
+                        (obj) => obj.userData.nodeId === edge.startNodeId
+                    );
+                    if (startNode) {
+                        startPos = new THREE.Vector3(
+                            startNode.position.x,
+                            startNode.position.y,
+                            startNode.position.z
+                        );
+                    }
+                }
+
+                // new tube geometry
+                const path = new THREE.LineCurve3(startPos, endPos);
+                const newGeometry = new THREE.TubeGeometry(path, 1, edgeRad, edgeRad * 4, false);
+
+                // dispose old mesh
+                edge.mesh.geometry.dispose();
+
+                // update with new mesh
+                edge.mesh.geometry = newGeometry;
+            }
+        });
     };
 
     // render function that can be called from anywhere so we can render only when needed.
@@ -145,7 +207,13 @@ export function MapEditor() {
                 controlRef.current.enabled = false;
             });
 
-            dragControlsRef.current.addEventListener('drag', function () {
+            dragControlsRef.current.addEventListener('drag', function (event) {
+                const draggedObject = event.object;
+                const nodeId = draggedObject.userData.nodeId;
+                console.log('dragging node: ', nodeId);
+                if (nodeId) {
+                    updateEdges(nodeId, draggedObject.position);
+                }
                 render(); // re-render during drag
             });
 
