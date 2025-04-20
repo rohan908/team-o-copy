@@ -3,6 +3,8 @@ import { Graph } from './Graph.ts';
 import { PathFinder } from './PathFinder.ts';
 import { BFSPathFinder } from './PathFinders/BFSPathFinder.ts';
 import { AStarPathFinder } from './PathFinders/AStarPathFinder.ts';
+import { DFSPathFinder } from './PathFinders/DFSPathFinder.ts';
+
 import PrismaClient from '../bin/prisma-client.ts';
 import graph from '../routes/Graph.ts';
 
@@ -36,7 +38,8 @@ export class NavigationService {
     public setPathFinderAlgo(pathAlgo: string) {
         if (
             (pathAlgo === 'BFS' && this.pathFinder instanceof BFSPathFinder) ||
-            (pathAlgo === 'A*' && this.pathFinder instanceof AStarPathFinder)
+            (pathAlgo === 'A*' && this.pathFinder instanceof AStarPathFinder) ||
+            (pathAlgo === 'DFS' && this.pathFinder instanceof DFSPathFinder)
         ) {
             return;
         } //dont want to make new objects for now reason
@@ -48,6 +51,9 @@ export class NavigationService {
                 break;
             case 'A*':
                 this.pathFinder = new AStarPathFinder(graphRef);
+                break;
+          case 'DFS':
+                this.pathFinder = new DFSPathFinder(graphRef);
                 break;
             default:
                 throw new Error(`Unknown pathfinder algorithm: ${pathAlgo}`);

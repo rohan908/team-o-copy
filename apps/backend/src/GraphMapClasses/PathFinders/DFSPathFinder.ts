@@ -17,16 +17,22 @@ export class DFSPathFinder extends PathFinder {
        console.error('start or end node DNE');
        return { success: false, pathIDs: [], distance: 0 };
      }
-
+    bfs(endNode, startNode)
 
    }
 
    //check if
-   bfs(graph: Graph<NodeDataType>, target: Graph<NodeDataType>, current: Graph<NodeDataType> ) {
+   private bfs( target: Node<NodeDataType>, current: Node<NodeDataType> ) {
       if (target == current){
-        succsess = true
+        return {success: true, pathIDs: current, distance: 0 }
       } else {
-
+        current.adjNodes.forEach((connectingNode: ConnectingNode<NodeDataType>) => {
+            const result: PathFinderResult  = bfs(target: Node<NodeDataType>, connectingNode)
+            if (result.success) {
+                result.pathIDs.push(connectingNode.getID())
+                result.distance = result.distance + 1;
+            }
+        })
       }
    }
 }
