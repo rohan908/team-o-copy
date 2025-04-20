@@ -124,7 +124,7 @@ const SelectBox = () => {
             pointerEvents: collapsed ? 'none' : 'auto',  //when collapsed, this box becomes unclickable
 
           }}
-          maw={500} {/* this  is supposed to render always to the center regardless of laptop screen*/}
+          maw={500} // this  is supposed to render always to the center regardless of laptop screen
         >
           <TwoPartInteractiveBox
             title="Find your Way!"
