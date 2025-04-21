@@ -1,5 +1,6 @@
-import {Flex, Transition, Text, Box} from '@mantine/core';
+import {Flex, Transition, Text, Box, Button} from '@mantine/core';
 import {useEffect, useState} from "react";
+import {Link} from 'react-router-dom';
 
 function NotFound() {
   const [opened, setOpened] = useState(false);
@@ -12,7 +13,7 @@ function NotFound() {
     <Box
       style={{
       minHeight: '100vh',
-      background:'linear-gradient(0deg, #EAFEFF 0%, #61F0FB 100%)',
+      background:'linear-gradient(0deg, #D8DFEB , #EBF2FF 100%)',
     }}>
     <Transition
       mounted={opened}
@@ -41,8 +42,26 @@ function NotFound() {
           <Text style={styles} fz = "lg" ff = "Roboto, sans-serif">Oops, we can't find the page you were looking for. Does it exist?</Text>
         </Flex>}
     </Transition>
+      <Transition
+        mounted={opened}
+        transition="slide-left"
+        duration={400}
+        timingFunction="ease">
+        {(styles) =>
+          <Flex
+            pos = "fixed"
+            top = "63%"
+            left = "20%"
+          >
+            <Button style={styles} component = {Link} to="/" >
+              Go Home
+            </Button>
+          </Flex>}
+      </Transition>
   </Box>
   );
 }
 
 export default NotFound;
+
+
