@@ -25,7 +25,7 @@ export function MapAPIPage({ onSelectHospital, onDepartmentSelect }: MapAPIPageP
     const [travelMode, setTravelMode] = useState<google.maps.TravelMode | null>(null);
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        googleMapsApiKey: "AIzaSyAfCGqkvzd-Aifefc3FOfP5kGbsnRrlCDM",
         // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
 
         libraries: ['places'], //required for location autocomplete in textbox
