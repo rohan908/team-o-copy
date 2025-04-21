@@ -83,7 +83,6 @@ const findPathHandler: RequestHandler<
         const start = Number(startID);
         const end = Number(endID);
         const algo = String(pathAlgo);
-
         const result: PathFinderResult = navigationService.findPath(start, end, algo);
 
         if (result.distance === 0) {
@@ -168,7 +167,8 @@ const getNodeHandler: RequestHandler<
 // Debug endpoint to get test the pathfinding between nodes
 router.get('/debug', (req: any, res: any) => {
     // Get the grid dimensions and some sample walkable points
-    const path = navigationService.findPath(1, 5, 'BFS');
+    const path = navigationService.findPath(1, 5, 'DFS');
+    console.log('ran files and got:', path);
     res.json(path);
 });
 
