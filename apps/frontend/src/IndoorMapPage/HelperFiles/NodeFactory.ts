@@ -26,16 +26,24 @@ export const createNode = (
     const nodeFloor = node.floor;
     if (nodeFloor === 1) {
         sceneArr[0].add(sphere);
-        objectsRef!.current.push(sphere);
+        if (objectsRef) {
+            objectsRef.current.push(sphere);
+        }
     } else if (nodeFloor === 2) {
         sceneArr[1].add(sphere);
-        objectsRef!.current.push(sphere);
+        if (objectsRef) {
+            objectsRef.current.push(sphere);
+        }
     } else if (nodeFloor === 3) {
         sceneArr[2].add(sphere);
-        objectsRef!.current.push(sphere);
+        if (objectsRef) {
+            objectsRef.current.push(sphere);
+        }
     } else if (nodeFloor === 4) {
         sceneArr[3].add(sphere);
-        objectsRef!.current.push(sphere);
+        if (objectsRef) {
+            objectsRef.current.push(sphere);
+        }
     } else {
         console.error("node not added because floor doesn't exist");
     }
