@@ -83,7 +83,6 @@ const findPathHandler: RequestHandler<
         const start = Number(startID);
         const end = Number(endID);
         const algo = String(pathAlgo);
-        console.log('algo', algo);
         const result: PathFinderResult = navigationService.findPath(start, end, algo);
 
         if (result.distance === 0) {
