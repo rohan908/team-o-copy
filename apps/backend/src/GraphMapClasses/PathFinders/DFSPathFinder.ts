@@ -44,10 +44,29 @@ export class DFSPathFinder extends PathFinder {
             );
 
             if (result.success) {
+                console.log('current.data.id', current.data.id);
+                console.log('result.pathIDs', result.pathIDs);
+                //calculate the distance from the current id to the most recent one in the result stack
+                console.log(
+                    'search for path with start in list of current.adjNodes: ',
+                    current.adjNodes
+                );
+                console.log(
+                    'the fist index in that list is',
+                    current.adjNodes[0].destination.data.id
+                );
+                console.log('searh for path with end result.pathIDs[0]', result.pathIDs[0]);
+
+                const distance = current.adjNodes.find(
+                    (adjNodes) => adjNodes.destination.data.id === result.pathIDs[0]
+                );
+
+                console.log('distance', distance);
+
                 return {
                     success: true,
                     pathIDs: [current.data.id, ...result.pathIDs], //reorder nodes here so no reorder function cuz js of overpowered somtimes
-                    distance: result.distance,
+                    distance: result.distance + distance!.weight,
                 };
             } //else, just end
         }
