@@ -392,6 +392,10 @@ export function MapEditor() {
 
         return () => {
             window.removeEventListener('click', handleClick); // stop listening to click on dismount
+            // clear refs on unmount
+            selectedObjects.current = [];
+            edgeMeshesRef.current = [];
+            objectsRef.current = [];
         };
     }, [mapTool]);
 
