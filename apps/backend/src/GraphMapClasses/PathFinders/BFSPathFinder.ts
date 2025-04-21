@@ -65,7 +65,6 @@ export class BFSPathFinder extends PathFinder {
                 const prevNode: Node<NodeDataType> | undefined = previous.get(currentNode);
                 // now we need the corresponding edge for the weight
                 const edge = prevNode!.adjNodes.find((edge) => edge.destination === currentNode);
-                console.log('----------Breadth first---------');
                 if (edge) {
                     totDistance = totDistance + edge.weight;
                 }
