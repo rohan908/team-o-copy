@@ -39,6 +39,7 @@ export function PathPickerBox() {
             data: {
                 HospitalName: hospital,
                 Department: null,
+                AlgorithmName: algo,
             } as NavSelectionItem,
         });
         //setSelectedHospitalName(hospital);
@@ -52,6 +53,19 @@ export function PathPickerBox() {
             data: {
                 HospitalName: hospital,
                 Department: department,
+                AlgorithmName: algo,
+            } as NavSelectionItem,
+        });
+    };
+
+    const setSelectedAlgo = (algo: string | null) => {
+        setAlgo(algo);
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: hospital,
+                Department: department,
+                AlgorithmName: algo,
             } as NavSelectionItem,
         });
     };
@@ -103,9 +117,10 @@ export function PathPickerBox() {
                     },
                     { value: 'DFS', label: 'Depth First Search' },
                 ]}
+                defaultValue="BFS"
                 value={algo}
                 onChange={(value) => {
-                    setAlgo(value);
+                    setSelectedAlgo(value);
                 }}
             />
         </Stack>
