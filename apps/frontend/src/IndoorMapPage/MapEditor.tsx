@@ -13,19 +13,27 @@ import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 
 export function MapEditor() {
     const [nodeSelected, setNodeSelected] = useState(false);
-    const [nodeX, setNodeX] = useState(0);
-    const [nodeY, setNodeY] = useState(0);
     const [floorState, setFloorState] = useState(1);
-    const [selectedHospitalName, setSelectedHospitalName] = useState('20 Patriot Pl');
     const [isFading, setIsFading] = useState(false);
     const { isLoggedIn } = useLogin();
-    const selectedObject = useRef<THREE.Object3D | null>(null); // useref so the selectedObject position can be set from the UI
-    const objectsRef = useRef<THREE.Object3D[]>([new THREE.Object3D()]);
+    const selectedObjects = useRef<THREE.Object3D[]>([]);
+    const [selectedObjectsInfo, setSelectedObjectsInfo] = useState<
+        { nodeId: string; x: number; y: number }[]
+    >([]);
+    const objectsRef = useRef<THREE.Object3D[]>([]);
+    const dragControlsRef = useRef<DragControls | null>(null);
+    const edgeMeshesRef = useRef<
+        {
+            mesh: THREE.Mesh;
+            startNodeId: number;
+            endNodeId: number;
+        }[]
+    >([]);
 
     const allNodes = useAllNodesContext();
 
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
-    const canvasRef = useRef<HTMLElement | null>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
 
     // Parameters for THREEjs objects and path display
@@ -54,6 +62,11 @@ export function MapEditor() {
         const geometry = new THREE.TubeGeometry(path, 1, edgeRad, edgeRad * 4, false);
         const material = new THREE.MeshBasicMaterial({ color: edgeColor });
         const mesh = new THREE.Mesh(geometry, material);
+        edgeMeshesRef.current.push({
+            mesh,
+            startNodeId: node1.id,
+            endNodeId: node2.id,
+        });
         if (node1.floor === node2.floor && node1.floor === 1) {
             scenesRef.current[0].add(mesh);
         } else if (node1.floor === node2.floor && node1.floor === 2) {
@@ -91,10 +104,67 @@ export function MapEditor() {
     const updateNodePosition = (x: number, y: number, floor: number) => {
         setNodeX(x);
         setNodeY(y);
-        if (selectedObject.current) {
-            selectedObject.current.position.x = x;
-            selectedObject.current.position.y = y;
+        if (selectedObjects.current.length === 1) {
+            selectedObjects.current[0].position.x = x;
+            selectedObjects.current[0].position.y = y;
             console.log(`Node position updated to: x=${x}, y=${y}, floor=${floor}`);
+        }
+    };
+
+    const updateEdges = (movedNodeId: number, newPosition: THREE.Vector3) => {
+        edgeMeshesRef.current.forEach((edge) => {
+            if (edge.startNodeId === movedNodeId || edge.endNodeId === movedNodeId) {
+                // new start and end positions
+                let startPos, endPos;
+
+                if (edge.startNodeId === movedNodeId) {
+                    // selected node is the edge's start node
+                    // update the start position
+                    startPos = newPosition;
+                    // find the end node by comparing threejs Id with node Id
+                    const endNode = objectsRef.current.find(
+                        (obj) => obj.userData.nodeId === edge.endNodeId
+                    );
+                    // get the existing position of the end node
+                    if (endNode) {
+                        endPos = new THREE.Vector3(
+                            endNode.position.x,
+                            endNode.position.y,
+                            endNode.position.z
+                        );
+                    }
+                } else {
+                    endPos = newPosition;
+                    // selected node is the edge's end node
+                    const startNode = objectsRef.current.find(
+                        (obj) => obj.userData.nodeId === edge.startNodeId
+                    );
+                    if (startNode) {
+                        startPos = new THREE.Vector3(
+                            startNode.position.x,
+                            startNode.position.y,
+                            startNode.position.z
+                        );
+                    }
+                }
+
+                // new tube geometry
+                const path = new THREE.LineCurve3(startPos, endPos);
+                const newGeometry = new THREE.TubeGeometry(path, 1, edgeRad, edgeRad * 4, false);
+
+                // dispose old mesh
+                edge.mesh.geometry.dispose();
+
+                // update with new mesh
+                edge.mesh.geometry = newGeometry;
+            }
+        });
+    };
+
+    // render function that can be called from anywhere so we can render only when needed.
+    const render = () => {
+        if (rendererRef.current && scenesRef.current && cameraRef.current) {
+            rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
         }
     };
 
@@ -103,7 +173,9 @@ export function MapEditor() {
         // populate all nodes and edges
         for (const node of allNodes) {
             if (node.x !== 0 && node.y !== 0) {
-                createNode(node, scenesRef.current); //Create the nodes
+                createNode(node, scenesRef.current, objectsRef, nodeRadius, {
+                    color: nodeColor,
+                }); //Create the nodes
                 for (const connectingNodeId of node.connectingNodes) {
                     // iterate over each connected node.
                     const connectedNode = getNode(connectingNodeId, allNodes);
@@ -116,110 +188,123 @@ export function MapEditor() {
         }
     }, [allNodes]);
 
-    // Function to update draggable objects to make sure only selected objects can be dragged
-    const updateDraggableObjects = () => {
-        // Create a new array with only the selected object (if any)
-        if (selectedObject.current) {
-            draggableObjectsRef.current.push(selectedObject.current);
+    const updateDragControls = () => {
+        // dispose existing drag controls if they exist
+        if (dragControlsRef.current) {
+            dragControlsRef.current.dispose();
         }
-        // new dragControls with the updated array
-        const dragControls = new DragControls(
-            draggableObjectsRef.current,
-            cameraRef.current,
-            rendererRef.current.domElement
-        );
-        // Event listeners that enable camera movement
-        dragControls.addEventListener('dragstart', function () {
-            controlRef.current.enabled = false;
-        });
-        dragControls.addEventListener('dragend', function () {
-            setTimeout(() => {
-                controlRef.current.enabled = true;
-            }, 10);
-        });
+
+        // create drag controls if there are selected objects
+        if (selectedObjects.current.length > 0) {
+            dragControlsRef.current = new DragControls(
+                selectedObjects.current, // Use selected objects directly
+                cameraRef.current,
+                rendererRef.current.domElement
+            );
+
+            // add event listeners to enable / enable map dragging while dragging nodes
+            dragControlsRef.current.addEventListener('dragstart', function () {
+                controlRef.current.enabled = false;
+            });
+
+            dragControlsRef.current.addEventListener('drag', function (event) {
+                const draggedObject = event.object;
+                const nodeId = draggedObject.userData.nodeId;
+                console.log('dragging node: ', nodeId);
+                if (nodeId) {
+                    updateEdges(nodeId, draggedObject.position);
+                }
+                render(); // re-render during drag
+            });
+
+            dragControlsRef.current.addEventListener('dragend', function () {
+                setTimeout(() => {
+                    controlRef.current.enabled = true;
+                }, 10);
+                render(); // render after dragging as well to make the scene is up to date
+            });
+        }
     };
 
-    // dragControls are used for node movement with mouse
-    const draggableObjects: THREE.Object3D[] = [];
-    if (rendererRef.current) {
-        const dragControls = new DragControls(
-            draggableObjects,
-            cameraRef.current,
-            rendererRef.current.domElement
-        );
-        // Disable map movement when dragging a node so both don't move together
-        // Event listeners should run even when in the initialization useEffect
-        dragControls.addEventListener('dragstart', function () {
-            controlRef.current.enabled = false;
-        });
+    const selectObject = (selectedObject: THREE.Object3D) => {
+        if (
+            selectedObject instanceof THREE.Mesh &&
+            selectedObject.material instanceof THREE.MeshBasicMaterial
+        ) {
+            selectedObject.material.color.set(selectedNodeColor);
+            selectedObject.material.needsUpdate = true;
+            selectedObjects.current.push(selectedObject);
+            render(); // render to show color changes
+            updateDragControls();
+        }
+    };
+    const deselectObject = (selectedObject: THREE.Object3D) => {
+        if (
+            selectedObject instanceof THREE.Mesh &&
+            selectedObject.material instanceof THREE.MeshBasicMaterial
+        ) {
+            selectedObject.material.color.set(nodeColor);
+            selectedObject.material.needsUpdate = true;
+            selectedObjects.current = selectedObjects.current.filter(
+                (object) => object !== selectedObject
+            );
+            render(); // render to show color changes
+            updateDragControls();
+        }
+    };
 
-        dragControls.addEventListener('dragend', function () {
-            setTimeout(() => {
-                controlRef.current.enabled = true;
-            }, 10);
-        });
-
+    // Once initialized event listeners will operate continuously. Thus they can just be put in a useEffect with no dependencies that will run once.
+    useEffect(() => {
         // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
         const raycaster = new THREE.Raycaster();
         const pointer = new THREE.Vector2();
 
-        window.addEventListener('click', (event) => {
-            if (canvasRef.current) {
-                const rect = canvasRef.current.getBoundingClientRect();
-                // normalize pointer position (-1 to 1 in x and y)
-                pointer.x = ((event.clientX - rect.left) / canvasRef.current!.clientWidth) * 2 - 1;
-                pointer.y = -((event.clientY - rect.top) / canvasRef.current!.clientHeight) * 2 + 1;
-                raycaster.setFromCamera(pointer, cameraRef.current);
-                // calculate objects intersecting the picking ray
-                const intersects = raycaster.intersectObjects(objectsRef.current);
-                if (intersects.length > 0) {
-                    const intersect = intersects[0]; // grab the first intersected object
-
-                    /*
-                    This structure handles selecting objects.
-                    It could probably use some proper handler functions, but it works for now.
-                    */
-                    // if there is no selected object or the clicked on object is not selected
-                    if (
-                        selectedObject.current === null ||
-                        selectedObject.current !== intersect.object
-                    ) {
-                        // if there is another selected object
-                        if (selectedObject.current !== intersect.object) {
-                            if (
-                                selectedObject.current instanceof THREE.Mesh &&
-                                selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                            ) {
-                                selectedObject.current.material.color.set(nodeColor); //set the already selected object back to it's non-selected color
-                            }
-                        }
-                        selectedObject.current = intersect.object; // switch selected object to the clicked on object
-                        setNodeSelected(true);
-                        // set the color of the clicked on objet to it's selected color
-                        if (
-                            selectedObject.current instanceof THREE.Mesh &&
-                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                        ) {
-                            selectedObject.current.material.color.set(selectedNodeColor);
-                        }
-                    }
-                    // The clicked on object is already selected (deselection when clicking on an already selected object)
-                    else {
-                        // set the color of the clicked on object to it's non-selected color
-                        if (
-                            selectedObject.current instanceof THREE.Mesh &&
-                            selectedObject.current.material instanceof THREE.MeshBasicMaterial
-                        ) {
-                            selectedObject.current.material.color.set(nodeColor);
-                        }
-                        // clear the selected object
-                        selectedObject.current = null;
-                        setNodeSelected(false);
-                    }
-                    updateDraggableObjects();
-                }
+        const handleClick = (event) => {
+            if (!canvasRef.current || !cameraRef.current) {
+                console.log('Canvas or camera ref not available');
+                return;
             }
-        });
+
+            const rect = canvasRef.current.getBoundingClientRect();
+            // check if click is within canvas bounds
+            if (
+                event.clientX < rect.left ||
+                event.clientX > rect.right ||
+                event.clientY < rect.top ||
+                event.clientY > rect.bottom
+            ) {
+                return;
+            }
+
+            // normalize pointer position (-1 to 1 in x and y)
+            pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            // ray from the camera position to the pointer
+            raycaster.setFromCamera(pointer, cameraRef.current);
+
+            // check if objects were intersected
+            if (objectsRef.current.length === 0) {
+                return;
+            }
+
+            const intersects = raycaster.intersectObjects(objectsRef.current, true);
+
+            if (intersects.length > 0) {
+                const selectedObject = intersects[0].object;
+                if (selectedObjects.current.includes(selectedObject)) {
+                    deselectObject(selectedObject);
+                    console.log('Deselected:', selectedObject);
+                } else {
+                    selectObject(selectedObject);
+                    console.log('Selected:', selectedObject);
+                }
+            } else {
+                console.log('No object hit');
+            }
+        };
+
+        window.addEventListener('click', handleClick);
 
         // make sure map movement is re-enabled for some edge cases
         const handleMouseUp = () => {
@@ -237,26 +322,45 @@ export function MapEditor() {
         if (rendererRef.current) {
             rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
         }
-    }
 
+        return () => {
+            window.removeEventListener('click', handleClick); // stop listening to click on dismount
+            // clear refs on unmount
+            selectedObjects.current = [];
+            edgeMeshesRef.current = [];
+            objectsRef.current = [];
+        };
+    }, []);
+
+    /*
+      OK the way animations work is that calling animate() will start an animation loop that runs continuously. However,
+      if you want the actual renderer to change, i.e. change the scene or camera, you need to restart the animation loop.
+      That's why the scene is in the useEffect dependency.
+     */
     useEffect(() => {
+        let animationFrameId: number;
+
         const animate = () => {
-            if (selectedObject.current) {
-                // Update state with selected object position
-                setNodeX(selectedObject.current.position.x);
-                setNodeY(selectedObject.current.position.y);
+            if (selectedObjects.current.length === 1) {
+                // Update state when user specifies the position
+                //setNodeX(selectedObjects.current[0].position.x);
+                //setNodeY(selectedObjects.current[0].position.y);
             }
 
             // Render the current scene
-            if (rendererRef.current) {
-                rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
-            }
-            window.requestAnimationFrame(animate);
-            return () => {
-                clearSceneObjects(scenesRef.current);
-            };
+            render();
+
+            animationFrameId = window.requestAnimationFrame(animate);
         };
+
+        // Start the animation
         animate();
+
+        return () => {
+            if (animationFrameId) {
+                window.cancelAnimationFrame(animationFrameId); // stop animation on dismount
+            }
+        };
     }, [sceneIndexState]);
 
     return (
@@ -265,13 +369,14 @@ export function MapEditor() {
             <MapEditorBox
                 // Pass selected node data to the ui
                 nodeSelected={nodeSelected}
-                nodeX={nodeX}
-                nodeY={nodeY}
+                nodeX={1}
+                nodeY={1}
                 // handle updating the node position from ui
                 updateNodePosition={updateNodePosition}
             />
 
             <canvas
+                ref={canvasRef}
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'absolute' }}
             />
