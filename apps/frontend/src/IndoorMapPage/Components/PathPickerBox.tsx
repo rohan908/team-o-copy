@@ -101,10 +101,11 @@ export function PathPickerBox() {
                         value: 'A*',
                         label: 'A Star',
                     },
+                    { value: 'DFS', label: 'Depth First Search' },
                 ]}
                 value={algo}
                 onChange={(value) => {
-                    setAlgo(value || 'BFS');
+                    setAlgo(value);
                 }}
             />
         </Stack>
