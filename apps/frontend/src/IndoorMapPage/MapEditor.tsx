@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, createContext} from 'react';
 import * as THREE from 'three';
 import { Box } from '@mantine/core';
+import { useMouse, useMergedRef} from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
@@ -11,10 +12,30 @@ import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 
+export interface MapEditorProps {
+  selectedTool: string;
+  setSelectedTool: (tool: string) => void;
+  newNodes?: DirectoryNodeItem[];
+  nodeSelected?: (isSelected: boolean) => void;
+  nodeX?: number;
+  nodeY?: number;
+  floor?: number;
+  updateNodePosition?: (x: number, y: number, floor: number) => void;
+}
+
+export const MapContext = createContext<MapEditorProps>({});
+
 export function MapEditor() {
     const [nodeSelected, setNodeSelected] = useState(false);
     const [floorState, setFloorState] = useState(1);
     const [isFading, setIsFading] = useState(false);
+    const [cursorStyle, setCursorStyle] = useState('pointer')
+    const [mapTool, setMapTool] = useState('pan');
+    const mapProps: MapEditorProps = {
+      selectedTool: mapTool,
+      setSelectedTool: setMapTool,
+    };
+
     const { isLoggedIn } = useLogin();
     const selectedObjects = useRef<THREE.Object3D[]>([]);
     const [selectedObjectsInfo, setSelectedObjectsInfo] = useState<
@@ -35,6 +56,9 @@ export function MapEditor() {
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
+    const {x: canvasX, y: canvasY, ref: mouseRef} = useMouse();
+
+    const ref = useMergedRef(canvasRef, mouseRef);
 
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
@@ -102,8 +126,6 @@ export function MapEditor() {
 
     // updates the selected node position from UI
     const updateNodePosition = (x: number, y: number, floor: number) => {
-        setNodeX(x);
-        setNodeY(y);
         if (selectedObjects.current.length === 1) {
             selectedObjects.current[0].position.x = x;
             selectedObjects.current[0].position.y = y;
@@ -259,11 +281,22 @@ export function MapEditor() {
         const raycaster = new THREE.Raycaster();
         const pointer = new THREE.Vector2();
 
+        // switches the type of cursor depending on the tool
+        switch(mapTool) {
+          case 'pan':
+            setCursorStyle('pointer');
+            break;
+          case 'add-node':
+            setCursorStyle('crosshair');
+            break;
+        }
+
         const handleClick = (event) => {
             if (!canvasRef.current || !cameraRef.current) {
                 console.log('Canvas or camera ref not available');
                 return;
             }
+            console.log(mapTool);
 
             const rect = canvasRef.current.getBoundingClientRect();
             // check if click is within canvas bounds
@@ -282,6 +315,28 @@ export function MapEditor() {
 
             // ray from the camera position to the pointer
             raycaster.setFromCamera(pointer, cameraRef.current);
+
+            if(mapTool == 'add-node') {
+              // new node positon
+              const posX = ((pointer.x)/2) * rect.width;
+              const posY = ((pointer.y)/2) * rect.height;
+
+              console.log(posX, posY);
+              const newNode: DirectoryNodeItem = {
+                id: 1000,
+                x: posX,
+                y: posY,
+                floor: 1,
+                mapId: 1,
+                name: "",
+                description: "",
+                nodeType: "",
+                connectingNodes: [],
+              }
+              createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
+                color: nodeColor,
+              }); //Create the nodes
+            }
 
             // check if objects were intersected
             if (objectsRef.current.length === 0) {
@@ -326,7 +381,7 @@ export function MapEditor() {
         return () => {
             window.removeEventListener('click', handleClick); // stop listening to click on dismount
         };
-    }, []);
+    }, [mapTool]);
 
     /*
       OK the way animations work is that calling animate() will start an animation loop that runs continuously. However,
@@ -360,23 +415,25 @@ export function MapEditor() {
     }, [sceneIndexState]);
 
     return (
-        <Box w="100vw" h="100vh" p={0}>
+        <Box w="100vw" h="100vh" p={0} ref={mouseRef}>
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
-            <MapEditorBox
-                // Pass selected node data to the ui
-                //todo make a list of all new node data to pass to backend, including deletion
-                newNodes={[]}
-                nodeSelected={nodeSelected}
-                nodeX={1}
-                nodeY={1}
-                // handle updating the node position from ui
-                updateNodePosition={updateNodePosition}
-            />
+            <MapContext.Provider value={mapProps}>
+              <MapEditorBox
+                  // Pass selected node data to the ui
+                  //todo make a list of all new node data to pass to backend, including deletion
+                  newNodes={[]}
+                  nodeSelected={nodeSelected}
+                  nodeX={1}
+                  nodeY={1}
+                  // handle updating the node position from ui
+                  updateNodePosition={updateNodePosition}
+              />
+            </MapContext.Provider>
 
             <canvas
                 ref={canvasRef}
                 id="insideMapCanvas"
-                style={{ width: '100%', height: '100%', position: 'absolute' }}
+                style={{ width: '100%', height: '100%', position: 'absolute', cursor: cursorStyle}}
             />
 
             <div
