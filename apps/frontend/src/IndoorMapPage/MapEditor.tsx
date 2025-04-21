@@ -325,11 +325,9 @@ export function MapEditor() {
 
         return () => {
             window.removeEventListener('click', handleClick); // stop listening to click on dismount
-            // dispose selected objects
+            // clear refs on unmount
             selectedObjects.current = [];
-            // dispose edges
             edgeMeshesRef.current = [];
-            // dispose objects
             objectsRef.current = [];
         };
     }, []);
