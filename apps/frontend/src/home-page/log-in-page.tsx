@@ -1,9 +1,8 @@
-import WaveAnimation from "./components/waveAnimation.tsx";
-import LogInBox from "./components/LogInBox.tsx";
-import { Box} from '@mantine/core';
+import WaveAnimation from './components/waveAnimation.tsx';
+import LogInBox from './components/LogInBox.tsx';
+import { Box } from '@mantine/core';
 
-
-export function HomePage() {
+export function LogInPage() {
     return (
         <>
             <Box
@@ -11,10 +10,9 @@ export function HomePage() {
                     position: 'relative',
                     width: '100%',
                     height: '100vh',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
                 }}
             >
-
                 <WaveAnimation id="waveCanvas" />
                 <LogInBox />
             </Box>
