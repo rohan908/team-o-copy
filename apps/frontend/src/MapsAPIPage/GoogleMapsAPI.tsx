@@ -1,13 +1,15 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {GoogleMap} from "@react-google-maps/api";
-import {Box, ScrollArea, Text, List} from '@mantine/core';
+import {Box, ScrollArea, Text, List, Button} from '@mantine/core';
 import { useTimeline } from '../HomePage/TimeLineContext';
+import {useSpeech}  from 'react-text-to-speech';
+
 
 const GoogleMapsAPI= () =>{
     const {selectedHospital, userCoordinates, travelMode } = useTimeline();
     const mapRef = useRef<google.maps.Map | null>(null);
     const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
-    const [steps, setSteps] = useState<string[]>([]);
+    const [steps, setSteps] = useState<{ instruction: string; distance: string; duration: string }[]>([]);
 
     const handleMapLoad = (map: google.maps.Map) => {
         mapRef.current = map;
@@ -28,9 +30,11 @@ const GoogleMapsAPI= () =>{
           (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) { //make
                     directionsRendererRef.current.setDirections(result)
-                    const newSteps = result.routes[0].legs[0].steps.map(
-                        (step) => step.instructions
-                    );
+                    const newSteps = result.routes[0].legs[0].steps.map((step) => ( {
+                      instruction: step.instructions,
+                      distance: step.distance.text,
+                      duration: step.duration.text
+                  }));
                     setSteps(newSteps);
                 }
                 else{
@@ -39,6 +43,23 @@ const GoogleMapsAPI= () =>{
             }
         )
     }, [userCoordinates, selectedHospital, travelMode]);
+
+   const speechText = steps.map((step) =>
+     step.instruction.replace(/<[^>]+>/g, '')).join('...');
+
+    const {
+      speechStatus,
+      start,
+      stop,
+    } = useSpeech({ text: speechText });
+
+    const handleToggle = () => {
+      if (speechStatus === 'started') {
+        stop();
+      } else {
+        start();
+      }
+    };
 
     return (
         <>
@@ -52,8 +73,7 @@ const GoogleMapsAPI= () =>{
                       disableDefaultUI: true,
                       mapTypeId: 'satellite',
                       mapTypeControl: 'true',
-                    }}
-                />
+                    }}/>
             {steps.length > 0 && (
                 <Box //custom box for directions
                     pos="absolute"
@@ -73,11 +93,24 @@ const GoogleMapsAPI= () =>{
                     <List type="ordered" pl="md" mt="sm">
                       {steps.map((step, index) => (
                         <List.Item key={index}>
-                          <Box dangerouslySetInnerHTML={{ __html: step }} mb="sm" />
+                          <Text size="xs" color="dimmed" mt={2}>
+                            ({step.distance}, {step.duration})
+                          </Text>
+                          <Box dangerouslySetInnerHTML={{ __html: step.instruction }} mb="sm" />
                         </List.Item>
                         ))}
                     </List>
                   </ScrollArea>
+                  <Box mt="sm">
+                    <Button
+                      fullWidth
+                      onClick={handleToggle}
+                      color={speechStatus === 'started' ? 'red' : 'blue'}
+                      variant="light"
+                    >
+                      {speechStatus === 'started' ? 'Stop' : 'Play Directions'}
+                    </Button>
+                  </Box>
                 </Box>
             )}
           </Box>
