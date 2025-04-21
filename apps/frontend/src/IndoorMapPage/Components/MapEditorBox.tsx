@@ -319,7 +319,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
         const importNodes = await axios.post('api/directory/import/direct', {
           data: newNodes,
         })
-
+        console.log(newNodes);
         addSaveLabel();
 
         console.log(importNodes);

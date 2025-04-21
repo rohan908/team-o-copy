@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, createContext} from 'react';
 import * as THREE from 'three';
 import { Box } from '@mantine/core';
-import { useMouse, useMergedRef} from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
@@ -31,9 +30,12 @@ export function MapEditor() {
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer')
     const [mapTool, setMapTool] = useState('pan');
+
+    const newNodes: DirectoryNodeItem[] = [];
     const mapProps: MapEditorProps = {
       selectedTool: mapTool,
       setSelectedTool: setMapTool,
+      newNodes: newNodes,
     };
 
     const { isLoggedIn } = useLogin();
@@ -56,9 +58,6 @@ export function MapEditor() {
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
-    const {x: canvasX, y: canvasY, ref: mouseRef} = useMouse();
-
-    const ref = useMergedRef(canvasRef, mouseRef);
 
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
@@ -109,6 +108,15 @@ export function MapEditor() {
         if (floor === 4) return 2;
         if (floor === 5) return 3;
         return 0;
+    };
+
+    // associated floors with scenes
+    const getFloorAndMapIDFromSceneIndex = (index: number) => {
+      if (index === 0) return {floor: 1, mapID: 1};
+      if (index === 1) return {floor: 3, mapID: 1};
+      if (index === 2) return {floor: 4, mapID: 1};
+      if (index === 3) return {floor: 5, mapID: 2};
+      return {floor: 1, mapID: 1};
     };
 
     // Handle switching to other floors
@@ -316,46 +324,50 @@ export function MapEditor() {
             // ray from the camera position to the pointer
             raycaster.setFromCamera(pointer, cameraRef.current);
 
-            if(mapTool == 'add-node') {
-              // new node positon
-              const posX = ((pointer.x)/2) * rect.width;
-              const posY = ((pointer.y)/2) * rect.height;
+            // check if objects were intersected
+            if (objectsRef.current.length === 0) {
+              return;
+            }
 
-              console.log(posX, posY);
+            const intersects = raycaster.intersectObjects(objectsRef.current, true);
+
+            if(mapTool == 'add-node' && intersects.length == 0) {
+              // new node positon
+              const point = raycaster.intersectObjects(scenesRef.current[sceneIndexState].children, true);
+
+              const posX = point[0].point.x;
+              const posY = point[0].point.y;
+
+              const {floor, mapID} = getFloorAndMapIDFromSceneIndex(sceneIndexState);
+
               const newNode: DirectoryNodeItem = {
                 id: 1000,
                 x: posX,
                 y: posY,
-                floor: 1,
-                mapId: 1,
+                floor: floor,
+                mapId: mapID,
                 name: "",
                 description: "",
                 nodeType: "",
                 connectingNodes: [],
               }
+              newNodes.push(newNode);
               createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
                 color: nodeColor,
               }); //Create the nodes
             }
 
-            // check if objects were intersected
-            if (objectsRef.current.length === 0) {
-                return;
-            }
-
-            const intersects = raycaster.intersectObjects(objectsRef.current, true);
-
             if (intersects.length > 0) {
-                const selectedObject = intersects[0].object;
-                if (selectedObjects.current.includes(selectedObject)) {
-                    deselectObject(selectedObject);
-                    console.log('Deselected:', selectedObject);
-                } else {
-                    selectObject(selectedObject);
-                    console.log('Selected:', selectedObject);
-                }
+              const selectedObject = intersects[0].object;
+              if (selectedObjects.current.includes(selectedObject)) {
+                deselectObject(selectedObject);
+                console.log('Deselected:', selectedObject);
+              } else {
+                selectObject(selectedObject);
+                console.log('Selected:', selectedObject);
+              }
             } else {
-                console.log('No object hit');
+              console.log('No object hit');
             }
         };
 
@@ -415,7 +427,7 @@ export function MapEditor() {
     }, [sceneIndexState]);
 
     return (
-        <Box w="100vw" h="100vh" p={0} ref={mouseRef}>
+        <Box w="100vw" h="100vh" p={0}>
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
             <MapContext.Provider value={mapProps}>
               <MapEditorBox
