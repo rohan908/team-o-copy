@@ -77,17 +77,16 @@ export function MaintenanceRequestHistory() {
 
     return (
         <Box
-            bg="themeGold.0"
             p="md"
             w="100%"
-            h="100vh"
+            h="100%"
             opacity="0.95"
             bd="lg"
             flex="column"
             bga='blur(5px)'
         >
             <Title order={1} mb="sm" c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
-                Sanitation Service Requests
+                Maintenance Service Requests
             </Title>
             <Text c="black" ta="left" mb="sm" fw={500} fz={{ sm: 'xxs', md: 'xs' }}>
                 Click on a row to find out more information
@@ -99,7 +98,6 @@ export function MaintenanceRequestHistory() {
                 style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden' }}
             >
                 <Table
-                  bg="themeGold.0"
                   striped
                   withColumnBorders
                   highlightOnHover
@@ -161,11 +159,12 @@ export function MaintenanceRequestHistory() {
                                         >
                                             {(styles) => (
                                               <Box
-                                                bg="#a9adb9"
+                                                bg="#5E62BF"
                                                 p="md"
                                                 mt="xs"
                                                 mb="md"
                                                 mx="sm"
+                                                c="white"
                                                 //...styles is needed for Transition Data, shadow and radius are styles only
                                                 style={{
                                                   ...styles,

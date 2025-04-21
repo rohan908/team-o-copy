@@ -23,6 +23,7 @@ import { NodeDirectory } from '../NodeDirectoryPage/NodeDirectory.tsx';
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import Sanitation from '../service-request/SanitationSR.tsx';
 import Security from '../service-request/SecuritySR.tsx';
+import AdminPageV2 from '../AdminPage/AdminPageNewUI.tsx';
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
@@ -70,7 +71,7 @@ export function Routing() {
                             }
                         />
                         <Route path="/map-editor" element={<MapEditor />} />
-                        <Route path="/admin-page" element={<AdminPage />} />
+                        <Route path="/admin-page" element={<AdminPageV2 />} />
                         <Route path="/HomePage/HomePage" element={<HomePage />} />
                         <Route
                             path="/language-request-history"
