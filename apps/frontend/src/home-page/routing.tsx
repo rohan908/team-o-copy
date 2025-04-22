@@ -24,6 +24,8 @@ import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import Sanitation from '../service-request/SanitationSR.tsx';
 import Security from '../service-request/SecuritySR.tsx';
 import AdminPageV2 from '../AdminPage/AdminPageNewUI.tsx';
+import { TimelineProvider } from '../HomePage/TimeLineContext';
+
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
