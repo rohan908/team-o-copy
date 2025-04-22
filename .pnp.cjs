@@ -5670,6 +5670,7 @@ const RAW_RUNTIME_STATE =
           ["@vitejs/plugin-react-swc", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.8.1"],\
           ["axios", "npm:1.8.4"],\
           ["camera-controls", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.10.1"],\
+          ["clsx", "npm:2.1.1"],\
           ["common", "workspace:packages/common"],\
           ["dayjs", "npm:1.11.13"],\
           ["dotenv", "npm:16.4.7"],\
@@ -5696,6 +5697,7 @@ const RAW_RUNTIME_STATE =
           ["react-router-bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.26.3"],\
           ["react-router-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:6.30.0"],\
           ["serve", "npm:14.2.4"],\
+          ["tailwind-merge", "npm:3.2.0"],\
           ["tailwindcss", "npm:4.0.17"],\
           ["three", "npm:0.175.0"],\
           ["threejs-compass", "npm:1.1.7"],\
@@ -9471,6 +9473,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/tabbable-npm-6.2.0-5a74c8b4e2-ced8b38f05.zip/node_modules/tabbable/",\
         "packageDependencies": [\
           ["tabbable", "npm:6.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tailwind-merge", [\
+      ["npm:3.2.0", {\
+        "packageLocation": "./.yarn/cache/tailwind-merge-npm-3.2.0-9c2d1456d4-294f6c2db0.zip/node_modules/tailwind-merge/",\
+        "packageDependencies": [\
+          ["tailwind-merge", "npm:3.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\
