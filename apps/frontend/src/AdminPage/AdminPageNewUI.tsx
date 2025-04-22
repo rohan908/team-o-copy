@@ -108,6 +108,7 @@ export function AdminPageV2() {
                                   </ActionIcon>
                                 )}
                               </Flex>
+
                               <Collapse in={formInfoOpen} transitionDuration={300} transitionTimingFunction="linear">
                                 <Flex direction="column" justify="center" gap="xs">
                                   <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={5} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(5)}>
