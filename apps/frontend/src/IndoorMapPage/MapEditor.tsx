@@ -59,6 +59,8 @@ export function MapEditor() {
         }[]
     >([]);
 
+    const nodeRef = useRef(allNodes);
+
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
@@ -117,9 +119,9 @@ export function MapEditor() {
     // associated floors with scenes
     const getFloorAndMapIDFromSceneIndex = (index: number) => {
       if (index === 0) return {floor: 1, mapID: 1};
-      if (index === 1) return {floor: 3, mapID: 1};
-      if (index === 2) return {floor: 4, mapID: 1};
-      if (index === 3) return {floor: 5, mapID: 2};
+      if (index === 1) return {floor: 2, mapID: 1};
+      if (index === 2) return {floor: 3, mapID: 1};
+      if (index === 3) return {floor: 4, mapID: 2};
       return {floor: 1, mapID: 1};
     };
 
@@ -198,15 +200,13 @@ export function MapEditor() {
     // updates allNodes position on a drag
     const updateNodeOnDrag = useCallback((nodeId: number, draggedObject: THREE.Object3D<THREE.Object3DEventMap>) => {
         if(draggedObject != null) {
-            const nodeToUpdate = allNodes.find(element => element.id === nodeId);
-            console.log(allNodes)
+            const nodeToUpdate = nodeRef.current.find(element => element.id === nodeId);
             if(nodeToUpdate != null) {
-                console.log("updating node", nodeToUpdate.id);
                 nodeToUpdate.x = draggedObject.position.x;
                 nodeToUpdate.y = draggedObject.position.y;
             }
         }
-    }, [allNodes]);
+    }, [nodeRef]);
 
     // render function that can be called from anywhere so we can render only when needed.
     const render = () => {
@@ -233,6 +233,8 @@ export function MapEditor() {
                 }
             }
         }
+
+        nodeRef.current = allNodes;
 
         return () => {
           //window.removeEventListener('mouseup', handleMouseUp);
@@ -321,7 +323,7 @@ export function MapEditor() {
       })
 
        */
-console.log("changed")
+
       // switches the type of cursor depending on the tool
       switch(mapTool) {
         case 'pan':
@@ -432,7 +434,7 @@ console.log("changed")
           connectingNodes: [],
         }
 
-        allNodes.push(newNode);
+        nodeRef.current.push(newNode);
 
         createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
           color: nodeColor,
@@ -441,13 +443,19 @@ console.log("changed")
     }
 
     const getUnusedNodeId = (): number => {
-      let openIndex: number = 0;
-      allNodes.forEach((node: DirectoryNodeItem, index: number) => {
-        if(node.id != index) {
-          openIndex = index;
-        }
-      })
-      return openIndex;
+        let openId = -1;
+        const allIds: number[] = [];
+        allNodes.forEach((node) => {
+            allIds.push(node.id);
+        })
+
+        allIds.forEach((nodeId, index) => {
+            if(nodeId != index+1) {
+                openId = nodeId+1;
+                return openId;
+            }
+        })
+        return openId;
     }
 
     const handleAddEdgeClick = (event) => {
@@ -505,18 +513,28 @@ console.log("changed")
           render();
           updateDragControls();
         } else if (selectedObjects.current.length == 1) {
-            const firstNode = allNodes.find(element => element.id === selectedObjects.current[0].userData.nodeId);
-            const secondNode = allNodes.find(element => element.id === selectedObject.userData.nodeId);
+            const firstNode = nodeRef.current.find(element => element.id === selectedObjects.current[0].userData.nodeId);
+            const secondNode = nodeRef.current.find(element => element.id === selectedObject.userData.nodeId);
             console.log(firstNode, secondNode);
 
             if(firstNode != null && secondNode != null) {
                 if (firstNode.connectingNodes.includes(secondNode.id) || secondNode.connectingNodes.includes(firstNode.id)) {
-                    const removeEndEdgeIndex = edgeMeshesRef.current.findIndex(element => element.endNodeId === firstNode.id);
-                    const removeEndEdge = edgeMeshesRef.current.at(removeEndEdgeIndex);
-                    if(removeEndEdge != null) {
-                        removeEndEdge.mesh.visible = false;
-                        removeEndEdge.mesh.geometry.dispose();
-                        edgeMeshesRef.current.splice(removeEndEdgeIndex, 1);
+                    const removeFirstToSecondEdgeIndex = edgeMeshesRef.current.findIndex(element => (element.startNodeId === firstNode.id) && (element.endNodeId === secondNode.id));
+                    const removeSecondToFirstEdgeIndex = edgeMeshesRef.current.findIndex(element => (element.endNodeId === firstNode.id) && (element.startNodeId === secondNode.id));
+
+                    const removeFirstEdge = edgeMeshesRef.current.at(removeFirstToSecondEdgeIndex);
+                    const removeSecondEdge = edgeMeshesRef.current.at(removeSecondToFirstEdgeIndex);
+
+                    if(removeFirstToSecondEdgeIndex != -1) {
+                        removeFirstEdge.mesh.visible = false;
+                        removeFirstEdge.mesh.geometry.dispose();
+                        edgeMeshesRef.current.splice(removeFirstToSecondEdgeIndex, 1);
+                    }
+
+                    if(removeSecondToFirstEdgeIndex != -1) {
+                        removeSecondEdge.mesh.visible = false;
+                        removeSecondEdge.mesh.geometry.dispose();
+                        edgeMeshesRef.current.splice(removeSecondToFirstEdgeIndex, 1);
                     }
 
                     firstNode.connectingNodes.splice(firstNode.connectingNodes.indexOf(secondNode.id), 1);
@@ -586,18 +604,18 @@ console.log("changed")
         const deleteSelected = () => {
             if(selectedObjects.current.length > 0) {
                 selectedObjects.current.forEach((object) => {
-                    const allNodesIndex = allNodes.findIndex(element => element.id === object.userData.nodeId);
+                    const allNodesIndex = nodeRef.current.findIndex(element => element.id === object.userData.nodeId);
                     if(allNodesIndex != -1) {
-                        allNodes.splice(allNodesIndex, 1);
+                        nodeRef.current.splice(allNodesIndex, 1);
 
                         // remove all connectingNodes from where this node exists in allNodes
-                        while(allNodes.findIndex(element => element.connectingNodes.includes(object.userData.nodeId)) != -1) {
-                            const removeConnectingNodesIndex = allNodes.findIndex(element => element.connectingNodes.includes(object.userData.nodeId));
-                            const node = allNodes.at(removeConnectingNodesIndex);
+                        while(nodeRef.current.findIndex(element => element.connectingNodes.includes(object.userData.nodeId)) != -1) {
+                            const removeConnectingNodesIndex = nodeRef.current.findIndex(element => element.connectingNodes.includes(object.userData.nodeId));
+                            const node = nodeRef.current.at(removeConnectingNodesIndex);
 
                             console.log("connecting nodes", removeConnectingNodesIndex);
                             if(node != null) {
-                                const connectingNodeIndex = allNodes[removeConnectingNodesIndex].connectingNodes.findIndex(element => element === object.userData.nodeId);
+                                const connectingNodeIndex = nodeRef.current[removeConnectingNodesIndex].connectingNodes.findIndex(element => element === object.userData.nodeId);
                                 node.connectingNodes.splice(connectingNodeIndex, 1);
                             }
                         }
@@ -616,6 +634,11 @@ console.log("changed")
                 })
                 render();
             }
+
+            selectedObjects.current.forEach((object) => {
+                deselectObject(object);
+            })
+
         }
 
         window.addEventListener('keydown', ({key}) => {
