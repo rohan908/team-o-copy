@@ -43,20 +43,16 @@ router.post('/import', async (req: Request, res: Response) => {
 
 // Will import Node data directly as node data, no CSV parsing
 router.post('/import/direct', async (req: Request, res: Response) => {
-    const { receivedData } = req.body;
-
-    /*
     // clears directory database for new input data
     const prismaClear = await PrismaClient.node.deleteMany({});
 
     // adds the imported file data to Prisma
     const prismaCreate = await PrismaClient.node.createMany({
-        data: receivedData,
+        data: req.body,
         skipDuplicates: true,
     });
 
-     */
-  console.log(receivedData);
+    console.log(req.body);
 
     // updates the backup file
     await exportToCSV();
@@ -66,7 +62,7 @@ router.post('/import/direct', async (req: Request, res: Response) => {
     res.status(200).json({
         status: 'success',
         statusText: 'Saved',
-        data: receivedData,
+        data: req.body,
     });
 
     console.log('Imported Table Successfully');

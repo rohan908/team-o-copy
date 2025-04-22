@@ -32,7 +32,7 @@ export function MapEditor() {
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer')
     const [mapTool, setMapTool] = useState('pan');
-    const [newNodes, setNewNodes] = useState<DirectoryNodeItem[]>(allNodes);
+    const [newNodes, setNewNodes] = useState<DirectoryNodeItem[]>([]);
 
     const mapProps: MapEditorProps = {
       selectedTool: mapTool,
@@ -493,6 +493,9 @@ export function MapEditor() {
           console.log(firstNode, secondNode)
           if(firstNode != null && secondNode != null) {
             createEdge(firstNode, secondNode);
+
+            firstNode.connectingNodes.push(secondNode.id);
+            secondNode.connectingNodes.push(firstNode.id);
           }
           selectedObjects.current.forEach((object) => {
             deselectObject(object);
@@ -519,6 +522,22 @@ export function MapEditor() {
 
 
     useEffect(() => {
+
+      setNewNodes(allNodes);
+
+      const deleteSelected = () => {
+        if(selectedObjects.current.length > 0) {
+          selectedObjects.current.forEach((object) => {
+            const newNodesIndex = newNodes.findIndex(element => element.id === object.userData.nodeId);
+            newNodes.splice(newNodesIndex, 1);
+
+            const objectsIndex = objectsRef.current.findIndex(element => element.id === object.userData.nodeId);
+            objectsRef.current.splice(objectsIndex, 1);
+          })
+          render();
+        }
+      }
+
       // make sure map movement is re-enabled for some edge cases
       const handleMouseUp = () => {
         setTimeout(() => {
@@ -530,6 +549,12 @@ export function MapEditor() {
           controlRef.current.enabled = true;
         }, 10);
       };
+
+      window.addEventListener('keydown', ({key}) => {
+        if (key === "Backspace" || key === "Delete") {
+          deleteSelected();
+        }
+      });
 
       window.addEventListener('mouseup', handleMouseUp);
       if (rendererRef.current) {

@@ -73,25 +73,28 @@ const MapEditorBox = ({}) => {
           setInterval(function () {
             switch (panTool.innerText) {
               case '+':
-                panTool.innerText = 'P';
+                panTool.innerText = 'M';
                 break;
-              case 'P':
-                panTool.innerText = 'Pa';
+              case 'M':
+                panTool.innerText = 'Mo';
                 break;
-              case 'Pa':
-                panTool.innerText = 'Pan';
+              case 'Mo':
+                panTool.innerText = 'Mov';
                 break;
-              case 'Pan':
-                panTool.innerText = 'Pan T';
+              case 'Mov':
+                panTool.innerText = 'Move';
                 break;
-              case 'Pan T':
-                panTool.innerText = 'Pan To';
+              case 'Move':
+                panTool.innerText = 'Move T';
                 break;
-              case 'Pan To':
-                panTool.innerText = 'Pan Too';
+              case 'Move T':
+                panTool.innerText = 'Move To';
                 break;
-              case 'Pan Too':
-                panTool.innerText = 'Pan Tool';
+              case 'Move To':
+                panTool.innerText = 'Move Too';
+                break;
+              case 'Move Too':
+                panTool.innerText = 'Move Tool';
                 clearInterval(hoverPanTool);
                 break;
             }
@@ -102,27 +105,30 @@ const MapEditorBox = ({}) => {
         setHoverPanTool(
           setInterval(function () {
             switch (panTool.innerText) {
-              case 'P':
+              case 'M':
                 panTool.innerText = '+';
                 clearInterval(hoverPanTool);
                 break;
-              case 'Pa':
-                panTool.innerText = 'P';
+              case 'Mo':
+                panTool.innerText = 'M';
                 break;
-              case 'Pan':
-                panTool.innerText = 'Pa';
+              case 'Mov':
+                panTool.innerText = 'Mo';
                 break;
-              case 'Pan T':
-                panTool.innerText = 'Pan';
+              case 'Move':
+                panTool.innerText = 'Mov';
                 break;
-              case 'Pan To':
-                panTool.innerText = 'Pan T';
+              case 'Move T':
+                panTool.innerText = 'Move';
                 break;
-              case 'Pan Too':
-                panTool.innerText = 'Pan To';
+              case 'Move To':
+                panTool.innerText = 'Move T';
                 break;
-              case 'Pan Tool':
-                panTool.innerText = 'Pan Too';
+              case 'Move Too':
+                panTool.innerText = 'Move To';
+                break;
+              case 'Move Tool':
+                panTool.innerText = 'Move Too';
                 break;
             }
           }, 20)
@@ -367,7 +373,7 @@ const MapEditorBox = ({}) => {
                             fw={700}
                             fz={{ sm: 'md', md: 'xl' }}
                           >
-                            Pan:
+                            Move:
                           </Title>
                           <BlackButton
                             id="panTool"
