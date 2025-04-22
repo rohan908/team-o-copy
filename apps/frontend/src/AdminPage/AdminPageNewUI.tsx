@@ -26,6 +26,7 @@ import {
 } from "@tabler/icons-react";
 import {useDisclosure} from "@mantine/hooks";
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
+import { Link } from 'react-router-dom';
 
 export function AdminPageV2() {
     const [sidebarOpen, {toggle}] = useDisclosure(true);
@@ -158,7 +159,9 @@ export function AdminPageV2() {
                                 <Button bg={displayTableNumber == 4 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(4)}>
                                   CSV Input Data
                                 </Button>
-                                <Button bg={displayTableNumber == 5 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(5)}>
+                                <Button bg={displayTableNumber == 5 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(5)}
+                                        component={Link}
+                                        to={"/map-editor"}>
                                   Map Editor Tools
                                 </Button>
                               </Flex>
