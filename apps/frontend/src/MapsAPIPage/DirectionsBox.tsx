@@ -1,6 +1,7 @@
 import React, {useState, useRef} from 'react'
-import {Box, ScrollArea, Text, List, Button} from '@mantine/core';
+import {Box, ScrollArea, Text, List, Button, Divider } from '@mantine/core';
 import {Step} from './Steps'
+import { Link } from "react-router-dom"; //use ive arrived button to direct to indoor
 
 
 interface Props {
@@ -12,9 +13,14 @@ const DirectionsBox = (props: Props) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
+  //helper function that transforms html into string
+  const parseHTMLtoText = (htmlString: string) => {
+    return htmlString.replace(/<[^>]+>/g, '');
+  };
+
   //transform directions info from google, from html to string
   const speechText = steps.map((step) =>
-    step.instruction.replace(/<[^>]+>/g, '')).join('...');
+    parseHTMLtoText(step.instruction)).join('....');
 
   //control play/stop logic
   const handleToggle = () => {
@@ -36,38 +42,50 @@ const DirectionsBox = (props: Props) => {
 return (
       <Box //custom box for directions
         pos="absolute"
-        bottom="2rem"
+        bottom="4rem"
         left="0.5rem"
-        maw={250}
-        bg="white"
-        p="md"
+        maw={200}
+        bg="#EFF4FE"
+        p="sm"
         radius="md"
         shadow="md"
         bd ="1px solid white"
         style={{borderRadius: "10px"}}
       >
-        <Text fw={700} mb="sm">Directions:</Text>
-        <ScrollArea h={250}>
+        <Text fw={700} mb="sm" size="sm" pl="md">Directions:</Text>
+        <ScrollArea h={200}>
 
           <List type="ordered" pl="md" mt="sm">
             {steps.map((step, index) => (
               <List.Item key={index}>
-                <Text size="xs" color="dimmed" mt={2}>
-                  ({step.distance}, {step.duration})
+                <Text size="md" my='xs' color="#1C43A7">
+                  {parseHTMLtoText(step.instruction)}
                 </Text>
-                <Box dangerouslySetInnerHTML={{ __html: step.instruction }} mb="sm" />
+                <Divider label={`${step.distance}`}
+                         labelPosition="center"
+                         my="xs"
+                         color="#F6D161" // Line color
+                         styles={{
+                           label: { color: '#000000'}, // Custom color for direction
+                         }}
+                />
               </List.Item>
             ))}
           </List>
         </ScrollArea>
-        <Box mt="sm">
+        <Box mt="sm" ta='center'>
           <Button
-            fullWidth
             onClick={handleToggle}
             color={isSpeaking ? 'red' : 'blue'}
             variant="light"
+            size='sm'
           >
             {isSpeaking ? 'Stop' : 'Play Directions'}
+          </Button>
+        </Box>
+        <Box ta='center' mt="md"> {/* this ensures button is in the right right*/}
+          <Button component={Link} to="/IndoorMapPage" color="#F8D261">
+            I've Arrived
           </Button>
         </Box>
       </Box>

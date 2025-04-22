@@ -208,12 +208,6 @@ const SelectBox = () => {
               Expand Directions Menu
             </Button>
           </Box>
-
-          <Box pos="absolute" right="6rem" bottom={0}> {/* this ensures button is in the right right*/}
-            <Button component={Link} to="/IndoorMapPage" color="green">
-              I've Arrived
-            </Button>
-          </Box>
         </Box>
       )}
     </>
