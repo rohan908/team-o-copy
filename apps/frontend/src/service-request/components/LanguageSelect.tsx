@@ -20,6 +20,7 @@ const LanguageSelect: React.FC<SelectProps> = (props) => {
             radius="sm"
             mb="sm"
             size="xs"
+            required
             {...props}
         />
     );

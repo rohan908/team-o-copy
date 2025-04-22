@@ -16,7 +16,6 @@ import {
     Patriot22,
     HospitalDepartment,
 } from '../directory/components/directorydata';
-import { UserFormProvider, useUserForm } from '../contexts/FormContext.tsx';
 import { useForm } from '@mantine/form';
 
 export interface RequestData {
@@ -101,14 +100,12 @@ const ParentRequestForm: React.FC<RequestDetails> = ({
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
                             {/*< column 1!!!*/}
-                            <NameEntry required {...form.getInputProps('employeeName')} />
+                            <NameEntry {...form.getInputProps('employeeName')} />
                             <HospitalSelect
-                                required
                                 value={form.values.hospital}
                                 onChange={handleHospitalChange}
                             />
                             <DepartmentSelect
-                                required
                                 departments={departmentOptions.map(
                                     (department) => department.title
                                 )}
@@ -120,10 +117,10 @@ const ParentRequestForm: React.FC<RequestDetails> = ({
 
                         <Box flex="1" miw="300px">
                             {/* column 2!!!*/}
-                            <DateInputForm required {...form.getInputProps('date')} />
-                            <TimeEntry required {...form.getInputProps('time')} />
-                            <PriorityButtons required {...form.getInputProps('priority')} />
-                            <StatusSelect required {...form.getInputProps('status')} />
+                            <DateInputForm {...form.getInputProps('date')} />
+                            <TimeEntry {...form.getInputProps('time')} />
+                            <PriorityButtons {...form.getInputProps('priority')} />
+                            <StatusSelect {...form.getInputProps('status')} />
                         </Box>
                     </Flex>
                     <Box mt="md">

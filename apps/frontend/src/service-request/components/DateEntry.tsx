@@ -6,10 +6,10 @@ const DateEntry: React.FC<DateInputProps> = (props) => {
             {...props}
             placeholder="--Select a date--"
             label="Enter Date"
-            required
             mb="sm"
             radius="sm"
             size="xs"
+            required
         />
     );
 };
