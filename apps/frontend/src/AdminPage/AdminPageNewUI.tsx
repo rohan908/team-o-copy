@@ -30,7 +30,7 @@ import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 export function AdminPageV2() {
     const [sidebarOpen, {toggle}] = useDisclosure(true);
     const [formInfoOpen, {open, close}] = useDisclosure(false);
-    const [otherToolsOpen, setOtherToolsOpen] = useState(false);
+    const [otherToolsOpen, setOtherToolsOpen] = useState(true);
     const [displayTableNumber, setDisplayTableNumber] = useState(4);
 
     function displayNumToggle(num: number) {
@@ -124,7 +124,7 @@ export function AdminPageV2() {
                               my="md"
                               size="sm"
                               style={{
-                                borderTop: '4px dotted #5E62BF',
+                                borderTop: '4px dotted #F8D56C',
                               }}
                             />
                             <Flex direction="row" align="center" justify="center" gap="sm" >
@@ -194,91 +194,80 @@ export function AdminPageV2() {
                 )}
               </Grid.Col>
             <Grid.Col span={"auto"}>
-              <Box
-                maw="100%"
-                mx="auto"
-                p="2%"
-              >
-                <Title order={2} mb="4px" ta="center" fw={600}>
-                  Admin Page
-                </Title>
-                <Center>
-                  <Flex direction="column" justify="center" align="center" w="100%">
-                    <Collapse in={displayTableNumber == -1} transitionDuration={300} transitionTimingFunction="linear">
-                      <Title order={3} mb="4px" ta="center" fw={600}>
-                        Select a tool from the sidebar
-                      </Title>
-                    </Collapse>
-                    <Collapse w = "100%" in={displayTableNumber == 0} transitionDuration={300} transitionTimingFunction="linear">
-                      <Box
-                        p="10px"
-                        mt="10px"
-                        w="100%"
-                        style={{
-                          borderRadius: "15px"
-                        }}
-                      >
-                        <LanguageRequestHistory />
-                      </Box>
-                    </Collapse>
-                    <Collapse in={displayTableNumber == 1} transitionDuration={300} transitionTimingFunction="linear">
-                      <Box
-                        p="10px"
-                        mt="10px"
-                        style={{
-                          borderRadius: "15px"
-                        }}
-                      >
-                        <SecurityRequestHistory />
-                      </Box>
-                    </Collapse>
-                    <Collapse in={displayTableNumber == 2} transitionDuration={300} transitionTimingFunction="linear">
-                      <Box
-                        p="10px"
-                        mt="10px"
-                        style={{
-                          borderRadius: "15px"
-                        }}
-                      >
-                        <SanitationRequestHistory />
-                      </Box>
-                    </Collapse>
-                    <Collapse in={displayTableNumber == 3} transitionDuration={300} transitionTimingFunction="linear">
-                      <Box
-                        p="10px"
-                        mt="10px"
-                        style={{
-                          borderRadius: "15px"
-                        }}
-                      >
-                        <MaintenanceRequestHistory />
-                      </Box>
-                    </Collapse>
-                    <Collapse in={displayTableNumber == 4} transitionDuration={300} transitionTimingFunction="linear">
-                      <Box
-                        p="10px"
-                        mt="10px"
-                        style={{
-                          borderRadius: "15px"
-                        }}
-                      >
-                        <CSVControlsComponent />
-                      </Box>
-                    </Collapse>
-                    <Collapse in={displayTableNumber == 5} transitionDuration={300} transitionTimingFunction="linear">
-                      <Box
-                        p="10px"
-                        mt="10px"
-                        style={{
-                          borderRadius: "15px"
-                        }}
-                      >
-                        <MapEditor />
-                      </Box>
-                    </Collapse>
-                  </Flex>
-                </Center>
-              </Box>
+                <Box
+                  maw="100%"
+                  mx="auto"
+                  p="2%"
+                >
+                  <Title order={2} mb="4px" ta="center" fw={600}>
+                    Admin Page
+                  </Title>
+                  <Center>
+                    <Flex direction="column" justify="center" align="center" w="100%">
+                      <Collapse in={displayTableNumber == -1} transitionDuration={300} transitionTimingFunction="linear">
+                        <Title order={3} mb="4px" ta="center" fw={600}>
+                          Select a tool from the sidebar
+                        </Title>
+                      </Collapse>
+                      <Collapse w = "100%" in={displayTableNumber == 0} transitionDuration={300} transitionTimingFunction="linear">
+                        <Box
+                          p="10px"
+                          mt="10px"
+                          w="100%"
+                          style={{
+                            borderRadius: "15px"
+                          }}
+                        >
+                          <LanguageRequestHistory />
+                        </Box>
+                      </Collapse>
+                      <Collapse w = "100%" in={displayTableNumber == 1} transitionDuration={300} transitionTimingFunction="linear">
+                        <Box
+                          p="10px"
+                          mt="10px"
+                          style={{
+                            borderRadius: "15px"
+                          }}
+                        >
+                          <SecurityRequestHistory />
+                        </Box>
+                      </Collapse>
+                      <Collapse w = "100%" in={displayTableNumber == 2} transitionDuration={300} transitionTimingFunction="linear">
+                        <Box
+                          p="10px"
+                          mt="10px"
+                          style={{
+                            borderRadius: "15px"
+                          }}
+                        >
+                          <SanitationRequestHistory />
+                        </Box>
+                      </Collapse>
+                      <Collapse w = "100%" in={displayTableNumber == 3} transitionDuration={300} transitionTimingFunction="linear">
+                        <Box
+                          p="10px"
+                          mt="10px"
+                          style={{
+                            borderRadius: "15px"
+                          }}
+                        >
+                          <MaintenanceRequestHistory />
+                        </Box>
+                      </Collapse>
+                      <Collapse in={displayTableNumber == 4} transitionDuration={300} transitionTimingFunction="linear">
+                        <Box
+                          p="10px"
+                          mt="10px"
+                          style={{
+                            borderRadius: "15px"
+                          }}
+                        >
+                          <CSVControlsComponent />
+                        </Box>
+                      </Collapse>
+                    </Flex>
+                  </Center>
+                </Box>
             </Grid.Col>
           </Grid>
         </Box>
