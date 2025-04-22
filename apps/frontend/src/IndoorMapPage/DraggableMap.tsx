@@ -45,7 +45,7 @@ export function DraggableMap() {
         canvasId: 'insideMapCanvas',
     });
 
-    const handleHospitalChange = (hospitalName) => {
+    const handleHospitalChange = (hospitalName: string) => {
         if (hospitalName === '20 Patriot Pl' || hospitalName === '22 Patriot Pl') {
             setSceneIndexState(0);
             setFloorState(1);
@@ -225,7 +225,7 @@ export function DraggableMap() {
             }
 
             // Render the current scene
-            if (rendererRef.current) {
+            if (rendererRef.current && cameraRef.current) {
                 rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
             }
             window.requestAnimationFrame(animate);
