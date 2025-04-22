@@ -38,12 +38,10 @@ export function MapEditor() {
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer')
     const [mapTool, setMapTool] = useState('pan');
-    const [newNodes, setNewNodes] = useState<DirectoryNodeItem[]>(allNodes);
 
     const mapProps: MapEditorProps = {
       selectedTool: mapTool,
       setSelectedTool: setMapTool,
-      newNodes: newNodes,
     };
 
     const { isLoggedIn } = useLogin();
@@ -198,14 +196,17 @@ export function MapEditor() {
     };
 
     // updates allNodes position on a drag
-    const updateNodeOnDrag = (movedNodeId: number, newPosition: THREE.Vector3)=> {
-      const nodeToUpdate = allNodes.find(element => element.id === movedNodeId)
-      if(nodeToUpdate != null) {
-        nodeToUpdate.x = newPosition.x;
-        nodeToUpdate.y = newPosition.y;
-      }
-      setNewNodes(allNodes);
-    }
+    const updateNodeOnDrag = useCallback((nodeId: number, draggedObject: THREE.Object3D<THREE.Object3DEventMap>) => {
+        if(draggedObject != null) {
+            const nodeToUpdate = allNodes.find(element => element.id === nodeId);
+            console.log(allNodes)
+            if(nodeToUpdate != null) {
+                console.log("updating node", nodeToUpdate.id);
+                nodeToUpdate.x = draggedObject.position.x;
+                nodeToUpdate.y = draggedObject.position.y;
+            }
+        }
+    }, [allNodes]);
 
     // render function that can be called from anywhere so we can render only when needed.
     const render = () => {
@@ -215,8 +216,6 @@ export function MapEditor() {
     };
 
     useEffect(() => {
-        setNewNodes(allNodes);
-
         clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
         for (const node of allNodes) {
@@ -272,7 +271,8 @@ export function MapEditor() {
                 console.log('dragging node: ', nodeId);
                 if (nodeId) {
                     updateEdges(nodeId, draggedObject.position);
-                    updateNodeOnDrag(nodeId, draggedObject.position);
+                    updateNodeOnDrag(nodeId, draggedObject);
+
                 }
                 render(); // re-render during drag
             });
@@ -284,7 +284,7 @@ export function MapEditor() {
                 render(); // render after dragging as well to make the scene is up to date
             });
         }
-    };
+    }
 
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
@@ -433,7 +433,6 @@ console.log("changed")
         }
 
         allNodes.push(newNode);
-        setNewNodes(allNodes);
 
         createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
           color: nodeColor,
@@ -506,23 +505,63 @@ console.log("changed")
           render();
           updateDragControls();
         } else if (selectedObjects.current.length == 1) {
-          const firstNode = allNodes.find(element => element.id === selectedObjects.current[0].userData.nodeId);
-          const secondNode = allNodes.find(element => element.id === selectedObject.userData.nodeId);
-          console.log(firstNode, secondNode)
-          if(firstNode != null && secondNode != null) {
-            createEdge(firstNode, secondNode);
+            const firstNode = allNodes.find(element => element.id === selectedObjects.current[0].userData.nodeId);
+            const secondNode = allNodes.find(element => element.id === selectedObject.userData.nodeId);
+            console.log(firstNode, secondNode);
 
-            firstNode.connectingNodes.push(secondNode.id);
-            secondNode.connectingNodes.push(firstNode.id);
-          }
-          selectedObjects.current.forEach((object) => {
-            deselectObject(object);
-          })
+            if(firstNode != null && secondNode != null) {
+                if (firstNode.connectingNodes.includes(secondNode.id) || secondNode.connectingNodes.includes(firstNode.id)) {
+                    const removeEndEdgeIndex = edgeMeshesRef.current.findIndex(element => element.endNodeId === firstNode.id);
+                    const removeEndEdge = edgeMeshesRef.current.at(removeEndEdgeIndex);
+                    if(removeEndEdge != null) {
+                        removeEndEdge.mesh.visible = false;
+                        removeEndEdge.mesh.geometry.dispose();
+                        edgeMeshesRef.current.splice(removeEndEdgeIndex, 1);
+                    }
 
-          render();
-          updateDragControls();
+                    firstNode.connectingNodes.splice(firstNode.connectingNodes.indexOf(secondNode.id), 1);
+                    secondNode.connectingNodes.splice(secondNode.connectingNodes.indexOf(firstNode.id), 1);
+
+                } else {
+                    createEdge(firstNode, secondNode);
+
+                    firstNode.connectingNodes.push(secondNode.id);
+                    secondNode.connectingNodes.push(firstNode.id);
+                }
+
+                selectedObjects.current.forEach((object) => {
+                    deselectObject(object);
+                })
+
+                render();
+                updateDragControls();
+            }
         }
       }
+    }
+
+    const deleteCascadingEdges = (objectToRemove: THREE.Object3D<Object3DEventMap>) => {
+        // remove all edges where this is the startID
+        while(edgeMeshesRef.current.findIndex(element => element.startNodeId === objectToRemove.userData.nodeId) != -1) {
+            const removeStartEdgeIndex = edgeMeshesRef.current.findIndex(element => element.startNodeId === objectToRemove.userData.nodeId);
+            const removeEdge = edgeMeshesRef.current.at(removeStartEdgeIndex);
+            if(removeEdge != null) {
+                removeEdge.mesh.visible = false;
+                removeEdge.mesh.geometry.dispose();
+                edgeMeshesRef.current.splice(removeStartEdgeIndex, 1);
+            }
+        }
+
+        // remove all edges where this is the endID
+        while(edgeMeshesRef.current.findIndex(element => element.endNodeId === objectToRemove.userData.nodeId) != -1) {
+            const removeEndEdgeIndex = edgeMeshesRef.current.findIndex(element => element.endNodeId === objectToRemove.userData.nodeId);
+            const removeEdge = edgeMeshesRef.current.at(removeEndEdgeIndex);
+            if(removeEdge != null) {
+                removeEdge.mesh.visible = false;
+                removeEdge.mesh.geometry.dispose();
+                edgeMeshesRef.current.splice(removeEndEdgeIndex, 1);
+            }
+        }
     }
 
     // Once initialized event listeners will operate continuously. Thus they can just be put in a useEffect with no dependencies that will run once.
@@ -545,12 +584,24 @@ console.log("changed")
     useEffect(() => {
 
         const deleteSelected = () => {
-          console.log(allNodes)
             if(selectedObjects.current.length > 0) {
                 selectedObjects.current.forEach((object) => {
                     const allNodesIndex = allNodes.findIndex(element => element.id === object.userData.nodeId);
-                    if(allNodesIndex != -1)
+                    if(allNodesIndex != -1) {
                         allNodes.splice(allNodesIndex, 1);
+
+                        // remove all connectingNodes from where this node exists in allNodes
+                        while(allNodes.findIndex(element => element.connectingNodes.includes(object.userData.nodeId)) != -1) {
+                            const removeConnectingNodesIndex = allNodes.findIndex(element => element.connectingNodes.includes(object.userData.nodeId));
+                            const node = allNodes.at(removeConnectingNodesIndex);
+
+                            console.log("connecting nodes", removeConnectingNodesIndex);
+                            if(node != null) {
+                                const connectingNodeIndex = allNodes[removeConnectingNodesIndex].connectingNodes.findIndex(element => element === object.userData.nodeId);
+                                node.connectingNodes.splice(connectingNodeIndex, 1);
+                            }
+                        }
+                    }
 
                     const objectsIndex = objectsRef.current.findIndex(element => element.userData.nodeId === object.userData.nodeId);
                     const objectToRemove = objectsRef.current.find(element => element.userData.nodeId === object.userData.nodeId);
@@ -563,47 +614,8 @@ console.log("changed")
                         objectsRef.current.splice(objectsIndex, 1);
                     }
                 })
-                setNewNodes(allNodes);
                 render();
             }
-        }
-
-        const deleteCascadingEdges = (objectToRemove: THREE.Object3D<Object3DEventMap>) => {
-          // remove all edges where this is the startID
-          while(edgeMeshesRef.current.findIndex(element => element.startNodeId === objectToRemove.userData.nodeId) != -1) {
-            const removeStartEdgeIndex = edgeMeshesRef.current.findIndex(element => element.startNodeId === objectToRemove.userData.nodeId);
-            const removeEdge = edgeMeshesRef.current.at(removeStartEdgeIndex);
-            if(removeEdge != null) {
-              removeEdge.mesh.visible = false;
-              removeEdge.mesh.geometry.dispose();
-              edgeMeshesRef.current.splice(removeStartEdgeIndex, 1);
-            }
-          }
-
-          // remove all edges where this is the endID
-          while(edgeMeshesRef.current.findIndex(element => element.endNodeId === objectToRemove.userData.nodeId) != -1) {
-            const removeEndEdgeIndex = edgeMeshesRef.current.findIndex(element => element.endNodeId === objectToRemove.userData.nodeId);
-            const removeEdge = edgeMeshesRef.current.at(removeEndEdgeIndex);
-            if(removeEdge != null) {
-              removeEdge.mesh.visible = false;
-              removeEdge.mesh.geometry.dispose();
-              edgeMeshesRef.current.splice(removeEndEdgeIndex, 1);
-            }
-          }
-          console.log("connecitng",allNodes.find(element => element.connectingNodes.includes(objectToRemove.userData.nodeId)))
-          console.log(allNodes.find(element => element.id === objectToRemove.userData.nodeId))
-          console.log(allNodes);
-          // remove all connectingNodes from where this node exists in allNodes
-          while(allNodes.findIndex(element => element.connectingNodes.includes(objectToRemove.userData.nodeId)) != -1) {
-            const removeConnectingNodesIndex = allNodes.findIndex(element => element.connectingNodes.includes(objectToRemove.userData.nodeId));
-            const node = allNodes.at(removeConnectingNodesIndex);
-
-            console.log("connecting nodes", removeConnectingNodesIndex);
-            if(node != null) {
-              const connectingNodeIndex = allNodes[removeConnectingNodesIndex].connectingNodes.findIndex(element => element === objectToRemove.userData.nodeId);
-              node.connectingNodes.splice(connectingNodeIndex, 1);
-            }
-          }
         }
 
         window.addEventListener('keydown', ({key}) => {

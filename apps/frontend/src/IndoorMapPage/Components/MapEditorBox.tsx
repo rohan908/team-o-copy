@@ -17,10 +17,12 @@ import { IconArrowBadgeRight, IconArrowBadgeDown } from '@tabler/icons-react';
 import {DirectoryNodeItem} from "../../contexts/DirectoryItem.ts";
 import {MapContext, MapEditorProps} from '../MapEditor.tsx';
 import axios from 'axios';
+import { useAllNodesContext } from '../../contexts/DirectoryContext.tsx';
 
 const MapEditorBox = ({}) => {
 
     const mapProps: MapEditorProps = useContext(MapContext);
+    const allNodes = useAllNodesContext();
 
     const theme = useMantineTheme();
     const [collapsed, setCollapsed] = useState(true);
@@ -308,10 +310,11 @@ const MapEditorBox = ({}) => {
 
     // Sends all new Node data to the backend
     async function SaveAllNodes() {
-        console.log(mapProps.newNodes);
+
+        console.log("allNodes", allNodes);
 
         const importNodes = await axios.post('api/directory/import/direct', {
-          data: mapProps.newNodes,
+          data: allNodes,
         })
 
         addSaveLabel();
