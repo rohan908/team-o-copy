@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ParentRequestForm, { RequestData } from './ParentRequestForm';
+import RequestForm, { RequestData } from './RequestForm.tsx';
 import MaintenanceSelect from './components/MaintenanceSelect.tsx';
 
 const initialValues: RequestData = {
@@ -46,14 +46,14 @@ function Maintenance() {
     };
 
     return (
-        <ParentRequestForm
+        <RequestForm
             handleSubmit={handleSubmit}
             newInitialValues={initialValues}
             contributors="Yanding Mario and Connor Daly"
             formLabel="Maintenance Request Form"
         >
             {(form) => <MaintenanceSelect {...form.getInputProps('security')} />}
-        </ParentRequestForm>
+        </RequestForm>
     );
 }
 

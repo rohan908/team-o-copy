@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ParentRequestForm, { RequestData } from './ParentRequestForm';
+import RequestForm, { RequestData } from './RequestForm.tsx';
 import SecuritySelect from './components/SecuritySelect';
 
 const initialValues: RequestData = {
@@ -46,14 +46,14 @@ function Security() {
     };
 
     return (
-        <ParentRequestForm
+        <RequestForm
             handleSubmit={handleSubmit}
             newInitialValues={initialValues}
             contributors="Ethan R. & Camden B."
             formLabel="Security Request Form"
         >
             {(form) => <SecuritySelect required {...form.getInputProps('security')} />}
-        </ParentRequestForm>
+        </RequestForm>
     );
 }
 

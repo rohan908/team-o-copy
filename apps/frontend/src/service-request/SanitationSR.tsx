@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ParentRequestForm, { RequestData } from './ParentRequestForm';
+import RequestForm, { RequestData } from './RequestForm.tsx';
 import SanitationSelect from './components/SanitationSelect.tsx';
 
 const initialValues: RequestData = {
@@ -46,14 +46,14 @@ function Sanitation() {
     };
 
     return (
-        <ParentRequestForm
+        <RequestForm
             handleSubmit={handleSubmit}
             newInitialValues={initialValues}
             contributors="Logan Winters and Joe Abata"
             formLabel="Sanitation Request Form"
         >
             {(form) => <SanitationSelect {...form.getInputProps('security')} />}
-        </ParentRequestForm>
+        </RequestForm>
     );
 }
 

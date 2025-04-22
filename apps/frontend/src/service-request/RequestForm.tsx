@@ -42,16 +42,13 @@ interface RequestDetails {
     formLabel: string;
 }
 
-const ParentRequestForm: React.FC<RequestDetails> = ({
+const RequestForm: React.FC<RequestDetails> = ({
     handleSubmit,
     children,
     newInitialValues,
     contributors,
     formLabel,
 }) => {
-    console.log('FORM LABEL:', formLabel);
-    console.log('CONTRIBUTORS:', contributors);
-
     const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
 
     const form = useForm<RequestData>({
@@ -147,4 +144,4 @@ const ParentRequestForm: React.FC<RequestDetails> = ({
     );
 };
 
-export default ParentRequestForm;
+export default RequestForm;

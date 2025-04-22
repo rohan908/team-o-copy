@@ -11,7 +11,6 @@ const RequestDescription: React.FC<TextareaProps> = (props) => {
             minRows={2}
             mb="sm"
             size="xs"
-            required
         />
     );
 };

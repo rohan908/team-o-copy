@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ParentRequestForm, { RequestData } from './ParentRequestForm';
+import RequestForm, { RequestData } from './RequestForm.tsx';
 import LanguageSelect from './components/LanguageSelect.tsx';
 import ISO6391 from 'iso-639-1';
 
@@ -53,14 +53,14 @@ function Language() {
     };
 
     return (
-        <ParentRequestForm
+        <RequestForm
             handleSubmit={handleSubmit}
             newInitialValues={initialValues}
             contributors="Logan Winters"
             formLabel="Language Request Form"
         >
-            {(form) => <LanguageSelect {...form.getInputProps('security')} />}
-        </ParentRequestForm>
+            {(form) => <LanguageSelect {...form.getInputProps('language')} />}
+        </RequestForm>
     );
 }
 
