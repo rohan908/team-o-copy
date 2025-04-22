@@ -3,6 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import ParentRequestForm, { RequestData } from './ParentRequestForm';
 import SecuritySelect from './components/SecuritySelect';
 
+const initialValues: RequestData = {
+    employeeName: '',
+    security: '',
+    hospital: '',
+    department: '',
+    date: '',
+    time: '',
+    priority: '',
+    status: '',
+    description: '',
+};
+
 function Test() {
     const navigate = useNavigate();
 
@@ -35,7 +47,7 @@ function Test() {
     };
 
     return (
-        <ParentRequestForm handleSubmit={handleSubmit}>
+        <ParentRequestForm handleSubmit={handleSubmit} newInitialValues={initialValues}>
             {(form) => <SecuritySelect required {...form.getInputProps('security')} />}
         </ParentRequestForm>
     );

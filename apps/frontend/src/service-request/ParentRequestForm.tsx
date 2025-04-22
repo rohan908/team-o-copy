@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button, Flex, Title, Paper, Box } from '@mantine/core';
 
 import TimeEntry from './components/TimeEntry';
@@ -35,30 +34,29 @@ export interface RequestData {
     security?: string;
 }
 
-interface Props {
+interface RequestDetails {
     handleSubmit: (values: RequestData) => void;
     children?: (form: ReturnType<typeof useForm<RequestData>>) => React.ReactNode;
     //pass in arbitrary amount of components needed but i dont know how to do that
+    newInitialValues: RequestData;
+    contributors?: string;
+    formLabel: string;
 }
 
-const ParentRequestForm: React.FC<Props> = ({ handleSubmit, children }) => {
+const ParentRequestForm: React.FC<RequestDetails> = ({
+    handleSubmit,
+    children,
+    newInitialValues,
+    contributors,
+    formLabel,
+}) => {
+    console.log('FORM LABEL:', formLabel);
+    console.log('CONTRIBUTORS:', contributors);
+
     const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
 
     const form = useForm<RequestData>({
-        initialValues: {
-            employeeName: '',
-            department: '',
-            hospital: '',
-            priority: '',
-            status: '',
-            date: '',
-            time: '',
-            description: '',
-            language: '',
-            maintenanceType: '',
-            cleanupType: '',
-            security: '', // do I need to do this for all of these?
-        },
+        initialValues: newInitialValues,
     });
     // logic for dependant department selection
     const handleHospitalChange = (hospital: string | null) => {
@@ -90,65 +88,63 @@ const ParentRequestForm: React.FC<Props> = ({ handleSubmit, children }) => {
             p="xl"
         >
             <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="65%">
-                <UserFormProvider form={form}>
-                    <form onSubmit={form.onSubmit(handleSubmit)}>
-                        <Flex direction="column" ta="center" justify="center">
-                            <Title order={2} ta="center" mb="md">
-                                Maintenance Request Form
-                            </Title>
-                            <Title mb="md" fz="xxxs">
-                                Yanding Mario and Connor Daly
-                            </Title>
-                        </Flex>
+                <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <Flex direction="column" ta="center" justify="center">
+                        <Title order={2} ta="center" mb="md">
+                            {formLabel}
+                        </Title>
+                        <Title mb="md" fz="xxxs">
+                            {contributors}
+                        </Title>
+                    </Flex>
 
-                        <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
-                            <Box flex="1" miw="300px">
-                                {/*< column 1!!!*/}
-                                <NameEntry />
-                                <HospitalSelect
-                                    required
-                                    value={form.values.hospital}
-                                    onChange={handleHospitalChange}
-                                />
-                                <DepartmentSelect
-                                    required
-                                    departments={departmentOptions.map(
-                                        (department) => department.title
-                                    )}
-                                    {...form.getInputProps('department')}
-                                />
-                                {children?.(form)}
-                                {/*this is where I want any unique components to go*/}
-                            </Box>
-
-                            <Box flex="1" miw="300px">
-                                {/* column 2!!!*/}
-                                <DateInputForm />
-                                <TimeEntry />
-                                <PriorityButtons />
-                                <StatusSelect />
-                            </Box>
-                        </Flex>
-                        <Box mt="md">
-                            <RequestDescription />
+                    <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
+                        <Box flex="1" miw="300px">
+                            {/*< column 1!!!*/}
+                            <NameEntry required {...form.getInputProps('employeeName')} />
+                            <HospitalSelect
+                                required
+                                value={form.values.hospital}
+                                onChange={handleHospitalChange}
+                            />
+                            <DepartmentSelect
+                                required
+                                departments={departmentOptions.map(
+                                    (department) => department.title
+                                )}
+                                {...form.getInputProps('department')}
+                            />
+                            {children?.(form)}
+                            {/*this is where I want any unique components to go*/}
                         </Box>
-                        <Flex mt="xl" justify="left" gap="md">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                color="blueBase.5"
-                                style={{ width: '200px' }}
-                                onClick={() => form.reset()}
-                            >
-                                Clear Form
-                            </Button>
 
-                            <Button type="submit" color="blueBase.5" style={{ width: '200px' }}>
-                                Submit Request
-                            </Button>
-                        </Flex>
-                    </form>
-                </UserFormProvider>
+                        <Box flex="1" miw="300px">
+                            {/* column 2!!!*/}
+                            <DateInputForm required {...form.getInputProps('date')} />
+                            <TimeEntry required {...form.getInputProps('time')} />
+                            <PriorityButtons required {...form.getInputProps('priority')} />
+                            <StatusSelect required {...form.getInputProps('status')} />
+                        </Box>
+                    </Flex>
+                    <Box mt="md">
+                        <RequestDescription {...form.getInputProps('description')} />
+                    </Box>
+                    <Flex mt="xl" justify="left" gap="md">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            color="blueBase.5"
+                            style={{ width: '200px' }}
+                            onClick={() => form.reset()}
+                        >
+                            Clear Form
+                        </Button>
+
+                        <Button type="submit" color="blueBase.5" style={{ width: '200px' }}>
+                            Submit Request
+                        </Button>
+                    </Flex>
+                </form>
             </Paper>
         </Flex>
     );
