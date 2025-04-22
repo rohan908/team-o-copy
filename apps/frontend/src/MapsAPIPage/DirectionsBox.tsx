@@ -44,7 +44,7 @@ return (
         pos="absolute"
         bottom="4rem"
         left="0.5rem"
-        maw={200}
+        maw={225}
         bg="#EFF4FE"
         p="sm"
         radius="md"
@@ -66,7 +66,7 @@ return (
                          my="xs"
                          color="#F6D161" // Line color
                          styles={{
-                           label: { color: '#000000'}, // Custom color for direction
+                           label: { color: '#000000',}, // Custom color for direction
                          }}
                 />
               </List.Item>

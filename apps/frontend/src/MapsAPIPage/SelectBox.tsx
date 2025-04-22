@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from "react-router-dom"; //use ive arrived button to direct to indoor
 import { BlackButton } from "../common-compoents/commonButtons.tsx";
-import { TwoPartInteractiveBox } from "../common-compoents/standAloneFrame.tsx";
+import { CustomNavigationBox } from "../common-compoents/CustomNavigationBox.tsx";
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
 import {
@@ -126,13 +126,16 @@ const SelectBox = () => {
           }}
           maw={500} // this  is supposed to render always to the center regardless of laptop screen
         >
-          <TwoPartInteractiveBox
+          <CustomNavigationBox
             title="Find your Way!"
             subtitle="Use our interactive map to find departments, parking, and efficient routes"
+            styles={{
+              root: { backgroundColor: '#EFF4FE' },
+            }} //overriding original color
           >
             <Stack w="100%">
               <Box>
-                <Text ta="left" mb="sm" fw={500}>
+                <Text ta="left" mb="sm" fw={500} color="#1C43A7">
                   Insert Starting Location:
                 </Text>
                 <TextInput
@@ -143,7 +146,7 @@ const SelectBox = () => {
               </Box>
 
               <Box>
-                <Text ta="left" mb="sm" fw={500}>
+                <Text ta="left" mb="sm" fw={500} color="#1C43A7">
                   Select Hospital:
                 </Text>
                 <Select
@@ -160,7 +163,7 @@ const SelectBox = () => {
               </Box>
 
               <Box>
-                <Text ta="left" mb="sm" fw={500}>
+                <Text ta="left" mb="sm" fw={500} color="#1C43A7">
                   Select Department:
                 </Text>
                 <Select
@@ -174,7 +177,7 @@ const SelectBox = () => {
               </Box>
 
               <Box>
-                <Text ta="left" mb="sm" fw={500}>
+                <Text ta="left" mb="sm" fw={500} color="#1C43A7">
                   Select Navigation Method:
                 </Text>
                 <Select
@@ -197,7 +200,7 @@ const SelectBox = () => {
                 </BlackButton>
               </Box>
             </Stack>
-          </TwoPartInteractiveBox>
+          </CustomNavigationBox>
         </Box>
       </Collapse>
 
