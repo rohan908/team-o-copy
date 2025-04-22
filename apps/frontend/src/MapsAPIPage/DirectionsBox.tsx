@@ -12,10 +12,11 @@ const DirectionsBox = (props: Props) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-
   //transform directions info from google, from html to string
   const speechText = steps.map((step) =>
     step.instruction.replace(/<[^>]+>/g, '')).join('...');
+
+  //control play/stop logic
   const handleToggle = () => {
     if (isSpeaking) {
       window.speechSynthesis.cancel();
