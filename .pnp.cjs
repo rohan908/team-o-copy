@@ -5697,6 +5697,7 @@ const RAW_RUNTIME_STATE =
           ["react-router-bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.26.3"],\
           ["react-router-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:6.30.0"],\
           ["serve", "npm:14.2.4"],\
+          ["simplex-noise", "npm:4.0.3"],\
           ["tailwind-merge", "npm:3.2.0"],\
           ["tailwindcss", "npm:4.0.17"],\
           ["three", "npm:0.175.0"],\
@@ -9067,6 +9068,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["simple-update-notifier", "npm:2.0.0"],\
           ["semver", "npm:7.7.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["simplex-noise", [\
+      ["npm:4.0.3", {\
+        "packageLocation": "./.yarn/cache/simplex-noise-npm-4.0.3-6a22a4a208-117b7f85ab.zip/node_modules/simplex-noise/",\
+        "packageDependencies": [\
+          ["simplex-noise", "npm:4.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
