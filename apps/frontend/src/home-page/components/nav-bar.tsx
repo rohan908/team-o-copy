@@ -17,7 +17,6 @@ import { useLogin } from './LoginContext'; // adjust path if needed
 import Service from '../../service-request/LanguageInterpreterSR.tsx';
 import AdminPage from '../../AdminPage/AdminPage.tsx';
 import { MapEditor } from '../../IndoorMapPage/MapEditor.tsx';
-
 import { useDisclosure } from '@mantine/hooks';
 
 type NavItem = {
@@ -48,7 +47,7 @@ export function NavBar() {
         bg="transparent"
         style={{ zIndex: 999 }}
       >
-        <Group h="100%" px="md" py="sm" bg={"transparent"}>
+        <Group h="0px" px="md" bg={"transparent"}>
           <Group justify="space-between" style={{ flex: 1 }}>
             {/* Logo */}
             <Link to="/">
@@ -129,7 +128,7 @@ export function NavBar() {
           </Group>
         </Group>
       </Box>
-      <Box style={{ paddingTop: '70px' }}>
+      <Box pt="50px" style={{ backgroundColor: 'transparent' }}>
         <Outlet />
       </Box>
     </>
