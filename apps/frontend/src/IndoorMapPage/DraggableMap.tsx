@@ -15,6 +15,7 @@ import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
+import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
 
 export function DraggableMap() {
     /*
@@ -77,6 +78,11 @@ export function DraggableMap() {
     const handlePath = (firstNodeId: number, lastNodeId: number, algo: string) => {
         const path = findPath(firstNodeId, lastNodeId, algo).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
+            // Add dispatch for navSelection
+            navSelection.dispatch({
+                type: 'SET_PATH_REQUEST',
+                data: { NodeIds: ids },
+            });
             // For each node id in the path
             for (const id of ids) {
                 // Get the full node from the ID
@@ -257,6 +263,7 @@ export function DraggableMap() {
                     zIndex: 10,
                 }}
             />
+            <DisplayDirectionsBox></DisplayDirectionsBox>
         </Box>
     );
 }
