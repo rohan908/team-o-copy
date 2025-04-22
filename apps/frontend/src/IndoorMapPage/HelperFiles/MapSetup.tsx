@@ -15,7 +15,7 @@ interface MapConfig {
     orbitControls?: Partial<OrbitControls>;
 }
 
-// Common hook for threejs map setup
+// common hook for threejs map setup
 export function mapSetup(config: MapConfig) {
     const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -23,15 +23,15 @@ export function mapSetup(config: MapConfig) {
     const controlRef = useRef<OrbitControls | null>(null);
     const canvasRef = useRef<HTMLElement | null>(null);
 
-    // Reference for initial camera position
+    // initial camera position
     const initialCameraPositionRef = useRef<THREE.Vector3>(new THREE.Vector3());
 
-    // Reference for initial target position
+    // initial camera target position
     const initialTargetRef = useRef<THREE.Vector3>(new THREE.Vector3());
 
-    // This only runs once to initialize things
+    // this only runs once to initialize things
     useEffect(() => {
-        // Initialize canvas
+        // initialize canvas
         canvasRef.current = document.getElementById(config.canvasId);
         if (!canvasRef.current) {
             console.error(`Canvas with ID ${config.canvasId} not found`);
@@ -48,7 +48,7 @@ export function mapSetup(config: MapConfig) {
         camera.position.set(
             config.cameraConfig?.position?.x ?? 0,
             config.cameraConfig?.position?.y ?? 0,
-            config.cameraConfig?.position?.z ?? 300
+            config.cameraConfig?.position?.z ?? 330
         );
         camera.lookAt(0, 0, 0);
         cameraRef.current = camera;
@@ -146,19 +146,17 @@ export function mapSetup(config: MapConfig) {
             // update renderer size
             renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
 
-            // Re-enforce boundaries after resize
+            // update boundaries
             enforceBoundaries();
         };
 
         window.addEventListener('resize', handleResize);
 
-        // Initial enforcement of boundaries
+        // initial boundaries
         enforceBoundaries();
 
-        // Store control reference
         controlRef.current = controls;
 
-        // Cleanup function
         return () => {
             window.removeEventListener('resize', handleResize);
 
