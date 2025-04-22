@@ -15,7 +15,8 @@ const DirectionsBox = (props: Props) => {
 
   //helper function that transforms html into string
   const parseHTMLtoText = (htmlString: string) => {
-    return htmlString.replace(/<[^>]+>/g, '');
+    return htmlString.replace(/<[^>]+>/g, '').replace(/\//g, ' ');    // replace slashes with spaces
+
   };
 
   //transform directions info from google, from html to string
@@ -52,13 +53,15 @@ return (
         bd ="1px solid white"
         style={{borderRadius: "10px"}}
       >
-        <Text fw={700} mb="sm" size="sm" pl="md">Directions:</Text>
-        <ScrollArea h={200}>
-
-          <List type="ordered" pl="md" mt="sm">
+        <Box mx="auto" ta='center'>
+          <Text fw={700} size="md" color="black" mb="xs" ta="left">
+            Directions:
+          </Text>
+          <ScrollArea h={200}>
+            <List type="ordered"mt="sm">
             {steps.map((step, index) => (
               <List.Item key={index}>
-                <Text size="md" my='xs' color="#1C43A7">
+                <Text size="xs" my='xs' color="#1C43A7" ta="center">
                   {parseHTMLtoText(step.instruction)}
                 </Text>
                 <Divider label={`${step.distance}`}
@@ -66,13 +69,14 @@ return (
                          my="xs"
                          color="#F6D161" // Line color
                          styles={{
-                           label: { color: '#000000',}, // Custom color for direction
-                         }}
-                />
+                           label: {
+                             color: '#000000'}
+                         }}/>
               </List.Item>
             ))}
           </List>
         </ScrollArea>
+        </Box>
         <Box mt="sm" ta='center'>
           <Button
             onClick={handleToggle}
@@ -83,7 +87,7 @@ return (
             {isSpeaking ? 'Stop' : 'Play Directions'}
           </Button>
         </Box>
-        <Box ta='center' mt="md"> {/* this ensures button is in the right right*/}
+        <Box ta='center' mt="md">
           <Button component={Link} to="/IndoorMapPage" color="#F8D261">
             I've Arrived
           </Button>
