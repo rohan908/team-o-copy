@@ -14,8 +14,7 @@
 }
 
 .navButton:hover {
-    background-color: #0043ad;
-    color: #FCCD6F;
+    background-color: #2a68f7;
 }
 
 
@@ -24,8 +23,8 @@
 }
 
 .LoggoutButton:hover {
-    background-color: #0043ad;
-    color: red;
+    background-color: #2a68f7;
+    color: #FF3030;
 }
 
 

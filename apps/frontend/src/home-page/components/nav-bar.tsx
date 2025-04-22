@@ -1,15 +1,15 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import {
-    Button,
-    Flex,
-    Image,
-    Box,
-    Group,
-    Anchor,
-    Burger,
-    UnstyledButton,
-    Tabs,
-    Menu,
+  Button,
+  Flex,
+  Image,
+  Box,
+  Group,
+  Anchor,
+  Burger,
+  UnstyledButton,
+  Tabs,
+  Menu, ActionIcon,
 } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import '../home-style.css';
@@ -27,10 +27,6 @@ type NavItem = {
 
 export const navItems: NavItem[] = [
     { name: 'Navigation', link: '/map-API' },
-
-    // { name: "Map", link: "/map-page" },
-    // { name: "Node Directory", link: "/NodeDirectory" },
-    // { name: "Directory", link: "/directory" },
 ];
 
 export const adminNavItems: NavItem[] = [
@@ -43,96 +39,50 @@ export const adminNavItems: NavItem[] = [
 
 export function NavBar() {
     const { isLoggedIn, logout } = useLogin();
-    const navigate = useNavigate();
-
-    const [opened, { toggle }] = useDisclosure();
-
     return (
         <>
             <nav>
-                <Group h="100%" px="md" py="sm" bg="blueBase.9">
-                    <Menu
-                        shadow="lg"
-                        onClose={toggle}
-                        transitionProps={{ transition: 'rotate-right', duration: 200 }}
-                    >
-                        <Menu.Target>
-                            <Burger
-                                opened={opened}
-                                onClick={toggle}
-                                hiddenFrom="sm"
-                                size="md"
-                                aria-label="Toggle navigation"
-                            />
-                        </Menu.Target>
-
-                        <Menu.Dropdown>
-                            {navItems.map((item, index) => (
-                                <>
-                                    <Menu.Item
-                                        key={index}
-                                        color="white"
-                                        component={Link}
-                                        to={item.link}
-                                        px="md"
-                                    >
-                                        {item.name}
-                                    </Menu.Item>
-                                </>
-                            ))}
-                            {isLoggedIn && (
-                                <>
-                                    {adminNavItems.map((item, index) => (
-                                        <Menu.Item
-                                            key={index}
-                                            color="white"
-                                            component={Link}
-                                            to={item.link}
-                                            px="md"
-                                        >
-                                            {item.name}
-                                        </Menu.Item>
-                                    ))}
-                                    <Menu.Divider />
-                                    {/* Logout Button */}
-                                    <Menu.Item
-                                        color="red"
-                                        px="md"
-                                        component={Link}
-                                        to={'/'}
-                                        onClick={logout}
-                                    >
-                                        Logout
-                                    </Menu.Item>
-                                </>
-                            )}
-                        </Menu.Dropdown>
-                    </Menu>
-
+                <Group h="100%" px="md" py="sm" bg={"transparent"}>
                     <Group justify="space-between" style={{ flex: 1 }}>
                         {/* Logo */}
-
                         <Link to="/">
-                            <Image
-                                className={'rounded'}
-                                src={'/logoMassGeneralBrighamWhiteText.png'}
-                                alt={'Home'}
-                                h="xl"
-                            />
+                          <Flex
+                            bg="blueBase.8"
+                            w="50px"
+                            h="50px"
+                            style={{
+                              borderRadius: "50%",
+                            }}
+                            justify={"center"}
+                            align="center"
+                          >
+                            <img
+                              height="25px"
+                              width="25px"
+                              src={"/goldLogoMassGeneralBrigham.png"}>
+                            </img>
+                          </Flex>
                         </Link>
 
-                        {/*</Flex>*/}
-                        <Group ml="xl" gap="md" visibleFrom="sm">
+                        <Group ml="xl" gap="md" visibleFrom="sm" bg="blueBase.9" style={{
+                          borderRadius: "20px",
+                        }}>
+                          <Box m="3px" bg="blueBase.6" style={{
+                            borderRadius: "20px",
+                          }}>
+                            <Box m="3px" bg="blueBase.9" style={{
+                              borderRadius: "20px",
+                            }}>
                             {/* Dynamically Render Buttons */}
                             {navItems.map((item, index) => (
                                 <Button
                                     variant="filled"
-                                    color="baseBlue.9"
+                                    color="baseBlue.6"
                                     className="navButton"
                                     justify="flex-end"
                                     component={Link}
                                     to={item.link}
-                                    size="xs"
+                                    size="sm"
                                 >
                                     {item.name}
                                 </Button>
@@ -142,12 +92,12 @@ export function NavBar() {
                                     {adminNavItems.map((item, index) => (
                                         <Button
                                             variant="filled"
-                                            color="baseBlue.9"
+                                            color="baseBlue.6"
                                             className="navButton"
                                             justify="flex-end"
                                             component={Link}
                                             to={item.link}
-                                            size="xs"
+                                            size="sm"
                                         >
                                             {item.name}
                                         </Button>
@@ -155,18 +105,20 @@ export function NavBar() {
                                     {/* Logout Button */}
                                     <Button
                                         variant="filled"
-                                        color="baseBlue.9"
+                                        color="baseBlue.6"
                                         className="LoggoutButton"
                                         justify="flex-end"
                                         onClick={logout}
                                         component={Link}
                                         to={'/'}
-                                        size="xs"
+                                        size="sm"
                                     >
                                         Log Out
                                     </Button>
                                 </>
                             )}
+                            </Box>
+                          </Box>
                         </Group>
                     </Group>
                 </Group>
