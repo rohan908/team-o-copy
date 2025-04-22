@@ -22,9 +22,9 @@ function Test() {
             if (response.ok) {
                 navigate('/submission', {
                     state: {
-                        requestData: Object.entries(requestData).map(([k, v]) => ({
-                            title: k,
-                            value: v,
+                        requestData: Object.entries(requestData).map(([title, value]) => ({
+                            title: title,
+                            value: value,
                         })),
                     },
                 });
@@ -36,7 +36,7 @@ function Test() {
 
     return (
         <ParentRequestForm handleSubmit={handleSubmit}>
-            {(form) => <SecuritySelect {...form.getInputProps('security')} />}
+            {(form) => <SecuritySelect required {...form.getInputProps('security')} />}
         </ParentRequestForm>
     );
 }
