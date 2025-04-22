@@ -25,13 +25,7 @@ export function ContentSwitcher() {
                 }
                 return <GoogleMapsAPI onStepsUpdate={setSteps} />;
             case 1: //Indoor Nav
-                return (
-                    <Image
-                        src={'/ProofOfConceptHomePageImages/FloorPlanPathing.png'}
-                        h={'auto'}
-                        w="auto"
-                    />
-                );
+                return <DraggableMap />;
             case 2: //Service Request
                 return <ServiceRequestPage />;
         }

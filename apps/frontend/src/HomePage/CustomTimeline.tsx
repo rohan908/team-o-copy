@@ -109,7 +109,8 @@ export const CustomTimeline = () => {
                 {titlesInfo.map((item, i: number) => (
                     <Timeline.Item
                         key={i}
-                        bullet={<div onClick={() => handleClickChangeButton(i)}> {item.icon} </div>}
+                        bullet={<div> {item.icon} </div>}
+                        onClick={() => handleClickChangeButton(i)}
                         c={theme.colors.secondaryBlues[7]}
                         style={{
                             display: 'flex',

@@ -17,7 +17,7 @@ export function HomePage() {
         setSelectedService,
     } = useTimeline();
 
-    // useEffect to clear the context when we go back to the home page
+    // useEffect to clear the context when we go back to the home page (on mount)
     useEffect(() => {
         setActiveSection(0);
         setSelectedHospital(null);
@@ -27,8 +27,12 @@ export function HomePage() {
         setSelectedService('');
     }, []);
 
+
     return (
-        <Box bg={theme.colors.blue[0]} h="100%" w="100%" p="xl" pos="absolute">
+        <Box style={{
+          backgroundImage: `radial-gradient(circle at center, white 0%, ${theme.colors.blue[0]} 100%)`,
+          backgroundSize: 'cover',
+        }} h="100%" w="100%" p="xl" pos="absolute">
             <Grid gutter="md" h="100%" mt={'2%'}>
                 {/* Left Context */}
                 <Grid.Col span={6} pl="5%">
