@@ -1,11 +1,21 @@
 import { Box, Flex, Grid, Stack, Title, useMantineTheme } from '@mantine/core';
 import { CustomTimeline } from './CustomTimeline.tsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ContentSwitcher } from './ContentSwitcher.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.js';
+import { useTimeline } from './TimeLineContext.tsx';
 
 export function HomePage() {
     const theme = useMantineTheme();
+
+    const {
+        setActiveSection,
+        setSelectedHospital,
+        setUserCoordinates,
+        setTravelMode,
+        setDepartment,
+        setSelectedService,
+    } = useTimeline();
 
     return (
         <Box bg={theme.colors.blue[0]} h="100%" w="100%" p="xl" pos="absolute">

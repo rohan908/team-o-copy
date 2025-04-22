@@ -23,20 +23,8 @@ import { ModeOfTravelSelector } from './ModeOfTravelSelector.tsx';
 import { AlgorithmSelector } from './AlgorithmSelector.tsx';
 
 export const CustomTimeline = () => {
-    const {
-        activeSection,
-        setActiveSection,
-        currDirectoryDestination,
-        setCurrDirectoryDestination,
-        selectedHospital,
-        setSelectedHospital,
-        userCoordinates,
-        setUserCoordinates,
-        travelMode,
-        setTravelMode,
-    } = useTimeline();
-
     const theme = useMantineTheme();
+    const { activeSection, setActiveSection } = useTimeline();
 
     //FILL IN CONTENT HERE FOR EACH SUBSECTION
 
@@ -46,9 +34,9 @@ export const CustomTimeline = () => {
             case 0: //Go To Hospital (GMAPS)
                 return (
                     <Stack gap={2} w="100%">
-                        <GmapsStartSelector required {...form.getInputProps('startLocation')} />
-                        <GmapsDestinationSelector required {...form.getInputProps('hospital')} />
-                        <ModeOfTravelSelector required {...form.getInputProps('modeOfTravel')} />
+                        <GmapsStartSelector />
+                        <GmapsDestinationSelector />
+                        <ModeOfTravelSelector />
                         <Flex justify={'end'}>
                             <Link to="map-API">
                                 <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>
@@ -106,17 +94,7 @@ export const CustomTimeline = () => {
         },
     });
 
-    const handleSubmit = (values: any) => {
-        switch (activeSection) {
-            case 0:
-                setUserCoordinates(values.startLocation);
-                setSelectedHospital(values.hospital);
-                break;
-            case 1:
-                setCurrDirectoryDestination(values.hospital);
-                break;
-        }
-    };
+    const handleSubmit = (values: any) => {};
 
     return (
         <form onSubmit={form.onSubmit(handleSubmit)}>

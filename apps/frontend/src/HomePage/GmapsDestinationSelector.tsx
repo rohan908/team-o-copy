@@ -1,14 +1,24 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
 import { IconChevronDown, IconMapPinFilled } from '@tabler/icons-react';
+import { useState } from 'react';
+import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
+import { NavSelectionItem } from '../contexts/NavigationItem.ts';
+import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
+import { useTimeline } from './TimeLineContext.tsx';
 
-const hospitalOptions = [
+export const hospitalOptions = [
     { value: '20 Patriot Pl', label: '20 Patriot Pl' },
     { value: '22 Patriot Pl', label: '22 Patriot Pl' },
     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
 ];
 
-export function GmapsDestinationSelector({ props }: { props: any }) {
+export function GmapsDestinationSelector() {
+    const NavSelection = useNavSelectionContext();
+
+    const { setSelectedHospital } = useTimeline();
+
     const theme = useMantineTheme();
+
     return (
         <Autocomplete
             placeholder="Hospital Destination"
@@ -18,14 +28,12 @@ export function GmapsDestinationSelector({ props }: { props: any }) {
             leftSection={
                 <IconMapPinFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            searchable
             data={hospitalOptions}
-            nothingFoundMessage="Hospital Not Available"
+            onChange={setSelectedHospital}
             radius="sm"
             mb="sm"
             size="xs"
             w={'100%'}
-            {...props}
         />
     );
 }

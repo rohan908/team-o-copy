@@ -1,16 +1,12 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
 import { IconCarFilled, IconChevronDown, IconMapPinFilled } from '@tabler/icons-react';
+import { useTimeline } from './TimeLineContext.tsx';
 
-const hospitalOptions = [
-    { value: '20 Patriot Pl', label: '20 Patriot Pl' },
-    { value: '22 Patriot Pl', label: '22 Patriot Pl' },
-    { value: 'Chestnut Hill', label: 'Chestnut Hill' },
-];
-
-export function ModeOfTravelSelector({ props }: { props: any }) {
+export function ModeOfTravelSelector() {
     const theme = useMantineTheme();
+    const { setTravelMode, travelMode } = useTimeline();
     return (
-        <Autocomplete
+        <Select
             placeholder="Mode of Transport"
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
@@ -18,14 +14,17 @@ export function ModeOfTravelSelector({ props }: { props: any }) {
             leftSection={
                 <IconCarFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            searchable
-            data={hospitalOptions}
-            nothingFoundMessage="Hospital Not Available"
+            data={[
+                { value: 'WALKING', label: 'Walking' },
+                { value: 'TRANSIT', label: 'Public Transportation' },
+                { value: 'DRIVING', label: 'Driving' },
+            ]}
+            value={travelMode}
+            onChange={setTravelMode}
             radius="sm"
             mb="sm"
             size="xs"
             w={'100%'}
-            {...props}
         />
     );
 }
