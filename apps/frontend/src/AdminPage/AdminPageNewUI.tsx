@@ -27,12 +27,14 @@ import {
 import {useDisclosure} from "@mantine/hooks";
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import { Link } from 'react-router-dom';
+import {ColorChangingButton} from "../common-compoents/commonButtons.tsx";
+import ServiceRequestPage from "../service-request/ServiceRequestPage.tsx";
 
 export function AdminPageV2() {
     const [sidebarOpen, {toggle}] = useDisclosure(true);
-    const [formInfoOpen, {open, close}] = useDisclosure(false);
+    const [formInfoOpen, {open, close}] = useDisclosure(true);
     const [otherToolsOpen, setOtherToolsOpen] = useState(true);
-    const [displayTableNumber, setDisplayTableNumber] = useState(4);
+    const [displayTableNumber, setDisplayTableNumber] = useState(5);
 
     function displayNumToggle(num: number) {
         if (num == displayTableNumber) {
@@ -79,93 +81,98 @@ export function AdminPageV2() {
                                 <IconArrowBadgeDownFilled color={"black"}/>
                               </ActionIcon>
                             </Flex>
-                            <Flex direction="row" align="center" justify="center" gap="sm">
-                              <Title c="black">
-                                Service Request Information
-                              </Title>
-                              <Collapse in={formInfoOpen} transitionDuration={0} transitionTimingFunction="linear">
-                                <ActionIcon
-                                  bg={"#EBF2FF"}
-                                  top="10%"
-                                  size="input-sm"
-                                  onClick={close}
-                                  aria-label="ActionIcon the same size as inputs"
-                                >
-                                  <IconArrowBadgeDownFilled color={"black"}/>
-                                </ActionIcon>
-                              </Collapse>
-                              {!formInfoOpen &&(
-                                <ActionIcon
-                                  bg={"#EBF2FF"}
-                                  size="input-sm"
-                                  onClick={open}
-                                  aria-label="ActionIcon the same size as inputs"
-                                >
-                                  <IconArrowBadgeLeftFilled color={"black"}/>
-                                </ActionIcon>
-                              )}
-                            </Flex>
-                            <Collapse in={formInfoOpen} transitionDuration={300} transitionTimingFunction="linear">
-                              <Flex direction="column" justify="center" gap="xs">
-                                <Button bg={displayTableNumber == 0 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(0)}>
-                                  Language Requests
-                                </Button>
-                                <Button bg={displayTableNumber == 2 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(2)}>
-                                  Sanitation Requests
-                                </Button>
-                                <Button bg={displayTableNumber == 3 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(3)}>
-                                  Maintenance Requests
-                                </Button>
-                                <Button bg={displayTableNumber == 1 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(1)}>
-                                  Security Requests
-                                </Button>
+                            <Flex direction="column" align="center" justify="center" gap="sm">
+                              <Flex direction="row" align="center" justify="center" gap="sm">
+                                <Title c="black">
+                                  Service Request Information
+                                </Title>
+                                <Collapse in={formInfoOpen} transitionDuration={0} transitionTimingFunction="linear">
+                                  <ActionIcon
+                                    bg={"#EBF2FF"}
+                                    top="10%"
+                                    size="input-sm"
+                                    onClick={close}
+                                    aria-label="ActionIcon the same size as inputs"
+                                  >
+                                    <IconArrowBadgeDownFilled color={"black"}/>
+                                  </ActionIcon>
+                                </Collapse>
+                                {!formInfoOpen &&(
+                                  <ActionIcon
+                                    bg={"#EBF2FF"}
+                                    size="input-sm"
+                                    onClick={open}
+                                    aria-label="ActionIcon the same size as inputs"
+                                  >
+                                    <IconArrowBadgeLeftFilled color={"black"}/>
+                                  </ActionIcon>
+                                )}
                               </Flex>
-                            </Collapse>
-                            <Divider
-                              my="md"
-                              size="sm"
-                              style={{
-                                borderTop: '4px dotted #F8D56C',
-                              }}
-                            />
-                            <Flex direction="row" align="center" justify="center" gap="sm" >
-                              <Title c="black">
-                                Other Tools
-                              </Title>
-                              <Collapse in={otherToolsOpen} transitionDuration={0} transitionTimingFunction="linear">
-                                <ActionIcon
-                                  bg={"#EBF2FF"}
-                                  top="10%"
-                                  size="input-sm"
-                                  onClick={toggleOtherTools}
-                                  aria-label="ActionIcon the same size as inputs"
-                                >
-                                  <IconArrowBadgeDownFilled color={"black"}/>
-                                </ActionIcon>
+                              <Collapse in={formInfoOpen} transitionDuration={300} transitionTimingFunction="linear">
+                                <Flex direction="column" justify="center" gap="xs">
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={5} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(5)}>
+                                    Service Request Input
+                                  </ColorChangingButton>
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={0} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(0)}>
+                                    Language Requests
+                                  </ColorChangingButton>
+                                  <ColorChangingButton  numValueToCheck={displayTableNumber} numForTrigger={2} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(2)}>
+                                    Sanitation Requests
+                                  </ColorChangingButton>
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={3} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(3)}>
+                                    Maintenance Requests
+                                  </ColorChangingButton>
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={1} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(1)}>
+                                    Security Requests
+                                  </ColorChangingButton>
+                                </Flex>
                               </Collapse>
-                              {!otherToolsOpen &&(
-                                <ActionIcon
-                                  bg={"#EBF2FF"}
-                                  size="input-sm"
-                                  onClick={toggleOtherTools}
-                                  aria-label="ActionIcon the same size as inputs"
-                                >
-                                  <IconArrowBadgeLeftFilled color={"black"}/>
-                                </ActionIcon>
-                              )}
-                            </Flex>
-                            <Collapse in={otherToolsOpen} transitionDuration={300} transitionTimingFunction="linear" left="15%" w="100%">
-                              <Flex direction="column" justify="center" gap="xs">
-                                <Button bg={displayTableNumber == 4 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(4)}>
-                                  CSV Input Data
-                                </Button>
-                                <Button bg={displayTableNumber == 5 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(5)}
-                                        component={Link}
-                                        to={"/map-editor"}>
-                                  Map Editor Tools
-                                </Button>
+                              <Flex direction="row" align="center" justify="center" gap="sm" >
+                                <Title c="black">
+                                  Other Tools
+                                </Title>
+                                <Collapse in={otherToolsOpen} transitionDuration={0} transitionTimingFunction="linear">
+                                  <ActionIcon
+                                    bg={"#EBF2FF"}
+                                    top="10%"
+                                    size="input-sm"
+                                    onClick={toggleOtherTools}
+                                    aria-label="ActionIcon the same size as inputs"
+                                  >
+                                    <IconArrowBadgeDownFilled color={"black"}/>
+                                  </ActionIcon>
+                                </Collapse>
+                                {!otherToolsOpen &&(
+                                  <ActionIcon
+                                    bg={"#EBF2FF"}
+                                    size="input-sm"
+                                    onClick={toggleOtherTools}
+                                    aria-label="ActionIcon the same size as inputs"
+                                  >
+                                    <IconArrowBadgeLeftFilled color={"black"}/>
+                                  </ActionIcon>
+                                )}
                               </Flex>
-                            </Collapse>
+                              <Collapse in={otherToolsOpen} transitionDuration={300} transitionTimingFunction="linear" w="56%">
+                                <Flex direction="column" justify="center" gap="xs">
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={4} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(4)}>
+                                    CSV Manipulator
+                                  </ColorChangingButton>
+                                  <Button bg={"#5A83DB"}
+                                          component={Link}
+                                          to={"/map-editor"}
+                                          size="sm"
+                                          ff="Inter"
+                                          fw="400"
+                                          style={{
+                                            borderRadius: "8px"
+                                          }}
+                                  >
+                                    Map Editor Tools
+                                  </Button>
+                                </Flex>
+                              </Collapse>
+                            </Flex>
                           </Flex>
                         </Box>
                       </Flex>
@@ -202,11 +209,14 @@ export function AdminPageV2() {
                   mx="auto"
                   p="2%"
                 >
-                  <Title order={2} mb="4px" ta="center" fw={600}>
+                  <Title ff="Inter" fz="30px" mb="4px" ta="center" fw={600}>
                     Admin Page
                   </Title>
                   <Center>
-                    <Flex direction="column" justify="center" align="center" w="100%">
+                    <Flex direction="column" justify="center" align="center" w="100%" style={{
+                      boxShadow: "inset 0px 0px 5px 5px rgba(0,0,255,0.1)",
+                      borderRadius: "8px"
+                    }}>
                       <Collapse in={displayTableNumber == -1} transitionDuration={300} transitionTimingFunction="linear">
                         <Title order={3} mb="4px" ta="center" fw={600}>
                           Select a tool from the sidebar
@@ -266,6 +276,17 @@ export function AdminPageV2() {
                           }}
                         >
                           <CSVControlsComponent />
+                        </Box>
+                      </Collapse>
+                      <Collapse in={displayTableNumber == 5} transitionDuration={300} transitionTimingFunction="linear">
+                        <Box
+                          p="10px"
+                          mt="10px"
+                          style={{
+                            borderRadius: "15px"
+                          }}
+                        >
+                          <ServiceRequestPage />
                         </Box>
                       </Collapse>
                     </Flex>
