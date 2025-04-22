@@ -8,20 +8,31 @@ export function HomePage() {
     const theme = useMantineTheme();
 
     return (
-        <Flex h="100%" justify="center" align="center" bg={theme.colors.primaryBlues[1]}>
-            {' '}
-            {/* background */}
-            <Flex justify={'space-around'} wrap={'wrap'}>
-                {' '}
-                {/*row flex of info inputs and picture side by side*/}
-                <Stack h={'90%'} pt={'xl'}>
-                    <HoverUnderline>
-                        <Title order={1}>How can We Help?</Title> {/* h1 heading */}
-                    </HoverUnderline>
-                    <CustomTimeline />
-                </Stack>
-                <ContentSwitcher />
-            </Flex>
-        </Flex>
+        <Box bg={theme.colors.blue[0]} h="100%" w="100%" p="xl" pos="absolute">
+            <Grid gutter="md" h="100%" mt={'2%'}>
+                {/* Left Context */}
+                <Grid.Col span={6} pl="5%">
+                    <Stack justify="flex-start" h="100%" align="flex-start">
+                        <HoverUnderline>
+                            <Title
+                                order={2}
+                                c={theme.colors.secondaryBlues[7]}
+                                fz={'xxxl'}
+                                w={'auto'}
+                            >
+                                How Can We Help?
+                            </Title>
+                        </HoverUnderline>
+                        <CustomTimeline />
+                    </Stack>
+                </Grid.Col>
+                {/* Right Content */}
+                <Grid.Col span={5}>
+                    <Flex h="100%" align="center" justify="center" pt="6%">
+                        <ContentSwitcher />
+                    </Flex>
+                </Grid.Col>
+            </Grid>
+        </Box>
     );
 }

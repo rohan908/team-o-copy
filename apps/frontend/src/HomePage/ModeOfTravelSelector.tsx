@@ -1,5 +1,5 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
-import { IconChevronDown, IconMapPinFilled } from '@tabler/icons-react';
+import { IconCarFilled, IconChevronDown, IconMapPinFilled } from '@tabler/icons-react';
 
 const hospitalOptions = [
     { value: '20 Patriot Pl', label: '20 Patriot Pl' },
@@ -7,16 +7,16 @@ const hospitalOptions = [
     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
 ];
 
-export function GmapsDestinationSelector({ props }: { props: any }) {
+export function ModeOfTravelSelector({ props }: { props: any }) {
     const theme = useMantineTheme();
     return (
         <Autocomplete
-            placeholder="Hospital Destination"
+            placeholder="Mode of Transport"
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
             leftSection={
-                <IconMapPinFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+                <IconCarFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
             searchable
             data={hospitalOptions}

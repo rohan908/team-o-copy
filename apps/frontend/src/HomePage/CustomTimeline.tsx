@@ -1,4 +1,15 @@
-import { Box, Button, Stack, Text, Timeline, Transition } from '@mantine/core';
+import {
+    Box,
+    Button,
+    Collapse,
+    Flex,
+    Stack,
+    Text,
+    Timeline,
+    Title,
+    Transition,
+    useMantineTheme,
+} from '@mantine/core';
 import React, { useState } from 'react';
 import { IconArrowZigZag, IconMap2, IconFileInfo } from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
@@ -8,6 +19,8 @@ import { useForm } from '@mantine/form';
 import { ParkingSelector } from './ParkingSelector.tsx';
 import { DepartmentSelector } from './DepartmentSelector.tsx';
 import { Link, useNavigate } from 'react-router-dom';
+import { ModeOfTravelSelector } from './ModeOfTravelSelector.tsx';
+import { AlgorithmSelector } from './AlgorithmSelector.tsx';
 
 export const CustomTimeline = () => {
     const {
@@ -23,7 +36,8 @@ export const CustomTimeline = () => {
         setTravelMode,
     } = useTimeline();
 
-    const navigate = useNavigate();
+    const theme = useMantineTheme();
+
     //FILL IN CONTENT HERE FOR EACH SUBSECTION
 
     // TODO: redo the form so instead it passes the necessary context to each component and then those components have a onChange{(value) => set...(value | '')}
@@ -31,13 +45,20 @@ export const CustomTimeline = () => {
         switch (i) {
             case 0: //Go To Hospital (GMAPS)
                 return (
-                    <Stack gap={2}>
+                    <Stack gap={2} w="100%">
                         <GmapsStartSelector required {...form.getInputProps('startLocation')} />
                         <GmapsDestinationSelector required {...form.getInputProps('hospital')} />
-                        <Button type="submit">Submit</Button>
-                        <Link to="log-in-page">
+                        <ModeOfTravelSelector required {...form.getInputProps('modeOfTravel')} />
+                        <Flex justify={'end'}>
+                            <Link to="map-API">
+                                <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>
+                                    Expand Directions
+                                </Button>
+                            </Link>
+                        </Flex>
+                        {/*<Link to="log-in-page">
                             <Button>Temp nav to old login page</Button>
-                        </Link>
+                        </Link>*/}
                     </Stack>
                 );
             case 1: //Indoor Nav
@@ -48,17 +69,30 @@ export const CustomTimeline = () => {
                             required
                             {...form.getInputProps('departmentDestination')}
                         />
+                        <AlgorithmSelector
+                            required
+                            {...form.getInputProps('departmentDestination')}
+                        />
+                        <Flex justify={'end'}>
+                            <Link to="IndoorMapPage">
+                                <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>
+                                    Expand Directions
+                                </Button>
+                            </Link>
+                        </Flex>
                     </Stack>
                 );
             case 2:
-                return <Text>Please Select a Service Request</Text>;
+                return (
+                    <Text c={theme.colors.secondaryBlues[8]}>Please Select a Service Request</Text>
+                );
         }
     };
 
     const titlesInfo = [
-        { title: 'Go To Hospital', icon: <IconMap2 size={16} /> },
-        { title: 'Navigate to Hospital', icon: <IconArrowZigZag size={16} /> },
-        { title: 'Request Services', icon: <IconFileInfo size={16} /> },
+        { title: 'Go To Hospital', icon: <IconMap2 size={28} /> },
+        { title: 'Navigate to Hospital', icon: <IconArrowZigZag size={28} /> },
+        { title: 'Request Services', icon: <IconFileInfo size={28} /> },
     ];
 
     const handleClickChangeButton = (i: number) => {
@@ -86,29 +120,37 @@ export const CustomTimeline = () => {
 
     return (
         <form onSubmit={form.onSubmit(handleSubmit)}>
-            <Timeline active={activeSection} bulletSize={24} lineWidth={2}>
+            <Timeline
+                active={activeSection}
+                bulletSize={50}
+                color={theme.colors.primaryBlues[8]}
+                lineWidth={2}
+                mt={'lg'}
+                style={{ cursor: 'default' }}
+            >
                 {titlesInfo.map((item, i: number) => (
                     <Timeline.Item
                         key={i}
                         bullet={<div onClick={() => handleClickChangeButton(i)}> {item.icon} </div>}
-                        title={item.title}
-                        py="xxl"
+                        c={theme.colors.secondaryBlues[7]}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                        }}
+                        pr={'xl'}
+                        pb={'lg'}
                     >
-                        <Transition
-                            mounted={activeSection === i}
-                            transition="scale-y"
-                            duration={500}
-                            exitDuration={200}
-                            timingFunction="ease-out"
+                        <Title order={1} fz={'xl'} pt={'5px'} mb={'sm'}>
+                            {item.title}
+                        </Title>
+                        <Collapse
+                            in={activeSection === i}
+                            transitionDuration={300}
+                            transitionTimingFunction="ease-out"
                         >
-                            {(
-                                styles //Transition is a bad component and it is hell that it requires this actually SCREAMING AT THIS BUG WHY WHY WHY HWHYYWYYWYWY
-                            ) => (
-                                <Stack gap={2} style={styles}>
-                                    {getCurrTabContent(i)}
-                                </Stack>
-                            )}
-                        </Transition>
+                            <Box w="100%">{getCurrTabContent(i)}</Box>
+                        </Collapse>
                     </Timeline.Item>
                 ))}
             </Timeline>
