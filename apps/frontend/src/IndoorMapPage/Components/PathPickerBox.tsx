@@ -1,5 +1,9 @@
 import { Box, Select, Stack, Text, useMantineTheme } from '@mantine/core';
-import { useChestnutHillContext, usePatriotContext } from '../../contexts/DirectoryContext.tsx';
+import {
+    useChestnutHillContext,
+    useFaulknerHospitalContext,
+    usePatriotContext,
+} from '../../contexts/DirectoryContext.tsx';
 import { useNavSelectionContext } from '../../contexts/NavigationContext.tsx';
 import { useState } from 'react';
 import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
@@ -10,6 +14,7 @@ export function PathPickerBox() {
     const theme = useMantineTheme();
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
+    const Faulkner = useFaulknerHospitalContext();
     const NavSelection = useNavSelectionContext();
     const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>(
         []
@@ -31,6 +36,8 @@ export function PathPickerBox() {
             setDepartmentOptions(MapDepartment(Patriot));
         } else if (hospital == 'Chestnut Hill') {
             setDepartmentOptions(MapDepartment(Chestnut));
+        } else if (hospital == 'Faulkner Hospital') {
+            setDepartmentOptions(MapDepartment(Faulkner));
         } else {
             setDepartmentOptions([]);
         }
@@ -83,6 +90,7 @@ export function PathPickerBox() {
                     { value: '20 Patriot Pl', label: '20 Patriot Pl' },
                     { value: '22 Patriot Pl', label: '22 Patriot Pl' },
                     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
+                    { value: 'Faulkner Hospital', label: 'Faulkner Hospital' },
                 ]}
                 value={hospital}
                 onChange={(value) => {

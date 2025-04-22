@@ -6,6 +6,7 @@ import { FlowingTubeAnimation } from './Edge.tsx';
 import {
     usePatriotContext,
     useChestnutHillContext,
+    useFaulknerHospitalContext,
     useAllNodesContext,
 } from '../contexts/DirectoryContext.js';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
@@ -29,6 +30,7 @@ export function DraggableMap() {
     // Declares context for start and end node information
     const patriotNodes = usePatriotContext();
     const chestnutNodes = useChestnutHillContext();
+    const faulknerNodes = useFaulknerHospitalContext();
 
     // Animation related refs
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
@@ -50,11 +52,15 @@ export function DraggableMap() {
         } else if (hospitalName === 'Chestnut Hill') {
             setSceneIndexState(3);
             setFloorState(1); // Assuming Chestnut Hill starts at floor 1
+        } else if (hospitalName === 'Faulkner Hospital') {
+            setSceneIndexState(4);
+            setFloorState(1);
         }
     };
     // associated floors with scenes
     const getSceneIndexFromFloor = (floor: number): number => {
         if (selectedHospitalName === 'Chestnut Hill') return 3;
+        if (selectedHospitalName === 'Faulkner Hospital') return 4;
         if (floor === 1) return 0;
         if (floor === 3) return 1;
         if (floor === 4) return 2;
@@ -162,6 +168,8 @@ export function DraggableMap() {
             return 1; // Node 1 for Patriot Place
         } else if (selectedHospitalName === 'Chestnut Hill') {
             return 100; // Node 100 for Chestnut Hill
+        } else if (selectedHospitalName === 'Faulkner Hospital') {
+            return 200;
         }
         return null;
     };
