@@ -30,6 +30,7 @@ import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 export function AdminPageV2() {
     const [sidebarOpen, {toggle}] = useDisclosure(true);
     const [formInfoOpen, {open, close}] = useDisclosure(false);
+    const [otherToolsOpen, setOtherToolsOpen] = useState(false);
     const [displayTableNumber, setDisplayTableNumber] = useState(4);
 
     function displayNumToggle(num: number) {
@@ -40,11 +41,15 @@ export function AdminPageV2() {
         }
     }
 
+    function toggleOtherTools(){
+      setOtherToolsOpen(!otherToolsOpen);
+    }
+
     return (
         <Box
-            h="100vh"
+            mih="100vh"
             w="full"
-            bg="#FAFAFB"
+            bg="#EBF2FF"
         >
           <Grid align="top">
               <Grid.Col span={"content"}>
@@ -53,82 +58,111 @@ export function AdminPageV2() {
                     <div style={styles}>
                       <Flex direction="column" justify="center">
                         <Box
-                          bg="blueBase.9"
                           w="30vw"
-                          h="100vh"
+                          mih="100vh"
                           p="lg"
                           mt="-8px"
                         >
                           <Flex direction="column" justify="center" gap="sm">
                             <Flex direction="row" align="center" justify="center" gap="sm">
-                              <Title c="white">
+                              <Title c="black">
                                 Toolbar
                               </Title>
                               <ActionIcon
+                                bg={"#EBF2FF"}
                                 top="10%"
-                                bg="blueBase.9"
                                 size="input-sm"
                                 onClick={toggle}
                                 aria-label="ActionIcon the same size as inputs"
                               >
-                                <IconArrowBadgeDownFilled />
+                                <IconArrowBadgeDownFilled color={"black"}/>
                               </ActionIcon>
                             </Flex>
                             <Flex direction="row" align="center" justify="center" gap="sm">
-                              <Title c="white">
+                              <Title c="black">
                                 Service Request Information
                               </Title>
                               <Collapse in={formInfoOpen} transitionDuration={0} transitionTimingFunction="linear">
                                 <ActionIcon
+                                  bg={"#EBF2FF"}
                                   top="10%"
-                                  bg="blueBase.8"
                                   size="input-sm"
                                   onClick={close}
                                   aria-label="ActionIcon the same size as inputs"
                                 >
-                                  <IconArrowBadgeDownFilled />
+                                  <IconArrowBadgeDownFilled color={"black"}/>
                                 </ActionIcon>
                               </Collapse>
                               {!formInfoOpen &&(
                                 <ActionIcon
-                                  bg="blueBase.9"
+                                  bg={"#EBF2FF"}
                                   size="input-sm"
                                   onClick={open}
                                   aria-label="ActionIcon the same size as inputs"
                                 >
-                                  <IconArrowBadgeLeftFilled />
+                                  <IconArrowBadgeLeftFilled color={"black"}/>
                                 </ActionIcon>
                               )}
                             </Flex>
                             <Collapse in={formInfoOpen} transitionDuration={300} transitionTimingFunction="linear">
                               <Flex direction="column" justify="center" gap="xs">
-                                <Button bg={displayTableNumber == 0 ? "#3e4180" : "#5E62BF"} onClick={() => displayNumToggle(0)}>
+                                <Button bg={displayTableNumber == 0 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(0)}>
                                   Language Requests
                                 </Button>
-                                <Button bg={displayTableNumber == 2 ? "#3e4180" : "#5E62BF"} onClick={() => displayNumToggle(2)}>
+                                <Button bg={displayTableNumber == 2 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(2)}>
                                   Sanitation Requests
                                 </Button>
-                                <Button bg={displayTableNumber == 3 ? "#3e4180" : "#5E62BF"} onClick={() => displayNumToggle(3)}>
+                                <Button bg={displayTableNumber == 3 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(3)}>
                                   Maintenance Requests
                                 </Button>
-                                <Button bg={displayTableNumber == 1 ? "#3e4180" : "#5E62BF"} onClick={() => displayNumToggle(1)}>
+                                <Button bg={displayTableNumber == 1 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(1)}>
                                   Security Requests
                                 </Button>
-                                <Divider
-                                  my="md"
-                                  size="sm"
-                                  style={{
-                                    borderTop: '4px dotted #5E62BF',
-                                  }}
-                                />
                               </Flex>
                             </Collapse>
-                            <Button bg={displayTableNumber == 4 ? "#3e4180" : "#5E62BF"} onClick={() => displayNumToggle(4)}>
-                              CSV Input Data
-                            </Button>
-                            <Button bg={displayTableNumber == 5 ? "#3e4180" : "#5E62BF"} onClick={() => displayNumToggle(5)}>
-                              Map Editor Tools
-                            </Button>
+                            <Divider
+                              my="md"
+                              size="sm"
+                              style={{
+                                borderTop: '4px dotted #5E62BF',
+                              }}
+                            />
+                            <Flex direction="row" align="center" justify="center" gap="sm" >
+                              <Title c="black">
+                                Other Tools
+                              </Title>
+                              <Collapse in={otherToolsOpen} transitionDuration={0} transitionTimingFunction="linear">
+                                <ActionIcon
+                                  bg={"#EBF2FF"}
+                                  top="10%"
+                                  size="input-sm"
+                                  onClick={toggleOtherTools}
+                                  aria-label="ActionIcon the same size as inputs"
+                                >
+                                  <IconArrowBadgeDownFilled color={"black"}/>
+                                </ActionIcon>
+                              </Collapse>
+                              {!otherToolsOpen &&(
+                                <ActionIcon
+                                  bg={"#EBF2FF"}
+                                  size="input-sm"
+                                  onClick={toggleOtherTools}
+                                  aria-label="ActionIcon the same size as inputs"
+                                >
+                                  <IconArrowBadgeLeftFilled color={"black"}/>
+                                </ActionIcon>
+                              )}
+                            </Flex>
+                            <Collapse in={otherToolsOpen} transitionDuration={300} transitionTimingFunction="linear" left="15%" w="100%">
+                              <Flex direction="column" justify="center" gap="xs">
+                                <Button bg={displayTableNumber == 4 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(4)}>
+                                  CSV Input Data
+                                </Button>
+                                <Button bg={displayTableNumber == 5 ? "#285CC6" : "#5A83DB"} onClick={() => displayNumToggle(5)}>
+                                  Map Editor Tools
+                                </Button>
+                              </Flex>
+                            </Collapse>
                           </Flex>
                         </Box>
                       </Flex>
@@ -136,24 +170,27 @@ export function AdminPageV2() {
                   }
                 </Transition>
                 {!sidebarOpen && (
-                  <Box
-                    bg="blueBase.9"
-                    w="fit-content"
-                    h="fit-content"
-                    style={{
-                      borderRadius: "15px",
-                      boxShadow: 'var(--shadow-lg)',
-                    }}
-                  >
-                    <ActionIcon
-                      bg="blueBase.9"
-                      size="input-sm"
-                      onClick={toggle}
-                      aria-label="ActionIcon the same size as inputs"
-                    >
-                      <IconArrowBadgeLeftFilled />
-                    </ActionIcon>
-                  </Box>
+                  <Transition mounted={!sidebarOpen} transition="slide-left" duration={400}>
+                    {(styles) =>
+                      <div style={styles}>
+                        <Box
+                          w="55px"
+                          h="100vh"
+                          p="lg"
+                          mt="-8px"
+                        >
+                          <ActionIcon
+                            bg="#EBF2FF"
+                            size="input-sm"
+                            onClick={toggle}
+                            ml={"-10px"}
+                            aria-label="ActionIcon the same size as inputs"
+                          >
+                            <IconArrowBadgeLeftFilled color="black" />
+                          </ActionIcon>
+                        </Box>
+                      </div>}
+                  </Transition>
                 )}
               </Grid.Col>
             <Grid.Col span={"auto"}>
@@ -161,25 +198,22 @@ export function AdminPageV2() {
                 maw="100%"
                 mx="auto"
                 p="2%"
-                style={{
-                  borderRadius: "15px",
-                  boxShadow: 'var(--shadow-lg)',
-                }}
               >
                 <Title order={2} mb="4px" ta="center" fw={600}>
                   Admin Page
                 </Title>
                 <Center>
-                  <Flex direction="column" justify="center" align="center">
+                  <Flex direction="column" justify="center" align="center" w="100%">
                     <Collapse in={displayTableNumber == -1} transitionDuration={300} transitionTimingFunction="linear">
                       <Title order={3} mb="4px" ta="center" fw={600}>
                         Select a tool from the sidebar
                       </Title>
                     </Collapse>
-                    <Collapse in={displayTableNumber == 0} transitionDuration={300} transitionTimingFunction="linear">
+                    <Collapse w = "100%" in={displayTableNumber == 0} transitionDuration={300} transitionTimingFunction="linear">
                       <Box
                         p="10px"
                         mt="10px"
+                        w="100%"
                         style={{
                           borderRadius: "15px"
                         }}
