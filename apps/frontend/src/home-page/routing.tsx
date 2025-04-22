@@ -24,6 +24,7 @@ import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import Sanitation from '../service-request/SanitationSR.tsx';
 import Security from "../service-request/SecuritySR.tsx";
 import NotFound from "../404Page.tsx";
+import { TimelineProvider } from '../HomePage/TimeLineContext';
 
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
@@ -36,7 +37,8 @@ export function Routing() {
 
     return (
         <>
-            <BrowserRouter>
+          <TimelineProvider>
+          <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<NavBar />}>
                         <Route index element={<HomePage />} />
@@ -82,6 +84,8 @@ export function Routing() {
                     </Route>
                 </Routes>
             </BrowserRouter>
+          </TimelineProvider>
+
         </>
     );
 }

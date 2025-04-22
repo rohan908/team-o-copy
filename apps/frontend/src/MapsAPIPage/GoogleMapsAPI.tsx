@@ -1,52 +1,54 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {GoogleMap} from "@react-google-maps/api";
-import {Box, ScrollArea, Text, List,  useMantineTheme} from '@mantine/core';
+import {Box } from '@mantine/core';
+import { useTimeline } from '../HomePage/TimeLineContext';
+import {Step} from './Steps'
 
-interface GoogleMapProps {
-    selectedHospital: google.maps.LatLngLiteral | null;
-    userCoordinate: google.maps.LatLngLiteral | null;
-    travelMode: google.maps.TravelMode | null;
 
+interface GoogleMapsAPIProps {
+  onStepsUpdate?: (steps: Step[]) => void; //make this input optional
 }
 
-const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
-    const {selectedHospital, userCoordinate, travelMode } = props;
+const GoogleMapsAPI= (props: GoogleMapsAPIProps) =>{
+    const onStepsUpdate = props.onStepsUpdate;
+    const {selectedHospital, userCoordinates, travelMode } = useTimeline();
     const mapRef = useRef<google.maps.Map | null>(null);
     const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
-    const [steps, setSteps] = useState<string[]>([]);
 
     const handleMapLoad = (map: google.maps.Map) => {
-        mapRef.current = map;
-    };
-    const theme = useMantineTheme();
+          mapRef.current = map;
+      };
 
    useEffect(() => {
-      if (!userCoordinate || !selectedHospital || !mapRef.current) return;
+      if (!userCoordinates || !selectedHospital || !mapRef.current) return;
         const directionsService = new google.maps.DirectionsService();
         if (!directionsRendererRef.current) {
             directionsRendererRef.current = new google.maps.DirectionsRenderer();
             directionsRendererRef.current.setMap(mapRef.current);
         }
         directionsService.route({
-            origin: userCoordinate,
+            origin: userCoordinates,
             destination: selectedHospital,
             travelMode: travelMode ?? google.maps.TravelMode.DRIVING
           },
           (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) { //make
                     directionsRendererRef.current.setDirections(result)
-                    const newSteps = result.routes[0].legs[0].steps.map(
-                        (step) => step.instructions
-                    );
-                    setSteps(newSteps);
+                    const newSteps = result.routes[0].legs[0].steps.map((step) => ( {
+                      instruction: step.instructions,
+                      distance: step.distance.text,
+                      duration: step.duration.text
+                  }));
+                  if (onStepsUpdate) {
+                    onStepsUpdate(newSteps);
+                  }//if passed prop, then run
                 }
                 else{
                     console.error("Routing failed:", status);
                 }
             }
         )
-    }, [userCoordinate, selectedHospital, travelMode]);
-
+    }, [userCoordinates, selectedHospital, travelMode]);
     return (
         <>
           <Box pos="relative" w="100%" h="100vh">
@@ -55,33 +57,11 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
                     zoom={10}
                     center={selectedHospital ?? { lat: 42.093429, lng: -71.268228 }}
                     onLoad={handleMapLoad}
-                />
-            {steps.length > 0 && (
-                <Box //custom box for directions
-                    pos="absolute"
-                    top="4rem"
-                    right="0.5rem"
-                    maw={250}
-                    bg="white"
-                    p="md"
-                    radius="md"
-                    shadow="md"
-                    bd ="1px solid white"
-                    style={{borderRadius: "10px"}}
-                >
-                  <Text fw={700} mb="sm">Directions:</Text>
-                  <ScrollArea h={250}>
-
-                    <List type="ordered" pl="md" mt="sm">
-                      {steps.map((step, index) => (
-                        <List.Item key={index}>
-                          <Box dangerouslySetInnerHTML={{ __html: step }} mb="sm" />
-                        </List.Item>
-                        ))}
-                    </List>
-                  </ScrollArea>
-                </Box>
-            )}
+                    options={{
+                      disableDefaultUI: true,
+                      mapTypeId: 'satellite',
+                      mapTypeControl: 'true',
+                    }}/>
           </Box>
         </>
     );
