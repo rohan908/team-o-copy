@@ -75,43 +75,52 @@ export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationPro
     
     // main animation init and loop
     useEffect(() => {
-        console.log("WaveAnimation useEffect running");
-        const canvas: HTMLCanvasElement | null  = canvasRef.current;
+        console.log('WaveAnimation useEffect running');
+        const canvas: HTMLCanvasElement | null = canvasRef.current;
         if (!canvas) {
-            console.error("Canvas ref is null");
+            console.error('Canvas ref is null');
             return;
         }
 
-        if (canvas.dataset.animationInitialized === "true") {
-            console.log("Canvas already initialized, skipping");
+        if (canvas.dataset.animationInitialized === 'true') {
+            console.log('Canvas already initialized, skipping');
             return;
         }
 
-        console.log("Initializing wave animation");
-        canvas.dataset.animationInitialized = "true";
+        console.log('Initializing wave animation');
+        canvas.dataset.animationInitialized = 'true';
 
         const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
         if (!ctx) {
-            console.error("Failed to get 2D context from canvas");
+            console.error('Failed to get 2D context from canvas');
             return;
         }
-        
+
         // changes canvas sizing when window resizes!
-        console.log("Canvas before resize:", { width: canvas.width, height: canvas.height, clientWidth: canvas.clientWidth, clientHeight: canvas.clientHeight });
+        console.log('Canvas before resize:', {
+            width: canvas.width,
+            height: canvas.height,
+            clientWidth: canvas.clientWidth,
+            clientHeight: canvas.clientHeight,
+        });
         resizeCanvas(canvas);
-        console.log("Canvas after resize:", { width: canvas.width, height: canvas.height, rect: canvas.getBoundingClientRect() });
-        
+        console.log('Canvas after resize:', {
+            width: canvas.width,
+            height: canvas.height,
+            rect: canvas.getBoundingClientRect(),
+        });
+
         //------------------------------------------------------------------------//
 
         // Animation state
         let time = 0;
         let frameCount = 0;
-        
+
         // animation loop
         function animate() {
             frameCount++;
             time += 0.005;
-            
+
             /* log every 100 frames to avoid console spam, for debugging purposes
             const isLogFrame = frameCount % 100 === 0;
             if (isLogFrame) {
@@ -120,81 +129,87 @@ export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationPro
             */
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             // draw background and place sprial sitkc logo
             //drawBackgroundGradient(ctx, canvas);
             ctx.fillStyle = COLORS.BACKGROUND_COLOR;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             const heroimage = new Image();
             heroimage.src = '/medicalSymbol.png';
-            
+
             // only draw the image once it's loaded- keep image centered in left 1/3 of screen for rule of thirds
             if (heroimage.complete) {
-                ctx.drawImage(heroimage, 0, -50, heroimage.width/3 * 2, heroimage.height/3 * 2);
+                ctx.drawImage(
+                    heroimage,
+                    0,
+                    -50,
+                    (heroimage.width / 3) * 2,
+                    (heroimage.height / 3) * 2
+                );
             } else {
                 // first time load - add event listener
                 heroimage.onload = () => {
                     ctx.drawImage(heroimage, 0, 0, canvas.width, canvas.height);
                 };
-                
+
                 // Handle error case, fallback to gradient background if image fails to load
                 heroimage.onerror = () => {
-                    console.error("Failed to load hero image at: /heroimage.jpeg");
+                    console.error('Failed to load hero image at: /heroimage.jpeg');
                     drawBackgroundGradient(ctx, canvas);
                 };
             }
-            
+
             // get dimensions, for bounding purposes and finidng spaces between points for bezier curves
             const rect = canvas.getBoundingClientRect();
             const width = rect.width;
             const height = rect.height;
-            
+
             // get shared path once per frame (this is the main bezier curve that all waves follow)
-            const pathPoints = getSharedPath(width, height, time);
-            
+            const pathPoints = getSharedPath(width, height);
+
             // draw waves using the shared path
             for (let i = 0; i < WAVE_CONFIG.NUM_WAVES; i++) {
                 const color = getGradientColor(i, WAVE_CONFIG.NUM_WAVES);
-                
+
                 // add a little spice to the wave frequency for each wave so they move differently
-                const frequency = 1 + (i * 0.1);
-                const phase = i * Math.PI / 5; // different starting phase for each wave
-                
+                const frequency = 1 + i * 0.1;
+                const phase = (i * Math.PI) / 5; // different starting phase for each wave
+
                 drawWaveAlongPath(ctx, width, height, pathPoints, {
                     color,
                     frequency,
                     phase,
                     time: time,
-                    waveIndex: i
+                    waveIndex: i,
                 });
             }
-            
+
             // continue animation loop
             animationRef.current = requestAnimationFrame(animate);
         }
-        
+
         // start animation
-        console.log("Starting animation loop");
+        console.log('Starting animation loop');
         animationRef.current = requestAnimationFrame(animate);
-        
+
         // add resize event listener
         const handleResize = () => {
-            console.log("Window resize detected");
+            console.log('Window resize detected');
             resizeCanvas(canvas);
         };
         window.addEventListener('resize', handleResize);
-        
+
         // cleanup, remove event listener and cancel animation frame when no longer on page
         return () => {
-            console.log("Cleaning up wave animation");
+            console.log('Cleaning up wave animation');
             window.removeEventListener('resize', handleResize);
             cancelAnimationFrame(animationRef.current);
-            canvas.dataset.animationInitialized = "false";
+            canvas.dataset.animationInitialized = 'false';
         };
     }, [waveColors]);
-    
+
     return (
-        <canvas 
+        <canvas
             ref={canvasRef}
             id={id}
             className={className}
@@ -204,36 +219,36 @@ export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationPro
                 left: 0,
                 width: '100%',
                 height: '100%',
-                zIndex: 0    // Ensure it's behind content
+                zIndex: 0, // Ensure it's behind content
             }}
         />
     );
 }
 
 /**
- * resize canvas to match its CSS size × device pixel ratio 
+ * resize canvas to match its CSS size × device pixel ratio
  */
 function resizeCanvas(canvas: HTMLCanvasElement): void {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    console.log("Resizing canvas:", { 
-        dpr, 
-        rectWidth: rect.width, 
+    console.log('Resizing canvas:', {
+        dpr,
+        rectWidth: rect.width,
         rectHeight: rect.height,
         newWidth: rect.width * dpr,
-        newHeight: rect.height * dpr
+        newHeight: rect.height * dpr,
     });
-    
+
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
-    
+
     // scale context for higher dpr displays
     const ctx = canvas.getContext('2d');
     if (ctx) {
-        console.log("Scaling context by DPR:", dpr);
+        console.log('Scaling context by DPR:', dpr);
         ctx.scale(dpr, dpr);
     } else {
-        console.error("Failed to get 2D context during resize");
+        console.error('Failed to get 2D context during resize');
     }
 }
 
@@ -252,29 +267,28 @@ function drawBackgroundGradient(ctx: CanvasRenderingContext2D, canvas: HTMLCanva
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-
-
 // GENERATES BEZIER!!!! very cool math (ok its not reallly a bezier but more an interpolation between points of combined sine functions)
 function getSharedPath(width: number, height: number) {
     const points = [];
     const numPoints = WAVE_CONFIG.CONTROL_POINTS;
     const baseY = height * 0.25; // top quarter of the screen
     const amplitude = height * WAVE_CONFIG.PATH_AMPLITUDE;
-    
+
     // generate path control points - static path that doesn't change with time
     for (let i = 0; i <= numPoints; i++) {
         const x = width * (i / numPoints);
-        
+
         const pathProgress = i / numPoints;
-        
+
         // use static sine waves to create a natural flowing shape (tweak values to change shape lol its kinda guess and check)
-        const y = baseY + 
-                            Math.sin(pathProgress * Math.PI * 1.2) * amplitude * .9 +
-                            Math.sin(pathProgress * Math.PI * 1.2 + Math.PI * .9) * amplitude * 0.5;
-        
+        const y =
+            baseY +
+            Math.sin(pathProgress * Math.PI * 1.2) * amplitude * 0.9 +
+            Math.sin(pathProgress * Math.PI * 1.2 + Math.PI * 0.9) * amplitude * 0.5;
+
         points.push({ x, y });
     }
-    
+
     return points;
 }
 
@@ -282,31 +296,31 @@ function getSharedPath(width: number, height: number) {
  * function to draw a wave that follows the shared path but oscillates around it
  */
 function drawWaveAlongPath(
-    ctx: CanvasRenderingContext2D | null ,
+    ctx: CanvasRenderingContext2D | null,
     width: number,
     height: number,
-    pathPoints, 
+    pathPoints,
     options
 ) {
     const { color, frequency, phase, time, waveIndex } = options;
-    
+
     // create points that follow the main path but oscillate around it (used for interpolation to make the waves)
     const wavePoints = [];
     const numPathPoints = pathPoints.length;
     const pathStep = width / (numPathPoints - 1);
     const numPoints = Math.ceil(width / 4); // more points for smoother curves
     const step = width / numPoints;
-    
+
     // calc wave points with oscillation around the shared path
     for (let i = 0; i <= numPoints; i++) {
         const x = i * step;
-        
+
         // find where on the path this x position falls
         const pathIndex = x / pathStep;
         const index1 = Math.floor(pathIndex);
         const index2 = Math.min(index1 + 1, numPathPoints - 1);
         const t = pathIndex - index1; // Interpolation factor
-        
+
         // if we're exactly on a path point
         let pathY;
         if (index1 === index2) {
@@ -315,58 +329,60 @@ function drawWaveAlongPath(
             // interpolate between path points if not on a path point of the bezier curve
             pathY = pathPoints[index1].y * (1 - t) + pathPoints[index2].y * t;
         }
-        
+
         // apply oscillation around the path
         const oscillationRange = height * WAVE_CONFIG.OSCILLATION_RANGE;
         const waveFactor = Math.PI * 2 * frequency;
         const timeOffset = time * (0.5 + waveIndex * 0.1);
-        
+
         // use multiple sine waves for more organic movement (this was a lot of tuning to make it look good)
-        const oscillation = 
-            Math.sin(x / width * waveFactor + timeOffset + phase) * oscillationRange * 0.6 +
-            Math.sin(x / width * waveFactor * 2 + timeOffset * 1.3 + phase) * oscillationRange * 0.3 +
-            Math.sin(x / width * waveFactor * 4 + timeOffset * 0.7) * oscillationRange * 0.1;
-        
+        const oscillation =
+            Math.sin((x / width) * waveFactor + timeOffset + phase) * oscillationRange * 0.6 +
+            Math.sin((x / width) * waveFactor * 2 + timeOffset * 1.3 + phase) *
+                oscillationRange *
+                0.3 +
+            Math.sin((x / width) * waveFactor * 4 + timeOffset * 0.7) * oscillationRange * 0.1;
+
         // combine path position with oscillation (the wave index is used to offset the wave so they dont all start at the same heights and they layer nicely)
-        const y = pathY + oscillation + (waveIndex * 15);
-        
+        const y = pathY + oscillation + waveIndex * 15;
+
         wavePoints.push({ x, y });
     }
-    
+
     // Draw the wave
     ctx.beginPath();
-    
+
     // start from the bottom left of the canvas
     ctx.moveTo(0, height);
-    
+
     // connect to the first wave point
     ctx.lineTo(wavePoints[0].x, wavePoints[0].y);
-    
+
     // draw smooth bezier curves through the wave points
     for (let i = 0; i < wavePoints.length - 1; i++) {
         const current = wavePoints[i];
         const next = wavePoints[i + 1];
-        
+
         // calculate control points for smoother curves
         const cp1x = current.x + (next.x - current.x) * 0.5;
         const cp1y = current.y;
-        
+
         const cp2x = next.x - (next.x - current.x) * 0.5;
         const cp2y = next.y;
-        
+
         // draw cubic bezier curve for interpolation between points
         ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, next.x, next.y);
     }
-    
+
     // close the path
     ctx.lineTo(width, height); //this is the bottom right of the canvas
     ctx.lineTo(0, height); //this is the bottom left of the canvas
     ctx.closePath();
-    
+
     //fills the bound space of the wave and the edges of the screen with the wave color
     ctx.fillStyle = color;
     ctx.fill();
-    
+
     /*
     // Draws a white crest along the top of the wave but SUPER COMPUTATIONALLY EXPENSIVE. Commented out :(
     ctx.beginPath();
@@ -399,7 +415,6 @@ function drawWaveAlongPath(
     ctx.stroke();
     */
 
-
     // Debug rendering of bezier curve (uncommment to see the cool path the waves follow)
     /*
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
@@ -423,4 +438,4 @@ function drawWaveAlongPath(
     */
 }
 
-export default WaveAnimation; 
+export default WaveAnimation;

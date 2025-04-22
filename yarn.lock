@@ -759,7 +759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/core@npm:7.17.4":
+"@mantine/core@npm:^7.17.4":
   version: 7.17.4
   resolution: "@mantine/core@npm:7.17.4"
   dependencies:
@@ -4374,7 +4374,7 @@ __metadata:
   resolution: "frontend@workspace:apps/frontend"
   dependencies:
     "@auth0/auth0-react": "npm:^2.1.1"
-    "@mantine/core": "npm:7.17.4"
+    "@mantine/core": "npm:^7.17.4"
     "@mantine/dates": "npm:7.17.4"
     "@mantine/form": "npm:^7.17.4"
     "@mantine/hooks": "npm:7.17.4"

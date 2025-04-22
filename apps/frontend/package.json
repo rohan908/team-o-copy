@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "@auth0/auth0-react": "^2.1.1",
-        "@mantine/core": "7.17.4",
+        "@mantine/core": "^7.17.4",
         "@mantine/dates": "7.17.4",
         "@mantine/form": "^7.17.4",
         "@mantine/hooks": "7.17.4",

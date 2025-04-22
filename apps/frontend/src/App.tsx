@@ -4,6 +4,7 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
 import { RequestProvider } from './contexts/RequestContext.tsx';
+import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import {
     createTheme,
     MantineProvider,
@@ -69,6 +70,45 @@ const greys: MantineColorsTuple = [
     '#4a5167',
 ];
 
+const secondaryBlues: MantineColorsTuple = [
+    '#eaf3ff',
+    '#d6e2fa',
+    '#acc2ee',
+    '#7fa0e4',
+    '#5a83db',
+    '#4271d6',
+    '#3568d4',
+    '#2658bd',
+    '#1d4eaa',
+    '#0c4397',
+];
+
+const primaryBlues: MantineColorsTuple = [
+    '#ebf2ff',
+    '#d6e0f8',
+    '#abbeee',
+    '#7d9ae5',
+    '#577bdd',
+    '#4068d9',
+    '#325ed8',
+    '#254ec0',
+    '#1d45ad',
+    '#0e3b99',
+];
+
+const yellowAccent: MantineColorsTuple = [
+    '#fff9e2',
+    '#fef2ce',
+    '#fbe49f',
+    '#f8d56b',
+    '#f6c841',
+    '#f4c025',
+    '#f4bc14',
+    '#d9a504',
+    '#c19200',
+    '#a77e00',
+];
+
 const myvariantColorResolver: VariantColorsResolver = (input) => {
     const defaultResolvedColors = defaultVariantColorsResolver(input);
     const parsedColor = parseThemeColor({
@@ -116,20 +156,21 @@ const theme = createTheme({
         xxxs: rem(12),
         xxs: rem(14),
         xs: rem(16),
-        sm: rem(18),
-        md: rem(20),
-        lg: rem(24),
-        xl: rem(30),
-        xxl: rem(36),
-        xxxl: rem(48),
+        sm: rem(16), //subheadings, etc
+        md: rem(18),
+        lg: rem(22), //section headers,
+        xl: rem(30), //dont use this unless you have a good reason
+        xxl: rem(36), //dont use this
+        xxxl: rem(57), //use this for the hero section but not much else
     },
-    fontFamily: 'Roboto, sans-serif',
+    fontFamily: 'Inter, sans-serif',
 
     headings: {
-        fontFamily: 'Roboto Slab, sans-serif',
+        fontFamily: 'Inter, sans-serif',
         fontWeight: '500',
         sizes: {
-            h1: { fontSize: 'rem(48)' },
+            h1: { fontSize: '300' },
+            h2: { fontSize: '400' },
         },
     },
     colors: {
@@ -148,7 +189,9 @@ function App() {
         <MantineProvider theme={theme}>
             <DirectoryProvider>
                 <RequestProvider>
-                    <Routing />
+                    <NavigationProvider>
+                        <Routing />
+                    </NavigationProvider>
                 </RequestProvider>
             </DirectoryProvider>
         </MantineProvider>

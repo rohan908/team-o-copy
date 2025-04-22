@@ -77,17 +77,14 @@ export function SecurityRequestHistory() {
 
     return (
         <Box
-            bg="white"
-            p="md"
-            w="100%"
-            h="100vh"
-            style={{
-                opacity: 0.95,
-                backdropFilter: 'blur(5px)',
-                borderRadius: theme.radius.lg,
-                display: 'flex',
-                flexDirection: 'column',
-            }}
+          bg="themeGold.0"
+          p="md"
+          w="100%"
+          h="100vh"
+          opacity="0.95"
+          bd="lg"
+          flex="column"
+          bga='blur(5px)'
         >
             <Title order={1} mb="sm" c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
                 Security Service Requests
@@ -102,63 +99,60 @@ export function SecurityRequestHistory() {
                 style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden' }}
             >
                 <Table
-                    striped
-                    withColumnBorders
-                    highlightOnHover
-                    style={{
-                        width: '100%',
-                        tableLayout: 'auto',
-                    }}
+                  bg="themeGold.0"
+                  striped
+                  withColumnBorders
+                  highlightOnHover
+                  width="100%"
+                  layout='auto'
                 >
-                    <thead>
-                        <tr style={{ backgroundColor: theme.colors.dark[6], color: 'white' }}>
+                  <Table.Thead>
+                    <Table.Tr
+                      bg="#164ec5"
+                      c="white"
+                    >
                             {summaryColumns.map((col) => (
-                                <th
-                                    key={col}
-                                    style={{
-                                        padding: '12px',
-                                        textTransform: 'capitalize',
-                                        whiteSpace: 'nowrap',
-                                        textAlign: 'left',
-                                    }}
-                                >
+                              <Table.Th
+                                key={col}
+                                p="12px"
+                                tt="capitalize"
+                                ta={"left"}
+                              >
                                     {col === 'createdAt'
                                         ? 'Submitted'
                                         : col === 'RequestID'
                                           ? 'Request ID'
                                           : col.charAt(0).toUpperCase() + col.slice(1)}
-                                </th>
+                              </Table.Th>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
+                    </Table.Tr>
+                  </Table.Thead>
+                    <Table.Tbody>
                         {data.map((row, idx) => (
                             <React.Fragment key={idx}>
-                                <tr
-                                    onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
-                                    style={{
-                                        cursor: 'pointer',
-                                        backgroundColor: theme.colors.gray[1],
-                                        borderRadius: '12px',
-                                    }}
-                                >
+                              <Table.Tr
+                                onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
+                                bg="#c8cad3"
+                                //Cursor and Border Radius are only possible through style={}
+                                style={{
+                                  cursor: 'pointer',
+                                  borderRadius: '12px',
+                                }}
+                              >
                                     {summaryColumns.map((col) => (
-                                        <td
-                                            key={col}
-                                            style={{
-                                                padding: '12px',
-                                                fontWeight: 500,
-                                                whiteSpace: 'nowrap',
-                                            }}
-                                        >
-                                            {col === 'createdAt'
-                                                ? timeAgo(row[col] as string)
-                                                : String(row[col] ?? '')}
-                                        </td>
+                                      <Table.Td
+                                        key={col}
+                                        p="12px"
+                                        fw="500"
+                                      >
+                                        {col === 'createdAt'
+                                          ? timeAgo(row[col] as string)
+                                          : String(row[col] ?? 'N/A')}
+                                      </Table.Td>
                                     ))}
-                                </tr>
-                                <tr>
-                                    <td colSpan={summaryColumns.length} style={{ padding: 0 }}>
+                              </Table.Tr>
+                              <Table.Tr>
+                                <Table.Td colSpan={summaryColumns.length} p="0px">
                                         <Transition
                                             mounted={expandedRow === idx}
                                             transition="scale-y"
@@ -166,19 +160,19 @@ export function SecurityRequestHistory() {
                                             timingFunction="ease"
                                         >
                                             {(styles) => (
-                                                <Box
-                                                    style={{
-                                                        ...styles,
-                                                        overflow: 'hidden',
-                                                        backgroundColor: theme.colors.gray[2],
-                                                        padding: theme.spacing.md,
-                                                        marginTop: theme.spacing.xs,
-                                                        marginBottom: theme.spacing.md,
-                                                        marginInline: theme.spacing.sm,
-                                                        boxShadow: theme.shadows.xs,
-                                                        borderRadius: theme.radius.md,
-                                                    }}
-                                                >
+                                              <Box
+                                                bg="#a9adb9"
+                                                p="md"
+                                                mt="xs"
+                                                mb="md"
+                                                mx="sm"
+                                                //...styles is needed for Transition Data, shadow and radius are styles only
+                                                style={{
+                                                  ...styles,
+                                                  boxShadow: theme.shadows.xs,
+                                                  borderRadius: theme.radius.md,
+                                                }}
+                                              >
                                                     {Object.entries(row).map(([key, value]) => {
                                                         if (summaryColumns.includes(key))
                                                             return null;
@@ -194,11 +188,11 @@ export function SecurityRequestHistory() {
                                                 </Box>
                                             )}
                                         </Transition>
-                                    </td>
-                                </tr>
+                                </Table.Td>
+                              </Table.Tr>
                             </React.Fragment>
                         ))}
-                    </tbody>
+                    </Table.Tbody>
                 </Table>
             </ScrollArea>
         </Box>
