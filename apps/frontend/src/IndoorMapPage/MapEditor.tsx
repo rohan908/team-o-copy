@@ -13,6 +13,7 @@ import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
+import {Object3DEventMap} from "three";
 
 export interface MapEditorProps {
   selectedTool: string;
@@ -196,6 +197,16 @@ export function MapEditor() {
         });
     };
 
+    // updates allNodes position on a drag
+    const updateNodeOnDrag = (movedNodeId: number, newPosition: THREE.Vector3)=> {
+      const nodeToUpdate = allNodes.find(element => element.id === movedNodeId)
+      if(nodeToUpdate != null) {
+        nodeToUpdate.x = newPosition.x;
+        nodeToUpdate.y = newPosition.y;
+      }
+      setNewNodes(allNodes);
+    }
+
     // render function that can be called from anywhere so we can render only when needed.
     const render = () => {
         if (rendererRef.current && scenesRef.current && cameraRef.current) {
@@ -261,6 +272,7 @@ export function MapEditor() {
                 console.log('dragging node: ', nodeId);
                 if (nodeId) {
                     updateEdges(nodeId, draggedObject.position);
+                    updateNodeOnDrag(nodeId, draggedObject.position);
                 }
                 render(); // re-render during drag
             });
@@ -513,10 +525,6 @@ console.log("changed")
       }
     }
 
-    const deleteCascadingEdges = () => {
-
-    }
-
     // Once initialized event listeners will operate continuously. Thus they can just be put in a useEffect with no dependencies that will run once.
     useEffect(() => {
         // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
@@ -537,6 +545,7 @@ console.log("changed")
     useEffect(() => {
 
         const deleteSelected = () => {
+          console.log(allNodes)
             if(selectedObjects.current.length > 0) {
                 selectedObjects.current.forEach((object) => {
                     const allNodesIndex = allNodes.findIndex(element => element.id === object.userData.nodeId);
@@ -549,13 +558,52 @@ console.log("changed")
                     if(objectsIndex != -1 && objectToRemove != null) {
                         objectToRemove.visible = false;
 
+                        deleteCascadingEdges(objectToRemove);
 
                         objectsRef.current.splice(objectsIndex, 1);
                     }
                 })
+                setNewNodes(allNodes);
                 render();
             }
-            setNewNodes(allNodes);
+        }
+
+        const deleteCascadingEdges = (objectToRemove: THREE.Object3D<Object3DEventMap>) => {
+          // remove all edges where this is the startID
+          while(edgeMeshesRef.current.findIndex(element => element.startNodeId === objectToRemove.userData.nodeId) != -1) {
+            const removeStartEdgeIndex = edgeMeshesRef.current.findIndex(element => element.startNodeId === objectToRemove.userData.nodeId);
+            const removeEdge = edgeMeshesRef.current.at(removeStartEdgeIndex);
+            if(removeEdge != null) {
+              removeEdge.mesh.visible = false;
+              removeEdge.mesh.geometry.dispose();
+              edgeMeshesRef.current.splice(removeStartEdgeIndex, 1);
+            }
+          }
+
+          // remove all edges where this is the endID
+          while(edgeMeshesRef.current.findIndex(element => element.endNodeId === objectToRemove.userData.nodeId) != -1) {
+            const removeEndEdgeIndex = edgeMeshesRef.current.findIndex(element => element.endNodeId === objectToRemove.userData.nodeId);
+            const removeEdge = edgeMeshesRef.current.at(removeEndEdgeIndex);
+            if(removeEdge != null) {
+              removeEdge.mesh.visible = false;
+              removeEdge.mesh.geometry.dispose();
+              edgeMeshesRef.current.splice(removeEndEdgeIndex, 1);
+            }
+          }
+          console.log("connecitng",allNodes.find(element => element.connectingNodes.includes(objectToRemove.userData.nodeId)))
+          console.log(allNodes.find(element => element.id === objectToRemove.userData.nodeId))
+          console.log(allNodes);
+          // remove all connectingNodes from where this node exists in allNodes
+          while(allNodes.findIndex(element => element.connectingNodes.includes(objectToRemove.userData.nodeId)) != -1) {
+            const removeConnectingNodesIndex = allNodes.findIndex(element => element.connectingNodes.includes(objectToRemove.userData.nodeId));
+            const node = allNodes.at(removeConnectingNodesIndex);
+
+            console.log("connecting nodes", removeConnectingNodesIndex);
+            if(node != null) {
+              const connectingNodeIndex = allNodes[removeConnectingNodesIndex].connectingNodes.findIndex(element => element === objectToRemove.userData.nodeId);
+              node.connectingNodes.splice(connectingNodeIndex, 1);
+            }
+          }
         }
 
         window.addEventListener('keydown', ({key}) => {
