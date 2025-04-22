@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ContentSwitcher } from './ContentSwitcher.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.js';
 import { useTimeline } from './TimeLineContext.tsx';
-
+import { useJsApiLoader } from '@react-google-maps/api';
 export function HomePage() {
     const theme = useMantineTheme();
 
@@ -26,6 +26,16 @@ export function HomePage() {
         setDepartment('');
         setSelectedService('');
     }, []);
+
+    const { isLoaded } = useJsApiLoader({
+      googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
+        libraries: ['places'], //required for location autocomplete in textbox
+    });
+
+    if (!isLoaded) {
+    return <div>Loading Google Maps...</div>; //debugmap
+    }
 
 
     return (
