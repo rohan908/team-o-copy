@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, createContext} from 'react';
+import { useEffect, useRef, useState, createContext, useCallback} from 'react';
 import * as THREE from 'three';
 import { Box } from '@mantine/core';
 import { DragControls } from 'three/addons/controls/DragControls.js';
@@ -30,8 +30,8 @@ export function MapEditor() {
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer')
     const [mapTool, setMapTool] = useState('pan');
+    const [newNodes, setNewNodes] = useState<DirectoryNodeItem[]>([]);
 
-    const newNodes: DirectoryNodeItem[] = [];
     const mapProps: MapEditorProps = {
       selectedTool: mapTool,
       setSelectedTool: setMapTool,
@@ -304,7 +304,6 @@ export function MapEditor() {
                 console.log('Canvas or camera ref not available');
                 return;
             }
-            console.log(mapTool);
 
             const rect = canvasRef.current.getBoundingClientRect();
             // check if click is within canvas bounds
@@ -324,52 +323,24 @@ export function MapEditor() {
             // ray from the camera position to the pointer
             raycaster.setFromCamera(pointer, cameraRef.current);
 
-            // check if objects were intersected
-            if (objectsRef.current.length === 0) {
-              return;
-            }
-
             const intersects = raycaster.intersectObjects(objectsRef.current, true);
 
-            if(mapTool == 'add-node' && intersects.length == 0) {
-              // new node positon
-              const point = raycaster.intersectObjects(scenesRef.current[sceneIndexState].children, true);
+            console.log(mapTool)
 
-              const posX = point[0].point.x;
-              const posY = point[0].point.y;
-
-              const {floor, mapID} = getFloorAndMapIDFromSceneIndex(sceneIndexState);
-
-              const newNode: DirectoryNodeItem = {
-                id: 1000,
-                x: posX,
-                y: posY,
-                floor: floor,
-                mapId: mapID,
-                name: "",
-                description: "",
-                nodeType: "",
-                connectingNodes: [],
-              }
-              newNodes.push(newNode);
-              createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
-                color: nodeColor,
-              }); //Create the nodes
-            }
-
-            if (intersects.length > 0) {
-              const selectedObject = intersects[0].object;
-              if (selectedObjects.current.includes(selectedObject)) {
-                deselectObject(selectedObject);
-                console.log('Deselected:', selectedObject);
-              } else {
-                selectObject(selectedObject);
-                console.log('Selected:', selectedObject);
-              }
+          if (intersects.length > 0) {
+            const selectedObject = intersects[0].object;
+            if (selectedObjects.current.includes(selectedObject)) {
+              deselectObject(selectedObject);
+              console.log('Deselected:', selectedObject);
             } else {
-              console.log('No object hit');
+              selectObject(selectedObject);
+              console.log('Selected:', selectedObject);
             }
-        };
+          } else {
+            console.log('No object hit');
+          }
+
+          };
 
         window.addEventListener('click', handleClick);
 
@@ -391,13 +362,50 @@ export function MapEditor() {
         }
 
         return () => {
-            window.removeEventListener('click', handleClick); // stop listening to click on dismount
-            // clear refs on unmount
-            selectedObjects.current = [];
-            edgeMeshesRef.current = [];
-            objectsRef.current = [];
-        };
-    }, [mapTool]);
+          window.removeEventListener('click', handleClick);
+          // clear refs on dismount
+          selectedObjects.current = [];
+          edgeMeshesRef.current = [];
+          objectsRef.current = [];
+        }
+    }, []);
+
+    useEffect(() => {
+
+      const handleClick = () => {
+
+        if(mapTool == 'add-node' && intersects.length == 0) {
+
+          // new node positon
+          const point = raycaster.intersectObjects(scenesRef.current[sceneIndexState].children, true);
+
+          const posX = point[0].point.x;
+          const posY = point[0].point.y;
+
+          const {floor, mapID} = getFloorAndMapIDFromSceneIndex(sceneIndexState);
+
+          const newNode: DirectoryNodeItem = {
+            id: 1000,
+            x: posX,
+            y: posY,
+            floor: floor,
+            mapId: mapID,
+            name: "",
+            description: "",
+            nodeType: "",
+            connectingNodes: [],
+          }
+
+          newNodes.push(newNode);
+          setNewNodes(newNodes);
+
+          createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
+            color: nodeColor,
+          }); //Create the nodes
+        }
+
+      }
+    })
 
     /*
       OK the way animations work is that calling animate() will start an animation loop that runs continuously. However,
@@ -434,16 +442,7 @@ export function MapEditor() {
         <Box w="100vw" h="100vh" p={0}>
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
             <MapContext.Provider value={mapProps}>
-              <MapEditorBox
-                  // Pass selected node data to the ui
-                  //todo make a list of all new node data to pass to backend, including deletion
-                  newNodes={[]}
-                  nodeSelected={nodeSelected}
-                  nodeX={1}
-                  nodeY={1}
-                  // handle updating the node position from ui
-                  updateNodePosition={updateNodePosition}
-              />
+              <MapEditorBox/>
             </MapContext.Provider>
 
             <canvas

@@ -18,23 +18,7 @@ import {DirectoryNodeItem} from "../../contexts/DirectoryItem.ts";
 import {MapContext, MapEditorProps} from '../MapEditor.tsx';
 import axios from 'axios';
 
-interface MapEditorBoxProps {
-    newNodes?: DirectoryNodeItem[];
-    nodeSelected?: (isSelected: boolean) => void;
-    nodeX?: number;
-    nodeY?: number;
-    floor?: number;
-    updateNodePosition?: (x: number, y: number, floor: number) => void;
-}
-
-const MapEditorBox: React.FC<MapEditorBoxProps> = ({
-    newNodes = [],
-    nodeSelected = false,
-    nodeX = 0,
-    nodeY = 0,
-    floor = 0,
-    updateNodePosition,
-}) => {
+const MapEditorBox = ({}) => {
 
     const mapProps: MapEditorProps = useContext(MapContext);
 
@@ -46,7 +30,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
     const [saveText, setSaveText] = useState(setTimeout(function () {}, 1000));
     const handlePanTool = () => {mapProps.setSelectedTool('pan')}
     const handleNodeTool = () => {mapProps.setSelectedTool('add-node')};
-    const handleEdgeTool = () => null;
+    const handleEdgeTool = () => {mapProps.setSelectedTool('add-edge')};
     
 
     const { hovered, ref } = useHover();
@@ -65,9 +49,11 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
             return;
         }
 
+        /*
         if (updateNodePosition) {
             updateNodePosition(x, y, floorNum);
         }
+         */
     };
 
     const form = useForm({
@@ -317,23 +303,13 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
     // Sends all new Node data to the backend
     async function SaveAllNodes() {
         const importNodes = await axios.post('api/directory/import/direct', {
-          data: newNodes,
+          data: mapProps.newNodes,
         })
-        console.log(newNodes);
+        console.log(mapProps.newNodes);
         addSaveLabel();
 
         console.log(importNodes);
     }
-
-    useEffect(() => {
-        if (nodeSelected) {
-            form.setValues({
-                xpos: nodeX.toString(),
-                ypos: nodeY.toString(),
-                floor: floor.toString(),
-            });
-        }
-    }, [nodeSelected, nodeX, nodeY, floor]);
 
     useEffect(() => {
       setCollapsed(!hovered);
@@ -444,29 +420,6 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                             >
                                 +
                             </BlackButton>
-                        </Flex>
-                        <Flex direction="row" justify="space-between" gap="xs">
-                            <TextInput
-                                label="X Position"
-                                placeholder="Select a node"
-                                disabled={!nodeSelected}
-                                key={form.key('xpos')}
-                                {...form.getInputProps('xpos')}
-                            ></TextInput>
-                            <TextInput
-                                label="Y Position"
-                                placeholder="Select a node"
-                                disabled={!nodeSelected}
-                                key={form.key('ypos')}
-                                {...form.getInputProps('ypos')}
-                            ></TextInput>
-                            <TextInput
-                                label="Floor"
-                                placeholder="Select a node"
-                                disabled={!nodeSelected}
-                                key={form.key('floor')}
-                                {...form.getInputProps('floor')}
-                            ></TextInput>
                         </Flex>
                         <Grid align="center">
                             <Grid.Col span={10}>
