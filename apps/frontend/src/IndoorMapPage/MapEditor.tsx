@@ -283,129 +283,163 @@ export function MapEditor() {
         }
     };
 
+    const clickHandler = useCallback((event) => {
+      // switches the type of cursor depending on the tool
+      switch(mapTool) {
+        case 'pan':
+          setCursorStyle('pointer');
+          handlePanClick(event);
+          break;
+        case 'add-node':
+          setCursorStyle('crosshair');
+          handleAddNodeClick(event);
+          break;
+      }
+    }, [mapTool])
+
+
+    const handlePanClick = (event) => {
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+
+      if (!canvasRef.current || !cameraRef.current) {
+        console.log('Canvas or camera ref not available');
+        return;
+      }
+
+      const rect = canvasRef.current.getBoundingClientRect();
+      // check if click is within canvas bounds
+      if (
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom
+      ) {
+        return;
+      }
+
+      // normalize pointer position (-1 to 1 in x and y)
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      // ray from the camera position to the pointer
+      raycaster.setFromCamera(pointer, cameraRef.current);
+
+      const intersects = raycaster.intersectObjects(objectsRef.current, true);
+
+      if (intersects.length > 0) {
+        const selectedObject = intersects[0].object;
+        if (selectedObjects.current.includes(selectedObject)) {
+          deselectObject(selectedObject);
+          console.log('Deselected:', selectedObject);
+        } else {
+          selectObject(selectedObject);
+          console.log('Selected:', selectedObject);
+        }
+      } else {
+        console.log('No object hit');
+      }
+    };
+
+    const handleAddNodeClick = (event) => {
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+
+      if (!canvasRef.current || !cameraRef.current) {
+        console.log('Canvas or camera ref not available');
+        return;
+      }
+
+      const rect = canvasRef.current.getBoundingClientRect();
+      // check if click is within canvas bounds
+      if (
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom
+      ) {
+        return;
+      }
+
+      // normalize pointer position (-1 to 1 in x and y)
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      // ray from the camera position to the pointer
+      raycaster.setFromCamera(pointer, cameraRef.current);
+
+      const intersects = raycaster.intersectObjects(objectsRef.current, true);
+
+
+      // new node positon
+      const point = raycaster.intersectObjects(scenesRef.current[sceneIndexState].children, true);
+
+      const posX = point[0].point.x;
+      const posY = point[0].point.y;
+
+      const {floor, mapID} = getFloorAndMapIDFromSceneIndex(sceneIndexState);
+
+      const newNode: DirectoryNodeItem = {
+        id: 1000,
+        x: posX,
+        y: posY,
+        floor: floor,
+        mapId: mapID,
+        name: "",
+        description: "",
+        nodeType: "",
+        connectingNodes: [],
+      }
+
+      newNodes.push(newNode);
+      setNewNodes(newNodes);
+
+      createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
+        color: nodeColor,
+      }); //Create the nodes
+    }
+
     // Once initialized event listeners will operate continuously. Thus they can just be put in a useEffect with no dependencies that will run once.
     useEffect(() => {
         // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
-        const raycaster = new THREE.Raycaster();
-        const pointer = new THREE.Vector2();
 
-        // switches the type of cursor depending on the tool
-        switch(mapTool) {
-          case 'pan':
-            setCursorStyle('pointer');
-            break;
-          case 'add-node':
-            setCursorStyle('crosshair');
-            break;
-        }
-
-        const handleClick = (event) => {
-            if (!canvasRef.current || !cameraRef.current) {
-                console.log('Canvas or camera ref not available');
-                return;
-            }
-
-            const rect = canvasRef.current.getBoundingClientRect();
-            // check if click is within canvas bounds
-            if (
-                event.clientX < rect.left ||
-                event.clientX > rect.right ||
-                event.clientY < rect.top ||
-                event.clientY > rect.bottom
-            ) {
-                return;
-            }
-
-            // normalize pointer position (-1 to 1 in x and y)
-            pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-            pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-            // ray from the camera position to the pointer
-            raycaster.setFromCamera(pointer, cameraRef.current);
-
-            const intersects = raycaster.intersectObjects(objectsRef.current, true);
-
-            console.log(mapTool)
-
-          if (intersects.length > 0) {
-            const selectedObject = intersects[0].object;
-            if (selectedObjects.current.includes(selectedObject)) {
-              deselectObject(selectedObject);
-              console.log('Deselected:', selectedObject);
-            } else {
-              selectObject(selectedObject);
-              console.log('Selected:', selectedObject);
-            }
-          } else {
-            console.log('No object hit');
-          }
-
-          };
-
-        window.addEventListener('click', handleClick);
-
-        // make sure map movement is re-enabled for some edge cases
-        const handleMouseUp = () => {
-            setTimeout(() => {
-                controlRef.current.enabled = true;
-            }, 10);
-        };
-        const handleMouseLeave = () => {
-            setTimeout(() => {
-                controlRef.current.enabled = true;
-            }, 10);
-        };
-
-        window.addEventListener('mouseup', handleMouseUp);
-        if (rendererRef.current) {
-            rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
-        }
+        window.addEventListener('click', clickHandler);
 
         return () => {
-          window.removeEventListener('click', handleClick);
-          // clear refs on dismount
-          selectedObjects.current = [];
-          edgeMeshesRef.current = [];
-          objectsRef.current = [];
+          window.removeEventListener('click', clickHandler);
         }
-    }, []);
+
+    }, [mapTool]);
+
 
     useEffect(() => {
+      // make sure map movement is re-enabled for some edge cases
+      const handleMouseUp = () => {
+        setTimeout(() => {
+          controlRef.current.enabled = true;
+        }, 10);
+      };
+      const handleMouseLeave = () => {
+        setTimeout(() => {
+          controlRef.current.enabled = true;
+        }, 10);
+      };
 
-      const handleClick = () => {
-
-        if(mapTool == 'add-node' && intersects.length == 0) {
-
-          // new node positon
-          const point = raycaster.intersectObjects(scenesRef.current[sceneIndexState].children, true);
-
-          const posX = point[0].point.x;
-          const posY = point[0].point.y;
-
-          const {floor, mapID} = getFloorAndMapIDFromSceneIndex(sceneIndexState);
-
-          const newNode: DirectoryNodeItem = {
-            id: 1000,
-            x: posX,
-            y: posY,
-            floor: floor,
-            mapId: mapID,
-            name: "",
-            description: "",
-            nodeType: "",
-            connectingNodes: [],
-          }
-
-          newNodes.push(newNode);
-          setNewNodes(newNodes);
-
-          createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
-            color: nodeColor,
-          }); //Create the nodes
-        }
-
+      window.addEventListener('mouseup', handleMouseUp);
+      if (rendererRef.current) {
+        rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
       }
-    })
+
+      return () => {
+        window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener('mouseleave', handleMouseLeave);
+        //window.removeEventListener('click', clickHandler);
+        // clear refs on dismount
+        selectedObjects.current = [];
+        edgeMeshesRef.current = [];
+        //objectsRef.current = [];
+      }
+    }, []);
 
     /*
       OK the way animations work is that calling animate() will start an animation loop that runs continuously. However,
