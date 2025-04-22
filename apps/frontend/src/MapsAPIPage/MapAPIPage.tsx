@@ -5,14 +5,17 @@ import SelectBox from './SelectBox.tsx';
 import GoogleMapsAPI from "./GoogleMapsAPI.tsx";
 import {useJsApiLoader } from "@react-google-maps/api"; //this is better than LoadScript
 import {useTimeline} from '../HomePage/TimeLineContext';
+import DirectionsBox from './DirectionsBox';
+import {Step} from './Steps'
 
- export const MapAPIPage = () => {
+export const MapAPIPage = () => {
     const {userCoordinates, travelMode, selectedHospital} = useTimeline();
+    const [steps, setSteps] = useState<Step[]>([]); // Manage steps here
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-          // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
-          libraries: ['places'], //required for location autocomplete in textbox
-      });
+          googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+            // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
+            libraries: ['places'], //required for location autocomplete in textbox
+        });
 
     if (!isLoaded && !travelMode) {
     return <div>Loading Google Maps...</div>; //debugmap
@@ -23,7 +26,8 @@ import {useTimeline} from '../HomePage/TimeLineContext';
           pos="absolute"
           w="100%"
           h="100%">
-        <GoogleMapsAPI/>
+          <GoogleMapsAPI onStepsUpdate={setSteps} />
+          {steps.length > 0 && <DirectionsBox steps={steps} />}
         </Box>
           <SelectBox/>
       </Box>
