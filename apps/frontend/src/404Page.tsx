@@ -1,9 +1,10 @@
-import { Flex, Transition, Text, Box, Button } from '@mantine/core';
+import { Flex, Transition, Text, Box, Button, useMantineTheme, Image } from '@mantine/core';
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 
 function NotFound() {
   const [opened, setOpened] = useState(false);
+  const theme = useMantineTheme();
 
   useEffect(() => {
     setOpened(true);
@@ -12,9 +13,7 @@ function NotFound() {
   return (
     <Box
       mih="100vh"
-      style={{
-        background: 'linear-gradient(0deg, #D8DFEB , #EBF2FF 100%)',
-      }}
+      bg = {theme.colors.terquAccet[1]}
     >
       <Flex
         direction="column"
@@ -63,6 +62,23 @@ function NotFound() {
             >
               Go Home
             </Button>
+          )}
+        </Transition>
+        <Transition
+          mounted={opened}
+          transition="slide-left"
+          duration={400}
+          timingFunction="ease"
+        >
+          {(styles) => (
+            <Box style={styles} mt="0">
+              <Image
+                src="/404 Page Icon.png"
+                alt="Not found illustration"
+                w={350}
+                radius="xs"
+              />
+            </Box>
           )}
         </Transition>
       </Flex>
