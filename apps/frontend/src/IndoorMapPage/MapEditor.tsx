@@ -511,6 +511,9 @@ console.log("changed")
           updateDragControls();
         }
       }
+    }
+
+    const deleteCascadingEdges = () => {
 
     }
 
@@ -529,6 +532,8 @@ console.log("changed")
 
     }, [mapTool, editBoxHovered]);
 
+
+    // for deleting selected nodes
     useEffect(() => {
 
         const deleteSelected = () => {
@@ -543,6 +548,7 @@ console.log("changed")
                     console.log(objectsIndex, objectsRef.current);
                     if(objectsIndex != -1 && objectToRemove != null) {
                         objectToRemove.visible = false;
+
 
                         objectsRef.current.splice(objectsIndex, 1);
                     }
