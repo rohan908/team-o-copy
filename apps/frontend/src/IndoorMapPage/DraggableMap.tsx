@@ -157,6 +157,11 @@ export function DraggableMap() {
                 return element.name == selectedDepartment;
             });
             return index >= 0 ? chestnutNodes[index].id : 0; //make sure nodeId exists
+        } else if (selectedHospitalName == 'Faulkner Hospital') {
+            const index = faulknerNodes.findIndex((element) => {
+                return element.name == selectedDepartment;
+            });
+            return index >= 0 ? faulknerNodes[index].id : 0; //make sure nodeId exists
         }
         return null;
     };
