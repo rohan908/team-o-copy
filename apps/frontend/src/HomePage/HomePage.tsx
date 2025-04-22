@@ -17,6 +17,16 @@ export function HomePage() {
         setSelectedService,
     } = useTimeline();
 
+    // useEffect to clear the context when we go back to the home page
+    useEffect(() => {
+        setActiveSection(0);
+        setSelectedHospital(null);
+        setUserCoordinates(null);
+        setTravelMode(null);
+        setDepartment('');
+        setSelectedService('');
+    }, []);
+
     return (
         <Box bg={theme.colors.blue[0]} h="100%" w="100%" p="xl" pos="absolute">
             <Grid gutter="md" h="100%" mt={'2%'}>
