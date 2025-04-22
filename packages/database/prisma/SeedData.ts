@@ -152,7 +152,7 @@ export function getNodeData() {
             connectingNodes: [13, 15],
         },
 
-        // floor 3 Patriot-22 (listed as 2 for pathfinding)
+        // floor 3 Patri  ot-22 (listed as 2 for pathfinding)
         {
             x: 94.8,
             y: -15.5,

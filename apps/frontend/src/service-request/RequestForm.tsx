@@ -10,13 +10,15 @@ import StatusSelect from './components/StatusSelect.tsx';
 import DepartmentSelect from './components/DepartmentSelect.tsx';
 import NameEntry from './components/NameEntry.tsx';
 
-import {
-    ChestnutHill,
-    Patriot20,
-    Patriot22,
-    HospitalDepartment,
-} from '../directory/components/directorydata';
+// import {
+//     ChestnutHill,
+//     Patriot20,
+//     Patriot22,
+//     HospitalDepartment,
+// } from '../directory/components/directorydata';
 import { useForm } from '@mantine/form';
+import { useChestnutHillContext, usePatriotContext } from '../contexts/DirectoryContext.tsx';
+import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 
 export interface RequestData {
     employeeName: string;
@@ -54,6 +56,16 @@ const RequestForm: React.FC<RequestDetails> = ({
     const form = useForm<RequestData>({
         initialValues: newInitialValues,
     });
+
+    const Patriot = usePatriotContext();
+    const Chestnut = useChestnutHillContext();
+
+    const MapDepartment = (department: DirectoryNodeItem[]) =>
+        department.map((department: DirectoryNodeItem) => ({
+            value: department.name,
+            label: department.name,
+        }));
+
     // logic for dependant department selection
     const handleHospitalChange = (hospital: string | null) => {
         form.setFieldValue('hospital', hospital || '');
