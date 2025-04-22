@@ -1,67 +1,73 @@
-import {Flex, Transition, Text, Box, Button} from '@mantine/core';
-import {useEffect, useState} from "react";
-import {Link} from 'react-router-dom';
+import { Flex, Transition, Text, Box, Button } from '@mantine/core';
+import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 
 function NotFound() {
   const [opened, setOpened] = useState(false);
 
   useEffect(() => {
     setOpened(true);
-    }, [])
+  }, []);
 
   return (
     <Box
+      mih="100vh"
       style={{
-      minHeight: '100vh',
-      background:'linear-gradient(0deg, #D8DFEB , #EBF2FF 100%)',
-    }}>
-    <Transition
-      mounted={opened}
-      transition="slide-right"
-      duration={400}
-      timingFunction="ease"
+        background: 'linear-gradient(0deg, #D8DFEB , #EBF2FF 100%)',
+      }}
     >
-      {(styles) =>
-        <Flex
-        top = "35%"
-        pos = "fixed"
+      <Flex
+        direction="column"
+        justify="center"
+        align="center"
+        mih= "100%"
+      >
+        <Transition
+          mounted={opened}
+          transition="slide-right"
+          duration={400}
+          timingFunction="ease"
         >
-        <Text style={styles} fz = '5rem' fw = {700} ff = "Roboto, sans-serif">404: Page Not Found</Text>
-        </Flex>}
-    </Transition>
-    <Transition
-    mounted={opened}
-    transition="slide-left"
-    duration={400}
-    timingFunction="ease">
-      {(styles) =>
-        <Flex
-          top = "55%"
-          pos = "fixed"
+          {(styles) => (
+            <Text style={styles} fz="5rem" fw={700} mt="7rem">
+              404: Page Not Found
+            </Text>
+          )}
+        </Transition>
+
+        <Transition
+          mounted={opened}
+          transition="slide-left"
+          duration={400}
+          timingFunction="ease"
         >
-          <Text style={styles} fz = "lg" ff = "Roboto, sans-serif">Oops, we can't find the page you were looking for. Does it exist?</Text>
-        </Flex>}
-    </Transition>
-      <Transition
-        mounted={opened}
-        transition="slide-left"
-        duration={400}
-        timingFunction="ease">
-        {(styles) =>
-          <Flex
-            pos = "fixed"
-            top = "63%"
-            left = "20%"
-          >
-            <Button style={styles} component = {Link} to="/" >
+          {(styles) => (
+            <Text style={styles} fz="lg">
+              Oops, we can't find the page you were looking for. Does it exist?
+            </Text>
+          )}
+        </Transition>
+
+        <Transition
+          mounted={opened}
+          transition="slide-left"
+          duration={400}
+          timingFunction="ease"
+        >
+          {(styles) => (
+            <Button
+              mt = "1rem"
+              style={styles}
+              component={Link}
+              to="/"
+            >
               Go Home
             </Button>
-          </Flex>}
-      </Transition>
-  </Box>
+          )}
+        </Transition>
+      </Flex>
+    </Box>
   );
 }
 
 export default NotFound;
-
-
