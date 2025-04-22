@@ -83,7 +83,6 @@ const RAW_RUNTIME_STATE =
           ["papaparse", "npm:5.5.2"],\
           ["prettier", "npm:3.5.3"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-          ["react-text-to-speech", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:2.0.0"],\
           ["tailwindcss", "npm:4.1.0"],\
           ["three", "npm:0.175.0"],\
           ["ts-config-custom", "workspace:configs/ts-config-custom"],\
@@ -5696,7 +5695,6 @@ const RAW_RUNTIME_STATE =
           ["react-leaflet", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.2.1"],\
           ["react-router-bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.26.3"],\
           ["react-router-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:6.30.0"],\
-          ["react-text-to-speech", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.0.0"],\
           ["serve", "npm:14.2.4"],\
           ["tailwindcss", "npm:4.0.17"],\
           ["three", "npm:0.175.0"],\
@@ -8559,49 +8557,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["react-text-to-speech", [\
-      ["npm:2.0.0", {\
-        "packageLocation": "./.yarn/cache/react-text-to-speech-npm-2.0.0-8c4a69cac0-aaf3959021.zip/node_modules/react-text-to-speech/",\
-        "packageDependencies": [\
-          ["react-text-to-speech", "npm:2.0.0"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:2.0.0", {\
-        "packageLocation": "./.yarn/__virtual__/react-text-to-speech-virtual-b109279964/0/cache/react-text-to-speech-npm-2.0.0-8c4a69cac0-aaf3959021.zip/node_modules/react-text-to-speech/",\
-        "packageDependencies": [\
-          ["react-text-to-speech", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:2.0.0"],\
-          ["@types/react", null],\
-          ["@types/react-dom", null],\
-          ["react", null],\
-          ["react-dom", null]\
-        ],\
-        "packagePeers": [\
-          "@types/react-dom",\
-          "@types/react",\
-          "react-dom",\
-          "react"\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.0.0", {\
-        "packageLocation": "./.yarn/__virtual__/react-text-to-speech-virtual-0bbc4b79be/0/cache/react-text-to-speech-npm-2.0.0-8c4a69cac0-aaf3959021.zip/node_modules/react-text-to-speech/",\
-        "packageDependencies": [\
-          ["react-text-to-speech", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.0.0"],\
-          ["@types/react", "npm:18.3.20"],\
-          ["@types/react-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:18.3.5"],\
-          ["react", "npm:18.3.1"],\
-          ["react-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:18.3.1"]\
-        ],\
-        "packagePeers": [\
-          "@types/react-dom",\
-          "@types/react",\
-          "react-dom",\
-          "react"\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["react-textarea-autosize", [\
       ["npm:8.5.9", {\
         "packageLocation": "./.yarn/cache/react-textarea-autosize-npm-8.5.9-e71d6a833b-3a924db592.zip/node_modules/react-textarea-autosize/",\
@@ -9184,7 +9139,6 @@ const RAW_RUNTIME_STATE =
           ["papaparse", "npm:5.5.2"],\
           ["prettier", "npm:3.5.3"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-          ["react-text-to-speech", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:2.0.0"],\
           ["tailwindcss", "npm:4.1.0"],\
           ["three", "npm:0.175.0"],\
           ["ts-config-custom", "workspace:configs/ts-config-custom"],\

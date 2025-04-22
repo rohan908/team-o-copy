@@ -36,8 +36,8 @@ const DirectionsBox = (props: Props) => {
 return (
       <Box //custom box for directions
         pos="absolute"
-        top="4rem"
-        right="0.5rem"
+        bottom="2rem"
+        left="0.5rem"
         maw={250}
         bg="white"
         p="md"

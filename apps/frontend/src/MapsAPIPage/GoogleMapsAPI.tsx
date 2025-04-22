@@ -39,7 +39,9 @@ const GoogleMapsAPI= (props: GoogleMapsAPIProps) =>{
                       distance: step.distance.text,
                       duration: step.duration.text
                   }));
+                  if (onStepsUpdate) {
                     onStepsUpdate(newSteps);
+                  }//if passed prop, then run
                 }
                 else{
                     console.error("Routing failed:", status);
