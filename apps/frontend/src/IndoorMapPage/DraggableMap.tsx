@@ -82,7 +82,7 @@ export function DraggableMap() {
                 // Get the full node from the ID
                 const node = getNode(id, allNodes);
                 if (node) {
-                    createNode(node, scenesRef.current, 0.5, { color: 0x56effa }); //Create the node from its data
+                    createNode(node, scenesRef.current); //Create the node from its data
                 } else {
                     console.error('Node id not found: ', id);
                 }
