@@ -2,18 +2,18 @@ import React, {useEffect, useRef, useState} from 'react';
 import {GoogleMap} from "@react-google-maps/api";
 import {Box, ScrollArea, Text, List, Button} from '@mantine/core';
 import { useTimeline } from '../HomePage/TimeLineContext';
-import {useSpeech}  from 'react-text-to-speech';
-
 
 const GoogleMapsAPI= () =>{
     const {selectedHospital, userCoordinates, travelMode } = useTimeline();
     const mapRef = useRef<google.maps.Map | null>(null);
     const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
     const [steps, setSteps] = useState<{ instruction: string; distance: string; duration: string }[]>([]);
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
     const handleMapLoad = (map: google.maps.Map) => {
-        mapRef.current = map;
-    };
+          mapRef.current = map;
+      };
 
    useEffect(() => {
       if (!userCoordinates || !selectedHospital || !mapRef.current) return;
@@ -44,22 +44,28 @@ const GoogleMapsAPI= () =>{
         )
     }, [userCoordinates, selectedHospital, travelMode]);
 
-   const speechText = steps.map((step) =>
+   //transform directions info from google, from html to string
+    const speechText = steps.map((step) =>
      step.instruction.replace(/<[^>]+>/g, '')).join('...');
 
-    const {
-      speechStatus,
-      start,
-      stop,
-    } = useSpeech({ text: speechText });
 
-    const handleToggle = () => {
-      if (speechStatus === 'started') {
-        stop();
-      } else {
-        start();
-      }
-    };
+    //callback function to handle the play/stop functionality
+  const handleToggle = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    } else {
+      const utterance = new SpeechSynthesisUtterance(speechText); //create new instance everytime it plays
+      utterance.lang = 'en-US';
+      utterance.rate = 0.75; //how fast talk
+      utterance.pitch = 0.5; //voice pitch
+      utterance.onend = () => setIsSpeaking(false);
+      window.speechSynthesis.cancel(); // Clear queue
+      window.speechSynthesis.speak(utterance);
+      utteranceRef.current = utterance;
+      setIsSpeaking(true);
+    }
+  };
 
     return (
         <>
@@ -105,10 +111,10 @@ const GoogleMapsAPI= () =>{
                     <Button
                       fullWidth
                       onClick={handleToggle}
-                      color={speechStatus === 'started' ? 'red' : 'blue'}
+                      color={isSpeaking ? 'red' : 'blue'}
                       variant="light"
                     >
-                      {speechStatus === 'started' ? 'Stop' : 'Play Directions'}
+                      {isSpeaking ? 'Stop' : 'Play Directions'}
                     </Button>
                   </Box>
                 </Box>
