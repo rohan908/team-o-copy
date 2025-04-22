@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, createContext, useCallback} from 'react';
+import { useEffect, useRef, useState, createContext, useCallback, useMemo} from 'react';
 import * as THREE from 'three';
 import { Box } from '@mantine/core';
+import { useHover} from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
@@ -10,6 +11,8 @@ import { useLogin } from '../home-page/components/LoginContext.tsx';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
+import { bool } from 'prop-types';
+import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 
 export interface MapEditorProps {
   selectedTool: string;
@@ -27,12 +30,14 @@ export const MapContext = createContext<MapEditorProps>({});
 export function MapEditor() {
     const allNodes = useAllNodesContext();
 
+    const { hovered: editBoxHovered, ref: hoverRef } = useHover();
+
     const [nodeSelected, setNodeSelected] = useState(false);
     const [floorState, setFloorState] = useState(1);
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer')
     const [mapTool, setMapTool] = useState('pan');
-    const [newNodes, setNewNodes] = useState<DirectoryNodeItem[]>([]);
+    const [newNodes, setNewNodes] = useState<DirectoryNodeItem[]>(allNodes);
 
     const mapProps: MapEditorProps = {
       selectedTool: mapTool,
@@ -199,6 +204,8 @@ export function MapEditor() {
     };
 
     useEffect(() => {
+        setNewNodes(allNodes);
+
         clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
         for (const node of allNodes) {
@@ -302,7 +309,7 @@ export function MapEditor() {
       })
 
        */
-
+console.log("changed")
       // switches the type of cursor depending on the tool
       switch(mapTool) {
         case 'pan':
@@ -319,7 +326,6 @@ export function MapEditor() {
           break;
       }
     }, [mapTool])
-
 
     const handlePanClick = (event) => {
       const raycaster = new THREE.Raycaster();
@@ -488,8 +494,8 @@ export function MapEditor() {
           render();
           updateDragControls();
         } else if (selectedObjects.current.length == 1) {
-          const firstNode = newNodes.find(element => element.id === selectedObjects.current[0].userData.nodeId);
-          const secondNode = newNodes.find(element => element.id === selectedObject.userData.nodeId);
+          const firstNode = allNodes.find(element => element.id === selectedObjects.current[0].userData.nodeId);
+          const secondNode = allNodes.find(element => element.id === selectedObject.userData.nodeId);
           console.log(firstNode, secondNode)
           if(firstNode != null && secondNode != null) {
             createEdge(firstNode, secondNode);
@@ -512,31 +518,54 @@ export function MapEditor() {
     useEffect(() => {
         // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
 
-        window.addEventListener('click', clickHandler);
+        // will only add the click handler if editing the map
+        if(!editBoxHovered) {
+            window.addEventListener('click', clickHandler);
 
-        return () => {
-          window.removeEventListener('click', clickHandler);
+            return () => {
+                window.removeEventListener('click', clickHandler);
+            }
         }
 
-    }, [mapTool]);
-
+    }, [mapTool, editBoxHovered]);
 
     useEffect(() => {
 
-      setNewNodes(allNodes);
+        const deleteSelected = () => {
+            if(selectedObjects.current.length > 0) {
+                selectedObjects.current.forEach((object) => {
+                    const allNodesIndex = allNodes.findIndex(element => element.id === object.userData.nodeId);
+                    if(allNodesIndex != -1)
+                        allNodes.splice(allNodesIndex, 1);
 
-      const deleteSelected = () => {
-        if(selectedObjects.current.length > 0) {
-          selectedObjects.current.forEach((object) => {
-            const newNodesIndex = newNodes.findIndex(element => element.id === object.userData.nodeId);
-            newNodes.splice(newNodesIndex, 1);
+                    const objectsIndex = objectsRef.current.findIndex(element => element.userData.nodeId === object.userData.nodeId);
+                    const objectToRemove = objectsRef.current.find(element => element.userData.nodeId === object.userData.nodeId);
+                    console.log(objectsIndex, objectsRef.current);
+                    if(objectsIndex != -1 && objectToRemove != null) {
+                        objectToRemove.visible = false;
 
-            const objectsIndex = objectsRef.current.findIndex(element => element.id === object.userData.nodeId);
-            objectsRef.current.splice(objectsIndex, 1);
-          })
-          render();
+                        objectsRef.current.splice(objectsIndex, 1);
+                    }
+                })
+                render();
+            }
+            setNewNodes(allNodes);
         }
-      }
+
+        window.addEventListener('keydown', ({key}) => {
+            if (key === "Backspace" || key === "Delete") {
+                deleteSelected();
+            }
+        });
+
+        return () => {
+            window.removeEventListener('keydown', deleteSelected);
+        }
+
+    }, [allNodes]);
+
+    // This is for one-time initializations and handlers
+    useEffect(() => {
 
       // make sure map movement is re-enabled for some edge cases
       const handleMouseUp = () => {
@@ -549,12 +578,6 @@ export function MapEditor() {
           controlRef.current.enabled = true;
         }, 10);
       };
-
-      window.addEventListener('keydown', ({key}) => {
-        if (key === "Backspace" || key === "Delete") {
-          deleteSelected();
-        }
-      });
 
       window.addEventListener('mouseup', handleMouseUp);
       if (rendererRef.current) {
@@ -606,9 +629,12 @@ export function MapEditor() {
     return (
         <Box w="100vw" h="100vh" p={0}>
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
-            <MapContext.Provider value={mapProps}>
-              <MapEditorBox/>
-            </MapContext.Provider>
+
+            <Box ref={hoverRef}>
+                <MapContext.Provider value={mapProps}>
+                    <MapEditorBox/>
+                </MapContext.Provider>
+            </Box>
 
             <canvas
                 ref={canvasRef}

@@ -48,7 +48,7 @@ router.post('/import/direct', async (req: Request, res: Response) => {
 
     // adds the imported file data to Prisma
     const prismaCreate = await PrismaClient.node.createMany({
-        data: req.body,
+        data: req.body.data,
         skipDuplicates: true,
     });
 

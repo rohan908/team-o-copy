@@ -308,13 +308,15 @@ const MapEditorBox = ({}) => {
 
     // Sends all new Node data to the backend
     async function SaveAllNodes() {
+        console.log(mapProps.newNodes);
+
         const importNodes = await axios.post('api/directory/import/direct', {
           data: mapProps.newNodes,
         })
-        console.log(mapProps.newNodes);
+
         addSaveLabel();
 
-        console.log(importNodes);
+        //console.log(importNodes);
     }
 
     useEffect(() => {
