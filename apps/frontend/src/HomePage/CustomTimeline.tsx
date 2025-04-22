@@ -146,8 +146,8 @@ export const CustomTimeline = () => {
                         </Title>
                         <Collapse
                             in={activeSection === i}
-                            transitionDuration={300}
-                            transitionTimingFunction="ease-out"
+                            transitionDuration={500}
+                            transitionTimingFunction="ease"
                         >
                             <Box w="100%">{getCurrTabContent(i)}</Box>
                         </Collapse>
