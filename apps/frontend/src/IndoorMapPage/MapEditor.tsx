@@ -25,12 +25,14 @@ export interface MapEditorProps {
 export const MapContext = createContext<MapEditorProps>({});
 
 export function MapEditor() {
+    const allNodes = useAllNodesContext();
+
     const [nodeSelected, setNodeSelected] = useState(false);
     const [floorState, setFloorState] = useState(1);
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer')
     const [mapTool, setMapTool] = useState('pan');
-    const [newNodes, setNewNodes] = useState<DirectoryNodeItem[]>([]);
+    const [newNodes, setNewNodes] = useState<DirectoryNodeItem[]>(allNodes);
 
     const mapProps: MapEditorProps = {
       selectedTool: mapTool,
@@ -52,8 +54,6 @@ export function MapEditor() {
             endNodeId: number;
         }[]
     >([]);
-
-    const allNodes = useAllNodesContext();
 
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -216,6 +216,17 @@ export function MapEditor() {
                 }
             }
         }
+
+        return () => {
+          //window.removeEventListener('mouseup', handleMouseUp);
+          //window.removeEventListener('mouseleave', handleMouseLeave);
+          window.removeEventListener('click', clickHandler);
+          // clear refs on dismount
+          selectedObjects.current = [];
+          edgeMeshesRef.current = [];
+          objectsRef.current = [];
+        }
+
     }, [allNodes]);
 
     const updateDragControls = () => {
@@ -278,12 +289,20 @@ export function MapEditor() {
             selectedObjects.current = selectedObjects.current.filter(
                 (object) => object !== selectedObject
             );
+
             render(); // render to show color changes
             updateDragControls();
         }
     };
 
     const clickHandler = useCallback((event) => {
+      /*
+      selectedObjects.current.forEach((object) => {
+        deselectObject(object);
+      })
+
+       */
+
       // switches the type of cursor depending on the tool
       switch(mapTool) {
         case 'pan':
@@ -293,6 +312,10 @@ export function MapEditor() {
         case 'add-node':
           setCursorStyle('crosshair');
           handleAddNodeClick(event);
+          break;
+        case 'add-edge':
+          setCursorStyle('crosshair');
+          handleAddEdgeClick(event);
           break;
       }
     }, [mapTool])
@@ -370,33 +393,116 @@ export function MapEditor() {
 
       const intersects = raycaster.intersectObjects(objectsRef.current, true);
 
-
       // new node positon
-      const point = raycaster.intersectObjects(scenesRef.current[sceneIndexState].children, true);
+      if(intersects.length == 0) {
+        const point = raycaster.intersectObjects(scenesRef.current[sceneIndexState].children, true);
 
-      const posX = point[0].point.x;
-      const posY = point[0].point.y;
+        const posX = point[0].point.x;
+        const posY = point[0].point.y;
 
-      const {floor, mapID} = getFloorAndMapIDFromSceneIndex(sceneIndexState);
+        const {floor, mapID} = getFloorAndMapIDFromSceneIndex(sceneIndexState);
 
-      const newNode: DirectoryNodeItem = {
-        id: 1000,
-        x: posX,
-        y: posY,
-        floor: floor,
-        mapId: mapID,
-        name: "",
-        description: "",
-        nodeType: "",
-        connectingNodes: [],
+        const newNode: DirectoryNodeItem = {
+          id: getUnusedNodeId(),
+          x: posX,
+          y: posY,
+          floor: floor,
+          mapId: mapID,
+          name: "",
+          description: "",
+          nodeType: "",
+          connectingNodes: [],
+        }
+
+        allNodes.push(newNode);
+        setNewNodes(allNodes);
+
+        createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
+          color: nodeColor,
+        }); //Create the nodes
+      }
+    }
+
+    const getUnusedNodeId = (): number => {
+      let openIndex: number = 0;
+      allNodes.forEach((node: DirectoryNodeItem, index: number) => {
+        if(node.id != index) {
+          openIndex = index;
+        }
+      })
+      return openIndex;
+    }
+
+    const handleAddEdgeClick = (event) => {
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+
+      if (!canvasRef.current || !cameraRef.current) {
+        console.log('Canvas or camera ref not available');
+        return;
       }
 
-      newNodes.push(newNode);
-      setNewNodes(newNodes);
+      const rect = canvasRef.current.getBoundingClientRect();
+      // check if click is within canvas bounds
+      if (
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom
+      ) {
+        return;
+      }
 
-      createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
-        color: nodeColor,
-      }); //Create the nodes
+      // normalize pointer position (-1 to 1 in x and y)
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      // ray from the camera position to the pointer
+      raycaster.setFromCamera(pointer, cameraRef.current);
+
+      const intersects = raycaster.intersectObjects(objectsRef.current, true);
+
+      if (intersects.length > 0) {
+        const selectedObject = intersects[0].object;
+        if (selectedObjects.current.includes(selectedObject)) {
+          deselectObject(selectedObject);
+          console.log('Deselected:', selectedObject);
+        } else {
+          toggleEdge(selectedObject);
+          console.log('Selected:', selectedObject);
+        }
+      } else {
+        console.log('No object hit');
+      }
+    }
+
+    const toggleEdge = (selectedObject: THREE.Object3D) => {
+      if (
+        selectedObject instanceof THREE.Mesh &&
+        selectedObject.material instanceof THREE.MeshBasicMaterial
+      ) {
+        if (selectedObjects.current.length == 0) {
+          selectedObject.material.color.set(selectedNodeColor);
+          selectedObject.material.needsUpdate = true;
+          selectedObjects.current.push(selectedObject);
+          render();
+          updateDragControls();
+        } else if (selectedObjects.current.length == 1) {
+          const firstNode = newNodes.find(element => element.id === selectedObjects.current[0].userData.nodeId);
+          const secondNode = newNodes.find(element => element.id === selectedObject.userData.nodeId);
+          console.log(firstNode, secondNode)
+          if(firstNode != null && secondNode != null) {
+            createEdge(firstNode, secondNode);
+          }
+          selectedObjects.current.forEach((object) => {
+            deselectObject(object);
+          })
+
+          render();
+          updateDragControls();
+        }
+      }
+
     }
 
     // Once initialized event listeners will operate continuously. Thus they can just be put in a useEffect with no dependencies that will run once.
@@ -431,13 +537,13 @@ export function MapEditor() {
       }
 
       return () => {
-        window.removeEventListener('mouseup', handleMouseUp);
-        window.removeEventListener('mouseleave', handleMouseLeave);
-        //window.removeEventListener('click', clickHandler);
+        //window.removeEventListener('mouseup', handleMouseUp);
+        //window.removeEventListener('mouseleave', handleMouseLeave);
+        window.removeEventListener('click', clickHandler);
         // clear refs on dismount
         selectedObjects.current = [];
         edgeMeshesRef.current = [];
-        //objectsRef.current = [];
+        objectsRef.current = [];
       }
     }, []);
 
