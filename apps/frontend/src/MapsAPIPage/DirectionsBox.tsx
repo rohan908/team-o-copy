@@ -70,7 +70,7 @@ return (
                          color="#F6D161" // Line color
                          styles={{
                            label: {
-                             color: '#000000'}
+                             color: '#000000'} //text colot
                          }}/>
               </List.Item>
             ))}
