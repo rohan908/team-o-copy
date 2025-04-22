@@ -8,6 +8,9 @@ import * as process from 'process';
 export default defineConfig({
     resolve: {
         preserveSymlinks: true,
+        alias: {
+            '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
+        },
     },
     server: {
         host: 'localhost',
