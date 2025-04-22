@@ -66,7 +66,11 @@ export function DisplayDirectionsBox() {
                         <Accordion.Control>Floor {floor}</Accordion.Control>
                         <Accordion.Panel>
                             {direction.map((step, idx) => (
-                                <Text key={idx}>{step.Direction}</Text>
+                                <Text key={idx}>
+                                    {step.Direction === 'Straight'
+                                        ? `Continue straight for ${step.Distance.toFixed(1)} units.`
+                                        : `Then turn ${step.Direction.toLowerCase()}.`}
+                                </Text>
                             ))}
                         </Accordion.Panel>
                     </Accordion.Item>

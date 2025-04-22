@@ -48,7 +48,8 @@ function calculateAngle(node1: NodeDataType, node2: NodeDataType): number {
  *  Current weight of a change in directions is anythign greater than 30 degrees, may need to be changed in the future
  */
 function getDirection(angle1: number, angle2: number): string {
-    let angleOffset = angle2 - angle1;
+    //let angleOffset = angle2 - angle1;
+    let angleOffset = ((angle2 - angle1 + 540) % 360) - 180;
     // if less than a 30 degree change (positive or negative) -> straight
     if (Math.abs(angleOffset) <= 30) {
         return 'Straight';
@@ -63,45 +64,59 @@ function getDirection(angle1: number, angle2: number): string {
     }
     return 'unknown';
 }
+function calculateDistance(node1: NodeDataType, node2: NodeDataType): number {
+    const dx = node2.x - node1.x;
+    const dy = node2.y - node1.y;
+    return Math.sqrt(dx * dx + dy * dy);
+}
 
+/**
+ *
+ * @param path
+ * @constructor
+ */
 export function GetTextDirections(path: NodeDataType[]): TextDirection[] {
     const directions: TextDirection[] = [];
     // Always start w/ straight for the first 2 nodes, since this will determine the original direction to then change from
-    const node1 = path[0];
-    const node2 = path[1];
-    // calculate starting angle
-    let startingAngle = calculateAngle(node1, node2);
-    directions.push({
-        Direction: 'Straight',
-        // placeholder until distance is integrated
-        Distance: 0,
-        Floor: node1.floor,
-    });
+    if (path.length >= 2) {
+        directions.push({
+            Direction: 'Straight',
+            // placeholder until distance is integrated
+            // added distance
+            Distance: calculateDistance(path[0], path[1]),
+            Floor: path[0].floor,
+        });
+    }
     // loop through and get directions for every following set of nodes
-    for (let i = 1; i < path.length - 1; i++) {
+    for (let i = 0; i < path.length - 2; i++) {
         const firstNode = path[i];
         const secondNode = path[i + 1];
+        // add thirdNode
+        const thirdNode = path[i + 2];
         // check for floor value
-        if (firstNode.floor !== secondNode.floor) {
-            // handle floor change, this will be the last direction per floor -> instructs how to move to the next using nodeType
-            directions.push({
-                Direction: 'Straight',
-                Distance: 0,
-                Floor: firstNode.floor,
-            });
+        if (firstNode.floor !== secondNode.floor || secondNode.floor !== thirdNode.floor) {
+            // skip direction if on different floors
             continue;
         }
         // call helpers
-        const nextAngle = calculateAngle(firstNode, secondNode);
-        const turnDirection = getDirection(startingAngle, nextAngle);
+        // change from nextAngle to angle 1 and add angle2
+        const angle1 = calculateAngle(firstNode, secondNode);
+        const angle2 = calculateAngle(secondNode, thirdNode);
+        const turnDirection = getDirection(angle1, angle2);
         // push data to directions
         directions.push({
             Direction: turnDirection,
+            // added distance
             Distance: 0,
-            Floor: firstNode.floor,
+            Floor: secondNode.floor,
         });
-        // update starting angle for next offset calculation
-        startingAngle = nextAngle;
+        // push data to directions
+        directions.push({
+            Direction: 'Straight',
+            // added distance
+            Distance: calculateDistance(secondNode, thirdNode),
+            Floor: secondNode.floor,
+        });
     }
     return directions;
 }
