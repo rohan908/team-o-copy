@@ -32,7 +32,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
     updateNodePosition,
 }) => {
     const theme = useMantineTheme();
-    const [collapsed, setCollapsed] = useState(true);
+    const [collapsed, setCollapsed] = useState(false);
     const [hoverAddNode, setHoverAddNode] = useState(setTimeout(function () {}, 1000));
     const [hoverRemoveNode, setHoverRemoveNode] = useState(setTimeout(function () {}, 1000));
     const [hoverAddEdge, setHoverAddEdge] = useState(setTimeout(function () {}, 1000));
@@ -390,6 +390,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
             right={0}
             display="flex"
             ta="left"
+            top={"100px"}
             pb={collapsed ? 0 : '1.5rem'}
             style={{
                 zIndex: 999,
