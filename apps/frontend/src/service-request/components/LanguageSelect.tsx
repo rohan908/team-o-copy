@@ -13,7 +13,7 @@ const LanguageSelect: React.FC<SelectProps> = (props) => {
     return (
         <Select
             label="Choose the Language Needed"
-            placeholder="--Select a Language--"
+            placeholder="Select a Language"
             searchable
             data={languageOptions}
             nothingFoundMessage="Language not found"

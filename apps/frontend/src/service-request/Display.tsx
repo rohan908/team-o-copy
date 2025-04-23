@@ -1,45 +1,40 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { Box, Flex, useMantineTheme, Text } from '@mantine/core';
+import { Box, Flex, useMantineTheme, Text, Button } from '@mantine/core';
 
-export function Display() {
+interface DisplayProps {
+    data: { title: string; value: string | undefined }[];
+    onBack: () => void;
+}
+const Display: React.FC<DisplayProps> = ({ data, onBack }) => {
     const theme = useMantineTheme();
-    const location = useLocation();
 
     // Safely handle missing state
-    if (!location.state?.requestData) {
-        return (
-            <Flex justify="center" align="center" h="100vh">
-                <Text>No submission data found. Please submit the form again.</Text>
-            </Flex>
-        );
-    }
-    const { requestData } = location.state;
 
     return (
-        <Flex w="100%" h="100vh" align="center" direction="column" p="xl" bg="terquAccet.2">
-            <Text size="xl" fw={700} mb="lg">
+        <Flex w="100%" h="100vh" align="center" direction="column" p="xl">
+            <Text size="xl" fw={700} mb="lg" c="#2658bd">
                 Service Request Submitted
             </Text>
             <Box
-                bg="themeGold.1"
                 p="xl"
                 w="100%"
                 maw="600px"
-                bd='3px solid'
+                bg="#D6E0F8"
                 /*Border Radius is only possible through style prop afaik -Connor*/
-                style={{
-                    borderRadius: theme.radius.md,
-                }}
             >
-                {requestData.map((item, idx) => (
-                    <Text mb="sm" key={idx}>
+                {data.map((item, idx) => (
+                    <Text mb="sm" key={idx} c="#2658bd">
                         <strong>{item.title}:</strong> {item.value}
                     </Text>
                 ))}
+                <Box mr="auto" mt="lg">
+                    <Button radius="md" onClick={onBack} bg="#5A83DB" style={{ width: '100px' }}>
+                        Back
+                    </Button>
+                </Box>
             </Box>
         </Flex>
     );
-}
+};
 
 export default Display;

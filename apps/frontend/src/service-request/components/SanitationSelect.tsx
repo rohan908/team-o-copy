@@ -4,7 +4,7 @@ const SanitationSelect: React.FC<SelectProps> = (props) => {
     return (
         <Select
             label="Choose the Cleanup Type Needed"
-            placeholder="--Select a Cleanup Type--"
+            placeholder="Select a Cleanup Type"
             searchable
             data={[
                 'Biohazard Cleanup',
