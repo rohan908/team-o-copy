@@ -118,5 +118,39 @@ export function GetTextDirections(path: NodeDataType[]): TextDirection[] {
             Floor: secondNode.floor,
         });
     }
-    return directions;
+    // return directions;
+    // merging straights
+    const combinedDirections: TextDirection[] = [];
+    for (const dir of directions) {
+        const last = combinedDirections[combinedDirections.length - 1];
+        if (
+            dir.Direction === 'Straight' &&
+            last &&
+            last.Direction === 'Straight' &&
+            last.Floor === dir.Floor
+        ) {
+            last.Distance += dir.Distance;
+        } else {
+            combinedDirections.push({ ...dir });
+        }
+    }
+    // add handling/message for going up stairs or elevator
+    for (let i = 1; i < path.length; i++) {
+        const prev = path[i - 1];
+        const curr = path[i];
+        const next = path[i + 1];
+        if (prev.floor !== curr.floor) {
+            const transitionType = prev.nodeType?.toUpperCase() || '';
+            let message = `Go to Floor ${curr.floor}`;
+            if (transitionType === 'STAIRCASE') {
+                message = `Take the stairs to Floor ${next.floor + 1}`;
+            }
+            combinedDirections.push({
+                Direction: message,
+                Distance: 0,
+                Floor: prev.floor,
+            });
+        }
+    }
+    return combinedDirections;
 }

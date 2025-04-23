@@ -63,13 +63,18 @@ export function DisplayDirectionsBox() {
             >
                 {Object.entries(directionsByFloor).map(([floor, direction]) => (
                     <Accordion.Item key={floor} value={`floor-${floor}`}>
-                        <Accordion.Control>Floor {floor}</Accordion.Control>
+                        <Accordion.Control>
+                            {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
+                            {Number(floor) === 1 ? 'Floor 1' : `Floor ${Number(floor) + 1}`}
+                        </Accordion.Control>
                         <Accordion.Panel>
                             {direction.map((step, idx) => (
                                 <Text key={idx}>
-                                    {step.Direction === 'Straight'
-                                        ? `Continue straight for ${step.Distance.toFixed(1)} units.`
-                                        : `Then turn ${step.Direction.toLowerCase()}.`}
+                                    {step.Direction.startsWith('Take')
+                                        ? step.Direction
+                                        : step.Direction === 'Straight'
+                                          ? `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`
+                                          : `Then turn ${step.Direction.toLowerCase()}.`}
                                 </Text>
                             ))}
                         </Accordion.Panel>
