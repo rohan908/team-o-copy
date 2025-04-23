@@ -16,6 +16,8 @@ interface TimelineContextType {
     setSelectedHospital: (hospital: string | null) => void;
     userCoordinates: LocationCoordinates | null;
     setUserCoordinates: (coords: LocationCoordinates | null) => void;
+    setUserStart: (start: string | null) => void;
+    userStart: string | null;
     travelMode: google.maps.TravelMode | null; //type travel mode must be googles enum, not just any string
     setTravelMode: (mode: google.maps.TravelMode | null) => void;
     isGmapsLoaded: boolean;
@@ -46,6 +48,8 @@ const TimelineContext = createContext<TimelineContextType>({
     setSelectedHospital: () => {},
     userCoordinates: null,
     setUserCoordinates: () => {},
+    userStart: null,
+    setUserStart: () => {},
     travelMode: null,
     setTravelMode: () => {},
     department: '',
@@ -68,6 +72,7 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
     // GMAPS
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [userCoordinates, setUserCoordinates] = useState<LocationCoordinates | null>(null);
+    const [userStart, setUserStart] = useState<string | null>(null);
     const [travelMode, setTravelMode] = useState<google.maps.TravelMode | null>(null);
     const [isGmapsLoaded, setIsGmapsLoaded] = useState<boolean>(false);
     const mapRef = useRef<google.maps.Map | null>(null);
@@ -91,6 +96,8 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
         setSelectedHospital,
         userCoordinates,
         setUserCoordinates,
+        userStart,
+        setUserStart,
         travelMode,
         setTravelMode,
         department,
