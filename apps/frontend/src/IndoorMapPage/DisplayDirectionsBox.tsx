@@ -56,7 +56,7 @@ export function DisplayDirectionsBox() {
     });
     return (
         <Box w="360px" h="400px" style={{ overflowY: 'auto' }}>
-            <Title order={1} size="xl" allign={'center'}>
+            <Title order={1} size="xl">
                 Navigate the Hospital
             </Title>
             <Accordion
