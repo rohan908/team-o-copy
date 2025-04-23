@@ -32,7 +32,7 @@ const LogInBox = () => {
 
         if (success) {
             setTimeout(() => {
-                navigate('/map-API');
+                navigate('/');
             }, 1000);
         }
     };
