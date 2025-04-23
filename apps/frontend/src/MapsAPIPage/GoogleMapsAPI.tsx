@@ -10,10 +10,8 @@ interface GoogleMapsAPIProps {
 
 const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     const onStepsUpdate = props.onStepsUpdate;
-    const { selectedHospital, userCoordinates, travelMode } = useTimeline();
+    const { selectedHospital, userCoordinates, travelMode, mapRef, directionsRendererRef } = useTimeline();
     console.log(selectedHospital + ' ' + userCoordinates + ' ' + travelMode);
-    const mapRef = useRef<google.maps.Map | null>(null);
-    const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
 
     function hospitalCoordinates(hospital: string | null): google.maps.LatLngLiteral | null {
         switch (hospital) {
@@ -34,12 +32,18 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     };
 
     useEffect(() => {
-        if (!userCoordinates || !selectedHospital || !travelMode || !mapRef.current) return;
+        if (!userCoordinates || !selectedHospital || !travelMode || !mapRef.current) {
+            if (directionsRendererRef.current) {
+                directionsRendererRef.current.setDirections({routes: []}); // Clear old route, if directions aren't filled completely
+            }
+            return;
+        }
         const directionsService = new google.maps.DirectionsService();
         if (!directionsRendererRef.current) {
             directionsRendererRef.current = new google.maps.DirectionsRenderer();
-            directionsRendererRef.current.setMap(mapRef.current);
+                
         }
+        directionsRendererRef.current.setMap(mapRef.current);
         directionsService.route(
             {
                 origin: userCoordinates,
@@ -63,7 +67,7 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
                 }
             }
         );
-    }, [userCoordinates, selectedHospital, travelMode]);
+    }, [userCoordinates, selectedHospital, travelMode, mapRef.current, directionsRendererRef.current]);
     return (
         <>
             <Box pos="relative" w="100%" h="100%">
@@ -77,7 +81,7 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
                     options={{
                         disableDefaultUI: true,
                         mapTypeId: 'satellite',
-                        mapTypeControl: 'true',
+                        mapTypeControl: true,
                     }}
                 />
             </Box>

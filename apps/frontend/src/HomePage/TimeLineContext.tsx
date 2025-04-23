@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useRef } from 'react';
 import { GoogleMap } from '@react-google-maps/api';
 
 // place holder
@@ -20,7 +20,8 @@ interface TimelineContextType {
     setTravelMode: (mode: google.maps.TravelMode | null) => void;
     isGmapsLoaded: boolean;
     setIsGmapsLoaded: (loaded: boolean) => void;
-
+    mapRef: {current: google.maps.Map | null};
+    directionsRendererRef: {current: google.maps.DirectionsRenderer | null};
 
     // Indoor Nav
     department: string | null;
@@ -57,6 +58,8 @@ const TimelineContext = createContext<TimelineContextType>({
     setSelectedService: () => {},
     isGmapsLoaded: false,
     setIsGmapsLoaded: () => {},
+    mapRef: {current: null},
+    directionsRendererRef: {current: null},
 });
 
 export function TimelineProvider({ children }: { children: ReactNode }) {
@@ -67,11 +70,13 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
     const [userCoordinates, setUserCoordinates] = useState<LocationCoordinates | null>(null);
     const [travelMode, setTravelMode] = useState<google.maps.TravelMode | null>(null);
     const [isGmapsLoaded, setIsGmapsLoaded] = useState<boolean>(false);
+    const mapRef = useRef<google.maps.Map | null>(null);
+    const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
 
     // Indoor Nav
     const [department, setDepartment] = useState<string | null>(null);
     const [directoryOptions, setDirectoryOptions] = useState<{ value: string; label: string }[]>(
-        []  
+        []
     );
 
     const [selectedAlgorithm, setSelectedAlgorithm] = useState<string | null>(null);
@@ -98,6 +103,8 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
         setSelectedService,
         isGmapsLoaded,
         setIsGmapsLoaded,
+        mapRef,
+        directionsRendererRef,
     };
 
     return <TimelineContext.Provider value={value}>{children}</TimelineContext.Provider>;
