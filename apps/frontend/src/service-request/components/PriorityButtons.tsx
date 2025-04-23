@@ -5,7 +5,7 @@ const PrioritySelect: React.FC<SelectProps> = (props) => {
     return (
         <Select
             label="Choose the Priority level"
-            placeholder="--Select a priotriy--"
+            placeholder="Select a priotriy"
             searchable
             data={['Emergency', 'High', 'Medium', 'Low']}
             nothingFoundMessage="No Priority selected"

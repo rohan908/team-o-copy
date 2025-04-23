@@ -25,7 +25,7 @@ router.post('/', async (req: Request, res: Response) => {
         // creating request to get data from frontend
         const request = await PrismaClient.securityServiceRequest.create({
             data: {
-                security: security,
+                security,
                 date,
                 time: convertTo24Hour(time),
                 department,

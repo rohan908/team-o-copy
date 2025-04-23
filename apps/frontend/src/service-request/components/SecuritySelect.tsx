@@ -5,7 +5,7 @@ const SecuritySelect: React.FC<SelectProps> = (props) => {
     return (
         <Select
             label="Choose Your Security Concern"
-            placeholder="--Select a Concern--"
+            placeholder="Select a Concern"
             searchable
             data={['Escort Service', 'Safety Hazard', 'Building Security', 'Surveillance']}
             nothingFoundMessage="Service not Offered"

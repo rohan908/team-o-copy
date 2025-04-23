@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RequestForm, { RequestData } from './RequestForm.tsx';
 import SecuritySelect from './components/SecuritySelect';
+import Display from './Display.tsx';
 
 const initialValues: RequestData = {
     employeeName: '',
@@ -16,7 +17,10 @@ const initialValues: RequestData = {
 };
 
 function Security({ onBack }: { onBack: () => void }) {
-    const navigate = useNavigate();
+    const [submittedData, setSubmittedData] = useState<
+        { title: string; value: string | undefined }[] | null
+    >(null);
+
     const handleSubmit = async (rawData: RequestData) => {
         const requestData = {
             ...rawData,
@@ -31,27 +35,27 @@ function Security({ onBack }: { onBack: () => void }) {
             });
 
             if (response.ok) {
-                navigate('/submission', {
-                    state: {
-                        requestData: [
-                            // need title for nicer looking display page
-                            { title: 'Name', value: requestData.employeeName },
-                            { title: 'Security', value: requestData.security },
-                            { title: 'Hospital', value: requestData.hospital },
-                            { title: 'Department', value: requestData.department },
-                            { title: 'Date', value: requestData.date },
-                            { title: 'Time', value: requestData.time },
-                            { title: 'Priority', value: requestData.priority },
-                            { title: 'Status', value: requestData.status },
-                            { title: 'Details', value: requestData.description },
-                        ],
-                    },
-                });
+                const displayData = [
+                    // need title for nicer looking display page
+                    { title: 'Name', value: requestData.employeeName },
+                    { title: 'Security', value: requestData.security },
+                    { title: 'Hospital', value: requestData.hospital },
+                    { title: 'Department', value: requestData.department },
+                    { title: 'Date', value: requestData.date },
+                    { title: 'Time', value: requestData.time },
+                    { title: 'Priority', value: requestData.priority },
+                    { title: 'Status', value: requestData.status },
+                    { title: 'Details', value: requestData.description },
+                ];
+                setSubmittedData(displayData);
             }
         } catch (error) {
             console.error('Request failed:', error);
         }
     };
+    if (submittedData) {
+        return <Display data={submittedData} onBack={() => setSubmittedData(null)} />;
+    }
 
     return (
         <RequestForm
