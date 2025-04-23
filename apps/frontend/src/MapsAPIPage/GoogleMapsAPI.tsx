@@ -11,6 +11,7 @@ interface GoogleMapsAPIProps {
 const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     const onStepsUpdate = props.onStepsUpdate;
     const { selectedHospital, userCoordinates, travelMode } = useTimeline();
+    console.log(selectedHospital + ' ' + userCoordinates + ' ' + travelMode);
     const mapRef = useRef<google.maps.Map | null>(null);
     const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
 

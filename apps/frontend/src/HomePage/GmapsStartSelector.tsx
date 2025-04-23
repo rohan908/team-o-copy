@@ -40,9 +40,6 @@ export function GmapsStartSelector() {
     return (
         <TextInput
             placeholder="Starting Location"
-            rightSection={
-                <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
-            }
             leftSection={
                 <IconHomeFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
