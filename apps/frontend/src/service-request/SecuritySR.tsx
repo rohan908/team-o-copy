@@ -33,10 +33,18 @@ function Security() {
             if (response.ok) {
                 navigate('/submission', {
                     state: {
-                        requestData: Object.entries(requestData).map(([title, value]) => ({
-                            title: title,
-                            value: value,
-                        })),
+                        requestData: [
+                            // need title for nicer looking display page
+                            { title: 'Name', value: requestData.employeeName },
+                            { title: 'Security', value: requestData.security },
+                            { title: 'Hospital', value: requestData.hospital },
+                            { title: 'Department', value: requestData.department },
+                            { title: 'Date', value: requestData.date },
+                            { title: 'Time', value: requestData.time },
+                            { title: 'Priority', value: requestData.priority },
+                            { title: 'Status', value: requestData.status },
+                            { title: 'Details', value: requestData.description },
+                        ],
                     },
                 });
             }
