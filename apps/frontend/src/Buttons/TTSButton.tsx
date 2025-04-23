@@ -6,7 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Button, Group } from '@mantine/core';
-import { IconPlayerPlay, IconPlayerStop } from '@tabler/icons-react';
+import { IconVolume, IconPlayerStop } from '@tabler/icons-react';
 interface TTSButtonProps {
     text: string[];
 }
@@ -46,8 +46,8 @@ const TTSButton: React.FC<TTSButtonProps> = ({ text }) => {
             size="sm"
         >
             <Group>
-                {isSpeaking ? <IconPlayerStop size="16" /> : <IconPlayerPlay size="16" />}
-                {isSpeaking ? 'Stop' : 'Play Directions'}
+                {isSpeaking ? <IconPlayerStop size="16" /> : <IconVolume size="16" />}
+                {isSpeaking ? 'Stop' : ''}
             </Group>
         </Button>
     );
