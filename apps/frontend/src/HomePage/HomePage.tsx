@@ -1,33 +1,76 @@
-import { Flex, Grid, Title, useMantineTheme } from '@mantine/core';
+import { Box, Flex, Grid, Stack, Title, useMantineTheme } from '@mantine/core';
 import { CustomTimeline } from './CustomTimeline.tsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ContentSwitcher } from './ContentSwitcher.tsx';
-import { TimelineProvider } from './TimeLineContext.tsx';
-
+import { HoverUnderline } from '../common-compoents/HoverUnderline.js';
+import { useTimeline } from './TimeLineContext.tsx';
+import { useJsApiLoader } from '@react-google-maps/api';
 export function HomePage() {
     const theme = useMantineTheme();
 
+    const {
+        setActiveSection,
+        setSelectedHospital,
+        setUserCoordinates,
+        setTravelMode,
+        setDepartment,
+        setSelectedService,
+    } = useTimeline();
+
+    // useEffect to clear the context when we go back to the home page (on mount)
+    useEffect(() => {
+        setActiveSection(0);
+        setSelectedHospital(null);
+        setUserCoordinates(null);
+        setTravelMode(null);
+        setDepartment('');
+        setSelectedService('');
+    }, []);
+
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
+        libraries: ['places'], //required for location autocomplete in textbox
+    });
+
+    if (!isLoaded) {
+        return <div>Loading Google Maps...</div>; //debugmap
+    }
+
     return (
-        <TimelineProvider>
-            <Flex h="100%" justify="center" align="center" bg={theme.colors.terquAccet[1]}>
-                <Grid h="100%" gutter="xl" justify="center" align="stretch">
-                    <Grid.Col span={6} p="xl">
-                        <Title order={1} size="h1">
-                            Welcome to Mass Brigham
-                        </Title>
-                    </Grid.Col>
-
-                    <Grid.Col span={6} p="xl"></Grid.Col>
-
-                    <Grid.Col span={6} p="xl" h="50%">
+        <Box
+            style={{
+                backgroundImage: `radial-gradient(circle at center, white 0%, ${theme.colors.blue[0]} 100%)`,
+            }}
+            h="100%"
+            w="100%"
+            p="xl"
+            pos="absolute"
+        >
+            <Grid gutter="md" h="100%" mt={'2%'}>
+                {/* Left Context */}
+                <Grid.Col span={6} pl="5%">
+                    <Stack justify="flex-start" h="100%" align="flex-start">
+                        <HoverUnderline>
+                            <Title
+                                order={2}
+                                c={theme.colors.secondaryBlues[7]}
+                                fz={'xxxl'}
+                                w={'auto'}
+                            >
+                                How Can We Help?
+                            </Title>
+                        </HoverUnderline>
                         <CustomTimeline />
-                    </Grid.Col>
-
-                    <Grid.Col span={6} p="xl" h="50%">
-                        <ContentSwitcher />
-                    </Grid.Col>
-                </Grid>
-            </Flex>
-        </TimelineProvider>
+                    </Stack>
+                </Grid.Col>
+                {/* Right Content */}
+                <Grid.Col span={5}> 
+                    <Box h="100%" w={'100%'} display={'flex'} align="center" justify="center" pt="6%">
+                        <ContentSwitcher /> 
+                    </Box>
+                </Grid.Col>
+            </Grid>
+        </Box>
     );
 }
