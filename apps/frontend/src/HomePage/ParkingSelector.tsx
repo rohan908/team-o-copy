@@ -4,17 +4,27 @@ import { useTimeline } from './TimeLineContext.tsx';
 import { hospitalOptions } from './GmapsDestinationSelector.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
-import { useChestnutHillContext, usePatriotContext } from '../contexts/DirectoryContext.tsx';
+import {
+    useChestnutHillContext,
+    useFaulknerHospitalContext,
+    usePatriotContext,
+} from '../contexts/DirectoryContext.tsx';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 
 export function ParkingSelector() {
-    const { setSelectedHospital, setDirectoryOptions, department, selectedAlgorithm } =
-        useTimeline();
+    const {
+        setSelectedHospital,
+        setDirectoryOptions,
+        department,
+        selectedAlgorithm,
+        selectedHospital,
+    } = useTimeline();
 
     const theme = useMantineTheme();
 
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
+    const Faulkner = useFaulknerHospitalContext();
 
     const NavSelection = useNavSelectionContext();
 
@@ -30,6 +40,8 @@ export function ParkingSelector() {
             setDirectoryOptions(MapDepartment(Patriot));
         } else if (hospital == 'Chestnut Hill') {
             setDirectoryOptions(MapDepartment(Chestnut));
+        } else if (hospital == 'Faulkner Hospital') {
+            setDirectoryOptions(MapDepartment(Faulkner));
         } else {
             setDirectoryOptions([]);
         }
@@ -55,6 +67,7 @@ export function ParkingSelector() {
             }
             leftSection={<IconBuilding size="16" style={{ color: theme.colors.primaryBlues[8] }} />}
             data={hospitalOptions}
+            value={selectedHospital ?? ''}
             onChange={setHospitalLocation}
             radius="sm"
             mb="sm"

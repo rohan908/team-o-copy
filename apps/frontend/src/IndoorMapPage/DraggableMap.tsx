@@ -17,11 +17,14 @@ import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
+import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 
 export function DraggableMap() {
     /*
       References that exist outside renders, changeable floor state, and properties like theme
      */
+    const { selectedHospital } = useTimeline();
+
     const allNodes = useAllNodesContext();
     const navSelection = useNavSelectionContext();
     const selectedHospitalName = navSelection.state.navSelectRequest?.HospitalName;
@@ -58,6 +61,23 @@ export function DraggableMap() {
             setFloorState(1);
         }
     };
+    //stupid fix for adams hard coding bruh, need to switch the scene depending on the selected hopsital going to the indoor map page
+    useEffect(() => {
+        if (selectedHospital === '20 Patriot Pl' || selectedHospital === '22 Patriot Pl') {
+            setSceneIndexState(0);
+            setFloorState(1);
+        } else if (selectedHospital === 'Chestnut Hill') {
+            setSceneIndexState(3);
+            setFloorState(1); // Assuming Chestnut Hill starts at floor 1
+        } else if (selectedHospital === 'Faulkner Hospital') {
+            setSceneIndexState(4);
+            setFloorState(1);
+        } else {
+            setSceneIndexState(0);
+            setFloorState(1);
+        }
+    }, []);
+
     // associated floors with scenes
     const getSceneIndexFromFloor = (floor: number): number => {
         if (selectedHospitalName === 'Chestnut Hill') return 3;
@@ -77,8 +97,8 @@ export function DraggableMap() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-            }, 200); // Fade-in duration
-        }, 200); // Fade-out duration
+            }, 300); // Fade-in duration
+        }, 300); // Fade-out duration
     };
 
     const handlePath = (firstNodeId: number, lastNodeId: number, algo: string) => {
@@ -121,7 +141,7 @@ export function DraggableMap() {
 
     // handles changes to the hospital from the navSelection context
     useEffect(() => {
-        handleHospitalChange(selectedHospitalName);
+        handleHospitalChange(selectedHospitalName!);
     }, [selectedHospitalName]);
 
     // handles changes to the department or pathAlgo from the navSelection context
@@ -224,12 +244,12 @@ export function DraggableMap() {
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 5) {
-          scenesRef.current[4].add(
-            animationRef.current.createEdge(
-              { x: node1.x, y: node1.y },
-              { x: node2.x, y: node2.y }
-            )
-          );
+            scenesRef.current[4].add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
         }
     };
 
@@ -257,7 +277,7 @@ export function DraggableMap() {
     }, [selectedDepartment, sceneIndexState]);
 
     return (
-        <Box w="100%" h="100%" p={0} pos={'absolute'}>
+        <Box w="100%" h="100%" p={0} pos={'relative'}>
             <FloorSwitchBox
                 floor={floorState}
                 onCollapseChange={() => true}
@@ -275,7 +295,7 @@ export function DraggableMap() {
                     left: 0,
                     width: '100%',
                     height: '100%',
-                    backgroundColor: '#2fbcc7',
+                    backgroundColor: '#EBF2FF',
                     opacity: isFading ? 1 : 0,
                     transition: 'opacity 0.3s ease-in-out',
                     pointerEvents: 'none',

@@ -21,10 +21,13 @@ import { DepartmentSelector } from './DepartmentSelector.tsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { ModeOfTravelSelector } from './ModeOfTravelSelector.tsx';
 import { AlgorithmSelector } from './AlgorithmSelector.tsx';
+import { useLogin } from '../home-page/components/LoginContext.js';
+import { useMemo } from 'react';
 
 export const CustomTimeline = () => {
     const theme = useMantineTheme();
-    const { activeSection, setActiveSection } = useTimeline();
+    const { activeSection: originalActiveSection, setActiveSection } = useTimeline();
+    const { isLoggedIn } = useLogin();
 
     //FILL IN CONTENT HERE FOR EACH SUBSECTION
 
@@ -71,11 +74,23 @@ export const CustomTimeline = () => {
         }
     };
 
-    const titlesInfo = [
+    const allTitlesInfo = [
         { title: 'Go To Hospital', icon: <IconMap2 size={28} /> },
-        { title: 'Navigate to Hospital', icon: <IconArrowZigZag size={28} /> },
+        { title: 'Navigate The Hospital', icon: <IconArrowZigZag size={28} /> },
         { title: 'Request Services', icon: <IconFileInfo size={28} /> },
     ];
+
+    const titlesInfo = useMemo(() => {
+        return isLoggedIn ? allTitlesInfo : allTitlesInfo.slice(0, 2);
+    }, [isLoggedIn]);
+
+    const activeSection = useMemo(() => {
+        if (!isLoggedIn && originalActiveSection === 2) {
+            setActiveSection(0);
+            return 0;
+        }
+        return originalActiveSection;
+    }, [isLoggedIn, originalActiveSection, setActiveSection]);
 
     const handleClickChangeButton = (i: number) => {
         if (i !== activeSection) setActiveSection(i);

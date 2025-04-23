@@ -15,6 +15,7 @@ const DepartmentSelect: React.FC<DepartmentSelectProps> = ({ departments, ...pro
             size="xs"
             mb="md"
             required
+            c={"#285CC6"}
             {...props}
             styles={{
                 label: {

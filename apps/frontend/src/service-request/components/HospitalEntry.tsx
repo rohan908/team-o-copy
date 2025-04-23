@@ -20,6 +20,7 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
             mb="md"
             size="xs"
             required
+            c={"#285CC6"}
             {...props}
             styles={{
                 label: {

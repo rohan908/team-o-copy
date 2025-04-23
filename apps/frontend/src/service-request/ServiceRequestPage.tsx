@@ -72,14 +72,14 @@ export function ServiceRequestPage() {
     }
     return (
         <div>
-            <Box py="xl">
+            <Box pb="xl">
                 <Flex w="100%" h="80vh" justify="center" align="center">
                     <Stack>
                         {/*<Title order={2} ta="left" c={'#001D4D'} mb="lg">*/}
                         {/*    Select Request Type:*/}
                         {/*</Title>*/}
                         {/* basic grid for button layout*/}
-                        <SimpleGrid cols={3} spacing="30">
+                        <SimpleGrid cols={{base:1, md: 2, xxl: 3}} spacing={{base:30, md: 100, xxl: 30}} verticalSpacing={{base:20, md: 10, xxl: 30}}>
                             {ServiceRequestItems.map((item, index) => (
                                 <HoverButton
                                     key={index}

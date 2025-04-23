@@ -27,7 +27,12 @@ export function DisclaimerPopup() {
                 timingFunction="ease"
             >
                 {(transitionStyle) => (
-                    <Box pos="fixed" top={20} left="50%" style={{ transform: 'translateX(-50%)' }}>
+                    <Box
+                        pos="fixed"
+                        top={20}
+                        left="50%"
+                        style={{ transform: 'translateX(-50%)', zIndex: '10000' }}
+                    >
                         <Container size="xs" px="md">
                             <Card
                                 shadow="sm"
