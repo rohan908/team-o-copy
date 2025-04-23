@@ -721,7 +721,7 @@ export function MapEditor() {
 
             <Box ref={hoverRef}>
                 <MapContext.Provider value={mapProps}>
-                    <MapEditorBox/>
+                  <MapEditorBox/>
                 </MapContext.Provider>
             </Box>
 
