@@ -45,6 +45,7 @@ const LogInBox = () => {
     return (
         <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
             <TwoPartInteractiveBox
+                bg={"#D6E0F8"}
                 title="Let's Get Started"
                 subtitle="Looking for Directions?"
                 subContents={
@@ -68,6 +69,7 @@ const LogInBox = () => {
                             <Box>
                                 <Text fw={700} mb="sm" fz={{ base: 'md' }}>Login here for Staff:</Text>
                                 <TextInput
+                                    variant="filled"
                                     placeholder="Username"
                                     mt="md"
                                     mb="sm"
@@ -75,6 +77,7 @@ const LogInBox = () => {
                                     onChange={(e) => setUsername(e.target.value)}
                                 />
                                 <TextInput
+                                    variant="filled"
                                     placeholder="Password"
                                     type="password"
                                     mb="sm"
@@ -84,6 +87,7 @@ const LogInBox = () => {
                             </Box>
                             {/*<Group justify="flex-start" w="100%">*/}
                             <BlackButton
+                                bg={"#285CC6"}
                                 onClick={handleLogin}
                                 disabled={!username || !password}
                                 style={{ width: 'fit-content' }}
