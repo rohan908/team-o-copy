@@ -243,8 +243,6 @@ export function DraggableMap() {
                 setFloor={handleFloorChange}
                 building={selectedHospitalName || ''}
             />
-            <PathPickerBox />
-
             <canvas
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'relative' }}

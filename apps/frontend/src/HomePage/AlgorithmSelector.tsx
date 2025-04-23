@@ -21,6 +21,7 @@ export function AlgorithmSelector() {
 
     const setSelectedAlgo = (algo: string | null) => {
         setSelectedAlgorithm(algo);
+        console.log(algo);
         NavSelection.dispatch({
             type: 'SET_NAV_REQUEST',
             data: {
@@ -31,7 +32,7 @@ export function AlgorithmSelector() {
         });
     };
     return (
-        <Autocomplete
+        <Select
             placeholder="Select an Algorithm"
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
