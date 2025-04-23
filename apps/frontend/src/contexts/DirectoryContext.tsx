@@ -98,12 +98,24 @@ export const useChestnutHillContext = () => {
     return context.chestnutHill;
 };
 
+export const useFaulknerHospitalContext = () => {
+    const context = useContext(DirectoryContext);
+    if (!context) {
+        throw new Error(
+            'The FaulknerContext must be used within the provider component FaulknerProvider'
+        );
+    }
+
+    return context.faulknerHospital;
+};
+
 /*
   This is for the reducer function.
  */
 interface DirectoryState {
     patriot: DirectoryNodeItem[];
     chestnutHill: DirectoryNodeItem[];
+    faulknerHospital: DirectoryNodeItem[];
     allNodes: DirectoryNodeItem[];
     isLoading: boolean;
     error: string | null;
@@ -117,6 +129,7 @@ interface DirectoryState {
 type DirectoryAction =
     | { type: 'SET_PATRIOT'; data: DirectoryNodeItem[] }
     | { type: 'SET_CHESTNUTHILL'; data: DirectoryNodeItem[] }
+    | { type: 'SET_FAULKNERHOSPITAL'; data: DirectoryNodeItem[] }
     | { type: 'SET_ALLNODES'; data: DirectoryNodeItem[] }
     | { type: 'SET_LOADING'; data: boolean }
     | { type: 'SET_ERROR'; data: string };
@@ -138,6 +151,8 @@ function directoryReducer(state: DirectoryState, action: DirectoryAction): Direc
             return { ...state, patriot: action.data };
         case 'SET_CHESTNUTHILL':
             return { ...state, chestnutHill: action.data };
+        case 'SET_FAULKNERHOSPITAL':
+            return { ...state, faulknerHospital: action.data };
         case 'SET_ALLNODES':
             return { ...state, allNodes: action.data };
         case 'SET_LOADING':
@@ -162,6 +177,7 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
     const [state, dispatch] = useReducer(directoryReducer, {
         patriot: [],
         chestnutHill: [],
+        faulknerHospital: [],
         allNodes: [],
         isLoading: false,
         error: null,
@@ -177,6 +193,7 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
             // grabs data from the database for each building
             const patData = await fetchDirectoryData('1');
             const chestHilldata = await fetchDirectoryData('2');
+            const faulknerHospitalData = await fetchDirectoryData('3');
             const allNodeData = await fetchAllNodeData();
 
             const setPatData = await patData?.json().then((data) => {
@@ -185,6 +202,10 @@ export const DirectoryProvider: React.FC<PropsWithChildren> = ({ children }) => 
 
             const setChestnutData = await chestHilldata?.json().then((data) => {
                 dispatch({ type: 'SET_CHESTNUTHILL', data: data });
+            });
+
+            const setFaulknerHospitalData = await faulknerHospitalData?.json().then((data) => {
+                dispatch({ type: 'SET_FAULKNERHOSPITAL', data: data });
             });
 
             const setAllNodeData = await allNodeData?.json().then((data) => {

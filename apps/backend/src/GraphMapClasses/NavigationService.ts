@@ -18,6 +18,29 @@ export class NavigationService {
         this.pathFinder = new BFSPathFinder(graphRef);
     }
 
+    public async reinitialize(): Promise<void> {
+        const databaseNodes = await PrismaClient.node.findMany({});
+        const databaseEdges = await PrismaClient.edge.findMany({});
+
+        this.graph.nodes.forEach((node) => {
+            this.graph.removeNode(node.data);
+        });
+
+        databaseNodes.forEach((databaseNode) => {
+            this.executeGraphCommand('nodeAdd', databaseNode);
+        });
+
+        databaseEdges.forEach((databaseEdge) => {
+            const node1 = this.graph.getNodeById(databaseEdge.nodes[0]);
+            const node2 = this.graph.getNodeById(databaseEdge.nodes[1]);
+            if (node1?.data !== undefined) {
+                this.executeGraphCommand('edgeAdd', node1?.data, node2?.data, databaseEdge.weight);
+            }
+        });
+
+        console.log('reinitialized graph');
+    }
+
     public async initialize(): Promise<void> {
         const databaseNodes = await PrismaClient.node.findMany({});
         const databaseEdges = await PrismaClient.edge.findMany({});

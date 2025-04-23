@@ -335,6 +335,7 @@ const MapEditorBox = ({}) => {
             pos="fixed"
             left={20}
             right={0}
+            w={"37%"}
             display="flex"
             ta="left"
             top={"75px"}
@@ -348,7 +349,7 @@ const MapEditorBox = ({}) => {
                 ref={ref}
                 bg="themeGold.2"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
-                w="37%"
+                w="100%"
                 maw={collapsed ? 350 : '80%'}
                 opacity={collapsed ? 0.8 : 0.95}
                 style={{

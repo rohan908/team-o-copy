@@ -21,7 +21,6 @@ export function AlgorithmSelector() {
 
     const setSelectedAlgo = (algo: string | null) => {
         setSelectedAlgorithm(algo);
-        console.log(algo);
         NavSelection.dispatch({
             type: 'SET_NAV_REQUEST',
             data: {
@@ -46,7 +45,7 @@ export function AlgorithmSelector() {
             size="xs"
             onChange={setSelectedAlgo}
             disabled={!selectedHospital || !department}
-            w={'100%'}
+            w={{ xl: '350px', lg: '300px', sm: '100%' }}
         />
     );
 }
