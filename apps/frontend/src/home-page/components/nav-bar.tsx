@@ -38,6 +38,9 @@ export function NavBar() {
         pos="sticky"
         top={"10px"}
         bg="transparent"
+        style={{
+          zIndex: 999
+        }}
       >
         <Group h="0px" px="md" bg="transparent">
           <Group justify="space-between" style={{ flex: 1 }}>
