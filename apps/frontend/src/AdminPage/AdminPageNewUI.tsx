@@ -50,9 +50,9 @@ export function AdminPageV2() {
 
     return (
         <Box
-            mih="100vh"
+            mih="80vh"
             w="full"
-            bg="#EBF2FF"
+            bg="#EAF1FF"
         >
           <Grid align="top">
               <Grid.Col span={"content"}>
@@ -61,7 +61,7 @@ export function AdminPageV2() {
                     <div style={styles}>
                       <Flex direction="column" justify="center">
                         <Box
-                          w="30vw"
+                          w="20vw"
                           mih="100vh"
                           p="lg"
                           mt="-8px"
@@ -84,7 +84,7 @@ export function AdminPageV2() {
                             <Flex direction="column" align="center" justify="center" gap="sm">
                               <Flex direction="row" align="center" justify="center" gap="sm">
                                 <Title c="black">
-                                  Service Request Information
+                                  Service Requests
                                 </Title>
                                 <Collapse in={formInfoOpen} transitionDuration={0} transitionTimingFunction="linear">
                                   <ActionIcon
@@ -108,7 +108,6 @@ export function AdminPageV2() {
                                   </ActionIcon>
                                 )}
                               </Flex>
-
                               <Collapse in={formInfoOpen} transitionDuration={300} transitionTimingFunction="linear">
                                 <Flex direction="column" justify="center" gap="xs">
                                   <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={5} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(5)}>
@@ -154,7 +153,7 @@ export function AdminPageV2() {
                                   </ActionIcon>
                                 )}
                               </Flex>
-                              <Collapse in={otherToolsOpen} transitionDuration={300} transitionTimingFunction="linear" w="56%">
+                              <Collapse in={otherToolsOpen} transitionDuration={300} transitionTimingFunction="linear">
                                 <Flex direction="column" justify="center" gap="xs">
                                   <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={4} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(4)}>
                                     CSV Manipulator
@@ -208,18 +207,17 @@ export function AdminPageV2() {
                 <Box
                   maw="100%"
                   mx="auto"
-                  p="2%"
                 >
                   <Title ff="Inter" fz="30px" mb="4px" ta="center" fw={600}>
                     Admin Page
                   </Title>
                   <Center>
-                    <Flex direction="column" justify="center" align="center" w="100%" style={{
-                      boxShadow: "inset 0px 0px 5px 5px rgba(0,0,255,0.1)",
+                    <Flex direction="column" justify="center" align="center" w="100%" bg="#D6E0F8" style={{
+                      boxShadow: "inset -5px 8px 5px -5px rgba(0,0,255,0.1)",
                       borderRadius: "8px"
                     }}>
                       <Collapse in={displayTableNumber == -1} transitionDuration={300} transitionTimingFunction="linear">
-                        <Title order={3} mb="4px" ta="center" fw={600}>
+                        <Title order={3} mt="100px" mb="100px" ta="center" fw={600}>
                           Select a tool from the sidebar
                         </Title>
                       </Collapse>

@@ -62,13 +62,13 @@ export function ServiceRequestPage() {
     return (
         <div>
             <Box py="xl">
-                <Flex w="100%" h="60vh" justify="center" align="center">
+                <Flex w="100%" h="65vh" justify="center" align="center">
                     <Stack>
                         <Title order={2} ta="left" c={'#001D4D'} mb="lg">
                             Select Request Type:
                         </Title>
                         {/* basic grid for button layout*/}
-                        <SimpleGrid cols={3} spacing="50">
+                        <SimpleGrid cols={3} spacing="30">
                             {ServiceRequestItems.map((item, index) => (
                                 <HoverButton
                                     key={index}
@@ -76,6 +76,7 @@ export function ServiceRequestPage() {
                                     labelOne={item.labelOne}
                                     labelTwo={item.labelTwo}
                                     onClick={() => navigate(item.link)}
+                                    disabled={item.disabled}
                                 />
                             ))}
                         </SimpleGrid>
