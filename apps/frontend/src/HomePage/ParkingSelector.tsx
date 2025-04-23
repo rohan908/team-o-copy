@@ -4,7 +4,7 @@ import { useTimeline } from './TimeLineContext.tsx';
 import { hospitalOptions } from './GmapsDestinationSelector.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
-import { useChestnutHillContext, usePatriotContext } from '../contexts/DirectoryContext.tsx';
+import {useChestnutHillContext, useFaulknerHospitalContext, usePatriotContext} from '../contexts/DirectoryContext.tsx';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 
 export function ParkingSelector() {
@@ -15,6 +15,7 @@ export function ParkingSelector() {
 
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
+    const Faulkner = useFaulknerHospitalContext();
 
     const NavSelection = useNavSelectionContext();
 
@@ -30,6 +31,8 @@ export function ParkingSelector() {
             setDirectoryOptions(MapDepartment(Patriot));
         } else if (hospital == 'Chestnut Hill') {
             setDirectoryOptions(MapDepartment(Chestnut));
+        } else if (hospital == 'Faulkner Hospital') {
+            setDirectoryOptions(MapDepartment(Faulkner));
         } else {
             setDirectoryOptions([]);
         }
