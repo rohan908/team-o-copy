@@ -10,7 +10,7 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
     return (
         <Select
             label="Choose the Hospital Needed"
-            placeholder="--Select a Hospital--"
+            placeholder="Select a Hospital"
             searchable
             data={['20 Patriot Place', '22 Patriot Place', 'Chestnut Hill', 'Falkner Hospital']}
             value={value}

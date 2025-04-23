@@ -97,7 +97,12 @@ const RequestForm: React.FC<RequestDetails> = ({
     return (
         <Flex justify="center" align="center" p="xxl">
             <Box p="xl">
-                <form onSubmit={form.onSubmit(handleSubmit)}>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        form.onSubmit(handleSubmit)();
+                    }}
+                >
                     <Flex direction="column" ta="center" justify="center">
                         <Box mr="auto" mb="lg">
                             <Button
