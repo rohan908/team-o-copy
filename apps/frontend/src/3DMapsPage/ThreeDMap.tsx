@@ -55,12 +55,14 @@ export function ThreeDMap() {
                     if (child instanceof THREE.Mesh) {
                         // Create a new standard material for better lighting
                         child.material = new THREE.MeshStandardMaterial({
-                            color: 0x808080,
+                            color: 0xa0a8b3,
                             roughness: 0.7,
-                            metalness: 0.2,
+                            metalness: 0,
                         });
                     }
                 });
+
+                sceneRef.current.background = new THREE.Color().setHex(0xeef4fe);
 
                 // Add the model to the scene
                 sceneRef.current.add(object);
@@ -96,7 +98,7 @@ export function ThreeDMap() {
         addObject('../../public/PatriotOther.obj', 4);
 
         // Add basic lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        const ambientLight = new THREE.AmbientLight(0x285cc6, 0.5);
         sceneRef.current.add(ambientLight);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
