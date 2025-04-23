@@ -11,6 +11,7 @@ const RequestDescription: React.FC<TextareaProps> = (props) => {
             minRows={2}
             mb="md"
             size="xs"
+            c={"#285CC6"}
             styles={{
                 label: {
                     fontSize: '18px',

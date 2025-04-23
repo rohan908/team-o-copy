@@ -21,6 +21,7 @@ const LanguageSelect: React.FC<SelectProps> = (props) => {
             mb="md"
             size="xs"
             required
+            c={"#285CC6"}
             {...props}
             styles={{
                 label: {

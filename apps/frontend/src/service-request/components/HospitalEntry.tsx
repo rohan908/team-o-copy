@@ -12,7 +12,11 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
             label="Choose the Hospital Needed"
             placeholder="--Select a Hospital--"
             searchable
-            data={['20 Patriot Place', '22 Patriot Place', 'Chestnut Hill']}
+            data={[
+                '20 Patriot Place',
+                '22 Patriot Place',
+                'Chestnut Hill',
+            ]}
             value={value}
             onChange={(val) => onChange(val || '')} // fallback for null values
             nothingFoundMessage="Hospital not found"
@@ -20,6 +24,7 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
             mb="md"
             size="xs"
             required
+            c={"#285CC6"}
             {...props}
             styles={{
                 label: {

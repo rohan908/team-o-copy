@@ -20,6 +20,7 @@ const TimeEntry: React.FC<TimeInputProps> = (props) => {
             size="xs"
             leftSection={pickerControl}
             required
+            c={"#285CC6"}
             styles={{
                 label: {
                     fontSize: '18px',

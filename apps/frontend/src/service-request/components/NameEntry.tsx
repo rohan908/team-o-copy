@@ -10,6 +10,7 @@ const NameEntry: React.FC<TextInputProps> = (props) => {
             mb="md"
             size="xs"
             required
+            c={"#285CC6"}
             styles={{
                 label: {
                     fontSize: '18px',

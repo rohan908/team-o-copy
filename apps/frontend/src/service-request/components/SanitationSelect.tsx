@@ -19,6 +19,7 @@ const SanitationSelect: React.FC<SelectProps> = (props) => {
             radius="sm"
             mb="md"
             size="xs"
+            c={"#285CC6"}
             required
             {...props}
             styles={{
