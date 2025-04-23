@@ -699,9 +699,9 @@ export function getNodeData() {
         "x": -70.0,
         "y": 8.0,
         "floor": 4,
-        "name": "",
-        "description": "",
-        "nodeType": "",
+        "name": "Ambulatory Care",
+        "description": "department",
+        "nodeType": "department",
         "mapId": 2,
         "connectingNodes": [
           135
@@ -797,9 +797,9 @@ export function getNodeData() {
         "x": 69.0,
         "y": 40.0,
         "floor": 4,
-        "name": "",
-        "description": "",
-        "nodeType": "",
+        "name": "MRI/CT",
+        "description": "department",
+        "nodeType": "department",
         "mapId": 2,
         "connectingNodes": [
           142
@@ -950,9 +950,9 @@ export function getNodeData() {
         "x": -111.0,
         "y": 90.0,
         "floor": 5,
-        "name": "",
-        "description": "",
-        "nodeType": "",
+        "name": "Belkin House Check-in",
+        "description": "department",
+        "nodeType": "department",
         "mapId": 3,
         "connectingNodes": [
           153
@@ -1104,9 +1104,9 @@ export function getNodeData() {
         "x": -45.0,
         "y": 12.0,
         "floor": 5,
-        "name": "",
-        "description": "",
-        "nodeType": "",
+        "name": "Emergency Check-in",
+        "description": "department",
+        "nodeType": "department",
         "mapId": 3,
         "connectingNodes": [
           164
@@ -1131,9 +1131,9 @@ export function getNodeData() {
         "x": -31.0,
         "y": 28.0,
         "floor": 5,
-        "name": "",
-        "description": "",
-        "nodeType": "",
+        "name": "Blood-Draw Lab",
+        "description": "department",
+        "nodeType": "department",
         "mapId": 3,
         "connectingNodes": [
           166
