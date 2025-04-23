@@ -11,7 +11,9 @@ import {
     NativeSelect,
     Collapse,
     Text,
+    Modal,
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
     IconDeviceFloppy,
     IconCirclePlus,
@@ -26,6 +28,7 @@ const MapEditorBox = () => {
     const allNodes = useAllNodesContext();
     const [saveLabel, setSaveLabel] = useState(false);
     const [nodeInfoOpen, setNodeInfoOpen] = useState(false);
+    const [openedEditMenu, { open, close }] = useDisclosure(false);
 
     const [selectedNodeType, setSelectedNodeType] = useState<string>(mapProps.currentNode?.nodeType || "");
 
@@ -161,8 +164,10 @@ const MapEditorBox = () => {
                                     variant="filled"
                                 ></Input>
                             </Flex>
+                            <Flex  direction="row" p="xs" gap="xs">
                             <NativeSelect
                                 size="sm"
+                                w={120}
                                 value={mapProps.currentNode?.nodeType || ''}
                                 onChange={(event) => mapProps.setCurrentNodeData({
                                   id: mapProps.currentNode.id,
@@ -185,6 +190,40 @@ const MapEditorBox = () => {
                                 ]}
                                 variant="filled"
                             />
+                              <Modal opened={openedEditMenu}
+                                     onClose={close}
+                                     title={"Edit Node"}
+                                     overlayProps={{
+                                backgroundOpacity: 0.55,
+                                blur: 3,
+                              }}>
+                                <Input
+                                  size="sm"
+                                  radius="xl"
+                                  w={120}
+                                  value={`${mapProps.currentNode?.name || ""}`}
+                                  variant="filled"
+                                  onChange={(event) => mapProps.setCurrentNodeData({
+                                    id: mapProps.currentNode.id,
+                                    x: mapProps.currentNode.x,
+                                    y: mapProps.currentNode.y,
+                                    floor: mapProps.currentNode.floor,
+                                    mapId: mapProps.currentNode.mapId,
+                                    name: event.currentTarget.value,
+                                    description: mapProps.currentNode.description,
+                                    nodeType: mapProps.currentNode.nodeType,
+                                    connectingNodes: mapProps.currentNode.connectingNodes,
+                                  })}
+                                ></Input>
+                              </Modal>
+                              <ActionIcon
+                                size="xxl"
+                                variant="filled"
+                                color="#285CC6"
+                                onClick={open}>
+                                Edit Node
+                              </ActionIcon>
+                          </Flex>
                         </Flex>
                     </Box>
                 </Collapse>

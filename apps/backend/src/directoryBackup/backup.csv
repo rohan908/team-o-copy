@@ -15,7 +15,7 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 167,-31,28,5,3,Blood-Draw Lab,department,department,166
 1,86,82,1,1,Patriot Place Parking Lot,parking,parking-lot,2
 2,99,53,1,1,hallway,hallway,hallway,"1,3,12"
-3,12,13,1,1,hallway,hallway,hallway,"2,4"
+3,12,13,1,1,John,hallway,hallway,"2,4"
 4,10,2,1,1,hallway,hallway,hallway,"3,5"
 5,0,4,1,1,hallway,hallway,hallway,"4,6"
 6,-15,-6,1,1,Imaging Suite,department,department,"5,7"
