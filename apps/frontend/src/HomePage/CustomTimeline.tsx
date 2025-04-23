@@ -52,15 +52,9 @@ export const CustomTimeline = () => {
             case 1: //Indoor Nav
                 return (
                     <Stack gap={2}>
-                        <ParkingSelector required {...form.getInputProps('hospital')} />
-                        <DepartmentSelector
-                            required
-                            {...form.getInputProps('departmentDestination')}
-                        />
-                        <AlgorithmSelector
-                            required
-                            {...form.getInputProps('departmentDestination')}
-                        />
+                        <ParkingSelector />
+                        <DepartmentSelector />
+                        <AlgorithmSelector />
                         <Flex justify={'end'}>
                             <Link to="IndoorMapPage">
                                 <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>
@@ -87,53 +81,42 @@ export const CustomTimeline = () => {
         if (i !== activeSection) setActiveSection(i);
     };
 
-    const form = useForm({
-        initialValues: {
-            startLocation: '',
-            hospital: '',
-        },
-    });
-
-    const handleSubmit = (values: any) => {};
-
     return (
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-            <Timeline
-                active={activeSection}
-                bulletSize={50}
-                color={theme.colors.primaryBlues[8]}
-                lineWidth={2}
-                mt={'lg'}
-                style={{ cursor: 'default' }}
-            >
-                {titlesInfo.map((item, i: number) => (
-                    <Timeline.Item
-                        key={i}
-                        bullet={<div> {item.icon} </div>}
-                        onClick={() => handleClickChangeButton(i)}
-                        c={theme.colors.secondaryBlues[7]}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            cursor: 'pointer',
-                            width: '100%',
-                        }}
-                        pr={'xl'}
-                        pb={'lg'}
+        <Timeline
+            active={activeSection}
+            bulletSize={50}
+            color={theme.colors.primaryBlues[8]}
+            lineWidth={2}
+            mt={'lg'}
+            style={{ cursor: 'default' }}
+        >
+            {titlesInfo.map((item, i: number) => (
+                <Timeline.Item
+                    key={i}
+                    bullet={<div> {item.icon} </div>}
+                    onClick={() => handleClickChangeButton(i)}
+                    c={theme.colors.secondaryBlues[7]}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        width: '100%',
+                    }}
+                    pr={'xl'}
+                    pb={'lg'}
+                >
+                    <Title order={1} fz={'xl'} pt={'5px'} mb={'sm'}>
+                        {item.title}
+                    </Title>
+                    <Collapse
+                        in={activeSection === i}
+                        transitionDuration={500}
+                        transitionTimingFunction="ease"
                     >
-                        <Title order={1} fz={'xl'} pt={'5px'} mb={'sm'}>
-                            {item.title}
-                        </Title>
-                        <Collapse
-                            in={activeSection === i}
-                            transitionDuration={500}
-                            transitionTimingFunction="ease"
-                        >
-                            <Box w="100%">{getCurrTabContent(i)}</Box>
-                        </Collapse>
-                    </Timeline.Item>
-                ))}
-            </Timeline>
-        </form>
+                        <Box w="100%">{getCurrTabContent(i)}</Box>
+                    </Collapse>
+                </Timeline.Item>
+            ))}
+        </Timeline>
     );
 };
