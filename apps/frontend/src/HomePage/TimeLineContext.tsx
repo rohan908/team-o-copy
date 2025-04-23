@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import {GoogleMap} from "@react-google-maps/api";
+
 
 // place holder
 interface LocationCoordinates {
     lat: number;
-    long: number;
+    lng: number; //this should be lng not long
 }
 
 interface TimelineContextType {
@@ -11,12 +13,12 @@ interface TimelineContextType {
     setActiveSection: (section: number) => void;
 
     // GMAPS
-    selectedHospital: string | undefined; // using any here for L.LatLng to avoid dependency issues
+    selectedHospital: string | undefined;
     setSelectedHospital: (hospital: string | undefined) => void;
     userCoordinates: LocationCoordinates | undefined;
     setUserCoordinates: (coords: LocationCoordinates | undefined) => void;
-    travelMode: string | undefined;
-    setTravelMode: (mode: string | undefined) => void;
+    travelMode: google.maps.TravelMode | undefined; //type travel mode must be googles enum, not just any string
+    setTravelMode: (mode: google.maps.TravelMode | undefined) => void;
 
     // Indoor Nav
     currDirectoryDestination: string | undefined;
@@ -51,7 +53,7 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
     const [userCoordinates, setUserCoordinates] = useState<LocationCoordinates | undefined>(
         undefined
     );
-    const [travelMode, setTravelMode] = useState<string | undefined>(undefined);
+    const [travelMode, setTravelMode] = useState<google.maps.TravelMode | undefined>(undefined);
 
     // Indoor Nav
     const [currDirectoryDestination, setCurrDirectoryDestination] = useState<any | undefined>(
