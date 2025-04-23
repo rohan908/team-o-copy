@@ -8,19 +8,21 @@ import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 export function DepartmentSelector() {
     const theme = useMantineTheme();
 
-    const { directoryOptions, selectedHospital, setDepartment } = useTimeline();
+    const { directoryOptions, selectedHospital, setDepartment, selectedAlgorithm } = useTimeline();
     const NavSelection = useNavSelectionContext();
 
     const setSelectedDepartment = (department: string | null) => {
         setDepartment(department);
-        NavSelection.dispatch({
-            type: 'SET_NAV_REQUEST',
-            data: {
-                HospitalName: selectedHospital,
-                Department: department,
-                AlgorithmName: 'BFS',
-            } as NavSelectionItem,
-        });
+        if (selectedAlgorithm) {
+            NavSelection.dispatch({
+                type: 'SET_NAV_REQUEST',
+                data: {
+                    HospitalName: selectedHospital,
+                    Department: department,
+                    AlgorithmName: selectedAlgorithm,
+                } as NavSelectionItem,
+            });
+        }
     };
 
     return (
@@ -35,7 +37,7 @@ export function DepartmentSelector() {
             radius="sm"
             mb="sm"
             size="xs"
-            disabled={directoryOptions.length === 0}
+            disabled={!selectedHospital && directoryOptions.length === 0}
             w={{ xl: '350px', lg: '300px', sm: '100%' }}
         />
     );

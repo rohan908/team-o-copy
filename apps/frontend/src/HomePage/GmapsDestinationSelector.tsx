@@ -38,14 +38,6 @@ export function GmapsDestinationSelector() {
         } else {
             setDirectoryOptions([]);
         }
-        NavSelection.dispatch({
-            type: 'SET_NAV_REQUEST',
-            data: {
-                HospitalName: hospital,
-                Department: null,
-                AlgorithmName: 'BFS',
-            } as NavSelectionItem,
-        });
         //setSelectedHospitalName(hospital);
         //setSelectedDepartment(null);
     };

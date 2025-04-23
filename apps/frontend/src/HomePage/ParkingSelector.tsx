@@ -8,7 +8,8 @@ import { useChestnutHillContext, usePatriotContext } from '../contexts/Directory
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 
 export function ParkingSelector() {
-    const { setSelectedHospital, setDirectoryOptions } = useTimeline();
+    const { setSelectedHospital, setDirectoryOptions, department, selectedAlgorithm } =
+        useTimeline();
 
     const theme = useMantineTheme();
 
@@ -32,14 +33,16 @@ export function ParkingSelector() {
         } else {
             setDirectoryOptions([]);
         }
-        NavSelection.dispatch({
-            type: 'SET_NAV_REQUEST',
-            data: {
-                HospitalName: hospital,
-                Department: null,
-                AlgorithmName: 'BFS',
-            } as NavSelectionItem,
-        });
+        if (department && selectedAlgorithm) {
+            NavSelection.dispatch({
+                type: 'SET_NAV_REQUEST',
+                data: {
+                    HospitalName: hospital,
+                    Department: department,
+                    AlgorithmName: selectedAlgorithm,
+                } as NavSelectionItem,
+            });
+        }
         //setSelectedHospitalName(hospital);
         //setSelectedDepartment(null);
     };
