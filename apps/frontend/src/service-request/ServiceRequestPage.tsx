@@ -8,57 +8,77 @@ import {
 } from '@tabler/icons-react';
 import HoverButton from './components/HoverButton.tsx';
 import { useNavigate } from 'react-router-dom';
+import React from 'react';
+
+type ServiceRequestItem = {
+    labelOne: string;
+    labelTwo: string;
+    icon: React.ReactNode;
+    link: string;
+    disabled?: boolean | true;
+};
+
+export const ServiceRequestItems: ServiceRequestItem[] = [
+    {
+        labelOne: 'Interpreter',
+        labelTwo: 'Request',
+        icon: <IconLanguage size={120} />,
+        link: '/language-form' },
+    {
+        labelOne: 'Security',
+        labelTwo: 'Request',
+        icon: <IconShieldHalf size={120} />,
+        link: '/security-form' },
+    {
+        labelOne: 'Sanitation',
+        labelTwo: 'Request',
+        icon: <IconTrash stroke={2} size={120} />,
+        link: '/sanitation-form',
+    },
+    {
+        labelOne: 'Maintenance',
+        labelTwo: 'Request',
+        icon: <IconBellExclamation stroke={2} size={120} />,
+        link: '/maintenance-form',
+    },
+    {
+        labelOne: 'Type 5',
+        labelTwo: '',
+        icon: <IconExclamationCircleFilled size={120} />,
+        link: "'/'",
+        disabled: true,
+    },
+    {
+        labelOne: 'Type 6',
+        labelTwo: '',
+        icon: <IconExclamationCircleFilled size={120} />,
+        link: "'/'",
+        disabled: true,
+    },
+];
+
 export function ServiceRequestPage() {
     const navigate = useNavigate();
     return (
         <div>
-            <Box bg="terquAccet.2" py="xl" left="0px" top="0px">
-                <Flex w="100%" h="85.5vh" justify="center" align="center">
+            <Box py="xl">
+                <Flex w="100%" h="65vh" justify="center" align="center">
                     <Stack>
-                        <Title order={2} ta="left" c={'#001D4D'} mb="lg">
-                            Select Request Type:
-                        </Title>
+                        {/*<Title order={2} ta="left" c={'#001D4D'} mb="lg">*/}
+                        {/*    Select Request Type:*/}
+                        {/*</Title>*/}
                         {/* basic grid for button layout*/}
-                        <SimpleGrid cols={3} spacing="50">
-                            {/* button for language interpreter request*/}
-                            <HoverButton
-                                icon={<IconLanguage size={120} />}
-                                label="Interpreter Request"
-                                onClick={() => navigate('/language-form')}
-                            />
-
-                            {/* button for Security Service Request */}
-                            <HoverButton
-                                icon={<IconShieldHalf size={120} />}
-                                label="Security Request"
-                                onClick={() => navigate('/security-form')}
-                            />
-                            {/* button for Sanitization Request */}
-                            <HoverButton
-                                icon={<IconTrash stroke={2} size={120} />}
-                                label="Sanitization Request"
-                                onClick={() => navigate('/sanitation-form')}
-                            />
-                            {/* button for ___ Request */}
-                            <HoverButton
-                                icon={<IconBellExclamation stroke={2} size={120} />}
-                                label="Maintenance Request"
-                                onClick={() => navigate('/maintenance-form')}
-                            />
-                            {/* button for ___ Request */}
-                            <HoverButton
-                                icon={<IconExclamationCircleFilled size={120} />}
-                                label="Type 5"
-                                onClick={() => navigate('/')}
-                                disabled={true}
-                            />
-                            {/* button for ___ Request */}
-                            <HoverButton
-                                icon={<IconExclamationCircleFilled size={120} />}
-                                label="Type 6"
-                                onClick={() => navigate('/')}
-                                disabled={true}
-                            />
+                        <SimpleGrid cols={3} spacing="30">
+                            {ServiceRequestItems.map((item, index) => (
+                                <HoverButton
+                                    key={index}
+                                    icon={item.icon}
+                                    labelOne={item.labelOne}
+                                    labelTwo={item.labelTwo}
+                                    onClick={() => navigate(item.link)}
+                                    disabled={item.disabled}
+                                />
+                            ))}
                         </SimpleGrid>
                     </Stack>
                 </Flex>

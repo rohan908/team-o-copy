@@ -11,36 +11,31 @@ import {
     TextInput,
     Grid,
 } from '@mantine/core';
+import { useHover } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { IconArrowBadgeRight, IconArrowBadgeDown } from '@tabler/icons-react';
+import {DirectoryNodeItem} from "../../contexts/DirectoryItem.ts";
+import {MapContext, MapEditorProps} from '../MapEditor.tsx';
+import axios from 'axios';
+import { useAllNodesContext } from '../../contexts/DirectoryContext.tsx';
 
-interface MapEditorBoxProps {
-    onCollapseChange?: (isCollapsed: boolean) => void;
-    nodeSelected?: (isSelected: boolean) => void;
-    nodeX?: number;
-    nodeY?: number;
-    floor?: number;
-    updateNodePosition?: (x: number, y: number, floor: number) => void;
-}
+const MapEditorBox = ({}) => {
 
-const MapEditorBox: React.FC<MapEditorBoxProps> = ({
-    onCollapseChange,
-    nodeSelected = false,
-    nodeX = 0,
-    nodeY = 0,
-    floor = 0,
-    updateNodePosition,
-}) => {
+    const mapProps: MapEditorProps = useContext(MapContext);
+    const allNodes = useAllNodesContext();
+
     const theme = useMantineTheme();
     const [collapsed, setCollapsed] = useState(false);
-    const [hoverAddNode, setHoverAddNode] = useState(setTimeout(function () {}, 1000));
-    const [hoverRemoveNode, setHoverRemoveNode] = useState(setTimeout(function () {}, 1000));
-    const [hoverAddEdge, setHoverAddEdge] = useState(setTimeout(function () {}, 1000));
-    const [hoverRemoveEdge, setHoverRemoveEdge] = useState(setTimeout(function () {}, 1000));
-    const handleAddNode = () => null;
-    const handleAddEdge = () => null;
-    const handleRemoveNode = () => null;
-    const handleRemoveEdge = () => null;
+    const [hoverPanTool, setHoverPanTool] = useState(setTimeout(function () {}, 1000));
+    const [hoverNodeTool, setHoverNodeTool] = useState(setTimeout(function () {}, 1000));
+    const [hoverEdgeTool, setHoverEdgeTool] = useState(setTimeout(function () {}, 1000));
+    const [saveText, setSaveText] = useState(setTimeout(function () {}, 1000));
+    const handlePanTool = () => {mapProps.setSelectedTool('pan')}
+    const handleNodeTool = () => {mapProps.setSelectedTool('add-node')};
+    const handleEdgeTool = () => {mapProps.setSelectedTool('add-edge')};
+
+
+    const { hovered, ref } = useHover();
 
     const handleUpdateNodePosition = () => {
         // Get values from form
@@ -56,9 +51,11 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
             return;
         }
 
+        /*
         if (updateNodePosition) {
             updateNodePosition(x, y, floorNum);
         }
+         */
     };
 
     const form = useForm({
@@ -70,11 +67,82 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
         },
     });
 
+    function switchPanToolLabel(hovering: boolean) {
+      const panTool = document.getElementById('panTool');
+      if (hovering && panTool != null) {
+        clearInterval(hoverPanTool);
+        setHoverPanTool(
+          setInterval(function () {
+            switch (panTool.innerText) {
+              case '+':
+                panTool.innerText = 'M';
+                break;
+              case 'M':
+                panTool.innerText = 'Mo';
+                break;
+              case 'Mo':
+                panTool.innerText = 'Mov';
+                break;
+              case 'Mov':
+                panTool.innerText = 'Move';
+                break;
+              case 'Move':
+                panTool.innerText = 'Move T';
+                break;
+              case 'Move T':
+                panTool.innerText = 'Move To';
+                break;
+              case 'Move To':
+                panTool.innerText = 'Move Too';
+                break;
+              case 'Move Too':
+                panTool.innerText = 'Move Tool';
+                clearInterval(hoverPanTool);
+                break;
+            }
+          }, 20)
+        );
+      } else if (panTool != null) {
+        clearInterval(hoverPanTool);
+        setHoverPanTool(
+          setInterval(function () {
+            switch (panTool.innerText) {
+              case 'M':
+                panTool.innerText = '+';
+                clearInterval(hoverPanTool);
+                break;
+              case 'Mo':
+                panTool.innerText = 'M';
+                break;
+              case 'Mov':
+                panTool.innerText = 'Mo';
+                break;
+              case 'Move':
+                panTool.innerText = 'Mov';
+                break;
+              case 'Move T':
+                panTool.innerText = 'Move';
+                break;
+              case 'Move To':
+                panTool.innerText = 'Move T';
+                break;
+              case 'Move Too':
+                panTool.innerText = 'Move To';
+                break;
+              case 'Move Tool':
+                panTool.innerText = 'Move Too';
+                break;
+            }
+          }, 20)
+        );
+      }
+    }
+
     function switchAddNodeLabel(hovering: boolean) {
         const addNode = document.getElementById('addNode');
         if (hovering && addNode != null) {
-            clearInterval(hoverAddNode);
-            setHoverAddNode(
+            clearInterval(hoverNodeTool);
+            setHoverNodeTool(
                 setInterval(function () {
                     switch (addNode.innerText) {
                         case '+':
@@ -97,19 +165,19 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                             break;
                         case 'Add Nod':
                             addNode.innerText = 'Add Node';
-                            clearInterval(hoverAddNode);
+                            clearInterval(hoverNodeTool);
                             break;
                     }
                 }, 20)
             );
         } else if (addNode != null) {
-            clearInterval(hoverAddNode);
-            setHoverAddNode(
+            clearInterval(hoverNodeTool);
+            setHoverNodeTool(
                 setInterval(function () {
                     switch (addNode.innerText) {
                         case 'A':
                             addNode.innerText = '+';
-                            clearInterval(hoverAddNode);
+                            clearInterval(hoverNodeTool);
                             break;
                         case 'Ad':
                             addNode.innerText = 'A';
@@ -135,94 +203,11 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
         }
     }
 
-    function switchRemoveNodeLabel(hovering: boolean) {
-        const removeNode = document.getElementById('removeNode');
-        if (hovering && removeNode != null) {
-            clearInterval(hoverRemoveNode);
-            setHoverRemoveNode(
-                setInterval(function () {
-                    switch (removeNode.innerText) {
-                        case '-':
-                            removeNode.innerText = 'R';
-                            break;
-                        case 'R':
-                            removeNode.innerText = 'Re';
-                            break;
-                        case 'Re':
-                            removeNode.innerText = 'Rem';
-                            break;
-                        case 'Rem':
-                            removeNode.innerText = 'Remo';
-                            break;
-                        case 'Remo':
-                            removeNode.innerText = 'Remov';
-                            break;
-                        case 'Remov':
-                            removeNode.innerText = 'Remove';
-                            break;
-                        case 'Remove':
-                            removeNode.innerText = 'Remove N';
-                            break;
-                        case 'Remove N':
-                            removeNode.innerText = 'Remove No';
-                            break;
-                        case 'Remove No':
-                            removeNode.innerText = 'Remove Nod';
-                            break;
-                        case 'Remove Nod':
-                            removeNode.innerText = 'Remove Node';
-                            clearInterval(hoverRemoveNode);
-                            break;
-                    }
-                }, 20)
-            );
-        } else if (removeNode != null) {
-            clearInterval(hoverRemoveNode);
-            setHoverRemoveNode(
-                setInterval(function () {
-                    switch (removeNode.innerText) {
-                        case 'R':
-                            removeNode.innerText = '-';
-                            clearInterval(hoverRemoveNode);
-                            break;
-                        case 'Re':
-                            removeNode.innerText = 'R';
-                            break;
-                        case 'Rem':
-                            removeNode.innerText = 'Re';
-                            break;
-                        case 'Remo':
-                            removeNode.innerText = 'Rem';
-                            break;
-                        case 'Remov':
-                            removeNode.innerText = 'Remo';
-                            break;
-                        case 'Remove':
-                            removeNode.innerText = 'Remov';
-                            break;
-                        case 'Remove N':
-                            removeNode.innerText = 'Remove';
-                            break;
-                        case 'Remove No':
-                            removeNode.innerText = 'Remove N';
-                            break;
-                        case 'Remove Nod':
-                            removeNode.innerText = 'Remove No';
-                            break;
-                        case 'Remove Node':
-                            removeNode.innerText = 'Remove Nod';
-                            break;
-                    }
-                }, 20)
-            );
-        }
-    }
-
     function switchAddEdgeLabel(hovering: boolean) {
         const addEdge = document.getElementById('addEdge');
         if (hovering && addEdge != null) {
-            clearInterval(hoverAddEdge);
-            setHoverAddEdge(
+            clearInterval(hoverEdgeTool);
+            setHoverEdgeTool(
                 setInterval(function () {
                     switch (addEdge.innerText) {
                         case '+':
@@ -248,19 +233,19 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                             break;
                         case 'Add Edg':
                             addEdge.innerText = 'Add Edge';
-                            clearInterval(hoverAddEdge);
+                            clearInterval(hoverEdgeTool);
                             break;
                     }
                 }, 20)
             );
         } else if (addEdge != null) {
-            clearInterval(hoverAddEdge);
-            setHoverAddEdge(
+            clearInterval(hoverEdgeTool);
+            setHoverEdgeTool(
                 setInterval(function () {
                     switch (addEdge.innerText) {
                         case 'A':
                             addEdge.innerText = '+';
-                            clearInterval(hoverAddEdge);
+                            clearInterval(hoverEdgeTool);
                             break;
                         case 'Ad':
                             addEdge.innerText = 'A';
@@ -286,102 +271,64 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
         }
     }
 
-    function switchRemoveEdgeLabel(hovering: boolean) {
-        const removeEdge = document.getElementById('removeEdge');
-        if (hovering && removeEdge != null) {
-            clearInterval(hoverRemoveEdge);
-            setHoverRemoveEdge(
-                setInterval(function () {
-                    switch (removeEdge.innerText) {
-                        case '-':
-                            removeEdge.innerText = 'R';
-                            break;
-                        case 'R':
-                            removeEdge.innerText = 'Re';
-                            break;
-                        case 'Re':
-                            removeEdge.innerText = 'Rem';
-                            break;
-                        case 'Rem':
-                            removeEdge.innerText = 'Remo';
-                            break;
-                        case 'Remo':
-                            removeEdge.innerText = 'Remov';
-                            break;
-                        case 'Remov':
-                            removeEdge.innerText = 'Remove';
-                            break;
-                        case 'Remove':
-                            removeEdge.innerText = 'Remove E';
-                            break;
-                        case 'Remove E':
-                            removeEdge.innerText = 'Remove Ed';
-                            break;
-                        case 'Remove Ed':
-                            removeEdge.innerText = 'Remove Edg';
-                            break;
-                        case 'Remove Edg':
-                            removeEdge.innerText = 'Remove Edge';
-                            clearInterval(hoverRemoveEdge);
-                            break;
-                    }
-                }, 20)
-            );
-        } else if (removeEdge != null) {
-            clearInterval(hoverRemoveEdge);
-            setHoverRemoveEdge(
-                setInterval(function () {
-                    switch (removeEdge.innerText) {
-                        case 'R':
-                            removeEdge.innerText = '-';
-                            clearInterval(hoverRemoveEdge);
-                            break;
-                        case 'Re':
-                            removeEdge.innerText = 'R';
-                            break;
-                        case 'Rem':
-                            removeEdge.innerText = 'Re';
-                            break;
-                        case 'Remo':
-                            removeEdge.innerText = 'Rem';
-                            break;
-                        case 'Remov':
-                            removeEdge.innerText = 'Remo';
-                            break;
-                        case 'Remove':
-                            removeEdge.innerText = 'Remov';
-                            break;
-                        case 'Remove E':
-                            removeEdge.innerText = 'Remove';
-                            break;
-                        case 'Remove Ed':
-                            removeEdge.innerText = 'Remove E';
-                            break;
-                        case 'Remove Edg':
-                            removeEdge.innerText = 'Remove Ed';
-                            break;
-                        case 'Remove Edge':
-                            removeEdge.innerText = 'Remove Edg';
-                            break;
-                    }
-                }, 20)
-            );
+    function addSaveLabel() {
+        const saveLabel = document.getElementById('saved');
+        if(saveLabel != null) {
+          clearInterval(saveText);
+          setSaveText(
+            setInterval(function () {
+                switch (saveLabel.innerText) {
+                case '':
+                  saveLabel.innerText = 'S';
+                  break;
+                case 'S':
+                  saveLabel.innerText = 'Sa';
+                  break;
+                case 'Sa':
+                  saveLabel.innerText = 'Sav';
+                  break;
+                case 'Sav':
+                  saveLabel.innerText = 'Save';
+                  break;
+                case 'Save':
+                  saveLabel.innerText = 'Saved';
+                  clearInterval(saveText);
+                  break;
+              }
+            }, 20)
+          );
         }
     }
 
-    useEffect(() => {
-        if (nodeSelected) {
-            form.setValues({
-                xpos: nodeX.toString(),
-                ypos: nodeY.toString(),
-                floor: floor.toString(),
-            });
-        }
-    }, [nodeSelected, nodeX, nodeY, floor]);
+    function removeSaveLabel() {
+      const saveLabel = document.getElementById('saved');
+      if(saveLabel != null) {
+        clearInterval(saveText);
+        saveLabel.innerText = '';
+      }
+    }
+
+    // Sends all new Node data to the backend
+    async function SaveAllNodes() {
+
+        console.log("allNodes", allNodes);
+
+        const importNodes = await axios.post('api/directory/import/direct', {
+          data: allNodes,
+        })
+
+        addSaveLabel();
+
+        //console.log(importNodes);
+    }
 
     useEffect(() => {
-        onCollapseChange?.(collapsed);
-    }, [collapsed]);
+      setCollapsed(!hovered);
+
+      removeSaveLabel();
+
+    }, [hovered]);
+
 
     return (
         <Box
@@ -398,6 +345,7 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
             }}
         >
             <Box
+                ref={ref}
                 bg="themeGold.2"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
                 w="37%"
@@ -419,9 +367,30 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                         fw={700}
                         fz={{ sm: 'xl', md: 'xxxl' }}
                     >
-                        Edit the Map
+                        Edit The Map
                     </Title>
                     <Flex direction="column" justify="space-evenly" gap="xs">
+                        <Flex direction="row" justify="space-around" gap="xs">
+                          <Title
+                            order={2}
+                            mb="md"
+                            c="black"
+                            ta="center"
+                            fw={700}
+                            fz={{ sm: 'md', md: 'xl' }}
+                          >
+                            Move:
+                          </Title>
+                          <BlackButton
+                            id="panTool"
+                            bg="blueBase.8"
+                            onClick={handlePanTool}
+                            onMouseEnter={() => switchPanToolLabel(true)}
+                            onMouseLeave={() => switchPanToolLabel(false)}
+                          >
+                            +
+                          </BlackButton>
+                        </Flex>
                         <Flex direction="row" justify="space-around" gap="xs">
                             <Title
                                 order={2}
@@ -436,20 +405,11 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                             <BlackButton
                                 id="addNode"
                                 bg="blueBase.8"
-                                onClick={handleAddNode}
+                                onClick={handleNodeTool}
                                 onMouseEnter={() => switchAddNodeLabel(true)}
                                 onMouseLeave={() => switchAddNodeLabel(false)}
                             >
                                 +
-                            </BlackButton>
-                            <BlackButton
-                                id="removeNode"
-                                bg="blueBase.8"
-                                onClick={handleRemoveNode}
-                                onMouseEnter={() => switchRemoveNodeLabel(true)}
-                                onMouseLeave={() => switchRemoveNodeLabel(false)}
-                            >
-                                -
                             </BlackButton>
                         </Flex>
                         <Flex direction="row" justify="space-around" gap="xl">
@@ -466,44 +426,12 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                             <BlackButton
                                 id="addEdge"
                                 bg="blueBase.8"
-                                onClick={handleAddEdge}
+                                onClick={handleEdgeTool}
                                 onMouseEnter={() => switchAddEdgeLabel(true)}
                                 onMouseLeave={() => switchAddEdgeLabel(false)}
                             >
                                 +
                             </BlackButton>
-                            <BlackButton
-                                id="removeEdge"
-                                bg="blueBase.8"
-                                onClick={handleRemoveEdge}
-                                onMouseEnter={() => switchRemoveEdgeLabel(true)}
-                                onMouseLeave={() => switchRemoveEdgeLabel(false)}
-                            >
-                                -
-                            </BlackButton>
-                        </Flex>
-                        <Flex direction="row" justify="space-between" gap="xs">
-                            <TextInput
-                                label="X Position"
-                                placeholder="Select a node"
-                                disabled={!nodeSelected}
-                                key={form.key('xpos')}
-                                {...form.getInputProps('xpos')}
-                            ></TextInput>
-                            <TextInput
-                                label="Y Position"
-                                placeholder="Select a node"
-                                disabled={!nodeSelected}
-                                key={form.key('ypos')}
-                                {...form.getInputProps('ypos')}
-                            ></TextInput>
-                            <TextInput
-                                label="Floor"
-                                placeholder="Select a node"
-                                disabled={!nodeSelected}
-                                key={form.key('floor')}
-                                {...form.getInputProps('floor')}
-                            ></TextInput>
                         </Flex>
                         <Grid align="center">
                             <Grid.Col span={10}>
@@ -522,6 +450,15 @@ const MapEditorBox: React.FC<MapEditorBoxProps> = ({
                                 </ActionIcon>
                             </Grid.Col>
                         </Grid>
+                      <Flex direction="row" justify="space-between" gap="xs">
+                        <BlackButton
+                        onClick={() => SaveAllNodes()}>
+                          Save Changes
+                        </BlackButton>
+                        <Title
+                          id={'saved'}>
+                        </Title>
+                      </Flex>
                     </Flex>
                     <Flex justify="flex-end" gap="md"></Flex>
                 </Collapse>
