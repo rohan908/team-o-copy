@@ -16,9 +16,17 @@ const MaintenanceSelect: React.FC<SelectProps> = (props) => {
             ]}
             nothingFoundMessage="Cleanup Type not found"
             radius="sm"
-            mb="sm"
+            mb="md"
             size="xs"
+            required
+            c={"#285CC6"}
             {...props}
+            styles={{
+                label: {
+                    fontSize: '18px',
+                    fontWeight: 350,
+                },
+            }}
         />
     );
 };

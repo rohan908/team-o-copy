@@ -22,8 +22,11 @@ import { LogInPage } from './log-in-page.tsx';
 import { NodeDirectory } from '../NodeDirectoryPage/NodeDirectory.tsx';
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import Sanitation from '../service-request/SanitationSR.tsx';
+import NotFound from '../404Page.tsx';
 import Security from '../service-request/SecuritySR.tsx';
+import AdminPageV2 from '../AdminPage/AdminPageNewUI.tsx';
 import { TimelineProvider } from '../HomePage/TimeLineContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import { IndoorMapsPage } from '../IndoorMapPage/IndoorMapsPage.tsx';
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
@@ -52,22 +55,48 @@ export function Routing() {
                                     />
                                 }
                             />
-                            <Route path="/submission" element={<Display />} />
+                            <Route
+                                path="/submission"
+                                element={<ProtectedRoute Route={<Display />} />}
+                            />
                             <Route path="directory" element={<Directory />} />
                             <Route path="/directory/:topic" element={<DirectoryLocation />} />
-                            <Route path="/service-request-page" element={<ServiceRequestPage />} />
-                            <Route path="/language-form" element={<Language />} />
-                            <Route path="/sanitation-form" element={<Sanitation />} />
-                            <Route path="/maintenance-form" element={<Maintenance />} />
-                            <Route path="/security-form" element={<Security />} />
+                            <Route
+                                path="/service-request-page"
+                                element={<ProtectedRoute Route={<ServiceRequestPage />} />}
+                            />
+                            <Route
+                                path="/language-form"
+                                element={<ProtectedRoute Route={<Language />} />}
+                            />
+                            <Route
+                                path="/sanitation-form"
+                                element={<ProtectedRoute Route={<Sanitation />} />}
+                            />
+                            <Route
+                                path="/maintenance-form"
+                                element={<ProtectedRoute Route={<Maintenance />} />}
+                            />
+                            <Route
+                                path="/security-form"
+                                element={<ProtectedRoute Route={<Security />} />}
+                            />
+                            <Route path="/*" element={<NotFound />} />
 
                             <Route path="/IndoorMapPage" element={<IndoorMapsPage />} />
-                            <Route path="/map-editor" element={<MapEditor />} />
-                            <Route path="/admin-page" element={<AdminPage />} />
+
+                            <Route
+                                path="/map-editor"
+                                element={<ProtectedRoute Route={<MapEditor />} />}
+                            />
+                            <Route
+                                path="/admin-page"
+                                element={<ProtectedRoute Route={<AdminPageV2 />} />}
+                            />
                             <Route path="/HomePage/HomePage" element={<HomePage />} />
                             <Route
                                 path="/language-request-history"
-                                element={<LanguageRequestHistory />}
+                                element={<ProtectedRoute Route={<LanguageRequestHistory />} />}
                             />
                         </Route>
                     </Routes>

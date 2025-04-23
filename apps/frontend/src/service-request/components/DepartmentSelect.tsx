@@ -1,23 +1,32 @@
 import { Select, SelectProps } from '@mantine/core';
 
 interface DepartmentSelectProps extends SelectProps {
-  departments: string[]; // Just titles
+    departments: string[]; // Just titles
 }
 
 const DepartmentSelect: React.FC<DepartmentSelectProps> = ({ departments, ...props }) => {
-
-  return (
-    <Select
-      label="Choose the Department"
-      placeholder={departments.length > 0 ? '--Select a Department--' : 'Select hospital first'}
-      searchable
-      data={departments}
-      radius="sm"
-      size="xs"
-      mb="sm"
-      {...props}
-    />
-  );
+    return (
+        <Select
+            label="Choose the Department"
+            placeholder={
+                departments.length > 0 ? '--Select a Department--' : '--Select Hospital First--'
+            }
+            searchable
+            data={departments}
+            radius="sm"
+            size="xs"
+            mb="md"
+            required
+            c={"#285CC6"}
+            {...props}
+            styles={{
+                label: {
+                    fontSize: '18px',
+                    fontWeight: 350,
+                },
+            }}
+        />
+    );
 };
 
 export default DepartmentSelect;

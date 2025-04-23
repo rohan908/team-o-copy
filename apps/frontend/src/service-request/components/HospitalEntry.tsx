@@ -21,9 +21,17 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
             onChange={(val) => onChange(val || '')} // fallback for null values
             nothingFoundMessage="Hospital not found"
             radius="sm"
-            mb="sm"
+            mb="md"
             size="xs"
+            required
+            c={"#285CC6"}
             {...props}
+            styles={{
+                label: {
+                    fontSize: '18px',
+                    fontWeight: 350,
+                },
+            }}
         />
     );
 };

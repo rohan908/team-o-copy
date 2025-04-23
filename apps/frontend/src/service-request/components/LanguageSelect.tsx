@@ -18,9 +18,17 @@ const LanguageSelect: React.FC<SelectProps> = (props) => {
             data={languageOptions}
             nothingFoundMessage="Language not found"
             radius="sm"
-            mb="sm"
+            mb="md"
             size="xs"
+            required
+            c={"#285CC6"}
             {...props}
+            styles={{
+                label: {
+                    fontSize: '18px',
+                    fontWeight: 350,
+                },
+            }}
         />
     );
 };

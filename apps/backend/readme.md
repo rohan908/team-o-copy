@@ -2,15 +2,14 @@
 
 <!-- TOC -->
 
-- [Backend](#backend)
-    - [RESTful API Basics](#restful-api-basics)
-    - [Package Overview](#package-overview)
-        - [Express.js](#expressjs)
-        - [ts-node](#ts-node)
-        - [Nodemon](#nodemon)
-        - [Miscellaneous](#miscellaneous)
-    - [Code Structure](#code-structure)
-        <!-- TOC -->
+- [Backend](#backend) - [RESTful API Basics](#restful-api-basics) - [Package Overview](#package-overview) - [Express.js](#expressjs) - [ts-node](#ts-node) - [Nodemon](#nodemon) - [Miscellaneous](#miscellaneous) - [Code Structure](#code-structure)
+  <<<<<<< HEAD
+
+    # <!-- TOC -->
+
+              <!-- TOC -->
+
+> > > > > > > refs/heads/main
 
 This package defines the backend server, and the RESTful API it
 represents. It also includes the packages used.
@@ -132,4 +131,4 @@ documents the recommended structure for using this.
   of processing is done
 - bin/database-connection.ts provides a database connection the rest of the
   database package can use. When this is required by www.ts, it automatically starts
-  the database. It also automatically disconnects WHENEVER the client exi
+  the database. It also automatically disconnects WHENEVER the client exits
