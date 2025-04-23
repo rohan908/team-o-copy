@@ -1,0 +1,83 @@
+id,x,y,floor,mapId,name,description,nodeType,connectingNodes
+1,86,82,1,1,Patriot Place Parking Lot,parking,parking-lot,2
+2,99,53,1,1,hallway,hallway,hallway,"1,3,12"
+3,12,13,1,1,hallway,hallway,hallway,"2,4"
+4,10,2,1,1,hallway,hallway,hallway,"3,5"
+5,0,4,1,1,hallway,hallway,hallway,"4,6"
+6,-15,-6,1,1,Imaging Suite,department,department,"5,7"
+7,-24,-4,1,1,hallway,hallway,hallway,"6,8"
+8,-31,-35,1,1,hallway,hallway,hallway,"7,9"
+9,-40,-34,1,1,hallway,hallway,hallway,"8,10"
+10,-39,-30,1,1,hallway,hallway,hallway,"9,11"
+11,-36,-28,1,1,Pharmacy,department,department,10
+12,115,14,1,1,hallway,hallway,hallway,"2,144"
+14,92,-15,1,1,staircase-1,stairs,staircase,"15,144"
+15,94,-15,2,1,staircase-2,stairs,staircase,"14,16,25"
+16,87,-18,2,1,hallway,hallway,hallway,"15,17,19"
+17,84,-20,2,1,hallway,hallway,hallway,"16,18"
+18,80,-18,2,1,Vein Care Services,department,department,17
+19,88,-24,2,1,hallway,hallway,hallway,"16,20"
+20,72,-28,2,1,hallway,hallway,hallway,"19,21"
+21,69,-23,2,1,hallway,hallway,hallway,"20,22"
+22,24,-39,2,1,hallway,hallway,hallway,"21,23"
+23,30,-58,2,1,hallway,hallway,hallway,"22,24"
+24,24,-60,2,1,Endocrinology,department,department,23
+25,94,-15,3,1,staircase-3,stairs,staircase,"15,26"
+26,81,-20,3,1,hallway,hallway,hallway,"25,27"
+27,75,-20,3,1,hallway,hallway,hallway,"26,28"
+28,52,-28,3,1,hallway,hallway,hallway,"27,29"
+29,50,-23,3,1,hallway,hallway,hallway,"28,30"
+30,54,-22,3,1,Phlebotomy/Primary Care,department,department,29
+112,-12,101,4,2,Multi-Specialty Clinic,department,department,"126,128"
+116,-29,108,4,2,Radiology,department,department,129
+117,-143,-45,4,2,Chestnut Parking,parking-lot,parking-lot,121
+118,-139,107,4,2,,,,"121,131"
+119,144,3,4,2,,,,120
+120,143,136,4,2,,,,"127,119"
+121,-140,57,4,2,,,,"118,117,122"
+122,-120,54,4,2,,,,"121,137"
+123,-74,54,4,2,,,,"132,137"
+124,-27,52,4,2,,,,"125,132"
+125,-24,88,4,2,,,,"124,126"
+126,-14,92,4,2,,,,"125,112,138"
+127,-7,136,4,2,,,,"128,120,131"
+128,-8,118,4,2,,,,"112,127,129"
+129,-21,115,4,2,,,,"128,116"
+131,-109,136,4,2,,,,"118,127"
+132,-39,53,4,2,,,,"124,123"
+133,-97,27,4,2,,,,"137,134"
+134,-84,24,4,2,,,,"133,135"
+135,-83,10,4,2,,,,"134,136"
+136,-70,8,4,2,Ambulatory Care,department,department,135
+137,-96,53,4,2,,,,"122,123,133"
+138,-1,90,4,2,,,,"126,139"
+139,30,90,4,2,,,,"138,140"
+140,80,89,4,2,,,,"139,141"
+141,82,32,4,2,,,,"140,142"
+142,72,32,4,2,,,,"141,143"
+143,69,40,4,2,MRI/CT,department,department,142
+144,84,5,1,1,,,,"12,14"
+145,-131,32,5,3,Faulkner Parking,parking-lot,parking-lot,146
+146,-106,62,5,3,,,,"145,147,148"
+147,-100,70,5,3,,,,"146,153"
+148,-89,63,5,3,,,,"146,149,168"
+149,-67,66,5,3,,,,"148,150"
+150,-42,73,5,3,,,,"149,151"
+151,-25,72,5,3,,,,"150,152"
+152,-7,68,5,3,,,,"151,155"
+153,-101,89,5,3,,,,"147,154"
+154,-111,90,5,3,Belkin House Check-in,department,department,153
+155,-10,63,5,3,,,,"152,156"
+156,-9,57,5,3,,,,"155,157"
+157,-6,47,5,3,,,,"156,158"
+158,-7,31,5,3,,,,"157,159"
+159,-6,19,5,3,,,,"158,160,163"
+160,-6,14,5,3,,,,"159,161"
+161,0,14,5,3,,,,"160,162"
+162,1,6,5,3,Pre-Admittance Screening,department,department,161
+163,-36,19,5,3,,,,"159,164"
+164,-41,20,5,3,,,,"163,166,165"
+165,-45,12,5,3,Emergency Check-in,department,department,164
+166,-41,28,5,3,,,,"164,167"
+167,-31,28,5,3,Blood-Draw Lab,department,department,166
+168,-92,-8,5,3,,,,148
