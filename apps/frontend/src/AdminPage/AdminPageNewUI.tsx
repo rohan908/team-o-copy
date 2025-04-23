@@ -112,19 +112,19 @@ export function AdminPageV2() {
                               </Flex>
                               <Collapse in={formInfoOpen} transitionDuration={300} transitionTimingFunction="linear">
                                 <Flex direction="column" justify="center" gap="xs">
-                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={5} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(5)}>
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={5} firstColor="#1C43A7" secondColor="#5A83DB" onClick={() => displayNumToggle(5)}>
                                     Service Request Input
                                   </ColorChangingButton>
-                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={0} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(0)}>
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={0} firstColor="#1C43A7" secondColor="#5A83DB" onClick={() => displayNumToggle(0)}>
                                     Language Requests
                                   </ColorChangingButton>
-                                  <ColorChangingButton  numValueToCheck={displayTableNumber} numForTrigger={2} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(2)}>
+                                  <ColorChangingButton  numValueToCheck={displayTableNumber} numForTrigger={2} firstColor="#1C43A7" secondColor="#5A83DB" onClick={() => displayNumToggle(2)}>
                                     Sanitation Requests
                                   </ColorChangingButton>
-                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={3} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(3)}>
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={3} firstColor="#1C43A7" secondColor="#5A83DB" onClick={() => displayNumToggle(3)}>
                                     Maintenance Requests
                                   </ColorChangingButton>
-                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={1} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(1)}>
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={1} firstColor="#1C43A7" secondColor="#5A83DB" onClick={() => displayNumToggle(1)}>
                                     Security Requests
                                   </ColorChangingButton>
                                 </Flex>
@@ -157,7 +157,7 @@ export function AdminPageV2() {
                               </Flex>
                               <Collapse in={otherToolsOpen} transitionDuration={300} transitionTimingFunction="linear">
                                 <Flex direction="column" justify="center" gap="xs">
-                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={4} firstColor="#285CC6" secondColor="#5A83DB" onClick={() => displayNumToggle(4)}>
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={4} firstColor="#1C43A7" secondColor="#5A83DB" onClick={() => displayNumToggle(4)}>
                                     CSV Manipulator
                                   </ColorChangingButton>
                                   <Button bg={"#5A83DB"}
@@ -213,7 +213,7 @@ export function AdminPageV2() {
                   {/*<Title ff="Inter" fz="30px" mb="4px" ta="center" fw={600}>*/}
                   {/*  Admin Page*/}
                   {/*</Title>*/}
-                  <Center>
+                  <Center pr="55px">
                     <Flex direction="column" justify="center" align="center" w="100%" bg="#D6E0F8" style={{
                       boxShadow: "inset -5px 8px 5px -5px rgba(0,0,255,0.1)",
                       borderRadius: "8px"

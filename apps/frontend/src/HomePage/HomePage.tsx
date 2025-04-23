@@ -45,11 +45,10 @@ export function HomePage() {
             h="100%"
             w="100%"
             p="xl"
-            pos="absolute"
         >
-            <Grid gutter="md" h="100%" mt={'2%'}>
+            <Grid gutter="md" h="100%" mt={'1%'}>
                 {/* Left Context */}
-                <Grid.Col span={6} pl="5%" p="xl" pt="75px">
+                <Grid.Col span={6} pl="5%" p="xl">
                     <Stack justify="flex-start" h="100%" align="flex-start">
                         <HoverUnderline>
                             <Title
@@ -66,9 +65,9 @@ export function HomePage() {
                 </Grid.Col>
                 {/* Right Content */}
                 <Grid.Col span={5}>
-                    <Box h="100%" w={'100%'} display={'flex'} align="center" justify="center" pt="6%">
+                    <Flex h="100%" w={'100%'} align="center" justify="center" pt="6%">
                         <ContentSwitcher />
-                    </Box>
+                    </Flex>
                 </Grid.Col>
             </Grid>
         </Box>

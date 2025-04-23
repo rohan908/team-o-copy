@@ -19,9 +19,9 @@ export const navItems: NavItem[] = [
 ];
 
 export const adminNavItems: NavItem[] = [
-  { name: 'Service Request', link: '/service-request-page' },
+  //{ name: 'Service Request', link: '/service-request-page' },
   { name: 'Admin Page', link: '/admin-page' },
-  { name: 'Map Editor', link: '/map-editor' },
+  //{ name: 'Map Editor', link: '/map-editor' },
 ];
 
 export const loginItems: NavItem[] = [
@@ -45,7 +45,7 @@ export function NavBar() {
             {/* Logo */}
             <Link to="/">
               <Flex
-                bg="blueBase.8"
+                bg="#1C43A7"
                 w="50px"
                 h="50px"
                 style={{
@@ -64,9 +64,9 @@ export function NavBar() {
               </Flex>
             </Link>
 
-            <Group ml="xl" gap="md" visibleFrom="sm" bg="blueBase.9" style={{ borderRadius: "20px", boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)' }}>
+            <Group ml="xl" gap="md" visibleFrom="sm" bg="#1C43A7" style={{ borderRadius: "22.5px", boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)' }}>
               <Box m="3px" bg="blueBase.6" style={{ borderRadius: "20px" }}>
-                <Box m="3px" bg="blueBase.9" style={{ borderRadius: "20px" }}>
+                <Box m="3px" bg="#1C43A7" style={{ borderRadius: "20px" }}>
                   {/* Navigation Items */}
                   {navItems.map((item, index) => (
                     <MantineProvider theme={{activeClassName: ''}}>
