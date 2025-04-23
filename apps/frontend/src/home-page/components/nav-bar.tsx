@@ -38,7 +38,9 @@ export function NavBar() {
         pos="sticky"
         top={"10px"}
         bg="transparent"
-        style={{ zIndex: 999 }}
+        style={{
+          zIndex: 999
+        }}
       >
         <Group h="0px" px="md" bg="transparent">
           <Group justify="space-between" style={{ flex: 1 }}>
@@ -50,7 +52,8 @@ export function NavBar() {
                 h="50px"
                 style={{
                   borderRadius: "50%",
-                  boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)'
+                  boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
+                  zIndex: 999
                 }}
                 justify="center"
                 align="center"
@@ -64,7 +67,16 @@ export function NavBar() {
               </Flex>
             </Link>
 
-            <Group ml="xl" gap="md" visibleFrom="sm" bg="#1C43A7" style={{ borderRadius: "22.5px", boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)' }}>
+            <Group
+              ml="xl"
+              gap="md"
+              visibleFrom="sm"
+              bg="#1C43A7"
+              style={{
+                borderRadius: "22.5px",
+                boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
+                zIndex: 999
+            }}>
               <Box m="3px" bg="blueBase.6" style={{ borderRadius: "20px" }}>
                 <Box m="3px" bg="#1C43A7" style={{ borderRadius: "20px" }}>
                   {/* Navigation Items */}
