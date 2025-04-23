@@ -47,12 +47,11 @@ export function HomePage() {
             h="100%"
             w="100%"
             p="xl"
-            pos="absolute"
         >
             <DisclaimerPopup />
             <Grid gutter="md" h="100%" mt={'2%'}>
                 {/* Left Context */}
-                <Grid.Col span={6} pl="5%">
+                <Grid.Col span={6} pl="5%" p="xl">
                     <Stack justify="flex-start" h="100%" align="flex-start">
                         <HoverUnderline>
                             <Title

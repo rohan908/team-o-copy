@@ -6,6 +6,7 @@ import { FlowingTubeAnimation } from './Edge.tsx';
 import {
     usePatriotContext,
     useChestnutHillContext,
+    useFaulknerHospitalContext,
     useAllNodesContext,
 } from '../contexts/DirectoryContext.js';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
@@ -29,6 +30,7 @@ export function DraggableMap() {
     // Declares context for start and end node information
     const patriotNodes = usePatriotContext();
     const chestnutNodes = useChestnutHillContext();
+    const faulknerNodes = useFaulknerHospitalContext();
 
     // Animation related refs
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
@@ -43,18 +45,22 @@ export function DraggableMap() {
         canvasId: 'insideMapCanvas',
     });
 
-    const handleHospitalChange = (hospitalName) => {
+    const handleHospitalChange = (hospitalName: string) => {
         if (hospitalName === '20 Patriot Pl' || hospitalName === '22 Patriot Pl') {
             setSceneIndexState(0);
             setFloorState(1);
         } else if (hospitalName === 'Chestnut Hill') {
             setSceneIndexState(3);
             setFloorState(1); // Assuming Chestnut Hill starts at floor 1
+        } else if (hospitalName === 'Faulkner Hospital') {
+            setSceneIndexState(4);
+            setFloorState(1);
         }
     };
     // associated floors with scenes
     const getSceneIndexFromFloor = (floor: number): number => {
         if (selectedHospitalName === 'Chestnut Hill') return 3;
+        if (selectedHospitalName === 'Faulkner Hospital') return 4;
         if (floor === 1) return 0;
         if (floor === 3) return 1;
         if (floor === 4) return 2;
@@ -78,6 +84,7 @@ export function DraggableMap() {
         const path = findPath(firstNodeId, lastNodeId, algo).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
             // For each node id in the path
+
             for (const id of ids) {
                 // Get the full node from the ID
                 const node = getNode(id, allNodes);
@@ -151,6 +158,11 @@ export function DraggableMap() {
                 return element.name == selectedDepartment;
             });
             return index >= 0 ? chestnutNodes[index].id : 0; //make sure nodeId exists
+        } else if (selectedHospitalName == 'Faulkner Hospital') {
+            const index = faulknerNodes.findIndex((element) => {
+                return element.name == selectedDepartment;
+            });
+            return index >= 0 ? faulknerNodes[index].id : 0; //make sure nodeId exists
         }
         return null;
     };
@@ -161,7 +173,9 @@ export function DraggableMap() {
         if (selectedHospitalName === '20 Patriot Pl' || selectedHospitalName === '22 Patriot Pl') {
             return 1; // Node 1 for Patriot Place
         } else if (selectedHospitalName === 'Chestnut Hill') {
-            return 100; // Node 100 for Chestnut Hill
+            return 117; // Node 100 for Chestnut Hill
+        } else if (selectedHospitalName === 'Faulkner Hospital') {
+            return 145;
         }
         return null;
     };
@@ -203,6 +217,13 @@ export function DraggableMap() {
                     { x: node2.x, y: node2.y }
                 )
             );
+        } else if (node1.floor === node2.floor && node1.floor === 5) {
+          scenesRef.current[4].add(
+            animationRef.current.createEdge(
+              { x: node1.x, y: node1.y },
+              { x: node2.x, y: node2.y }
+            )
+          );
         }
     };
 
@@ -217,7 +238,7 @@ export function DraggableMap() {
             }
 
             // Render the current scene
-            if (rendererRef.current) {
+            if (rendererRef.current && cameraRef.current) {
                 rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
             }
             window.requestAnimationFrame(animate);

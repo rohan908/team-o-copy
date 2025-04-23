@@ -72,6 +72,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
           value={floor.toString()}
           onChange={(value) => setFloor(parseInt(value))}
           data={[
+            { label: 'FK', value: '6'},
             { label: 'CH', value: '5'},
             { label: '4', value: '4' },
             { label: '3', value: '3' },

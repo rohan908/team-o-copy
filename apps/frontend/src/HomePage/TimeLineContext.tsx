@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useRef } from 'react';
 import { GoogleMap } from '@react-google-maps/api';
 
 // place holder
@@ -16,11 +16,14 @@ interface TimelineContextType {
     setSelectedHospital: (hospital: string | null) => void;
     userCoordinates: LocationCoordinates | null;
     setUserCoordinates: (coords: LocationCoordinates | null) => void;
+    setUserStart: (start: string | null) => void;
+    userStart: string | null;
     travelMode: google.maps.TravelMode | null; //type travel mode must be googles enum, not just any string
     setTravelMode: (mode: google.maps.TravelMode | null) => void;
     isGmapsLoaded: boolean;
     setIsGmapsLoaded: (loaded: boolean) => void;
-
+    mapRef: {current: google.maps.Map | null};
+    directionsRendererRef: {current: google.maps.DirectionsRenderer | null};
 
     // Indoor Nav
     department: string | null;
@@ -45,6 +48,8 @@ const TimelineContext = createContext<TimelineContextType>({
     setSelectedHospital: () => {},
     userCoordinates: null,
     setUserCoordinates: () => {},
+    userStart: null,
+    setUserStart: () => {},
     travelMode: null,
     setTravelMode: () => {},
     department: '',
@@ -57,6 +62,8 @@ const TimelineContext = createContext<TimelineContextType>({
     setSelectedService: () => {},
     isGmapsLoaded: false,
     setIsGmapsLoaded: () => {},
+    mapRef: {current: null},
+    directionsRendererRef: {current: null},
 });
 
 export function TimelineProvider({ children }: { children: ReactNode }) {
@@ -65,13 +72,16 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
     // GMAPS
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [userCoordinates, setUserCoordinates] = useState<LocationCoordinates | null>(null);
+    const [userStart, setUserStart] = useState<string | null>(null);
     const [travelMode, setTravelMode] = useState<google.maps.TravelMode | null>(null);
     const [isGmapsLoaded, setIsGmapsLoaded] = useState<boolean>(false);
+    const mapRef = useRef<google.maps.Map | null>(null);
+    const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
 
     // Indoor Nav
     const [department, setDepartment] = useState<string | null>(null);
     const [directoryOptions, setDirectoryOptions] = useState<{ value: string; label: string }[]>(
-        []  
+        []
     );
 
     const [selectedAlgorithm, setSelectedAlgorithm] = useState<string | null>(null);
@@ -86,6 +96,8 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
         setSelectedHospital,
         userCoordinates,
         setUserCoordinates,
+        userStart,
+        setUserStart,
         travelMode,
         setTravelMode,
         department,
@@ -98,6 +110,8 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
         setSelectedService,
         isGmapsLoaded,
         setIsGmapsLoaded,
+        mapRef,
+        directionsRendererRef,
     };
 
     return <TimelineContext.Provider value={value}>{children}</TimelineContext.Provider>;

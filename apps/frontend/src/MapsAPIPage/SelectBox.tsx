@@ -8,11 +8,20 @@ import { Box, Text, Select, Collapse, TextInput, Stack, Button } from '@mantine/
 import { useTimeline } from '../HomePage/TimeLineContext';
 
 const SelectBox = () => {
-    const { setSelectedHospital, setDepartment, setUserCoordinates, setTravelMode } = useTimeline();
+    const {
+        setSelectedHospital,
+        setDepartment,
+        setUserCoordinates,
+        setTravelMode,
+        setUserStart,
+        selectedHospital,
+        userCoordinates,
+        travelMode,
+    } = useTimeline();
 
     const [hospital, setHospital] = useState<string | null>(null);
     const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
     const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>(
         []
     ); //this is needed to display department options when entered a hospital
@@ -93,10 +102,16 @@ const SelectBox = () => {
                     lat: location.lat(),
                     lng: location.lng(),
                 };
-                setUserStartLocation(latlng);
+                setUserCoordinates(latlng);
             }
         });
     }, [collapsed]);
+
+    useEffect(() => {
+        if (selectedHospital && selectedDepartment && travelMode) {
+            setCollapsed(true);
+        }
+    }, []);
 
     return (
         <>
@@ -126,6 +141,7 @@ const SelectBox = () => {
                                 <TextInput
                                     color="#A5A7AC"
                                     ref={input}
+                                    onChange={(value) => setUserStart(value)}
                                     placeholder="--Enter a Location--"
                                 />
                             </Box>
