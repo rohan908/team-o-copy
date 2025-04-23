@@ -2,11 +2,26 @@ import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
 import { IconBuilding, IconChevronDown, IconHospital } from '@tabler/icons-react';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { useTimeline } from './TimeLineContext.tsx';
+import { NavSelectionItem } from '../contexts/NavigationItem.ts';
+import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 
 export function DepartmentSelector() {
     const theme = useMantineTheme();
 
-    const { directoryOptions, selectedHospital } = useTimeline();
+    const { directoryOptions, selectedHospital, setDepartment } = useTimeline();
+    const NavSelection = useNavSelectionContext();
+
+    const setSelectedDepartment = (department: string | null) => {
+        setDepartment(department);
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: selectedHospital,
+                Department: department,
+                AlgorithmName: 'BFS',
+            } as NavSelectionItem,
+        });
+    };
 
     return (
         <Autocomplete
@@ -16,6 +31,7 @@ export function DepartmentSelector() {
             }
             leftSection={<IconHospital size="16" style={{ color: theme.colors.primaryBlues[8] }} />}
             data={directoryOptions}
+            onChange={setSelectedDepartment}
             radius="sm"
             mb="sm"
             size="xs"
