@@ -9,8 +9,36 @@ import {
     parseImportedCSV,
 } from 'common/src/CSVParsing.ts';
 import { BACKUP_PATHS } from 'common/src/constants.ts';
+import { edgeData } from 'common/src/MapHelper.ts';
+import { reinitialzeNavigationService } from './Graph.ts';
 
 const router: Router = express.Router();
+
+async function updateEdgeTable() {
+    // clear edge table
+    const deleteEdges = await PrismaClient.edge.deleteMany({});
+
+    // adds all node data from /SeedData.ts
+    const addDefaultNodes = await PrismaClient.node.findMany({});
+
+    // adds all edges based on connecting nodes in each node
+    for (const node of addDefaultNodes) {
+        const connections = node.connectingNodes;
+
+        for (const connectingID of connections) {
+            const nodeToConnect = await PrismaClient.node.findUnique({
+                where: { id: connectingID },
+            });
+
+            const addEdge = await PrismaClient.edge.createMany({
+                data: edgeData(node, nodeToConnect, 1),
+                skipDuplicates: true,
+            });
+        }
+    }
+
+    await reinitialzeNavigationService();
+}
 
 // Will update the directory backup CSV with more entries from a given CSV
 router.post('/import', async (req: Request, res: Response) => {
@@ -30,6 +58,8 @@ router.post('/import', async (req: Request, res: Response) => {
 
     // updates the backup file
     await exportToCSV();
+
+    await updateEdgeTable();
 
     console.log('CSV written to:', BACKUP_PATHS.directoryBackup);
 
@@ -56,6 +86,8 @@ router.post('/import/direct', async (req: Request, res: Response) => {
 
     // updates the backup file
     await exportToCSV();
+
+    await updateEdgeTable();
 
     console.log('CSV written to:', BACKUP_PATHS.directoryBackup);
 

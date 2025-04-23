@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, createContext, useCallback, useMemo} from 'react';
 import * as THREE from 'three';
-import { Box } from '@mantine/core';
+import { Box, Flex } from '@mantine/core';
 import { useHover} from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
+import NodeInfoBox from './Components/NodeInfoBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
@@ -11,6 +12,7 @@ import { useLogin } from '../home-page/components/LoginContext.tsx';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
+
 import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import {Object3DEventMap} from "three";
@@ -18,11 +20,8 @@ import {Object3DEventMap} from "three";
 export interface MapEditorProps {
   selectedTool: string;
   setSelectedTool: (tool: string) => void;
-  newNodes?: DirectoryNodeItem[];
-  nodeSelected?: (isSelected: boolean) => void;
-  nodeX?: number;
-  nodeY?: number;
-  floor?: number;
+  currentNode?: DirectoryNodeItem;
+  nodeSelected?: boolean;
   updateNodePosition?: (x: number, y: number, floor: number) => void;
 }
 
@@ -76,6 +75,7 @@ export function MapEditor() {
     Patriot Place Floor 3 -> floor2 -> scene 2
     Patriot Place Floor 4 -> floor3 -> scene 3
     Chestnut Hill Floor 1 -> floor4 -> scene 4
+    Faulkner Hospital Floor 1 -> floor5 -> scene 5
      */
 
     // set up map
@@ -104,6 +104,8 @@ export function MapEditor() {
             scenesRef.current[2].add(mesh);
         } else if (node1.floor === node2.floor && node1.floor === 4) {
             scenesRef.current[3].add(mesh);
+        } else if (node1.floor === node2.floor && node1.floor === 5) {
+          scenesRef.current[4].add(mesh);
         }
     };
 
@@ -113,6 +115,7 @@ export function MapEditor() {
         if (floor === 3) return 1;
         if (floor === 4) return 2;
         if (floor === 5) return 3;
+        if (floor === 6) return 4;
         return 0;
     };
 
@@ -122,6 +125,7 @@ export function MapEditor() {
       if (index === 1) return {floor: 2, mapID: 1};
       if (index === 2) return {floor: 3, mapID: 1};
       if (index === 3) return {floor: 4, mapID: 2};
+      if (index === 4) return {floor: 5, mapID: 3};
       return {floor: 1, mapID: 1};
     };
 
@@ -296,6 +300,8 @@ export function MapEditor() {
             selectedObject.material.color.set(selectedNodeColor);
             selectedObject.material.needsUpdate = true;
             selectedObjects.current.push(selectedObject);
+
+            console.log(nodeRef.current.find(element => element.id === selectedObject.userData.nodeId));
             render(); // render to show color changes
             updateDragControls();
         }
@@ -317,13 +323,6 @@ export function MapEditor() {
     };
 
     const clickHandler = useCallback((event) => {
-      /*
-      selectedObjects.current.forEach((object) => {
-        deselectObject(object);
-      })
-
-       */
-
       // switches the type of cursor depending on the tool
       switch(mapTool) {
         case 'pan':
@@ -716,7 +715,7 @@ export function MapEditor() {
     }, [sceneIndexState]);
 
     return (
-        <Box w="100vw" h="100vh" p={0}>
+        <Box w="100vw" h="100vh">
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
 
             <Box ref={hoverRef}>
@@ -731,20 +730,24 @@ export function MapEditor() {
                 style={{ width: '100%', height: '100%', position: 'absolute', cursor: cursorStyle}}
             />
 
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: '#000',
-                    opacity: isFading ? 1 : 0,
-                    transition: 'opacity 0.3s ease-in-out',
-                    pointerEvents: 'none',
-                    zIndex: 5,
-                }}
-            />
+            {/*<div*/}
+            {/*    style={{*/}
+            {/*        position: 'absolute',*/}
+            {/*        top: 0,*/}
+            {/*        left: 0,*/}
+            {/*        width: '50%',*/}
+            {/*        height: '100%',*/}
+            {/*        backgroundColor: '#000',*/}
+            {/*        opacity: isFading ? 1 : 0,*/}
+            {/*        transition: 'opacity 0.3s ease-in-out',*/}
+            {/*        pointerEvents: 'none',*/}
+            {/*        zIndex: 5,*/}
+            {/*    }}*/}
+            {/*/>*/}
+
+
+          {/*<NodeInfoBox/>*/}
+
         </Box>
     );
 }

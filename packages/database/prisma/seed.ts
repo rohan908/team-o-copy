@@ -25,6 +25,7 @@ export async function populate() {
         data: [
             { name: 'Patriot', id: 1 },
             { name: 'Chestnut', id: 2 },
+            { name: 'Falkner', id: 3 },
         ],
         skipDuplicates: true,
     });

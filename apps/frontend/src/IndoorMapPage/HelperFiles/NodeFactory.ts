@@ -44,6 +44,11 @@ export const createNode = (
         if (objectsRef) {
             objectsRef.current.push(sphere);
         }
+    } else if (nodeFloor === 5) {
+      sceneArr[4].add(sphere);
+      if (objectsRef) {
+        objectsRef.current.push(sphere);
+      }
     } else {
         console.error("node not added because floor doesn't exist");
     }
