@@ -11,35 +11,49 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
 type ServiceRequestItem = {
-    label: string;
+    labelOne: string;
+    labelTwo: string;
     icon: React.ReactNode;
     link: string;
     disabled?: boolean | true;
 };
+
 export const ServiceRequestItems: ServiceRequestItem[] = [
-    { label: 'Interpreter Request', icon: <IconLanguage size={120} />, link: '/language-form' },
-    { label: 'Security Request', icon: <IconShieldHalf size={120} />, link: '/security-form' },
     {
-        label: 'Sanitization Request',
+        labelOne: 'Interpreter',
+        labelTwo: 'Request',
+        icon: <IconLanguage size={120} />,
+        link: '/language-form' },
+    {
+        labelOne: 'Security',
+        labelTwo: 'Request',
+        icon: <IconShieldHalf size={120} />,
+        link: '/security-form' },
+    {
+        labelOne: 'Sanitation',
+        labelTwo: 'Request',
         icon: <IconTrash stroke={2} size={120} />,
         link: '/sanitation-form',
     },
     {
-        label: 'Maintenance Request',
+        labelOne: 'Maintenance',
+        labelTwo: 'Request',
         icon: <IconBellExclamation stroke={2} size={120} />,
         link: '/maintenance-form',
     },
     {
-        label: 'Type 5',
+        labelOne: 'Type 5',
+        labelTwo: '',
         icon: <IconExclamationCircleFilled size={120} />,
         link: "'/'",
-        disabled: false,
+        disabled: true,
     },
     {
-        label: 'Type 6',
+        labelOne: 'Type 6',
+        labelTwo: '',
         icon: <IconExclamationCircleFilled size={120} />,
         link: "'/'",
-        disabled: false,
+        disabled: true,
     },
 ];
 
@@ -47,20 +61,22 @@ export function ServiceRequestPage() {
     const navigate = useNavigate();
     return (
         <div>
-            <Box bg="terquAccet.2" py="xl">
-                <Flex w="100%" h="85.5vh" justify="center" align="center">
+            <Box py="xl">
+                <Flex w="100%" h="65vh" justify="center" align="center">
                     <Stack>
-                        <Title order={2} ta="left" c={'#001D4D'} mb="lg">
-                            Select Request Type:
-                        </Title>
+                        {/*<Title order={2} ta="left" c={'#001D4D'} mb="lg">*/}
+                        {/*    Select Request Type:*/}
+                        {/*</Title>*/}
                         {/* basic grid for button layout*/}
-                        <SimpleGrid cols={3} spacing="50">
+                        <SimpleGrid cols={3} spacing="30">
                             {ServiceRequestItems.map((item, index) => (
                                 <HoverButton
                                     key={index}
                                     icon={item.icon}
-                                    label={item.label}
+                                    labelOne={item.labelOne}
+                                    labelTwo={item.labelTwo}
                                     onClick={() => navigate(item.link)}
+                                    disabled={item.disabled}
                                 />
                             ))}
                         </SimpleGrid>

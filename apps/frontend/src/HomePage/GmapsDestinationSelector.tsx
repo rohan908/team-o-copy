@@ -1,25 +1,61 @@
-import { Select } from "@mantine/core";
+import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
+import { IconChevronDown, IconMapPinFilled } from '@tabler/icons-react';
+import { useState } from 'react';
+import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
+import { NavSelectionItem } from '../contexts/NavigationItem.ts';
+import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
+import { useTimeline } from './TimeLineContext.tsx';
+import { useChestnutHillContext, usePatriotContext } from '../contexts/DirectoryContext.tsx';
 
-const hospitalOptions = [
+export const hospitalOptions = [
     { value: '20 Patriot Pl', label: '20 Patriot Pl' },
     { value: '22 Patriot Pl', label: '22 Patriot Pl' },
     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
 ];
 
-export function GmapsDestinationSelector({props}: {props: any}) {
+export function GmapsDestinationSelector() {
+    const { setSelectedHospital, setDirectoryOptions } = useTimeline();
+
+    const theme = useMantineTheme();
+
+    const Patriot = usePatriotContext();
+    const Chestnut = useChestnutHillContext();
+
+    const NavSelection = useNavSelectionContext();
+
+    const MapDepartment = (department: DirectoryNodeItem[]) =>
+        department.map((department: DirectoryNodeItem) => ({
+            value: department.name,
+            label: department.name,
+        }));
+
+    const setHospitalLocation = (hospital: string | null) => {
+        setSelectedHospital(hospital);
+        if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
+            setDirectoryOptions(MapDepartment(Patriot));
+        } else if (hospital == 'Chestnut Hill') {
+            setDirectoryOptions(MapDepartment(Chestnut));
+        } else {
+            setDirectoryOptions([]);
+        }
+        //setSelectedHospitalName(hospital);
+        //setSelectedDepartment(null);
+    };
     return (
-        <Select
-            label="Choose your hospital"
-            placeholder="--Select a Hospital--"
-            searchable
+        <Autocomplete
+            placeholder="Hospital Destination"
+            rightSection={
+                <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            }
+            leftSection={
+                <IconMapPinFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            }
             data={hospitalOptions}
-            nothingFoundMessage="Hospital Not Available"
+            onChange={setHospitalLocation}
             radius="sm"
             mb="sm"
-            size = "xs"
-
-            {...props}
-
+            size="xs"
+            w={{ xl: '350px', lg: '300px', sm: '100%' }}
         />
     );
 }
