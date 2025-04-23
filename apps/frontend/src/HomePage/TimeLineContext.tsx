@@ -22,8 +22,8 @@ interface TimelineContextType {
     setTravelMode: (mode: google.maps.TravelMode | null) => void;
     isGmapsLoaded: boolean;
     setIsGmapsLoaded: (loaded: boolean) => void;
-    mapRef: {current: google.maps.Map | null};
-    directionsRendererRef: {current: google.maps.DirectionsRenderer | null};
+    mapRef: { current: google.maps.Map | null };
+    directionsRendererRef: { current: google.maps.DirectionsRenderer | null };
 
     // Indoor Nav
     department: string | null;
@@ -62,8 +62,8 @@ const TimelineContext = createContext<TimelineContextType>({
     setSelectedService: () => {},
     isGmapsLoaded: false,
     setIsGmapsLoaded: () => {},
-    mapRef: {current: null},
-    directionsRendererRef: {current: null},
+    mapRef: { current: null },
+    directionsRendererRef: { current: null },
 });
 
 export function TimelineProvider({ children }: { children: ReactNode }) {

@@ -73,7 +73,7 @@ export const CustomTimeline = () => {
 
     const titlesInfo = [
         { title: 'Go To Hospital', icon: <IconMap2 size={28} /> },
-        { title: 'Navigate to Hospital', icon: <IconArrowZigZag size={28} /> },
+        { title: 'Navigate The Hospital', icon: <IconArrowZigZag size={28} /> },
         { title: 'Request Services', icon: <IconFileInfo size={28} /> },
     ];
 
