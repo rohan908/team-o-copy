@@ -95,7 +95,7 @@ const RequestForm: React.FC<RequestDetails> = ({
             align="center"
             p="xl"
         >
-            <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="65%">
+            <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="50%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Flex direction="column" ta="center" justify="center">
                         <Title order={2} ta="center" mb="md">
@@ -107,7 +107,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                     </Flex>
 
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
-                        <Box flex="1" miw="300px">
+                        <Box flex="1" miw="300px" mr="lg">
                             {/*< column 1!!!*/}
                             <NameEntry {...form.getInputProps('employeeName')} />
                             <HospitalSelect
@@ -122,7 +122,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                             {/*this is where I want any unique components to go*/}
                         </Box>
 
-                        <Box flex="1" miw="300px">
+                        <Box flex="1" miw="300px" ml="lg">
                             {/* column 2!!!*/}
                             <DateInputForm {...form.getInputProps('date')} />
                             <TimeEntry {...form.getInputProps('time')} />
