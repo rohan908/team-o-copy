@@ -1,5 +1,5 @@
 import { DraggableMap } from './DraggableMap.tsx';
-import { Flex, Box, Stack } from '@mantine/core';
+import { Flex, Box, Stack, Title } from '@mantine/core';
 import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
 import { ParkingSelector } from '../HomePage/ParkingSelector.tsx';
 import { DepartmentSelector } from '../HomePage/DepartmentSelector.tsx';
@@ -10,8 +10,13 @@ export function IndoorMapsPage() {
         <Flex direction="row" h="100vh" w="100vw">
             <Box w={320}>
                 {/* Sidebar Panel */}
+                <Title order={1} fz={'xl'} pt={'5px'} mb={'sm'}>
+                    Navigate to Hospital
+                </Title>
                 <Stack w={320}>
-                    <ParkingSelector />
+                    <Box w="100%">
+                        <ParkingSelector />
+                    </Box>
                     <DepartmentSelector />
                     <AlgorithmSelector />
                     <DisplayDirectionsBox />

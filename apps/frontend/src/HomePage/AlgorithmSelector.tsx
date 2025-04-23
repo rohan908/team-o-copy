@@ -46,7 +46,7 @@ export function AlgorithmSelector() {
             size="xs"
             onChange={setSelectedAlgo}
             disabled={!selectedHospital || !department}
-            w={{ base: '100%', sm: '400px' }}
+            w={'100%'}
         />
     );
 }
