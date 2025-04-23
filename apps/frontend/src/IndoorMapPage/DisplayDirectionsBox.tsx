@@ -4,13 +4,15 @@
  NOTES: CTRL+F !!! for changes that may need to be made
  I use ({Date}) in comments to manually track myself
  */
-import { Accordion, Box, Title, Text, Group, Divider } from '@mantine/core';
+import { Accordion, Box, Text, Group, Divider } from '@mantine/core';
 import { GetTextDirections } from './GetTextDirections.tsx';
 import { useMemo } from 'react';
-import { usePathContext, useNavSelectionContext } from '../contexts/NavigationContext.tsx';
+import { usePathContext } from '../contexts/NavigationContext.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import { IconArrowLeft, IconArrowRight, IconArrowNarrowUp, IconStairs } from '@tabler/icons-react';
+import TTSButton from '../Buttons/TTSButton.tsx';
+
 /**
  *
  * @param nodeIds : list of numbers representing the nodeIds that are in the calculated path
@@ -56,9 +58,6 @@ export function DisplayDirectionsBox() {
     });
     return (
         <Box w="360px" h="400px" style={{ overflowY: 'auto' }}>
-            <Title order={1} size="xl">
-                Navigate the Hospital
-            </Title>
             <Accordion
                 multiple
                 styles={{
@@ -66,49 +65,64 @@ export function DisplayDirectionsBox() {
                 }}
                 defaultValue={Object.keys(directionsByFloor).map((floor) => `floor-${floor}`)}
             >
-                {Object.entries(directionsByFloor).map(([floor, direction]) => (
-                    <Accordion.Item key={floor} value={`floor-${floor}`}>
-                        <Accordion.Control>
-                            <Text fw={700} size="md" c="blue.7">
-                                {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
-                                {Number(floor) === 1 ? 'Floor 1' : `Floor ${Number(floor) + 1}`}
-                            </Text>
-                        </Accordion.Control>
-                        <Accordion.Panel>
-                            {direction.map((step, idx) => {
-                                const icon = step.Direction.toLowerCase().includes('elevator') ? (
-                                    <IconStairs size={20} />
-                                ) : step.Direction.toLowerCase().includes('stairs') ? (
-                                    <IconStairs size={20} />
-                                ) : step.Direction === 'Straight' ? (
-                                    <IconArrowNarrowUp size={20} />
-                                ) : step.Direction === 'Left' ? (
-                                    <IconArrowLeft size={20} />
-                                ) : (
-                                    <IconArrowRight size={20} />
-                                );
+                {Object.entries(directionsByFloor).map(([floor, direction]) => {
+                    const floorTTS = direction.map((step) => {
+                        if (step.Direction.startsWith('Take')) return step.Direction;
+                        if (step.Direction === 'Straight')
+                            return `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`;
+                        return `Turn ${step.Direction.toLowerCase()}`;
+                    });
+                    return (
+                        <Accordion.Item key={floor} value={`floor-${floor}`}>
+                            <Accordion.Control>
+                                <Group>
+                                    <Text fw={700} size="md" c="blue.7">
+                                        {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
+                                        {Number(floor) === 1
+                                            ? 'Floor 1'
+                                            : `Floor ${Number(floor) + 1}`}
+                                    </Text>
+                                    <TTSButton text={floorTTS} />
+                                </Group>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                {direction.map((step, idx) => {
+                                    const icon = step.Direction.toLowerCase().includes(
+                                        'elevator'
+                                    ) ? (
+                                        <IconStairs size={20} color="#0E3B99" />
+                                    ) : step.Direction.toLowerCase().includes('stairs') ? (
+                                        <IconStairs size={20} color="#0E3B99" />
+                                    ) : step.Direction === 'Straight' ? (
+                                        <IconArrowNarrowUp size={20} color="#0E3B99" />
+                                    ) : step.Direction === 'Left' ? (
+                                        <IconArrowLeft size={20} color="#0E3B99" />
+                                    ) : (
+                                        <IconArrowRight size={20} color="#0E3B99" />
+                                    );
 
-                                const label = step.Direction.startsWith('Take')
-                                    ? step.Direction
-                                    : step.Direction === 'Straight'
-                                      ? `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`
-                                      : `Turn ${step.Direction.toLowerCase()}`;
+                                    const label = step.Direction.startsWith('Take')
+                                        ? step.Direction
+                                        : step.Direction === 'Straight'
+                                          ? `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`
+                                          : `Turn ${step.Direction.toLowerCase()}`;
 
-                                return (
-                                    <Box key={idx} mb="xs">
-                                        <Group align="center">
-                                            {icon}
-                                            <Text size="sm" fw={500} color="blue">
-                                                {label}
-                                            </Text>
-                                        </Group>
-                                        <Divider my="xs" />
-                                    </Box>
-                                );
-                            })}
-                        </Accordion.Panel>
-                    </Accordion.Item>
-                ))}
+                                    return (
+                                        <Box key={idx} mb="xs">
+                                            <Group align="center">
+                                                {icon}
+                                                <Text size="sm" fw={500} c="blue">
+                                                    {label}
+                                                </Text>
+                                            </Group>
+                                            <Divider my="xs" />
+                                        </Box>
+                                    );
+                                })}
+                            </Accordion.Panel>
+                        </Accordion.Item>
+                    );
+                })}
             </Accordion>
         </Box>
     );
