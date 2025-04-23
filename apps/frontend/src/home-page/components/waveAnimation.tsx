@@ -8,18 +8,18 @@ interface WaveAnimationProps {
 
 const COLORS = {
     WAVE_COLORS: [ //backup wave colors bc mantine doesnt work or smth idk it breaks sometimes
-      '#99E5F4',
-      '#88D3EC',
-      '#77C1E4',
-      '#66AFDC',
-      '#559DD5',
-      '#448BCD',
-      '#3379C5',
-      '#2267BD',
-      '#1155B5',
-      '#0043AD',
+      '#D6E1F6',
+      '#C2CFED',
+      '#ADBEE5',
+      '#98ACDC',
+      '#849BD3',
+      '#6F89CA',
+      '#5A77C1',
+      '#4566B9',
+      '#3155B0',
+      '#1C43A7',
     ],
-    BACKGROUND_COLOR: '#AAF7FC' //lighest mantine tuquoise color
+    BACKGROUND_COLOR: '#EBF2FF' //lighest mantine tuquoise color
 };
 
 // Wave animation configuration
@@ -135,7 +135,7 @@ export function WaveAnimation({ id = "waveCanvas", className }: WaveAnimationPro
             ctx.fillStyle = COLORS.BACKGROUND_COLOR;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             const heroimage = new Image();
-            heroimage.src = '/medicalSymbol.png';
+            heroimage.src = '/medicalSymbolPaleBlue.png';
 
             // only draw the image once it's loaded- keep image centered in left 1/3 of screen for rule of thirds
             if (heroimage.complete) {

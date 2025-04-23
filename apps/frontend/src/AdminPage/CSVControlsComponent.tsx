@@ -7,29 +7,33 @@ import AdminPageV2 from "./AdminPageNewUI.tsx";
 export function CSVControlsComponent() {
   const [showPreview, setShowPreview] = useState(false);
   return (
-    <Box>
-      <DatabaseController table="directory" />
+    <Box
+    h="100%"
+    >
+      <Flex direction="column">
+        <DatabaseController table="directory" />
 
-      {/* Toggle Button */}
-      <Flex
-        justify="center"
-        mt="10px"
-      >
-        <Button
-          color="#153A90"
-          variant="outline"
-          onClick={() => setShowPreview((prev) => !prev)}
+        {/* Toggle Button */}
+        <Flex
+          justify="center"
+          mt="10px"
         >
-          {showPreview ? 'Hide Directory Preview' : 'Preview Directory'}
-        </Button>
-      </Flex>
+          <Button
+            color="#153A90"
+            variant="outline"
+            onClick={() => setShowPreview((prev) => !prev)}
+          >
+            {showPreview ? 'Hide Directory Preview' : 'Preview Directory'}
+          </Button>
+        </Flex>
 
-      {/* Collapsible CSV Table */}
-      <Collapse in={showPreview} transitionDuration={200}>
-        <div className="mt-4">
-          <CSVTable table="directory" />
-        </div>
-      </Collapse>
+        {/* Collapsible CSV Table */}
+        <Collapse in={showPreview} transitionDuration={200}>
+          <div className="mt-4">
+            <CSVTable table="directory" />
+          </div>
+        </Collapse>
+      </Flex>
     </Box>
   )
 }

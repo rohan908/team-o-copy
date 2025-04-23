@@ -91,7 +91,7 @@ export function DatabaseController({ table }: Props) {
     }
 
     return (
-        <div className="w-full max-w-md mx-auto">
+        <div className="w-full max-w-md mx-auto" >
             {/**/}
             {/*Input for import csv*/}
             <Modal
