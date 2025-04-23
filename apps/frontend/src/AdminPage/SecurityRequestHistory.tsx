@@ -79,13 +79,13 @@ export function SecurityRequestHistory() {
         <Box
           p="md"
           w="100%"
-          h="100%"
+          h="90vh"
           opacity="0.95"
           bd="lg"
           flex="column"
           bga='blur(5px)'
         >
-            <Title order={1} mb="sm" c="black" ta="center" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
+            <Title order={1} mb="sm" mt="50px" c="black" ta="center" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
                 Security Service Requests
             </Title>
             <Text c="black" ta="center" mb="sm" fw={500} fz={{ sm: 'xxs', md: 'xs' }}>
