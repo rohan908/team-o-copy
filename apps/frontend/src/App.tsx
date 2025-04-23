@@ -18,6 +18,7 @@ import {
     darken,
     MantineRadiusValues,
 } from '@mantine/core';
+import { TimelineProvider } from './HomePage/TimeLineContext.tsx';
 const themeGold: MantineColorsTuple = [
     '#FFF8EB',
     '#FDF0D5',
@@ -59,7 +60,7 @@ const terquAccet: MantineColorsTuple = [
 
 const greys: MantineColorsTuple = [
     '#f1f4fe',
-    '#e4e6ed',
+    '#e4e6ed', //MAIN GREY
     '#c8cad3',
     '#a9adb9',
     '#9094a3',
@@ -78,13 +79,13 @@ const secondaryBlues: MantineColorsTuple = [
     '#5a83db',
     '#4271d6',
     '#3568d4',
-    '#2658bd',
+    '#2658bd', //MAIN REGULAR BLUE
     '#1d4eaa',
     '#0c4397',
 ];
 
 const primaryBlues: MantineColorsTuple = [
-    '#ebf2ff',
+    '#ebf2ff', //MAIN LIGHT BLUE FOR BACKGROUND
     '#d6e0f8',
     '#abbeee',
     '#7d9ae5',
@@ -92,7 +93,7 @@ const primaryBlues: MantineColorsTuple = [
     '#4068d9',
     '#325ed8',
     '#254ec0',
-    '#1d45ad',
+    '#1d45ad', //MAIN DARK BLUE
     '#0e3b99',
 ];
 
@@ -100,7 +101,7 @@ const yellowAccent: MantineColorsTuple = [
     '#fff9e2',
     '#fef2ce',
     '#fbe49f',
-    '#f8d56b',
+    '#f8d56b', //MAIN ONE
     '#f6c841',
     '#f4c025',
     '#f4bc14',
@@ -167,17 +168,21 @@ const theme = createTheme({
 
     headings: {
         fontFamily: 'Inter, sans-serif',
-        fontWeight: '500',
+        fontWeight: '300',
         sizes: {
             h1: { fontSize: '300' },
             h2: { fontSize: '400' },
         },
     },
+
     colors: {
         blueBase,
         terquAccet,
         greys,
         themeGold,
+        secondaryBlues,
+        primaryBlues,
+        yellowAccent,
     },
     primaryShade: { light: 6, dark: 9 },
     defaultRadius: 30,
@@ -190,7 +195,9 @@ function App() {
             <DirectoryProvider>
                 <RequestProvider>
                     <NavigationProvider>
-                        <Routing />
+                        <TimelineProvider>
+                            <Routing />
+                        </TimelineProvider>
                     </NavigationProvider>
                 </RequestProvider>
             </DirectoryProvider>
