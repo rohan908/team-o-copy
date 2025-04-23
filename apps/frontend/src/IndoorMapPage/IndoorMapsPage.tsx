@@ -12,4 +12,3 @@ export function IndoorMapsPage() {
         </Flex>
     );
 }
-export default IndoorMapsPage;
