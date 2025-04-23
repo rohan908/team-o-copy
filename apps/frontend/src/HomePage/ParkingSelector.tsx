@@ -1,29 +1,65 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
 import { IconBuilding, IconChevronDown } from '@tabler/icons-react';
+import { useTimeline } from './TimeLineContext.tsx';
+import { hospitalOptions } from './GmapsDestinationSelector.tsx';
+import { NavSelectionItem } from '../contexts/NavigationItem.ts';
+import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
+import { useChestnutHillContext, usePatriotContext } from '../contexts/DirectoryContext.tsx';
+import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 
-//need to change this to actual api call autocomplete later
-const hospitalOptions = [
-    { value: '20 Patriot Pl', label: '20 Patriot Pl' },
-    { value: '22 Patriot Pl', label: '22 Patriot Pl' },
-    { value: 'Chestnut Hill', label: 'Chestnut Hill' },
-];
+export function ParkingSelector() {
+    const { setSelectedHospital, setDirectoryOptions, department, selectedAlgorithm } =
+        useTimeline();
 
-export function ParkingSelector({ props }: { props: any }) {
     const theme = useMantineTheme();
+
+    const Patriot = usePatriotContext();
+    const Chestnut = useChestnutHillContext();
+
+    const NavSelection = useNavSelectionContext();
+
+    const MapDepartment = (department: DirectoryNodeItem[]) =>
+        department.map((department: DirectoryNodeItem) => ({
+            value: department.name,
+            label: department.name,
+        }));
+
+    const setHospitalLocation = (hospital: string | null) => {
+        setSelectedHospital(hospital);
+        if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
+            setDirectoryOptions(MapDepartment(Patriot));
+        } else if (hospital == 'Chestnut Hill') {
+            setDirectoryOptions(MapDepartment(Chestnut));
+        } else {
+            setDirectoryOptions([]);
+        }
+        if (department && selectedAlgorithm) {
+            NavSelection.dispatch({
+                type: 'SET_NAV_REQUEST',
+                data: {
+                    HospitalName: hospital,
+                    Department: department,
+                    AlgorithmName: selectedAlgorithm,
+                } as NavSelectionItem,
+            });
+        }
+        //setSelectedHospitalName(hospital);
+        //setSelectedDepartment(null);
+    };
+
     return (
         <Autocomplete
-            placeholder="Select a Hospital"
+            placeholder="Hospital Destination"
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
             leftSection={<IconBuilding size="16" style={{ color: theme.colors.primaryBlues[8] }} />}
             data={hospitalOptions}
-            nothingFoundMessage="Location Not Available"
+            onChange={setHospitalLocation}
             radius="sm"
             mb="sm"
             size="xs"
-            w={{ base: '100%', sm: '400px' }}
-            {...props}
+            w={{ xl: '350px', lg: '300px', sm: '100%' }}
         />
     );
 }
