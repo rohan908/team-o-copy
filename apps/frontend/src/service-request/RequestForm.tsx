@@ -104,10 +104,10 @@ const RequestForm: React.FC<RequestDetails> = ({
                                 Back
                             </Button>
                         </Box>
-                        <Title order={2} ta="center" mb="md" fz="xl">
+                        <Title order={2} ta="center" mb="md" fz="xl" c={"#285CC6"}>
                             {formLabel}
                         </Title>
-                        <Title mb="md" fz="xxxs">
+                        <Title mb="md" fz="xxxs" c={"#285CC6"}>
                             {contributors}
                         </Title>
                     </Flex>

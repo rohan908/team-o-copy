@@ -72,7 +72,7 @@ export function ServiceRequestPage() {
     }
     return (
         <div>
-            <Box py="xl" bg="#EBF2FF">
+            <Box pb="xl">
                 <Flex w="100%" h="80vh" justify="center" align="center">
                     <Stack>
                         {/*<Title order={2} ta="left" c={'#001D4D'} mb="lg">*/}
