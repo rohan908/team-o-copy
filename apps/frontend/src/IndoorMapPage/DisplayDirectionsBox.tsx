@@ -57,7 +57,7 @@ export function DisplayDirectionsBox() {
         directionsByFloor[direction.Floor].push(direction);
     });
     return (
-        <Box w="100%" h="300px" style={{ overflowY: 'auto' }}>
+        <Box w="100%" h="335px" style={{ overflowY: 'auto' }}>
             <Accordion
                 multiple
                 styles={{
