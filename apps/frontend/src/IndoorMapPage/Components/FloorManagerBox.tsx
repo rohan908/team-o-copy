@@ -63,9 +63,9 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
   } else if (building === 'admin'){
     return (
       <Box
-        bg="#1C43A7" pos = "fixed" left = "93%" bottom = "2%"
+        bg="#1C43A7" pos = "fixed" right = "30px" bottom = "15px"
         m="3px"
-        w="5%"
+        w="70px"
         style={{
           borderRadius: "30px",
           zIndex: 999,
