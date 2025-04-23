@@ -106,7 +106,7 @@ export const useFaulknerHospitalContext = () => {
         );
     }
 
-    return context.chestnutHill;
+    return context.faulknerHospital;
 };
 
 /*
