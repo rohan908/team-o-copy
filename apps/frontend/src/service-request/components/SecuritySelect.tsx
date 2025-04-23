@@ -10,9 +10,16 @@ const SecuritySelect: React.FC<SelectProps> = (props) => {
             data={['Escort Service', 'Safety Hazard', 'Building Security', 'Surveillance']}
             nothingFoundMessage="Service not Offered"
             radius="sm"
-            mb="sm"
+            mb="md"
             size="xs"
+            required
             {...props}
+            styles={{
+                label: {
+                    fontSize: '18px',
+                    fontWeight: 350,
+                },
+            }}
         />
     );
 };
