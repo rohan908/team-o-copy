@@ -9,7 +9,14 @@ import DirectionsBox from './DirectionsBox';
 import { Step } from './Steps';
 
 export const MapAPIPage = () => {
-    const { userCoordinates, travelMode, selectedHospital, setSelectedHospital } = useTimeline();
+    const {
+        userCoordinates,
+        travelMode,
+        selectedHospital,
+        setSelectedHospital,
+        isGmapsLoaded,
+        setIsGmapsLoaded,
+    } = useTimeline();
     const [steps, setSteps] = useState<Step[]>([]); // Manage steps here
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,

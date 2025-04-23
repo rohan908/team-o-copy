@@ -11,6 +11,7 @@ export const hospitalOptions = [
     { value: '20 Patriot Pl', label: '20 Patriot Pl' },
     { value: '22 Patriot Pl', label: '22 Patriot Pl' },
     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
+    { value: 'Faulkner Hill', label: 'Faulkner Hill' },
 ];
 
 export function GmapsDestinationSelector() {
