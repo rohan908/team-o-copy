@@ -35,6 +35,8 @@ export function ContentSwitcher() {
             w="100%"
             h="100%"
             p="xxl"
+            miw="550px"
+            mih="550px"
             style={{
                 borderRadius: '8px',
                 boxShadow: 'inset 0px 0px 10px 2px rgba(0, 0, 0, 1)',

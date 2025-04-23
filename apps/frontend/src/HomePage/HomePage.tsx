@@ -28,21 +28,25 @@ export function HomePage() {
     }, []);
 
     const { isLoaded } = useJsApiLoader({
-      googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
         // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
         libraries: ['places'], //required for location autocomplete in textbox
     });
 
     if (!isLoaded) {
-    return <div>Loading Google Maps...</div>; //debugmap
+        return <div>Loading Google Maps...</div>; //debugmap
     }
 
-
     return (
-        <Box style={{
-          backgroundImage: `radial-gradient(circle at center, white 0%, ${theme.colors.blue[0]} 100%)`,
-          backgroundSize: 'cover',
-        }} h="100%" w="100%" p="xl" pos="absolute">
+        <Box
+            style={{
+                backgroundImage: `radial-gradient(circle at center, white 0%, ${theme.colors.blue[0]} 100%)`,
+            }}
+            h="100%"
+            w="100%"
+            p="xl"
+            pos="absolute"
+        >
             <Grid gutter="md" h="100%" mt={'2%'}>
                 {/* Left Context */}
                 <Grid.Col span={6} pl="5%">
@@ -61,10 +65,10 @@ export function HomePage() {
                     </Stack>
                 </Grid.Col>
                 {/* Right Content */}
-                <Grid.Col span={5}>
-                    <Flex h="100%" align="center" justify="center" pt="6%">
-                        <ContentSwitcher />
-                    </Flex>
+                <Grid.Col span={5}> 
+                    <Box h="100%" w={'100%'} display={'flex'} align="center" justify="center" pt="6%">
+                        <ContentSwitcher /> 
+                    </Box>
                 </Grid.Col>
             </Grid>
         </Box>

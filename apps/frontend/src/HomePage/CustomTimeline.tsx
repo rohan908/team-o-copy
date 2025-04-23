@@ -116,6 +116,7 @@ export const CustomTimeline = () => {
                             display: 'flex',
                             alignItems: 'center',
                             cursor: 'pointer',
+                            width: '100%',
                         }}
                         pr={'xl'}
                         pb={'lg'}

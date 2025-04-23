@@ -50,7 +50,7 @@ export function GmapsStartSelector() {
             radius="sm"
             mb="sm"
             size="xs"
-            w={{ base: '100%', sm: '400px' }}
+            w={{ xl: '350px', lg: '300px', sm: '100%' }}
         />
     );
 }
