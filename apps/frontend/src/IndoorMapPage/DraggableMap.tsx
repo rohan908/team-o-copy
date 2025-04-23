@@ -121,7 +121,7 @@ export function DraggableMap() {
 
     // handles changes to the hospital from the navSelection context
     useEffect(() => {
-        handleHospitalChange(selectedHospitalName);
+        handleHospitalChange(selectedHospitalName!);
     }, [selectedHospitalName]);
 
     // handles changes to the department or pathAlgo from the navSelection context
@@ -224,12 +224,12 @@ export function DraggableMap() {
                 )
             );
         } else if (node1.floor === node2.floor && node1.floor === 5) {
-          scenesRef.current[4].add(
-            animationRef.current.createEdge(
-              { x: node1.x, y: node1.y },
-              { x: node2.x, y: node2.y }
-            )
-          );
+            scenesRef.current[4].add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
         }
     };
 
@@ -257,7 +257,7 @@ export function DraggableMap() {
     }, [selectedDepartment, sceneIndexState]);
 
     return (
-        <Box w="100%" h="100%" p={0} pos={'absolute'}>
+        <Box w="100%" h="100%" p={0} pos={'relative'}>
             <FloorSwitchBox
                 floor={floorState}
                 onCollapseChange={() => true}

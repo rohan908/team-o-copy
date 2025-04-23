@@ -79,7 +79,7 @@ export function ServiceRequestPage() {
                         {/*    Select Request Type:*/}
                         {/*</Title>*/}
                         {/* basic grid for button layout*/}
-                        <SimpleGrid cols={3} spacing="30">
+                        <SimpleGrid cols={{base:1, md: 2, xxl: 3}} spacing={{base:30, md: 100, xxl: 30}} verticalSpacing={{base:20, md: 10, xxl: 30}}>
                             {ServiceRequestItems.map((item, index) => (
                                 <HoverButton
                                     key={index}
