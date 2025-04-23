@@ -38,7 +38,7 @@ export function DepartmentSelector() {
             mb="sm"
             size="xs"
             disabled={!selectedHospital && directoryOptions.length === 0}
-            w={{ xl: '350px', lg: '300px', sm: '100%' }}
+            w={'100%'}
         />
     );
 }
