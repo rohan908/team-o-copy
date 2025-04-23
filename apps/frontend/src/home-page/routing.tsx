@@ -22,6 +22,7 @@ import { LogInPage } from './log-in-page.tsx';
 import { NodeDirectory } from '../NodeDirectoryPage/NodeDirectory.tsx';
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import Sanitation from '../service-request/SanitationSR.tsx';
+import NotFound from "../404Page.tsx";
 import Security from '../service-request/SecuritySR.tsx';
 import AdminPageV2 from '../AdminPage/AdminPageNewUI.tsx';
 import { TimelineProvider } from '../HomePage/TimeLineContext';
@@ -60,6 +61,7 @@ export function Routing() {
                         <Route path="/sanitation-form" element={<Sanitation />} />
                         <Route path="/maintenance-form" element={<Maintenance />} />
                         <Route path="/security-form" element={<Security />} />
+                        <Route path="/*" element={<NotFound/>} />
 
                         <Route
                             path="/IndoorMapPage"
