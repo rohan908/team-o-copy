@@ -27,6 +27,7 @@ import Security from '../service-request/SecuritySR.tsx';
 import AdminPageV2 from '../AdminPage/AdminPageNewUI.tsx';
 import { TimelineProvider } from '../HomePage/TimeLineContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import { IndoorMapsPage } from '../IndoorMapPage/IndoorMapsPage.tsx';
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
@@ -81,29 +82,14 @@ export function Routing() {
                         />
                         <Route path="/*" element={<NotFound />} />
 
-                        <Route
-                            path="/IndoorMapPage"
-                            element={
-                                <DraggableMap
-                                    selectedHospitalName={selectedHospitalName}
-                                    selectedDepartment={selectedDepartment}
-                                    setSelectedDepartment={setSelectedDepartment}
-                                    setSelectedHospitalName={setSelectedHospitalName}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/map-editor"
-                            element={<ProtectedRoute Route={<MapEditor />} />}
-                        />
-                        <Route
-                            path="/admin-page"
-                            element={<ProtectedRoute Route={<AdminPageV2 />} />}
-                        />
+                      <Route path="/IndoorMapPage" element={<IndoorMapsPage />} />
+
+                      <Route path="/map-editor" element={<ProtectedRoute Route={<MapEditor/>} />} />
+                        <Route path="/admin-page" element={<ProtectedRoute Route={<AdminPageV2 />} />} />
                         <Route path="/HomePage/HomePage" element={<HomePage />} />
                         <Route
                             path="/language-request-history"
-                            element={<ProtectedRoute Route={<LanguageRequestHistory />} />}
+                            element={<ProtectedRoute Route={<LanguageRequestHistory/>} />}
                         />
                     </Route>
                 </Routes>

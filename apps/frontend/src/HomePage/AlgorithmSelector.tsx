@@ -31,7 +31,7 @@ export function AlgorithmSelector() {
         });
     };
     return (
-        <Autocomplete
+        <Select
             placeholder="Select an Algorithm"
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />

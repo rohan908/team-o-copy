@@ -40,7 +40,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
           ]}
           styles={{
             root: {
-              borderRadius: 8,
+              borderRadius: 10,
               backgroundColor: '#164EC5',
             },
             label: {
@@ -57,7 +57,6 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
   } else if (building === 'admin'){
     return (
       <Box
-    bg="terquAccet.8"
     pos = "fixed"
     left = "93%"
     bottom = "2%"
@@ -81,7 +80,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
           ]}
           styles = {{
             root: {
-              borderRadius: 8,
+              borderRadius: 30,
               backgroundColor: '#164EC5',
             },
             label: {
@@ -89,7 +88,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
               color: 'white',
             },
             indicator: {
-              borderRadius: 5,
+              borderRadius: 50,
             }
             }}
         />
