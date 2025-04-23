@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, createContext, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
 import { Box, Flex } from '@mantine/core';
-import { useHover} from '@mantine/hooks';
+import { useHover } from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
 import NodeInfoBox from './Components/NodeInfoBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
+import PopupTooltip from './Components/PopupTooltip';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { useLogin } from '../home-page/components/LoginContext.tsx';
 import { createNode } from './HelperFiles/NodeFactory.ts';
@@ -18,11 +19,11 @@ import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
 
 export interface MapEditorProps {
-  selectedTool: string;
-  setSelectedTool: (tool: string) => void;
-  currentNode?: DirectoryNodeItem;
-  nodeSelected?: boolean;
-  updateNodePosition?: (x: number, y: number, floor: number) => void;
+    selectedTool: string;
+    setSelectedTool: (tool: string) => void;
+    currentNode?: DirectoryNodeItem;
+    nodeSelected?: boolean;
+    updateNodePosition?: (x: number, y: number, floor: number) => void;
 }
 
 export const MapContext = createContext<MapEditorProps>({});
@@ -106,7 +107,7 @@ export function MapEditor() {
         } else if (node1.floor === node2.floor && node1.floor === 4) {
             scenesRef.current[3].add(mesh);
         } else if (node1.floor === node2.floor && node1.floor === 5) {
-          scenesRef.current[4].add(mesh);
+            scenesRef.current[4].add(mesh);
         }
     };
 
@@ -122,12 +123,12 @@ export function MapEditor() {
 
     // associated floors with scenes
     const getFloorAndMapIDFromSceneIndex = (index: number) => {
-      if (index === 0) return {floor: 1, mapID: 1};
-      if (index === 1) return {floor: 2, mapID: 1};
-      if (index === 2) return {floor: 3, mapID: 1};
-      if (index === 3) return {floor: 4, mapID: 2};
-      if (index === 4) return {floor: 5, mapID: 3};
-      return {floor: 1, mapID: 1};
+        if (index === 0) return { floor: 1, mapID: 1 };
+        if (index === 1) return { floor: 2, mapID: 1 };
+        if (index === 2) return { floor: 3, mapID: 1 };
+        if (index === 3) return { floor: 4, mapID: 2 };
+        if (index === 4) return { floor: 5, mapID: 3 };
+        return { floor: 1, mapID: 1 };
     };
 
     // Handle switching to other floors
@@ -303,7 +304,9 @@ export function MapEditor() {
             selectedObject.material.needsUpdate = true;
             selectedObjects.current.push(selectedObject);
 
-            console.log(nodeRef.current.find(element => element.id === selectedObject.userData.nodeId));
+            console.log(
+                nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
+            );
             render(); // render to show color changes
             updateDragControls();
         }
@@ -324,23 +327,26 @@ export function MapEditor() {
         }
     };
 
-    const clickHandler = useCallback((event) => {
-      // switches the type of cursor depending on the tool
-      switch(mapTool) {
-        case 'pan':
-          setCursorStyle('pointer');
-          handlePanClick(event);
-          break;
-        case 'add-node':
-          setCursorStyle('crosshair');
-          handleAddNodeClick(event);
-          break;
-        case 'add-edge':
-          setCursorStyle('crosshair');
-          handleAddEdgeClick(event);
-          break;
-      }
-    }, [mapTool])
+    const clickHandler = useCallback(
+        (event) => {
+            // switches the type of cursor depending on the tool
+            switch (mapTool) {
+                case 'pan':
+                    setCursorStyle('pointer');
+                    handlePanClick(event);
+                    break;
+                case 'add-node':
+                    setCursorStyle('crosshair');
+                    handleAddNodeClick(event);
+                    break;
+                case 'add-edge':
+                    setCursorStyle('crosshair');
+                    handleAddEdgeClick(event);
+                    break;
+            }
+        },
+        [mapTool, allNodes] // added allNodes, important for displaying node data.
+    );
 
     const handlePanClick = (event) => {
         const raycaster = new THREE.Raycaster();
@@ -390,6 +396,7 @@ export function MapEditor() {
                         type: node.nodeType,
                     });
                 }
+                console.log('set data');
                 console.log('Selected:', selectedObject);
             }
         } else {
@@ -780,6 +787,7 @@ export function MapEditor() {
 
     return (
         <Box w="100vw" h="100vh">
+            <PopupTooltip />
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
 
             <Box ref={hoverRef}>
@@ -809,9 +817,7 @@ export function MapEditor() {
             {/*    }}*/}
             {/*/>*/}
 
-
-          {/*<NodeInfoBox/>*/}
-
+            {/*<NodeInfoBox/>*/}
         </Box>
     );
 }
