@@ -48,14 +48,14 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 133,-97,27,4,2,,,,"137,134"
 134,-84,24,4,2,,,,"133,135"
 135,-83,10,4,2,,,,"134,136"
-136,-70,8,4,2,Ambulatory Care,department,department,135
+136,-70,8,4,2,,,,135
 137,-96,53,4,2,,,,"122,123,133"
 138,-1,90,4,2,,,,"126,139"
 139,30,90,4,2,,,,"138,140"
 140,80,89,4,2,,,,"139,141"
 141,82,32,4,2,,,,"140,142"
 142,72,32,4,2,,,,"141,143"
-143,69,40,4,2,MRI/CT,department,department,142
+143,69,40,4,2,,,,142
 144,84,5,1,1,,,,"12,14"
 145,-131,32,5,3,Faulkner Parking,parking-lot,parking-lot,146
 146,-106,62,5,3,,,,"145,147,148"
@@ -66,7 +66,7 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 151,-25,72,5,3,,,,"150,152"
 152,-7,68,5,3,,,,"151,155"
 153,-101,89,5,3,,,,"147,154"
-154,-111,90,5,3,Belkin House Check-in,department,department,153
+154,-111,90,5,3,,,,153
 155,-10,63,5,3,,,,"152,156"
 156,-9,57,5,3,,,,"155,157"
 157,-6,47,5,3,,,,"156,158"
@@ -77,6 +77,6 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 162,1,6,5,3,Pre-Admittance Screening,department,department,161
 163,-36,19,5,3,,,,"159,164"
 164,-41,20,5,3,,,,"163,166,165"
-165,-45,12,5,3,Emergency Check-in,department,department,164
+165,-45,12,5,3,,,,164
 166,-41,28,5,3,,,,"164,167"
-167,-31,28,5,3,Blood-Draw Lab,department,department,166
+167,-31,28,5,3,,,,166
