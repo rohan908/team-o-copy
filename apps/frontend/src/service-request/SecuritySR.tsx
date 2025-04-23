@@ -15,7 +15,7 @@ const initialValues: RequestData = {
     description: '',
 };
 
-function Security() {
+function Security({ onBack }: { onBack: () => void }) {
     const navigate = useNavigate();
     const handleSubmit = async (rawData: RequestData) => {
         const requestData = {
@@ -59,6 +59,7 @@ function Security() {
             newInitialValues={initialValues}
             contributors="Ethan R. & Camden B."
             formLabel="Security Request Form"
+            onBack={onBack}
         >
             {(form) => <SecuritySelect required {...form.getInputProps('security')} />}
         </RequestForm>

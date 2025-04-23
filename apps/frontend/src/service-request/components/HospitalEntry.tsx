@@ -21,6 +21,12 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
             size="xs"
             required
             {...props}
+            styles={{
+                label: {
+                    fontSize: '16px',
+                    fontWeight: 400,
+                },
+            }}
         />
     );
 };

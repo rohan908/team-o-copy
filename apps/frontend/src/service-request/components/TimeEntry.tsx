@@ -10,7 +10,6 @@ const TimeEntry: React.FC<TimeInputProps> = (props) => {
             <IconClock size={16} stroke={1.5} />
         </ActionIcon>
     );
-
     return (
         <TimeInput
             {...props}
@@ -21,6 +20,12 @@ const TimeEntry: React.FC<TimeInputProps> = (props) => {
             size="xs"
             leftSection={pickerControl}
             required
+            styles={{
+                label: {
+                    fontSize: '16px',
+                    fontWeight: 400,
+                },
+            }}
         />
     );
 };

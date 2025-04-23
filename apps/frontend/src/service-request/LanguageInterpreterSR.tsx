@@ -16,7 +16,7 @@ const initialValues: RequestData = {
     description: '',
 };
 
-function Language() {
+function Language({ onBack }: { onBack: () => void }) {
     const navigate = useNavigate();
     const handleSubmit = async (rawData: RequestData) => {
         // truncating the date object to remove the time becuase that is default with date object
@@ -65,7 +65,8 @@ function Language() {
             handleSubmit={handleSubmit}
             newInitialValues={initialValues}
             contributors="Logan Winters"
-            formLabel="Language Request Form"
+            formLabel="Language Interpreter Request Form"
+            onBack={onBack}
         >
             {(form) => <LanguageSelect {...form.getInputProps('language')} />}
         </RequestForm>

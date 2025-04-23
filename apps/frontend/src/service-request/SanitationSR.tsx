@@ -15,7 +15,7 @@ const initialValues: RequestData = {
     description: '',
 };
 
-function Sanitation() {
+function Sanitation({ onBack }: { onBack: () => void }) {
     const navigate = useNavigate();
     const handleSubmit = async (rawData: RequestData) => {
         const requestData = {
@@ -59,6 +59,7 @@ function Sanitation() {
             newInitialValues={initialValues}
             contributors="Logan Winters and Joe Abata"
             formLabel="Sanitation Request Form"
+            onBack={onBack}
         >
             {(form) => <SanitationSelect {...form.getInputProps('security')} />}
         </RequestForm>

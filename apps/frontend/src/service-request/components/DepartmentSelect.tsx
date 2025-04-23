@@ -18,6 +18,12 @@ const DepartmentSelect: React.FC<DepartmentSelectProps> = ({ departments, ...pro
             mb="sm"
             required
             {...props}
+            styles={{
+                label: {
+                    fontSize: '16px',
+                    fontWeight: 400,
+                },
+            }}
         />
     );
 };

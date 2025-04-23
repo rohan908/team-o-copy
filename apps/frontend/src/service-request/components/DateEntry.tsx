@@ -10,6 +10,12 @@ const DateEntry: React.FC<DateInputProps> = (props) => {
             radius="sm"
             size="xs"
             required
+            styles={{
+                label: {
+                    fontSize: '16px',
+                    fontWeight: 400,
+                },
+            }}
         />
     );
 };

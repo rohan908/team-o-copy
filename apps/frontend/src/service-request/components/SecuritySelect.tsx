@@ -14,6 +14,12 @@ const SecuritySelect: React.FC<SelectProps> = (props) => {
             size="xs"
             required
             {...props}
+            styles={{
+                label: {
+                    fontSize: '16px',
+                    fontWeight: 400,
+                },
+            }}
         />
     );
 };

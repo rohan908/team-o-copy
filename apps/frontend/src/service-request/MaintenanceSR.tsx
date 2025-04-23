@@ -15,7 +15,7 @@ const initialValues: RequestData = {
     description: '',
 };
 
-function Maintenance() {
+function Maintenance({ onBack }: { onBack: () => void }) {
     const navigate = useNavigate();
     const handleSubmit = async (rawData: RequestData) => {
         const requestData = {
@@ -59,6 +59,7 @@ function Maintenance() {
             newInitialValues={initialValues}
             contributors="Yanding Mario and Connor Daly"
             formLabel="Maintenance Request Form"
+            onBack={onBack}
         >
             {(form) => <MaintenanceSelect {...form.getInputProps('security')} />}
         </RequestForm>

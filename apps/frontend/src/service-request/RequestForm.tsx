@@ -42,6 +42,7 @@ interface RequestDetails {
     newInitialValues: RequestData;
     contributors?: string;
     formLabel: string;
+    onBack: () => void;
 }
 
 const RequestForm: React.FC<RequestDetails> = ({
@@ -50,6 +51,7 @@ const RequestForm: React.FC<RequestDetails> = ({
     newInitialValues,
     contributors,
     formLabel,
+    onBack,
 }) => {
     const [departmentOptions, setDepartmentOptions] = useState<string[]>([]);
 
@@ -88,17 +90,16 @@ const RequestForm: React.FC<RequestDetails> = ({
     };
 
     return (
-        <Flex
-            className="min-h-screen w-full"
-            bg="terquAccet.2"
-            justify="center"
-            align="center"
-            p="xl"
-        >
-            <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="50%">
+        <Flex justify="center" align="center" p="xxl">
+            <Box p="xl">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Flex direction="column" ta="center" justify="center">
-                        <Title order={2} ta="center" mb="md">
+                        <Box mr="auto">
+                            <Button onClick={onBack} bg="#5A83DB" style={{ width: '100px' }}>
+                                Back
+                            </Button>
+                        </Box>
+                        <Title order={2} ta="center" mb="md" fz="lg">
                             {formLabel}
                         </Title>
                         <Title mb="md" fz="xxxs">
@@ -137,19 +138,19 @@ const RequestForm: React.FC<RequestDetails> = ({
                         <Button
                             type="button"
                             variant="outline"
-                            color="blueBase.5"
+                            color="#5A83DB"
                             style={{ width: '200px' }}
                             onClick={() => form.reset()}
                         >
                             Clear Form
                         </Button>
 
-                        <Button type="submit" color="blueBase.5" style={{ width: '200px' }}>
+                        <Button type="submit" bg="#5A83DB" style={{ width: '200px' }}>
                             Submit Request
                         </Button>
                     </Flex>
                 </form>
-            </Paper>
+            </Box>
         </Flex>
     );
 };
