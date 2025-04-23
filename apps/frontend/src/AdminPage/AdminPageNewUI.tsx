@@ -10,7 +10,7 @@ import {
   Title,
   Box,
   Grid,
-  ActionIcon, Transition,
+  ActionIcon, Transition, Modal,
 } from '@mantine/core';
 import LanguageRequestHistory from './LanguageRequestHistory.tsx';
 import { SegmentedControl } from '@mantine/core';
@@ -34,6 +34,7 @@ export function AdminPageV2() {
     const [sidebarOpen, {toggle}] = useDisclosure(true);
     const [formInfoOpen, {open, close}] = useDisclosure(true);
     const [otherToolsOpen, setOtherToolsOpen] = useState(true);
+    const [CSVManipOpen, setCSVManipOpen] = useState(false);
     const [displayTableNumber, setDisplayTableNumber] = useState(5);
 
     function displayNumToggle(num: number) {
@@ -51,9 +52,9 @@ export function AdminPageV2() {
 
     return (
         <Box
-            mih="80vh"
+            mih="95vh"
             w="full"
-            pt={"75px"}
+            pt={"5px"}
             bg="#EAF1FF"
         >
           <Grid align="top">
@@ -65,6 +66,7 @@ export function AdminPageV2() {
                         <Box
                           w="20vw"
                           mih="100vh"
+                          pt="75px"
                           p="lg"
                           mt="-8px"
                         >
@@ -157,7 +159,7 @@ export function AdminPageV2() {
                               </Flex>
                               <Collapse in={otherToolsOpen} transitionDuration={300} transitionTimingFunction="linear">
                                 <Flex direction="column" justify="center" gap="xs">
-                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={4} firstColor="#1C43A7" secondColor="#5A83DB" onClick={() => displayNumToggle(4)}>
+                                  <ColorChangingButton numValueToCheck={displayTableNumber} numForTrigger={4} firstColor="#1C43A7" secondColor="#5A83DB" onClick={() => setCSVManipOpen(true)}>
                                     CSV Manipulator
                                   </ColorChangingButton>
                                   <Button bg={"#5A83DB"}
@@ -186,9 +188,10 @@ export function AdminPageV2() {
                     {(styles) =>
                       <div style={styles}>
                         <Box
-                          w="55px"
+                          w="45px"
                           h="100vh"
                           p="lg"
+                          pt="75px"
                           mt="-8px"
                         >
                           <ActionIcon
@@ -213,7 +216,7 @@ export function AdminPageV2() {
                   {/*<Title ff="Inter" fz="30px" mb="4px" ta="center" fw={600}>*/}
                   {/*  Admin Page*/}
                   {/*</Title>*/}
-                  <Center pr="55px">
+                  <Center pr="10px">
                     <Flex direction="column" justify="center" align="center" w="100%" bg="#D6E0F8" style={{
                       boxShadow: "inset -5px 8px 5px -5px rgba(0,0,255,0.1)",
                       borderRadius: "8px"
@@ -268,17 +271,23 @@ export function AdminPageV2() {
                           <MaintenanceRequestHistory />
                         </Box>
                       </Collapse>
-                      <Collapse in={displayTableNumber == 4} transitionDuration={300} transitionTimingFunction="linear">
-                        <Box
-                          p="10px"
-                          mt="10px"
-                          style={{
-                            borderRadius: "15px"
-                          }}
-                        >
-                          <CSVControlsComponent />
-                        </Box>
-                      </Collapse>
+                      <Box
+                        p="10px"
+                        mt="10px"
+                        style={{
+                          borderRadius: "15px"
+                        }}
+                      >
+                          <Modal
+                          opened={CSVManipOpen}
+                          onClose={() => setCSVManipOpen(false)}
+                          title="CSV Manipulator"
+                          centered
+                          >
+
+                            <CSVControlsComponent />
+                          </Modal>
+                      </Box>
                       <Collapse in={displayTableNumber == 5} transitionDuration={300} transitionTimingFunction="linear">
                         <Box
                           p="10px"
