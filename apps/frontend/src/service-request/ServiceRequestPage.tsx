@@ -8,6 +8,41 @@ import {
 } from '@tabler/icons-react';
 import HoverButton from './components/HoverButton.tsx';
 import { useNavigate } from 'react-router-dom';
+import React from 'react';
+
+type ServiceRequestItem = {
+    label: string;
+    icon: React.ReactNode;
+    link: string;
+    disabled?: boolean | true;
+};
+export const ServiceRequestItems: ServiceRequestItem[] = [
+    { label: 'Interpreter Request', icon: <IconLanguage size={120} />, link: '/language-form' },
+    { label: 'Security Request', icon: <IconShieldHalf size={120} />, link: '/security-form' },
+    {
+        label: 'Sanitization Request',
+        icon: <IconTrash stroke={2} size={120} />,
+        link: '/sanitation-form',
+    },
+    {
+        label: 'Maintenance Request',
+        icon: <IconBellExclamation stroke={2} size={120} />,
+        link: '/maintenance-form',
+    },
+    {
+        label: 'Type 5',
+        icon: <IconExclamationCircleFilled size={120} />,
+        link: "'/'",
+        disabled: false,
+    },
+    {
+        label: 'Type 6',
+        icon: <IconExclamationCircleFilled size={120} />,
+        link: "'/'",
+        disabled: false,
+    },
+];
+
 export function ServiceRequestPage() {
     const navigate = useNavigate();
     return (
@@ -20,45 +55,14 @@ export function ServiceRequestPage() {
                         </Title>
                         {/* basic grid for button layout*/}
                         <SimpleGrid cols={3} spacing="50">
-                            {/* button for language interpreter request*/}
-                            <HoverButton
-                                icon={<IconLanguage size={120} />}
-                                label="Interpreter Request"
-                                onClick={() => navigate('/language-form')}
-                            />
-
-                            {/* button for Security Service Request */}
-                            <HoverButton
-                                icon={<IconShieldHalf size={120} />}
-                                label="Security Request"
-                                onClick={() => navigate('/security-form')}
-                            />
-                            {/* button for Sanitization Request */}
-                            <HoverButton
-                                icon={<IconTrash stroke={2} size={120} />}
-                                label="Sanitization Request"
-                                onClick={() => navigate('/sanitation-form')}
-                            />
-                            {/* button for ___ Request */}
-                            <HoverButton
-                                icon={<IconBellExclamation stroke={2} size={120} />}
-                                label="Maintenance Request"
-                                onClick={() => navigate('/maintenance-form')}
-                            />
-                            {/* button for ___ Request */}
-                            <HoverButton
-                                icon={<IconExclamationCircleFilled size={120} />}
-                                label="Type 5"
-                                onClick={() => navigate('/')}
-                                disabled={true}
-                            />
-                            {/* button for ___ Request */}
-                            <HoverButton
-                                icon={<IconExclamationCircleFilled size={120} />}
-                                label="Type 6"
-                                onClick={() => navigate('/')}
-                                disabled={true}
-                            />
+                            {ServiceRequestItems.map((item, index) => (
+                                <HoverButton
+                                    key={index}
+                                    icon={item.icon}
+                                    label={item.label}
+                                    onClick={() => navigate(item.link)}
+                                />
+                            ))}
                         </SimpleGrid>
                     </Stack>
                 </Flex>
