@@ -22,13 +22,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ModeOfTravelSelector } from './ModeOfTravelSelector.tsx';
 import { AlgorithmSelector } from './AlgorithmSelector.tsx';
 import { useLogin } from '../home-page/components/LoginContext.js';
-import {useMemo} from 'react';
+import { useMemo } from 'react';
 
 export const CustomTimeline = () => {
     const theme = useMantineTheme();
-    const { activeSection : originalActiveSection, setActiveSection } = useTimeline();
-    const { isLoggedIn} = useLogin();
-
+    const { activeSection: originalActiveSection, setActiveSection } = useTimeline();
+    const { isLoggedIn } = useLogin();
 
     //FILL IN CONTENT HERE FOR EACH SUBSECTION
 
@@ -82,17 +81,15 @@ export const CustomTimeline = () => {
     ];
 
     const titlesInfo = useMemo(() => {
-        return isLoggedIn 
-            ? allTitlesInfo 
-            : allTitlesInfo.slice(0, 2);
+        return isLoggedIn ? allTitlesInfo : allTitlesInfo.slice(0, 2);
     }, [isLoggedIn]);
 
     const activeSection = useMemo(() => {
-        if (isLoggedIn) {
-            return originalActiveSection;
+        if (!isLoggedIn && originalActiveSection === 2) {
+            setActiveSection(0);
+            return 0;
         }
-        setActiveSection(1);
-        return 1;
+        return originalActiveSection;
     }, [isLoggedIn, originalActiveSection, setActiveSection]);
 
     const handleClickChangeButton = (i: number) => {
