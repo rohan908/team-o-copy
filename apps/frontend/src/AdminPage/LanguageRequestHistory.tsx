@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
-    useMantineTheme,
-    Table,
-    Title,
-    ScrollArea,
-    Text,
-    Box,
-    Loader,
-    Center,
-    Transition,
+  useMantineTheme,
+  Table,
+  Title,
+  ScrollArea,
+  Text,
+  Box,
+  Loader,
+  Center,
+  Transition, Flex,
 } from '@mantine/core';
 
 // Type-safe interface for request data
@@ -77,16 +77,15 @@ export function LanguageRequestHistory() {
 
     return (
         <Box
-            bg="themeGold.0"
             p="md"
             w="100%"
-            h="100vh"
+            h="100%"
             opacity="0.95"
             bd="lg"
             flex="column"
             bga='blur(5px)'
         >
-            <Title order={1} mb="sm" c="black" ta="left" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
+            <Title order={1} mb="sm" c="black" ta="center" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
                 Language Service Requests
             </Title>
             <Text c="black" ta="center" mb="sm" fw={500} fz={{ sm: 'xxs', md: 'xs' }}>
@@ -98,18 +97,14 @@ export function LanguageRequestHistory() {
                 scrollbarSize={6}
                 style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden' }}
             >
-                <Table
-                    bg="themeGold.0"
-                    striped
-                    withColumnBorders
-                    highlightOnHover
+                <Table c="black" borderColor="black" withTableBorder={true} withRowBorders={true} withColumnBorders={true}
+                    highlightOnHover={true} highlightOnHoverColor={"#CBD2DF"}
                     width="100%"
                     layout='auto'
                 >
-                    <Table.Thead>
+                    <Table.Thead c="black">
                         <Table.Tr
-                          bg="#164ec5"
-                          c="white"
+                          c="black"
                         >
                             {summaryColumns.map((col) => (
                                 <Table.Th
@@ -132,7 +127,6 @@ export function LanguageRequestHistory() {
                             <React.Fragment key={idx}>
                                 <Table.Tr
                                     onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
-                                    bg="#c8cad3"
                                     //Cursor and Border Radius are only possible through style={}
                                     style={{
                                         cursor: 'pointer',
@@ -161,11 +155,11 @@ export function LanguageRequestHistory() {
                                         >
                                             {(styles) => (
                                                 <Box
-                                                    bg="#a9adb9"
                                                     p="md"
                                                     mt="xs"
                                                     mb="md"
                                                     mx="sm"
+                                                    c="black"
                                                     //...styles is needed for Transition Data, shadow and radius are styles only
                                                     style={{
                                                         ...styles,

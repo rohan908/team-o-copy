@@ -1,16 +1,17 @@
 import React, { useState, useCallback } from 'react';
-import { Button, Stack, Transition, Overlay, useMantineTheme } from '@mantine/core';
+import { Button, Stack, Text, Transition, Overlay, useMantineTheme } from '@mantine/core';
 import { useHover, useMouse, useMergedRef } from '@mantine/hooks';
 
 interface HoverButtonProps {
-    icon: React.ReactNode;
-    label: string;
-    onClick?: () => void;
-    disabled?: boolean;
+  icon: React.ReactNode;
+  labelOne: string;
+  labelTwo: string;
+  onClick?: () => void;
+  disabled?: boolean;
 }
-
+// exporting to own file to utilize useState to change color on hover
 // component for large service request buttons
-const HoverButton: React.FC<HoverButtonProps> = ({ icon, label, onClick, disabled = false }) => {
+const HoverButton: React.FC<HoverButtonProps> = ({ icon, labelOne, labelTwo, onClick, disabled = false }) => {
     const theme = useMantineTheme();
     const { hovered, ref: hoverRef } = useHover();
     const { x, y, ref: mouseRef } = useMouse({ resetOnExit: true });
@@ -42,10 +43,11 @@ const HoverButton: React.FC<HoverButtonProps> = ({ icon, label, onClick, disable
             disabled={disabled}
             onClick={onClick}
             style={{
-                width: '300px',
-                height: '250px',
-                padding: '1.5rem',
-                border: '10px solid' + theme.colors.blueBase[8],
+                borderRadius: "8px",
+                width: 250,
+                height: 220,
+                padding: '0.5rem',
+                border: hovered ? '10px solid' + "#1C43A7" : '10px solid' + "#5A83DB",
                 transform: hovered
                     ? `rotateX(${xRotation(250)}deg) rotateY(${yRotation(300)}deg) scale(1.1)`
                     : 'scale(1)',
@@ -58,7 +60,7 @@ const HoverButton: React.FC<HoverButtonProps> = ({ icon, label, onClick, disable
                 style={{
                     padding: '1.5rem',
                     // the one hard-coded color from style guide, not in mantine yet
-                    backgroundColor: hovered ? '#003EB1' : theme.colors.blueBase[8], //this hardcoded color is going to fuck us up later but today is tommarrows yesterday
+                    backgroundColor: hovered ? '#1C43A7' : "#5A83DB", //this hardcoded color is going to fuck us up later but today is tommarrows yesterday
                     transition: 'all 0.25s linear',
                 }}
             >
@@ -72,7 +74,10 @@ const HoverButton: React.FC<HoverButtonProps> = ({ icon, label, onClick, disable
                     }}
                 >
                     {icon}
-                    <span>{label}</span>
+                  <Text>
+                    {labelOne + " "}
+                    {labelTwo}
+                  </Text>
                 </Stack>
             </Overlay>
         </Button>

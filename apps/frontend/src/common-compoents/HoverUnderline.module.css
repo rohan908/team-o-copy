@@ -1,0 +1,23 @@
+/* crashout disclaimer: I HATE YOU MANTINE 7.0 CRINGE COMPONENT LIBRARY */
+
+.container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  cursor: default;
+
+}
+
+.underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 80%;
+  background-color: var(--mantine-color-yellow-4);
+  transition: width 300ms ease;
+}
+
+.container:hover .underline {
+  width: 100%;
+}
