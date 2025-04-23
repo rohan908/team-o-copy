@@ -118,23 +118,25 @@ function Security() {
     };
 
     return (
-        <Flex
-            className="min-h-screen w-full"
-            bg="terquAccet.2"
-            justify="center"
-            align="center"
-            p="xl"
-        >
-            <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="65%">
-                <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <Flex direction="column" ta="center" justify="center">
-                        <Title order={2} mb="sm">
-                            Security Request
-                        </Title>
-                        <Text mb="md" fz="xxxs">
-                            Ethan R. & Camden B.
-                        </Text>
-                    </Flex>
+      <Flex className="min-h-screen w-full" bg="#EBF2FF" justify="center" align="center" p="xl">
+        <Paper bg="#EBF2FF" p="xl" radius="8px" w="65%">
+          <form onSubmit={form.onSubmit(handleSubmit)}>
+            <Flex direction="column" ta="center" justify="center">
+              <Title
+                order={2}
+                c="#285CC6"
+                fz={'xl'}
+                fw={400}
+                ta={"center"}
+                w={'auto'}
+                mb={"md"}
+              >
+                Security Request Form
+              </Title>
+              <Text mb="md" fz="xxxs" c="#285CC6">
+                Ethan Ramoth and Camden Brayton
+              </Text>
+            </Flex>
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
                             {' '}

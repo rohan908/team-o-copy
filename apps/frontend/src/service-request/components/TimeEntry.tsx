@@ -19,6 +19,7 @@ const TimeEntry: React.FC<TimeInputProps> = (props) => {
       ref={ref}
       mb="sm"
       size = "xs"
+      c={"#285CC6"}
       leftSection={pickerControl}
     />
   );

@@ -18,6 +18,7 @@ const MaintenanceSelect: React.FC<SelectProps> = (props) => {
             radius="sm"
             mb="sm"
             size="xs"
+            c={"#285CC6"}
             {...props}
         />
     );

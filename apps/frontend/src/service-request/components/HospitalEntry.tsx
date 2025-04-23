@@ -23,6 +23,7 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
             radius="sm"
             mb="sm"
             size="xs"
+            c={"#285CC6"}
             {...props}
         />
     );

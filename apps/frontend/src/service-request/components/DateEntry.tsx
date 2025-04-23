@@ -13,6 +13,7 @@ const DateEntry: React.FC<DateInputProps> = (props) => {
       mb="sm"
       radius="sm"
       size = "xs"
+      c={"#285CC6"}
     />
   );
 };

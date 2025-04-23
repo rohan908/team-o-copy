@@ -61,7 +61,7 @@ export function ServiceRequestPage() {
     const navigate = useNavigate();
     return (
         <div>
-            <Box py="xl">
+            <Box py="xl" bg="#EBF2FF">
                 <Flex w="100%" h="80vh" justify="center" align="center">
                     <Stack>
                         {/*<Title order={2} ta="left" c={'#001D4D'} mb="lg">*/}

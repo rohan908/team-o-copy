@@ -128,13 +128,20 @@ function Language() {
     };
 
     return (
-        <Flex className="min-h-screen w-full" bg="terquAccet.2" justify="center" align="center" p="xl">
-            <Paper bg="themeGold.1" p="xl" shadow="xl" radius="md" w="65%">
+        <Flex className="min-h-screen w-full" bg="#EBF2FF" justify="center" align="center" p="xl">
+            <Paper bg="#EBF2FF" p="xl" radius="8px" w="65%">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <Title order={2} ta="center" mb="md">
-                        Interpreter Request Form
-                    </Title>
-
+                  <Title
+                    order={2}
+                    c="#285CC6"
+                    fz={'xl'}
+                    fw={400}
+                    ta={"center"}
+                    w={'auto'}
+                    mb={"md"}
+                  >
+                    Interpreter Request Form
+                  </Title>
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
                         <Box flex="1" miw="300px">
                             {/*< column 1!!!*/}
@@ -171,14 +178,14 @@ function Language() {
                         <Button
                             type="button"
                             variant="outline"
-                            color="blueBase.5"
+                            color="#1C43A7"
                             style={{ width: '200px' }}
                             onClick={() => form.reset()}
                         >
                             Clear Form
                         </Button>
 
-                        <Button type="submit" color="blueBase.5" style={{ width: '200px' }}>
+                        <Button type="submit" color="#1C43A7" style={{ width: '200px' }}>
                             Submit Request
                         </Button>
                     </Flex>

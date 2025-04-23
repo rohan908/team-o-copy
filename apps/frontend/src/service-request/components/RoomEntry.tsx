@@ -11,7 +11,7 @@ const RoomNumberInput: React.FC<TextInputProps> = (props) => {
       radius="sm"
       mb="sm"
       size = "xs"
-
+      c={"#285CC6"}
     />
   );
 };
