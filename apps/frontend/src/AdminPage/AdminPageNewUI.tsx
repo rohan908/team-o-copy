@@ -37,11 +37,12 @@ export function AdminPageV2() {
     const [displayTableNumber, setDisplayTableNumber] = useState(5);
 
     function displayNumToggle(num: number) {
-        if (num == displayTableNumber) {
-          setDisplayTableNumber(-1);
-        } else {
-          setDisplayTableNumber(num);
-        }
+        // if (num == displayTableNumber) {
+        //   setDisplayTableNumber(-1);
+        // } else {
+        //   setDisplayTableNumber(num);
+        // }
+        setDisplayTableNumber(num);
     }
 
     function toggleOtherTools(){
@@ -208,9 +209,9 @@ export function AdminPageV2() {
                   maw="100%"
                   mx="auto"
                 >
-                  <Title ff="Inter" fz="30px" mb="4px" ta="center" fw={600}>
-                    Admin Page
-                  </Title>
+                  {/*<Title ff="Inter" fz="30px" mb="4px" ta="center" fw={600}>*/}
+                  {/*  Admin Page*/}
+                  {/*</Title>*/}
                   <Center>
                     <Flex direction="column" justify="center" align="center" w="100%" bg="#D6E0F8" style={{
                       boxShadow: "inset -5px 8px 5px -5px rgba(0,0,255,0.1)",
