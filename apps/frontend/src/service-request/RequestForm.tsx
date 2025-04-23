@@ -51,7 +51,7 @@ const RequestForm: React.FC<RequestDetails> = ({
     contributors,
     formLabel,
 }) => {
-    const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
+    const [departmentOptions, setDepartmentOptions] = useState<string[]>([]);
 
     const form = useForm<RequestData>({
         initialValues: newInitialValues,
@@ -60,11 +60,8 @@ const RequestForm: React.FC<RequestDetails> = ({
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
 
-    const MapDepartment = (department: DirectoryNodeItem[]) =>
-        department.map((department: DirectoryNodeItem) => ({
-            value: department.name,
-            label: department.name,
-        }));
+    const mapDepartment = (department: DirectoryNodeItem[]) =>
+        department.map((department) => department.name);
 
     // logic for dependant department selection
     const handleHospitalChange = (hospital: string | null) => {
@@ -72,13 +69,16 @@ const RequestForm: React.FC<RequestDetails> = ({
 
         switch (hospital) {
             case 'Chestnut Hill':
-                setDepartmentOptions(ChestnutHill);
+                setDepartmentOptions(mapDepartment(Chestnut));
                 break;
             case '20 Patriot Place':
-                setDepartmentOptions(Patriot20);
+                setDepartmentOptions(mapDepartment(Patriot));
                 break;
             case '22 Patriot Place':
-                setDepartmentOptions(Patriot22);
+                setDepartmentOptions(mapDepartment(Patriot));
+                break;
+            case 'Falkner':
+                setDepartmentOptions([]); // do faulkner when we can
                 break;
             default:
                 setDepartmentOptions([]);
@@ -115,9 +115,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                                 onChange={handleHospitalChange}
                             />
                             <DepartmentSelect
-                                departments={departmentOptions.map(
-                                    (department) => department.title
-                                )}
+                                departments={departmentOptions}
                                 {...form.getInputProps('department')}
                             />
                             {children?.(form)}
