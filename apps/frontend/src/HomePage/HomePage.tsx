@@ -25,7 +25,7 @@ export function HomePage() {
     } = useTimeline();
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        googleMapsApiKey: 'AIzaSyAfCGqkvzd-Aifefc3FOfP5kGbsnRrlCDM',
         // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
         libraries: ['places'], //required for location autocomplete in textbox
     });
@@ -89,13 +89,7 @@ export function HomePage() {
                 </Grid.Col>
                 {/* Right Content */}
                 <Grid.Col span={5}>
-                    <Flex
-                        h="100%"
-                        w={'100%'}
-                        align="center"
-                        justify="center"
-                        pt="6%"
-                    >
+                    <Flex h="100%" w={'100%'} align="center" justify="center" pt="6%">
                         <ContentSwitcher />
                     </Flex>
                 </Grid.Col>
