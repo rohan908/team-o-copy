@@ -24,7 +24,7 @@ const MapEditorBox = () => {
     return (
         <Box
             pos="fixed"
-            top="83%"
+            top="80%"
             left={20}
             style={{ transform: 'translateY(-50%)', zIndex: 999 }}
         >
@@ -36,10 +36,13 @@ const MapEditorBox = () => {
                         color="#285CC6"
                         style={{
                             border: '2px solid #1C43A7',
+                          width: 60,
+                          height: 60,
+                          borderRadius: 50
                         }}
                         onClick={() => mapProps.setSelectedTool('pan')}
                     >
-                        <IconHandMove />
+                        <IconHandMove size={32} />
                     </ActionIcon>
                 </Tooltip>
 
@@ -49,11 +52,14 @@ const MapEditorBox = () => {
                         variant="filled"
                         color="#285CC6"
                         style={{
-                            border: '2px solid #1C43A7',
+                          border: '2px solid #1C43A7',
+                          width: 60,
+                          height: 60,
+                          borderRadius: 50
                         }}
                         onClick={() => mapProps.setSelectedTool('add-node')}
                     >
-                        <IconCirclePlus />
+                        <IconCirclePlus size={32}/>
                     </ActionIcon>
                 </Tooltip>
 
@@ -63,11 +69,14 @@ const MapEditorBox = () => {
                         variant="filled"
                         color="#285CC6"
                         style={{
-                            border: '2px solid #1C43A7',
+                          border: '2px solid #1C43A7',
+                          width: 60,
+                          height: 60,
+                          borderRadius: 50
                         }}
                         onClick={() => mapProps.setSelectedTool('add-edge')}
                     >
-                        <IconVectorBezier2 />
+                        <IconVectorBezier2 size={32}/>
                     </ActionIcon>
                 </Tooltip>
 
@@ -77,11 +86,14 @@ const MapEditorBox = () => {
                         variant="filled"
                         color={saveLabel ? 'green' : '#285CC6'}
                         style={{
-                            border: '2px solid #1C43A7',
+                          border: '2px solid #1C43A7',
+                          width: 60,
+                          height: 60,
+                          borderRadius: 50
                         }}
                         onClick={SaveAllNodes}
                     >
-                        <IconDeviceFloppy />
+                        <IconDeviceFloppy size={32}/>
                     </ActionIcon>
                 </Tooltip>
             </Stack>
