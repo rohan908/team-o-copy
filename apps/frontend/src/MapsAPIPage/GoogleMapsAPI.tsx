@@ -22,8 +22,8 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
                 return { lat: 42.09304546224412, lng: -71.26680481859991 };
             case 'Chestnut Hill':
                 return { lat: 42.32624893122403, lng: -71.14948990068949 };
-            case 'pharmacy':
-                return { lat: 42.093429, lng: -71.268228 };
+            case 'Faulkner Hospital':
+                return { lat: 42.30199320903482, lng: -71.12747581365801 };
         }
         return null;
     }
