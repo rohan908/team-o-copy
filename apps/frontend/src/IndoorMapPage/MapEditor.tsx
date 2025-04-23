@@ -21,7 +21,8 @@ import { Object3DEventMap } from 'three';
 export interface MapEditorProps {
     selectedTool: string;
     setSelectedTool: (tool: string) => void;
-    currentNode?: DirectoryNodeItem;
+    currentNode?: DirectoryNodeItem | null;
+    setCurrentNodeData?: (node: DirectoryNodeItem | null) => void;
     nodeSelected?: boolean;
     updateNodePosition?: (x: number, y: number, floor: number) => void;
 }
@@ -32,12 +33,7 @@ export function MapEditor() {
     const allNodes = useAllNodesContext();
 
     const { hovered: editBoxHovered, ref: hoverRef } = useHover();
-    const [selectedNodeData, setSelectedNodeData] = useState<{
-        x: number;
-        y: number;
-        id: number;
-        type: string;
-    } | null>(null);
+    const [currentNodeData, setCurrentNodeData] = useState<DirectoryNodeItem | null>();
     const [floorState, setFloorState] = useState(1);
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer');
@@ -46,6 +42,8 @@ export function MapEditor() {
     const mapProps: MapEditorProps = {
         selectedTool: mapTool,
         setSelectedTool: setMapTool,
+        currentNode: currentNodeData,
+        setCurrentNodeData: setCurrentNodeData,
     };
 
     const { isLoggedIn } = useLogin();
@@ -295,6 +293,23 @@ export function MapEditor() {
         }
     };
 
+    useEffect(() => {
+      if(currentNodeData != null) {
+        const nodeToUpdate = nodeRef.current.find(element => element.id === currentNodeData.id);
+        if(nodeToUpdate != null) {
+          nodeToUpdate.id = currentNodeData.id;
+          nodeToUpdate.x = currentNodeData.x;
+          nodeToUpdate.y = currentNodeData.y;
+          nodeToUpdate.floor = currentNodeData.floor;
+          nodeToUpdate.mapId = currentNodeData.mapId;
+          nodeToUpdate.name = currentNodeData.name;
+          nodeToUpdate.description = currentNodeData.description;
+          nodeToUpdate.nodeType = currentNodeData.nodeType;
+          nodeToUpdate.connectingNodes = currentNodeData.connectingNodes;
+        }
+      }
+    }, [currentNodeData])
+
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
             selectedObject instanceof THREE.Mesh &&
@@ -304,9 +319,8 @@ export function MapEditor() {
             selectedObject.material.needsUpdate = true;
             selectedObjects.current.push(selectedObject);
 
-            console.log(
-                nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
-            );
+            setCurrentNodeData(nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId));
+
             render(); // render to show color changes
             updateDragControls();
         }
@@ -321,6 +335,13 @@ export function MapEditor() {
             selectedObjects.current = selectedObjects.current.filter(
                 (object) => object !== selectedObject
             );
+
+            if (selectedObjects.current.length === 0) {
+              setCurrentNodeData(null);
+            } else if (selectedObjects.current.length > 0) {
+              setCurrentNodeData(nodeRef.current.find((element) =>
+                element.id === selectedObjects.current[selectedObjects.current.length-1].userData.nodeId));
+            }
 
             render(); // render to show color changes
             updateDragControls();
@@ -381,21 +402,10 @@ export function MapEditor() {
             const selectedObject = intersects[0].object;
             if (selectedObjects.current.includes(selectedObject)) {
                 deselectObject(selectedObject);
-                if (selectedObjects.current.length === 0) {
-                    setSelectedNodeData(null);
-                }
                 console.log('Deselected:', selectedObject);
             } else {
                 selectObject(selectedObject);
-                const node = getNode(selectedObject.userData.nodeId, allNodes);
-                if (node) {
-                    setSelectedNodeData({
-                        x: Math.round(node.x),
-                        y: Math.round(node.y),
-                        id: node.id,
-                        type: node.nodeType,
-                    });
-                }
+
                 console.log('set data');
                 console.log('Selected:', selectedObject);
             }
@@ -466,19 +476,12 @@ export function MapEditor() {
     };
 
     const getUnusedNodeId = (): number => {
-        let openId = -1;
         const allIds: number[] = [];
         allNodes.forEach((node) => {
             allIds.push(node.id);
         });
 
-        allIds.forEach((nodeId, index) => {
-            if (nodeId != index + 1) {
-                openId = nodeId + 1;
-                return openId;
-            }
-        });
-        return openId;
+        return (Math.max(...allIds))+1;
     };
 
     const handleAddEdgeClick = (event) => {
@@ -792,7 +795,7 @@ export function MapEditor() {
 
             <Box ref={hoverRef}>
                 <MapContext.Provider value={mapProps}>
-                    <MapEditorBox nodeData={selectedNodeData} />
+                    <MapEditorBox/>
                 </MapContext.Provider>
             </Box>
 

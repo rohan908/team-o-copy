@@ -21,25 +21,27 @@ import {
 import { MapContext } from '../MapEditor.tsx';
 import { useAllNodesContext } from '../../contexts/DirectoryContext.tsx';
 import axios from 'axios';
-const MapEditorBox = ({ nodeData }) => {
+const MapEditorBox = () => {
     const mapProps = useContext(MapContext);
     const allNodes = useAllNodesContext();
     const [saveLabel, setSaveLabel] = useState(false);
     const [nodeInfoOpen, setNodeInfoOpen] = useState(false);
+
+    const [selectedNodeType, setSelectedNodeType] = useState<string>(mapProps.currentNode?.nodeType || "");
 
     const SaveAllNodes = async () => {
         await axios.post('api/directory/import/direct', { data: allNodes });
         setSaveLabel(true);
         setTimeout(() => setSaveLabel(false), 1500);
     };
-    console.log(nodeData);
+
     useEffect(() => {
-        if (nodeData) {
+        if (mapProps.currentNode) {
             setNodeInfoOpen(true);
         } else {
             setNodeInfoOpen(false);
         }
-    }, [nodeData]);
+    }, [mapProps.currentNode]);
 
     return (
         <Box pos="fixed" top="60%" left={20} style={{ transform: 'translateY(-50%)', zIndex: 999 }}>
@@ -133,7 +135,7 @@ const MapEditorBox = ({ nodeData }) => {
                                 <TextInput
                                     variant="filled"
                                     readOnly
-                                    value={`ID: ${nodeData?.id || 0}`}
+                                    value={`ID: ${mapProps.currentNode?.id || 0}`}
                                     size="sm"
                                     radius="xl"
                                     w={80}
@@ -148,21 +150,33 @@ const MapEditorBox = ({ nodeData }) => {
                                     size="sm"
                                     radius="xl"
                                     w={80}
-                                    placeholder={`X: ${nodeData?.x || 0}`}
+                                    placeholder={`X: ${mapProps.currentNode?.x || 0}`}
                                     variant="filled"
                                 ></Input>
                                 <Input
                                     size="sm"
                                     radius="xl"
                                     w={80}
-                                    placeholder={`Y: ${nodeData?.y || 0}`}
+                                    placeholder={`Y: ${mapProps.currentNode?.y || 0}`}
                                     variant="filled"
                                 ></Input>
                             </Flex>
                             <NativeSelect
                                 size="sm"
-                                value={nodeData?.type || 'Hallway'}
+                                value={mapProps.currentNode?.nodeType || ''}
+                                onChange={(event) => mapProps.setCurrentNodeData({
+                                  id: mapProps.currentNode.id,
+                                  x: mapProps.currentNode.x,
+                                  y: mapProps.currentNode.y,
+                                  floor: mapProps.currentNode.floor,
+                                  mapId: mapProps.currentNode.mapId,
+                                  name: mapProps.currentNode.name,
+                                  description: mapProps.currentNode.description,
+                                  nodeType: event.currentTarget.value,
+                                  connectingNodes: mapProps.currentNode.connectingNodes,
+                                })}
                                 data={[
+                                    '',
                                     'department',
                                     'parking-lot',
                                     'hallway',
