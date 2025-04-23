@@ -47,7 +47,7 @@ const blueBase: MantineColorsTuple = [
 const terquAccet: MantineColorsTuple = [
     '#ebfeff',
     '#d7fbfd',
-    '#aaf7fc',
+    '#DBFBE6',
     '#7df3fb',
     '#61f0fb',
     '#56effa',
