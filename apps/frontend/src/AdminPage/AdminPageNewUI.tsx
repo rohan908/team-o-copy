@@ -73,7 +73,7 @@ export function AdminPageV2() {
                                                 justify="center"
                                                 gap="sm"
                                             >
-                                                <Title c="black">Toolbar</Title>
+                                                <Title c={"#285CC6"}>Toolbar</Title>
                                                 <ActionIcon
                                                     bg={'#EBF2FF'}
                                                     top="10%"
@@ -81,7 +81,7 @@ export function AdminPageV2() {
                                                     onClick={toggle}
                                                     aria-label="ActionIcon the same size as inputs"
                                                 >
-                                                    <IconArrowBadgeDownFilled color={'black'} />
+                                                    <IconArrowBadgeDownFilled color={"#1C43A7"} />
                                                 </ActionIcon>
                                             </Flex>
                                             <Flex
@@ -96,7 +96,7 @@ export function AdminPageV2() {
                                                     justify="center"
                                                     gap="sm"
                                                 >
-                                                    <Title c="black">Service Requests</Title>
+                                                    <Title c={"#285CC6"}>Service Requests</Title>
                                                     <Collapse
                                                         in={formInfoOpen}
                                                         transitionDuration={0}
@@ -110,7 +110,7 @@ export function AdminPageV2() {
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
                                                             <IconArrowBadgeDownFilled
-                                                                color={'black'}
+                                                              color={"#1C43A7"}
                                                             />
                                                         </ActionIcon>
                                                     </Collapse>
@@ -122,7 +122,7 @@ export function AdminPageV2() {
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
                                                             <IconArrowBadgeLeftFilled
-                                                                color={'black'}
+                                                              color={"#1C43A7"}
                                                             />
                                                         </ActionIcon>
                                                     )}
@@ -190,7 +190,7 @@ export function AdminPageV2() {
                                                     justify="center"
                                                     gap="sm"
                                                 >
-                                                    <Title c="black">Other Tools</Title>
+                                                    <Title c={"#285CC6"}>Other Tools</Title>
                                                     <Collapse
                                                         in={otherToolsOpen}
                                                         transitionDuration={0}
@@ -204,7 +204,7 @@ export function AdminPageV2() {
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
                                                             <IconArrowBadgeDownFilled
-                                                                color={'black'}
+                                                              color={"#1C43A7"}
                                                             />
                                                         </ActionIcon>
                                                     </Collapse>
@@ -216,7 +216,7 @@ export function AdminPageV2() {
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
                                                             <IconArrowBadgeLeftFilled
-                                                                color={'black'}
+                                                              color={"#1C43A7"}
                                                             />
                                                         </ActionIcon>
                                                     )}
@@ -274,7 +274,7 @@ export function AdminPageV2() {
                                             ml={'-10px'}
                                             aria-label="ActionIcon the same size as inputs"
                                         >
-                                            <IconArrowBadgeLeftFilled color="black" />
+                                            <IconArrowBadgeLeftFilled color={"#1C43A7"} />
                                         </ActionIcon>
                                     </Box>
                                 </div>
@@ -402,7 +402,7 @@ export function AdminPageV2() {
                                             borderRadius: '15px',
                                         }}
                                     >
-                                        <ServiceRequestPage />
+                                        <ServiceRequestPage width={"100%"} marginRight={"0%"} height={"80vh"} cols={3} hSpacing={30} vSpacing={10} buttonHeight={220}/>
                                     </Box>
                                 </Collapse>
                             </Flex>
