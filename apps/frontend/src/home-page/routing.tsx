@@ -3,7 +3,6 @@ import { NavBar } from './components/nav-bar.tsx';
 import { MapPage } from '../MapPage/MapPage.tsx';
 import { Directory } from '../directory/directory.tsx';
 import { DirectoryLocation } from '../directory/components/DirectoryLocation.tsx';
-import { Display } from '../service-request/Display.tsx';
 import { AdminPage } from '../AdminPage/AdminPage.tsx';
 import { MapAPIPage } from '../MapsAPIPage/MapAPIPage.tsx';
 import Language from '../service-request/LanguageInterpreterSR.tsx';
@@ -55,10 +54,7 @@ export function Routing() {
                                     />
                                 }
                             />
-                            <Route
-                                path="/submission"
-                                element={<ProtectedRoute Route={<Display />} />}
-                            />
+
                             <Route path="directory" element={<Directory />} />
                             <Route path="/directory/:topic" element={<DirectoryLocation />} />
                             <Route

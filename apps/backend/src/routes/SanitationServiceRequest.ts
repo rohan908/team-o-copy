@@ -13,8 +13,8 @@ router.post('/', async (req: Request, res: Response) => {
         // For inputting a request form, adds entry
         const {
             cleanupType,
-            selectedDate,
-            selectedTime,
+            date,
+            time,
             department,
             description,
             priority,
@@ -26,9 +26,9 @@ router.post('/', async (req: Request, res: Response) => {
         // creating request to get data from frontend
         const request = await PrismaClient.sanitationServiceRequest.create({
             data: {
-                cleanupType: cleanupType,
-                date: selectedDate,
-                time: convertTo24Hour(selectedTime),
+                cleanupType,
+                date,
+                time: convertTo24Hour(time),
                 department,
                 description,
                 priority,

@@ -17,7 +17,11 @@ import NameEntry from './components/NameEntry.tsx';
 //     HospitalDepartment,
 // } from '../directory/components/directorydata';
 import { useForm } from '@mantine/form';
-import { useChestnutHillContext, usePatriotContext } from '../contexts/DirectoryContext.tsx';
+import {
+    useChestnutHillContext,
+    useFaulknerHospitalContext,
+    usePatriotContext,
+} from '../contexts/DirectoryContext.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 
 export interface RequestData {
@@ -61,6 +65,7 @@ const RequestForm: React.FC<RequestDetails> = ({
 
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
+    const Faulkner = useFaulknerHospitalContext();
 
     const mapDepartment = (department: DirectoryNodeItem[]) =>
         department.map((department) => department.name);
@@ -79,8 +84,8 @@ const RequestForm: React.FC<RequestDetails> = ({
             case '22 Patriot Place':
                 setDepartmentOptions(mapDepartment(Patriot));
                 break;
-            case 'Falkner':
-                setDepartmentOptions([]); // do faulkner when we can
+            case 'Falkner Hospital':
+                setDepartmentOptions(mapDepartment(Faulkner)); // do faulkner when we can
                 break;
             default:
                 setDepartmentOptions([]);
