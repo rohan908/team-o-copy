@@ -63,7 +63,7 @@ export function HomePage() {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}
-            h="100vh"
+            h="100%"
             w="100%"
             p="xl"
         >
@@ -87,16 +87,15 @@ export function HomePage() {
                 </Grid.Col>
                 {/* Right Content */}
                 <Grid.Col span={5}>
-                    <Box
+                    <Flex
                         h="100%"
                         w={'100%'}
-                        display={'flex'}
                         align="center"
                         justify="center"
                         pt="6%"
                     >
                         <ContentSwitcher />
-                    </Box>
+                    </Flex>
                 </Grid.Col>
             </Grid>
         </Box>

@@ -21,7 +21,17 @@ type ServiceRequestItem = {
     disabled?: boolean | true;
 };
 
-export function ServiceRequestPage() {
+interface ServiceRequestPageProps {
+  width: string;
+  marginRight: string;
+  height: string;
+  cols: number;
+  vSpacing: number;
+  hSpacing: number;
+  buttonHeight: number;
+}
+
+export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
     const [activeFormIndex, setActiveFormIndex] = useState<number | null>(null);
 
     const ServiceRequestItems: ServiceRequestItem[] = [
@@ -73,13 +83,18 @@ export function ServiceRequestPage() {
     return (
         <div>
             <Box pb="xl">
-                <Flex w="100%" h="80vh" justify="center" align="center">
+                <Flex w={props.width} ml = {props.marginRight} mr={props.marginRight} h={props.height} justify="center" align="center">
                     <Stack>
                         {/*<Title order={2} ta="left" c={'#001D4D'} mb="lg">*/}
                         {/*    Select Request Type:*/}
                         {/*</Title>*/}
                         {/* basic grid for button layout*/}
-                        <SimpleGrid cols={{base:1, md: 2, xxl: 3}} spacing={{base:30, md: 100, xxl: 30}} verticalSpacing={{base:20, md: 10, xxl: 30}}>
+                        <SimpleGrid
+
+                          cols={{base:1, md: props.cols, xxl: 3}}
+                          spacing={{base:30, md: props.hSpacing, xxl: 30}}
+                          verticalSpacing={{base:20, md: props.vSpacing, xxl: 30}}
+                        >
                             {ServiceRequestItems.map((item, index) => (
                                 <HoverButton
                                     key={index}
@@ -88,6 +103,7 @@ export function ServiceRequestPage() {
                                     labelTwo={item.labelTwo}
                                     onClick={() => setActiveFormIndex(index)}
                                     disabled={item.disabled}
+                                    buttonHeight={props.buttonHeight}
                                 />
                             ))}
                         </SimpleGrid>

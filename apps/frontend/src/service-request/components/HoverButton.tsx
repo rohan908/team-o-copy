@@ -8,10 +8,11 @@ interface HoverButtonProps {
   labelTwo: string;
   onClick?: () => void;
   disabled?: boolean;
+  buttonHeight: number;
 }
 // exporting to own file to utilize useState to change color on hover
 // component for large service request buttons
-const HoverButton: React.FC<HoverButtonProps> = ({ icon, labelOne, labelTwo, onClick, disabled = false }) => {
+const HoverButton: React.FC<HoverButtonProps> = ({ icon, labelOne, labelTwo, onClick, disabled = false, buttonHeight }) => {
     const theme = useMantineTheme();
     const { hovered, ref: hoverRef } = useHover();
     const { x, y, ref: mouseRef } = useMouse({ resetOnExit: true });
@@ -45,7 +46,7 @@ const HoverButton: React.FC<HoverButtonProps> = ({ icon, labelOne, labelTwo, onC
             style={{
                 borderRadius: "8px",
                 width: 250,
-                height: 220,
+                height: buttonHeight,
                 padding: '0.5rem',
                 border: hovered ? '10px solid' + theme.colors.primaryBlues[8] : '10px solid' + theme.colors.secondaryBlues[7],
                 transform: hovered
@@ -58,13 +59,14 @@ const HoverButton: React.FC<HoverButtonProps> = ({ icon, labelOne, labelTwo, onC
         >
             <Overlay
                 style={{
-                    padding: '1.5rem',
+                    padding: '1.0rem',
                     // the one hard-coded color from style guide, not in mantine yet
                     backgroundColor: hovered ? theme.colors.primaryBlues[8] : theme.colors.secondaryBlues[7], //this hardcoded color is going to fuck us up later but today is tommarrows yesterday
                     transition: 'all 0.25s linear',
                 }}
             >
                 <Stack
+                    h={"100%"}
                     align="center"
                     style={{
                         transform: hovered

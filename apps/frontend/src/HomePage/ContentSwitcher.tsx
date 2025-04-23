@@ -27,7 +27,7 @@ export function ContentSwitcher() {
             case 1: //Indoor Nav
                 return <DraggableMap />;
             case 2: //Service Request
-                return <ServiceRequestPage />;
+                return <ServiceRequestPage width={"80%"} marginRight={"10%"} height={"80vh"} cols={2} vSpacing={10} hSpacing={30} buttonHeight={150}/>;
         }
     };
     return (
