@@ -8,25 +8,25 @@ interface GoogleMapsAPIProps {
     onStepsUpdate?: (steps: Step[]) => void; //make this input optional
 }
 
+export function hospitalCoordinates(hospital: string | null): google.maps.LatLngLiteral | null {
+    switch (hospital) {
+        case '20 Patriot Pl':
+            return { lat: 42.092759710546595, lng: -71.26611460791148 }; //this is fixed location for pharmacy, should route to specific parking lot
+        case '22 Patriot Pl':
+            return { lat: 42.09304546224412, lng: -71.26680481859991 };
+        case 'Chestnut Hill':
+            return { lat: 42.32624893122403, lng: -71.14948990068949 };
+        case 'Faulkner Hospital':
+            return { lat: 42.30199320903482, lng: -71.12747581365801 };
+    }
+    return null;
+}
+
 const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     const onStepsUpdate = props.onStepsUpdate;
     const { selectedHospital, userCoordinates, travelMode, mapRef, directionsRendererRef } =
         useTimeline();
     console.log(selectedHospital + ' ' + userCoordinates + ' ' + travelMode);
-
-    function hospitalCoordinates(hospital: string | null): google.maps.LatLngLiteral | null {
-        switch (hospital) {
-            case '20 Patriot Pl':
-                return { lat: 42.092759710546595, lng: -71.26611460791148 }; //this is fixed location for pharmacy, should route to specific parking lot
-            case '22 Patriot Pl':
-                return { lat: 42.09304546224412, lng: -71.26680481859991 };
-            case 'Chestnut Hill':
-                return { lat: 42.32624893122403, lng: -71.14948990068949 };
-            case 'Faulkner Hospital':
-                return { lat: 42.30199320903482, lng: -71.12747581365801 };
-        }
-        return null;
-    }
 
     const handleMapLoad = (map: google.maps.Map) => {
         mapRef.current = map;
