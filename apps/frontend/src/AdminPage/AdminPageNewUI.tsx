@@ -51,7 +51,7 @@ export function AdminPageV2() {
     }
 
     return (
-        <Box mih="80vh" w="full" bg="#EAF1FF">
+        <Box w="full" bg="#EAF1FF">
             <Grid align="top">
                 <Grid.Col span={'content'}>
                     <Transition

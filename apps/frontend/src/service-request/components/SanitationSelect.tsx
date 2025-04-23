@@ -17,14 +17,14 @@ const SanitationSelect: React.FC<SelectProps> = (props) => {
             ]}
             nothingFoundMessage="Cleanup Type not found"
             radius="sm"
-            mb="sm"
+            mb="md"
             size="xs"
             required
             {...props}
             styles={{
                 label: {
-                    fontSize: '16px',
-                    fontWeight: 400,
+                    fontSize: '18px',
+                    fontWeight: 350,
                 },
             }}
         />

@@ -9,12 +9,12 @@ const RequestDescription: React.FC<TextareaProps> = (props) => {
             radius="sm"
             autosize
             minRows={2}
-            mb="sm"
+            mb="md"
             size="xs"
             styles={{
                 label: {
-                    fontSize: '16px',
-                    fontWeight: 400,
+                    fontSize: '18px',
+                    fontWeight: 350,
                 },
             }}
         />

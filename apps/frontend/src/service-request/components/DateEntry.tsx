@@ -6,14 +6,14 @@ const DateEntry: React.FC<DateInputProps> = (props) => {
             {...props}
             placeholder="--Select a date--"
             label="Enter Date"
-            mb="sm"
+            mb="md"
             radius="sm"
             size="xs"
             required
             styles={{
                 label: {
-                    fontSize: '16px',
-                    fontWeight: 400,
+                    fontSize: '18px',
+                    fontWeight: 350,
                 },
             }}
         />

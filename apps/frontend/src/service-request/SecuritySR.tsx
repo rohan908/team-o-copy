@@ -58,7 +58,7 @@ function Security({ onBack }: { onBack: () => void }) {
             handleSubmit={handleSubmit}
             newInitialValues={initialValues}
             contributors="Ethan R. & Camden B."
-            formLabel="Security Request Form"
+            formLabel="Security Request"
             onBack={onBack}
         >
             {(form) => <SecuritySelect required {...form.getInputProps('security')} />}

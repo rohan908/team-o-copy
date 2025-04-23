@@ -9,19 +9,19 @@ const DepartmentSelect: React.FC<DepartmentSelectProps> = ({ departments, ...pro
         <Select
             label="Choose the Department"
             placeholder={
-                departments.length > 0 ? '--Select a Department--' : 'Select hospital first'
+                departments.length > 0 ? '--Select a Department--' : '--Select Hospital First--'
             }
             searchable
             data={departments}
             radius="sm"
             size="xs"
-            mb="sm"
+            mb="md"
             required
             {...props}
             styles={{
                 label: {
-                    fontSize: '16px',
-                    fontWeight: 400,
+                    fontSize: '18px',
+                    fontWeight: 350,
                 },
             }}
         />

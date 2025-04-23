@@ -9,14 +9,14 @@ const StatusSelect: React.FC<SelectProps> = (props) => {
             data={['Unassigned', 'Assigned', 'Working', 'Done']}
             nothingFoundMessage="Hospital not found"
             radius="sm"
-            mb="sm"
+            mb="md"
             size="xs"
             required
             {...props}
             styles={{
                 label: {
-                    fontSize: '16px',
-                    fontWeight: 400,
+                    fontSize: '18px',
+                    fontWeight: 350,
                 },
             }}
         />

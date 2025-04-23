@@ -94,12 +94,17 @@ const RequestForm: React.FC<RequestDetails> = ({
             <Box p="xl">
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Flex direction="column" ta="center" justify="center">
-                        <Box mr="auto">
-                            <Button onClick={onBack} bg="#5A83DB" style={{ width: '100px' }}>
+                        <Box mr="auto" mb="lg">
+                            <Button
+                                radius="md"
+                                onClick={onBack}
+                                bg="#5A83DB"
+                                style={{ width: '100px' }}
+                            >
                                 Back
                             </Button>
                         </Box>
-                        <Title order={2} ta="center" mb="md" fz="lg">
+                        <Title order={2} ta="center" mb="md" fz="xl">
                             {formLabel}
                         </Title>
                         <Title mb="md" fz="xxxs">
@@ -108,7 +113,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                     </Flex>
 
                     <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
-                        <Box flex="1" miw="300px" mr="lg">
+                        <Box flex="1" mih="300px" mr="lg">
                             {/*< column 1!!!*/}
                             <NameEntry {...form.getInputProps('employeeName')} />
                             <HospitalSelect
@@ -123,7 +128,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                             {/*this is where I want any unique components to go*/}
                         </Box>
 
-                        <Box flex="1" miw="300px" ml="lg">
+                        <Box flex="1" mih="300px" ml="lg">
                             {/* column 2!!!*/}
                             <DateInputForm {...form.getInputProps('date')} />
                             <TimeEntry {...form.getInputProps('time')} />
@@ -139,14 +144,15 @@ const RequestForm: React.FC<RequestDetails> = ({
                             type="button"
                             variant="outline"
                             color="#5A83DB"
+                            radius="md"
                             style={{ width: '200px' }}
                             onClick={() => form.reset()}
                         >
                             Clear Form
                         </Button>
 
-                        <Button type="submit" bg="#5A83DB" style={{ width: '200px' }}>
-                            Submit Request
+                        <Button radius="md" type="submit" bg="#5A83DB" style={{ width: '200px' }}>
+                            Submit
                         </Button>
                     </Flex>
                 </form>

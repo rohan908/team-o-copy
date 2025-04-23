@@ -58,7 +58,7 @@ function Sanitation({ onBack }: { onBack: () => void }) {
             handleSubmit={handleSubmit}
             newInitialValues={initialValues}
             contributors="Logan Winters and Joe Abata"
-            formLabel="Sanitation Request Form"
+            formLabel="Sanitation Request"
             onBack={onBack}
         >
             {(form) => <SanitationSelect {...form.getInputProps('security')} />}

@@ -58,7 +58,7 @@ function Maintenance({ onBack }: { onBack: () => void }) {
             handleSubmit={handleSubmit}
             newInitialValues={initialValues}
             contributors="Yanding Mario and Connor Daly"
-            formLabel="Maintenance Request Form"
+            formLabel="Maintenance Request"
             onBack={onBack}
         >
             {(form) => <MaintenanceSelect {...form.getInputProps('security')} />}

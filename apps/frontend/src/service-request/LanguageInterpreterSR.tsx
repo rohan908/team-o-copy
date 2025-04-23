@@ -65,7 +65,7 @@ function Language({ onBack }: { onBack: () => void }) {
             handleSubmit={handleSubmit}
             newInitialValues={initialValues}
             contributors="Logan Winters"
-            formLabel="Language Interpreter Request Form"
+            formLabel="Language Interpreter Request"
             onBack={onBack}
         >
             {(form) => <LanguageSelect {...form.getInputProps('language')} />}
