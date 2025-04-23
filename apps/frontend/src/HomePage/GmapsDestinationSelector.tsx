@@ -5,13 +5,13 @@ import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useTimeline } from './TimeLineContext.tsx';
-import { useChestnutHillContext, usePatriotContext } from '../contexts/DirectoryContext.tsx';
+import {useChestnutHillContext, useFaulknerHospitalContext, usePatriotContext} from '../contexts/DirectoryContext.tsx';
 
 export const hospitalOptions = [
     { value: '20 Patriot Pl', label: '20 Patriot Pl' },
     { value: '22 Patriot Pl', label: '22 Patriot Pl' },
     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
-    { value: 'Faulkner Hill', label: 'Faulkner Hill' },
+    { value: 'Faulkner Hospital', label: 'Faulkner Hospital' },
 ];
 
 export function GmapsDestinationSelector() {
@@ -21,6 +21,7 @@ export function GmapsDestinationSelector() {
 
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
+    const Faulkner = useFaulknerHospitalContext();
 
     const NavSelection = useNavSelectionContext();
 
@@ -36,6 +37,8 @@ export function GmapsDestinationSelector() {
             setDirectoryOptions(MapDepartment(Patriot));
         } else if (hospital == 'Chestnut Hill') {
             setDirectoryOptions(MapDepartment(Chestnut));
+        } else if (hospital == 'Faulkner Hospital') {
+          setDirectoryOptions(MapDepartment(Faulkner));
         } else {
             setDirectoryOptions([]);
         }
