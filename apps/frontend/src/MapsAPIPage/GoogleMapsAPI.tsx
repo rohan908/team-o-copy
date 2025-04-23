@@ -15,12 +15,26 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     const mapRef = useRef<google.maps.Map | null>(null);
     const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
 
+    function hospitalCoordinates(hospital: string | null): google.maps.LatLngLiteral | null {
+        switch (hospital) {
+            case '20 Patriot Pl':
+                return { lat: 42.092759710546595, lng: -71.26611460791148 }; //this is fixed location for pharmacy, should route to specific parking lot
+            case '22 Patriot Pl':
+                return { lat: 42.09304546224412, lng: -71.26680481859991 };
+            case 'Chestnut Hill':
+                return { lat: 42.32624893122403, lng: -71.14948990068949 };
+            case 'pharmacy':
+                return { lat: 42.093429, lng: -71.268228 };
+        }
+        return null;
+    }
+
     const handleMapLoad = (map: google.maps.Map) => {
         mapRef.current = map;
     };
 
     useEffect(() => {
-        if (!userCoordinates || !selectedHospital || !mapRef.current) return;
+        if (!userCoordinates || !selectedHospital || !travelMode || !mapRef.current) return;
         const directionsService = new google.maps.DirectionsService();
         if (!directionsRendererRef.current) {
             directionsRendererRef.current = new google.maps.DirectionsRenderer();
@@ -29,17 +43,17 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
         directionsService.route(
             {
                 origin: userCoordinates,
-                destination: selectedHospital,
+                destination: hospitalCoordinates(selectedHospital)!,
                 travelMode: travelMode ?? google.maps.TravelMode.DRIVING,
             },
             (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) {
                     //make
                     directionsRendererRef.current.setDirections(result);
-                    const newSteps = result.routes[0].legs[0].steps.map((step) => ({
+                    const newSteps = result!.routes[0].legs[0].steps.map((step) => ({
                         instruction: step.instructions,
-                        distance: step.distance.text,
-                        duration: step.duration.text,
+                        distance: step.distance!.text,
+                        duration: step.duration!.text,
                     }));
                     if (onStepsUpdate) {
                         onStepsUpdate(newSteps);
@@ -55,8 +69,10 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
             <Box pos="relative" w="100%" h="100%">
                 <GoogleMap
                     mapContainerStyle={{ width: '100%', height: '100%' }}
-                    zoom={10}
-                    center={selectedHospital ?? { lat: 42.093429, lng: -71.268228 }}
+                    zoom={hospitalCoordinates(selectedHospital) ? 18.6 : 10}
+                    center={
+                        hospitalCoordinates(selectedHospital) ?? { lat: 42.093429, lng: -71.268228 }
+                    }
                     onLoad={handleMapLoad}
                     options={{
                         disableDefaultUI: true,

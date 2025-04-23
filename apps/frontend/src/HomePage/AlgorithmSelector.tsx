@@ -1,15 +1,35 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
 import { IconBuilding, IconChevronDown, IconRouteSquare } from '@tabler/icons-react';
+import { useTimeline } from './TimeLineContext.tsx';
+import { NavSelectionItem } from '../contexts/NavigationItem.ts';
+import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 
 //need to change this to actual api call autocomplete later
-const hospitalOptions = [
-    { value: '20 Patriot Pl', label: '20 Patriot Pl' },
-    { value: '22 Patriot Pl', label: '22 Patriot Pl' },
-    { value: 'Chestnut Hill', label: 'Chestnut Hill' },
+const algoOptions = [
+    { value: 'BFS', label: 'Breadth First Search' },
+    {
+        value: 'A*',
+        label: 'A Star',
+    },
+    { value: 'DFS', label: 'Depth First Search' },
 ];
 
-export function AlgorithmSelector({ props }: { props: any }) {
+export function AlgorithmSelector() {
     const theme = useMantineTheme();
+    const { setSelectedAlgorithm, selectedHospital, department } = useTimeline();
+    const NavSelection = useNavSelectionContext();
+
+    const setSelectedAlgo = (algo: string | null) => {
+        setSelectedAlgorithm(algo);
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: selectedHospital,
+                Department: department,
+                AlgorithmName: algo,
+            } as NavSelectionItem,
+        });
+    };
     return (
         <Autocomplete
             placeholder="Select an Algorithm"
@@ -19,13 +39,13 @@ export function AlgorithmSelector({ props }: { props: any }) {
             leftSection={
                 <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            data={hospitalOptions}
-            nothingFoundMessage="Location Not Available"
+            data={algoOptions}
             radius="sm"
             mb="sm"
             size="xs"
+            onChange={setSelectedAlgo}
+            disabled={!selectedHospital || !department}
             w={{ base: '100%', sm: '400px' }}
-            {...props}
         />
     );
 }
