@@ -43,8 +43,10 @@ export function HomePage() {
         <Box
             style={{
                 backgroundImage: `radial-gradient(circle at center, white 0%, ${theme.colors.blue[0]} 100%)`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
             }}
-            h="100%"
+            h="100vh"
             w="100%"
             p="xl"
         >
