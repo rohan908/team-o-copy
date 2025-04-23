@@ -4395,7 +4395,6 @@ __metadata:
     "@vitejs/plugin-react-swc": "npm:^3.0.0"
     axios: "npm:^1.7.4"
     camera-controls: "npm:^2.10.1"
-    clsx: "npm:^2.1.1"
     common: "npm:*"
     dayjs: "npm:^1.11.13"
     dotenv: "npm:*"
@@ -4422,8 +4421,6 @@ __metadata:
     react-router-bootstrap: "npm:^0.26.2"
     react-router-dom: "npm:^6.11.2"
     serve: "npm:^14.2.0"
-    simplex-noise: "npm:^4.0.3"
-    tailwind-merge: "npm:^3.2.0"
     tailwindcss: "npm:^4.0.17"
     three: "npm:^0.175.0"
     threejs-compass: "npm:^1.1.7"
@@ -7287,13 +7284,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simplex-noise@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "simplex-noise@npm:4.0.3"
-  checksum: 10c0/117b7f85abd90f3dc63817ed790705ff0fb50cb0bf396a8fc8fa1443265e4b2529429bb34992e43e7b27d6cacb9059f37fa52a37e59c52f51698ad0d3038d0f3
-  languageName: node
-  linkType: hard
-
 "sirv@npm:^3.0.1":
   version: 3.0.1
   resolution: "sirv@npm:3.0.1"
@@ -7625,13 +7615,6 @@ __metadata:
   version: 6.2.0
   resolution: "tabbable@npm:6.2.0"
   checksum: 10c0/ced8b38f05f2de62cd46836d77c2646c42b8c9713f5bd265daf0e78ff5ac73d3ba48a7ca45f348bafeef29b23da7187c72250742d37627883ef89cbd7fa76898
-  languageName: node
-  linkType: hard
-
-"tailwind-merge@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "tailwind-merge@npm:3.2.0"
-  checksum: 10c0/294f6c2db0df74405bff126107107426c3126a70a1717d78e8d6811db65546c9bb3d61282bdb8d9fbded23f6bc8ec3e8e61031a4f53265f90b7f3dba558f88f4
   languageName: node
   linkType: hard
 
