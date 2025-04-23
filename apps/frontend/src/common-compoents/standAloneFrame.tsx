@@ -20,7 +20,7 @@ export const TwoPartInteractiveBox: React.FC<PropsWithChildren<BoxProps>> = ({
 
     return (
         <Box
-            bg="themeGold.0"
+            bg="#D6E0F8"
             p={{ base: 'sm', sm: 'sm', md: 'sm', lg: 'md' }}
             // w={{ base: '90%', sm: '70%', md: '600px' }}
             maw={{ base: '300px', sm: '300px', md: '450px', lg: '450px' }}

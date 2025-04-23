@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState, createContext, useCallback, useMemo} from 'react';
+import { useEffect, useRef, useState, createContext, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
-import { Box } from '@mantine/core';
+import { Box, Flex } from '@mantine/core';
 import { useHover} from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
+import NodeInfoBox from './Components/NodeInfoBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
@@ -11,18 +12,16 @@ import { useLogin } from '../home-page/components/LoginContext.tsx';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
+
 import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
-import {Object3DEventMap} from "three";
+import { Object3DEventMap } from 'three';
 
 export interface MapEditorProps {
   selectedTool: string;
   setSelectedTool: (tool: string) => void;
-  newNodes?: DirectoryNodeItem[];
-  nodeSelected?: (isSelected: boolean) => void;
-  nodeX?: number;
-  nodeY?: number;
-  floor?: number;
+  currentNode?: DirectoryNodeItem;
+  nodeSelected?: boolean;
   updateNodePosition?: (x: number, y: number, floor: number) => void;
 }
 
@@ -32,23 +31,24 @@ export function MapEditor() {
     const allNodes = useAllNodesContext();
 
     const { hovered: editBoxHovered, ref: hoverRef } = useHover();
-
-    const [nodeSelected, setNodeSelected] = useState(false);
+    const [selectedNodeData, setSelectedNodeData] = useState<{
+        x: number;
+        y: number;
+        id: number;
+        type: string;
+    } | null>(null);
     const [floorState, setFloorState] = useState(1);
     const [isFading, setIsFading] = useState(false);
-    const [cursorStyle, setCursorStyle] = useState('pointer')
+    const [cursorStyle, setCursorStyle] = useState('pointer');
     const [mapTool, setMapTool] = useState('pan');
 
     const mapProps: MapEditorProps = {
-      selectedTool: mapTool,
-      setSelectedTool: setMapTool,
+        selectedTool: mapTool,
+        setSelectedTool: setMapTool,
     };
 
     const { isLoggedIn } = useLogin();
     const selectedObjects = useRef<THREE.Object3D[]>([]);
-    const [selectedObjectsInfo, setSelectedObjectsInfo] = useState<
-        { nodeId: string; x: number; y: number }[]
-    >([]);
     const objectsRef = useRef<THREE.Object3D[]>([]);
     const dragControlsRef = useRef<DragControls | null>(null);
     const edgeMeshesRef = useRef<
@@ -76,6 +76,7 @@ export function MapEditor() {
     Patriot Place Floor 3 -> floor2 -> scene 2
     Patriot Place Floor 4 -> floor3 -> scene 3
     Chestnut Hill Floor 1 -> floor4 -> scene 4
+    Faulkner Hospital Floor 1 -> floor5 -> scene 5
      */
 
     // set up map
@@ -104,6 +105,8 @@ export function MapEditor() {
             scenesRef.current[2].add(mesh);
         } else if (node1.floor === node2.floor && node1.floor === 4) {
             scenesRef.current[3].add(mesh);
+        } else if (node1.floor === node2.floor && node1.floor === 5) {
+          scenesRef.current[4].add(mesh);
         }
     };
 
@@ -113,6 +116,7 @@ export function MapEditor() {
         if (floor === 3) return 1;
         if (floor === 4) return 2;
         if (floor === 5) return 3;
+        if (floor === 6) return 4;
         return 0;
     };
 
@@ -122,6 +126,7 @@ export function MapEditor() {
       if (index === 1) return {floor: 2, mapID: 1};
       if (index === 2) return {floor: 3, mapID: 1};
       if (index === 3) return {floor: 4, mapID: 2};
+      if (index === 4) return {floor: 5, mapID: 3};
       return {floor: 1, mapID: 1};
     };
 
@@ -198,15 +203,18 @@ export function MapEditor() {
     };
 
     // updates allNodes position on a drag
-    const updateNodeOnDrag = useCallback((nodeId: number, draggedObject: THREE.Object3D<THREE.Object3DEventMap>) => {
-        if(draggedObject != null) {
-            const nodeToUpdate = nodeRef.current.find(element => element.id === nodeId);
-            if(nodeToUpdate != null) {
-                nodeToUpdate.x = draggedObject.position.x;
-                nodeToUpdate.y = draggedObject.position.y;
+    const updateNodeOnDrag = useCallback(
+        (nodeId: number, draggedObject: THREE.Object3D<THREE.Object3DEventMap>) => {
+            if (draggedObject != null) {
+                const nodeToUpdate = nodeRef.current.find((element) => element.id === nodeId);
+                if (nodeToUpdate != null) {
+                    nodeToUpdate.x = draggedObject.position.x;
+                    nodeToUpdate.y = draggedObject.position.y;
+                }
             }
-        }
-    }, [nodeRef]);
+        },
+        [nodeRef]
+    );
 
     // render function that can be called from anywhere so we can render only when needed.
     const render = () => {
@@ -237,15 +245,14 @@ export function MapEditor() {
         nodeRef.current = allNodes;
 
         return () => {
-          //window.removeEventListener('mouseup', handleMouseUp);
-          //window.removeEventListener('mouseleave', handleMouseLeave);
-          window.removeEventListener('click', clickHandler);
-          // clear refs on dismount
-          selectedObjects.current = [];
-          edgeMeshesRef.current = [];
-          objectsRef.current = [];
-        }
-
+            //window.removeEventListener('mouseup', handleMouseUp);
+            //window.removeEventListener('mouseleave', handleMouseLeave);
+            window.removeEventListener('click', clickHandler);
+            // clear refs on dismount
+            selectedObjects.current = [];
+            edgeMeshesRef.current = [];
+            objectsRef.current = [];
+        };
     }, [allNodes]);
 
     const updateDragControls = () => {
@@ -274,7 +281,6 @@ export function MapEditor() {
                 if (nodeId) {
                     updateEdges(nodeId, draggedObject.position);
                     updateNodeOnDrag(nodeId, draggedObject);
-
                 }
                 render(); // re-render during drag
             });
@@ -286,7 +292,7 @@ export function MapEditor() {
                 render(); // render after dragging as well to make the scene is up to date
             });
         }
-    }
+    };
 
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
@@ -296,6 +302,8 @@ export function MapEditor() {
             selectedObject.material.color.set(selectedNodeColor);
             selectedObject.material.needsUpdate = true;
             selectedObjects.current.push(selectedObject);
+
+            console.log(nodeRef.current.find(element => element.id === selectedObject.userData.nodeId));
             render(); // render to show color changes
             updateDragControls();
         }
@@ -317,13 +325,6 @@ export function MapEditor() {
     };
 
     const clickHandler = useCallback((event) => {
-      /*
-      selectedObjects.current.forEach((object) => {
-        deselectObject(object);
-      })
-
-       */
-
       // switches the type of cursor depending on the tool
       switch(mapTool) {
         case 'pan':
@@ -342,228 +343,273 @@ export function MapEditor() {
     }, [mapTool])
 
     const handlePanClick = (event) => {
-      const raycaster = new THREE.Raycaster();
-      const pointer = new THREE.Vector2();
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
 
-      if (!canvasRef.current || !cameraRef.current) {
-        console.log('Canvas or camera ref not available');
-        return;
-      }
-
-      const rect = canvasRef.current.getBoundingClientRect();
-      // check if click is within canvas bounds
-      if (
-        event.clientX < rect.left ||
-        event.clientX > rect.right ||
-        event.clientY < rect.top ||
-        event.clientY > rect.bottom
-      ) {
-        return;
-      }
-
-      // normalize pointer position (-1 to 1 in x and y)
-      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-      // ray from the camera position to the pointer
-      raycaster.setFromCamera(pointer, cameraRef.current);
-
-      const intersects = raycaster.intersectObjects(objectsRef.current, true);
-
-      if (intersects.length > 0) {
-        const selectedObject = intersects[0].object;
-        if (selectedObjects.current.includes(selectedObject)) {
-          deselectObject(selectedObject);
-          console.log('Deselected:', selectedObject);
-        } else {
-          selectObject(selectedObject);
-          console.log('Selected:', selectedObject);
+        if (!canvasRef.current || !cameraRef.current) {
+            console.log('Canvas or camera ref not available');
+            return;
         }
-      } else {
-        console.log('No object hit');
-      }
+
+        const rect = canvasRef.current.getBoundingClientRect();
+        // check if click is within canvas bounds
+        if (
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom
+        ) {
+            return;
+        }
+
+        // normalize pointer position (-1 to 1 in x and y)
+        pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        // ray from the camera position to the pointer
+        raycaster.setFromCamera(pointer, cameraRef.current);
+
+        const intersects = raycaster.intersectObjects(objectsRef.current, true);
+
+        if (intersects.length > 0) {
+            const selectedObject = intersects[0].object;
+            if (selectedObjects.current.includes(selectedObject)) {
+                deselectObject(selectedObject);
+                if (selectedObjects.current.length === 0) {
+                    setSelectedNodeData(null);
+                }
+                console.log('Deselected:', selectedObject);
+            } else {
+                selectObject(selectedObject);
+                const node = getNode(selectedObject.userData.nodeId, allNodes);
+                if (node) {
+                    setSelectedNodeData({
+                        x: Math.round(node.x),
+                        y: Math.round(node.y),
+                        id: node.id,
+                        type: node.nodeType,
+                    });
+                }
+                console.log('Selected:', selectedObject);
+            }
+        } else {
+            console.log('No object hit');
+        }
     };
 
     const handleAddNodeClick = (event) => {
-      const raycaster = new THREE.Raycaster();
-      const pointer = new THREE.Vector2();
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
 
-      if (!canvasRef.current || !cameraRef.current) {
-        console.log('Canvas or camera ref not available');
-        return;
-      }
-
-      const rect = canvasRef.current.getBoundingClientRect();
-      // check if click is within canvas bounds
-      if (
-        event.clientX < rect.left ||
-        event.clientX > rect.right ||
-        event.clientY < rect.top ||
-        event.clientY > rect.bottom
-      ) {
-        return;
-      }
-
-      // normalize pointer position (-1 to 1 in x and y)
-      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-      // ray from the camera position to the pointer
-      raycaster.setFromCamera(pointer, cameraRef.current);
-
-      const intersects = raycaster.intersectObjects(objectsRef.current, true);
-
-      // new node positon
-      if(intersects.length == 0) {
-        const point = raycaster.intersectObjects(scenesRef.current[sceneIndexState].children, true);
-
-        const posX = point[0].point.x;
-        const posY = point[0].point.y;
-
-        const {floor, mapID} = getFloorAndMapIDFromSceneIndex(sceneIndexState);
-
-        const newNode: DirectoryNodeItem = {
-          id: getUnusedNodeId(),
-          x: posX,
-          y: posY,
-          floor: floor,
-          mapId: mapID,
-          name: "",
-          description: "",
-          nodeType: "",
-          connectingNodes: [],
+        if (!canvasRef.current || !cameraRef.current) {
+            console.log('Canvas or camera ref not available');
+            return;
         }
 
-        nodeRef.current.push(newNode);
+        const rect = canvasRef.current.getBoundingClientRect();
+        // check if click is within canvas bounds
+        if (
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom
+        ) {
+            return;
+        }
 
-        createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
-          color: nodeColor,
-        }); //Create the nodes
-      }
-    }
+        // normalize pointer position (-1 to 1 in x and y)
+        pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        // ray from the camera position to the pointer
+        raycaster.setFromCamera(pointer, cameraRef.current);
+
+        const intersects = raycaster.intersectObjects(objectsRef.current, true);
+
+        // new node positon
+        if (intersects.length == 0) {
+            const point = raycaster.intersectObjects(
+                scenesRef.current[sceneIndexState].children,
+                true
+            );
+
+            const posX = point[0].point.x;
+            const posY = point[0].point.y;
+
+            const { floor, mapID } = getFloorAndMapIDFromSceneIndex(sceneIndexState);
+
+            const newNode: DirectoryNodeItem = {
+                id: getUnusedNodeId(),
+                x: posX,
+                y: posY,
+                floor: floor,
+                mapId: mapID,
+                name: '',
+                description: '',
+                nodeType: '',
+                connectingNodes: [],
+            };
+
+            nodeRef.current.push(newNode);
+
+            createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
+                color: nodeColor,
+            }); //Create the nodes
+        }
+    };
 
     const getUnusedNodeId = (): number => {
         let openId = -1;
         const allIds: number[] = [];
         allNodes.forEach((node) => {
             allIds.push(node.id);
-        })
+        });
 
         allIds.forEach((nodeId, index) => {
-            if(nodeId != index+1) {
-                openId = nodeId+1;
+            if (nodeId != index + 1) {
+                openId = nodeId + 1;
                 return openId;
             }
-        })
+        });
         return openId;
-    }
+    };
 
     const handleAddEdgeClick = (event) => {
-      const raycaster = new THREE.Raycaster();
-      const pointer = new THREE.Vector2();
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
 
-      if (!canvasRef.current || !cameraRef.current) {
-        console.log('Canvas or camera ref not available');
-        return;
-      }
-
-      const rect = canvasRef.current.getBoundingClientRect();
-      // check if click is within canvas bounds
-      if (
-        event.clientX < rect.left ||
-        event.clientX > rect.right ||
-        event.clientY < rect.top ||
-        event.clientY > rect.bottom
-      ) {
-        return;
-      }
-
-      // normalize pointer position (-1 to 1 in x and y)
-      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-      // ray from the camera position to the pointer
-      raycaster.setFromCamera(pointer, cameraRef.current);
-
-      const intersects = raycaster.intersectObjects(objectsRef.current, true);
-
-      if (intersects.length > 0) {
-        const selectedObject = intersects[0].object;
-        if (selectedObjects.current.includes(selectedObject)) {
-          deselectObject(selectedObject);
-          console.log('Deselected:', selectedObject);
-        } else {
-          toggleEdge(selectedObject);
-          console.log('Selected:', selectedObject);
+        if (!canvasRef.current || !cameraRef.current) {
+            console.log('Canvas or camera ref not available');
+            return;
         }
-      } else {
-        console.log('No object hit');
-      }
-    }
+
+        const rect = canvasRef.current.getBoundingClientRect();
+        // check if click is within canvas bounds
+        if (
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom
+        ) {
+            return;
+        }
+
+        // normalize pointer position (-1 to 1 in x and y)
+        pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        // ray from the camera position to the pointer
+        raycaster.setFromCamera(pointer, cameraRef.current);
+
+        const intersects = raycaster.intersectObjects(objectsRef.current, true);
+
+        if (intersects.length > 0) {
+            const selectedObject = intersects[0].object;
+            if (selectedObjects.current.includes(selectedObject)) {
+                deselectObject(selectedObject);
+                console.log('Deselected:', selectedObject);
+            } else {
+                toggleEdge(selectedObject);
+                console.log('Selected:', selectedObject);
+            }
+        } else {
+            console.log('No object hit');
+        }
+    };
 
     const toggleEdge = (selectedObject: THREE.Object3D) => {
-      if (
-        selectedObject instanceof THREE.Mesh &&
-        selectedObject.material instanceof THREE.MeshBasicMaterial
-      ) {
-        if (selectedObjects.current.length == 0) {
-          selectedObject.material.color.set(selectedNodeColor);
-          selectedObject.material.needsUpdate = true;
-          selectedObjects.current.push(selectedObject);
-          render();
-          updateDragControls();
-        } else if (selectedObjects.current.length == 1) {
-            const firstNode = nodeRef.current.find(element => element.id === selectedObjects.current[0].userData.nodeId);
-            const secondNode = nodeRef.current.find(element => element.id === selectedObject.userData.nodeId);
-            console.log(firstNode, secondNode);
-
-            if(firstNode != null && secondNode != null) {
-                if (firstNode.connectingNodes.includes(secondNode.id) || secondNode.connectingNodes.includes(firstNode.id)) {
-                    const removeFirstToSecondEdgeIndex = edgeMeshesRef.current.findIndex(element => (element.startNodeId === firstNode.id) && (element.endNodeId === secondNode.id));
-                    const removeSecondToFirstEdgeIndex = edgeMeshesRef.current.findIndex(element => (element.endNodeId === firstNode.id) && (element.startNodeId === secondNode.id));
-
-                    const removeFirstEdge = edgeMeshesRef.current.at(removeFirstToSecondEdgeIndex);
-                    const removeSecondEdge = edgeMeshesRef.current.at(removeSecondToFirstEdgeIndex);
-
-                    if(removeFirstToSecondEdgeIndex != -1) {
-                        removeFirstEdge.mesh.visible = false;
-                        removeFirstEdge.mesh.geometry.dispose();
-                        edgeMeshesRef.current.splice(removeFirstToSecondEdgeIndex, 1);
-                    }
-
-                    if(removeSecondToFirstEdgeIndex != -1) {
-                        removeSecondEdge.mesh.visible = false;
-                        removeSecondEdge.mesh.geometry.dispose();
-                        edgeMeshesRef.current.splice(removeSecondToFirstEdgeIndex, 1);
-                    }
-
-                    firstNode.connectingNodes.splice(firstNode.connectingNodes.indexOf(secondNode.id), 1);
-                    secondNode.connectingNodes.splice(secondNode.connectingNodes.indexOf(firstNode.id), 1);
-
-                } else {
-                    createEdge(firstNode, secondNode);
-
-                    firstNode.connectingNodes.push(secondNode.id);
-                    secondNode.connectingNodes.push(firstNode.id);
-                }
-
-                selectedObjects.current.forEach((object) => {
-                    deselectObject(object);
-                })
-
+        if (
+            selectedObject instanceof THREE.Mesh &&
+            selectedObject.material instanceof THREE.MeshBasicMaterial
+        ) {
+            if (selectedObjects.current.length == 0) {
+                selectedObject.material.color.set(selectedNodeColor);
+                selectedObject.material.needsUpdate = true;
+                selectedObjects.current.push(selectedObject);
                 render();
                 updateDragControls();
+            } else if (selectedObjects.current.length == 1) {
+                const firstNode = nodeRef.current.find(
+                    (element) => element.id === selectedObjects.current[0].userData.nodeId
+                );
+                const secondNode = nodeRef.current.find(
+                    (element) => element.id === selectedObject.userData.nodeId
+                );
+                console.log(firstNode, secondNode);
+
+                if (firstNode != null && secondNode != null) {
+                    if (
+                        firstNode.connectingNodes.includes(secondNode.id) ||
+                        secondNode.connectingNodes.includes(firstNode.id)
+                    ) {
+                        const removeFirstToSecondEdgeIndex = edgeMeshesRef.current.findIndex(
+                            (element) =>
+                                element.startNodeId === firstNode.id &&
+                                element.endNodeId === secondNode.id
+                        );
+                        const removeSecondToFirstEdgeIndex = edgeMeshesRef.current.findIndex(
+                            (element) =>
+                                element.endNodeId === firstNode.id &&
+                                element.startNodeId === secondNode.id
+                        );
+
+                        const removeFirstEdge = edgeMeshesRef.current.at(
+                            removeFirstToSecondEdgeIndex
+                        );
+                        const removeSecondEdge = edgeMeshesRef.current.at(
+                            removeSecondToFirstEdgeIndex
+                        );
+
+                        if (removeFirstToSecondEdgeIndex != -1) {
+                            removeFirstEdge.mesh.visible = false;
+                            removeFirstEdge.mesh.geometry.dispose();
+                            edgeMeshesRef.current.splice(removeFirstToSecondEdgeIndex, 1);
+                        }
+
+                        if (removeSecondToFirstEdgeIndex != -1) {
+                            removeSecondEdge.mesh.visible = false;
+                            removeSecondEdge.mesh.geometry.dispose();
+                            edgeMeshesRef.current.splice(removeSecondToFirstEdgeIndex, 1);
+                        }
+
+                        firstNode.connectingNodes.splice(
+                            firstNode.connectingNodes.indexOf(secondNode.id),
+                            1
+                        );
+                        secondNode.connectingNodes.splice(
+                            secondNode.connectingNodes.indexOf(firstNode.id),
+                            1
+                        );
+                    } else {
+                        createEdge(firstNode, secondNode);
+
+                        firstNode.connectingNodes.push(secondNode.id);
+                        secondNode.connectingNodes.push(firstNode.id);
+                    }
+
+                    selectedObjects.current.forEach((object) => {
+                        deselectObject(object);
+                    });
+
+                    render();
+                    updateDragControls();
+                }
             }
         }
-      }
-    }
+    };
 
     const deleteCascadingEdges = (objectToRemove: THREE.Object3D<Object3DEventMap>) => {
         // remove all edges where this is the startID
-        while(edgeMeshesRef.current.findIndex(element => element.startNodeId === objectToRemove.userData.nodeId) != -1) {
-            const removeStartEdgeIndex = edgeMeshesRef.current.findIndex(element => element.startNodeId === objectToRemove.userData.nodeId);
+        while (
+            edgeMeshesRef.current.findIndex(
+                (element) => element.startNodeId === objectToRemove.userData.nodeId
+            ) != -1
+        ) {
+            const removeStartEdgeIndex = edgeMeshesRef.current.findIndex(
+                (element) => element.startNodeId === objectToRemove.userData.nodeId
+            );
             const removeEdge = edgeMeshesRef.current.at(removeStartEdgeIndex);
-            if(removeEdge != null) {
+            if (removeEdge != null) {
                 removeEdge.mesh.visible = false;
                 removeEdge.mesh.geometry.dispose();
                 edgeMeshesRef.current.splice(removeStartEdgeIndex, 1);
@@ -571,124 +617,141 @@ export function MapEditor() {
         }
 
         // remove all edges where this is the endID
-        while(edgeMeshesRef.current.findIndex(element => element.endNodeId === objectToRemove.userData.nodeId) != -1) {
-            const removeEndEdgeIndex = edgeMeshesRef.current.findIndex(element => element.endNodeId === objectToRemove.userData.nodeId);
+        while (
+            edgeMeshesRef.current.findIndex(
+                (element) => element.endNodeId === objectToRemove.userData.nodeId
+            ) != -1
+        ) {
+            const removeEndEdgeIndex = edgeMeshesRef.current.findIndex(
+                (element) => element.endNodeId === objectToRemove.userData.nodeId
+            );
             const removeEdge = edgeMeshesRef.current.at(removeEndEdgeIndex);
-            if(removeEdge != null) {
+            if (removeEdge != null) {
                 removeEdge.mesh.visible = false;
                 removeEdge.mesh.geometry.dispose();
                 edgeMeshesRef.current.splice(removeEndEdgeIndex, 1);
             }
         }
-    }
+    };
 
     // Once initialized event listeners will operate continuously. Thus they can just be put in a useEffect with no dependencies that will run once.
     useEffect(() => {
         // raycaster for selecting nodes adapted from: https://codesandbox.io/p/sandbox/basic-threejs-example-with-re-use-dsrvn?file=%2Fsrc%2Findex.js%3A93%2C3-93%2C41
 
         // will only add the click handler if editing the map
-        if(!editBoxHovered) {
+        if (!editBoxHovered) {
             window.addEventListener('click', clickHandler);
 
             return () => {
                 window.removeEventListener('click', clickHandler);
-            }
+            };
         }
-
     }, [mapTool, editBoxHovered]);
-
 
     // for deleting selected nodes
     useEffect(() => {
-
         const deleteSelected = () => {
-            if(selectedObjects.current.length > 0) {
+            if (selectedObjects.current.length > 0) {
                 selectedObjects.current.forEach((object) => {
-                    const allNodesIndex = nodeRef.current.findIndex(element => element.id === object.userData.nodeId);
-                    if(allNodesIndex != -1) {
+                    const allNodesIndex = nodeRef.current.findIndex(
+                        (element) => element.id === object.userData.nodeId
+                    );
+                    if (allNodesIndex != -1) {
                         nodeRef.current.splice(allNodesIndex, 1);
 
                         // remove all connectingNodes from where this node exists in allNodes
-                        while(nodeRef.current.findIndex(element => element.connectingNodes.includes(object.userData.nodeId)) != -1) {
-                            const removeConnectingNodesIndex = nodeRef.current.findIndex(element => element.connectingNodes.includes(object.userData.nodeId));
+                        while (
+                            nodeRef.current.findIndex((element) =>
+                                element.connectingNodes.includes(object.userData.nodeId)
+                            ) != -1
+                        ) {
+                            const removeConnectingNodesIndex = nodeRef.current.findIndex(
+                                (element) =>
+                                    element.connectingNodes.includes(object.userData.nodeId)
+                            );
                             const node = nodeRef.current.at(removeConnectingNodesIndex);
 
-                            console.log("connecting nodes", removeConnectingNodesIndex);
-                            if(node != null) {
-                                const connectingNodeIndex = nodeRef.current[removeConnectingNodesIndex].connectingNodes.findIndex(element => element === object.userData.nodeId);
+                            console.log('connecting nodes', removeConnectingNodesIndex);
+                            if (node != null) {
+                                const connectingNodeIndex = nodeRef.current[
+                                    removeConnectingNodesIndex
+                                ].connectingNodes.findIndex(
+                                    (element) => element === object.userData.nodeId
+                                );
                                 node.connectingNodes.splice(connectingNodeIndex, 1);
                             }
                         }
                     }
 
-                    const objectsIndex = objectsRef.current.findIndex(element => element.userData.nodeId === object.userData.nodeId);
-                    const objectToRemove = objectsRef.current.find(element => element.userData.nodeId === object.userData.nodeId);
+                    const objectsIndex = objectsRef.current.findIndex(
+                        (element) => element.userData.nodeId === object.userData.nodeId
+                    );
+                    const objectToRemove = objectsRef.current.find(
+                        (element) => element.userData.nodeId === object.userData.nodeId
+                    );
                     console.log(objectsIndex, objectsRef.current);
-                    if(objectsIndex != -1 && objectToRemove != null) {
+                    if (objectsIndex != -1 && objectToRemove != null) {
                         objectToRemove.visible = false;
 
                         deleteCascadingEdges(objectToRemove);
 
                         objectsRef.current.splice(objectsIndex, 1);
                     }
-                })
+                });
                 render();
             }
 
             selectedObjects.current.forEach((object) => {
                 deselectObject(object);
-            })
+            });
+        };
 
-        }
-
-        window.addEventListener('keydown', ({key}) => {
-            if (key === "Backspace" || key === "Delete") {
+        window.addEventListener('keydown', ({ key }) => {
+            if (key === 'Backspace' || key === 'Delete') {
                 deleteSelected();
             }
         });
 
         return () => {
             window.removeEventListener('keydown', deleteSelected);
-        }
-
+        };
     }, [allNodes]);
 
     // This is for one-time initializations and handlers
     useEffect(() => {
+        // make sure map movement is re-enabled for some edge cases
+        const handleMouseUp = () => {
+            setTimeout(() => {
+                controlRef.current.enabled = true;
+            }, 10);
+        };
+        const handleMouseLeave = () => {
+            setTimeout(() => {
+                controlRef.current.enabled = true;
+            }, 10);
+        };
 
-      // make sure map movement is re-enabled for some edge cases
-      const handleMouseUp = () => {
-        setTimeout(() => {
-          controlRef.current.enabled = true;
-        }, 10);
-      };
-      const handleMouseLeave = () => {
-        setTimeout(() => {
-          controlRef.current.enabled = true;
-        }, 10);
-      };
+        window.addEventListener('mouseup', handleMouseUp);
+        if (rendererRef.current) {
+            rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
+        }
 
-      window.addEventListener('mouseup', handleMouseUp);
-      if (rendererRef.current) {
-        rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
-      }
-
-      return () => {
-        //window.removeEventListener('mouseup', handleMouseUp);
-        //window.removeEventListener('mouseleave', handleMouseLeave);
-        window.removeEventListener('click', clickHandler);
-        // clear refs on dismount
-        selectedObjects.current = [];
-        edgeMeshesRef.current = [];
-        objectsRef.current = [];
-      }
+        return () => {
+            //window.removeEventListener('mouseup', handleMouseUp);
+            //window.removeEventListener('mouseleave', handleMouseLeave);
+            window.removeEventListener('click', clickHandler);
+            // clear refs on dismount
+            selectedObjects.current = [];
+            edgeMeshesRef.current = [];
+            objectsRef.current = [];
+        };
     }, []);
 
     /*
-      OK the way animations work is that calling animate() will start an animation loop that runs continuously. However,
-      if you want the actual renderer to change, i.e. change the scene or camera, you need to restart the animation loop.
-      That's why the scene is in the useEffect dependency.
-     */
+    OK the way animations work is that calling animate() will start an animation loop that runs continuously. However,
+    if you want the actual renderer to change, i.e. change the scene or camera, you need to restart the animation loop.
+    That's why the scene is in the useEffect dependency.
+   */
     useEffect(() => {
         let animationFrameId: number;
 
@@ -716,35 +779,39 @@ export function MapEditor() {
     }, [sceneIndexState]);
 
     return (
-        <Box w="100vw" h="100vh" p={0}>
+        <Box w="100vw" h="100vh">
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
 
             <Box ref={hoverRef}>
                 <MapContext.Provider value={mapProps}>
-                    <MapEditorBox/>
+                    <MapEditorBox nodeData={selectedNodeData} />
                 </MapContext.Provider>
             </Box>
 
             <canvas
                 ref={canvasRef}
                 id="insideMapCanvas"
-                style={{ width: '100%', height: '100%', position: 'absolute', cursor: cursorStyle}}
+                style={{ width: '100%', height: '100%', position: 'absolute', cursor: cursorStyle }}
             />
 
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: '#000',
-                    opacity: isFading ? 1 : 0,
-                    transition: 'opacity 0.3s ease-in-out',
-                    pointerEvents: 'none',
-                    zIndex: 5,
-                }}
-            />
+            {/*<div*/}
+            {/*    style={{*/}
+            {/*        position: 'absolute',*/}
+            {/*        top: 0,*/}
+            {/*        left: 0,*/}
+            {/*        width: '50%',*/}
+            {/*        height: '100%',*/}
+            {/*        backgroundColor: '#000',*/}
+            {/*        opacity: isFading ? 1 : 0,*/}
+            {/*        transition: 'opacity 0.3s ease-in-out',*/}
+            {/*        pointerEvents: 'none',*/}
+            {/*        zIndex: 5,*/}
+            {/*    }}*/}
+            {/*/>*/}
+
+
+          {/*<NodeInfoBox/>*/}
+
         </Box>
     );
 }
