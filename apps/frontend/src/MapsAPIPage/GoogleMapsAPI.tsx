@@ -75,9 +75,10 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
                     }
                     onLoad={handleMapLoad}
                     options={{
+                        fullscreenControl: false,
                         disableDefaultUI: true,
                         mapTypeId: 'satellite',
-                        mapTypeControl: 'true',
+                        mapTypeControl: true,
                     }}
                 />
             </Box>
