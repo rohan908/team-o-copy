@@ -337,7 +337,7 @@ const MapEditorBox = ({}) => {
             right={0}
             display="flex"
             ta="left"
-            top={"100px"}
+            top={"75px"}
             pb={collapsed ? 0 : '1.5rem'}
             style={{
                 zIndex: 999,

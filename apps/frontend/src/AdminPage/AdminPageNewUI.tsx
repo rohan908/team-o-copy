@@ -53,6 +53,7 @@ export function AdminPageV2() {
         <Box
             mih="80vh"
             w="full"
+            pt={"75px"}
             bg="#EAF1FF"
         >
           <Grid align="top">

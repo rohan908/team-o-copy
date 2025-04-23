@@ -36,7 +36,7 @@ export function NavBar() {
       <Box
         component="nav"
         pos="sticky"
-        top={0}
+        top={"10px"}
         bg="transparent"
         style={{ zIndex: 999 }}
       >
@@ -50,6 +50,7 @@ export function NavBar() {
                 h="50px"
                 style={{
                   borderRadius: "50%",
+                  boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)'
                 }}
                 justify="center"
                 align="center"
@@ -63,7 +64,7 @@ export function NavBar() {
               </Flex>
             </Link>
 
-            <Group ml="xl" gap="md" visibleFrom="sm" bg="blueBase.9" style={{ borderRadius: "20px" }}>
+            <Group ml="xl" gap="md" visibleFrom="sm" bg="blueBase.9" style={{ borderRadius: "20px", boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)' }}>
               <Box m="3px" bg="blueBase.6" style={{ borderRadius: "20px" }}>
                 <Box m="3px" bg="blueBase.9" style={{ borderRadius: "20px" }}>
                   {/* Navigation Items */}
