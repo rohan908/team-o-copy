@@ -7,7 +7,7 @@ import { usePatriotContext, useChestnutHillContext } from '../contexts/Directory
 import { Box, Text, Select, Collapse, TextInput, Stack, Button } from '@mantine/core';
 import { useTimeline } from '../HomePage/TimeLineContext';
 import { hospitalCoordinates } from './GoogleMapsAPI.tsx';
-import { hospitalOptions } from '../HomePage/GmapsDestinationSelector.tsx';
+import {hospitalOptions} from "../HomePage/GmapsDestinationSelector.tsx";
 
 const SelectBox = () => {
     const {
@@ -36,6 +36,7 @@ const SelectBox = () => {
 
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
+
 
     const MapDepartment = (department: DirectoryNodeItem[]) =>
         department.map((department: DirectoryNodeItem) => ({

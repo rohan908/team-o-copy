@@ -8,7 +8,8 @@ import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 export function DepartmentSelector() {
     const theme = useMantineTheme();
 
-    const { directoryOptions, selectedHospital, setDepartment, selectedAlgorithm } = useTimeline();
+    const { directoryOptions, selectedHospital, setDepartment, selectedAlgorithm, department } =
+        useTimeline();
     const NavSelection = useNavSelectionContext();
 
     const setSelectedDepartment = (department: string | null) => {
@@ -34,6 +35,7 @@ export function DepartmentSelector() {
             leftSection={<IconHospital size="16" style={{ color: theme.colors.primaryBlues[8] }} />}
             data={directoryOptions}
             onChange={setSelectedDepartment}
+            value={department ?? ''}
             radius="sm"
             mb="sm"
             size="xs"
