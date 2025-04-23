@@ -263,7 +263,6 @@ export function DraggableMap() {
                     zIndex: 10,
                 }}
             />
-            <DisplayDirectionsBox></DisplayDirectionsBox>
         </Box>
     );
 }

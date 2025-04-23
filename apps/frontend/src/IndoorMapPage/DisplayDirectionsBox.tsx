@@ -4,13 +4,13 @@
  NOTES: CTRL+F !!! for changes that may need to be made
  I use ({Date}) in comments to manually track myself
  */
-import { Accordion, Box, Title, Text } from '@mantine/core';
+import { Accordion, Box, Title, Text, Group, Divider } from '@mantine/core';
 import { GetTextDirections } from './GetTextDirections.tsx';
 import { useMemo } from 'react';
 import { usePathContext, useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
-
+import { IconArrowLeft, IconArrowRight, IconArrowNarrowUp, IconStairs } from '@tabler/icons-react';
 /**
  *
  * @param nodeIds : list of numbers representing the nodeIds that are in the calculated path
@@ -55,28 +55,57 @@ export function DisplayDirectionsBox() {
         directionsByFloor[direction.Floor].push(direction);
     });
     return (
-        <Box>
-            <Title>Directions</Title>
+        <Box w="360px" h="400px" style={{ overflowY: 'auto' }}>
+            <Title order={1} size="xl" allign={'center'}>
+                Navigate the Hospital
+            </Title>
             <Accordion
                 multiple
+                styles={{
+                    item: { marginBottom: '0px' },
+                }}
                 defaultValue={Object.keys(directionsByFloor).map((floor) => `floor-${floor}`)}
             >
                 {Object.entries(directionsByFloor).map(([floor, direction]) => (
                     <Accordion.Item key={floor} value={`floor-${floor}`}>
                         <Accordion.Control>
-                            {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
-                            {Number(floor) === 1 ? 'Floor 1' : `Floor ${Number(floor) + 1}`}
+                            <Text fw={700} size="md" c="blue.7">
+                                {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
+                                {Number(floor) === 1 ? 'Floor 1' : `Floor ${Number(floor) + 1}`}
+                            </Text>
                         </Accordion.Control>
                         <Accordion.Panel>
-                            {direction.map((step, idx) => (
-                                <Text key={idx}>
-                                    {step.Direction.startsWith('Take')
-                                        ? step.Direction
-                                        : step.Direction === 'Straight'
-                                          ? `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`
-                                          : `Then turn ${step.Direction.toLowerCase()}.`}
-                                </Text>
-                            ))}
+                            {direction.map((step, idx) => {
+                                const icon = step.Direction.toLowerCase().includes('elevator') ? (
+                                    <IconStairs size={20} />
+                                ) : step.Direction.toLowerCase().includes('stairs') ? (
+                                    <IconStairs size={20} />
+                                ) : step.Direction === 'Straight' ? (
+                                    <IconArrowNarrowUp size={20} />
+                                ) : step.Direction === 'Left' ? (
+                                    <IconArrowLeft size={20} />
+                                ) : (
+                                    <IconArrowRight size={20} />
+                                );
+
+                                const label = step.Direction.startsWith('Take')
+                                    ? step.Direction
+                                    : step.Direction === 'Straight'
+                                      ? `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`
+                                      : `Turn ${step.Direction.toLowerCase()}`;
+
+                                return (
+                                    <Box key={idx} mb="xs">
+                                        <Group align="center">
+                                            {icon}
+                                            <Text size="sm" fw={500} color="blue">
+                                                {label}
+                                            </Text>
+                                        </Group>
+                                        <Divider my="xs" />
+                                    </Box>
+                                );
+                            })}
                         </Accordion.Panel>
                     </Accordion.Item>
                 ))}
