@@ -4,6 +4,8 @@ type LoginContextType = {
     isLoggedIn: boolean;
     login: (username: string, password: string) => boolean;
     logout: () => void;
+    loading: boolean;  // Add loading state
+
 };
 
 const LoginContext = createContext<LoginContextType | undefined>(undefined);
@@ -11,13 +13,17 @@ const LoginContext = createContext<LoginContextType | undefined>(undefined);
 
 export const LoginProvider = ({ children }: { children: ReactNode }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [loading, setLoading] = useState(true);
 
+  //please check this code
     useEffect(() => {
         const storedUser = localStorage.getItem('username');
         const storedPass = localStorage.getItem('password');
         if (storedUser === 'admin' && storedPass === 'admin') {
             setIsLoggedIn(true);
         }
+        setLoading(false);
+
     }, []);
 
     const login = (username: string, password: string) => {
@@ -37,7 +43,7 @@ export const LoginProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <LoginContext.Provider value={{ isLoggedIn, login, logout }}>
+        <LoginContext.Provider value={{ isLoggedIn, login, logout, loading }}>
             {children}
         </LoginContext.Provider>
     );

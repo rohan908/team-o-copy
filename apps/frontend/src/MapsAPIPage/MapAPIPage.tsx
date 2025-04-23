@@ -20,9 +20,6 @@ export const MapAPIPage = () => {
     if (!isLoaded && !travelMode) {
         return <div>Loading Google Maps...</div>; //debugmap
     }
-    useEffect(() => {
-        setSelectedHospital(null);
-    }, []);
 
     return (
         <Box pos="relative" w="100%" h="100vh">

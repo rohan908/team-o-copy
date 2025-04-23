@@ -25,7 +25,7 @@ const MapEditorBox = ({}) => {
     const allNodes = useAllNodesContext();
 
     const theme = useMantineTheme();
-    const [collapsed, setCollapsed] = useState(true);
+    const [collapsed, setCollapsed] = useState(false);
     const [hoverPanTool, setHoverPanTool] = useState(setTimeout(function () {}, 1000));
     const [hoverNodeTool, setHoverNodeTool] = useState(setTimeout(function () {}, 1000));
     const [hoverEdgeTool, setHoverEdgeTool] = useState(setTimeout(function () {}, 1000));
@@ -33,7 +33,7 @@ const MapEditorBox = ({}) => {
     const handlePanTool = () => {mapProps.setSelectedTool('pan')}
     const handleNodeTool = () => {mapProps.setSelectedTool('add-node')};
     const handleEdgeTool = () => {mapProps.setSelectedTool('add-edge')};
-    
+
 
     const { hovered, ref } = useHover();
 
@@ -335,8 +335,10 @@ const MapEditorBox = ({}) => {
             pos="fixed"
             left={20}
             right={0}
+            w={"37%"}
             display="flex"
             ta="left"
+            top={"75px"}
             pb={collapsed ? 0 : '1.5rem'}
             style={{
                 zIndex: 999,
@@ -347,7 +349,7 @@ const MapEditorBox = ({}) => {
                 ref={ref}
                 bg="themeGold.2"
                 p={collapsed ? 0 : { base: 'xl', sm: '2rem' }}
-                w="37%"
+                w="100%"
                 maw={collapsed ? 350 : '80%'}
                 opacity={collapsed ? 0.8 : 0.95}
                 style={{
