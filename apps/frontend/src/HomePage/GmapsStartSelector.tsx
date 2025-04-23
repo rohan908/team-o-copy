@@ -7,8 +7,8 @@ import { useEffect, useRef } from 'react';
 
 export function GmapsStartSelector() {
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+    const { setUserCoordinates, setUserStart, userStart } = useTimeline();
     const input = useRef<HTMLInputElement>(null);
-    const { setUserCoordinates } = useTimeline();
     //initialize only when the box is not collapsed or has input
     useEffect(() => {
         if (!input.current) return;
@@ -32,6 +32,9 @@ export function GmapsStartSelector() {
                     lng: location.lng(),
                 };
                 setUserCoordinates(latlng);
+                if (place.formatted_address) {
+                    setUserStart(place.formatted_address);
+                }
             }
         });
     }, []);
@@ -44,6 +47,7 @@ export function GmapsStartSelector() {
                 <IconHomeFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
             ref={input}
+            onChange={(value) => setUserStart(value)}
             radius="sm"
             mb="sm"
             size="xs"
