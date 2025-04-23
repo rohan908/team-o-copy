@@ -17,11 +17,14 @@ import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
+import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 
 export function DraggableMap() {
     /*
       References that exist outside renders, changeable floor state, and properties like theme
      */
+    const { selectedHospital } = useTimeline();
+
     const allNodes = useAllNodesContext();
     const navSelection = useNavSelectionContext();
     const selectedHospitalName = navSelection.state.navSelectRequest?.HospitalName;
@@ -58,6 +61,23 @@ export function DraggableMap() {
             setFloorState(1);
         }
     };
+    //stupid fix for adams hard coding bruh, need to switch the scene depending on the selected hopsital going to the indoor map page
+    useEffect(() => {
+        if (selectedHospital === '20 Patriot Pl' || selectedHospital === '22 Patriot Pl') {
+            setSceneIndexState(0);
+            setFloorState(1);
+        } else if (selectedHospital === 'Chestnut Hill') {
+            setSceneIndexState(3);
+            setFloorState(1); // Assuming Chestnut Hill starts at floor 1
+        } else if (selectedHospital === 'Faulkner Hospital') {
+            setSceneIndexState(4);
+            setFloorState(1);
+        } else {
+            setSceneIndexState(0);
+            setFloorState(1);
+        }
+    }, []);
+
     // associated floors with scenes
     const getSceneIndexFromFloor = (floor: number): number => {
         if (selectedHospitalName === 'Chestnut Hill') return 3;
