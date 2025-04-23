@@ -15,7 +15,7 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     const mapRef = useRef<google.maps.Map | null>(null);
     const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
 
-    function hospitalCoordinates(hospital: string): google.maps.LatLngLiteral | null {
+    function hospitalCoordinates(hospital: string | null): google.maps.LatLngLiteral | null {
         switch (hospital) {
             case '20 Patriot Pl':
                 return { lat: 42.092759710546595, lng: -71.26611460791148 }; //this is fixed location for pharmacy, should route to specific parking lot
@@ -34,7 +34,7 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     };
 
     useEffect(() => {
-        if (!userCoordinates || !selectedHospital || !mapRef.current) return;
+        if (!userCoordinates || !selectedHospital || !travelMode || !mapRef.current) return;
         const directionsService = new google.maps.DirectionsService();
         if (!directionsRendererRef.current) {
             directionsRendererRef.current = new google.maps.DirectionsRenderer();
@@ -69,8 +69,10 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
             <Box pos="relative" w="100%" h="100%">
                 <GoogleMap
                     mapContainerStyle={{ width: '100%', height: '100%' }}
-                    zoom={10}
-                    center={selectedHospital ?? { lat: 42.093429, lng: -71.268228 }}
+                    zoom={hospitalCoordinates(selectedHospital) ? 18 : 10}
+                    center={
+                        hospitalCoordinates(selectedHospital) ?? { lat: 42.093429, lng: -71.268228 }
+                    }
                     onLoad={handleMapLoad}
                     options={{
                         disableDefaultUI: true,
