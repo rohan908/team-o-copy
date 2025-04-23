@@ -77,8 +77,8 @@ export function DraggableMap() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-            }, 200); // Fade-in duration
-        }, 200); // Fade-out duration
+            }, 300); // Fade-in duration
+        }, 300); // Fade-out duration
     };
 
     const handlePath = (firstNodeId: number, lastNodeId: number, algo: string) => {
@@ -275,7 +275,7 @@ export function DraggableMap() {
                     left: 0,
                     width: '100%',
                     height: '100%',
-                    backgroundColor: '#2fbcc7',
+                    backgroundColor: '#EBF2FF',
                     opacity: isFading ? 1 : 0,
                     transition: 'opacity 0.3s ease-in-out',
                     pointerEvents: 'none',

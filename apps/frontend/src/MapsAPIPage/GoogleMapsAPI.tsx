@@ -82,7 +82,7 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
                         fullscreenControl: false,
                         disableDefaultUI: true,
                         mapTypeId: 'satellite',
-                        mapTypeControl: true,
+                        mapTypeControl: false,
                     }}
                 />
             </Box>
