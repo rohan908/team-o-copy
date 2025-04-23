@@ -3,7 +3,7 @@ import {
   Button,
   Flex,
   Box,
-  Group,
+  Group, MantineProvider,
 } from '@mantine/core';
 import { useLogin } from './LoginContext'; // adjust path if needed
 import { useState, useEffect } from 'react';
@@ -68,6 +68,7 @@ export function NavBar() {
                 <Box m="3px" bg="blueBase.9" style={{ borderRadius: "20px" }}>
                   {/* Navigation Items */}
                   {navItems.map((item, index) => (
+                    <MantineProvider theme={{activeClassName: ''}}>
                     <Button
                       key={index}
                       variant="filled"
@@ -77,13 +78,17 @@ export function NavBar() {
                       component={Link}
                       to={item.link}
                       size="sm"
+                      style={{borderRadius: '8px'}}
+
                     >
                       {item.name}
                     </Button>
+                    </MantineProvider>
                   ))}
 
                   {/* Log In Button (only when logged out) */}
                   {!isLoggedIn && loginItems.map((item, index) => (
+                    <MantineProvider theme={{activeClassName: ''}}>
                     <Button
                       key={index}
                       variant="filled"
@@ -93,15 +98,18 @@ export function NavBar() {
                       component={Link}
                       to={item.link}
                       size="sm"
+                      style={{borderRadius: '8px'}}
                     >
                       {item.name}
                     </Button>
+                      </MantineProvider>
                   ))}
 
                   {/* Admin Buttons and Log Out (only when logged in) */}
                   {isLoggedIn && (
                     <>
                       {adminNavItems.map((item, index) => (
+                        <MantineProvider theme={{activeClassName: ''}}>
                         <Button
                           key={index}
                           variant="filled"
@@ -111,10 +119,13 @@ export function NavBar() {
                           component={Link}
                           to={item.link}
                           size="sm"
+                          style={{borderRadius: '8px'}}
                         >
                           {item.name}
                         </Button>
+                          </MantineProvider>
                       ))}
+                      <MantineProvider theme={{activeClassName: ''}}>
                       <Button
                         variant="filled"
                         color="baseBlue.6"
@@ -124,9 +135,11 @@ export function NavBar() {
                         component={Link}
                         to="/"
                         size="sm"
+                        style={{borderRadius: '8px'}}
                       >
                         Log Out
                       </Button>
+                        </MantineProvider>
                     </>
                   )}
                 </Box>

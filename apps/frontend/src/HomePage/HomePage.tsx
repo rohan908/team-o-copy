@@ -11,7 +11,7 @@ export function HomePage() {
         <TimelineProvider>
             <Flex h="100%" justify="center" align="center" bg={theme.colors.terquAccet[1]}>
                 <Grid h="100%" gutter="xl" justify="center" align="stretch">
-                    <Grid.Col span={6} p="xl">
+                    <Grid.Col span={6} p="xl" pt="75px">
                         <Title order={1} size="h1">
                             Welcome to Mass Brigham
                         </Title>

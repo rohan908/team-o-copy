@@ -55,6 +55,7 @@ const GoogleMapsAPI: React.FC<GoogleMapProps> = (props) =>{
                     zoom={10}
                     center={selectedHospital ?? { lat: 42.093429, lng: -71.268228 }}
                     onLoad={handleMapLoad}
+                    options={{fullscreenControl: false}}
                 />
             {steps.length > 0 && (
                 <Box //custom box for directions

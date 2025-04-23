@@ -121,7 +121,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
 
         <Box
           pos="absolute"
-          top="50%"
+          top="55%"
           left="50%"
           style={{ transform: 'translate(-50%, -50%)',
                   pointerEvents: collapsed ? 'none' : 'auto',}} //when collapsed, this box becomes unclickable
@@ -132,7 +132,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
             subtitle="Use our interactive map to find departments, parking, and efficient routes">
               <Stack w="100%">
                 <Box>
-                  <Text ta="left" mb="sm" fw={500}>
+                  <Text ta="left" mb="xs" fw={500}>
                     Insert Starting Location:
                   </Text>
                   <TextInput
@@ -143,7 +143,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 </Box>
 
                 <Box>
-                  <Text ta="left" mb="sm" fw={500}>
+                  <Text ta="left" mb="xs" fw={500}>
                     Select Hospital:
                   </Text>
                   <Select
@@ -158,7 +158,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 </Box>
 
                 <Box>
-                  <Text ta="left" mb="sm" fw={500}>
+                  <Text ta="left" mb="xs" fw={500}>
                     Select Department:
                   </Text>
                   <Select
@@ -171,7 +171,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
                 </Box>
 
                 <Box>
-                  <Text ta="left" mb="sm" fw={500}>
+                  <Text ta="left" mb="xs" fw={500}>
                     Select Navigation Method:
                   </Text>
                   <Select
@@ -199,7 +199,7 @@ const SelectBox: React.FC<HospitalSelectBoxProps> = (props) => {
         </Collapse>
 
         {collapsed && ( //when collapsed, transfrom into a box that contains the 2 buttons
-        <Box pos="absolute" bottom="1rem" left={0} right={0}>
+        <Box pos="absolute" bottom=".5rem" left={0} right={0}>
 
             <Box mx="auto" w="fit-content"> {/* force this to be on the center*/}
             <Button onClick={() => setCollapsed(false)}>
