@@ -20,8 +20,8 @@ const TTSButton: React.FC<TTSButtonProps> = ({ text }) => {
             window.speechSynthesis.cancel();
             setIsSpeaking(false);
         } else {
-            // changing to be used
-            const utterance = new SpeechSynthesisUtterance(text);
+            // changing to be
+            const utterance = new SpeechSynthesisUtterance(text.join('....'));
             utterance.lang = 'en-US';
             utterance.rate = 0.75;
             utterance.pitch = 0.5;
