@@ -83,6 +83,7 @@ const RAW_RUNTIME_STATE =
           ["papaparse", "npm:5.5.2"],\
           ["prettier", "npm:3.5.3"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["react-icons", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:5.5.0"],\
           ["tailwindcss", "npm:4.1.0"],\
           ["three", "npm:0.175.0"],\
           ["ts-config-custom", "workspace:configs/ts-config-custom"],\
@@ -8314,6 +8315,28 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["react-icons", [\
+      ["npm:5.5.0", {\
+        "packageLocation": "./.yarn/cache/react-icons-npm-5.5.0-906730a3cf-a24309bfc9.zip/node_modules/react-icons/",\
+        "packageDependencies": [\
+          ["react-icons", "npm:5.5.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:5.5.0", {\
+        "packageLocation": "./.yarn/__virtual__/react-icons-virtual-bb8f2d5a7e/0/cache/react-icons-npm-5.5.0-906730a3cf-a24309bfc9.zip/node_modules/react-icons/",\
+        "packageDependencies": [\
+          ["react-icons", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:5.5.0"],\
+          ["@types/react", null],\
+          ["react", null]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["react-is", [\
       ["npm:16.13.1", {\
         "packageLocation": "./.yarn/cache/react-is-npm-16.13.1-a9b9382b4f-33977da7a5.zip/node_modules/react-is/",\
@@ -9139,6 +9162,7 @@ const RAW_RUNTIME_STATE =
           ["papaparse", "npm:5.5.2"],\
           ["prettier", "npm:3.5.3"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["react-icons", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:5.5.0"],\
           ["tailwindcss", "npm:4.1.0"],\
           ["three", "npm:0.175.0"],\
           ["ts-config-custom", "workspace:configs/ts-config-custom"],\

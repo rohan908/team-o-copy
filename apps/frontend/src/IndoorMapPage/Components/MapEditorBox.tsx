@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     ActionIcon,
     Tooltip,
@@ -25,14 +25,21 @@ const MapEditorBox = ({ nodeData }) => {
     const mapProps = useContext(MapContext);
     const allNodes = useAllNodesContext();
     const [saveLabel, setSaveLabel] = useState(false);
+    const [nodeInfoOpen, setNodeInfoOpen] = useState(false);
 
     const SaveAllNodes = async () => {
         await axios.post('api/directory/import/direct', { data: allNodes });
         setSaveLabel(true);
         setTimeout(() => setSaveLabel(false), 1500);
     };
-
-    const nodeInfoOpen = !!nodeData;
+    console.log(nodeData);
+    useEffect(() => {
+        if (nodeData) {
+            setNodeInfoOpen(true);
+        } else {
+            setNodeInfoOpen(false);
+        }
+    }, [nodeData]);
 
     return (
         <Box pos="fixed" top="60%" left={20} style={{ transform: 'translateY(-50%)', zIndex: 999 }}>
@@ -71,7 +78,7 @@ const MapEditorBox = ({ nodeData }) => {
                     </ActionIcon>
                 </Tooltip>
 
-                <Tooltip label="Add Edge" position="right">
+                <Tooltip label="Add or Remove Edge" position="right">
                     <ActionIcon
                         size="xl"
                         variant="filled"
