@@ -5,6 +5,7 @@ import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useTimeline } from './TimeLineContext.tsx';
+import { useChestnutHillContext, usePatriotContext } from '../contexts/DirectoryContext.tsx';
 
 export const hospitalOptions = [
     { value: '20 Patriot Pl', label: '20 Patriot Pl' },
@@ -13,12 +14,41 @@ export const hospitalOptions = [
 ];
 
 export function GmapsDestinationSelector() {
-    const NavSelection = useNavSelectionContext();
-
-    const { setSelectedHospital } = useTimeline();
+    const { setSelectedHospital, setDirectoryOptions } = useTimeline();
 
     const theme = useMantineTheme();
 
+    const Patriot = usePatriotContext();
+    const Chestnut = useChestnutHillContext();
+
+    const NavSelection = useNavSelectionContext();
+
+    const MapDepartment = (department: DirectoryNodeItem[]) =>
+        department.map((department: DirectoryNodeItem) => ({
+            value: department.name,
+            label: department.name,
+        }));
+
+    const setHospitalLocation = (hospital: string | null) => {
+        setSelectedHospital(hospital);
+        if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
+            setDirectoryOptions(MapDepartment(Patriot));
+        } else if (hospital == 'Chestnut Hill') {
+            setDirectoryOptions(MapDepartment(Chestnut));
+        } else {
+            setDirectoryOptions([]);
+        }
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: hospital,
+                Department: null,
+                AlgorithmName: 'BFS',
+            } as NavSelectionItem,
+        });
+        //setSelectedHospitalName(hospital);
+        //setSelectedDepartment(null);
+    };
     return (
         <Autocomplete
             placeholder="Hospital Destination"
@@ -29,7 +59,7 @@ export function GmapsDestinationSelector() {
                 <IconMapPinFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
             data={hospitalOptions}
-            onChange={setSelectedHospital}
+            onChange={setHospitalLocation}
             radius="sm"
             mb="sm"
             size="xs"

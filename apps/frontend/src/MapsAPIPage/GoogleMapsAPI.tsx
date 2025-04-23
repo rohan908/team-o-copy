@@ -43,17 +43,17 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
         directionsService.route(
             {
                 origin: userCoordinates,
-                destination: hospitalCoordinates(selectedHospital),
+                destination: hospitalCoordinates(selectedHospital)!,
                 travelMode: travelMode ?? google.maps.TravelMode.DRIVING,
             },
             (result, status) => {
                 if (status === google.maps.DirectionsStatus.OK && directionsRendererRef.current) {
                     //make
                     directionsRendererRef.current.setDirections(result);
-                    const newSteps = result.routes[0].legs[0].steps.map((step) => ({
+                    const newSteps = result!.routes[0].legs[0].steps.map((step) => ({
                         instruction: step.instructions,
-                        distance: step.distance.text,
-                        duration: step.duration.text,
+                        distance: step.distance!.text,
+                        duration: step.duration!.text,
                     }));
                     if (onStepsUpdate) {
                         onStepsUpdate(newSteps);
