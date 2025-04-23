@@ -47,7 +47,7 @@ const HoverButton: React.FC<HoverButtonProps> = ({ icon, labelOne, labelTwo, onC
                 width: 250,
                 height: 220,
                 padding: '0.5rem',
-                border: hovered ? '10px solid' + "#1C43A7" : '10px solid' + "#5A83DB",
+                border: hovered ? '10px solid' + theme.colors.primaryBlues[8] : '10px solid' + theme.colors.secondaryBlues[7],
                 transform: hovered
                     ? `rotateX(${xRotation(250)}deg) rotateY(${yRotation(300)}deg) scale(1.1)`
                     : 'scale(1)',
@@ -60,7 +60,7 @@ const HoverButton: React.FC<HoverButtonProps> = ({ icon, labelOne, labelTwo, onC
                 style={{
                     padding: '1.5rem',
                     // the one hard-coded color from style guide, not in mantine yet
-                    backgroundColor: hovered ? '#1C43A7' : "#5A83DB", //this hardcoded color is going to fuck us up later but today is tommarrows yesterday
+                    backgroundColor: hovered ? theme.colors.primaryBlues[8] : theme.colors.secondaryBlues[7], //this hardcoded color is going to fuck us up later but today is tommarrows yesterday
                     transition: 'all 0.25s linear',
                 }}
             >
