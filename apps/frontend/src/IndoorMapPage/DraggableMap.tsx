@@ -84,6 +84,7 @@ export function DraggableMap() {
         const path = findPath(firstNodeId, lastNodeId, algo).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
             // For each node id in the path
+
             for (const id of ids) {
                 // Get the full node from the ID
                 const node = getNode(id, allNodes);
@@ -172,9 +173,9 @@ export function DraggableMap() {
         if (selectedHospitalName === '20 Patriot Pl' || selectedHospitalName === '22 Patriot Pl') {
             return 1; // Node 1 for Patriot Place
         } else if (selectedHospitalName === 'Chestnut Hill') {
-            return 100; // Node 100 for Chestnut Hill
+            return 117; // Node 100 for Chestnut Hill
         } else if (selectedHospitalName === 'Faulkner Hospital') {
-            return 200;
+            return 145;
         }
         return null;
     };
@@ -216,6 +217,13 @@ export function DraggableMap() {
                     { x: node2.x, y: node2.y }
                 )
             );
+        } else if (node1.floor === node2.floor && node1.floor === 5) {
+          scenesRef.current[4].add(
+            animationRef.current.createEdge(
+              { x: node1.x, y: node1.y },
+              { x: node2.x, y: node2.y }
+            )
+          );
         }
     };
 

@@ -62,6 +62,10 @@ type PathFindingResponse = PathFindingSuccessResponse | PathFindingErrorResponse
 
 type getNodeResponse = getNodeSuccessResponse | getNodeErrorResponse;
 
+export async function reinitialzeNavigationService() {
+    await navigationService.reinitialize();
+}
+
 // Use RequestHandler with generics for proper typing
 const findPathHandler: RequestHandler<
     {}, // Route parameters
