@@ -54,14 +54,14 @@ export function Routing() {
                                 />
                             }
                         />
-                        <Route path="/submission" element={<Display />} />
+                        <Route path="/submission" element={<ProtectedRoute Route={<Display/>} />} />
                         <Route path="directory" element={<Directory />} />
                         <Route path="/directory/:topic" element={<DirectoryLocation />} />
                         <Route path="/service-request-page" element={<ProtectedRoute Route={<ServiceRequestPage />} />} />
-                        <Route path="/language-form" element={<Language />} />
-                        <Route path="/sanitation-form" element={<Sanitation />} />
-                        <Route path="/maintenance-form" element={<Maintenance />} />
-                        <Route path="/security-form" element={<Security />} />
+                        <Route path="/language-form" element={<ProtectedRoute Route={<Language/>} />} />
+                        <Route path="/sanitation-form" element={<ProtectedRoute Route={<Sanitation/>} />} />
+                        <Route path="/maintenance-form" element={<ProtectedRoute Route={<Maintenance/>} />} />
+                        <Route path="/security-form" element={<ProtectedRoute Route={<Security/>} />} />
 
                         <Route
                             path="/IndoorMapPage"
@@ -79,7 +79,7 @@ export function Routing() {
                         <Route path="/HomePage/HomePage" element={<HomePage />} />
                         <Route
                             path="/language-request-history"
-                            element={<LanguageRequestHistory />}
+                            element={<ProtectedRoute Route={<LanguageRequestHistory/>} />}
                         />
                     </Route>
                 </Routes>
