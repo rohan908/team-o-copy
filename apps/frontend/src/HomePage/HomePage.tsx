@@ -21,6 +21,7 @@ export function HomePage() {
         setTravelMode,
         setDepartment,
         setSelectedService,
+        setSelectedAlgorithm,
     } = useTimeline();
 
     const { isLoaded } = useJsApiLoader({
@@ -47,8 +48,9 @@ export function HomePage() {
         setUserCoordinates(null);
         if (isLoaded) setTravelMode(google.maps.TravelMode.DRIVING);
         else setTravelMode(null);
-        setDepartment('');
         setSelectedService('');
+        setDepartment(null);
+        setSelectedAlgorithm(null);
         clearNavMap();
     }, []);
 

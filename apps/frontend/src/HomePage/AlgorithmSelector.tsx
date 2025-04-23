@@ -16,7 +16,7 @@ const algoOptions = [
 
 export function AlgorithmSelector() {
     const theme = useMantineTheme();
-    const { setSelectedAlgorithm, selectedHospital, department } = useTimeline();
+    const { setSelectedAlgorithm, selectedHospital, department, selectedAlgorithm } = useTimeline();
     const NavSelection = useNavSelectionContext();
 
     const setSelectedAlgo = (algo: string | null) => {
@@ -43,6 +43,7 @@ export function AlgorithmSelector() {
             radius="sm"
             mb="sm"
             size="xs"
+            value={selectedAlgorithm ?? ''}
             onChange={setSelectedAlgo}
             disabled={!selectedHospital || !department}
             w={{ xl: '350px', lg: '300px', sm: '100%' }}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Box, useMantineTheme, SegmentedControl } from '@mantine/core';
+import {Box, useMantineTheme, SegmentedControl, Flex} from '@mantine/core';
 import {MantineProvider} from '@mantine/core';
 
 interface FloorSwitchBoxProps {
@@ -20,78 +20,93 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
   if (building === '22 Patriot Pl' || building == '20 Patriot Pl') {
     return (
       <Box
-        bg="themeGold.5" pos = "fixed" left = "93%" bottom = "2%"
+        bg="#1C43A7" pos = "fixed" left = "93%" bottom = "5%"
+        m="3px"
         style={{
+          borderRadius: "30px",
           zIndex: 999,
           transition: 'all 0.4s ease-in-out',
+          boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
         }}
       >
-        <SegmentedControl
-          orientation="vertical"
-          fullWidth
-          size="md"
-          color="#FCB024"
-          value={floor.toString()}
-          onChange={(value) => setFloor(parseInt(value))}
-          data={[
-            { label: '4', value: '4' },
-            { label: '3', value: '3' },
-            { label: '1', value: '1' },
-          ]}
-          styles={{
-            root: {
-              borderRadius: 10,
-              backgroundColor: '#164EC5',
-            },
-            label: {
-              fontWeight: 600,
-              color: 'white',
-            },
-            indicator: {
-              borderRadius: 5,
-            },
-          }}
-        />
+        <Box m="4px" p="2px" bg="blueBase.6" style={{ borderRadius: "30px" }}>
+          <SegmentedControl
+            orientation="vertical"
+            withItemsBorders={false}
+            size="14px"
+            m="1px"
+            color="blueBase.6"
+            value={floor.toString()}
+            onChange={(value) => setFloor(parseInt(value))}
+            data={[
+              { label: 'F4', value: '4' },
+              { label: 'F3', value: '3' },
+              { label: 'F1', value: '1' },
+            ]}
+            styles={{
+              root: {
+                borderRadius: 30,
+                backgroundColor: '#1C43A7',
+              },
+              label: {
+                fontWeight: 600,
+                color: 'white',
+              },
+              indicator: {
+                borderRadius: 30,
+              },
+            }}
+          />
+        </Box>
       </Box>
     );
   } else if (building === 'admin'){
     return (
       <Box
-    pos = "fixed"
-    left = "93%"
-    bottom = "2%"
-    style={{
-      zIndex: 999,
-      transition: 'all 0.4s ease-in-out',
-    }}
-  >
-        <SegmentedControl
-          orientation="vertical"
-          size="md"
-          color = "#FCB024"
-          value={floor.toString()}
-          onChange={(value) => setFloor(parseInt(value))}
-          data={[
-            { label: 'FK', value: '6'},
-            { label: 'CH', value: '5'},
-            { label: '4', value: '4' },
-            { label: '3', value: '3' },
-            { label: '1', value: '1' },
-          ]}
-          styles = {{
-            root: {
-              borderRadius: 30,
-              backgroundColor: '#164EC5',
-            },
-            label: {
-              fontWeight: 600,
-              color: 'white',
-            },
-            indicator: {
-              borderRadius: 50,
-            }
-            }}
-        />
+        bg="#1C43A7" pos = "fixed" left = "93%" bottom = "2%"
+        m="3px"
+        w="5%"
+        style={{
+          borderRadius: "30px",
+          zIndex: 999,
+          transition: 'all 0.4s ease-in-out',
+          boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
+        }}
+      >
+        <Flex m="3px" p="2px" bg="blueBase.6" justify={"center"} style={{ borderRadius: "30px" }}>
+          <SegmentedControl
+            orientation="vertical"
+            withItemsBorders={false}
+            w={"100%"}
+            size="14px"
+            m="1px"
+            color="blueBase.6"
+            value={floor.toString()}
+            onChange={(value) => setFloor(parseInt(value))}
+            data={[
+              { label: 'FK', value: '6'},
+              { label: 'CH', value: '5'},
+              { label: 'P4', value: '4' },
+              { label: 'P3', value: '3' },
+              { label: 'P1', value: '1' },
+            ]}
+            styles = {{
+              root: {
+                borderRadius: 30,
+                backgroundColor: '#1C43A7',
+              },
+              label: {
+                fontWeight: 600,
+                textSize: '14px',
+                textAlign: "center",
+                color: 'white',
+              },
+              indicator: {
+                borderRadius: 30,
+              }
+              }}
+          />
+        </Flex>
       </Box>
     );
   }

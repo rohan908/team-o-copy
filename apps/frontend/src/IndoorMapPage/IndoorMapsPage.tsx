@@ -7,10 +7,10 @@ import { AlgorithmSelector } from '../HomePage/AlgorithmSelector.tsx';
 
 export function IndoorMapsPage() {
     return (
-        <Flex direction="row" h="100vh" w="100vw">
-            <Box w={320} mt={60}>
+        <Flex direction="row" h="100vh" w="100vw" bg="#EBF2FF">
+            <Box w={320} mt={60} bg="#EBF2FF">
                 {/* Sidebar Panel */}
-                <Title order={1} fz={'xl'} pt={'5px'} mb={'sm'} ta={'center'} c={'#0E3B99'}>
+                <Title order={1} fz={'xl'} pt={'8px'} mb={'sm'} ta={'center'} c={'#0E3B99'}>
                     Navigate to Hospital
                 </Title>
                 <Stack w={320}>
