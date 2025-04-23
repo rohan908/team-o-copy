@@ -3,12 +3,14 @@ import { CustomTimeline } from './CustomTimeline.tsx';
 import { useState } from 'react';
 import { ContentSwitcher } from './ContentSwitcher.tsx';
 import { TimelineProvider } from './TimeLineContext.tsx';
+import { DisclaimerPopup } from './Disclaimer/DisclaimerPopup.tsx';
 
 export function HomePage() {
     const theme = useMantineTheme();
 
     return (
         <TimelineProvider>
+            <DisclaimerPopup />
             <Flex h="100%" justify="center" align="center" bg={theme.colors.terquAccet[1]}>
                 <Grid h="100%" gutter="xl" justify="center" align="stretch">
                     <Grid.Col span={6} p="xl">
