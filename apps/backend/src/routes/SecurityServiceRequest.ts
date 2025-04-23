@@ -13,8 +13,8 @@ router.post('/', async (req: Request, res: Response) => {
         // For inputting a request form, adds entry
         const {
             security,
-            selectedDate,
-            selectedTime,
+            date,
+            time,
             department,
             description,
             priority,
@@ -22,13 +22,12 @@ router.post('/', async (req: Request, res: Response) => {
             hospital,
             employeeName,
         } = req.body;
-
         // creating request to get data from frontend
         const request = await PrismaClient.securityServiceRequest.create({
             data: {
                 security: security,
-                date: selectedDate,
-                time: convertTo24Hour(selectedTime),
+                date,
+                time: convertTo24Hour(time),
                 department,
                 description,
                 employeeName,

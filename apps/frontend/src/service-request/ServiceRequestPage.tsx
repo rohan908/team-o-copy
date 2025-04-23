@@ -7,58 +7,69 @@ import {
     IconBellExclamation,
 } from '@tabler/icons-react';
 import HoverButton from './components/HoverButton.tsx';
-import { useNavigate } from 'react-router-dom';
-import React from 'react';
+import React, { useState } from 'react';
+import LanguageInterpreterSR from './LanguageInterpreterSR.tsx';
+import SecuritySR from './SecuritySR.tsx';
+import SanitationSR from './SanitationSR.tsx';
+import MaintenanceSR from './MaintenanceSR.tsx';
 
 type ServiceRequestItem = {
     labelOne: string;
     labelTwo: string;
     icon: React.ReactNode;
-    link: string;
+    form?: () => React.ReactNode;
     disabled?: boolean | true;
 };
 
-export const ServiceRequestItems: ServiceRequestItem[] = [
-    {
-        labelOne: 'Interpreter',
-        labelTwo: 'Request',
-        icon: <IconLanguage size={120} />,
-        link: '/language-form' },
-    {
-        labelOne: 'Security',
-        labelTwo: 'Request',
-        icon: <IconShieldHalf size={120} />,
-        link: '/security-form' },
-    {
-        labelOne: 'Sanitation',
-        labelTwo: 'Request',
-        icon: <IconTrash stroke={2} size={120} />,
-        link: '/sanitation-form',
-    },
-    {
-        labelOne: 'Maintenance',
-        labelTwo: 'Request',
-        icon: <IconBellExclamation stroke={2} size={120} />,
-        link: '/maintenance-form',
-    },
-    {
-        labelOne: 'Type 5',
-        labelTwo: '',
-        icon: <IconExclamationCircleFilled size={120} />,
-        link: "'/'",
-        disabled: true,
-    },
-    {
-        labelOne: 'Type 6',
-        labelTwo: '',
-        icon: <IconExclamationCircleFilled size={120} />,
-        link: "'/'",
-        disabled: true,
-    },
-];
-
 export function ServiceRequestPage() {
-    const navigate = useNavigate();
+    const [activeFormIndex, setActiveFormIndex] = useState<number | null>(null);
+
+    const ServiceRequestItems: ServiceRequestItem[] = [
+        {
+            labelOne: 'Interpreter',
+            labelTwo: 'Request',
+            icon: <IconLanguage size={120} />,
+            form: () => <LanguageInterpreterSR onBack={() => setActiveFormIndex(null)} />,
+        },
+        {
+            labelOne: 'Security',
+            labelTwo: 'Request',
+            icon: <IconShieldHalf size={120} />,
+            form: () => <SecuritySR onBack={() => setActiveFormIndex(null)} />,
+        },
+        {
+            labelOne: 'Sanitation',
+            labelTwo: 'Request',
+            icon: <IconTrash stroke={2} size={120} />,
+            form: () => <SanitationSR onBack={() => setActiveFormIndex(null)} />,
+        },
+        {
+            labelOne: 'Maintenance',
+            labelTwo: 'Request',
+            icon: <IconBellExclamation stroke={2} size={120} />,
+            form: () => <MaintenanceSR onBack={() => setActiveFormIndex(null)} />,
+        },
+        {
+            labelOne: 'Type 5',
+            labelTwo: '',
+            icon: <IconExclamationCircleFilled size={120} />,
+            disabled: true,
+        },
+        {
+            labelOne: 'Type 6',
+            labelTwo: '',
+            icon: <IconExclamationCircleFilled size={120} />,
+            disabled: true,
+        },
+    ];
+    // rendering the form to replace the page
+    if (activeFormIndex !== null) {
+        const item = ServiceRequestItems[activeFormIndex];
+        if (item?.form) {
+            const FormComponent = item.form;
+            return <>{FormComponent()}</>;
+        }
+    }
     return (
         <div>
             <Box py="xl" bg="#EBF2FF">
@@ -75,7 +86,7 @@ export function ServiceRequestPage() {
                                     icon={item.icon}
                                     labelOne={item.labelOne}
                                     labelTwo={item.labelTwo}
-                                    onClick={() => navigate(item.link)}
+                                    onClick={() => setActiveFormIndex(index)}
                                     disabled={item.disabled}
                                 />
                             ))}

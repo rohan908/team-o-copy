@@ -10,7 +10,8 @@ interface GoogleMapsAPIProps {
 
 const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     const onStepsUpdate = props.onStepsUpdate;
-    const { selectedHospital, userCoordinates, travelMode, mapRef, directionsRendererRef } = useTimeline();
+    const { selectedHospital, userCoordinates, travelMode, mapRef, directionsRendererRef } =
+        useTimeline();
     console.log(selectedHospital + ' ' + userCoordinates + ' ' + travelMode);
 
     function hospitalCoordinates(hospital: string | null): google.maps.LatLngLiteral | null {
@@ -34,14 +35,13 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     useEffect(() => {
         if (!userCoordinates || !selectedHospital || !travelMode || !mapRef.current) {
             if (directionsRendererRef.current) {
-                directionsRendererRef.current.setDirections({routes: []}); // Clear old route, if directions aren't filled completely
+                directionsRendererRef.current.setDirections({ routes: [] }); // Clear old route, if directions aren't filled completely
             }
             return;
         }
         const directionsService = new google.maps.DirectionsService();
         if (!directionsRendererRef.current) {
             directionsRendererRef.current = new google.maps.DirectionsRenderer();
-                
         }
         directionsRendererRef.current.setMap(mapRef.current);
         directionsService.route(
@@ -67,7 +67,13 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
                 }
             }
         );
-    }, [userCoordinates, selectedHospital, travelMode, mapRef.current, directionsRendererRef.current]);
+    }, [
+        userCoordinates,
+        selectedHospital,
+        travelMode,
+        mapRef.current,
+        directionsRendererRef.current,
+    ]);
     return (
         <>
             <Box pos="relative" w="100%" h="100%">
@@ -82,7 +88,7 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
                         fullscreenControl: false,
                         disableDefaultUI: true,
                         mapTypeId: 'satellite',
-                        mapTypeControl: true,
+                        mapTypeControl: false,
                     }}
                 />
             </Box>

@@ -1,123 +1,56 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Flex, Title, Paper, Box } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import RequestForm, { RequestData } from './RequestForm.tsx';
+import LanguageSelect from './components/LanguageSelect.tsx';
 import ISO6391 from 'iso-639-1';
-import { useLanguageRequestContext } from '../contexts/RequestContext.tsx';
 
-import TimeEntry from './components/TimeEntry';
-import DateInputForm from './components/DateEntry';
-import RequestDescription from './components/RequestDescription';
-import LanguageSelect from './components/LanguageSelect';
-import HospitalSelect from './components/HospitalEntry.tsx';
-import PriorityButtons from './components/PriorityButtons.tsx';
-import StatusSelect from './components/StatusSelect.tsx';
-import NameEntry from './components/NameEntry.tsx';
-import DepartmentSelect from './components/DepartmentSelect.tsx';
-import {
-    ChestnutHill,
-    Patriot20,
-    Patriot22,
-    HospitalDepartment,
-} from '../directory/components/directorydata';
+const initialValues: RequestData = {
+    employeeName: '',
+    language: '',
+    hospital: '',
+    department: '',
+    date: '',
+    time: '',
+    priority: '',
+    status: '',
+    description: '',
+};
 
-interface RequestData {
-    employeeName: string;
-    language: string;
-    hospital: string;
-    department: string;
-    date: string;
-    time: string;
-    priority: string;
-    status: string;
-    description: string;
-}
-
-function Language() {
+function Language({ onBack }: { onBack: () => void }) {
     const navigate = useNavigate();
-    const [departmentOptions, setDepartmentOptions] = useState<HospitalDepartment[]>([]);
-
-    const form = useForm<RequestData>({
-        initialValues: {
-            language: '',
-            date: '',
-            department: '',
-            time: '',
-            employeeName: '',
-            hospital: '',
-            priority: '',
-            status: '',
-            description: '',
-        },
-    });
-    // logic for dependant department slection
-    const handleHospitalChange = (hospital: string | null) => {
-        form.setFieldValue('hospital', hospital || '');
-
-        switch (hospital) {
-            case 'Chestnut Hill':
-                setDepartmentOptions(ChestnutHill);
-                break;
-            case '20 Patriot Place':
-                setDepartmentOptions(Patriot20);
-                break;
-            case '22 Patriot Place':
-                setDepartmentOptions(Patriot22);
-                break;
-            default:
-                setDepartmentOptions([]);
-        }
-
-        form.setFieldValue('department', '');
-    };
-    const langREQ = useLanguageRequestContext();
-    console.log('TESTER CODE FOR CONTEXT!!!!');
-    console.log(langREQ);
-
-    const handleSubmit = async () => {
-        const rawData = form.values;
-
-        // truncating the time so just the date gets passed in
-        const RequestData = {
+    const handleSubmit = async (rawData: RequestData) => {
+        // truncating the date object to remove the time becuase that is default with date object
+        // turning the language key into the language label so it is clear what is being submitted
+        const requestData = {
             ...rawData,
             date: new Date(rawData.date).toISOString().split('T')[0],
+            language:
+                rawData.language === 'asl'
+                    ? 'ASL (American Sign Language)'
+                    : ISO6391.getName(rawData.language),
         };
-        // turning the language key into the language label so it is clear what is being submitted
-        const label =
-            RequestData.language === 'asl'
-                ? 'ASL (American Sign Language)'
-                : ISO6391.getName(RequestData.language);
 
         try {
             const response = await fetch('/api/languageSR', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    label,
-                    selectedDate: RequestData.date,
-                    selectedTime: RequestData.time,
-                    department: RequestData.department,
-                    priority: RequestData.priority,
-                    employeeName: RequestData.employeeName,
-                    status: RequestData.status,
-                    hospital: RequestData.hospital,
-                    description: RequestData.description,
-                }),
+                body: JSON.stringify(requestData),
             });
 
             if (response.ok) {
                 navigate('/submission', {
                     state: {
                         requestData: [
-                            { title: 'Name', value: RequestData.employeeName },
-                            { title: 'Language', value: label },
-                            { title: 'Hospital', value: RequestData.hospital },
-                            { title: 'Department', value: RequestData.department },
-                            { title: 'Date', value: RequestData.date },
-                            { title: 'Time', value: RequestData.time },
-                            { title: 'Priority', value: RequestData.priority },
-                            { title: 'Status', value: RequestData.status },
-                            { title: 'Details', value: RequestData.description },
+                            // need title for nicer looking display page
+                            { title: 'Name', value: requestData.employeeName },
+                            { title: 'Language', value: requestData.language },
+                            { title: 'Hospital', value: requestData.hospital },
+                            { title: 'Department', value: requestData.department },
+                            { title: 'Date', value: requestData.date },
+                            { title: 'Time', value: requestData.time },
+                            { title: 'Priority', value: requestData.priority },
+                            { title: 'Status', value: requestData.status },
+                            { title: 'Details', value: requestData.description },
                         ],
                     },
                 });
@@ -128,70 +61,15 @@ function Language() {
     };
 
     return (
-        <Flex className="min-h-screen w-full" bg="#EBF2FF" justify="center" align="center" p="xl">
-            <Paper bg="#EBF2FF" p="xl" radius="8px" w="65%">
-                <form onSubmit={form.onSubmit(handleSubmit)}>
-                  <Title
-                    order={2}
-                    c="#285CC6"
-                    fz={'xl'}
-                    fw={400}
-                    ta={"center"}
-                    w={'auto'}
-                    mb={"md"}
-                  >
-                    Interpreter Request Form
-                  </Title>
-                    <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
-                        <Box flex="1" miw="300px">
-                            {/*< column 1!!!*/}
-                            <NameEntry required {...form.getInputProps('employeeName')} />
-                            <HospitalSelect
-                                required
-                                value={form.values.hospital}
-                                onChange={handleHospitalChange}
-                            />
-                            <DepartmentSelect
-                                required
-                                departments={departmentOptions.map(
-                                    (department) => department.title
-                                )}
-                                {...form.getInputProps('department')}
-                            />
-                            <LanguageSelect required {...form.getInputProps('language')} />
-                        </Box>
-
-                        <Box flex="1" miw="300px">
-                            {/* column 2!!!*/}
-                            <DateInputForm required {...form.getInputProps('date')} />
-                            <TimeEntry required {...form.getInputProps('time')} />
-                            <PriorityButtons {...form.getInputProps('priority')} />
-                            <StatusSelect required {...form.getInputProps('status')} />
-                        </Box>
-                    </Flex>
-
-                    <Box mt="md">
-                        <RequestDescription {...form.getInputProps('description')} />
-                    </Box>
-
-                    <Flex mt="xl" justify="left" gap="md">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            color="#1C43A7"
-                            style={{ width: '200px' }}
-                            onClick={() => form.reset()}
-                        >
-                            Clear Form
-                        </Button>
-
-                        <Button type="submit" color="#1C43A7" style={{ width: '200px' }}>
-                            Submit Request
-                        </Button>
-                    </Flex>
-                </form>
-            </Paper>
-        </Flex>
+        <RequestForm
+            handleSubmit={handleSubmit}
+            newInitialValues={initialValues}
+            contributors="Logan Winters"
+            formLabel="Language Interpreter Request"
+            onBack={onBack}
+        >
+            {(form) => <LanguageSelect {...form.getInputProps('language')} />}
+        </RequestForm>
     );
 }
 
