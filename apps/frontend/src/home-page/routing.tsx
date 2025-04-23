@@ -22,7 +22,9 @@ import { LogInPage } from './log-in-page.tsx';
 import { NodeDirectory } from '../NodeDirectoryPage/NodeDirectory.tsx';
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import Sanitation from '../service-request/SanitationSR.tsx';
-import Security from "../service-request/SecuritySR.tsx";
+import NotFound from "../404Page.tsx";
+import Security from '../service-request/SecuritySR.tsx';
+import AdminPageV2 from '../AdminPage/AdminPageNewUI.tsx';
 import { TimelineProvider } from '../HomePage/TimeLineContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -38,8 +40,7 @@ export function Routing() {
 
     return (
         <>
-          <TimelineProvider>
-          <BrowserRouter>
+            <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<NavBar />}>
                         <Route index element={<HomePage />} />
@@ -62,6 +63,7 @@ export function Routing() {
                         <Route path="/sanitation-form" element={<ProtectedRoute Route={<Sanitation/>} />} />
                         <Route path="/maintenance-form" element={<ProtectedRoute Route={<Maintenance/>} />} />
                         <Route path="/security-form" element={<ProtectedRoute Route={<Security/>} />} />
+                        <Route path="/*" element={<NotFound/>} />
 
                         <Route
                             path="/IndoorMapPage"
@@ -75,7 +77,7 @@ export function Routing() {
                             }
                         />
                         <Route path="/map-editor" element={<ProtectedRoute Route={<MapEditor/>} />} />
-                        <Route path="/admin-page" element={<ProtectedRoute Route={<AdminPage />} />} />
+                        <Route path="/admin-page" element={<ProtectedRoute Route={<AdminPageV2 />} />} />
                         <Route path="/HomePage/HomePage" element={<HomePage />} />
                         <Route
                             path="/language-request-history"
@@ -84,8 +86,6 @@ export function Routing() {
                     </Route>
                 </Routes>
             </BrowserRouter>
-          </TimelineProvider>
-
         </>
     );
 }

@@ -1,5 +1,5 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
-import { IconBuilding, IconChevronDown, IconHospital } from '@tabler/icons-react';
+import { IconBuilding, IconChevronDown, IconRouteSquare } from '@tabler/icons-react';
 
 //need to change this to actual api call autocomplete later
 const hospitalOptions = [
@@ -8,15 +8,17 @@ const hospitalOptions = [
     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
 ];
 
-export function DepartmentSelector({ props }: { props: any }) {
+export function AlgorithmSelector({ props }: { props: any }) {
     const theme = useMantineTheme();
     return (
         <Autocomplete
-            placeholder="Select a Department"
+            placeholder="Select an Algorithm"
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={<IconHospital size="16" style={{ color: theme.colors.primaryBlues[8] }} />}
+            leftSection={
+                <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            }
             data={hospitalOptions}
             nothingFoundMessage="Location Not Available"
             radius="sm"
