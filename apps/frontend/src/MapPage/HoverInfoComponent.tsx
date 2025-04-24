@@ -31,20 +31,20 @@ const HoverInfoComponent = () => {
     useEffect(() => {
         const imageSources = {
             normal: {
-                imaging: 'MapImages/ImagingSuiteAlphaChannel.png',
-                pharmacy: 'MapImages/Pharmacy.png',
-                phlebotomy: 'MapImages/Phlebotomy.png',
-                specClinic: 'MapImages/SpecClinic.png',
-                urgentCare: 'MapImages/UrgentCare.png',
-                twentyTwo: 'MapImages/22PatFull.png',
+                imaging: 'public/MapImages/ImagingSuiteAlphaChannel.png',
+                pharmacy: 'public/MapImages/Pharmacy.png',
+                phlebotomy: 'public/MapImages/Phlebotomy.png',
+                specClinic: 'public/MapImages/SpecClinic.png',
+                urgentCare: 'public/MapImages/UrgentCare.png',
+                twentyTwo: 'public/MapImages/22PatFull.png',
             },
             dark: {
-                imaging: 'MapImages/ImagingDark.png',
-                pharmacy: 'MapImages/PharmacyDark.png',
-                phlebotomy: 'MapImages/PhleDark.png',
-                specClinic: 'MapImages/SpecDark.png',
-                urgentCare: 'MapImages/UrgentDark.png',
-                twentyTwo: 'MapImages/Darker22.png',
+                imaging: 'public/MapImages/ImagingDark.png',
+                pharmacy: 'public/MapImages/PharmacyDark.png',
+                phlebotomy: 'public/MapImages/PhleDark.png',
+                specClinic: 'public/MapImages/SpecDark.png',
+                urgentCare: 'public/MapImages/UrgentDark.png',
+                twentyTwo: 'public/MapImages/Darker22.png',
             },
         };
 
@@ -118,22 +118,22 @@ const HoverInfoComponent = () => {
             const image = new Image();
             switch (ref) {
                 case canvasRefImaging:
-                    image.src = 'MapImages/ImagingSuiteAlphaChannel.png';
+                    image.src = 'public/MapImages/ImagingSuiteAlphaChannel.png';
                     break;
                 case canvasRefPharmacy:
-                    image.src = 'MapImages/Pharmacy.png';
+                    image.src = 'public/MapImages/Pharmacy.png';
                     break;
                 case canvasRefPhlebotomy:
-                    image.src = 'MapImages/Phlebotomy.png';
+                    image.src = 'public/MapImages/Phlebotomy.png';
                     break;
                 case canvasRefSpecClinic:
-                    image.src = 'MapImages/SpecClinic.png';
+                    image.src = 'public/MapImages/SpecClinic.png';
                     break;
                 case canvasRefUrgentCare:
-                    image.src = 'MapImages/UrgentCare.png';
+                    image.src = 'public/MapImages/UrgentCare.png';
                     break;
                 case canvasRef22:
-                    image.src = 'MapImages/22PatFull.png';
+                    image.src = 'public/MapImages/22PatFull.png';
                     break;
             }
 
@@ -383,7 +383,7 @@ const HoverInfoComponent = () => {
             </Box>
             <div className="mapContainer" ref={mapContainerRef}>
                 <img
-                    src="MapImages/Whole_Floor_PlanTurqoiseBackground.png"
+                    src="public/MapImages/Whole_Floor_PlanTurqoiseBackground.png"
                     alt="MainMapImage"
                     className="mainMapImage"
                 />
