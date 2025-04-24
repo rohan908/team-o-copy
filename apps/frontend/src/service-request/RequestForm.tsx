@@ -114,16 +114,16 @@ const RequestForm: React.FC<RequestDetails> = ({
                                 Back
                             </Button>
                         </Box>
-                        <Title order={2} ta="center" mb="md" fz="xl" c={"#285CC6"}>
+                        <Title order={2} ta="center" mb="md" fz="xl" c={'#285CC6'}>
                             {formLabel}
                         </Title>
-                        <Title mb="md" fz="xxxs" c={"#285CC6"}>
+                        <Title mb="md" fz="xxxs" c={'#285CC6'}>
                             {contributors}
                         </Title>
                     </Flex>
 
-                    <Flex align="stretch" gap="lg" wrap="wrap" mb="md">
-                        <Box flex="1" miw="275" mr="lg">
+                    <Flex align="stretch" gap="xl" wrap="wrap" mb="md">
+                        <Box flex="1" miw="275">
                             {/*< column 1!!!*/}
                             <NameEntry {...form.getInputProps('employeeName')} />
                             <HospitalSelect
@@ -138,7 +138,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                             {/*this is where I want any unique components to go*/}
                         </Box>
 
-                        <Box flex="1" miw="275" ml="lg">
+                        <Box flex="1" miw="275">
                             {/* column 2!!!*/}
                             <DateInputForm {...form.getInputProps('date')} />
                             <TimeEntry {...form.getInputProps('time')} />
