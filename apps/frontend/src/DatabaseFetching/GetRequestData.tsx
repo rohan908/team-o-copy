@@ -11,6 +11,7 @@ export async function fetchRequestData(requestName: string) {
 
         // returns data as a Promise !!
         return res;
+
     } catch (error) {
         console.error('Error fetching request table', error);
         return null;
