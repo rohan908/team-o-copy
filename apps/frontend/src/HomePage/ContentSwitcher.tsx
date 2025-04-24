@@ -12,7 +12,7 @@ export function ContentSwitcher() {
     const [steps, setSteps] = useState<Step[]>([]);
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: 'AIzaSyAfCGqkvzd-Aifefc3FOfP5kGbsnRrlCDM',
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
         // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
         libraries: ['places'], //required for location autocomplete in textbox
     });
@@ -27,17 +27,7 @@ export function ContentSwitcher() {
             case 1: //Indoor Nav
                 return <DraggableMap />;
             case 2: //Service Request
-                return (
-                    <ServiceRequestPage
-                        width={'80%'}
-                        marginRight={'10%'}
-                        height={'80vh'}
-                        cols={2}
-                        vSpacing={10}
-                        hSpacing={30}
-                        buttonHeight={150}
-                    />
-                );
+                return <ServiceRequestPage width={"80%"} marginRight={"10%"} height={"80vh"} cols={2} vSpacing={10} hSpacing={30} buttonHeight={150}/>;
         }
     };
     return (
