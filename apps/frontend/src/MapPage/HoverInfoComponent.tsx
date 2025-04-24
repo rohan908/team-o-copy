@@ -31,20 +31,20 @@ const HoverInfoComponent = () => {
     useEffect(() => {
         const imageSources = {
             normal: {
-                imaging: 'public/MapImages/ImagingSuiteAlphaChannel.png',
-                pharmacy: 'public/MapImages/Pharmacy.png',
-                phlebotomy: 'public/MapImages/Phlebotomy.png',
-                specClinic: 'public/MapImages/SpecClinic.png',
-                urgentCare: 'public/MapImages/UrgentCare.png',
-                twentyTwo: 'public/MapImages/22PatFull.png',
+                imaging: 'MapImages/ImagingSuiteAlphaChannel.png',
+                pharmacy: 'MapImages/Pharmacy.png',
+                phlebotomy: 'MapImages/Phlebotomy.png',
+                specClinic: 'MapImages/SpecClinic.png',
+                urgentCare: 'MapImages/UrgentCare.png',
+                twentyTwo: 'MapImages/22PatFull.png',
             },
             dark: {
-                imaging: 'public/MapImages/ImagingDark.png',
-                pharmacy: 'public/MapImages/PharmacyDark.png',
-                phlebotomy: 'public/MapImages/PhleDark.png',
-                specClinic: 'public/MapImages/SpecDark.png',
-                urgentCare: 'public/MapImages/UrgentDark.png',
-                twentyTwo: 'public/MapImages/Darker22.png',
+                imaging: 'MapImages/ImagingDark.png',
+                pharmacy: 'MapImages/PharmacyDark.png',
+                phlebotomy: 'MapImages/PhleDark.png',
+                specClinic: 'MapImages/SpecDark.png',
+                urgentCare: 'MapImages/UrgentDark.png',
+                twentyTwo: 'MapImages/Darker22.png',
             },
         };
 
@@ -118,22 +118,22 @@ const HoverInfoComponent = () => {
             const image = new Image();
             switch (ref) {
                 case canvasRefImaging:
-                    image.src = 'public/MapImages/ImagingSuiteAlphaChannel.png';
+                    image.src = 'MapImages/ImagingSuiteAlphaChannel.png';
                     break;
                 case canvasRefPharmacy:
-                    image.src = 'public/MapImages/Pharmacy.png';
+                    image.src = 'MapImages/Pharmacy.png';
                     break;
                 case canvasRefPhlebotomy:
-                    image.src = 'public/MapImages/Phlebotomy.png';
+                    image.src = 'MapImages/Phlebotomy.png';
                     break;
                 case canvasRefSpecClinic:
-                    image.src = 'public/MapImages/SpecClinic.png';
+                    image.src = 'MapImages/SpecClinic.png';
                     break;
                 case canvasRefUrgentCare:
-                    image.src = 'public/MapImages/UrgentCare.png';
+                    image.src = 'MapImages/UrgentCare.png';
                     break;
                 case canvasRef22:
-                    image.src = 'public/MapImages/22PatFull.png';
+                    image.src = 'MapImages/22PatFull.png';
                     break;
             }
 

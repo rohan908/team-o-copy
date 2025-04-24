@@ -105,13 +105,13 @@ export function NodeDirectory() {
     //In theory, this returns image tags based on what string is given. In practice, they aren't showing up in the icon slot, but neither is anything else.
     function mapTypesToIcons(type: string) {
         if (type.localeCompare('Elevator') === 0) {
-            return 'public/NodeDirectoryIcons/Elevator.png';
+            return 'NodeDirectoryIcons/Elevator.png';
         } else if (type.localeCompare('Hallway') === 0) {
-            return 'public/NodeDirectoryIcons/Hallway.png';
+            return 'NodeDirectoryIcons/Hallway.png';
         } else if (type.localeCompare('Room') === 0) {
-            return 'public/NodeDirectoryIcons/Room.png';
+            return 'NodeDirectoryIcons/Room.png';
         } else {
-            return 'public/NodeDirectoryIcons/Room.png';
+            return 'NodeDirectoryIcons/Room.png';
         }
     }
 
