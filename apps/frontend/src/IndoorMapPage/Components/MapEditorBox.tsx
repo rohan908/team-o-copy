@@ -167,7 +167,7 @@ const MapEditorBox = () => {
                             <Flex  direction="row" p="xs" gap="xs">
                             <NativeSelect
                                 size="sm"
-                                w={120}
+                                w={160}
                                 value={mapProps.currentNode?.nodeType || ''}
                                 onChange={(event) => mapProps.setCurrentNodeData({
                                   id: mapProps.currentNode.id,
@@ -190,34 +190,50 @@ const MapEditorBox = () => {
                                 ]}
                                 variant="filled"
                             />
-                              <Modal opened={openedEditMenu}
-                                     onClose={close}
-                                     title={"Edit Node"}
+                              <Modal opened={openedEditMenu} onClose={close} title={"Edit Node"} size={"auto"} yOffset={"15%"}
                                      overlayProps={{
                                 backgroundOpacity: 0.55,
                                 blur: 3,
                               }}>
-                                <Input
-                                  size="sm"
-                                  radius="xl"
-                                  w={120}
-                                  value={`${mapProps.currentNode?.name || ""}`}
-                                  variant="filled"
-                                  onChange={(event) => mapProps.setCurrentNodeData({
-                                    id: mapProps.currentNode.id,
-                                    x: mapProps.currentNode.x,
-                                    y: mapProps.currentNode.y,
-                                    floor: mapProps.currentNode.floor,
-                                    mapId: mapProps.currentNode.mapId,
-                                    name: event.currentTarget.value,
-                                    description: mapProps.currentNode.description,
-                                    nodeType: mapProps.currentNode.nodeType,
-                                    connectingNodes: mapProps.currentNode.connectingNodes,
-                                  })}
-                                ></Input>
+                                <TextInput
+                                    label={"Node Name"}
+                                    size="sm"
+                                    radius="xl"
+                                    value={`${mapProps.currentNode?.name || ""}`}
+                                    variant="filled"
+                                    onChange={(event) => mapProps.setCurrentNodeData({
+                                        id: mapProps.currentNode.id,
+                                        x: mapProps.currentNode.x,
+                                        y: mapProps.currentNode.y,
+                                        floor: mapProps.currentNode.floor,
+                                        mapId: mapProps.currentNode.mapId,
+                                        name: event.currentTarget.value,
+                                        description: mapProps.currentNode.description,
+                                        nodeType: mapProps.currentNode.nodeType,
+                                        connectingNodes: mapProps.currentNode.connectingNodes,
+                                    })}
+                                ></TextInput>
+                                  <TextInput
+                                      label={"Node Description"}
+                                      size="sm"
+                                      radius="xl"
+                                      value={`${mapProps.currentNode?.description || ""}`}
+                                      variant="filled"
+                                      onChange={(event) => mapProps.setCurrentNodeData({
+                                          id: mapProps.currentNode.id,
+                                          x: mapProps.currentNode.x,
+                                          y: mapProps.currentNode.y,
+                                          floor: mapProps.currentNode.floor,
+                                          mapId: mapProps.currentNode.mapId,
+                                          name: mapProps.currentNode.name,
+                                          description: event.currentTarget.value,
+                                          nodeType: mapProps.currentNode.nodeType,
+                                          connectingNodes: mapProps.currentNode.connectingNodes,
+                                      })}
+                                  ></TextInput>
                               </Modal>
                               <ActionIcon
-                                size="xxl"
+                                size="xxxl"
                                 variant="filled"
                                 color="#285CC6"
                                 onClick={open}>
