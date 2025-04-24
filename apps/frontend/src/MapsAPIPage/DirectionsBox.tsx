@@ -53,7 +53,7 @@ return (
         bd ="1px solid white"
         style={{borderRadius: "10px"}}
       >
-        <Box mx="auto" ta='center'>
+        <Box mx="auto" ta='left'>
           <Text fw={700} size="md" color="black" mb="xs" ta="left">
             Directions:
           </Text>
@@ -61,7 +61,7 @@ return (
             <List type="ordered"mt="sm">
             {steps.map((step, index) => (
               <List.Item key={index}>
-                <Text size="xs" my='xs' color="#1C43A7" ta="center">
+                <Text size="xs" my='xs' color="#1C43A7" ta="left">
                   {parseHTMLtoText(step.instruction)}
                 </Text>
                 <Divider label={`${step.distance}`}
