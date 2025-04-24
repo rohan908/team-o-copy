@@ -448,7 +448,9 @@ export function MapEditor() {
         // ray from the camera position to the pointer
         raycaster.setFromCamera(pointer, cameraRef.current);
 
-        const intersects = raycaster.intersectObjects(objectsRef.current, true);
+        const intersects = raycaster.intersectObjects(
+            objectsRef.current.filter(value =>
+                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
 
         // new node positon
         if (intersects.length == 0) {
@@ -518,7 +520,9 @@ export function MapEditor() {
         // ray from the camera position to the pointer
         raycaster.setFromCamera(pointer, cameraRef.current);
 
-        const intersects = raycaster.intersectObjects(objectsRef.current, true);
+        const intersects = raycaster.intersectObjects(
+            objectsRef.current.filter(value =>
+                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
