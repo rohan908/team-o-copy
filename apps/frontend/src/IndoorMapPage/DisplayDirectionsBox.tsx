@@ -78,9 +78,14 @@ export function DisplayDirectionsBox() {
                                 <Group>
                                     <Text fw={700} size="md" c="blue.7">
                                         {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
+                                        {/* Changing for Faulkner and Chestnut*/}
                                         {Number(floor) === 1
                                             ? 'Floor 1'
-                                            : `Floor ${Number(floor) + 1}`}
+                                            : Number(floor) === 4
+                                              ? 'Chestnut'
+                                              : Number(floor) === 5
+                                                ? 'Faulkner'
+                                                : `Floor ${Number(floor) + 1}`}
                                     </Text>
                                     <TTSButton text={floorTTS} />
                                 </Group>
