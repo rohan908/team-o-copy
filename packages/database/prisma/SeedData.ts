@@ -2,8 +2,8 @@ import { edgeData } from '../../common/src/MapHelper.ts';
 
 // returns object with all the data required for seeding the "Node" table will replace contents of this file with
 // information exported from frontend
-// bounds are -250 to 250 for x, -200 to 200 for y, z
-44;
+// bounds are -250 to 250 for x, -200 to 200 for y
+
 // !!! PLEASE DO NOT AUTO FORMAT THIS FILE PLEASE PRETTY PLEASE !!!
 
 export function getNodeData() {
@@ -333,576 +333,1213 @@ export function getNodeData() {
             connectingNodes: [29],
         },
         {
-            id: 112,
-            x: -12.0,
-            y: 101.0,
-            floor: 4,
-            name: 'Multi-Specialty Clinic',
-            description: 'department',
-            nodeType: 'department',
-            mapId: 2,
-            connectingNodes: [126, 128],
+            "id": 124,
+            "x": -27,
+            "y": 52,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                125,
+                132
+            ]
         },
         {
-            id: 116,
-            x: -29.0,
-            y: 108.0,
-            floor: 4,
-            name: 'Radiology',
-            description: 'department',
-            nodeType: 'department',
-            mapId: 2,
-            connectingNodes: [129],
+            "id": 125,
+            "x": -24,
+            "y": 88,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                124,
+                126
+            ]
         },
         {
-            id: 117,
-            x: -143.0,
-            y: -45.0,
-            floor: 4,
-            name: 'Chestnut Parking',
-            description: 'parking-lot',
-            nodeType: 'parking-lot',
-            mapId: 2,
-            connectingNodes: [121],
+            "id": 126,
+            "x": -12,
+            "y": 91,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                125,
+                112,
+                138,
+                199,
+                200,
+                201,
+                202
+            ]
         },
         {
-            id: 118,
-            x: -139.0,
-            y: 107.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [121, 131],
+            "id": 127,
+            "x": -7,
+            "y": 136,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                128,
+                120,
+                131
+            ]
         },
         {
-            id: 119,
-            x: 144.0,
-            y: 3.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [120],
+            "id": 128,
+            "x": -8,
+            "y": 118,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                112,
+                127,
+                129,
+                199,
+                200,
+                201,
+                202
+            ]
         },
         {
-            id: 120,
-            x: 143.0,
-            y: 136.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [127, 119],
+            "id": 129,
+            "x": -21,
+            "y": 115,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                128,
+                116,
+                197
+            ]
         },
         {
-            id: 121,
-            x: -140.0,
-            y: 57.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [118, 117, 122],
+            "id": 131,
+            "x": -109,
+            "y": 136,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                118,
+                127
+            ]
         },
         {
-            id: 122,
-            x: -120.0,
-            y: 54.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [121, 137],
+            "id": 132,
+            "x": -39,
+            "y": 53,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                124,
+                123
+            ]
         },
         {
-            id: 123,
-            x: -74.0,
-            y: 54.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [132, 137],
+            "id": 133,
+            "x": -97,
+            "y": 27,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                137,
+                134
+            ]
         },
         {
-            id: 124,
-            x: -27.0,
-            y: 52.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [125, 132],
+            "id": 134,
+            "x": -84,
+            "y": 24,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                133,
+                135
+            ]
         },
         {
-            id: 125,
-            x: -24.0,
-            y: 88.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [124, 126],
+            "id": 135,
+            "x": -83,
+            "y": 10,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                134,
+                136
+            ]
         },
         {
-            id: 126,
-            x: -14.0,
-            y: 92.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [125, 112, 138],
+            "id": 136,
+            "x": -70,
+            "y": 8,
+            "floor": 4,
+            "mapId": 2,
+            "name": "Ambulatory Care",
+            "description": "department",
+            "nodeType": "department",
+            "connectingNodes": [
+                135
+            ]
         },
         {
-            id: 127,
-            x: -7.0,
-            y: 136.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [128, 120, 131],
+            "id": 137,
+            "x": -96,
+            "y": 53,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                122,
+                123,
+                133
+            ]
         },
         {
-            id: 128,
-            x: -8.0,
-            y: 118.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [112, 127, 129],
+            "id": 138,
+            "x": -1,
+            "y": 90,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                126,
+                139
+            ]
         },
         {
-            id: 129,
-            x: -21.0,
-            y: 115.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [128, 116],
+            "id": 139,
+            "x": 30,
+            "y": 90,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                138,
+                140
+            ]
         },
         {
-            id: 131,
-            x: -109.0,
-            y: 136.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [118, 127],
+            "id": 140,
+            "x": 80,
+            "y": 89,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                139,
+                141
+            ]
         },
         {
-            id: 132,
-            x: -39.0,
-            y: 53.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [124, 123],
+            "id": 141,
+            "x": 82,
+            "y": 32,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                140,
+                142
+            ]
         },
         {
-            id: 133,
-            x: -97.0,
-            y: 27.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [137, 134],
+            "id": 142,
+            "x": 72,
+            "y": 32,
+            "floor": 4,
+            "mapId": 2,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                141,
+                143,
+                196,
+                195
+            ]
         },
         {
-            id: 134,
-            x: -84.0,
-            y: 24.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [133, 135],
+            "id": 143,
+            "x": 68,
+            "y": 39,
+            "floor": 4,
+            "mapId": 2,
+            "name": "MRI",
+            "description": "department",
+            "nodeType": "department",
+            "connectingNodes": [
+                142
+            ]
         },
         {
-            id: 135,
-            x: -83.0,
-            y: 10.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [134, 136],
+            "id": 145,
+            "x": -131,
+            "y": 32,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Faulkner Parking",
+            "description": "parking-lot",
+            "nodeType": "parking-lot",
+            "connectingNodes": [
+                146
+            ]
         },
         {
-            id: 136,
-            x: -70.0,
-            y: 8.0,
-            floor: 4,
-            name: 'Ambulatory Care',
-            description: 'department',
-            nodeType: 'department',
-            mapId: 2,
-            connectingNodes: [135],
+            "id": 146,
+            "x": -106,
+            "y": 62,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                145,
+                147,
+                148
+            ]
         },
         {
-            id: 137,
-            x: -96.0,
-            y: 53.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [122, 123, 133],
+            "id": 147,
+            "x": -100,
+            "y": 70,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                146,
+                153
+            ]
         },
         {
-            id: 138,
-            x: -1.0,
-            y: 90.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [126, 139],
+            "id": 148,
+            "x": -89,
+            "y": 63,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                146,
+                149
+            ]
         },
         {
-            id: 139,
-            x: 30.0,
-            y: 90.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [138, 140],
+            "id": 149,
+            "x": -67,
+            "y": 66,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                148,
+                150
+            ]
         },
         {
-            id: 140,
-            x: 80.0,
-            y: 89.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [139, 141],
+            "id": 150,
+            "x": -42,
+            "y": 73,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                149,
+                151
+            ]
         },
         {
-            id: 141,
-            x: 82.0,
-            y: 32.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [140, 142],
+            "id": 151,
+            "x": -25,
+            "y": 72,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                150,
+                152
+            ]
         },
         {
-            id: 142,
-            x: 72.0,
-            y: 32.0,
-            floor: 4,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 2,
-            connectingNodes: [141, 143],
+            "id": 152,
+            "x": -7,
+            "y": 68,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                151,
+                155
+            ]
         },
         {
-            id: 143,
-            x: 69.0,
-            y: 40.0,
-            floor: 4,
-            name: 'MRI/CT',
-            description: 'department',
-            nodeType: 'department',
-            mapId: 2,
-            connectingNodes: [142],
+            "id": 153,
+            "x": -101,
+            "y": 89,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                147,
+                154
+            ]
         },
         {
-            id: 144,
-            x: 84.0,
-            y: 5.0,
-            floor: 1,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 1,
-            connectingNodes: [12, 14],
+            "id": 154,
+            "x": -112,
+            "y": 90,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Dialysis",
+            "description": "department",
+            "nodeType": "department",
+            "connectingNodes": [
+                153
+            ]
         },
         {
-            id: 145,
-            x: -131.0,
-            y: 32.0,
-            floor: 5,
-            name: 'Faulkner Parking',
-            description: 'parking-lot',
-            nodeType: 'parking-lot',
-            mapId: 3,
-            connectingNodes: [146],
+            "id": 155,
+            "x": -10,
+            "y": 63,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                152,
+                156
+            ]
         },
         {
-            id: 146,
-            x: -106.0,
-            y: 62.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [145, 147, 148],
+            "id": 156,
+            "x": -9,
+            "y": 57,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                155,
+                157
+            ]
         },
         {
-            id: 147,
-            x: -100.0,
-            y: 70.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [146, 153],
+            "id": 157,
+            "x": -6,
+            "y": 47,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                156,
+                158
+            ]
         },
         {
-            id: 148,
-            x: -89.0,
-            y: 63.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [146, 149],
+            "id": 158,
+            "x": -7,
+            "y": 31,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                157,
+                159
+            ]
         },
         {
-            id: 149,
-            x: -67.0,
-            y: 66.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [148, 150],
+            "id": 159,
+            "x": -6,
+            "y": 19,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                158,
+                163,
+                207
+            ]
         },
         {
-            id: 150,
-            x: -42.0,
-            y: 73.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [149, 151],
+            "id": 161,
+            "x": 0,
+            "y": 14,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": []
         },
         {
-            id: 151,
-            x: -25.0,
-            y: 72.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [150, 152],
+            "id": 163,
+            "x": -36,
+            "y": 19,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                159,
+                164
+            ]
         },
         {
-            id: 152,
-            x: -7.0,
-            y: 68.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [151, 155],
+            "id": 164,
+            "x": -41,
+            "y": 20,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                163,
+                166,
+                165
+            ]
         },
         {
-            id: 153,
-            x: -101.0,
-            y: 89.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [147, 154],
+            "id": 165,
+            "x": -47,
+            "y": 13,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Emergency Check-in",
+            "description": "department",
+            "nodeType": "department",
+            "connectingNodes": [
+                164
+            ]
         },
         {
-            id: 154,
-            x: -111.0,
-            y: 90.0,
-            floor: 5,
-            name: 'Belkin House Check-in',
-            description: 'department',
-            nodeType: 'department',
-            mapId: 3,
-            connectingNodes: [153],
+            "id": 166,
+            "x": -41,
+            "y": 28,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                164,
+                167,
+                203,
+                204,
+                205,
+                206
+            ]
         },
         {
-            id: 155,
-            x: -10.0,
-            y: 63.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [152, 156],
+            "id": 167,
+            "x": -32,
+            "y": 31,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Blood-Draw Lab",
+            "description": "department",
+            "nodeType": "department",
+            "connectingNodes": [
+                166
+            ]
         },
         {
-            id: 156,
-            x: -9.0,
-            y: 57.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [155, 157],
+            "id": 168,
+            "x": -48,
+            "y": 18,
+            "floor": 1,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                5,
+                171
+            ]
         },
         {
-            id: 157,
-            x: -6.0,
-            y: 47.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [156, 158],
+            "id": 169,
+            "x": -88,
+            "y": 27,
+            "floor": 1,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                171,
+                174
+            ]
         },
         {
-            id: 158,
-            x: -7.0,
-            y: 31.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [157, 159],
+            "id": 171,
+            "x": -61,
+            "y": 20,
+            "floor": 1,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                168,
+                169,
+                172
+            ]
         },
         {
-            id: 159,
-            x: -6.0,
-            y: 19.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [158, 160, 163],
+            "id": 172,
+            "x": -63,
+            "y": 14,
+            "floor": 1,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                171,
+                173
+            ]
         },
         {
-            id: 160,
-            x: -6.0,
-            y: 14.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [159, 161],
+            "id": 173,
+            "x": -68,
+            "y": 7,
+            "floor": 1,
+            "mapId": 1,
+            "name": "Urgent Care Check-In",
+            "description": "Urgent Care",
+            "nodeType": "department",
+            "connectingNodes": [
+                172
+            ]
         },
         {
-            id: 161,
-            x: 0.0,
-            y: 14.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [160, 162],
+            "id": 174,
+            "x": -91,
+            "y": 16,
+            "floor": 1,
+            "mapId": 1,
+            "name": "Cardio/Urology",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                169
+            ]
         },
         {
-            id: 162,
-            x: 1.0,
-            y: 6.0,
-            floor: 5,
-            name: 'Pre-Admittance Screening',
-            description: 'department',
-            nodeType: 'department',
-            mapId: 3,
-            connectingNodes: [161],
+            "id": 175,
+            "x": 85,
+            "y": 3,
+            "floor": 1,
+            "mapId": 1,
+            "name": "hallway",
+            "description": "hallway",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                12,
+                14
+            ]
         },
         {
-            id: 163,
-            x: -36.0,
-            y: 19.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [159, 164],
+            "id": 176,
+            "x": 76,
+            "y": -13,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Pulmonary",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                17
+            ]
         },
         {
-            id: 164,
-            x: -41.0,
-            y: 20.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [163, 166, 165],
+            "id": 177,
+            "x": 75,
+            "y": -11,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Women's Health",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                17
+            ]
         },
         {
-            id: 165,
-            x: -45.0,
-            y: 12.0,
-            floor: 5,
-            name: 'Emergency Check-in',
-            description: 'department',
-            nodeType: 'department',
-            mapId: 3,
-            connectingNodes: [164],
+            "id": 178,
+            "x": 73,
+            "y": -13,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Rheumatology",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                17
+            ]
         },
         {
-            id: 166,
-            x: -41.0,
-            y: 28.0,
-            floor: 5,
-            name: '',
-            description: '',
-            nodeType: '',
-            mapId: 3,
-            connectingNodes: [164, 167],
+            "id": 179,
+            "x": 24,
+            "y": -58,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Cardiac Arrhythmia",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                23
+            ]
         },
         {
-            id: 167,
-            x: -31.0,
-            y: 28.0,
-            floor: 5,
-            name: 'Blood-Draw Lab',
-            description: 'department',
-            nodeType: 'department',
-            mapId: 3,
-            connectingNodes: [166],
+            "id": 180,
+            "x": 26,
+            "y": -57,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Allergy",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                23
+            ]
         },
+        {
+            "id": 181,
+            "x": 27,
+            "y": -58,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Gastroenterology",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                23
+            ]
+        },
+        {
+            "id": 183,
+            "x": 25,
+            "y": -62,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Neurology",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                23
+            ]
+        },
+        {
+            "id": 184,
+            "x": 25,
+            "y": -58,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Kidney (Renal) Medicine",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                23
+            ]
+        },
+        {
+            "id": 185,
+            "x": 26,
+            "y": -60,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Dermatology",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                23
+            ]
+        },
+        {
+            "id": 186,
+            "x": 25,
+            "y": -60,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Neurosurgery",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                23
+            ]
+        },
+        {
+            "id": 187,
+            "x": 28,
+            "y": -60,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Ophthamology",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                23
+            ]
+        },
+        {
+            "id": 188,
+            "x": 27,
+            "y": -61,
+            "floor": 2,
+            "mapId": 1,
+            "name": "Optometry",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                23
+            ]
+        },
+        {
+            "id": 189,
+            "x": 25,
+            "y": -47,
+            "floor": 3,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                191,
+                192
+            ]
+        },
+        {
+            "id": 191,
+            "x": 15,
+            "y": -51,
+            "floor": 3,
+            "mapId": 1,
+            "name": "Primary Care Check-In",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                189
+            ]
+        },
+        {
+            "id": 192,
+            "x": 24,
+            "y": -38,
+            "floor": 3,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                189,
+                28
+            ]
+        },
+        {
+            "id": 193,
+            "x": 61,
+            "y": -19,
+            "floor": 3,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                29,
+                194
+            ]
+        },
+        {
+            "id": 194,
+            "x": 62,
+            "y": -14,
+            "floor": 3,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                193,
+                30
+            ]
+        },
+        {
+            "id": 195,
+            "x": 70,
+            "y": 39,
+            "floor": 4,
+            "mapId": 2,
+            "name": "CT",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                142
+            ]
+        },
+        {
+            "id": 196,
+            "x": 72,
+            "y": 39,
+            "floor": 4,
+            "mapId": 2,
+            "name": "X-Ray",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                142
+            ]
+        },
+        {
+            "id": 197,
+            "x": -27,
+            "y": 107,
+            "floor": 4,
+            "mapId": 2,
+            "name": "Lab Services",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                129
+            ]
+        },
+        {
+            "id": 199,
+            "x": -12,
+            "y": 104,
+            "floor": 4,
+            "mapId": 2,
+            "name": "Vascular Surgery",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                128,
+                126
+            ]
+        },
+        {
+            "id": 200,
+            "x": -10,
+            "y": 104,
+            "floor": 4,
+            "mapId": 2,
+            "name": "Dermatology",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                128,
+                126
+            ]
+        },
+        {
+            "id": 201,
+            "x": -9,
+            "y": 103,
+            "floor": 4,
+            "mapId": 2,
+            "name": "Pain Medicine",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                128,
+                126
+            ]
+        },
+        {
+            "id": 202,
+            "x": -8,
+            "y": 103,
+            "floor": 4,
+            "mapId": 2,
+            "name": "Travel Medicine",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                128,
+                126
+            ]
+        },
+        {
+            "id": 203,
+            "x": -31,
+            "y": 33,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Admitting",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                166
+            ]
+        },
+        {
+            "id": 204,
+            "x": -30,
+            "y": 31,
+            "floor": 5,
+            "mapId": 3,
+            "name": "GI Endoscopy",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                166
+            ]
+        },
+        {
+            "id": 205,
+            "x": -31,
+            "y": 30,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Pulmonary Lab",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                166
+            ]
+        },
+        {
+            "id": 206,
+            "x": -29,
+            "y": 29,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Vascular Lab",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                166
+            ]
+        },
+        {
+            "id": 207,
+            "x": -6,
+            "y": 14,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                159,
+                208
+            ]
+        },
+        {
+            "id": 208,
+            "x": 0,
+            "y": 14,
+            "floor": 5,
+            "mapId": 3,
+            "name": "",
+            "description": "",
+            "nodeType": "",
+            "connectingNodes": [
+                207,
+                209,
+                210,
+                211,
+                212,
+                213
+            ]
+        },
+        {
+            "id": 209,
+            "x": 1,
+            "y": 5,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Audiology",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                208
+            ]
+        },
+        {
+            "id": 210,
+            "x": 0,
+            "y": 5,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Cardiac Rehab",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                208
+            ]
+        },
+        {
+            "id": 211,
+            "x": 2,
+            "y": 4,
+            "floor": 5,
+            "mapId": 3,
+            "name": "MRI/CT",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                208
+            ]
+        },
+        {
+            "id": 212,
+            "x": 3,
+            "y": 5,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Pre-admittance Screening",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                208
+            ]
+        },
+        {
+            "id": 213,
+            "x": 3,
+            "y": 6,
+            "floor": 5,
+            "mapId": 3,
+            "name": "Radiology",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                208
+            ]
+        },
+        {
+            "id": 214,
+            "x": -64,
+            "y": -2,
+            "floor": 1,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                216,
+                215
+            ]
+        },
+        {
+            "id": 215,
+            "x": -29,
+            "y": -11,
+            "floor": 1,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                214,
+                218
+            ]
+        },
+        {
+            "id": 216,
+            "x": -63,
+            "y": -14,
+            "floor": 1,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                214,
+                219
+            ]
+        },
+        {
+            "id": 218,
+            "x": -25,
+            "y": -12,
+            "floor": 1,
+            "mapId": 1,
+            "name": "",
+            "description": "",
+            "nodeType": "hallway",
+            "connectingNodes": [
+                7,
+                215,
+                8
+            ]
+        },
+        {
+            "id": 219,
+            "x": -63,
+            "y": -19,
+            "floor": 1,
+            "mapId": 1,
+            "name": "Phlebotomy",
+            "description": "",
+            "nodeType": "department",
+            "connectingNodes": [
+                216
+            ]
+        }
     ];
 }
