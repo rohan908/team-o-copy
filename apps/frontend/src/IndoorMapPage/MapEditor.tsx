@@ -61,6 +61,7 @@ export function MapEditor() {
     const nodeRef = useRef(allNodes);
 
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
+    const sceneIndexRef = useRef(sceneIndexState);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
 
@@ -310,6 +311,10 @@ export function MapEditor() {
       }
     }, [currentNodeData])
 
+  useEffect(() => {
+    sceneIndexRef.current = sceneIndexState;
+  }, [sceneIndexState]);
+
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
             selectedObject instanceof THREE.Mesh &&
@@ -396,7 +401,9 @@ export function MapEditor() {
         // ray from the camera position to the pointer
         raycaster.setFromCamera(pointer, cameraRef.current);
 
-        const intersects = raycaster.intersectObjects(objectsRef.current, true);
+        const intersects = raycaster.intersectObjects(
+          objectsRef.current.filter(value =>
+            value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
