@@ -1,76 +1,60 @@
 id,x,y,floor,mapId,name,description,nodeType,connectingNodes
-154,-111,90,5,3,Belkin House Check-in,department,department,153
-155,-10,63,5,3,,,,"152,156"
-156,-9,57,5,3,,,,"155,157"
-157,-6,47,5,3,,,,"156,158"
-158,-7,31,5,3,,,,"157,159"
-159,-6,19,5,3,,,,"158,160,163"
-160,-6,14,5,3,,,,"159,161"
-161,0,14,5,3,,,,"160,162"
-162,1,6,5,3,Pre-Admittance Screening,department,department,161
-163,-36,19,5,3,,,,"159,164"
-164,-41,20,5,3,,,,"163,166,165"
-165,-45,12,5,3,Emergency Check-in,department,department,164
-166,-41,28,5,3,,,,"164,167"
-167,-31,28,5,3,Blood-Draw Lab,department,department,166
 1,86,82,1,1,Patriot Place Parking Lot,parking,parking-lot,2
 2,99,53,1,1,hallway,hallway,hallway,"1,3,12"
 3,12,13,1,1,hallway,hallway,hallway,"2,4"
 4,10,2,1,1,hallway,hallway,hallway,"3,5"
-5,0,4,1,1,hallway,hallway,hallway,"4,6"
-6,-15,-6,1,1,Imaging Suite,department,department,"5,7"
-7,-24,-4,1,1,hallway,hallway,hallway,"6,8"
-8,-31,-35,1,1,hallway,hallway,hallway,"7,9"
-9,-40,-34,1,1,hallway,hallway,hallway,"8,10"
-10,-39,-30,1,1,hallway,hallway,hallway,"9,11"
-11,-36,-28,1,1,Pharmacy,department,department,10
-12,115,14,1,1,hallway,hallway,hallway,"2,144"
-14,92,-15,1,1,staircase-1,stairs,staircase,"15,144"
+5,-2,4,1,1,hallway,hallway,hallway,"4,6,168"
+6,-16,-4,1,1,Radiology Check-In,Radiology,department,"5,7"
+7,-24,-4,1,1,hallway,hallway,hallway,"6,218"
+8,-31,-35,1,1,hallway,hallway,hallway,"9,218"
+9,-36,-37,1,1,hallway,hallway,hallway,"8,11"
+11,-38,-32,1,1,Pharmacy,department,department,9
+12,115,14,1,1,hallway,hallway,hallway,"2,175"
+14,92,-15,1,1,staircase-1,stairs,staircase,"15,175"
 15,94,-15,2,1,staircase-2,stairs,staircase,"14,16,25"
-16,87,-18,2,1,hallway,hallway,hallway,"15,17,19"
-17,84,-20,2,1,hallway,hallway,hallway,"16,18"
-18,80,-18,2,1,Vein Care Services,department,department,17
-19,88,-24,2,1,hallway,hallway,hallway,"16,20"
+16,86,-19,2,1,hallway,hallway,hallway,"15,17,19"
+17,80,-20,2,1,hallway,hallway,hallway,"16,18,177,176,178"
+18,78,-12,2,1,Vein Care Services,department,department,17
+19,85,-23,2,1,hallway,hallway,hallway,"16,20"
 20,72,-28,2,1,hallway,hallway,hallway,"19,21"
 21,69,-23,2,1,hallway,hallway,hallway,"20,22"
 22,24,-39,2,1,hallway,hallway,hallway,"21,23"
-23,30,-58,2,1,hallway,hallway,hallway,"22,24"
-24,24,-60,2,1,Endocrinology,department,department,23
+23,29,-54,2,1,hallway,hallway,hallway,"22,24,179,180,181,183,184,185,186,187,188"
+24,23,-60,2,1,Endocrinology,department,department,23
 25,94,-15,3,1,staircase-3,stairs,staircase,"15,26"
 26,81,-20,3,1,hallway,hallway,hallway,"25,27"
 27,75,-20,3,1,hallway,hallway,hallway,"26,28"
-28,52,-28,3,1,hallway,hallway,hallway,"27,29"
-29,50,-23,3,1,hallway,hallway,hallway,"28,30"
-30,54,-22,3,1,Phlebotomy/Primary Care,department,department,29
-112,-12,101,4,2,Multi-Specialty Clinic,department,department,"126,128"
-116,-29,108,4,2,Radiology,department,department,129
+28,52,-28,3,1,hallway,hallway,hallway,"27,29,192"
+29,50,-23,3,1,hallway,hallway,hallway,"28,193"
+30,72,-10,3,1,Phlebotomy/Blood Draw,department,department,194
+112,-14,104,4,2,Orthopedic Surgery,department,department,"126,128"
+116,-30,108,4,2,Blood Work,department,department,129
 117,-143,-45,4,2,Chestnut Parking,parking-lot,parking-lot,121
 118,-139,107,4,2,,,,"121,131"
 119,144,3,4,2,,,,120
 120,143,136,4,2,,,,"127,119"
 121,-140,57,4,2,,,,"118,117,122"
 122,-120,54,4,2,,,,"121,137"
-123,-74,54,4,2,,,hallway,"132,137"
+123,-74,54,4,2,,,,"132,137"
 124,-27,52,4,2,,,,"125,132"
 125,-24,88,4,2,,,,"124,126"
-126,-14,92,4,2,,,,"125,112,138"
+126,-12,91,4,2,,,,"125,112,138,199,200,201,202"
 127,-7,136,4,2,,,,"128,120,131"
-128,-8,118,4,2,,,,"112,127,129"
-129,-21,115,4,2,,,,"128,116"
+128,-8,118,4,2,,,,"112,127,129,199,200,201,202"
+129,-21,115,4,2,,,,"128,116,197"
 131,-109,136,4,2,,,,"118,127"
 132,-39,53,4,2,,,,"124,123"
 133,-97,27,4,2,,,,"137,134"
 134,-84,24,4,2,,,,"133,135"
 135,-83,10,4,2,,,,"134,136"
 136,-70,8,4,2,Ambulatory Care,department,department,135
-137,-96,53,4,2,,,hallway,"122,123,133"
+137,-96,53,4,2,,,,"122,123,133"
 138,-1,90,4,2,,,,"126,139"
-139,30,90,4,2,,,hallway,"138,140"
+139,30,90,4,2,,,,"138,140"
 140,80,89,4,2,,,,"139,141"
 141,82,32,4,2,,,,"140,142"
-142,72,32,4,2,,,,"141,143"
-143,69,40,4,2,MRI/CT,department,department,142
-144,84,5,1,1,,,hallway,"12,14"
+142,72,32,4,2,,,,"141,143,196,195"
+143,68,39,4,2,MRI,department,department,142
 145,-131,32,5,3,Faulkner Parking,parking-lot,parking-lot,146
 146,-106,62,5,3,,,,"145,147,148"
 147,-100,70,5,3,,,,"146,153"
@@ -80,6 +64,62 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 151,-25,72,5,3,,,,"150,152"
 152,-7,68,5,3,,,,"151,155"
 153,-101,89,5,3,,,,"147,154"
-168,132,87,4,2,,,hallway,169
-169,114,79,4,2,,,parking-lot,"170,168"
-170,117,55,4,2,,,parking-lot,169
+154,-112,90,5,3,Dialysis,department,department,153
+155,-10,63,5,3,,,,"152,156"
+156,-9,57,5,3,,,,"155,157"
+157,-6,47,5,3,,,,"156,158"
+158,-7,31,5,3,,,,"157,159"
+159,-6,19,5,3,,,,"158,163,207"
+161,0,14,5,3,,,,
+163,-36,19,5,3,,,,"159,164"
+164,-41,20,5,3,,,,"163,166,165"
+165,-47,13,5,3,Emergency Check-in,department,department,164
+166,-41,28,5,3,,,,"164,167,203,204,205,206"
+167,-32,31,5,3,Blood-Draw Lab,department,department,166
+168,-48,18,1,1,,,hallway,"5,171"
+169,-88,27,1,1,,,hallway,"171,174"
+171,-61,20,1,1,,,hallway,"168,169,172"
+172,-63,14,1,1,,,hallway,"171,173"
+173,-68,7,1,1,Urgent Care Check-In,Urgent Care,department,172
+174,-91,16,1,1,Cardio/Urology,,department,169
+175,85,3,1,1,hallway,hallway,hallway,"12,14"
+176,76,-13,2,1,Pulmonary,,department,17
+177,75,-11,2,1,Women's Health,,department,17
+178,73,-13,2,1,Rheumatology,,department,17
+179,24,-58,2,1,Cardiac Arrhythmia,,department,23
+180,26,-57,2,1,Allergy,,department,23
+181,27,-58,2,1,Gastroenterology,,department,23
+183,25,-62,2,1,Neurology,,department,23
+184,25,-58,2,1,Kidney (Renal) Medicine,,department,23
+185,26,-60,2,1,Dermatology,,department,23
+186,25,-60,2,1,Neurosurgery,,department,23
+187,28,-60,2,1,Ophthamology,,department,23
+188,27,-61,2,1,Optometry,,department,23
+189,25,-47,3,1,,,hallway,"191,192"
+191,15,-51,3,1,Primary Care Check-In,,department,189
+192,24,-38,3,1,,,hallway,"189,28"
+193,61,-19,3,1,,,hallway,"29,194"
+194,62,-14,3,1,,,hallway,"193,30"
+195,70,39,4,2,CT,,department,142
+196,72,39,4,2,X-Ray,,department,142
+197,-27,107,4,2,Lab Services,,department,129
+199,-12,104,4,2,Vascular Surgery,,department,"128,126"
+200,-10,104,4,2,Dermatology,,department,"128,126"
+201,-9,103,4,2,Pain Medicine,,department,"128,126"
+202,-8,103,4,2,Travel Medicine,,department,"128,126"
+203,-31,33,5,3,Admitting,,department,166
+204,-30,31,5,3,GI Endoscopy,,department,166
+205,-31,30,5,3,Pulmonary Lab,,department,166
+206,-29,29,5,3,Vascular Lab,,department,166
+207,-6,14,5,3,,,,"159,208"
+208,0,14,5,3,,,,"207,209,210,211,212,213"
+209,1,5,5,3,Audiology,,department,208
+210,0,5,5,3,Cardiac Rehab,,department,208
+211,2,4,5,3,MRI/CT,,department,208
+212,3,5,5,3,Pre-admittance Screening,,department,208
+213,3,6,5,3,Radiology,,department,208
+214,-64,-2,1,1,,,hallway,"216,215"
+215,-29,-11,1,1,,,hallway,"214,218"
+216,-63,-14,1,1,,,hallway,"214,219"
+218,-25,-12,1,1,,,hallway,"7,215,8"
+219,-63,-19,1,1,Phlebotomy,,department,216
