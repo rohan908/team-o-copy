@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from 'express';
 import fs from 'fs';
 import PrismaClient from '../bin/prisma-client';
-import { exportToCSV } from '../directoryBackup/ExportToCSV.ts';
+import { exportToCSV, exportToJSON } from '../directoryBackup/ExportToCSV.ts';
 import {
     cleanString,
     formatBeforeWriteToBackupCSV,
@@ -86,6 +86,7 @@ router.post('/import/direct', async (req: Request, res: Response) => {
 
     // updates the backup file
     await exportToCSV();
+    await exportToJSON();
 
     await updateEdgeTable();
 

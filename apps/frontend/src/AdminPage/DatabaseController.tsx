@@ -76,7 +76,12 @@ export function DatabaseController({ table }: Props) {
     };
 
     const handleExportJSON = async () => {
-
+        const link = document.createElement('a');
+        link.href = 'api/exportRoute/static-export/nodeBackup.json';
+        link.setAttribute('download', 'nodeBackup.json');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     // clear function handling
@@ -198,7 +203,7 @@ export function DatabaseController({ table }: Props) {
                             },
                         },
                     }}
-                    onClick={handleExport}
+                    onClick={handleExportJSON}
                 >
                     Export JSON
                 </Button>
