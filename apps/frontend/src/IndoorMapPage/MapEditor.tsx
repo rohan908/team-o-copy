@@ -144,6 +144,9 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
+                selectedObjects.current.forEach((object) => {
+                  deselectObject(object);
+                });
             }, 200); // Fade-in duration
         }, 200); // Fade-out duration
     };
@@ -367,7 +370,7 @@ export function MapEditor() {
                 setCursorStyle(`url(${MouseImages.AddEdge}),auto`);
                 break;
         }
-    }, [mapTool, selectedObjects]);
+    }, [mapTool]);
 
     const clickHandler = useCallback(
         (event) => {
@@ -555,7 +558,7 @@ export function MapEditor() {
                 selectedObject.material.needsUpdate = true;
                 selectedObjects.current.push(selectedObject);
                 render();
-                updateDragControls();
+
             } else if (selectedObjects.current.length == 1) {
                 const firstNode = nodeRef.current.find(
                     (element) => element.id === selectedObjects.current[0].userData.nodeId
@@ -822,23 +825,6 @@ export function MapEditor() {
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'absolute' }}
             />
-
-            {/*<div*/}
-            {/*    style={{*/}
-            {/*        position: 'absolute',*/}
-            {/*        top: 0,*/}
-            {/*        left: 0,*/}
-            {/*        width: '50%',*/}
-            {/*        height: '100%',*/}
-            {/*        backgroundColor: '#000',*/}
-            {/*        opacity: isFading ? 1 : 0,*/}
-            {/*        transition: 'opacity 0.3s ease-in-out',*/}
-            {/*        pointerEvents: 'none',*/}
-            {/*        zIndex: 5,*/}
-            {/*    }}*/}
-            {/*/>*/}
-
-            {/*<NodeInfoBox/>*/}
         </Box>
     );
 }
