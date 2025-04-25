@@ -5,7 +5,6 @@ const MaintenanceSelect: React.FC<SelectProps> = (props) => {
         <Select
             label="Choose the Maintenance Needed"
             placeholder="Select Maintenance Issue"
-            searchable
             data={[
                 'Elevator',
                 'HVAC',
