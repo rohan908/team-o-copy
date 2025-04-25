@@ -13,10 +13,16 @@ import { useLogin } from '../home-page/components/LoginContext.tsx';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
+import { IconCurrentLocation } from '@tabler/icons-react';
 
 import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
+
+const MouseImages = {
+    AddNode: 'MapImages/MouseCursors/AddNode.png',
+    AddEdge: 'MapImages/MouseCursors/AddEdge.png',
+}
 
 export interface MapEditorProps {
     selectedTool: string;
@@ -348,20 +354,32 @@ export function MapEditor() {
         }
     };
 
+    // switches the type of cursor depending on the tool
+    useEffect(() => {
+        switch (mapTool) {
+            case 'pan':
+                setCursorStyle('pointer');
+                break;
+            case 'add-node':
+                setCursorStyle(`url(${MouseImages.AddNode}),auto`);
+                break;
+            case 'add-edge':
+                setCursorStyle(`url(${MouseImages.AddEdge}),auto`);
+                break;
+        }
+    }, [mapTool, selectedObjects]);
+
     const clickHandler = useCallback(
         (event) => {
-            // switches the type of cursor depending on the tool
+            // switches editing tool
             switch (mapTool) {
                 case 'pan':
-                    setCursorStyle('pointer');
                     handlePanClick(event);
                     break;
                 case 'add-node':
-                    setCursorStyle('crosshair');
                     handleAddNodeClick(event);
                     break;
                 case 'add-edge':
-                    setCursorStyle('crosshair');
                     handleAddEdgeClick(event);
                     break;
             }
@@ -789,7 +807,7 @@ export function MapEditor() {
     }, [sceneIndexState]);
 
     return (
-        <Box w="100vw" h="100vh">
+        <Box w="100vw" h="100vh" style={{ cursor: cursorStyle }}>
             <PopupTooltip />
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
 
@@ -802,7 +820,7 @@ export function MapEditor() {
             <canvas
                 ref={canvasRef}
                 id="insideMapCanvas"
-                style={{ width: '100%', height: '100%', position: 'absolute', cursor: cursorStyle }}
+                style={{ width: '100%', height: '100%', position: 'absolute' }}
             />
 
             {/*<div*/}
