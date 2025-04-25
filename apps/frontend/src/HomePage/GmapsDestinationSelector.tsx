@@ -46,7 +46,7 @@ export function GmapsDestinationSelector() {
         //setSelectedDepartment(null);
     };
     return (
-        <Autocomplete
+        <Select
             placeholder="Hospital Destination"
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />

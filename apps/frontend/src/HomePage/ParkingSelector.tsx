@@ -1,4 +1,4 @@
-import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
+import {Select, useMantineTheme } from '@mantine/core';
 import { IconBuilding, IconChevronDown } from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
 import { hospitalOptions } from './GmapsDestinationSelector.tsx';
@@ -60,7 +60,7 @@ export function ParkingSelector() {
     };
 
     return (
-        <Autocomplete
+        <Select
             placeholder="Hospital Destination"
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
