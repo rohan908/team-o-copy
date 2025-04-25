@@ -1,5 +1,5 @@
-import { useMantineTheme, Select, SelectProps } from '@mantine/core';
-import ISO6391 from 'iso-639-1';
+import {Select, SelectProps } from '@mantine/core';
+
 
 const SecuritySelect: React.FC<SelectProps> = (props) => {
     return (

@@ -1,4 +1,4 @@
-import { useMantineTheme, Select, SelectProps } from '@mantine/core';
+import { Select, SelectProps } from '@mantine/core';
 
 const SanitationSelect: React.FC<SelectProps> = (props) => {
     return (
