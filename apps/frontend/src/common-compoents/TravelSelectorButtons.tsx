@@ -1,6 +1,6 @@
 import {useTimeline} from "../HomePage/TimeLineContext.tsx";
 import {ColorChangingButton} from "./commonButtons.tsx";
-import { Autocomplete, Flex, Select, useMantineTheme } from '@mantine/core';
+import { Autocomplete, Box, Flex, Select, Tooltip, useMantineTheme } from '@mantine/core';
 import {
   IconCar,
   IconCarFilled,
@@ -28,36 +28,48 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
 
   return (
       <Flex direction="row" justify="space-around" gap="md" w="100%" mb="md">
-        <ColorChangingButton
-          w={props.w}
-          ValueToCheck={travelMode.toString()}
-          ValueForTrigger={google.maps.TravelMode.DRIVING.toString()}
-          firstColor="primaryBlues.9"
-          secondColor="secondaryBlues.5"
-          borderRadius="30px"
-          onClick={() => setTravelMode(google.maps.TravelMode.DRIVING)}>
-          <IconCar size={24} />
-        </ColorChangingButton>
-        <ColorChangingButton
-          w={props.w}
-          ValueToCheck={travelMode.toString()}
-          ValueForTrigger={google.maps.TravelMode.WALKING.toString()}
-          firstColor="primaryBlues.9"
-          secondColor="secondaryBlues.5"
-          borderRadius="30px"
-          onClick={() => setTravelMode(google.maps.TravelMode.WALKING)}>
-          <IconTrekking size={24} />
-        </ColorChangingButton>
-        <ColorChangingButton
-          w={props.w}
-          ValueToCheck={travelMode.toString()}
-          ValueForTrigger={google.maps.TravelMode.TRANSIT.toString()}
-          firstColor="primaryBlues.9"
-          secondColor="secondaryBlues.5"
-          onClick={() => setTravelMode(google.maps.TravelMode.TRANSIT)}
-          borderRadius="30px">
-          <IconTrain size={24} />
-        </ColorChangingButton>
+        <Tooltip label="Driving">
+          <Box>
+            <ColorChangingButton
+              w={props.w}
+              ValueToCheck={travelMode.toString()}
+              ValueForTrigger={google.maps.TravelMode.DRIVING.toString()}
+              firstColor="primaryBlues.9"
+              secondColor="secondaryBlues.5"
+              borderRadius="30px"
+              onClick={() => setTravelMode(google.maps.TravelMode.DRIVING)}>
+              <IconCar size={24} />
+            </ColorChangingButton>
+          </Box>
+        </Tooltip>
+        <Tooltip label="Walking">
+          <Box>
+            <ColorChangingButton
+              w={props.w}
+              ValueToCheck={travelMode.toString()}
+              ValueForTrigger={google.maps.TravelMode.WALKING.toString()}
+              firstColor="primaryBlues.9"
+              secondColor="secondaryBlues.5"
+              borderRadius="30px"
+              onClick={() => setTravelMode(google.maps.TravelMode.WALKING)}>
+              <IconTrekking size={24} />
+            </ColorChangingButton>
+          </Box>
+        </Tooltip>
+        <Tooltip label="Public Transit">
+          <Box>
+            <ColorChangingButton
+              w={props.w}
+              ValueToCheck={travelMode.toString()}
+              ValueForTrigger={google.maps.TravelMode.TRANSIT.toString()}
+              firstColor="primaryBlues.9"
+              secondColor="secondaryBlues.5"
+              onClick={() => setTravelMode(google.maps.TravelMode.TRANSIT)}
+              borderRadius="30px">
+              <IconTrain size={24} />
+            </ColorChangingButton>
+          </Box>
+        </Tooltip>
       </Flex>
   );
 }

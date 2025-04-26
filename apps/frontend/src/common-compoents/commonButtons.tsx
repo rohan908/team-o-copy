@@ -66,26 +66,25 @@ export const BlackButton: React.FC<CustomButtonProps> = ({ children, onClick, ..
 };
 
 export const ColorChangingButton: React.FC<ColorChangingButtonProps> = ({
+    ref,
     children,
     onClick,
-    ...props}) => {
-  return (
-    <Button
-      size="sm"
-      ff="Inter"
-      fw="400"
-      w={props.w}
-      bg={props.ValueToCheck === props.ValueForTrigger ? props.firstColor : props.secondColor}
-      onClick={onClick}
-      leftSection={props.leftSection}
-      fullWidth={false}
-      style={{
-        borderRadius: props.borderRadius,
-        transition: 'all 0.4s ease',
-      }}
-      {...props}
-    >
-      {children}
-    </Button>
+    ...props}) => (
+      <Button
+        size="sm"
+        ff="Inter"
+        fw="400"
+        w={props.w}
+        bg={props.ValueToCheck === props.ValueForTrigger ? props.firstColor : props.secondColor}
+        onClick={onClick}
+        leftSection={props.leftSection}
+        fullWidth={false}
+        style={{
+          borderRadius: props.borderRadius,
+          transition: 'all 0.4s ease',
+        }}
+        {...props}
+      >
+        {children}
+      </Button>
   );
-};
