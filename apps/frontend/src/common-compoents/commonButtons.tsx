@@ -66,7 +66,6 @@ export const BlackButton: React.FC<CustomButtonProps> = ({ children, onClick, ..
 };
 
 export const ColorChangingButton: React.FC<ColorChangingButtonProps> = ({
-    ref,
     children,
     onClick,
     ...props}) => (
