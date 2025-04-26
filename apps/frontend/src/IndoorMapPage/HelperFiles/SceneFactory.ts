@@ -22,6 +22,7 @@ export const createAllScenes = () => {
     const scene3 = createMapScene('MapImages/Patriot Place 4.png');
     const scene4 = createMapScene('MapImages/Chestnut Hill Floor 1.png');
     const scene5 = createMapScene('MapImages/Falkner Hospital.png');
-    const sceneArr: THREE.Scene[] = [scene1, scene2, scene3, scene4, scene5];
+    const scene6 = createMapScene('MapImages/BWH Parking Lots and Floor 2.png');
+    const sceneArr: THREE.Scene[] = [scene1, scene2, scene3, scene4, scene5, scene6];
     return sceneArr;
 };

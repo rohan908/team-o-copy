@@ -7,6 +7,7 @@ import {
     usePatriotContext,
     useChestnutHillContext,
     useFaulknerHospitalContext,
+    useBwhCampusContext,
     useAllNodesContext,
 } from '../contexts/DirectoryContext.js';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
@@ -35,6 +36,7 @@ export function DraggableMap() {
     const patriotNodes = usePatriotContext();
     const chestnutNodes = useChestnutHillContext();
     const faulknerNodes = useFaulknerHospitalContext();
+    const bwhNodes = useBwhCampusContext();
 
     // Animation related refs
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
@@ -59,6 +61,9 @@ export function DraggableMap() {
         } else if (hospitalName === 'Faulkner Hospital') {
             setSceneIndexState(4);
             setFloorState(1);
+        } else if (hospitalName === 'BWH Campus') {
+            setSceneIndexState(5);
+            setFloorState(1);
         }
     };
     //stupid fix for adams hard coding bruh, need to switch the scene depending on the selected hopsital going to the indoor map page
@@ -72,6 +77,9 @@ export function DraggableMap() {
         } else if (selectedHospital === 'Faulkner Hospital') {
             setSceneIndexState(4);
             setFloorState(1);
+        } else if (selectedHospital === 'BWH Campus') {
+            setSceneIndexState(5);
+            setFloorState(1);
         } else {
             setSceneIndexState(0);
             setFloorState(1);
@@ -82,6 +90,7 @@ export function DraggableMap() {
     const getSceneIndexFromFloor = (floor: number): number => {
         if (selectedHospitalName === 'Chestnut Hill') return 3;
         if (selectedHospitalName === 'Faulkner Hospital') return 4;
+        if (selectedHospitalName === 'BWH Campus') return 5;
         if (floor === 1) return 0;
         if (floor === 3) return 1;
         if (floor === 4) return 2;
@@ -188,7 +197,12 @@ export function DraggableMap() {
             const index = faulknerNodes.findIndex((element) => {
                 return element.name == selectedDepartment;
             });
-            return index >= 0 ? faulknerNodes[index].id : 0; //make sure nodeId exists
+            return index >= 0 ? faulknerNodes[index].id : 0;
+        } else if (selectedHospitalName == 'BWH Campus') {
+            const index = bwhNodes.findIndex((element) => {
+                return element.name == selectedDepartment;
+            });
+            return index >= 0 ? bwhNodes[index].id : 0;
         }
         return null;
     };
@@ -202,6 +216,8 @@ export function DraggableMap() {
             return 117; // Node 100 for Chestnut Hill
         } else if (selectedHospitalName === 'Faulkner Hospital') {
             return 145;
+        } else if (selectedHospitalName === 'BWH Campus') {
+            return 301;
         }
         return null;
     };
@@ -245,6 +261,13 @@ export function DraggableMap() {
             );
         } else if (node1.floor === node2.floor && node1.floor === 5) {
             scenesRef.current[4].add(
+                animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y },
+                    { x: node2.x, y: node2.y }
+                )
+            );
+        } else if (node1.floor === node2.floor && node1.floor === 6) {
+            scenesRef.current[5].add(
                 animationRef.current.createEdge(
                     { x: node1.x, y: node1.y },
                     { x: node2.x, y: node2.y }
