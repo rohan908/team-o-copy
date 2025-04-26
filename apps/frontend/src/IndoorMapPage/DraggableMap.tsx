@@ -217,7 +217,7 @@ export function DraggableMap() {
         } else if (selectedHospitalName === 'Faulkner Hospital') {
             return 145;
         } else if (selectedHospitalName === 'BWH Campus') {
-            return 301;
+            return 220;
         }
         return null;
     };
