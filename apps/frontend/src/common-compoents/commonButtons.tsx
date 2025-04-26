@@ -9,7 +9,7 @@ interface CustomButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
 }
 
 interface ColorChangingButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  children: string;
+  children?: React.ReactNode;
   leftSection?: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
@@ -19,6 +19,7 @@ interface ColorChangingButtonProps extends React.HTMLAttributes<HTMLButtonElemen
   secondColor: string;
   ValueToCheck: string;
   ValueForTrigger: string;
+  borderRadius: string;
 }
 
 export const BasicOutlinedButton: React.FC<CustomButtonProps> = ({
@@ -79,7 +80,7 @@ export const ColorChangingButton: React.FC<ColorChangingButtonProps> = ({
       leftSection={props.leftSection}
       fullWidth={false}
       style={{
-        borderRadius: '8px',
+        borderRadius: props.borderRadius,
         transition: 'all 0.4s ease',
       }}
       {...props}

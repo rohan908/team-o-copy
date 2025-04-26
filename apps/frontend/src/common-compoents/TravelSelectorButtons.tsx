@@ -27,39 +27,37 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
   }
 
   return (
-    <Flex direction="column" gap="md" justify="center" align="center" w="100%" mb="md">
-      <Flex direction="row" gap="md" w="100%">
+      <Flex direction="row" justify="space-around" gap="md" w="100%" mb="md">
         <ColorChangingButton
           w={props.w}
-          leftSection={<IconCar size={24} />}
           ValueToCheck={travelMode.toString()}
           ValueForTrigger={google.maps.TravelMode.DRIVING.toString()}
-          firstColor="#1C43A7"
-          secondColor="#5A83DB"
+          firstColor="primaryBlues.9"
+          secondColor="secondaryBlues.5"
+          borderRadius="30px"
           onClick={() => setTravelMode(google.maps.TravelMode.DRIVING)}>
-          Driving
+          <IconCar size={24} />
         </ColorChangingButton>
         <ColorChangingButton
           w={props.w}
-          leftSection={<IconTrekking size={24} />}
           ValueToCheck={travelMode.toString()}
           ValueForTrigger={google.maps.TravelMode.WALKING.toString()}
-          firstColor="#1C43A7"
-          secondColor="#5A83DB"
+          firstColor="primaryBlues.9"
+          secondColor="secondaryBlues.5"
+          borderRadius="30px"
           onClick={() => setTravelMode(google.maps.TravelMode.WALKING)}>
-          Walking
+          <IconTrekking size={24} />
+        </ColorChangingButton>
+        <ColorChangingButton
+          w={props.w}
+          ValueToCheck={travelMode.toString()}
+          ValueForTrigger={google.maps.TravelMode.TRANSIT.toString()}
+          firstColor="primaryBlues.9"
+          secondColor="secondaryBlues.5"
+          onClick={() => setTravelMode(google.maps.TravelMode.TRANSIT)}
+          borderRadius="30px">
+          <IconTrain size={24} />
         </ColorChangingButton>
       </Flex>
-      <ColorChangingButton
-        w={props.w}
-        leftSection={<IconTrain size={24} />}
-        ValueToCheck={travelMode.toString()}
-        ValueForTrigger={google.maps.TravelMode.TRANSIT.toString()}
-        firstColor="#1C43A7"
-        secondColor="#5A83DB"
-        onClick={() => setTravelMode(google.maps.TravelMode.TRANSIT)}>
-        Public Transit
-      </ColorChangingButton>
-    </Flex>
   );
 }
