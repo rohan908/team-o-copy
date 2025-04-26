@@ -283,9 +283,19 @@ export function MapEditor() {
                 rendererRef.current.domElement
             );
 
+            // these listeners fix a visual bug with the mouse when selecting a node too quickly
+            dragControlsRef.current.addEventListener('hoveron', function (event) {
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
+            });
+
+            dragControlsRef.current.addEventListener('hoveroff', function (event) {
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
+            });
+
             // add event listeners to enable / enable map dragging while dragging nodes
             dragControlsRef.current.addEventListener('dragstart', function () {
                 controlRef.current.enabled = false;
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
             });
 
             dragControlsRef.current.addEventListener('drag', function (event) {
@@ -300,6 +310,7 @@ export function MapEditor() {
             });
 
             dragControlsRef.current.addEventListener('dragend', function () {
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
                 setTimeout(() => {
                     controlRef.current.enabled = true;
                 }, 10);
