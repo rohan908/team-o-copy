@@ -18,8 +18,11 @@ import { IconCurrentLocation } from '@tabler/icons-react';
 import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
+import { map } from 'leaflet';
 
 const MouseImages = {
+    MoveNone: 'MapImages/MouseCursors/MoveNoSelected.png',
+    MoveClick: 'MapImages/MouseCursors/MoveSelected.png',
     AddNode: 'MapImages/MouseCursors/AddNode.png',
     AddEdge: 'MapImages/MouseCursors/AddEdge.png',
 }
@@ -65,6 +68,7 @@ export function MapEditor() {
     >([]);
 
     const nodeRef = useRef(allNodes);
+    const cursorStyleRef = useRef(MouseImages.MoveNone);
 
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const sceneIndexRef = useRef(sceneIndexState);
@@ -228,6 +232,7 @@ export function MapEditor() {
     // render function that can be called from anywhere so we can render only when needed.
     const render = () => {
         if (rendererRef.current && scenesRef.current && cameraRef.current) {
+            rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
             rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
         }
     };
@@ -335,6 +340,9 @@ export function MapEditor() {
             selectedObject.material.needsUpdate = true;
             selectedObjects.current.push(selectedObject);
 
+            // changes mouse on selected object
+            setCursorStyle(`url(${MouseImages.MoveClick}),auto`);
+
             setCurrentNodeData(
                 nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
             );
@@ -356,6 +364,11 @@ export function MapEditor() {
 
             if (selectedObjects.current.length === 0) {
                 setCurrentNodeData(null);
+
+                if(cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
+                    // changes mouse on no selected objects
+                    setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
+                }
             } else if (selectedObjects.current.length > 0) {
                 setCurrentNodeData(
                     nodeRef.current.find(
@@ -376,7 +389,7 @@ export function MapEditor() {
     useEffect(() => {
         switch (mapTool) {
             case 'pan':
-                setCursorStyle('pointer');
+                setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
                 break;
             case 'add-node':
                 setCursorStyle(`url(${MouseImages.AddNode}),auto`);
@@ -386,6 +399,10 @@ export function MapEditor() {
                 break;
         }
     }, [mapTool]);
+
+    useEffect(() => {
+        cursorStyleRef.current = cursorStyle;
+    }, [cursorStyle]);
 
     const clickHandler = useCallback(
         (event) => {
@@ -750,12 +767,13 @@ export function MapEditor() {
                         objectsRef.current.splice(objectsIndex, 1);
                     }
                 });
-                render();
             }
 
             selectedObjects.current.forEach((object) => {
                 deselectObject(object);
             });
+
+            render();
         };
 
         window.addEventListener('keydown', ({ key }) => {
@@ -831,7 +849,7 @@ export function MapEditor() {
     }, [sceneIndexState]);
 
     return (
-        <Box w="100vw" h="100vh" style={{ cursor: cursorStyle }}>
+        <Box w="100vw" h="100vh">
             <PopupTooltip />
             <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
 
