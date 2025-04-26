@@ -31,7 +31,7 @@ const SelectBox = () => {
     const [userStartLocation, setUserStartLocation] = useState<{ lat: number; lng: number } | null>(
         null
     ); // store user location input
-    const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode>(google.maps.TravelMode.BICYCLING);
+    const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode>(google.maps.TravelMode.DRIVING);
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 

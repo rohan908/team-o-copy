@@ -23,6 +23,7 @@ import { ModeOfTravelSelector } from './ModeOfTravelSelector.tsx';
 import { AlgorithmSelector } from './AlgorithmSelector.tsx';
 import { useLogin } from '../home-page/components/LoginContext.js';
 import { useMemo } from 'react';
+import {ModeOfTravelSelectorButtons} from "./ModeOfTravelSelectorButtons.tsx";
 
 export const CustomTimeline = () => {
     const theme = useMantineTheme();
@@ -39,7 +40,7 @@ export const CustomTimeline = () => {
                     <Stack gap={2} w="100%">
                         <GmapsStartSelector />
                         <GmapsDestinationSelector />
-                        <ModeOfTravelSelector />
+                        <ModeOfTravelSelectorButtons />
                         <Flex justify={'end'}>
                             <Link to="map-API">
                                 <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>
