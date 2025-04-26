@@ -210,7 +210,7 @@ const SelectBox = () => {
                             </Box>
 
                             <Box ta="right">
-                                <BlackButton onClick={handleFindPath}>Find Path</BlackButton>
+                                <Button color="#1C43A7" onClick={handleFindPath}>Find Path</Button>
                             </Box>
                         </Stack>
                     </CustomNavigationBox>
