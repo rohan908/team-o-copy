@@ -2,17 +2,19 @@ import {useTimeline} from "../HomePage/TimeLineContext.tsx";
 import {ColorChangingButton} from "./commonButtons.tsx";
 import { Autocomplete, Box, Flex, Select, Tooltip, useMantineTheme } from '@mantine/core';
 import {
+  IconBike,
   IconCar,
   IconCarFilled,
   IconChevronDown,
   IconMapPinFilled,
   IconTrain,
-  IconTrekking,
+  IconTrekking, IconWalk,
 } from '@tabler/icons-react';
 import {useState} from "react";
 
 interface TravelSelectorButtonProps {
   w: string;
+  h: string;
 }
 
 export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props) => {
@@ -32,13 +34,15 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
           <Box>
             <ColorChangingButton
               w={props.w}
+              h={props.h}
               ValueToCheck={travelMode.toString()}
               ValueForTrigger={google.maps.TravelMode.DRIVING.toString()}
               firstColor="primaryBlues.9"
               secondColor="secondaryBlues.5"
               borderRadius="30px"
+              size="compact-xs"
               onClick={() => setTravelMode(google.maps.TravelMode.DRIVING)}>
-              <IconCar size={24} />
+              <IconCar size={24}/>
             </ColorChangingButton>
           </Box>
         </Tooltip>
@@ -46,13 +50,15 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
           <Box>
             <ColorChangingButton
               w={props.w}
+              h={props.h}
               ValueToCheck={travelMode.toString()}
               ValueForTrigger={google.maps.TravelMode.WALKING.toString()}
               firstColor="primaryBlues.9"
               secondColor="secondaryBlues.5"
               borderRadius="30px"
+              size="compact-xs"
               onClick={() => setTravelMode(google.maps.TravelMode.WALKING)}>
-              <IconTrekking size={24} />
+              <IconWalk size={24} />
             </ColorChangingButton>
           </Box>
         </Tooltip>
@@ -60,13 +66,31 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
           <Box>
             <ColorChangingButton
               w={props.w}
+              h={props.h}
               ValueToCheck={travelMode.toString()}
               ValueForTrigger={google.maps.TravelMode.TRANSIT.toString()}
               firstColor="primaryBlues.9"
               secondColor="secondaryBlues.5"
+              size="compact-xs"
               onClick={() => setTravelMode(google.maps.TravelMode.TRANSIT)}
               borderRadius="30px">
               <IconTrain size={24} />
+            </ColorChangingButton>
+          </Box>
+        </Tooltip>
+        <Tooltip label="Cycling">
+          <Box>
+            <ColorChangingButton
+              w={props.w}
+              h={props.h}
+              ValueToCheck={travelMode.toString()}
+              ValueForTrigger={google.maps.TravelMode.BICYCLING.toString()}
+              firstColor="primaryBlues.9"
+              secondColor="secondaryBlues.5"
+              size="compact-xs"
+              onClick={() => setTravelMode(google.maps.TravelMode.BICYCLING)}
+              borderRadius="30px">
+              <IconBike size={24} />
             </ColorChangingButton>
           </Box>
         </Tooltip>

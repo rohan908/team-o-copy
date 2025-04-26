@@ -15,11 +15,13 @@ interface ColorChangingButtonProps extends React.HTMLAttributes<HTMLButtonElemen
   disabled?: boolean;
   bg?: string;
   w?: string;
+  h?: string;
   firstColor: string;
   secondColor: string;
   ValueToCheck: string;
   ValueForTrigger: string;
   borderRadius: string;
+  size?: string;
 }
 
 export const BasicOutlinedButton: React.FC<CustomButtonProps> = ({
@@ -68,22 +70,24 @@ export const BlackButton: React.FC<CustomButtonProps> = ({ children, onClick, ..
 export const ColorChangingButton: React.FC<ColorChangingButtonProps> = ({
     children,
     onClick,
-    ...props}) => (
-      <Button
-        size="sm"
+    ...props
+}) => (
+    <Button
+        size={props.size}
         ff="Inter"
         fw="400"
         w={props.w}
+        h={props.h}
         bg={props.ValueToCheck === props.ValueForTrigger ? props.firstColor : props.secondColor}
         onClick={onClick}
         leftSection={props.leftSection}
         fullWidth={false}
         style={{
-          borderRadius: props.borderRadius,
-          transition: 'all 0.4s ease',
+            borderRadius: props.borderRadius,
+            transition: 'all 0.4s ease',
         }}
         {...props}
-      >
+    >
         {children}
-      </Button>
-  );
+    </Button>
+);

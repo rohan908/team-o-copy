@@ -40,7 +40,7 @@ export const CustomTimeline = () => {
                     <Stack gap={2} w="100%">
                         <GmapsStartSelector />
                         <GmapsDestinationSelector />
-                        <TravelSelectorButtons w={"75px"}/>
+                        <TravelSelectorButtons w={"50px"} h={"50px"}/>
                         <Flex justify={'end'}>
                             <Link to="map-API">
                                 <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>

@@ -173,7 +173,7 @@ const SelectBox = () => {
                                 <Text ta="left" mb="sm" fw={500} color="#1C43A7">
                                     Select Navigation Method:
                                 </Text>
-                                <TravelSelectorButtons w={"75px"} />
+                                <TravelSelectorButtons w={"50px"} h={"50px"}/>
                             </Box>
 
                             <Box ta="right">
