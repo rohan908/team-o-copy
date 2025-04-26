@@ -138,6 +138,7 @@ export function AdminPageV2() {
                                                         gap="xs"
                                                     >
                                                         <ColorChangingButton
+                                                            w="100%"
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={"5"}
                                                             firstColor="#1C43A7"
@@ -147,6 +148,7 @@ export function AdminPageV2() {
                                                             Service Request Input
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
+                                                            w="100%"
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={"0"}
                                                             firstColor="#1C43A7"
@@ -156,6 +158,7 @@ export function AdminPageV2() {
                                                             Language Requests
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
+                                                            w="100%"
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={"2"}
                                                             firstColor="#1C43A7"
@@ -165,6 +168,7 @@ export function AdminPageV2() {
                                                             Sanitation Requests
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
+                                                            w="100%"
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={"3"}
                                                             firstColor="#1C43A7"
@@ -174,6 +178,7 @@ export function AdminPageV2() {
                                                             Maintenance Requests
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
+                                                            w="100%"
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={"1"}
                                                             firstColor="#1C43A7"
@@ -232,6 +237,7 @@ export function AdminPageV2() {
                                                         gap="xs"
                                                     >
                                                         <ColorChangingButton
+                                                            w="100%"
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={"4"}
                                                             firstColor="#1C43A7"
