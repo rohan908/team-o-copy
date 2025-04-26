@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom'; //use ive arrived button to direct to indoor
-import { BlackButton } from '../common-compoents/commonButtons.tsx';
+import {BlackButton, ColorChangingButton} from '../common-compoents/commonButtons.tsx';
 import { CustomNavigationBox } from '../common-compoents/CustomNavigationBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
-import { Box, Text, Select, Collapse, TextInput, Stack, Button } from '@mantine/core';
+import {Box, Text, Select, Collapse, TextInput, Stack, Button, Flex} from '@mantine/core';
 import { useTimeline } from '../HomePage/TimeLineContext';
 import { hospitalCoordinates } from './GoogleMapsAPI.tsx';
 import { hospitalOptions } from '../HomePage/GmapsDestinationSelector.tsx';
+import {IconCar, IconPhoto, IconTrain, IconTrekking} from "@tabler/icons-react";
 
 const SelectBox = () => {
     const {
@@ -30,7 +31,7 @@ const SelectBox = () => {
     const [userStartLocation, setUserStartLocation] = useState<{ lat: number; lng: number } | null>(
         null
     ); // store user location input
-    const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode | null>(null);
+    const [navigationMethod, setNavigationMethod] = useState<google.maps.TravelMode>(google.maps.TravelMode.BICYCLING);
     const input = useRef<HTMLInputElement>(null);
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
@@ -172,21 +173,38 @@ const SelectBox = () => {
                                 <Text ta="left" mb="sm" fw={500} color="#1C43A7">
                                     Select Navigation Method:
                                 </Text>
-                                <Select
-                                    color="#A5A7AC"
-                                    placeholder="--Select Navigation Method--"
-                                    data={[
-                                        { value: google.maps.TravelMode.WALKING, label: 'Walking' },
-                                        {
-                                            value: google.maps.TravelMode.TRANSIT,
-                                            label: 'Public Transportation',
-                                        },
-                                        { value: google.maps.TravelMode.DRIVING, label: 'Driving' },
-                                    ]}
-                                    value={navigationMethod}
-                                    onChange={setNavigationMethod}
-                                    disabled={!hospital}
-                                />
+                                <Flex direction="column" gap="xs">
+
+                                </Flex>
+                                <Flex direction="row" gap="xs">
+                                  <ColorChangingButton
+                                    leftSection={<IconCar size={14} />}
+                                    ValueToCheck={navigationMethod.toString()}
+                                    ValueForTrigger={google.maps.TravelMode.DRIVING.toString()}
+                                    firstColor="#1C43A7"
+                                    secondColor="#5A83DB"
+                                    onClick={() => setNavigationMethod(google.maps.TravelMode.DRIVING)}>
+                                    Driving
+                                  </ColorChangingButton>
+                                  <ColorChangingButton
+                                    leftSection={<IconTrekking size={14} />}
+                                    ValueToCheck={navigationMethod.toString()}
+                                    ValueForTrigger={google.maps.TravelMode.WALKING.toString()}
+                                    firstColor="#1C43A7"
+                                    secondColor="#5A83DB"
+                                    onClick={() => setNavigationMethod(google.maps.TravelMode.WALKING)}>
+                                    Walking
+                                  </ColorChangingButton>
+                                  <ColorChangingButton
+                                    leftSection={<IconTrain size={14} />}
+                                    ValueToCheck={navigationMethod.toString()}
+                                    ValueForTrigger={google.maps.TravelMode.TRANSIT.toString()}
+                                    firstColor="#1C43A7"
+                                    secondColor="#5A83DB"
+                                    onClick={() => setNavigationMethod(google.maps.TravelMode.TRANSIT)}>
+                                    Public Transit
+                                  </ColorChangingButton>
+                                </Flex>
                             </Box>
 
                             <Box ta="right">

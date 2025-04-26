@@ -138,8 +138,8 @@ export function AdminPageV2() {
                                                         gap="xs"
                                                     >
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={5}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"5"}
                                                             firstColor="#1C43A7"
                                                             secondColor="#5A83DB"
                                                             onClick={() => displayNumToggle(5)}
@@ -147,8 +147,8 @@ export function AdminPageV2() {
                                                             Service Request Input
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={0}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"0"}
                                                             firstColor="#1C43A7"
                                                             secondColor="#5A83DB"
                                                             onClick={() => displayNumToggle(0)}
@@ -156,8 +156,8 @@ export function AdminPageV2() {
                                                             Language Requests
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={2}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"2"}
                                                             firstColor="#1C43A7"
                                                             secondColor="#5A83DB"
                                                             onClick={() => displayNumToggle(2)}
@@ -165,8 +165,8 @@ export function AdminPageV2() {
                                                             Sanitation Requests
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={3}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"3"}
                                                             firstColor="#1C43A7"
                                                             secondColor="#5A83DB"
                                                             onClick={() => displayNumToggle(3)}
@@ -174,8 +174,8 @@ export function AdminPageV2() {
                                                             Maintenance Requests
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={1}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"1"}
                                                             firstColor="#1C43A7"
                                                             secondColor="#5A83DB"
                                                             onClick={() => displayNumToggle(1)}
@@ -232,8 +232,8 @@ export function AdminPageV2() {
                                                         gap="xs"
                                                     >
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={4}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"4"}
                                                             firstColor="#1C43A7"
                                                             secondColor="#5A83DB"
                                                             onClick={() => setCSVManipOpen(true)}
