@@ -19,6 +19,8 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
   const theme = useMantineTheme();
   const { setTravelMode, travelMode } = useTimeline();
   const [hasAvoidedNull, setHasAvoidedNull] = useState<boolean>(false);
+  //Ensures that the Travel Mode is set to a default value on page load.
+  //For some reason, it wasn't liking me trying to set this default value directly in the context.
   if (!travelMode && !hasAvoidedNull) {
     setTravelMode(google.maps.TravelMode.DRIVING)
     setHasAvoidedNull(true);

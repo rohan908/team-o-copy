@@ -23,7 +23,6 @@ import { ModeOfTravelSelector } from './ModeOfTravelSelector.tsx';
 import { AlgorithmSelector } from './AlgorithmSelector.tsx';
 import { useLogin } from '../home-page/components/LoginContext.js';
 import { useMemo } from 'react';
-import {ModeOfTravelSelectorButtons} from "./ModeOfTravelSelectorButtons.tsx";
 import {TravelSelectorButtons} from "../common-compoents/TravelSelectorButtons.tsx";
 
 export const CustomTimeline = () => {
