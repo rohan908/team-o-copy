@@ -7,7 +7,7 @@
 import { Accordion, Box, Text, Group, Divider } from '@mantine/core';
 import { GetTextDirections } from './GetTextDirections.tsx';
 import { useMemo } from 'react';
-import { usePathContext } from '../contexts/NavigationContext.tsx';
+import { usePathContext, useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import { IconArrowLeft, IconArrowRight, IconArrowNarrowUp, IconStairs } from '@tabler/icons-react';
@@ -34,9 +34,29 @@ function getPathNodes(nodeIds: number[], allNodes: NodeDataType[]): NodeDataType
 
 export function DisplayDirectionsBox() {
     const pathNodes = usePathContext();
+    const navSelection = useNavSelectionContext();
     const nodeIds = pathNodes.state.pathSelectRequest?.NodeIds;
 
     const allNodes = useAllNodesContext();
+
+    // Scale factor translates node space coords to feet
+    const getScaleFactor = () => {
+        const hospital = navSelection.state.navSelectRequest?.HospitalName;
+        if (hospital === '20 Patriot Pl' || hospital === '22 Patriot Pl') {
+            return 1.5;
+        }
+        if (hospital === 'Chestnut Hill') {
+            return 0.91;
+        }
+        if (hospital === 'Faulkner Hospital') {
+            return 2.23;
+        }
+        if (hospital === 'BWH Campus') {
+            return 1.5;
+        } else {
+            return 1;
+        }
+    };
 
     // only call GetTextDirections if/when pathNodes change
     const directions = useMemo(() => {
@@ -69,7 +89,7 @@ export function DisplayDirectionsBox() {
                     const floorTTS = direction.map((step) => {
                         if (step.Direction.startsWith('Take')) return step.Direction;
                         if (step.Direction === 'Straight')
-                            return `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`;
+                            return `Continue straight for ${(step.Distance * getScaleFactor()).toFixed(0)} feet.`;
                         return `Turn ${step.Direction.toLowerCase()}`;
                     });
                     return (
@@ -85,7 +105,9 @@ export function DisplayDirectionsBox() {
                                               ? 'Chestnut'
                                               : Number(floor) === 5
                                                 ? 'Faulkner'
-                                                : `Floor ${Number(floor) + 1}`}
+                                                : `Floor ${Number(floor) + 1}`
+                                                  ? 'BWH'
+                                                  : `Floor ${Number(floor) + 2}`}
                                     </Text>
                                     <TTSButton text={floorTTS} />
                                 </Group>
