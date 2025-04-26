@@ -14,6 +14,7 @@ interface ColorChangingButtonProps extends React.HTMLAttributes<HTMLButtonElemen
   onClick?: () => void;
   disabled?: boolean;
   bg?: string;
+  w?: string;
   firstColor: string;
   secondColor: string;
   ValueToCheck: string;
@@ -72,7 +73,7 @@ export const ColorChangingButton: React.FC<ColorChangingButtonProps> = ({
       size="sm"
       ff="Inter"
       fw="400"
-      w="100%"
+      w={props.w}
       bg={props.ValueToCheck === props.ValueForTrigger ? props.firstColor : props.secondColor}
       onClick={onClick}
       leftSection={props.leftSection}

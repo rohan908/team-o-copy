@@ -173,30 +173,32 @@ const SelectBox = () => {
                                 <Text ta="left" mb="sm" fw={500} color="#1C43A7">
                                     Select Navigation Method:
                                 </Text>
-                                <Flex direction="column" gap="xs">
-
-                                </Flex>
-                                <Flex direction="row" gap="xs">
+                                <Flex direction="column" gap="md" justify="center" align="center" w="100%">
+                                  <Flex direction="row" gap="md" w="100%">
+                                    <ColorChangingButton
+                                      w="200px"
+                                      leftSection={<IconCar size={24} />}
+                                      ValueToCheck={navigationMethod.toString()}
+                                      ValueForTrigger={google.maps.TravelMode.DRIVING.toString()}
+                                      firstColor="#1C43A7"
+                                      secondColor="#5A83DB"
+                                      onClick={() => setNavigationMethod(google.maps.TravelMode.DRIVING)}>
+                                      Driving
+                                    </ColorChangingButton>
+                                    <ColorChangingButton
+                                      w="200px"
+                                      leftSection={<IconTrekking size={24} />}
+                                      ValueToCheck={navigationMethod.toString()}
+                                      ValueForTrigger={google.maps.TravelMode.WALKING.toString()}
+                                      firstColor="#1C43A7"
+                                      secondColor="#5A83DB"
+                                      onClick={() => setNavigationMethod(google.maps.TravelMode.WALKING)}>
+                                      Walking
+                                    </ColorChangingButton>
+                                  </Flex>
                                   <ColorChangingButton
-                                    leftSection={<IconCar size={14} />}
-                                    ValueToCheck={navigationMethod.toString()}
-                                    ValueForTrigger={google.maps.TravelMode.DRIVING.toString()}
-                                    firstColor="#1C43A7"
-                                    secondColor="#5A83DB"
-                                    onClick={() => setNavigationMethod(google.maps.TravelMode.DRIVING)}>
-                                    Driving
-                                  </ColorChangingButton>
-                                  <ColorChangingButton
-                                    leftSection={<IconTrekking size={14} />}
-                                    ValueToCheck={navigationMethod.toString()}
-                                    ValueForTrigger={google.maps.TravelMode.WALKING.toString()}
-                                    firstColor="#1C43A7"
-                                    secondColor="#5A83DB"
-                                    onClick={() => setNavigationMethod(google.maps.TravelMode.WALKING)}>
-                                    Walking
-                                  </ColorChangingButton>
-                                  <ColorChangingButton
-                                    leftSection={<IconTrain size={14} />}
+                                    w="200px"
+                                    leftSection={<IconTrain size={24} />}
                                     ValueToCheck={navigationMethod.toString()}
                                     ValueForTrigger={google.maps.TravelMode.TRANSIT.toString()}
                                     firstColor="#1C43A7"
