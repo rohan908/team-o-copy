@@ -294,21 +294,23 @@ export function MapEditor() {
     };
 
     useEffect(() => {
-      if(currentNodeData != null) {
-        const nodeToUpdate = nodeRef.current.find(element => element.id === currentNodeData.id);
-        if(nodeToUpdate != null) {
-          nodeToUpdate.id = currentNodeData.id;
-          nodeToUpdate.x = currentNodeData.x;
-          nodeToUpdate.y = currentNodeData.y;
-          nodeToUpdate.floor = currentNodeData.floor;
-          nodeToUpdate.mapId = currentNodeData.mapId;
-          nodeToUpdate.name = currentNodeData.name;
-          nodeToUpdate.description = currentNodeData.description;
-          nodeToUpdate.nodeType = currentNodeData.nodeType;
-          nodeToUpdate.connectingNodes = currentNodeData.connectingNodes;
+        if (currentNodeData != null) {
+            const nodeToUpdate = nodeRef.current.find(
+                (element) => element.id === currentNodeData.id
+            );
+            if (nodeToUpdate != null) {
+                nodeToUpdate.id = currentNodeData.id;
+                nodeToUpdate.x = currentNodeData.x;
+                nodeToUpdate.y = currentNodeData.y;
+                nodeToUpdate.floor = currentNodeData.floor;
+                nodeToUpdate.mapId = currentNodeData.mapId;
+                nodeToUpdate.name = currentNodeData.name;
+                nodeToUpdate.description = currentNodeData.description;
+                nodeToUpdate.nodeType = currentNodeData.nodeType;
+                nodeToUpdate.connectingNodes = currentNodeData.connectingNodes;
+            }
         }
-      }
-    }, [currentNodeData])
+    }, [currentNodeData]);
 
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
@@ -319,7 +321,9 @@ export function MapEditor() {
             selectedObject.material.needsUpdate = true;
             selectedObjects.current.push(selectedObject);
 
-            setCurrentNodeData(nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId));
+            setCurrentNodeData(
+                nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
+            );
 
             render(); // render to show color changes
             updateDragControls();
@@ -337,10 +341,16 @@ export function MapEditor() {
             );
 
             if (selectedObjects.current.length === 0) {
-              setCurrentNodeData(null);
+                setCurrentNodeData(null);
             } else if (selectedObjects.current.length > 0) {
-              setCurrentNodeData(nodeRef.current.find((element) =>
-                element.id === selectedObjects.current[selectedObjects.current.length-1].userData.nodeId));
+                setCurrentNodeData(
+                    nodeRef.current.find(
+                        (element) =>
+                            element.id ===
+                            selectedObjects.current[selectedObjects.current.length - 1].userData
+                                .nodeId
+                    )
+                );
             }
 
             render(); // render to show color changes
@@ -481,7 +491,7 @@ export function MapEditor() {
             allIds.push(node.id);
         });
 
-        return (Math.max(...allIds))+1;
+        return Math.max(...allIds) + 1;
     };
 
     const handleAddEdgeClick = (event) => {
@@ -795,7 +805,7 @@ export function MapEditor() {
 
             <Box ref={hoverRef}>
                 <MapContext.Provider value={mapProps}>
-                    <MapEditorBox/>
+                    <MapEditorBox />
                 </MapContext.Provider>
             </Box>
 
