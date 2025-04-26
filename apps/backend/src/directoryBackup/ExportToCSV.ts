@@ -27,3 +27,22 @@ export async function exportToCSV() {
         await PrismaClient.$disconnect();
     }
 }
+
+export async function exportToJSON() {
+    try {
+        // clears the backup file for new data
+        fs.writeFileSync(BACKUP_PATHS.directoryBackupJSON, '');
+
+        // query to get data from directory table
+        const nodeData = await PrismaClient.node.findMany({});
+
+        // write to backup.csv file, creates files if doesn't exist (should exist already tho)
+        fs.writeFileSync(BACKUP_PATHS.directoryBackupJSON, JSON.stringify(nodeData));
+
+        console.log('JSON written to:', BACKUP_PATHS.directoryBackupJSON);
+    } catch (error) {
+        console.error('Error exporting data:', error);
+    } finally {
+        await PrismaClient.$disconnect();
+    }
+}

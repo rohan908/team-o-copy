@@ -190,7 +190,7 @@ const MapEditorBox = () => {
                                 ]}
                                 variant="filled"
                             />
-                              <Modal opened={openedEditMenu} onClose={close} title={"Edit Node"} size={"auto"} yOffset={"15%"}
+                              <Modal opened={openedEditMenu} onClose={close} title={"Edit Node"} size={"auto"} centered
                                      overlayProps={{
                                 backgroundOpacity: 0.55,
                                 blur: 3,
