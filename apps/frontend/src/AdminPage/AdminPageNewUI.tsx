@@ -385,6 +385,7 @@ export function AdminPageV2() {
                                         opened={CSVManipOpen}
                                         onClose={() => setCSVManipOpen(false)}
                                         title="CSV Manipulator"
+                                        size="auto"
                                         centered
                                     >
                                         <CSVControlsComponent />

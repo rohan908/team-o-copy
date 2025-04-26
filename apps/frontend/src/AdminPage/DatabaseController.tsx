@@ -75,6 +75,15 @@ export function DatabaseController({ table }: Props) {
         document.body.removeChild(link);
     };
 
+    const handleExportJSON = async () => {
+        const link = document.createElement('a');
+        link.href = 'api/exportRoute/static-export/nodeBackup.json';
+        link.setAttribute('download', 'nodeBackup.json');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     // clear function handling
     const handleClear = async () => {
         if (!confirm('Are you sure you want to clear this table?')) return;
@@ -91,7 +100,7 @@ export function DatabaseController({ table }: Props) {
     }
 
     return (
-        <div className="w-full max-w-md mx-auto" >
+        <div className="w-full max-w-md mx-auto">
             {/**/}
             {/*Input for import csv*/}
             <Modal
@@ -176,6 +185,27 @@ export function DatabaseController({ table }: Props) {
                     onClick={handleExport}
                 >
                     Export CSV
+                </Button>
+                <Button
+                    size="sm"
+                    color="dark"
+                    className="nav-element hover-shadow"
+                    bg="#153A90"
+                    fw="600"
+                    //leftSection={<IconArrowRight size={14} />}
+                    style={{
+                        root: {
+                            borderColor: '#000',
+                            '&:hover': {
+                                color: '#93c5fd',
+                                borderColor: '#93c5fd',
+                                backgroundColor: 'transparent',
+                            },
+                        },
+                    }}
+                    onClick={handleExportJSON}
+                >
+                    Export JSON
                 </Button>
                 <Button
                     size="sm"

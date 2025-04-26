@@ -23,6 +23,7 @@ export const createNode = (
     sphere.position.x = node.x;
     sphere.position.y = node.y;
     sphere.userData.nodeId = node.id;
+    sphere.userData.floor = node.floor
     const nodeFloor = node.floor;
     if (nodeFloor === 1) {
         sceneArr[0].add(sphere);
