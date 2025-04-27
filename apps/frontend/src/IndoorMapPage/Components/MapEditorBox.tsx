@@ -108,8 +108,6 @@ const MapEditorBox = () => {
                     </ActionIcon>
                 </Tooltip>
 
-              <NodeInfoBox/>
-
             </Stack>
         </Box>
     );

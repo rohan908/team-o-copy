@@ -11,9 +11,13 @@ import {
     ActionIcon,
     Input,
     Stack,
+    Text,
+    Button,
+    MantineProvider
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { MapContext, MapEditorProps } from '../MapEditor.tsx';
+import { IconArrowBadgeRight, IconArrowBadgeDown  } from '@tabler/icons-react';
 import { BlackButton } from '../../common-compoents/commonButtons.tsx';
 
 const NodeInfoBox = () => {
@@ -37,7 +41,6 @@ const NodeInfoBox = () => {
             setNodeInfoOpen(true);
         } else {
             setNodeInfoOpen(false);
-            setExpandInfo(false);
         }
     }, [mapProps.currentNode]);
 
@@ -45,7 +48,6 @@ const NodeInfoBox = () => {
         <Collapse in={nodeInfoOpen} transitionDuration={250} transitionTimingFunction="linear">
             <Stack>
                 <Box
-                    //bg="#FCB024"
                     p="sm"
                     style={{
                         width: 'auto',
@@ -56,6 +58,9 @@ const NodeInfoBox = () => {
                     }}
                 >
                     <Flex direction="column">
+                        <MantineProvider theme={theme}>
+                            <Text color={'white'}>Edit Node Properties</Text>
+                        </MantineProvider>
                         <Flex direction="row" p="xs" gap="xs">
                             <TextInput
                                 variant="filled"
@@ -75,14 +80,16 @@ const NodeInfoBox = () => {
                                 size="sm"
                                 radius="xl"
                                 w={80}
-                                placeholder={`X: ${mapProps.currentNode?.x || 0}`}
+                                value={`X: ${(Math.round(mapProps.currentNode?.x * 10) / 10) || 0}`}
+                                readOnly
                                 variant="filled"
                             ></Input>
                             <Input
                                 size="sm"
                                 radius="xl"
                                 w={80}
-                                placeholder={`Y: ${mapProps.currentNode?.y || 0}`}
+                                value={`Y: ${(Math.round(mapProps.currentNode?.x * 10) / 10) || 0}`}
+                                readOnly
                                 variant="filled"
                             ></Input>
                         </Flex>
@@ -114,14 +121,18 @@ const NodeInfoBox = () => {
                                 ]}
                                 variant="filled"
                             />
-                            <ActionIcon
-                                size="xxxl"
+                            <Button
                                 variant="filled"
-                                color="#285CC6"
+                                color="baseBlue.6"
+                                justify="flex-end"
                                 onClick={() => toggleMoreInfo()}
+                                size="sm"
+                                radius="xl"
+                                className="navButton"
+                                rightSection={expandInfo ? <IconArrowBadgeDown/> : <IconArrowBadgeRight />}
                             >
-                                Edit Node
-                            </ActionIcon>
+                                More
+                            </Button>
                         </Flex>
                     </Flex>
                 </Box>
@@ -130,8 +141,27 @@ const NodeInfoBox = () => {
                     transitionDuration={250}
                     transitionTimingFunction="linear"
                 >
+                    <Box
+                        p="sm"
+                        style={{
+                            width: 'auto',
+                            minWidth: '300px',
+                            backgroundColor: '#285CC6',
+                            border: '2px solid #1C43A7',
+                            borderRadius: 24,
+                        }}
+                    >
                     <TextInput
                         label={'Node Name'}
+                        styles = {{
+                            label: {
+                                fontWeight: 600,
+                                textSize: '14px',
+                                textAlign: "center",
+                                color: 'white',
+                            },
+                        }}
+                        p={"xs"}
                         size="sm"
                         radius="xl"
                         value={`${mapProps.currentNode?.name || ''}`}
@@ -152,7 +182,16 @@ const NodeInfoBox = () => {
                     ></TextInput>
                     <TextInput
                         label={'Node Description'}
+                        styles = {{
+                            label: {
+                                fontWeight: 600,
+                                textSize: '14px',
+                                textAlign: "center",
+                                color: 'white',
+                            },
+                        }}
                         size="sm"
+                        p={"xs"}
                         radius="xl"
                         value={`${mapProps.currentNode?.description || ''}`}
                         variant="filled"
@@ -170,6 +209,24 @@ const NodeInfoBox = () => {
                             })
                         }
                     ></TextInput>
+                        <TextInput
+                            label={'Connecting Node IDs'}
+                            readOnly
+                            styles = {{
+                                label: {
+                                    fontWeight: 600,
+                                    textSize: '14px',
+                                    textAlign: "center",
+                                    color: 'white',
+                                },
+                            }}
+                            size="sm"
+                            p={"xs"}
+                            radius="xl"
+                            value={`${mapProps.currentNode?.connectingNodes || ''}`}
+                            variant="filled"
+                        ></TextInput>
+                    </Box>
                 </Collapse>
             </Stack>
         </Collapse>

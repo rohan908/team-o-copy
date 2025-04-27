@@ -1,7 +1,7 @@
 id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 1,86,82,1,1,Patriot Place Main Parking Lot,500+ spaces with EV access,parking-lot,2
 2,99,53,1,1,Main Lobby Corridor,Primary entrance with information desk,hallway,"1,3,12"
-3,12,13,1,1,East Diagnostic Hallway,Leads to lab and imaging services,hallway,"2,4"
+3,15,15,1,1,East Diagnostic Hallway,Leads to lab and imaging services,hallway,"2,4"
 4,10,2,1,1,Imaging Prep Hallway,Quiet Zone before Radiology,hallway,"3,5"
 5,-2,4,1,1,South Service Corridor,Staff access route,hallway,"4,6,168"
 6,-16,-4,1,1,Radiology Check-In,CT/MRI/X-ray services,department,"5,7"
@@ -23,6 +23,22 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 24,23,-60,2,1,Endocrinology,department,department,23
 25,94,-15,3,1,Stairwell C,Third Staircase,staircase,"15,26"
 26,81,-20,3,1,Primary Care Hallway,Access to general medicine,hallway,"25,27"
+203,-31,33,5,3,Admitting,,department,166
+204,-30,31,5,3,GI Endoscopy,,department,166
+205,-31,30,5,3,Pulmonary Lab,,department,166
+206,-29,29,5,3,Vascular Lab,,department,166
+207,-6,14,5,3,,,,"159,208"
+208,0,14,5,3,,,,"207,209,210,211,212,213"
+209,1,5,5,3,Audiology,,department,208
+210,0,5,5,3,Cardiac Rehab,,department,208
+211,2,4,5,3,MRI/CT,,department,208
+212,3,5,5,3,Pre-admittance Screening,,department,208
+213,3,6,5,3,Radiology,,department,208
+214,-64,-2,1,1,,,hallway,"216,215"
+215,-29,-11,1,1,,,hallway,"214,218"
+216,-63,-14,1,1,,,hallway,"214,219"
+218,-25,-12,1,1,,,hallway,"7,215,8"
+219,-63,-19,1,1,Phlebotomy,,department,216
 27,75,-20,3,1,Lab service hallway,Approach to blood draw stations,hallway,"26,28"
 28,52,-28,3,1,Phlebotomy Hallway,Blood draw prep area,hallway,"27,29,192"
 29,50,-23,3,1,Patient Services Hallway,Multi-service access hallway,hallway,"28,193"
@@ -107,19 +123,3 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 200,-10,104,4,2,Dermatology,,department,"128,126"
 201,-9,103,4,2,Pain Medicine,,department,"128,126"
 202,-8,103,4,2,Travel Medicine,,department,"128,126"
-203,-31,33,5,3,Admitting,,department,166
-204,-30,31,5,3,GI Endoscopy,,department,166
-205,-31,30,5,3,Pulmonary Lab,,department,166
-206,-29,29,5,3,Vascular Lab,,department,166
-207,-6,14,5,3,,,,"159,208"
-208,0,14,5,3,,,,"207,209,210,211,212,213"
-209,1,5,5,3,Audiology,,department,208
-210,0,5,5,3,Cardiac Rehab,,department,208
-211,2,4,5,3,MRI/CT,,department,208
-212,3,5,5,3,Pre-admittance Screening,,department,208
-213,3,6,5,3,Radiology,,department,208
-214,-64,-2,1,1,,,hallway,"216,215"
-215,-29,-11,1,1,,,hallway,"214,218"
-216,-63,-14,1,1,,,hallway,"214,219"
-218,-25,-12,1,1,,,hallway,"7,215,8"
-219,-63,-19,1,1,Phlebotomy,,department,216

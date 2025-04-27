@@ -817,6 +817,9 @@ export function MapEditor() {
             <Box ref={hoverRef}>
                 <MapContext.Provider value={mapProps}>
                     <MapEditorBox />
+                    <Box pos="fixed" top={"10%"} right={20} style={{zIndex: 999}}>
+                        <NodeInfoBox/>
+                    </Box>
                 </MapContext.Provider>
             </Box>
 
