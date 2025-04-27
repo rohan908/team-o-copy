@@ -123,3 +123,59 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 216,-63,-14,1,1,,,hallway,"214,219"
 218,-25,-12,1,1,,,hallway,"7,215,8"
 219,-63,-19,1,1,Phlebotomy,,department,216
+220,48,31,6,4,,,parking-lot,221
+221,30,38,6,4,,,,"220,222,275"
+222,30,48,6,4,,,,"221,234,228,230,229,224,225,233,231,227,223,226,232,235,258"
+223,30,53,6,4,Weight Management and Metabolic Surgery,,department,222
+224,28,53,6,4,Gastroenterology and Hepatology,,department,222
+225,31,54,6,4,Nutrition,,department,222
+226,31,53,6,4,Phlebotomy,,department,222
+227,31,53,6,4,MRI and CSIR,,department,222
+228,30,53,6,4,Kidney Medicine,,department,222
+229,29,54,6,4,Endocrine-Diabetes,,department,222
+230,30,53,6,4,Genomics Medicine,,department,222
+231,33,54,6,4,ENT,,department,222
+232,34,55,6,4,Weiner Pre-op Evaluation,,department,222
+233,32,53,6,4,Plastic and Reconstructive Surgery,,department,222
+234,30,53,6,4,Kidney/Pancreas Transplant,,department,222
+235,4,49,6,4,,,,"222,236,237"
+236,3,31,6,4,,,,"235,239"
+237,-6,53,6,4,,,,"235,238"
+238,-6,62,6,4,,,,"237,240,260"
+239,-60,32,6,4,,,,"236,240,241"
+240,-61,61,6,4,,,,"238,239"
+241,-80,27,6,4,,,,"239,242,248"
+242,-102,29,6,4,,,,"241,245,246,244,243,247,272"
+243,-102,34,6,4,Mammography,,department,242
+244,-102,33,6,4,Comprehensive Breast Health Center,,department,"242,245"
+245,-102,34,6,4,Jen Center for Primary Care,,department,"242,244"
+246,-102,34,6,4,Breast Imaging,,department,242
+247,-102,34,6,4,Radiation Oncology,,department,242
+248,-96,9,6,4,,,,"241,249"
+249,-96,-12,6,4,,,,"248,250,251,252,253,254,255,257"
+250,-98,-17,6,4,CT and MRI,,department,249
+251,-98,-17,6,4,Shapiro Procedural Check-in,,department,249
+252,-99,-18,6,4,BCMA,,department,249
+253,-97,-17,6,4,Echocardiography Lab,,department,249
+254,-98,-18,6,4,Electrophysiology,,department,249
+255,-98,-18,6,4,Orthopedics,,department,249
+256,-97,-18,6,4,Podiatry,,department,
+257,-98,-18,6,4,Watkins Cardiovascular Clinic,,department,249
+258,43,54,6,4,,,,"259,222"
+259,44,66,6,4,,,,"261,258,260"
+260,20,62,6,4,,,,"259,238"
+261,134,88,6,4,,,,"259,263,262,266,264,265"
+262,144,89,6,4,Thoracic Surgery Clinic,,department,261
+263,145,86,6,4,Ambulatory Radiology,,department,261
+264,143,87,6,4,Chest Diseases,,department,261
+265,144,87,6,4,Internal Patient Center,,department,261
+266,142,87,6,4,Lung Center,,department,261
+267,-187,-32,6,4,,,,268
+268,-180,-9,6,4,,,,"267,269"
+269,-167,-9,6,4,,,,"268,270"
+270,-166,2,6,4,,,,"269,271"
+271,-154,4,6,4,,,,"270,272,273"
+272,-153,27,6,4,,,,"271,242"
+273,-150,1,6,4,,,,"271,274"
+274,25,1,6,4,,,,"273,275"
+275,25,24,6,4,,,,"274,221"
