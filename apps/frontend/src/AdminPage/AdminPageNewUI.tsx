@@ -138,46 +138,56 @@ export function AdminPageV2() {
                                                         gap="xs"
                                                     >
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={5}
-                                                            firstColor="#1C43A7"
-                                                            secondColor="#5A83DB"
+                                                            w="100%"
+                                                            borderRadius={"8px"}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"5"}
+                                                            firstColor="primaryBlues.8"
+                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(5)}
                                                         >
                                                             Service Request Input
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={0}
-                                                            firstColor="#1C43A7"
-                                                            secondColor="#5A83DB"
+                                                            borderRadius={"8px"}
+                                                            w="100%"
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"0"}
+                                                            firstColor="primaryBlues.8"
+                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(0)}
                                                         >
                                                             Language Requests
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={2}
-                                                            firstColor="#1C43A7"
-                                                            secondColor="#5A83DB"
+                                                            w="100%"
+                                                            borderRadius={"8px"}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"2"}
+                                                            firstColor="primaryBlues.8"
+                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(2)}
                                                         >
                                                             Sanitation Requests
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={3}
-                                                            firstColor="#1C43A7"
-                                                            secondColor="#5A83DB"
+                                                            w="100%"
+                                                            borderRadius={"8px"}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"3"}
+                                                            firstColor="primaryBlues.8"
+                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(3)}
                                                         >
                                                             Maintenance Requests
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={1}
-                                                            firstColor="#1C43A7"
-                                                            secondColor="#5A83DB"
+                                                            w="100%"
+                                                            borderRadius={"8px"}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"1"}
+                                                            firstColor="primaryBlues.8"
+                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(1)}
                                                         >
                                                             Security Requests
@@ -232,16 +242,18 @@ export function AdminPageV2() {
                                                         gap="xs"
                                                     >
                                                         <ColorChangingButton
-                                                            numValueToCheck={displayTableNumber}
-                                                            numForTrigger={4}
-                                                            firstColor="#1C43A7"
-                                                            secondColor="#5A83DB"
+                                                            w="100%"
+                                                            borderRadius={"8px"}
+                                                            ValueToCheck={displayTableNumber.toString()}
+                                                            ValueForTrigger={"4"}
+                                                            firstColor="primaryBlues.8"
+                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => setCSVManipOpen(true)}
                                                         >
                                                             CSV Manipulator
                                                         </ColorChangingButton>
                                                         <Button
-                                                            bg={'#5A83DB'}
+                                                            bg={'secondaryBlues.4'}
                                                             component={Link}
                                                             to={'/map-editor'}
                                                             size="sm"
