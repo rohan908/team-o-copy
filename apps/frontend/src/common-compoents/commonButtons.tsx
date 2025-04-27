@@ -9,14 +9,19 @@ interface CustomButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
 }
 
 interface ColorChangingButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  children: string;
+  children?: React.ReactNode;
+  leftSection?: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
   bg?: string;
+  w?: string;
+  h?: string;
   firstColor: string;
   secondColor: string;
-  numValueToCheck: number;
-  numForTrigger: number;
+  ValueToCheck: string;
+  ValueForTrigger: string;
+  borderRadius: string;
+  size?: string;
 }
 
 export const BasicOutlinedButton: React.FC<CustomButtonProps> = ({
@@ -65,23 +70,24 @@ export const BlackButton: React.FC<CustomButtonProps> = ({ children, onClick, ..
 export const ColorChangingButton: React.FC<ColorChangingButtonProps> = ({
     children,
     onClick,
-    ...props}) => {
-  return (
+    ...props
+}) => (
     <Button
-      size="sm"
-      ff="Inter"
-      fw="400"
-      w="100%"
-      bg={props.numValueToCheck == props.numForTrigger ? props.firstColor : props.secondColor}
-      onClick={onClick}
-      fullWidth={false}
-      style={{
-        borderRadius: '8px',
-        transition: 'all 0.4s ease',
-      }}
-      {...props}
+        size={props.size}
+        ff="Inter"
+        fw="400"
+        w={props.w}
+        h={props.h}
+        bg={props.ValueToCheck === props.ValueForTrigger ? props.firstColor : props.secondColor}
+        onClick={onClick}
+        leftSection={props.leftSection}
+        fullWidth={false}
+        style={{
+            borderRadius: props.borderRadius,
+            transition: 'all 0.4s ease',
+        }}
+        {...props}
     >
-      {children}
+        {children}
     </Button>
-  );
-};
+);
