@@ -117,6 +117,8 @@ export function MapEditor() {
             scenesRef.current[3].add(mesh);
         } else if (node1.floor === node2.floor && node1.floor === 5) {
             scenesRef.current[4].add(mesh);
+        } else if (node1.floor === node2.floor && node1.floor === 6) {
+            scenesRef.current[5].add(mesh);
         }
     };
 
@@ -127,6 +129,7 @@ export function MapEditor() {
         if (floor === 4) return 2;
         if (floor === 5) return 3;
         if (floor === 6) return 4;
+        if (floor === 7) return 5;
         return 0;
     };
 
@@ -137,6 +140,7 @@ export function MapEditor() {
         if (index === 2) return { floor: 3, mapID: 1 };
         if (index === 3) return { floor: 4, mapID: 2 };
         if (index === 4) return { floor: 5, mapID: 3 };
+        if (index === 5) return { floor: 6, mapID: 4 };
         return { floor: 1, mapID: 1 };
     };
 
@@ -241,17 +245,15 @@ export function MapEditor() {
         clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
         for (const node of allNodes) {
-            if (node.x !== 0 && node.y !== 0) {
-                createNode(node, scenesRef.current, objectsRef, nodeRadius, {
-                    color: nodeColor,
-                }); //Create the nodes
-                for (const connectingNodeId of node.connectingNodes) {
-                    // iterate over each connected node.
-                    const connectedNode = getNode(connectingNodeId, allNodes);
-                    // TODO: Add another check that makes it so duplicate edge objects aren't created
-                    if (connectedNode) {
-                        createEdge(node, connectedNode);
-                    }
+            createNode(node, scenesRef.current, objectsRef, nodeRadius, {
+                color: nodeColor,
+            }); //Create the nodes
+            for (const connectingNodeId of node.connectingNodes) {
+                // iterate over each connected node.
+                const connectedNode = getNode(connectingNodeId, allNodes);
+                // TODO: Add another check that makes it so duplicate edge objects aren't created
+                if (connectedNode) {
+                    createEdge(node, connectedNode);
                 }
             }
         }
@@ -338,9 +340,9 @@ export function MapEditor() {
         }
     }, [currentNodeData]);
 
-  useEffect(() => {
-    sceneIndexRef.current = sceneIndexState;
-  }, [sceneIndexState]);
+    useEffect(() => {
+        sceneIndexRef.current = sceneIndexState;
+    }, [sceneIndexState]);
 
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
@@ -461,8 +463,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-          objectsRef.current.filter(value =>
-            value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
@@ -508,8 +514,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-            objectsRef.current.filter(value =>
-                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         // new node positon
         if (intersects.length == 0) {
@@ -580,8 +590,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-            objectsRef.current.filter(value =>
-                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
