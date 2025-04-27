@@ -1,72 +1,179 @@
-import { useContext, useState} from 'react';
-import { useMantineTheme, Box, Flex, TextInput, Menu} from '@mantine/core'
-import { useForm } from '@mantine/form'
-import {MapContext, MapEditorProps} from '../MapEditor.tsx';
-import {BlackButton} from "../../common-compoents/commonButtons.tsx";
+import { useContext, useState, useEffect } from 'react';
+import {
+    useMantineTheme,
+    Box,
+    Flex,
+    TextInput,
+    Menu,
+    Collapse,
+    NativeSelect,
+    Modal,
+    ActionIcon,
+    Input,
+    Stack,
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { MapContext, MapEditorProps } from '../MapEditor.tsx';
+import { BlackButton } from '../../common-compoents/commonButtons.tsx';
 
 const NodeInfoBox = () => {
+    const mapProps = useContext(MapContext);
+    const theme = useMantineTheme();
+    const collapsed = false;
 
-  const MapData = useContext(MapContext);
-  const theme = useMantineTheme();
-  const collapsed = false;
+    const [nodeInfoOpen, setNodeInfoOpen] = useState(false);
+    const [expandInfo, setExpandInfo] = useState(false);
 
-  const [opened, setOpened] = useState(true);
+    const toggleMoreInfo = () => {
+        if (expandInfo) {
+            setExpandInfo(false);
+        } else {
+            setExpandInfo(true);
+        }
+    };
 
-  const handleUpdateNodeData = () => {
-    // Get values from form
-    const values = form.getValues();
-    const x = parseFloat(values.xpos); // convert from string to float
-    const y = parseFloat(values.ypos);
-    const floorNum = parseInt(values.floor);
+    useEffect(() => {
+        if (mapProps.currentNode) {
+            setNodeInfoOpen(true);
+        } else {
+            setNodeInfoOpen(false);
+            setExpandInfo(false);
+        }
+    }, [mapProps.currentNode]);
 
-    // Validate values
-    if (isNaN(x) || isNaN(y) || isNaN(floorNum)) {
-      console.log(x, y, floorNum);
-      alert('Please enter valid numbers for X, Y, and Floor');
-      return;
-    }
-
-    if (MapData.updateNodePosition) {
-      MapData.updateNodePosition(x, y, floorNum);
-    }
-  };
-
-  const form = useForm({
-    mode: 'uncontrolled',
-    initialValues: {
-      xpos: 'Select a node',
-      ypos: 'Select a node',
-      floor: 'Select a node',
-    },
-  });
-
-  return (
-    <Box>
-
-      <TextInput
-        label="X Position"
-        placeholder="Select a node"
-        disabled={!MapData.nodeSelected}
-        key={form.key('xpos')}
-        {...form.getInputProps('xpos')}
-      ></TextInput>
-      <TextInput
-        label="Y Position"
-        placeholder="Select a node"
-        disabled={!MapData.nodeSelected}
-        key={form.key('ypos')}
-        {...form.getInputProps('ypos')}
-      ></TextInput>
-      <TextInput
-        label="Floor"
-        placeholder="Select a node"
-        disabled={!MapData.nodeSelected}
-        key={form.key('floor')}
-        {...form.getInputProps('floor')}
-      ></TextInput>
-
-    </Box>
-  );
-}
+    return (
+        <Collapse in={nodeInfoOpen} transitionDuration={250} transitionTimingFunction="linear">
+            <Stack>
+                <Box
+                    //bg="#FCB024"
+                    p="sm"
+                    style={{
+                        width: 'auto',
+                        minWidth: '300px',
+                        backgroundColor: '#285CC6',
+                        border: '2px solid #1C43A7',
+                        borderRadius: 24,
+                    }}
+                >
+                    <Flex direction="column">
+                        <Flex direction="row" p="xs" gap="xs">
+                            <TextInput
+                                variant="filled"
+                                readOnly
+                                value={`ID: ${mapProps.currentNode?.id || 0}`}
+                                size="sm"
+                                radius="xl"
+                                w={80}
+                                styles={{
+                                    input: {
+                                        color: 'black',
+                                        fontWeight: 400,
+                                    },
+                                }}
+                            />
+                            <Input
+                                size="sm"
+                                radius="xl"
+                                w={80}
+                                placeholder={`X: ${mapProps.currentNode?.x || 0}`}
+                                variant="filled"
+                            ></Input>
+                            <Input
+                                size="sm"
+                                radius="xl"
+                                w={80}
+                                placeholder={`Y: ${mapProps.currentNode?.y || 0}`}
+                                variant="filled"
+                            ></Input>
+                        </Flex>
+                        <Flex direction="row" p="xs" gap="xs">
+                            <NativeSelect
+                                size="sm"
+                                w={160}
+                                value={mapProps.currentNode?.nodeType || ''}
+                                onChange={(event) =>
+                                    mapProps.setCurrentNodeData({
+                                        id: mapProps.currentNode.id,
+                                        x: mapProps.currentNode.x,
+                                        y: mapProps.currentNode.y,
+                                        floor: mapProps.currentNode.floor,
+                                        mapId: mapProps.currentNode.mapId,
+                                        name: mapProps.currentNode.name,
+                                        description: mapProps.currentNode.description,
+                                        nodeType: event.currentTarget.value,
+                                        connectingNodes: mapProps.currentNode.connectingNodes,
+                                    })
+                                }
+                                data={[
+                                    '',
+                                    'department',
+                                    'parking-lot',
+                                    'hallway',
+                                    'staircase',
+                                    'elevator',
+                                ]}
+                                variant="filled"
+                            />
+                            <ActionIcon
+                                size="xxxl"
+                                variant="filled"
+                                color="#285CC6"
+                                onClick={() => toggleMoreInfo()}
+                            >
+                                Edit Node
+                            </ActionIcon>
+                        </Flex>
+                    </Flex>
+                </Box>
+                <Collapse
+                    in={expandInfo}
+                    transitionDuration={250}
+                    transitionTimingFunction="linear"
+                >
+                    <TextInput
+                        label={'Node Name'}
+                        size="sm"
+                        radius="xl"
+                        value={`${mapProps.currentNode?.name || ''}`}
+                        variant="filled"
+                        onChange={(event) =>
+                            mapProps.setCurrentNodeData({
+                                id: mapProps.currentNode.id,
+                                x: mapProps.currentNode.x,
+                                y: mapProps.currentNode.y,
+                                floor: mapProps.currentNode.floor,
+                                mapId: mapProps.currentNode.mapId,
+                                name: event.currentTarget.value,
+                                description: mapProps.currentNode.description,
+                                nodeType: mapProps.currentNode.nodeType,
+                                connectingNodes: mapProps.currentNode.connectingNodes,
+                            })
+                        }
+                    ></TextInput>
+                    <TextInput
+                        label={'Node Description'}
+                        size="sm"
+                        radius="xl"
+                        value={`${mapProps.currentNode?.description || ''}`}
+                        variant="filled"
+                        onChange={(event) =>
+                            mapProps.setCurrentNodeData({
+                                id: mapProps.currentNode.id,
+                                x: mapProps.currentNode.x,
+                                y: mapProps.currentNode.y,
+                                floor: mapProps.currentNode.floor,
+                                mapId: mapProps.currentNode.mapId,
+                                name: mapProps.currentNode.name,
+                                description: event.currentTarget.value,
+                                nodeType: mapProps.currentNode.nodeType,
+                                connectingNodes: mapProps.currentNode.connectingNodes,
+                            })
+                        }
+                    ></TextInput>
+                </Collapse>
+            </Stack>
+        </Collapse>
+    );
+};
 
 export default NodeInfoBox;
