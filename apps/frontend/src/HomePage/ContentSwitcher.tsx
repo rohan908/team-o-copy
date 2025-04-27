@@ -27,7 +27,17 @@ export function ContentSwitcher() {
             case 1: //Indoor Nav
                 return <DraggableMap />;
             case 2: //Service Request
-                return <ServiceRequestPage width={"80%"} marginRight={"10%"} height={"80vh"} cols={2} vSpacing={10} hSpacing={30} buttonHeight={150}/>;
+                return (
+                    <ServiceRequestPage
+                        width={'80%'}
+                        marginRight={'10%'}
+                        height={'80vh'}
+                        cols={2}
+                        vSpacing={10}
+                        hSpacing={30}
+                        buttonHeight={150}
+                    />
+                );
         }
     };
     return (
@@ -35,8 +45,7 @@ export function ContentSwitcher() {
             w="100%"
             h="100%"
             p="xxl"
-            miw="550px"
-            mih="550px"
+            maxWidth=""
             style={{
                 borderRadius: '8px',
                 overflow: 'hidden',
