@@ -41,6 +41,10 @@ function CreditPage() {
   const jiraImage = `https://cdn.simpleicons.org/jira/jira`;
   const discordImage = `https://cdn.simpleicons.org/discord/discord`;
   const githubImage = `https://cdn.simpleicons.org/github/github`;
+  const webstormImage = `https://cdn.simpleicons.org/webstorm/webstorm`;
+  const mantineImage = `https://cdn.simpleicons.org/mantine/mantine`;
+  const reactImage = `https://cdn.simpleicons.org/react/react`;
+  const viteImage = `https://cdn.simpleicons.org/vite/vite`;
   return (
     <Box h="100vh" w="100vw">
       <Flex direction="row" align="center" justify="flex-start" h="100vh" p="md">
@@ -94,9 +98,9 @@ function CreditPage() {
             </Link>
           </Tooltip>
         </Stack>
-        <Stack align="flex-start" spacing="sm" style={{ position: "absolute", top: "50%", right: 0 }}>
+        <Stack align="flex-start" spacing="sm" style={{ position: "absolute", top: "50%", right: 0, zIndex: 10 }}>
           <Tooltip label="Webstorm">
-            <Link to="https://github.com/">
+            <Link to="https://www.jetbrains.com/webstorm/">
               <ActionIcon
                 size="xl"
                 variant="transparent"
@@ -107,7 +111,39 @@ function CreditPage() {
                   padding: 0
                 }}
               >
-                <img src={githubImage} alt="jira" style={{objectFit: "contain"}}/>
+                <img src={webstormImage} alt="jira" style={{objectFit: "contain"}}/>
+              </ActionIcon>
+            </Link>
+          </Tooltip>
+          <Tooltip label="React">
+            <Link to="https://react.dev/">
+              <ActionIcon
+                size="xl"
+                variant="transparent"
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 50,
+                  padding: 0
+                }}
+              >
+                <img src={reactImage} alt="jira" style={{objectFit: "contain"}}/>
+              </ActionIcon>
+            </Link>
+          </Tooltip>
+          <Tooltip label="Vite">
+            <Link to="https://vite.dev/">
+              <ActionIcon
+                size="xl"
+                variant="transparent"
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 50,
+                  padding: 0
+                }}
+              >
+                <img src={viteImage} alt="jira" style={{objectFit: "contain"}}/>
               </ActionIcon>
             </Link>
           </Tooltip>
