@@ -13,10 +13,19 @@ import { useLogin } from '../home-page/components/LoginContext.tsx';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
+import { IconCurrentLocation } from '@tabler/icons-react';
 
 import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
+import { map } from 'leaflet';
+
+const MouseImages = {
+    MoveNone: 'MapImages/MouseCursors/MoveNoSelected.png',
+    MoveClick: 'MapImages/MouseCursors/MoveSelected.png',
+    AddNode: 'MapImages/MouseCursors/AddNode.png',
+    AddEdge: 'MapImages/MouseCursors/AddEdge.png',
+}
 
 export interface MapEditorProps {
     selectedTool: string;
@@ -59,6 +68,7 @@ export function MapEditor() {
     >([]);
 
     const nodeRef = useRef(allNodes);
+    const cursorStyleRef = useRef(MouseImages.MoveNone);
 
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const sceneIndexRef = useRef(sceneIndexState);
@@ -139,6 +149,9 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
+                selectedObjects.current.forEach((object) => {
+                  deselectObject(object);
+                });
             }, 200); // Fade-in duration
         }, 200); // Fade-out duration
     };
@@ -219,6 +232,7 @@ export function MapEditor() {
     // render function that can be called from anywhere so we can render only when needed.
     const render = () => {
         if (rendererRef.current && scenesRef.current && cameraRef.current) {
+            rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
             rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
         }
     };
@@ -269,9 +283,19 @@ export function MapEditor() {
                 rendererRef.current.domElement
             );
 
+            // these listeners fix a visual bug with the mouse when selecting a node too quickly
+            dragControlsRef.current.addEventListener('hoveron', function (event) {
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
+            });
+
+            dragControlsRef.current.addEventListener('hoveroff', function (event) {
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
+            });
+
             // add event listeners to enable / enable map dragging while dragging nodes
             dragControlsRef.current.addEventListener('dragstart', function () {
                 controlRef.current.enabled = false;
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
             });
 
             dragControlsRef.current.addEventListener('drag', function (event) {
@@ -286,6 +310,7 @@ export function MapEditor() {
             });
 
             dragControlsRef.current.addEventListener('dragend', function () {
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
                 setTimeout(() => {
                     controlRef.current.enabled = true;
                 }, 10);
@@ -326,6 +351,9 @@ export function MapEditor() {
             selectedObject.material.needsUpdate = true;
             selectedObjects.current.push(selectedObject);
 
+            // changes mouse on selected object
+            setCursorStyle(`url(${MouseImages.MoveClick}),auto`);
+
             setCurrentNodeData(
                 nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
             );
@@ -347,6 +375,11 @@ export function MapEditor() {
 
             if (selectedObjects.current.length === 0) {
                 setCurrentNodeData(null);
+
+                if(cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
+                    // changes mouse on no selected objects
+                    setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
+                }
             } else if (selectedObjects.current.length > 0) {
                 setCurrentNodeData(
                     nodeRef.current.find(
@@ -363,20 +396,36 @@ export function MapEditor() {
         }
     };
 
+    // switches the type of cursor depending on the tool
+    useEffect(() => {
+        switch (mapTool) {
+            case 'pan':
+                setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
+                break;
+            case 'add-node':
+                setCursorStyle(`url(${MouseImages.AddNode}),auto`);
+                break;
+            case 'add-edge':
+                setCursorStyle(`url(${MouseImages.AddEdge}),auto`);
+                break;
+        }
+    }, [mapTool]);
+
+    useEffect(() => {
+        cursorStyleRef.current = cursorStyle;
+    }, [cursorStyle]);
+
     const clickHandler = useCallback(
         (event) => {
-            // switches the type of cursor depending on the tool
+            // switches editing tool
             switch (mapTool) {
                 case 'pan':
-                    setCursorStyle('pointer');
                     handlePanClick(event);
                     break;
                 case 'add-node':
-                    setCursorStyle('crosshair');
                     handleAddNodeClick(event);
                     break;
                 case 'add-edge':
-                    setCursorStyle('crosshair');
                     handleAddEdgeClick(event);
                     break;
             }
@@ -558,7 +607,7 @@ export function MapEditor() {
                 selectedObject.material.needsUpdate = true;
                 selectedObjects.current.push(selectedObject);
                 render();
-                updateDragControls();
+
             } else if (selectedObjects.current.length == 1) {
                 const firstNode = nodeRef.current.find(
                     (element) => element.id === selectedObjects.current[0].userData.nodeId
@@ -729,12 +778,13 @@ export function MapEditor() {
                         objectsRef.current.splice(objectsIndex, 1);
                     }
                 });
-                render();
             }
 
             selectedObjects.current.forEach((object) => {
                 deselectObject(object);
             });
+
+            render();
         };
 
         window.addEventListener('keydown', ({ key }) => {
@@ -823,25 +873,8 @@ export function MapEditor() {
             <canvas
                 ref={canvasRef}
                 id="insideMapCanvas"
-                style={{ width: '100%', height: '100%', position: 'absolute', cursor: cursorStyle }}
+                style={{ width: '100%', height: '100%', position: 'absolute' }}
             />
-
-            {/*<div*/}
-            {/*    style={{*/}
-            {/*        position: 'absolute',*/}
-            {/*        top: 0,*/}
-            {/*        left: 0,*/}
-            {/*        width: '50%',*/}
-            {/*        height: '100%',*/}
-            {/*        backgroundColor: '#000',*/}
-            {/*        opacity: isFading ? 1 : 0,*/}
-            {/*        transition: 'opacity 0.3s ease-in-out',*/}
-            {/*        pointerEvents: 'none',*/}
-            {/*        zIndex: 5,*/}
-            {/*    }}*/}
-            {/*/>*/}
-
-            {/*<NodeInfoBox/>*/}
         </Box>
     );
 }
