@@ -45,10 +45,8 @@ export function ContentSwitcher() {
             w="100%"
             h="100%"
             p="xxl"
-            maxWidth=""
             style={{
                 borderRadius: '8px',
-                overflow: 'hidden',
             }}
         >
             {content()}

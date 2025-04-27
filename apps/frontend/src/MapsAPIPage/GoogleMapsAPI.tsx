@@ -32,6 +32,7 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
         mapRef.current = map;
     };
 
+    // 'confused shrieking... we both know this code is bad, but do you want to fix it?... its not like it will run twice on load or anything
     useEffect(() => {
         if (!userCoordinates || !selectedHospital || !travelMode || !mapRef.current) {
             if (directionsRendererRef.current) {
@@ -78,7 +79,7 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
         <>
             <Box pos="relative" w="100%" h="100%">
                 <GoogleMap
-                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    mapContainerStyle={{ borderRadius: '8px', width: '100%', height: '100%' }} //ik putting the border radius is sloppy but google maps can go pound sand
                     zoom={hospitalCoordinates(selectedHospital) ? 18.6 : 10}
                     center={
                         hospitalCoordinates(selectedHospital) ?? { lat: 42.093429, lng: -71.268228 }

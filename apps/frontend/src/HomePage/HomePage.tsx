@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Stack, Title, useMantineTheme } from '@mantine/core';
+import { Box, Flex, Grid, SimpleGrid, Stack, Title, useMantineTheme } from '@mantine/core';
 import { CustomTimeline } from './CustomTimeline.tsx';
 import { useEffect, useState } from 'react';
 import { ContentSwitcher } from './ContentSwitcher.tsx';
@@ -60,46 +60,56 @@ export function HomePage() {
 
     return (
         <Box
-            style={{
-                backgroundImage: `radial-gradient(circle at center, white 0%, ${theme.colors.blue[0]} 100%)`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
-            h="100%"
+            // style={{
+            //     backgroundImage: `radial-gradient(circle at center, white 0%, ${theme.colors.blue[0]} 100%)`,
+            //     backgroundSize: 'cover',
+            //     backgroundPosition: 'center',
+            // }}
+            // h="100%"
             w="100%"
             p="xl"
+            bg={theme.colors.secondaryBlues[0]}
+            style={{ position: 'relative', minHeight: '100vh' }}
         >
             <DisclaimerPopup />
-            <Grid gutter="md" h="100%" mt={'2%'}>
+            <SimpleGrid
+                cols={{ base: 2, xs: 1, sm: 2 }}
+                spacing="xs"
+                verticalSpacing="xs"
+                mt={'2%'}
+                bottom="0"
+                left="0"
+                h={{ base: '100vh', xxs: '100%', xs: '100%', sm: '100%' }}
+                style={{}}
+            >
                 {/* Left Context */}
-                <Grid.Col span={6} pl="5%" p="xl">
-                    <Stack justify="flex-start" h="100%" align="flex-start">
-                        <HoverUnderline>
-                            <Title
-                                order={2}
-                                c={theme.colors.secondaryBlues[7]}
-                                fz={'xxxl'}
-                                w={'auto'}
-                            >
-                                How Can We Help?
-                            </Title>
-                        </HoverUnderline>
-                        <CustomTimeline />
-                    </Stack>
-                </Grid.Col>
+                <Stack justify="flex-start" h="100%" align="flex-start">
+                    <HoverUnderline>
+                        <Title
+                            order={2}
+                            c={theme.colors.secondaryBlues[7]}
+                            fz={{ base: 'xxxl', xs: 'xxl', sm: 'xxl' }}
+                            w={'auto'}
+                        >
+                            How Can We Help?
+                        </Title>
+                    </HoverUnderline>
+                    <CustomTimeline />
+                </Stack>
                 {/* Right Content */}
-                <Grid.Col span={5}>
-                    <Flex
-                        h="100%"
-                        w={'100%'}
-                        align="center"
-                        justify="center"
-                        pt="6%"
-                    >
-                        <ContentSwitcher />
-                    </Flex>
-                </Grid.Col>
-            </Grid>
+                <Flex
+                    // w={'100%'}
+                    align="center"
+                    justify="center"
+                    mb="40px"
+                    style={{
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <ContentSwitcher />
+                </Flex>
+            </SimpleGrid>
         </Box>
     );
 }

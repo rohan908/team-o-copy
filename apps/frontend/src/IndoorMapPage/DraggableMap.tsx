@@ -300,7 +300,7 @@ export function DraggableMap() {
     }, [selectedDepartment, sceneIndexState]);
 
     return (
-        <Box w="100%" h="100%" p={0} pos={'relative'}>
+        <Box w="100%" h="100%" p={0} pos={'relative'} style={{ borderRadius: '8px' }}>
             <FloorSwitchBox
                 floor={floorState}
                 onCollapseChange={() => true}
