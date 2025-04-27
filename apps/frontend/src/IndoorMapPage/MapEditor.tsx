@@ -13,10 +13,19 @@ import { useLogin } from '../home-page/components/LoginContext.tsx';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
+import { IconCurrentLocation } from '@tabler/icons-react';
 
 import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
+import { map } from 'leaflet';
+
+const MouseImages = {
+    MoveNone: 'MapImages/MouseCursors/MoveNoSelected.png',
+    MoveClick: 'MapImages/MouseCursors/MoveSelected.png',
+    AddNode: 'MapImages/MouseCursors/AddNode.png',
+    AddEdge: 'MapImages/MouseCursors/AddEdge.png',
+}
 
 export interface MapEditorProps {
     selectedTool: string;
@@ -59,6 +68,7 @@ export function MapEditor() {
     >([]);
 
     const nodeRef = useRef(allNodes);
+    const cursorStyleRef = useRef(MouseImages.MoveNone);
 
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const sceneIndexRef = useRef(sceneIndexState);
@@ -107,6 +117,8 @@ export function MapEditor() {
             scenesRef.current[3].add(mesh);
         } else if (node1.floor === node2.floor && node1.floor === 5) {
             scenesRef.current[4].add(mesh);
+        } else if (node1.floor === node2.floor && node1.floor === 6) {
+            scenesRef.current[5].add(mesh);
         }
     };
 
@@ -117,6 +129,7 @@ export function MapEditor() {
         if (floor === 4) return 2;
         if (floor === 5) return 3;
         if (floor === 6) return 4;
+        if (floor === 7) return 5;
         return 0;
     };
 
@@ -127,6 +140,7 @@ export function MapEditor() {
         if (index === 2) return { floor: 3, mapID: 1 };
         if (index === 3) return { floor: 4, mapID: 2 };
         if (index === 4) return { floor: 5, mapID: 3 };
+        if (index === 5) return { floor: 6, mapID: 4 };
         return { floor: 1, mapID: 1 };
     };
 
@@ -139,6 +153,9 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
+                selectedObjects.current.forEach((object) => {
+                  deselectObject(object);
+                });
             }, 200); // Fade-in duration
         }, 200); // Fade-out duration
     };
@@ -219,6 +236,7 @@ export function MapEditor() {
     // render function that can be called from anywhere so we can render only when needed.
     const render = () => {
         if (rendererRef.current && scenesRef.current && cameraRef.current) {
+            rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
             rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
         }
     };
@@ -227,17 +245,15 @@ export function MapEditor() {
         clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
         for (const node of allNodes) {
-            if (node.x !== 0 && node.y !== 0) {
-                createNode(node, scenesRef.current, objectsRef, nodeRadius, {
-                    color: nodeColor,
-                }); //Create the nodes
-                for (const connectingNodeId of node.connectingNodes) {
-                    // iterate over each connected node.
-                    const connectedNode = getNode(connectingNodeId, allNodes);
-                    // TODO: Add another check that makes it so duplicate edge objects aren't created
-                    if (connectedNode) {
-                        createEdge(node, connectedNode);
-                    }
+            createNode(node, scenesRef.current, objectsRef, nodeRadius, {
+                color: nodeColor,
+            }); //Create the nodes
+            for (const connectingNodeId of node.connectingNodes) {
+                // iterate over each connected node.
+                const connectedNode = getNode(connectingNodeId, allNodes);
+                // TODO: Add another check that makes it so duplicate edge objects aren't created
+                if (connectedNode) {
+                    createEdge(node, connectedNode);
                 }
             }
         }
@@ -269,9 +285,19 @@ export function MapEditor() {
                 rendererRef.current.domElement
             );
 
+            // these listeners fix a visual bug with the mouse when selecting a node too quickly
+            dragControlsRef.current.addEventListener('hoveron', function (event) {
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
+            });
+
+            dragControlsRef.current.addEventListener('hoveroff', function (event) {
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
+            });
+
             // add event listeners to enable / enable map dragging while dragging nodes
             dragControlsRef.current.addEventListener('dragstart', function () {
                 controlRef.current.enabled = false;
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
             });
 
             dragControlsRef.current.addEventListener('drag', function (event) {
@@ -286,6 +312,7 @@ export function MapEditor() {
             });
 
             dragControlsRef.current.addEventListener('dragend', function () {
+                rendererRef.current.domElement.style.cursor = cursorStyleRef.current;
                 setTimeout(() => {
                     controlRef.current.enabled = true;
                 }, 10);
@@ -313,9 +340,9 @@ export function MapEditor() {
         }
     }, [currentNodeData]);
 
-  useEffect(() => {
-    sceneIndexRef.current = sceneIndexState;
-  }, [sceneIndexState]);
+    useEffect(() => {
+        sceneIndexRef.current = sceneIndexState;
+    }, [sceneIndexState]);
 
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
@@ -325,6 +352,9 @@ export function MapEditor() {
             selectedObject.material.color.set(selectedNodeColor);
             selectedObject.material.needsUpdate = true;
             selectedObjects.current.push(selectedObject);
+
+            // changes mouse on selected object
+            setCursorStyle(`url(${MouseImages.MoveClick}),auto`);
 
             setCurrentNodeData(
                 nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
@@ -347,6 +377,11 @@ export function MapEditor() {
 
             if (selectedObjects.current.length === 0) {
                 setCurrentNodeData(null);
+
+                if(cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
+                    // changes mouse on no selected objects
+                    setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
+                }
             } else if (selectedObjects.current.length > 0) {
                 setCurrentNodeData(
                     nodeRef.current.find(
@@ -363,20 +398,36 @@ export function MapEditor() {
         }
     };
 
+    // switches the type of cursor depending on the tool
+    useEffect(() => {
+        switch (mapTool) {
+            case 'pan':
+                setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
+                break;
+            case 'add-node':
+                setCursorStyle(`url(${MouseImages.AddNode}),auto`);
+                break;
+            case 'add-edge':
+                setCursorStyle(`url(${MouseImages.AddEdge}),auto`);
+                break;
+        }
+    }, [mapTool]);
+
+    useEffect(() => {
+        cursorStyleRef.current = cursorStyle;
+    }, [cursorStyle]);
+
     const clickHandler = useCallback(
         (event) => {
-            // switches the type of cursor depending on the tool
+            // switches editing tool
             switch (mapTool) {
                 case 'pan':
-                    setCursorStyle('pointer');
                     handlePanClick(event);
                     break;
                 case 'add-node':
-                    setCursorStyle('crosshair');
                     handleAddNodeClick(event);
                     break;
                 case 'add-edge':
-                    setCursorStyle('crosshair');
                     handleAddEdgeClick(event);
                     break;
             }
@@ -412,8 +463,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-          objectsRef.current.filter(value =>
-            value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
@@ -459,8 +514,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-            objectsRef.current.filter(value =>
-                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         // new node positon
         if (intersects.length == 0) {
@@ -531,8 +590,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-            objectsRef.current.filter(value =>
-                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
@@ -558,7 +621,7 @@ export function MapEditor() {
                 selectedObject.material.needsUpdate = true;
                 selectedObjects.current.push(selectedObject);
                 render();
-                updateDragControls();
+
             } else if (selectedObjects.current.length == 1) {
                 const firstNode = nodeRef.current.find(
                     (element) => element.id === selectedObjects.current[0].userData.nodeId
@@ -729,12 +792,13 @@ export function MapEditor() {
                         objectsRef.current.splice(objectsIndex, 1);
                     }
                 });
-                render();
             }
 
             selectedObjects.current.forEach((object) => {
                 deselectObject(object);
             });
+
+            render();
         };
 
         window.addEventListener('keydown', ({ key }) => {
@@ -826,25 +890,8 @@ export function MapEditor() {
             <canvas
                 ref={canvasRef}
                 id="insideMapCanvas"
-                style={{ width: '100%', height: '100%', position: 'absolute', cursor: cursorStyle }}
+                style={{ width: '100%', height: '100%', position: 'absolute' }}
             />
-
-            {/*<div*/}
-            {/*    style={{*/}
-            {/*        position: 'absolute',*/}
-            {/*        top: 0,*/}
-            {/*        left: 0,*/}
-            {/*        width: '50%',*/}
-            {/*        height: '100%',*/}
-            {/*        backgroundColor: '#000',*/}
-            {/*        opacity: isFading ? 1 : 0,*/}
-            {/*        transition: 'opacity 0.3s ease-in-out',*/}
-            {/*        pointerEvents: 'none',*/}
-            {/*        zIndex: 5,*/}
-            {/*    }}*/}
-            {/*/>*/}
-
-            {/*<NodeInfoBox/>*/}
         </Box>
     );
 }

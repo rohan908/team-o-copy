@@ -44,7 +44,7 @@ const MapEditorBox = () => {
                     <ActionIcon
                         size="xl"
                         variant="filled"
-                        color="#285CC6"
+                        color={mapProps.selectedTool == 'pan' ? "#003EB1" : "#285CC6" }
                         style={{
                             border: '2px solid #1C43A7',
                             width: 60,
@@ -61,7 +61,7 @@ const MapEditorBox = () => {
                     <ActionIcon
                         size="xl"
                         variant="filled"
-                        color="#285CC6"
+                        color={mapProps.selectedTool == 'add-node' ? "#003EB1" : "#285CC6" }
                         style={{
                             border: '2px solid #1C43A7',
                             width: 60,
@@ -78,7 +78,7 @@ const MapEditorBox = () => {
                     <ActionIcon
                         size="xl"
                         variant="filled"
-                        color="#285CC6"
+                        color={mapProps.selectedTool == 'add-edge' ? "#003EB1" : "#285CC6" }
                         style={{
                             border: '2px solid #1C43A7',
                             width: 60,
