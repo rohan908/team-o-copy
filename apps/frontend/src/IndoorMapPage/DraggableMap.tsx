@@ -14,7 +14,7 @@ import { PathPickerBox } from './Components/PathPickerBox.tsx';
 import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
-import { createNode } from './HelperFiles/NodeFactory.ts';
+import { createNode } from './HelperFiles/NodeFactory.tsx';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
@@ -115,7 +115,7 @@ export function DraggableMap() {
                 // Get the full node from the ID
                 const node = getNode(id, allNodes);
                 if (node) {
-                    createNode(node, scenesRef.current); //Create the node from its data
+                    createNode(node, scenesRef.current, node.nodeType, firstNodeId, lastNodeId); //Create the node from its data
                 } else {
                     console.error('Node id not found: ', id);
                 }

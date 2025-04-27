@@ -10,7 +10,7 @@ import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import PopupTooltip from './Components/PopupTooltip';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { useLogin } from '../home-page/components/LoginContext.tsx';
-import { createNode } from './HelperFiles/NodeFactory.ts';
+import { createNode } from './HelperFiles/NodeFactory.tsx';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 
@@ -27,7 +27,7 @@ export interface MapEditorProps {
     updateNodePosition?: (x: number, y: number, floor: number) => void;
 }
 
-export const MapContext = createContext<MapEditorProps>({});
+export const MapContext = createContext<MapEditorProps>();
 
 export function MapEditor() {
     const allNodes = useAllNodesContext();
@@ -68,6 +68,8 @@ export function MapEditor() {
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
     const selectedNodeColor = 0x56effa;
+    const startColor = 0x2a68f7;
+    const endColor = 0xfcbe45;
     const edgeColor = 0x2a68f7;
     const nodeRadius = 1.5;
     const edgeRad = 0.75;
@@ -228,7 +230,7 @@ export function MapEditor() {
         // populate all nodes and edges
         for (const node of allNodes) {
             if (node.x !== 0 && node.y !== 0) {
-                createNode(node, scenesRef.current, objectsRef, nodeRadius, {
+                createNode(node, scenesRef.current, node.nodeType, 0, 0, objectsRef, nodeRadius, {
                     color: nodeColor,
                 }); //Create the nodes
                 for (const connectingNodeId of node.connectingNodes) {
@@ -313,9 +315,9 @@ export function MapEditor() {
         }
     }, [currentNodeData]);
 
-  useEffect(() => {
-    sceneIndexRef.current = sceneIndexState;
-  }, [sceneIndexState]);
+    useEffect(() => {
+        sceneIndexRef.current = sceneIndexState;
+    }, [sceneIndexState]);
 
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
@@ -338,29 +340,28 @@ export function MapEditor() {
         if (
             selectedObject instanceof THREE.Mesh &&
             selectedObject.material instanceof THREE.MeshBasicMaterial
-        ) {
+        )
             selectedObject.material.color.set(nodeColor);
-            selectedObject.material.needsUpdate = true;
-            selectedObjects.current = selectedObjects.current.filter(
-                (object) => object !== selectedObject
+
+        selectedObject.material.needsUpdate = true;
+        selectedObjects.current = selectedObjects.current.filter(
+            (object) => object !== selectedObject
+        );
+
+        if (selectedObjects.current.length === 0) {
+            setCurrentNodeData(null);
+        } else if (selectedObjects.current.length > 0) {
+            setCurrentNodeData(
+                nodeRef.current.find(
+                    (element) =>
+                        element.id ===
+                        selectedObjects.current[selectedObjects.current.length - 1].userData.nodeId
+                )
             );
-
-            if (selectedObjects.current.length === 0) {
-                setCurrentNodeData(null);
-            } else if (selectedObjects.current.length > 0) {
-                setCurrentNodeData(
-                    nodeRef.current.find(
-                        (element) =>
-                            element.id ===
-                            selectedObjects.current[selectedObjects.current.length - 1].userData
-                                .nodeId
-                    )
-                );
-            }
-
-            render(); // render to show color changes
-            updateDragControls();
         }
+
+        render(); // render to show color changes
+        updateDragControls();
     };
 
     const clickHandler = useCallback(
@@ -412,8 +413,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-          objectsRef.current.filter(value =>
-            value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
@@ -459,8 +464,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-            objectsRef.current.filter(value =>
-                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         // new node positon
         if (intersects.length == 0) {
@@ -531,8 +540,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-            objectsRef.current.filter(value =>
-                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
