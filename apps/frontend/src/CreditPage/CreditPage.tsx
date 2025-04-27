@@ -1,4 +1,4 @@
-import {Flex, Box, Text, Stack, Tooltip, ActionIcon} from "@mantine/core";
+import {Flex, Box, Text, Stack, Tooltip, ActionIcon, Grid, Title} from "@mantine/core";
 import IconCloud from "./IconCloudComponent.tsx";
 import { Link } from "react-router-dom";
 
@@ -43,11 +43,82 @@ function CreditPage() {
   const githubImage = `https://cdn.simpleicons.org/github/github`;
   const webstormImage = `https://cdn.simpleicons.org/webstorm/webstorm`;
   const mantineImage = `https://cdn.simpleicons.org/mantine/mantine`;
-  const reactImage = `https://cdn.simpleicons.org/react/react`;
   const viteImage = `https://cdn.simpleicons.org/vite/vite`;
+  const postgresqlImage = `https://cdn.simpleicons.org/postgresql/postgresql`;
+  const expressImage = `https://cdn.simpleicons.org/express/express`;
+  const reactImage = `https://cdn.simpleicons.org/react/react`;
+  const nodeImage = `https://cdn.simpleicons.org/nodedotjs/nodedotjs`;
+
   return (
     <Box h="100vh" w="100vw">
       <Flex direction="row" align="center" justify="flex-start" h="100vh" p="md">
+        <Text style={{ position: "absolute", top: "0%", left: "40%"}}>Onyx Onis' Software Credits</Text>
+        <Grid align="flex-start" spacing="sm" style={{ position: "absolute", top: "17%", zIndex: 10 }}>
+          <Tooltip label="PostgreSQL">
+            <Link to="">
+              <ActionIcon
+                size="xl"
+                variant="transparent"
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 50,
+                  padding: 0
+                }}
+              >
+                <img src={postgresqlImage} alt="PostgreSQL" style={{objectFit: "contain"}}/>
+              </ActionIcon>
+            </Link>
+          </Tooltip>
+          <Tooltip label="Express">
+            <Link to="">
+              <ActionIcon
+                size="xl"
+                variant="transparent"
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 50,
+                  padding: 0
+                }}
+              >
+                <img src={expressImage} alt="express" style={{objectFit: "contain"}}/>
+              </ActionIcon>
+            </Link>
+          </Tooltip>
+          <Tooltip label="React">
+            <Link to="https://react.dev/">
+              <ActionIcon
+                size="xl"
+                variant="transparent"
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 50,
+                  padding: 0
+                }}
+              >
+                <img src={reactImage} alt="react" style={{objectFit: "contain"}}/>
+              </ActionIcon>
+            </Link>
+          </Tooltip>
+          <Tooltip label="Node.js">
+            <Link to="">
+              <ActionIcon
+                size="xl"
+                variant="transparent"
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 50,
+                  padding: 0
+                }}
+              >
+                <img src={nodeImage} alt="Node.js" style={{objectFit: "contain"}}/>
+              </ActionIcon>
+            </Link>
+          </Tooltip>
+        </Grid>
         <Stack align="flex-start" spacing="sm" style={{ position: "absolute", top: "50%", left: 25, zIndex: 10 }}>
           <Tooltip label="Jira">
             <Link to="https://www.atlassian.com/software/jira">
@@ -112,22 +183,6 @@ function CreditPage() {
                 }}
               >
                 <img src={webstormImage} alt="jira" style={{objectFit: "contain"}}/>
-              </ActionIcon>
-            </Link>
-          </Tooltip>
-          <Tooltip label="React">
-            <Link to="https://react.dev/">
-              <ActionIcon
-                size="xl"
-                variant="transparent"
-                style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: 50,
-                  padding: 0
-                }}
-              >
-                <img src={reactImage} alt="jira" style={{objectFit: "contain"}}/>
               </ActionIcon>
             </Link>
           </Tooltip>
