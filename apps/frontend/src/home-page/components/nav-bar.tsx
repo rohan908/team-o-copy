@@ -11,6 +11,7 @@ type NavItem = {
 
 export const navItems: NavItem[] = [
     // { name: 'Navigation', link: '/map-API' },
+    { name: 'About', link: '/About-page' },
 ];
 
 export const adminNavItems: NavItem[] = [

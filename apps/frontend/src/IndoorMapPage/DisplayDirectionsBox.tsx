@@ -7,7 +7,7 @@
 import { Accordion, Box, Text, Group, Divider } from '@mantine/core';
 import { GetTextDirections } from './GetTextDirections.tsx';
 import { useMemo } from 'react';
-import { usePathContext } from '../contexts/NavigationContext.tsx';
+import { usePathContext, useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
 import { IconArrowLeft, IconArrowRight, IconArrowNarrowUp, IconStairs } from '@tabler/icons-react';
@@ -34,9 +34,29 @@ function getPathNodes(nodeIds: number[], allNodes: NodeDataType[]): NodeDataType
 
 export function DisplayDirectionsBox() {
     const pathNodes = usePathContext();
+    const navSelection = useNavSelectionContext();
     const nodeIds = pathNodes.state.pathSelectRequest?.NodeIds;
 
     const allNodes = useAllNodesContext();
+
+    // Scale factor translates node space coords to feet
+    const getScaleFactor = () => {
+        const hospital = navSelection.state.navSelectRequest?.HospitalName;
+        if (hospital === '20 Patriot Pl' || hospital === '22 Patriot Pl') {
+            return 1.5;
+        }
+        if (hospital === 'Chestnut Hill') {
+            return 0.91;
+        }
+        if (hospital === 'Faulkner Hospital') {
+            return 2.23;
+        }
+        if (hospital === 'BWH Campus') {
+            return 3.43;
+        } else {
+            return 1;
+        }
+    };
 
     // only call GetTextDirections if/when pathNodes change
     const directions = useMemo(() => {
@@ -74,46 +94,48 @@ export function DisplayDirectionsBox() {
               }}
               defaultValue={Object.keys(directionsByFloor).map((floor) => `floor-${floor}`)}
             >
-              {Object.entries(directionsByFloor).map(([floor, direction]) => {
-                const floorTTS = direction.map((step) => {
-                  if (step.Direction.startsWith('Take')) return step.Direction;
-                  if (step.Direction === 'Straight')
-                    return `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`;
-                  return `Turn ${step.Direction.toLowerCase()}`;
-                });
-                return (
-                  <Accordion.Item key={floor} value={`floor-${floor}`}>
-                    <Accordion.Control>
-                      <Group>
-                        <Text fw={700} size="md" c="blue.7">
-                          {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
-                          {/* Changing for Faulkner and Chestnut*/}
-                          {Number(floor) === 1
-                            ? 'Floor 1'
-                            : Number(floor) === 4
-                              ? 'Chestnut'
-                              : Number(floor) === 5
-                                ? 'Faulkner'
-                                : `Floor ${Number(floor) + 1}`}
-                        </Text>
-                        <TTSButton text={floorTTS} />
-                      </Group>
-                    </Accordion.Control>
-                    <Accordion.Panel>
-                      {direction.map((step, idx) => {
-                        const icon = step.Direction.toLowerCase().includes(
-                          'elevator'
-                        ) ? (
-                          <IconStairs size={20} color="#0E3B99" />
-                        ) : step.Direction.toLowerCase().includes('stairs') ? (
-                          <IconStairs size={20} color="#0E3B99" />
-                        ) : step.Direction === 'Straight' ? (
-                          <IconArrowNarrowUp size={20} color="#0E3B99" />
-                        ) : step.Direction === 'Left' ? (
-                          <IconArrowLeft size={20} color="#0E3B99" />
-                        ) : (
-                          <IconArrowRight size={20} color="#0E3B99" />
-                        );
+                {Object.entries(directionsByFloor).map(([floor, direction]) => {
+                    const floorTTS = direction.map((step) => {
+                        if (step.Direction.startsWith('Take')) return step.Direction;
+                        if (step.Direction === 'Straight')
+                            return `Continue straight for ${(step.Distance * getScaleFactor()).toFixed(0)} feet.`;
+                        return `Turn ${step.Direction.toLowerCase()}`;
+                    });
+                    return (
+                        <Accordion.Item key={floor} value={`floor-${floor}`}>
+                            <Accordion.Control>
+                                <Group>
+                                    <Text fw={700} size="md" c="blue.7">
+                                        {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
+                                        {/* Changing for Faulkner and Chestnut*/}
+                                        {Number(floor) === 1
+                                            ? 'Floor 1'
+                                            : Number(floor) === 4
+                                              ? 'Chestnut'
+                                              : Number(floor) === 5
+                                                ? 'Faulkner'
+                                                : `Floor ${Number(floor) + 1}`
+                                                  ? 'BWH'
+                                                  : `Floor ${Number(floor) + 2}`}
+                                    </Text>
+                                    <TTSButton text={floorTTS} />
+                                </Group>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                {direction.map((step, idx) => {
+                                    const icon = step.Direction.toLowerCase().includes(
+                                        'elevator'
+                                    ) ? (
+                                        <IconStairs size={20} color="#0E3B99" />
+                                    ) : step.Direction.toLowerCase().includes('stairs') ? (
+                                        <IconStairs size={20} color="#0E3B99" />
+                                    ) : step.Direction === 'Straight' ? (
+                                        <IconArrowNarrowUp size={20} color="#0E3B99" />
+                                    ) : step.Direction === 'Left' ? (
+                                        <IconArrowLeft size={20} color="#0E3B99" />
+                                    ) : (
+                                        <IconArrowRight size={20} color="#0E3B99" />
+                                    );
 
                         const label = step.Direction.startsWith('Take')
                           ? step.Direction
