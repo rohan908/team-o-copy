@@ -231,43 +231,6 @@ const setAlgoHandelr: RequestHandler<
     }
 };
 
-const getAlgoHandelr: RequestHandler<
-    {}, // Route parameters
-    getAlgoIdResponse // Response body
-    // Request body
-> = (req, res) => {
-    try {
-        const result:  = navigationService.getAlgo();
-        // if (result.algoID === undefined) {
-        //     res.status(404).json({
-        //         success: false,
-        //         error: 'Node not found',
-        //     });
-        //     return;
-        // }
-
-        const response: getAlgoIdResponse = {
-            result: {
-                algoID: result!.algoID,
-            },
-            success: true,
-        };
-
-        res.json(response);
-
-        return;
-    } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-        console.error('Error getting node:', error);
-
-        res.status(500).json({
-            success: false,
-            error: errorMessage || 'An error occurred while getting a node',
-        });
-        return; // Return void
-    }
-};
-
 // Debug endpoint to get test the pathfinding between nodes
 router.get('/debug', (req: any, res: any) => {
     // Get the grid dimensions and some sample walkable points
@@ -281,7 +244,12 @@ router.post('/findPath', findPathHandler);
 
 router.post('/getNode', getNodeHandler);
 
-// Will import Node data directly as node data, no CSV parsing
 router.post('/setAlgo', setAlgoHandelr);
+
+router.get('/getAlgo', (req: any, res: any) => {
+    const algo = navigationService.getAlgo();
+    console.log('ran files and got:', algo);
+    res.json(algo);
+});
 
 export default router;

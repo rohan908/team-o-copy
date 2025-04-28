@@ -12,16 +12,20 @@ import { ALGORITHM } from 'common/src/constants.ts';
 export class NavigationService {
     protected graph: Graph<NodeDataType>;
     private pathFinder: PathFinder;
+    private pathFindAlgo: ALGORITHM;
 
     constructor() {
         this.graph = new Graph<NodeDataType>(this.nodeComparator);
         const graphRef = () => this.graph;
-        this.pathFinder = new BFSPathFinder(graphRef);
+        this.pathFinder = new BFSPathFinder(graphRef); //kinda wana remove this
+        this.pathFindAlgo = 2;
     }
 
     public async reinitialize(): Promise<void> {
         const databaseNodes = await PrismaClient.node.findMany({});
         const databaseEdges = await PrismaClient.edge.findMany({});
+        const path = await this.getAlgo();
+        if (path) this.pathFindAlgo = path!.algoID;
 
         this.graph.nodes.forEach((node) => {
             this.graph.removeNode(node.data);
@@ -45,6 +49,8 @@ export class NavigationService {
     public async initialize(): Promise<void> {
         const databaseNodes = await PrismaClient.node.findMany({});
         const databaseEdges = await PrismaClient.edge.findMany({});
+        const path = await this.getAlgo();
+        if (path) this.pathFindAlgo = path!.algoID;
 
         databaseNodes.forEach((databaseNode) => {
             this.executeGraphCommand('nodeAdd', databaseNode);
@@ -59,13 +65,8 @@ export class NavigationService {
         });
     }
 
-    public async setPathFinderAlgo() {
-        const algo = await this.getAlgo();
-        const algoID = algo?.algoID;
-        if (algoID === undefined) {
-            throw new Error('Algo not found in database.');
-        }
-        const pathAlgo: string = ALGORITHM[algoID];
+    public setPathFinderAlgo() {
+        const pathAlgo: string = ALGORITHM[this.pathFindAlgo];
 
         if (
             (pathAlgo === 'BFS' && this.pathFinder instanceof BFSPathFinder) ||
@@ -123,8 +124,8 @@ export class NavigationService {
         }
     }
 
-    public async findPath(startNodeId: number, endNodeId: number): PathFinderResult {
-        await this.setPathFinderAlgo();
+    public findPath(startNodeId: number, endNodeId: number): PathFinderResult {
+        this.setPathFinderAlgo();
         return this.pathFinder.findPath(startNodeId, endNodeId);
     }
 
