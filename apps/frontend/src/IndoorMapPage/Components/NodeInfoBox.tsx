@@ -68,9 +68,8 @@ const NodeInfoBox = () => {
     }, [mapProps.currentNode]);
 
     return (
-        <Flex direction={"row-reverse"} align={"flex-end"} p="xs" gap="xs">
-        <Collapse in={nodeInfoOpen} transitionDuration={250} transitionTimingFunction="linear">
-            <Stack>
+        <Flex direction={'row-reverse'}>
+            <Collapse in={nodeInfoOpen} transitionDuration={250} transitionTimingFunction="linear">
                 <Box
                     p="sm"
                     style={{
@@ -81,44 +80,18 @@ const NodeInfoBox = () => {
                         borderRadius: 24,
                     }}
                 >
-                    <Flex direction="column">
-                        <MantineProvider theme={theme}>
-                            <Text color={'white'}>Edit Node Properties</Text>
-                        </MantineProvider>
-                        <Flex direction="row" p="xs" gap="xs">
-                            <TextInput
-                                variant="filled"
-                                readOnly
-                                value={`ID: ${mapProps.currentNode?.id || 0}`}
-                                size="sm"
-                                radius="xl"
-                                w={80}
+                    <Flex direction="row" p="xs" gap="xs">
+                        <Flex direction="column" align={'flex-start'}>
+                            <NativeSelect
+                                label={'Node Type'}
                                 styles={{
-                                    input: {
-                                        color: 'black',
-                                        fontWeight: 400,
+                                    label: {
+                                        fontWeight: 600,
+                                        textSize: '14px',
+                                        textAlign: 'center',
+                                        color: 'white',
                                     },
                                 }}
-                            />
-                            <Input
-                                size="sm"
-                                radius="xl"
-                                w={80}
-                                value={`X: ${Math.round(mapProps.currentNode?.x * 10) / 10 || 0}`}
-                                readOnly
-                                variant="filled"
-                            ></Input>
-                            <Input
-                                size="sm"
-                                radius="xl"
-                                w={80}
-                                value={`Y: ${Math.round(mapProps.currentNode?.x * 10) / 10 || 0}`}
-                                readOnly
-                                variant="filled"
-                            ></Input>
-                        </Flex>
-                        <Flex direction="row" p="xs" gap="xs">
-                            <NativeSelect
                                 size="sm"
                                 w={160}
                                 value={mapProps.currentNode?.nodeType || ''}
@@ -148,139 +121,162 @@ const NodeInfoBox = () => {
                             <Button
                                 variant="filled"
                                 color="baseBlue.6"
-                                justify="flex-end"
                                 onClick={() => toggleMoreInfo()}
-                                size="sm"
-                                radius="xl"
-                                className="navButton"
-                                rightSection={
-                                    expandInfo ? <IconArrowBadgeDown /> : <IconArrowBadgeRight />
-                                }
-                            >
-                                More
-                            </Button>
-                        </Flex>
-                    </Flex>
-                </Box>
-                <Collapse
-                    in={expandInfo}
-                    transitionDuration={250}
-                    transitionTimingFunction="linear"
-                >
-                    <Box
-                        p="sm"
-                        style={{
-                            width: 'auto',
-                            minWidth: '300px',
-                            backgroundColor: '#285CC6',
-                            border: '2px solid #1C43A7',
-                            borderRadius: 24,
-                        }}
-                    >
-                        <TextInput
-                            label={'Node Name'}
-                            styles={{
-                                label: {
-                                    fontWeight: 600,
-                                    textSize: '14px',
-                                    textAlign: 'center',
-                                    color: 'white',
-                                },
-                            }}
-                            p={'xs'}
-                            size="sm"
-                            radius="xl"
-                            value={`${mapProps.currentNode?.name || ''}`}
-                            variant="filled"
-                            onChange={(event) =>
-                                mapProps.setCurrentNodeData({
-                                    id: mapProps.currentNode.id,
-                                    x: mapProps.currentNode.x,
-                                    y: mapProps.currentNode.y,
-                                    floor: mapProps.currentNode.floor,
-                                    mapId: mapProps.currentNode.mapId,
-                                    name: event.currentTarget.value,
-                                    description: mapProps.currentNode.description,
-                                    nodeType: mapProps.currentNode.nodeType,
-                                    connectingNodes: mapProps.currentNode.connectingNodes,
-                                })
-                            }
-                        ></TextInput>
-                        <TextInput
-                            label={'Node Description'}
-                            styles={{
-                                label: {
-                                    fontWeight: 600,
-                                    textSize: '14px',
-                                    textAlign: 'center',
-                                    color: 'white',
-                                },
-                            }}
-                            size="sm"
-                            p={'xs'}
-                            radius="xl"
-                            value={`${mapProps.currentNode?.description || ''}`}
-                            variant="filled"
-                            onChange={(event) =>
-                                mapProps.setCurrentNodeData({
-                                    id: mapProps.currentNode.id,
-                                    x: mapProps.currentNode.x,
-                                    y: mapProps.currentNode.y,
-                                    floor: mapProps.currentNode.floor,
-                                    mapId: mapProps.currentNode.mapId,
-                                    name: mapProps.currentNode.name,
-                                    description: event.currentTarget.value,
-                                    nodeType: mapProps.currentNode.nodeType,
-                                    connectingNodes: mapProps.currentNode.connectingNodes,
-                                })
-                            }
-                        ></TextInput>
-                        <TextInput
-                            label={'Connecting Node IDs'}
-                            readOnly
-                            styles={{
-                                label: {
-                                    fontWeight: 600,
-                                    textSize: '14px',
-                                    textAlign: 'center',
-                                    color: 'white',
-                                },
-                            }}
-                            size="sm"
-                            p={'xs'}
-                            radius="xl"
-                            value={`${mapProps.currentNode?.connectingNodes || ''}`}
-                            variant="filled"
-                        ></TextInput>
-                        <Collapse
-                            in={isFloorEdge}
-                            transitionDuration={250}
-                            transitionTimingFunction="linear"
-                        >
-                            <Button
-                                variant="filled"
-                                color="baseBlue.6"
-                                justify="flex-end"
-                                onClick={() => toggleFloorMenu()}
-                                size="sm"
+                                size="md"
                                 radius="xl"
                                 className="navButton"
                                 leftSection={
-                                    floorInfo ? <IconArrowBadgeLeft /> : <IconArrowBadgeRight />
+                                    expandInfo ? <IconArrowBadgeLeft /> : <IconArrowBadgeDown />
                                 }
                             >
-                                Link Floors
+                                More Data
                             </Button>
-                        </Collapse>
-                    </Box>
-                </Collapse>
-            </Stack>
-        </Collapse>
-            <Collapse
-                in={floorInfo}
-                transitionDuration={250}
-                transitionTimingFunction="linear"
-            >
+                        </Flex>
+                        <Flex direction="column" align={'flex-start'}>
+                            <TextInput
+                                label={'Node Name'}
+                                styles={{
+                                    label: {
+                                        fontWeight: 600,
+                                        textSize: '14px',
+                                        textAlign: 'center',
+                                        color: 'white',
+                                    },
+                                }}
+                                size="sm"
+                                radius="xl"
+                                value={`${mapProps.currentNode?.name || ''}`}
+                                variant="filled"
+                                onChange={(event) =>
+                                    mapProps.setCurrentNodeData({
+                                        id: mapProps.currentNode.id,
+                                        x: mapProps.currentNode.x,
+                                        y: mapProps.currentNode.y,
+                                        floor: mapProps.currentNode.floor,
+                                        mapId: mapProps.currentNode.mapId,
+                                        name: event.currentTarget.value,
+                                        description: mapProps.currentNode.description,
+                                        nodeType: mapProps.currentNode.nodeType,
+                                        connectingNodes: mapProps.currentNode.connectingNodes,
+                                    })
+                                }
+                            ></TextInput>
+                            <TextInput
+                                label={'Node Description'}
+                                styles={{
+                                    label: {
+                                        fontWeight: 600,
+                                        textSize: '14px',
+                                        textAlign: 'center',
+                                        color: 'white',
+                                    },
+                                }}
+                                size="sm"
+                                radius="xl"
+                                value={`${mapProps.currentNode?.description || ''}`}
+                                variant="filled"
+                                onChange={(event) =>
+                                    mapProps.setCurrentNodeData({
+                                        id: mapProps.currentNode.id,
+                                        x: mapProps.currentNode.x,
+                                        y: mapProps.currentNode.y,
+                                        floor: mapProps.currentNode.floor,
+                                        mapId: mapProps.currentNode.mapId,
+                                        name: mapProps.currentNode.name,
+                                        description: event.currentTarget.value,
+                                        nodeType: mapProps.currentNode.nodeType,
+                                        connectingNodes: mapProps.currentNode.connectingNodes,
+                                    })
+                                }
+                            ></TextInput>
+                        </Flex>
+                    </Flex>
+                </Box>
+            </Collapse>
+            <Collapse in={expandInfo} transitionDuration={250} transitionTimingFunction="linear">
+                <Box
+                    p="sm"
+                    style={{
+                        width: 'auto',
+                        minWidth: '300px',
+                        backgroundColor: '#285CC6',
+                        border: '2px solid #1C43A7',
+                        borderRadius: 24,
+                    }}
+                >
+                    <Text color={'white'}>View-Only Properties</Text>
+                    <Flex direction="row" p="xs" gap="xs">
+                        <TextInput
+                            variant="filled"
+                            readOnly
+                            value={`ID: ${mapProps.currentNode?.id || 0}`}
+                            size="sm"
+                            radius="xl"
+                            w={80}
+                            styles={{
+                                input: {
+                                    color: 'black',
+                                    fontWeight: 400,
+                                },
+                            }}
+                        />
+                        <Input
+                            size="sm"
+                            radius="xl"
+                            w={80}
+                            value={`X: ${Math.round(mapProps.currentNode?.x * 10) / 10 || 0}`}
+                            readOnly
+                            variant="filled"
+                        ></Input>
+                        <Input
+                            size="sm"
+                            radius="xl"
+                            w={80}
+                            value={`Y: ${Math.round(mapProps.currentNode?.x * 10) / 10 || 0}`}
+                            readOnly
+                            variant="filled"
+                        ></Input>
+                    </Flex>
+                    <TextInput
+                        label={'Connecting Node IDs'}
+                        readOnly
+                        styles={{
+                            label: {
+                                fontWeight: 600,
+                                textSize: '14px',
+                                textAlign: 'center',
+                                color: 'white',
+                            },
+                        }}
+                        size="sm"
+                        p={'xs'}
+                        radius="xl"
+                        value={`${mapProps.currentNode?.connectingNodes || ''}`}
+                        variant="filled"
+                    ></TextInput>
+                    <Collapse
+                        in={isFloorEdge}
+                        transitionDuration={250}
+                        transitionTimingFunction="linear"
+                    >
+                        <Button
+                            variant="filled"
+                            color="baseBlue.6"
+                            justify="flex-end"
+                            onClick={() => toggleFloorMenu()}
+                            size="sm"
+                            radius="xl"
+                            className="navButton"
+                            leftSection={
+                                floorInfo ? <IconArrowBadgeLeft /> : <IconArrowBadgeRight />
+                            }
+                        >
+                            Link Floors
+                        </Button>
+                    </Collapse>
+                </Box>
+            </Collapse>
+            <Collapse in={floorInfo} transitionDuration={250} transitionTimingFunction="linear">
                 <FloorEditorBox />
             </Collapse>
         </Flex>
