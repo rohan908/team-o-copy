@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, createContext, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
-import { Box, Flex } from '@mantine/core';
+import { Box, Flex, Collapse, useMantineTheme } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
@@ -14,11 +14,11 @@ import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { IconCurrentLocation } from '@tabler/icons-react';
-
 import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
 import { map } from 'leaflet';
+import FloorConnectionBox from './Components/FloorConnectionBox.tsx';
 
 const MouseImages = {
     MoveNone: 'MapImages/MouseCursors/MoveNoSelected.png',
@@ -153,9 +153,11 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-                selectedObjects.current.forEach((object) => {
-                  deselectObject(object);
-                });
+                if(mapTool != 'add-edge') {
+                    selectedObjects.current.forEach((object) => {
+                        deselectObject(object);
+                    });
+                }
             }, 200); // Fade-in duration
         }, 200); // Fade-out duration
     };
@@ -620,6 +622,11 @@ export function MapEditor() {
                 selectedObject.material.color.set(selectedNodeColor);
                 selectedObject.material.needsUpdate = true;
                 selectedObjects.current.push(selectedObject);
+
+                setCurrentNodeData(
+                    nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
+                );
+
                 render();
 
             } else if (selectedObjects.current.length == 1) {
@@ -884,6 +891,9 @@ export function MapEditor() {
                     <Box pos="fixed" top={"10%"} right={20} style={{zIndex: 999}}>
                         <NodeInfoBox/>
                     </Box>
+                    <Collapse in={mapTool == 'add-edge' && currentNodeData != null} transitionDuration={250} transitionTimingFunction="linear">
+                        <FloorConnectionBox />
+                    </Collapse>
                 </MapContext.Provider>
             </Box>
 
