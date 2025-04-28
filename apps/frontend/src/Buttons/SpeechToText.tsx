@@ -1,5 +1,7 @@
 import React, {useState, useRef} from 'react'
-import { Button, } from '@mantine/core';
+import { ActionIcon, Loader } from '@mantine/core';
+import { IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react';
+
 
 interface SpechToTextProps {
   OnResult: (text: string) => void;
@@ -52,12 +54,14 @@ const SpeechToText: React.FC<SpechToTextProps> = (props: SpechToTextProps) => {
   }
 
   return (
-    <Button
+    <ActionIcon
       variant='outlined'
       color={isSpeaking? 'red':'blue'}
-      onClick={handleToggle}>
-      {isSpeaking? 'Listening...': 'Start'}
-    </Button>
+      onClick={handleToggle}
+      >
+      {isSpeaking ?
+          <Loader size="xs"/> : <IconMicrophone size={16} />}
+    </ActionIcon>
 
   )
 }

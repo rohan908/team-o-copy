@@ -4164,6 +4164,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["chrono-node", [\
+      ["npm:2.8.0", {\
+        "packageLocation": "./.yarn/cache/chrono-node-npm-2.8.0-0a705ff881-77ff6eb95c.zip/node_modules/chrono-node/",\
+        "packageDependencies": [\
+          ["chrono-node", "npm:2.8.0"],\
+          ["dayjs", "npm:1.11.13"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["ci-info", [\
       ["npm:4.2.0", {\
         "packageLocation": "./.yarn/cache/ci-info-npm-4.2.0-5451b2fa90-37a2f4b6a2.zip/node_modules/ci-info/",\
@@ -5681,6 +5691,7 @@ const RAW_RUNTIME_STATE =
           ["@vitejs/plugin-react-swc", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.8.1"],\
           ["axios", "npm:1.8.4"],\
           ["camera-controls", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.10.1"],\
+          ["chrono-node", "npm:2.8.0"],\
           ["common", "workspace:packages/common"],\
           ["dayjs", "npm:1.11.13"],\
           ["dotenv", "npm:16.4.7"],\

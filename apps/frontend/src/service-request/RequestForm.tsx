@@ -126,6 +126,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                     <Flex align="stretch" gap="xl" wrap="wrap" mb="md">
                         <Box flex="1" miw="275">
                             {/*< column 1!!!*/}
+
                             <NameEntry {...form.getInputProps('employeeName')} />
                             <HospitalSelect
                                 value={form.values.hospital}
@@ -149,7 +150,6 @@ const RequestForm: React.FC<RequestDetails> = ({
                     </Flex>
                     <Box mt="md">
                         <RequestDescription {...form.getInputProps('description')} />
-                        <SpeechToText OnResult={(text) => {form.setFieldValue('description', text)}}/>
                     </Box>
                     <Flex mt="xl" justify="left" gap="md">
                         <Button
