@@ -52,7 +52,7 @@ export function DisplayDirectionsBox() {
             return 2.23;
         }
         if (hospital === 'BWH Campus') {
-            return 1.5;
+            return 3.43;
         } else {
             return 1;
         }
