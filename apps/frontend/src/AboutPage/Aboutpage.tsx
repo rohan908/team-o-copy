@@ -99,9 +99,9 @@ export function AboutPage() {
                         Shinn!
                     </Text>
 
-                    <Group align="flex-start" justify="center" mt="md" gap="xl" wrap="nowrap">
+                    <Group align="center" justify="center" mt="md" gap="xl" wrap="nowrap">
                         {/* Left side - Text content */}
-                        <Stack gap={0} align="flex-start" w={300}>
+                        <Stack gap={0} align="flex-start" w={300} style={{ alignSelf: 'center' }}>
                             <Text c={theme.colors.secondaryBlues[7]} fz="md">
                                 WPI Computer Science Department
                             </Text>
@@ -114,7 +114,7 @@ export function AboutPage() {
                         </Stack>
 
                         {/* Right side - Carousel */}
-                        <Stack align="center" gap="sm">
+                        <Stack align="center" gap="sm" style={{ alignSelf: 'center' }}>
                             <Box pos="relative" w={250} h={250}>
                                 {/* Background Image Stuff */}
                                 <Paper
@@ -150,16 +150,7 @@ export function AboutPage() {
                                 />
                             </Box>
 
-                            <Stack gap={0} align="center">
-                                <Text size="lg" fw={500} c={theme.colors.secondaryBlues[7]}>
-                                    {member.name}
-                                </Text>
-                                <Text size="sm" c={theme.colors.secondaryBlues[7]}>
-                                    {member.role}
-                                </Text>
-                            </Stack>
-
-                            <Group my="sm">
+                            <Group justify="center" mt="sm">
                                 <Button
                                     variant="light"
                                     color="blue"
@@ -177,6 +168,15 @@ export function AboutPage() {
                                     <IconChevronRight />
                                 </Button>
                             </Group>
+
+                            <Stack gap={0} align="center" mt="sm">
+                                <Text size="lg" fw={500} c={theme.colors.secondaryBlues[7]}>
+                                    {member.name}
+                                </Text>
+                                <Text size="sm" c={theme.colors.secondaryBlues[7]}>
+                                    {member.role}
+                                </Text>
+                            </Stack>
                         </Stack>
                     </Group>
 
