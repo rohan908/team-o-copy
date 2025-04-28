@@ -1,22 +1,19 @@
-import { useEffect, useRef, useState, createContext, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useState, createContext, useCallback } from 'react';
 import * as THREE from 'three';
-import { Box, Flex } from '@mantine/core';
+import { Box } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
-import NodeInfoBox from './Components/NodeInfoBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import PopupTooltip from './Components/PopupTooltip';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
-import { useLogin } from '../home-page/components/LoginContext.tsx';
+import { useUser } from '@clerk/clerk-react';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
-
-import { bool } from 'prop-types';
-import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
+import { Navigate } from 'react-router-dom';
 
 export interface MapEditorProps {
     selectedTool: string;
@@ -35,9 +32,18 @@ export function MapEditor() {
     const { hovered: editBoxHovered, ref: hoverRef } = useHover();
     const [currentNodeData, setCurrentNodeData] = useState<DirectoryNodeItem | null>();
     const [floorState, setFloorState] = useState(1);
-    const [isFading, setIsFading] = useState(false);
+    const [setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer');
     const [mapTool, setMapTool] = useState('pan');
+
+    // clerk const's
+    const { user, isSignedIn } = useUser();
+
+    // check role
+    const role = user?.publicMetadata?.role;
+    if (!isSignedIn || role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
 
     const mapProps: MapEditorProps = {
         selectedTool: mapTool,
@@ -46,7 +52,6 @@ export function MapEditor() {
         setCurrentNodeData: setCurrentNodeData,
     };
 
-    const { isLoggedIn } = useLogin();
     const selectedObjects = useRef<THREE.Object3D[]>([]);
     const objectsRef = useRef<THREE.Object3D[]>([]);
     const dragControlsRef = useRef<DragControls | null>(null);
@@ -63,7 +68,6 @@ export function MapEditor() {
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const sceneIndexRef = useRef(sceneIndexState);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
 
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
@@ -313,9 +317,9 @@ export function MapEditor() {
         }
     }, [currentNodeData]);
 
-  useEffect(() => {
-    sceneIndexRef.current = sceneIndexState;
-  }, [sceneIndexState]);
+    useEffect(() => {
+        sceneIndexRef.current = sceneIndexState;
+    }, [sceneIndexState]);
 
     const selectObject = (selectedObject: THREE.Object3D) => {
         if (
@@ -412,8 +416,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-          objectsRef.current.filter(value =>
-            value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
@@ -459,8 +467,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-            objectsRef.current.filter(value =>
-                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         // new node positon
         if (intersects.length == 0) {
@@ -531,8 +543,12 @@ export function MapEditor() {
         raycaster.setFromCamera(pointer, cameraRef.current);
 
         const intersects = raycaster.intersectObjects(
-            objectsRef.current.filter(value =>
-                value.userData.floor === getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor));
+            objectsRef.current.filter(
+                (value) =>
+                    value.userData.floor ===
+                    getFloorAndMapIDFromSceneIndex(sceneIndexRef.current).floor
+            )
+        );
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
