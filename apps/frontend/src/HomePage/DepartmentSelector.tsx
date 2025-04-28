@@ -20,7 +20,6 @@ export function DepartmentSelector() {
                 data: {
                     HospitalName: selectedHospital,
                     Department: department,
-                    AlgorithmName: selectedAlgorithm,
                 } as NavSelectionItem,
             });
         }

@@ -24,21 +24,9 @@ export function AlgorithmSelector() {
 
     const setSelectedAlgo = (algo: string | null) => {
         setAlgo(+algo!);
-        console.log('algo just changed to: ', algo);
-
-        // await axios.post('api/graph/setAlgo', { pathAlgo: +algo! });
-        // setSaveLabel(true);
-        // setTimeout(() => setSaveLabel(false), 1500);
-        //
-        // setSelectedAlgorithm(algo);
-        // NavSelection.dispatch({
-        //     type: 'SET_NAV_REQUEST',
-        //     data: {
-        //         HospitalName: selectedHospital,
-        //         Department: department,
-        //         AlgorithmName: algo,
-        //     } as NavSelectionItem,
+        console.log('selector algo just changed to: ', algo);
     };
+
     return (
         <Select
             placeholder="Select an Algorithm"

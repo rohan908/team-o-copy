@@ -4,14 +4,12 @@ import { NodeDataType } from '../MapClasses/MapTypes.ts';
 
 export async function findPath(
     startNodeId: number,
-    endNodeId: number,
-    pathFindingType: string
+    endNodeId: number
 ): Promise<Node<NodeDataType>[]> {
     try {
         const response = await axios.post(`api/graph/findPath`, {
             startID: startNodeId,
             endID: endNodeId,
-            pathAlgo: pathFindingType,
         });
 
         return response.data;

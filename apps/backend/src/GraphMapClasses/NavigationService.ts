@@ -128,11 +128,15 @@ export class NavigationService {
         };
     }
 
-    public setAlgo(pathAlgoID: number) {
-        PrismaClient.algorithm.upsert({
-            where: { id: 0 },
-            update: { algoID: pathAlgoID },
-            create: { id: 0, algoID: pathAlgoID },
+    public async setAlgo(pathAlgoID: number) {
+        console.log('adding new value to the database value: ', pathAlgoID);
+        const updateAlgo = await PrismaClient.algorithm.update({
+            where: {
+                id: 0,
+            },
+            data: {
+                algoID: pathAlgoID,
+            },
         });
         return;
     }

@@ -176,7 +176,7 @@ const getAlgoHandelr: RequestHandler<
 > = (req, res) => {
     try {
         const { pathAlgo } = req.body;
-
+        console.log('made it to Graph. getAlgoHandelr and got pathAlgo: ', pathAlgo);
         // Validate input
         if ([pathAlgo].some((param) => param === undefined)) {
             res.status(400).json({

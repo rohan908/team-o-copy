@@ -36,7 +36,6 @@ export function HomePage() {
             data: {
                 HospitalName: null,
                 Department: null,
-                AlgorithmName: null,
             } as NavSelectionItem,
         });
     };
@@ -89,13 +88,7 @@ export function HomePage() {
                 </Grid.Col>
                 {/* Right Content */}
                 <Grid.Col span={5}>
-                    <Flex
-                        h="100%"
-                        w={'100%'}
-                        align="center"
-                        justify="center"
-                        pt="6%"
-                    >
+                    <Flex h="100%" w={'100%'} align="center" justify="center" pt="6%">
                         <ContentSwitcher />
                     </Flex>
                 </Grid.Col>

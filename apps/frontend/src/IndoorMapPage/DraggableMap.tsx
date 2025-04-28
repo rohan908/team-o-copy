@@ -101,8 +101,8 @@ export function DraggableMap() {
         }, 300); // Fade-out duration
     };
 
-    const handlePath = (firstNodeId: number, lastNodeId: number, algo: string) => {
-        const path = findPath(firstNodeId, lastNodeId, algo).then(async (pathres) => {
+    const handlePath = (firstNodeId: number, lastNodeId: number) => {
+        const path = findPath(firstNodeId, lastNodeId).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
             // Add dispatch for navSelection
             navSelection.dispatch({
@@ -153,14 +153,7 @@ export function DraggableMap() {
         clearSceneObjects(scenesRef.current);
 
         console.log('finding path:', firstNodeId, lastNodeId);
-        let algorithm = 'BFS'; // default to BFS if not selected
-        if (selectedAlgorithm) {
-            algorithm = selectedAlgorithm;
-        }
-        if (firstNodeId && lastNodeId) {
-            handlePath(firstNodeId, lastNodeId, algorithm);
-        }
-    }, [selectedDepartment, selectedAlgorithm]);
+    }, [selectedDepartment]);
 
     useEffect(() => {
         // Initialize path animation
