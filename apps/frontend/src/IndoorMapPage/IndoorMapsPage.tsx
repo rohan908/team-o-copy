@@ -29,13 +29,13 @@ export function IndoorMapsPage() {
                         <IconCheckupList size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
                         <DepartmentSelector hasIcon={false} w={"80%"}/>
                       </Flex>
-                      <Flex w="100%" justify={"left"}>
-                        <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "17.5px"}}  />
-                      </Flex>
-                      <Flex direction="row" gap={"xs"}>
-                        <IconRouteSquare size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
-                        <AlgorithmSelector hasIcon={false} w={"80%"}/>
-                      </Flex>
+                      {/*<Flex w="100%" justify={"left"}>*/}
+                      {/*  <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "17.5px"}}  />*/}
+                      {/*</Flex>*/}
+                      {/*<Flex direction="row" gap={"xs"}>*/}
+                      {/*  <IconRouteSquare size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />*/}
+                      {/*  <AlgorithmSelector hasIcon={false} w={"80%"}/>*/}
+                      {/*</Flex>*/}
                     </Flex>
                     <Flex direction="column" justify="center" align="center">
                       <DisplayDirectionsBox />

@@ -59,7 +59,7 @@ export const CustomTimeline = () => {
                         <Flex direction="column" justify="center" align="center">
                           <ParkingSelector hasIcon={true} w={"100%"}/>
                           <DepartmentSelector hasIcon={true} w={"100%"}/>
-                          <AlgorithmSelector  hasIcon={true} w={"100%"}/>
+                          {/*<AlgorithmSelector  hasIcon={true} w={"100%"}/>*/}
                         </Flex>
                         <Flex justify={'end'}>
                             <Link to="IndoorMapPage">
