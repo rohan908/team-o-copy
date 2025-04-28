@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { Button, Container, Text, Image, Group, Center, Stack, Box, Paper } from '@mantine/core';
+import {
+    Button,
+    Container,
+    Text,
+    Image,
+    Group,
+    Stack,
+    Box,
+    Paper,
+    useMantineTheme,
+} from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 type Member = {
@@ -66,7 +76,9 @@ const teamMembers: Member[] = [
     },
 ];
 
-export function TeamRotation() {
+export function AboutPage() {
+    const theme = useMantineTheme();
+
     const [active, setActive] = useState(0);
 
     const handleNext = () => {
@@ -82,19 +94,19 @@ export function TeamRotation() {
     return (
         <Container size="lg" py="xl">
             <Stack align="center" gap="lg">
-                <Text ta="center" fz="xl" fw="bold" c="blue.8">
+                <Text ta="center" fz="xl" fw="bold" c={theme.colors.secondaryBlues[7]}>
                     Thank you to Brigham and Women’s Hospital and their representative, Andrew
                     Shinn!
                 </Text>
 
                 <Stack gap={0} align="center" mt="md">
-                    <Text ta="center" c="blue.8" fz="md">
+                    <Text ta="center" c={theme.colors.secondaryBlues[7]} fz="md">
                         WPI Computer Science Department
                     </Text>
-                    <Text ta="center" c="blue.8" fz="md">
+                    <Text ta="center" c={theme.colors.secondaryBlues[7]} fz="md">
                         CS3733-D25 Software Engineering, Prof. Wilson Wong
                     </Text>
-                    <Text ta="center" c="blue.8" fz="md">
+                    <Text ta="center" c={theme.colors.secondaryBlues[7]} fz="md">
                         Team Coach: Matt Hagger
                     </Text>
                 </Stack>
@@ -135,14 +147,30 @@ export function TeamRotation() {
                 </Box>
 
                 <Stack align="center" gap={4}>
-                    <Text size="lg" c="blue.8">
+                    <Text size="lg" c={theme.colors.secondaryBlues[7]}>
                         {member.name}
                     </Text>
-                    <Text size="sm" c="blue.8">
+                    <Text size="sm" c={theme.colors.secondaryBlues[7]}>
                         {member.role}
                     </Text>
                 </Stack>
+
+                <Group my="md">
+                    <Button variant="light" color="blue" radius="xl" onClick={handlePrevious}>
+                        <IconChevronLeft />
+                    </Button>
+                    <Button variant="light" color="blue" radius="xl" onClick={handleNext}>
+                        <IconChevronRight />
+                    </Button>
+                </Group>
+
+                <Text ta="center" mt="xl" size="sm" c="blue.8" maw={500}>
+                    The Brigham & Women's Hospital maps and data used in this application are
+                    copyrighted and provided for the sole use of educational purposes.
+                </Text>
             </Stack>
         </Container>
     );
 }
+
+export default AboutPage;
