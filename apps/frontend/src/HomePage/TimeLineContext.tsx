@@ -56,7 +56,7 @@ const TimelineContext = createContext<TimelineContextType>({
     setDepartment: () => {},
     directoryOptions: [],
     setDirectoryOptions: () => {},
-    selectedAlgorithm: '',
+    selectedAlgorithm: 'A*',
     setSelectedAlgorithm: () => {},
     selectedService: '',
     setSelectedService: () => {},

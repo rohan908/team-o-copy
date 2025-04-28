@@ -56,9 +56,11 @@ export const CustomTimeline = () => {
             case 1: //Indoor Nav
                 return (
                     <Stack gap={2}>
-                        <ParkingSelector />
-                        <DepartmentSelector />
-                        <AlgorithmSelector />
+                        <Flex direction="column" justify="center" align="center">
+                          <ParkingSelector hasIcon={true} w={"100%"}/>
+                          <DepartmentSelector hasIcon={true} w={"100%"}/>
+                          <AlgorithmSelector  hasIcon={true} w={"100%"}/>
+                        </Flex>
                         <Flex justify={'end'}>
                             <Link to="IndoorMapPage">
                                 <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>

@@ -24,7 +24,7 @@ export function PathPickerBox() {
     // keep local states so we're not setting and access the context in one file
     const [department, setDepartment] = useState<string | null>(null);
     const [hospital, setHospital] = useState<string | null>(null);
-    const [algo, setAlgo] = useState<string | null>(null);
+    const [algo, setAlgo] = useState<string | null>("A*");
 
     const MapDepartment = (department: DirectoryNodeItem[]) =>
         department.map((department: DirectoryNodeItem) => ({
@@ -116,26 +116,26 @@ export function PathPickerBox() {
                 mb="md"
                 disabled={!hospital || departmentOptions.length === 0}
             />
-            <Text ta="left" fw={500}>
-                Select Navigation Method:
-            </Text>
-            <Select
-                color="gray"
-                placeholder="Navigation Method"
-                data={[
-                    { value: 'BFS', label: 'Breadth First Search' },
-                    {
-                        value: 'A*',
-                        label: 'A Star',
-                    },
-                    { value: 'DFS', label: 'Depth First Search' },
-                ]}
-                defaultValue="BFS"
-                value={algo}
-                onChange={(value) => {
-                    setSelectedAlgo(value);
-                }}
-            />
+            {/*<Text ta="left" fw={500}>*/}
+            {/*    Select Navigation Method:*/}
+            {/*</Text>*/}
+            {/*<Select*/}
+            {/*    color="gray"*/}
+            {/*    placeholder="Navigation Method"*/}
+            {/*    data={[*/}
+            {/*        { value: 'BFS', label: 'Breadth First Search' },*/}
+            {/*        {*/}
+            {/*            value: 'A*',*/}
+            {/*            label: 'A Star',*/}
+            {/*        },*/}
+            {/*        { value: 'DFS', label: 'Depth First Search' },*/}
+            {/*    ]}*/}
+            {/*    defaultValue="BFS"*/}
+            {/*    value={algo}*/}
+            {/*    onChange={(value) => {*/}
+            {/*        setSelectedAlgo(value);*/}
+            {/*    }}*/}
+            {/*/>*/}
         </Stack>
     );
 
