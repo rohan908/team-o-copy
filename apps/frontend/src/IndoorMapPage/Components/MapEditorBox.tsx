@@ -1,17 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  ActionIcon,
-  Tooltip,
-  Box,
-  Stack,
-  Container,
-  Flex,
-  Input,
-  TextInput,
-  NativeSelect,
-  Collapse,
-  Text,
-  Modal, Transition,
+    ActionIcon,
+    Tooltip,
+    Box,
+    Stack,
+    Container,
+    Flex,
+    Input,
+    TextInput,
+    NativeSelect,
+    Collapse,
+    Text,
+    Modal,
+    Transition,
+    Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
@@ -117,7 +119,7 @@ const MapEditorBox = () => {
                     </ActionIcon>
                 </Tooltip>
 
-                <Flex direction="row" gap={"lg"}>
+                <Flex direction="row" gap={"lg"} align={"center"}>
                   <Tooltip label="Help" position="right">
                     <ActionIcon
                       size="xl"
@@ -143,19 +145,47 @@ const MapEditorBox = () => {
                     {(styles) => (
                       <div style={styles}>
                         <Box
-                          //bg="#FCB024"
-                          p="sm"
+                          p="3px"
+                          w="auto"
+                          miw="200px"
+                          bg="secondaryBlues.7"
                           style={{
-                            width: 'auto',
-                            minWidth: '300px',
-                            backgroundColor: '#285CC6',
-                            border: '2px solid #1C43A7',
+                            border: '3px solid #ebf2ff',
                             borderRadius: 24,
                           }}
                         >
-                          <Text>
-                            Help Data
-                          </Text>
+                          <Box
+                            p="3px"
+                            w="auto"
+                            miw="200px"
+                            maw="200px"
+                            bg="primaryBlues.0"
+                            style={{
+                              borderRadius: 20,
+                            }}
+                          >
+                            <Title c={"secondaryBlues.7"} fz={"md"} fw={"bold"}>
+                              Map Editor Controls:
+                            </Title>
+                            <Text c={"secondaryBlues.7"} fz={"sm"} fw={"bold"}>
+                              Move Tool: <br/>
+                            </Text>
+                            <Text c={"secondaryBlues.7"} fz={"sm"} fw={"normal"}>
+                              To move a node, click on the node you wish to move and drag it.
+                            </Text>
+                            <Text c={"secondaryBlues.7"} fz={"sm"} fw={"bold"}>
+                              Add Node: <br/>
+                            </Text>
+                            <Text c={"secondaryBlues.7"} fz={"sm"} fw={"normal"}>
+                              Click where you would like to place a new node.
+                            </Text>
+                            <Text c={"secondaryBlues.7"} fz={"sm"} fw={"bold"}>
+                              Add or Remove Edges: <br/>
+                            </Text>
+                            <Text c={"secondaryBlues.7"} fz={"sm"} fw={"normal"}>
+                              Click on the starting node and the ending node to add or remove an edge between them.
+                            </Text>
+                          </Box>
                         </Box>
                       </div>)}
                   </Transition>
@@ -167,12 +197,11 @@ const MapEditorBox = () => {
                     transitionTimingFunction="linear"
                 >
                     <Box
-                        //bg="#FCB024"
                         p="sm"
+                        w="auto"
+                        miw="300px"
+                        bg="primaryBlues.0"
                         style={{
-                            width: 'auto',
-                            minWidth: '300px',
-                            backgroundColor: '#285CC6',
                             border: '2px solid #1C43A7',
                             borderRadius: 24,
                         }}
