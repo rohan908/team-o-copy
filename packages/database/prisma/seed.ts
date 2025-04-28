@@ -26,6 +26,7 @@ export async function populate() {
             { name: 'Patriot', id: 1 },
             { name: 'Chestnut', id: 2 },
             { name: 'Falkner', id: 3 },
+            { name: 'BWH', id: 4 },
         ],
         skipDuplicates: true,
     });

@@ -1,5 +1,6 @@
 import { Box, Select, Stack, Text, useMantineTheme } from '@mantine/core';
 import {
+    useBwhCampusContext,
     useChestnutHillContext,
     useFaulknerHospitalContext,
     usePatriotContext,
@@ -15,6 +16,7 @@ export function PathPickerBox() {
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
     const Faulkner = useFaulknerHospitalContext();
+    const BWHCampus = useBwhCampusContext();
     const NavSelection = useNavSelectionContext();
     const [departmentOptions, setDepartmentOptions] = useState<{ value: string; label: string }[]>(
         []
@@ -38,6 +40,8 @@ export function PathPickerBox() {
             setDepartmentOptions(MapDepartment(Chestnut));
         } else if (hospital == 'Faulkner Hospital') {
             setDepartmentOptions(MapDepartment(Faulkner));
+        } else if (hospital == 'BWH Campus') {
+            setDepartmentOptions(MapDepartment(BWHCampus));
         } else {
             setDepartmentOptions([]);
         }
@@ -91,6 +95,7 @@ export function PathPickerBox() {
                     { value: '22 Patriot Pl', label: '22 Patriot Pl' },
                     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
                     { value: 'Faulkner Hospital', label: 'Faulkner Hospital' },
+                    { value: 'BWH Campus', label: 'BWH Campus' },
                 ]}
                 value={hospital}
                 onChange={(value) => {

@@ -4,8 +4,7 @@ const MaintenanceSelect: React.FC<SelectProps> = (props) => {
     return (
         <Select
             label="Choose the Maintenance Needed"
-            placeholder="Select a Cleanup Type"
-            searchable
+            placeholder="Select Maintenance Issue"
             data={[
                 'Elevator',
                 'HVAC',
@@ -14,7 +13,7 @@ const MaintenanceSelect: React.FC<SelectProps> = (props) => {
                 'Electrical',
                 'Building Structure',
             ]}
-            nothingFoundMessage="Cleanup Type not found"
+            nothingFoundMessage="Maintenance Type not found"
             radius="sm"
             mb="md"
             size="xs"

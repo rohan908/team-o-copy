@@ -11,13 +11,15 @@ interface GoogleMapsAPIProps {
 export function hospitalCoordinates(hospital: string | null): google.maps.LatLngLiteral | null {
     switch (hospital) {
         case '20 Patriot Pl':
-            return { lat: 42.092759710546595, lng: -71.26611460791148 }; //this is fixed location for pharmacy, should route to specific parking lot
+            return { lat: 42.09190044054284, lng: -71.26640734850004 }; //this is fixed location for pharmacy, should route to specific parking lot
         case '22 Patriot Pl':
-            return { lat: 42.09304546224412, lng: -71.26680481859991 };
+            return { lat: 42.09190044054284, lng: -71.26640734850004 };
         case 'Chestnut Hill':
-            return { lat: 42.32624893122403, lng: -71.14948990068949 };
+            return { lat: 42.32636099324175, lng: -71.1492697651447 };
         case 'Faulkner Hospital':
-            return { lat: 42.30199320903482, lng: -71.12747581365801 };
+            return { lat: 42.30198339966857, lng: -71.12743582275311 };
+        case 'BWH Campus':
+            return { lat: 42.33636274679939, lng: -71.10897247577398 };
     }
     return null;
 }
