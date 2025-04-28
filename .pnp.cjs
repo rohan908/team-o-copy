@@ -2437,6 +2437,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/dom-speech-recognition", [\
+      ["npm:0.0.6", {\
+        "packageLocation": "./.yarn/cache/@types-dom-speech-recognition-npm-0.0.6-7323470dac-2483e59689.zip/node_modules/@types/dom-speech-recognition/",\
+        "packageDependencies": [\
+          ["@types/dom-speech-recognition", "npm:0.0.6"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/draco3d", [\
       ["npm:1.4.10", {\
         "packageLocation": "./.yarn/cache/@types-draco3d-npm-1.4.10-1af3ea4bb0-431e333b2f.zip/node_modules/@types/draco3d/",\
@@ -5659,6 +5668,7 @@ const RAW_RUNTIME_STATE =
           ["@react-three/fiber", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.18.0"],\
           ["@tabler/icons-react", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.31.0"],\
           ["@tailwindcss/vite", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.0.17"],\
+          ["@types/dom-speech-recognition", "npm:0.0.6"],\
           ["@types/leaflet", "npm:1.9.17"],\
           ["@types/leaflet-routing-machine", "npm:3.2.8"],\
           ["@types/node", "npm:22.14.1"],\

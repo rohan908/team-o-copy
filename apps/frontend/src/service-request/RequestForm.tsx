@@ -23,6 +23,7 @@ import {
     usePatriotContext,
 } from '../contexts/DirectoryContext.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
+import SpeechToText from '../Buttons/SpeechToText.tsx'
 
 export interface RequestData {
     employeeName: string;
@@ -148,6 +149,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                     </Flex>
                     <Box mt="md">
                         <RequestDescription {...form.getInputProps('description')} />
+                        <SpeechToText OnResult={(text) => {form.setFieldValue('description', text)}}/>
                     </Box>
                     <Flex mt="xl" justify="left" gap="md">
                         <Button
