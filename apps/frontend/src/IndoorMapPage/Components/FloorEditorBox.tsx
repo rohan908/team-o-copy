@@ -28,13 +28,15 @@ const NodeInfoBox = () => {
         <Box
             p="sm"
             style={{
-                width: 'auto',
+                width: 'fit-content',
                 minWidth: '300px',
                 backgroundColor: '#285CC6',
                 border: '2px solid #1C43A7',
                 borderRadius: 24,
             }}
-        ></Box>
+        >
+        here is stuff
+        </Box>
     );
 };
 

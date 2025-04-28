@@ -27,13 +27,11 @@ const NodeInfoBox = () => {
 
     const [nodeInfoOpen, setNodeInfoOpen] = useState(false);
     const [expandInfo, setExpandInfo] = useState(false);
-    const [floorInfo, setFloorInfo] = useState(false);
     const [isFloorEdge, setIsFloorEdge] = useState(false);
 
     const toggleMoreInfo = () => {
         if (expandInfo) {
             setExpandInfo(false);
-            setFloorInfo(false);
         } else {
             setExpandInfo(true);
         }
@@ -50,25 +48,19 @@ const NodeInfoBox = () => {
         }
     };
 
-    const toggleFloorMenu = () => {
-        if (floorInfo) {
-            setFloorInfo(false);
-        } else {
-            setFloorInfo(true);
-        }
-    };
-
     useEffect(() => {
         checkNodeType();
         if (mapProps.currentNode) {
             setNodeInfoOpen(true);
         } else {
             setNodeInfoOpen(false);
+            setExpandInfo(false);
         }
     }, [mapProps.currentNode]);
 
     return (
-        <Flex direction={'row-reverse'}>
+        <Flex direction={"column"} gap={'xs'} align={"flex-end"}>
+        <Flex direction={'row-reverse'} gap={'xs'}>
             <Collapse in={nodeInfoOpen} transitionDuration={250} transitionTimingFunction="linear">
                 <Box
                     p="sm"
@@ -80,8 +72,12 @@ const NodeInfoBox = () => {
                         borderRadius: 24,
                     }}
                 >
-                    <Flex direction="row" p="xs" gap="xs">
-                        <Flex direction="column" align={'flex-start'}>
+                    <Flex direction="row" gap={'xs'}>
+                        <Text color={'white'}>Edit Properties</Text>
+                    </Flex>
+
+                    <Flex direction="row" gap={'xs'}>
+                        <Flex direction="column" align={'flex-start'} justify={'space-between'}>
                             <NativeSelect
                                 label={'Node Type'}
                                 styles={{
@@ -122,7 +118,7 @@ const NodeInfoBox = () => {
                                 variant="filled"
                                 color="baseBlue.6"
                                 onClick={() => toggleMoreInfo()}
-                                size="md"
+                                size="sm"
                                 radius="xl"
                                 className="navButton"
                                 leftSection={
@@ -205,7 +201,7 @@ const NodeInfoBox = () => {
                     }}
                 >
                     <Text color={'white'}>View-Only Properties</Text>
-                    <Flex direction="row" p="xs" gap="xs">
+                    <Flex direction="row" gap="xs">
                         <TextInput
                             variant="filled"
                             readOnly
@@ -249,36 +245,17 @@ const NodeInfoBox = () => {
                             },
                         }}
                         size="sm"
-                        p={'xs'}
                         radius="xl"
                         value={`${mapProps.currentNode?.connectingNodes || ''}`}
                         variant="filled"
                     ></TextInput>
-                    <Collapse
-                        in={isFloorEdge}
-                        transitionDuration={250}
-                        transitionTimingFunction="linear"
-                    >
-                        <Button
-                            variant="filled"
-                            color="baseBlue.6"
-                            justify="flex-end"
-                            onClick={() => toggleFloorMenu()}
-                            size="sm"
-                            radius="xl"
-                            className="navButton"
-                            leftSection={
-                                floorInfo ? <IconArrowBadgeLeft /> : <IconArrowBadgeRight />
-                            }
-                        >
-                            Link Floors
-                        </Button>
-                    </Collapse>
                 </Box>
             </Collapse>
-            <Collapse in={floorInfo} transitionDuration={250} transitionTimingFunction="linear">
-                <FloorEditorBox />
-            </Collapse>
+        </Flex>
+
+    <Collapse in={isFloorEdge} transitionDuration={250} transitionTimingFunction="linear">
+        <FloorEditorBox />
+    </Collapse>
         </Flex>
     );
 };
