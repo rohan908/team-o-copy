@@ -20,3 +20,9 @@ export const API_ROUTES = {
 export const BACKUP_PATHS = {
     directoryBackup: './src/directoryBackup/backup.csv',
 };
+
+export enum ALGORITHM {
+    BFS,
+    DFS,
+    AStar,
+}

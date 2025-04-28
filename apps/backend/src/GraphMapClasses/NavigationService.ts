@@ -65,7 +65,7 @@ export class NavigationService {
             (pathAlgo === 'DFS' && this.pathFinder instanceof DFSPathFinder)
         ) {
             return;
-        } //dont want to make new objects for now reason
+        } //dont want to make new objects for no reason
 
         const graphRef = () => this.graph;
         switch (pathAlgo) {
@@ -126,5 +126,14 @@ export class NavigationService {
             node,
             success: node !== undefined,
         };
+    }
+
+    public setAlgo(pathAlgoID: number) {
+        PrismaClient.algorithm.upsert({
+            where: { id: 0 },
+            update: { algoID: pathAlgoID },
+            create: { id: 0, algoID: pathAlgoID },
+        });
+        return;
     }
 }

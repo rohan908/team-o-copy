@@ -3,15 +3,18 @@ import { IconBuilding, IconChevronDown, IconRouteSquare } from '@tabler/icons-re
 import { useTimeline } from './TimeLineContext.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
+import { ALGORITHM } from 'common/src/constants.ts';
+import axios from 'axios';
+import { setAlgo } from './setAlgoRouting.ts';
 
 //need to change this to actual api call autocomplete later
 const algoOptions = [
-    { value: 'BFS', label: 'Breadth First Search' },
+    { value: ALGORITHM.BFS.toString(), label: 'Breadth First Search' },
     {
-        value: 'A*',
+        value: ALGORITHM.AStar.toString(),
         label: 'A Star',
     },
-    { value: 'DFS', label: 'Depth First Search' },
+    { value: ALGORITHM.DFS.toString(), label: 'Depth First Search' },
 ];
 
 export function AlgorithmSelector() {
@@ -20,15 +23,21 @@ export function AlgorithmSelector() {
     const NavSelection = useNavSelectionContext();
 
     const setSelectedAlgo = (algo: string | null) => {
-        setSelectedAlgorithm(algo);
-        NavSelection.dispatch({
-            type: 'SET_NAV_REQUEST',
-            data: {
-                HospitalName: selectedHospital,
-                Department: department,
-                AlgorithmName: algo,
-            } as NavSelectionItem,
-        });
+        setAlgo(+algo!);
+        console.log('algo just changed to: ', algo);
+
+        // await axios.post('api/graph/setAlgo', { pathAlgo: +algo! });
+        // setSaveLabel(true);
+        // setTimeout(() => setSaveLabel(false), 1500);
+        //
+        // setSelectedAlgorithm(algo);
+        // NavSelection.dispatch({
+        //     type: 'SET_NAV_REQUEST',
+        //     data: {
+        //         HospitalName: selectedHospital,
+        //         Department: department,
+        //         AlgorithmName: algo,
+        //     } as NavSelectionItem,
     };
     return (
         <Select

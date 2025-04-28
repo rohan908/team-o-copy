@@ -168,6 +168,53 @@ const getNodeHandler: RequestHandler<
     }
 };
 
+// Use RequestHandler with generics for proper typing
+const getAlgoHandelr: RequestHandler<
+    {}, // Route parameters
+    PathFindingResponse, // Response body
+    PathFindingRequestBody // Request body
+> = (req, res) => {
+    try {
+        const { pathAlgo } = req.body;
+
+        // Validate input
+        if ([pathAlgo].some((param) => param === undefined)) {
+            res.status(400).json({
+                success: false,
+                error: 'Missing required parameters',
+            });
+            return; // Return void
+        }
+
+        const algo: number = +pathAlgo;
+
+        navigationService.setAlgo(algo);
+
+        // const result: PathFinderResult = navigationService.setAlgo(algo);
+
+        //     if (result.distance === 0) {
+        //         res.status(404).json({
+        //             success: false,
+        //             error: 'No path found between the specified points',
+        //         });
+        //         return; // Return void
+        //     }
+        //
+        //     res.send({ result });
+        //
+        //     return; // Return void explicitly
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        console.error('Error finding path:', error);
+
+        res.status(500).json({
+            success: false,
+            error: errorMessage || 'An error occurred while finding the path',
+        });
+        return; // Return void
+    }
+};
+
 // Debug endpoint to get test the pathfinding between nodes
 router.get('/debug', (req: any, res: any) => {
     // Get the grid dimensions and some sample walkable points
@@ -180,5 +227,8 @@ router.get('/debug', (req: any, res: any) => {
 router.post('/findPath', findPathHandler);
 
 router.post('/getNode', getNodeHandler);
+
+// Will import Node data directly as node data, no CSV parsing
+router.post('/setAlgo', getAlgoHandelr);
 
 export default router;

@@ -120,3 +120,8 @@ model Edge {
   mapId  Int
   nodes  Int[] // ids of both nodes in this edge
 }
+
+model Algorithm {
+  id Int @id
+  algoID  Int
+}
