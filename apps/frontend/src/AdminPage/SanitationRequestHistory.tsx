@@ -73,7 +73,7 @@ export function SanitationRequestHistory() {
     if (error) return <Text color="red">{error}</Text>;
     if (!data.length) return <Text>No request form data found.</Text>;
 
-    const summaryColumns = ['requestID', 'cleanupType', 'createdAt'];
+    const summaryColumns = ['Employee', 'requestID', 'cleanupType', 'createdAt'];
 
     return (
         <Box
@@ -85,12 +85,9 @@ export function SanitationRequestHistory() {
             flex="column"
             bga='blur(5px)'
         >
-            <Title order={1} mb="sm" mt="50px" c="black" ta="center" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
+            <Title order={1} mb="sm" mt="50px" c="primaryBlues.8" ta="left" fw={700} fz={{ sm: 'xl' }}>
                 Sanitation Service Requests
             </Title>
-            <Text c="black" ta="center" mb="sm" fw={500} fz={{ sm: 'xxs', md: 'xs' }}>
-                Click on a row to find out more information
-            </Text>
             <ScrollArea
                 type="scroll"
                 offsetScrollbars
@@ -98,14 +95,30 @@ export function SanitationRequestHistory() {
                 style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden' }}
             >
                 <Table
-                  c="black" borderColor="black" withTableBorder={true} withRowBorders={true} withColumnBorders={true}
-                  highlightOnHover={true} highlightOnHoverColor={"#CBD2DF"}
+                  c="black"
+                  borderColor="black"
+                  withTableBorder={false}
+                  withRowBorders={true}
+                  withColumnBorders={false}
+                  highlightOnHover={true}
+                  highlightOnHoverColor={"#CBD2DF"}
                   width="100%"
                   layout='auto'
+                  style={{
+                    borderRadius: "8px",
+                  }}
                 >
-                  <Table.Thead>
+                  <Table.Thead
+                    bg="primaryBlues.8"
+                    style={{
+                      borderRadius: "8px",
+                    }}
+                  >
                     <Table.Tr
-                      c="black"
+                      c="white"
+                      style={{
+                        borderRadius: "8px",
+                      }}
                     >
                             {summaryColumns.map((col) => (
                               <Table.Th
