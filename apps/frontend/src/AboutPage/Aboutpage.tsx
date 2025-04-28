@@ -32,17 +32,17 @@ const teamMembers: Member[] = [
     {
         name: 'Hudson Kortus',
         role: 'Lead Software Engineer',
-        image: 'public/TeamPhotos/HudsonKortus.jpg',
+        image: 'public/TeamPhotos/Hudson.png',
     },
     {
         name: 'Rohan Inamdar',
         role: 'Assistant Lead Software Engineer',
-        image: 'public/TeamPhotos/Rohan.jpeg',
+        image: 'public/TeamPhotos/Rohan.png',
     },
     {
         name: 'Owen Hart',
         role: 'Assistant Lead Software Engineer',
-        image: 'public/TeamPhotos/Owen.jpeg',
+        image: 'public/TeamPhotos/Owen.png',
     },
     {
         name: 'Yanding Mario',
@@ -52,12 +52,12 @@ const teamMembers: Member[] = [
     {
         name: 'Camden Brayton',
         role: 'Full-Time Software Engineer',
-        image: 'public/TeamPhotos/Camden.jpg',
+        image: 'public/TeamPhotos/Camden.png',
     },
     {
         name: 'Joseph Abata',
         role: 'Full-Time Software Engineer',
-        image: 'public/TeamPhotos/JoeAbata.JPG',
+        image: 'public/TeamPhotos/Joe.png',
     },
     {
         name: 'Conner Daly',
@@ -67,7 +67,7 @@ const teamMembers: Member[] = [
     {
         name: 'Adam Blanchard',
         role: 'Scrum Master',
-        image: 'public/TeamPhotos/Adam.jpg',
+        image: 'public/TeamPhotos/Adam.png',
     },
     {
         name: 'Ethan Ramoth',
@@ -78,7 +78,6 @@ const teamMembers: Member[] = [
 
 export function AboutPage() {
     const theme = useMantineTheme();
-
     const [active, setActive] = useState(0);
 
     const handleNext = () => {
@@ -92,84 +91,108 @@ export function AboutPage() {
     const member = teamMembers[active];
 
     return (
-        <Container size="lg" py="xl">
-            <Stack align="center" gap="lg">
-                <Text ta="center" fz="xl" fw="bold" c={theme.colors.secondaryBlues[7]}>
-                    Thank you to Brigham and Women’s Hospital and their representative, Andrew
-                    Shinn!
-                </Text>
+        <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py="xl">
+            <Container size="lg" py="xl">
+                <Stack align="center" gap="lg">
+                    <Text ta="center" fz="xl" fw="bold" c={theme.colors.secondaryBlues[7]}>
+                        Thank you to Brigham and Women's Hospital and their representative, Andrew
+                        Shinn!
+                    </Text>
 
-                <Stack gap={0} align="center" mt="md">
-                    <Text ta="center" c={theme.colors.secondaryBlues[7]} fz="md">
-                        WPI Computer Science Department
-                    </Text>
-                    <Text ta="center" c={theme.colors.secondaryBlues[7]} fz="md">
-                        CS3733-D25 Software Engineering, Prof. Wilson Wong
-                    </Text>
-                    <Text ta="center" c={theme.colors.secondaryBlues[7]} fz="md">
-                        Team Coach: Matt Hagger
+                    <Group align="flex-start" justify="center" mt="md" gap="xl" wrap="nowrap">
+                        {/* Left side - Text content */}
+                        <Stack gap={0} align="flex-start" w={300}>
+                            <Text c={theme.colors.secondaryBlues[7]} fz="md">
+                                WPI Computer Science Department
+                            </Text>
+                            <Text c={theme.colors.secondaryBlues[7]} fz="md">
+                                CS3733-D25 Software Engineering, Prof. Wilson Wong
+                            </Text>
+                            <Text c={theme.colors.secondaryBlues[7]} fz="md">
+                                Team Coach: Matt Hagger
+                            </Text>
+                        </Stack>
+
+                        {/* Right side - Carousel */}
+                        <Stack align="center" gap="sm">
+                            <Box pos="relative" w={250} h={250}>
+                                {/* Background Image Stuff */}
+                                <Paper
+                                    pos="absolute"
+                                    top={10}
+                                    left={10}
+                                    w="100%"
+                                    h="100%"
+                                    bg={theme.colors.secondaryBlues[7]}
+                                    radius="lg"
+                                    style={{ transform: 'rotate(5deg)', zIndex: 1 }}
+                                />
+                                <Paper
+                                    pos="absolute"
+                                    top={5}
+                                    left={5}
+                                    w="100%"
+                                    h="100%"
+                                    bg={theme.colors.secondaryBlues[5]}
+                                    radius="lg"
+                                    style={{ transform: 'rotate(-5deg)', zIndex: 2 }}
+                                />
+
+                                {/* Active Member image */}
+                                <Image
+                                    src={member.image}
+                                    alt={member.name}
+                                    radius="lg"
+                                    width={250}
+                                    height={250}
+                                    fit="cover"
+                                    style={{ position: 'relative', zIndex: 3 }}
+                                />
+                            </Box>
+
+                            <Stack gap={0} align="center">
+                                <Text size="lg" fw={500} c={theme.colors.secondaryBlues[7]}>
+                                    {member.name}
+                                </Text>
+                                <Text size="sm" c={theme.colors.secondaryBlues[7]}>
+                                    {member.role}
+                                </Text>
+                            </Stack>
+
+                            <Group my="sm">
+                                <Button
+                                    variant="light"
+                                    color="blue"
+                                    radius="xl"
+                                    onClick={handlePrevious}
+                                >
+                                    <IconChevronLeft />
+                                </Button>
+                                <Button
+                                    variant="light"
+                                    color="blue"
+                                    radius="xl"
+                                    onClick={handleNext}
+                                >
+                                    <IconChevronRight />
+                                </Button>
+                            </Group>
+                        </Stack>
+                    </Group>
+
+                    <Text
+                        ta="center"
+                        mt="xl"
+                        size="sm"
+                        c={theme.colors.secondaryBlues[7]}
+                        maw={500}
+                    >
+                        The Brigham & Women's Hospital maps and data used in this application are
+                        copyrighted and provided for the sole use of educational purposes.
                     </Text>
                 </Stack>
-
-                <Box pos="relative" w={250} h={250}>
-                    {/*Background Image Stuff*/}
-                    <Paper
-                        pos="absolute"
-                        top={10}
-                        left={10}
-                        w="100%"
-                        h="100%"
-                        bg="white"
-                        radius="lg"
-                        style={{ transform: 'rotate(5deg)', zIndex: 1 }}
-                    />
-                    <Paper
-                        pos="absolute"
-                        top={5}
-                        left={5}
-                        w="100%"
-                        h="100%"
-                        bg="white"
-                        radius="lg"
-                        style={{ transform: 'rotate(-5deg)', zIndex: 2 }}
-                    />
-
-                    {/*Active Member image*/}
-                    <Image
-                        src={member.image}
-                        alt={member.name}
-                        radius="lg"
-                        width={250}
-                        height={250}
-                        fit="cover"
-                        style={{ position: 'relative', zIndex: 3 }}
-                    />
-                </Box>
-
-                <Stack align="center" gap={4}>
-                    <Text size="lg" c={theme.colors.secondaryBlues[7]}>
-                        {member.name}
-                    </Text>
-                    <Text size="sm" c={theme.colors.secondaryBlues[7]}>
-                        {member.role}
-                    </Text>
-                </Stack>
-
-                <Group my="md">
-                    <Button variant="light" color="blue" radius="xl" onClick={handlePrevious}>
-                        <IconChevronLeft />
-                    </Button>
-                    <Button variant="light" color="blue" radius="xl" onClick={handleNext}>
-                        <IconChevronRight />
-                    </Button>
-                </Group>
-
-                <Text ta="center" mt="xl" size="sm" c="blue.8" maw={500}>
-                    The Brigham & Women's Hospital maps and data used in this application are
-                    copyrighted and provided for the sole use of educational purposes.
-                </Text>
-            </Stack>
-        </Container>
+            </Container>
+        </Box>
     );
 }
 
