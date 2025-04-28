@@ -29,7 +29,6 @@ export function DraggableMap() {
     const navSelection = useNavSelectionContext();
     const selectedHospitalName = navSelection.state.navSelectRequest?.HospitalName;
     const selectedDepartment = navSelection.state.navSelectRequest?.Department;
-    const selectedAlgorithm = navSelection.state.navSelectRequest?.AlgorithmName;
 
     // Declares context for start and end node information
     const patriotNodes = usePatriotContext();

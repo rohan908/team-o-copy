@@ -58,6 +58,23 @@ interface getNodeErrorResponse {
     error: string;
 }
 
+interface getAlgoIdResponse {
+    result: {
+        algoID: number;
+    };
+    success?: boolean;
+}
+
+// interface getAlgoIdResponseBody {
+//     id: number;
+//     algoID: number;
+// }
+
+interface getAlgoIdErrorResponse {
+    success: false;
+    error: string;
+}
+
 type PathFindingResponse = PathFindingSuccessResponse | PathFindingErrorResponse;
 
 type getNodeResponse = getNodeSuccessResponse | getNodeErrorResponse;
@@ -73,10 +90,10 @@ const findPathHandler: RequestHandler<
     PathFindingRequestBody // Request body
 > = (req, res) => {
     try {
-        const { startID, endID, pathAlgo } = req.body;
+        const { startID, endID } = req.body;
 
         // Validate input
-        if ([startID, endID, pathAlgo].some((param) => param === undefined)) {
+        if ([startID, endID].some((param) => param === undefined)) {
             res.status(400).json({
                 success: false,
                 error: 'Missing required parameters',
@@ -86,8 +103,7 @@ const findPathHandler: RequestHandler<
 
         const start = Number(startID);
         const end = Number(endID);
-        const algo = String(pathAlgo);
-        const result: PathFinderResult = navigationService.findPath(start, end, algo);
+        const result: PathFinderResult = navigationService.findPath(start, end);
 
         if (result.distance === 0) {
             res.status(404).json({
@@ -169,7 +185,7 @@ const getNodeHandler: RequestHandler<
 };
 
 // Use RequestHandler with generics for proper typing
-const getAlgoHandelr: RequestHandler<
+const setAlgoHandelr: RequestHandler<
     {}, // Route parameters
     PathFindingResponse, // Response body
     PathFindingRequestBody // Request body
@@ -215,10 +231,47 @@ const getAlgoHandelr: RequestHandler<
     }
 };
 
+const getAlgoHandelr: RequestHandler<
+    {}, // Route parameters
+    getAlgoIdResponse // Response body
+    // Request body
+> = (req, res) => {
+    try {
+        const result:  = navigationService.getAlgo();
+        // if (result.algoID === undefined) {
+        //     res.status(404).json({
+        //         success: false,
+        //         error: 'Node not found',
+        //     });
+        //     return;
+        // }
+
+        const response: getAlgoIdResponse = {
+            result: {
+                algoID: result!.algoID,
+            },
+            success: true,
+        };
+
+        res.json(response);
+
+        return;
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        console.error('Error getting node:', error);
+
+        res.status(500).json({
+            success: false,
+            error: errorMessage || 'An error occurred while getting a node',
+        });
+        return; // Return void
+    }
+};
+
 // Debug endpoint to get test the pathfinding between nodes
 router.get('/debug', (req: any, res: any) => {
     // Get the grid dimensions and some sample walkable points
-    const path = navigationService.findPath(1, 5, 'DFS');
+    const path = navigationService.findPath(1, 5);
     console.log('ran files and got:', path);
     res.json(path);
 });
@@ -229,6 +282,6 @@ router.post('/findPath', findPathHandler);
 router.post('/getNode', getNodeHandler);
 
 // Will import Node data directly as node data, no CSV parsing
-router.post('/setAlgo', getAlgoHandelr);
+router.post('/setAlgo', setAlgoHandelr);
 
 export default router;

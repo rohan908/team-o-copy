@@ -7,6 +7,7 @@ import { DFSPathFinder } from './PathFinders/DFSPathFinder.ts';
 
 import PrismaClient from '../bin/prisma-client.ts';
 import graph from '../routes/Graph.ts';
+import { ALGORITHM } from 'common/src/constants.ts';
 
 export class NavigationService {
     protected graph: Graph<NodeDataType>;
@@ -58,10 +59,17 @@ export class NavigationService {
         });
     }
 
-    public setPathFinderAlgo(pathAlgo: string) {
+    public async setPathFinderAlgo() {
+        const algo = await this.getAlgo();
+        const algoID = algo?.algoID;
+        if (algoID === undefined) {
+            throw new Error('Algo not found in database.');
+        }
+        const pathAlgo: string = ALGORITHM[algoID];
+
         if (
             (pathAlgo === 'BFS' && this.pathFinder instanceof BFSPathFinder) ||
-            (pathAlgo === 'A*' && this.pathFinder instanceof AStarPathFinder) ||
+            (pathAlgo === 'AStar' && this.pathFinder instanceof AStarPathFinder) ||
             (pathAlgo === 'DFS' && this.pathFinder instanceof DFSPathFinder)
         ) {
             return;
@@ -72,7 +80,7 @@ export class NavigationService {
             case 'BFS':
                 this.pathFinder = new BFSPathFinder(graphRef);
                 break;
-            case 'A*':
+            case 'AStar':
                 this.pathFinder = new AStarPathFinder(graphRef);
                 break;
             case 'DFS':
@@ -115,8 +123,8 @@ export class NavigationService {
         }
     }
 
-    public findPath(startNodeId: number, endNodeId: number, pathAlgo: string): PathFinderResult {
-        this.setPathFinderAlgo(pathAlgo);
+    public async findPath(startNodeId: number, endNodeId: number): PathFinderResult {
+        await this.setPathFinderAlgo();
         return this.pathFinder.findPath(startNodeId, endNodeId);
     }
 
@@ -139,5 +147,14 @@ export class NavigationService {
             },
         });
         return;
+    }
+
+    public async getAlgo() {
+        const getAlgo = await PrismaClient.algorithm.findUnique({
+            where: {
+                id: 0,
+            },
+        });
+        return getAlgo;
     }
 }
