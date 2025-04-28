@@ -28,6 +28,7 @@ import { TimelineProvider } from '../HomePage/TimeLineContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { IndoorMapsPage } from '../IndoorMapPage/IndoorMapsPage.tsx';
 import AboutPage from '../AboutPage/Aboutpage.tsx';
+import { ThreeDMap } from '../3DMapsPage/ThreeDMap.tsx';
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
@@ -96,6 +97,7 @@ export function Routing() {
                                 path="/language-request-history"
                                 element={<ProtectedRoute Route={<LanguageRequestHistory />} />}
                             />
+                            <Route path="/ThreeDMap" element={<ThreeDMap />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
