@@ -47,8 +47,21 @@ const MapEditorBox = () => {
     }, [mapProps.currentNode]);
 
     return (
-        <Box pos="fixed" top="60%" left={20} style={{ transform: 'translateY(-50%)', zIndex: 999 }}>
+        <Box pos="fixed" top="80%" left={20} style={{ transform: 'translateY(-50%)', zIndex: 999 }}>
             <Stack spacing="sm">
+              <Box
+                //bg="#FCB024"
+                p="sm"
+                style={{
+                  width: 'auto',
+                  minWidth: '300px',
+                  backgroundColor: '#285CC6',
+                  border: '2px solid #1C43A7',
+                  borderRadius: 24,
+                }}
+              >
+                
+
                 <Tooltip label="Move Tool" position="right">
                     <ActionIcon
                         size="xl"
