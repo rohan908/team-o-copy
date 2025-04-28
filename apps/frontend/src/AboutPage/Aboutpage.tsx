@@ -121,7 +121,27 @@ export function TeamRotation() {
                         radius="lg"
                         style={{ transform: 'rotate(-5deg)', zIndex: 2 }}
                     />
+
+                    {/*Active Member image*/}
+                    <Image
+                        src={member.image}
+                        alt={member.name}
+                        radius="lg"
+                        width={250}
+                        height={250}
+                        fit="cover"
+                        style={{ position: 'relative', zIndex: 3 }}
+                    />
                 </Box>
+
+                <Stack align="center" gap={4}>
+                    <Text size="lg" c="blue.8">
+                        {member.name}
+                    </Text>
+                    <Text size="sm" c="blue.8">
+                        {member.role}
+                    </Text>
+                </Stack>
             </Stack>
         </Container>
     );
