@@ -5,6 +5,7 @@ import { hospitalOptions } from './GmapsDestinationSelector.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import {
+    useBwhCampusContext,
     useChestnutHillContext,
     useFaulknerHospitalContext,
     usePatriotContext,
@@ -25,6 +26,7 @@ export function ParkingSelector() {
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
     const Faulkner = useFaulknerHospitalContext();
+    const BWH = useBwhCampusContext();
 
     const NavSelection = useNavSelectionContext();
 
@@ -42,6 +44,8 @@ export function ParkingSelector() {
             setDirectoryOptions(MapDepartment(Chestnut));
         } else if (hospital == 'Faulkner Hospital') {
             setDirectoryOptions(MapDepartment(Faulkner));
+        } else if (hospital == 'BWH Campus') {
+            setDirectoryOptions(MapDepartment(BWH));
         } else {
             setDirectoryOptions([]);
         }
