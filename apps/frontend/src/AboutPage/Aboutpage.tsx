@@ -109,8 +109,7 @@ export function TeamRotation() {
                         h="100%"
                         bg="white"
                         radius="lg"
-                        style={{ transform: 'rotate(5deg)' }}
-                        zIndex={1}
+                        style={{ transform: 'rotate(5deg)', zIndex: 1 }}
                     />
                     <Paper
                         pos="absolute"
@@ -120,8 +119,7 @@ export function TeamRotation() {
                         h="100%"
                         bg="white"
                         radius="lg"
-                        style={{ transform: 'rotate(-5deg)' }}
-                        zIndex={2}
+                        style={{ transform: 'rotate(-5deg)', zIndex: 2 }}
                     />
                 </Box>
             </Stack>
