@@ -27,7 +27,8 @@ export function DepartmentSelector() {
     };
 
     return (
-        <Autocomplete
+        <Select
+          searchable
             placeholder="Select a Department"
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
