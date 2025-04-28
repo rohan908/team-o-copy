@@ -1,24 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-    ActionIcon,
-    Tooltip,
-    Box,
-    Stack,
-    Container,
-    Flex,
-    Input,
-    TextInput,
-    NativeSelect,
-    Collapse,
-    Text,
-    Modal,
+  ActionIcon,
+  Tooltip,
+  Box,
+  Stack,
+  Container,
+  Flex,
+  Input,
+  TextInput,
+  NativeSelect,
+  Collapse,
+  Text,
+  Modal, Transition,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
-    IconDeviceFloppy,
-    IconCirclePlus,
-    IconVectorBezier2,
-    IconHandMove,
+  IconDeviceFloppy,
+  IconCirclePlus,
+  IconVectorBezier2,
+  IconHandMove, IconQuestionMark,
 } from '@tabler/icons-react';
 import { MapContext } from '../MapEditor.tsx';
 import { useAllNodesContext } from '../../contexts/DirectoryContext.tsx';
@@ -116,6 +116,50 @@ const MapEditorBox = () => {
                         <IconDeviceFloppy size={32} />
                     </ActionIcon>
                 </Tooltip>
+
+                <Flex direction="row" gap={"lg"}>
+                  <Tooltip label="Help" position="right">
+                    <ActionIcon
+                      size="xl"
+                      variant="filled"
+                      color={mapProps.selectedTool == 'help' ? "#003EB1" : "#285CC6" }
+                      style={{
+                        border: '2px solid #1C43A7',
+                        width: 60,
+                        height: 60,
+                        borderRadius: 50,
+                      }}
+                      onClick={() => mapProps.setSelectedTool('help')}
+                    >
+                      <IconQuestionMark size={32} />
+                    </ActionIcon>
+                  </Tooltip>
+                  <Transition
+                    mounted={mapProps.selectedTool === 'help'}
+                    transition="slide-right"
+                    duration={400}
+                    timingFunction="linear"
+                  >
+                    {(styles) => (
+                      <div style={styles}>
+                        <Box
+                          //bg="#FCB024"
+                          p="sm"
+                          style={{
+                            width: 'auto',
+                            minWidth: '300px',
+                            backgroundColor: '#285CC6',
+                            border: '2px solid #1C43A7',
+                            borderRadius: 24,
+                          }}
+                        >
+                          <Text>
+                            Help Data
+                          </Text>
+                        </Box>
+                      </div>)}
+                  </Transition>
+                </Flex>
 
                 <Collapse
                     in={nodeInfoOpen}
