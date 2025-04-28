@@ -1,20 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-    ActionIcon,
-    Tooltip,
-    Box,
-    Stack,
-    Container,
-    Flex,
-    Input,
-    TextInput,
-    NativeSelect,
-    Collapse,
-    Text,
-    Modal,
-    Transition,
-    Title,
-    Divider,
+  ActionIcon,
+  Tooltip,
+  Box,
+  Stack,
+  Container,
+  Flex,
+  Input,
+  TextInput,
+  NativeSelect,
+  Collapse,
+  Text,
+  Modal,
+  Transition,
+  Title,
+  Divider, Button,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
@@ -44,6 +44,15 @@ const MapEditorBox = () => {
 
     function toggleHelp(){
       setOpenedHelp(!openedHelp);
+    }
+
+    function roundCoordsToTwoPlaces(input: number){
+      if (!input) return 0;
+      let roundedNumber = input;
+      roundedNumber = roundedNumber * 100;
+      roundedNumber = Math.round(roundedNumber);
+      roundedNumber = roundedNumber / 100;
+      return roundedNumber;
     }
 
     useEffect(() => {
@@ -152,7 +161,6 @@ const MapEditorBox = () => {
                             miw="300px"
                             bg="primaryBlues.0"
                             style={{
-                                border: '2px solid #1C43A7',
                                 borderRadius: 24,
                             }}
                         >
@@ -165,9 +173,11 @@ const MapEditorBox = () => {
                                         size="sm"
                                         radius="xl"
                                         w={80}
+                                        color={"secondaryBlues.7"}
                                         styles={{
                                             input: {
-                                                color: 'black',
+                                                backgroundColor: "#2658bd",
+                                                color: 'white',
                                                 fontWeight: 400,
                                             },
                                         }}
@@ -175,16 +185,30 @@ const MapEditorBox = () => {
                                     <Input
                                         size="sm"
                                         radius="xl"
-                                        w={80}
-                                        placeholder={`X: ${mapProps.currentNode?.x || 0}`}
+                                        w={90}
+                                        placeholder={`X: ${roundCoordsToTwoPlaces(mapProps.currentNode?.x) || 0}`}
                                         variant="filled"
+                                        styles={{
+                                          input: {
+                                            backgroundColor: "#2658bd",
+                                            color: 'white',
+                                            fontWeight: 400,
+                                          },
+                                        }}
                                     ></Input>
                                     <Input
                                         size="sm"
                                         radius="xl"
-                                        w={80}
-                                        placeholder={`Y: ${mapProps.currentNode?.y || 0}`}
+                                        w={90}
+                                        placeholder={`Y: ${roundCoordsToTwoPlaces(mapProps.currentNode?.y) || 0}`}
                                         variant="filled"
+                                        styles={{
+                                          input: {
+                                            backgroundColor: "#2658bd",
+                                            color: 'white',
+                                            fontWeight: 400,
+                                          },
+                                        }}
                                     ></Input>
                                 </Flex>
                                 <Flex direction="row" p="xs" gap="xs">
@@ -215,6 +239,13 @@ const MapEditorBox = () => {
                                             'elevator',
                                         ]}
                                         variant="filled"
+                                        styles={{
+                                          input: {
+                                            backgroundColor: "#2658bd",
+                                            color: 'white',
+                                            fontWeight: 400,
+                                          },
+                                        }}
                                     />
                                     <Modal
                                         opened={openedEditMenu}
@@ -228,6 +259,7 @@ const MapEditorBox = () => {
                                         }}
                                     >
                                         <TextInput
+                                            bg={"secondaryBlues.7"}
                                             label={'Node Name'}
                                             size="sm"
                                             radius="xl"
@@ -270,14 +302,14 @@ const MapEditorBox = () => {
                                             }
                                         ></TextInput>
                                     </Modal>
-                                    <ActionIcon
-                                        size="xxxl"
+                                    <Button
+                                        size="sm"
                                         variant="filled"
                                         color="#285CC6"
                                         onClick={open}
                                     >
                                         Edit Node
-                                    </ActionIcon>
+                                    </Button>
                                 </Flex>
                             </Flex>
                         </Box>
