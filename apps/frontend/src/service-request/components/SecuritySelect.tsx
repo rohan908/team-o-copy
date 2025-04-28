@@ -24,7 +24,6 @@ const SecuritySelect: React.FC<SecuritySelectProps> = ({ value, onChange }) => {
       <Select
             label="Choose your Security Concern"
             placeholder="Select a Concern"
-            searchable
             data={securityOptions}
             value={value}
             onChange={(val) => onChange(val)}

@@ -32,7 +32,6 @@ const MaintenanceSelect: React.FC<MaintenanceSelectProps> = ({ value, onChange, 
       <Select
             label="Choose the Maintenance Type"
             placeholder="Select a Cleanup Type"
-            searchable
             data={maintenanceOptions}
             value={value}
             onChange={(val, option) => onChange(val, option)}

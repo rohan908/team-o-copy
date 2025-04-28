@@ -27,7 +27,6 @@ const PrioritySelect: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
       <Select
             label="Choose the Priority level"
             placeholder="Select a priotriy"
-            searchable
             data={priorityOptions}
             value={value}
             onChange={(val) => onChange(val)}

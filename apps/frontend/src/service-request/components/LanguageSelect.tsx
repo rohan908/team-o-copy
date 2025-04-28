@@ -34,7 +34,6 @@ const LanguageSelect: React.FC<LanguageSelectProps> = ({value, onChange, ...prop
       <Select
             label="Choose the Language Needed"
             placeholder="Select a Language"
-            searchable
             data={languageOptions}
             value={value}
             onChange={(val, option) => onChange(val, option)}

@@ -25,7 +25,6 @@ const DepartmentSelect: React.FC<DepartmentSelectProps> = ({ departments, value,
       <Select
             label="Choose the Department"
             placeholder={departments.length > 0 ? 'Select a Department' : 'Select Hospital First'}
-            searchable
             data={departments}
             value={value}
             onChange={(val) => onChange(val || '')}

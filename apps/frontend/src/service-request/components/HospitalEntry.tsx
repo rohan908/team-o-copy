@@ -25,7 +25,6 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
       <Select
             label="Choose the Hospital Needed"
             placeholder="Select a Hospital"
-            searchable
             data={hospitalData}
             value={value}
             onChange={(val) => onChange(val || '')} // fallback for null values

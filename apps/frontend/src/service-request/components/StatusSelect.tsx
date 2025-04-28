@@ -26,7 +26,6 @@ const StatusSelect: React.FC<StatusSelectProps> = ({ value, onChange }) => {
       <Select
             label="What is the Status "
             placeholder="Select a Status"
-            searchable
             data={statusOptions}
             value={value}
             onChange={(val) => onChange(val)}

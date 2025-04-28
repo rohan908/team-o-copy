@@ -34,7 +34,6 @@ const SanitationSelect: React.FC<SanitationSelectProps> = ({ value, onChange }) 
       <Select
         label="Choose the Cleanup Type"
         placeholder="Select a Cleanup Type"
-        searchable
         data={sanitationOptions}
         value={value}
         onChange={(val) => onChange(val)}
