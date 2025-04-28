@@ -57,7 +57,7 @@ export function DisplayDirectionsBox() {
         directionsByFloor[direction.Floor].push(direction);
     });
     return (
-        <Box w="80%" h="335px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: "0px -4px 4px 0px #AAAAAA"}}>
+        <Box w="80%" h="400px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: "0px -4px 4px 0px #AAAAAA"}}>
           <Box
             style={{overflowY: 'auto'}}
           >
@@ -65,7 +65,7 @@ export function DisplayDirectionsBox() {
               multiple
               styles={{
                 root: {
-                  height: "378px",
+                  height: "450px",
                   overflowY: "auto",
                 },
                 item: {
