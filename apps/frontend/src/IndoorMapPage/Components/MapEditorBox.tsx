@@ -66,7 +66,7 @@ const MapEditorBox = () => {
                     <ActionIcon
                         size="xl"
                         variant="filled"
-                        color="#285CC6"
+                        color={mapProps.selectedTool == 'pan' ? "#003EB1" : "#285CC6" }
                         style={{
                             border: '2px solid #1C43A7',
                             width: 60,
@@ -83,7 +83,7 @@ const MapEditorBox = () => {
                     <ActionIcon
                         size="xl"
                         variant="filled"
-                        color="#285CC6"
+                        color={mapProps.selectedTool == 'add-node' ? "#003EB1" : "#285CC6" }
                         style={{
                             border: '2px solid #1C43A7',
                             width: 60,
@@ -100,7 +100,7 @@ const MapEditorBox = () => {
                     <ActionIcon
                         size="xl"
                         variant="filled"
-                        color="#285CC6"
+                        color={mapProps.selectedTool == 'add-edge' ? "#003EB1" : "#285CC6" }
                         style={{
                             border: '2px solid #1C43A7',
                             width: 60,
@@ -203,7 +203,7 @@ const MapEditorBox = () => {
                                 ]}
                                 variant="filled"
                             />
-                              <Modal opened={openedEditMenu} onClose={close} title={"Edit Node"} size={"auto"} yOffset={"15%"}
+                              <Modal opened={openedEditMenu} onClose={close} title={"Edit Node"} size={"auto"} centered
                                      overlayProps={{
                                 backgroundOpacity: 0.55,
                                 blur: 3,

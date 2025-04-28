@@ -19,4 +19,5 @@ export const API_ROUTES = {
 // file paths for backup files
 export const BACKUP_PATHS = {
     directoryBackup: './src/directoryBackup/backup.csv',
+    directoryBackupJSON: './src/directoryBackup/nodeBackup.json',
 };
