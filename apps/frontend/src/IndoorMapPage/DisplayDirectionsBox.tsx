@@ -57,7 +57,7 @@ export function DisplayDirectionsBox() {
         directionsByFloor[direction.Floor].push(direction);
     });
     return (
-        <Box w="80%" h="335px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: "0px 0px 5px 0px #000000"}}>
+        <Box w="80%" h="335px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: "0px -4px 4px 0px #AAAAAA"}}>
           <Box
             style={{overflowY: 'auto'}}
           >
