@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {Button, Container, Text, Image, Group, Center, Stack, Box, Paper} from '@mantine/core';
+import { Button, Container, Text, Image, Group, Center, Stack, Box, Paper } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 type Member = {
@@ -100,18 +100,30 @@ export function TeamRotation() {
                 </Stack>
 
                 <Box pos="relative" w={250} h={250}>
-                  {/*Background Image Stuff*/}
-                  <Paper
-                    pos="absolute"
-                    top={10}
-                    left={10}
-                    w="100%"
-                    h="100%"
-                    bg="white"
-                    radius="lg"
-                    sx={{transform: "rotate(5deg)" }}
-                    zIndex={1}
-                  />
+                    {/*Background Image Stuff*/}
+                    <Paper
+                        pos="absolute"
+                        top={10}
+                        left={10}
+                        w="100%"
+                        h="100%"
+                        bg="white"
+                        radius="lg"
+                        style={{ transform: 'rotate(5deg)' }}
+                        zIndex={1}
+                    />
+                    <Paper
+                        pos="absolute"
+                        top={5}
+                        left={5}
+                        w="100%"
+                        h="100%"
+                        bg="white"
+                        radius="lg"
+                        style={{ transform: 'rotate(-5deg)' }}
+                        zIndex={2}
+                    />
+                </Box>
             </Stack>
         </Container>
     );
