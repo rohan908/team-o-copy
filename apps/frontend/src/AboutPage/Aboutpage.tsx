@@ -65,3 +65,40 @@ const teamMembers: Member[] = [
         image: 'public/TeamPhotos/Ethan.png',
     },
 ];
+
+export function TeamRotation() {
+    const [active, setActive] = useState(0);
+
+    const handleNext = () => {
+        setActive((prev) => (prev + 1) % teamMembers.length);
+    };
+
+    const handlePrevious = () => {
+        setActive((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
+    };
+
+    const member = teamMembers[active];
+
+    return (
+        <Container size="lg" py="xl">
+            <Stack align="center" gap="lg">
+                <Text ta="center" fz="xl" fw="bold" c="blue.8">
+                    Thank you to Brigham and Women’s Hospital and their representative, Andrew
+                    Shinn!
+                </Text>
+
+                <Stack gap={0} align="center" mt="md">
+                    <Text ta="center" c="blue.8" fz="md">
+                        WPI Computer Science Department
+                    </Text>
+                    <Text ta="center" c="blue.8" fz="md">
+                        CS3733-D25 Software Engineering, Prof. Wilson Wong
+                    </Text>
+                    <Text ta="center" c="blue.8" fz="md">
+                        Team Coach: Matt Hagger
+                    </Text>
+                </Stack>
+            </Stack>
+        </Container>
+    );
+}
