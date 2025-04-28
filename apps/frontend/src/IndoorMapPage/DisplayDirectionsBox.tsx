@@ -77,7 +77,7 @@ export function DisplayDirectionsBox() {
         directionsByFloor[direction.Floor].push(direction);
     });
     return (
-        <Box w="80%" h="400px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: "0px -4px 4px 0px #AAAAAA"}}>
+        <Box w="80%" h="400px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: nodeIds && nodeIds.length > 1 ? "0px -4px 4px 0px #AAAAAA" : "0px 0px 0px 0px #FFFFFF" }}>
           <Box
             style={{overflowY: 'auto'}}
           >
@@ -108,15 +108,12 @@ export function DisplayDirectionsBox() {
                                     <Text fw={700} size="md" c="blue.7">
                                         {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
                                         {/* Changing for Faulkner and Chestnut*/}
-                                        {Number(floor) === 1
-                                            ? 'Floor 1'
-                                            : Number(floor) === 4
-                                              ? 'Chestnut'
-                                              : Number(floor) === 5
-                                                ? 'Faulkner'
-                                                : `Floor ${Number(floor) + 1}`
-                                                  ? 'BWH'
-                                                  : `Floor ${Number(floor) + 2}`}
+                                        {Number(floor) === 1 ? 'Floor 1' : ""}
+                                        {Number(floor) === 2 ? 'Floor 3' : ""}
+                                        {Number(floor) === 3 ? 'Floor 4' : ""}
+                                        {Number(floor) === 4 ? 'Chestnut' : ""}
+                                        {Number(floor) === 5 ? 'Faulkner' : ""}
+                                        {Number(floor) === 6 ? 'BWH' : ""}
                                     </Text>
                                     <TTSButton text={floorTTS} />
                                 </Group>
