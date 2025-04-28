@@ -30,7 +30,7 @@ const MaintenanceSelect: React.FC<MaintenanceSelectProps> = ({ value, onChange, 
       <Flex align="center" gap="sm">
 
       <Select
-            label="Choose the Maintenance Needed"
+            label="Choose the Maintenance Type"
             placeholder="Select a Cleanup Type"
             searchable
             data={maintenanceOptions}
@@ -51,7 +51,7 @@ const MaintenanceSelect: React.FC<MaintenanceSelectProps> = ({ value, onChange, 
                 },
             }}
         />
-        <Box mt={35}>
+        <Box mt={14}>
           <SpeechToText OnResult={handleSpeechResult} />
         </Box>
       </Flex>
