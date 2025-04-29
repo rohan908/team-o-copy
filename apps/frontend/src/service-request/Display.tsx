@@ -1,39 +1,36 @@
 import React from 'react';
-import { Box, Flex, useMantineTheme, Text, Button } from '@mantine/core';
+import { Box, Flex, Text, Button } from '@mantine/core';
 
 interface DisplayProps {
     data: { title: string; value: string | undefined }[];
     onBack: () => void;
 }
+
 const Display: React.FC<DisplayProps> = ({ data, onBack }) => {
-    const theme = useMantineTheme();
-
-    // Safely handle missing state
-
     return (
-        <Flex w="100%" h="100vh" align="center" direction="column" p="xl">
-            <Text size="xl" fw={700} mb="lg" c="#2658bd">
+        <Box p="xl" bg="#ebf2ff">
+            <Text
+                size="xl"
+                fw={700}
+                mb="lg"
+                c="#2658bd"
+                ta="center"
+                style={{ borderBottom: '1px solid #2658bd', paddingBottom: '8px' }}
+            >
                 Service Request Submitted
             </Text>
-            <Box
-                p="xl"
-                w="100%"
-                maw="600px"
-                bg="#ebf2ff"
-                /*Border Radius is only possible through style prop afaik -Connor*/
-            >
+
+            <Box mb="xl">
                 {data.map((item, idx) => (
-                    <Text mb="sm" key={idx} c="#2658bd">
-                        <strong>{item.title}:</strong> {item.value}
-                    </Text>
+                    <Flex key={idx} mb="sm" gap="sm">
+                        <Text fw={600} c="#2658bd" style={{ minWidth: '140px' }}>
+                            {item.title}:
+                        </Text>
+                        <Text c="#2658bd">{item.value || 'Not specified'}</Text>
+                    </Flex>
                 ))}
-                <Box mr="auto" mt="lg">
-                    <Button radius="md" onClick={onBack} bg="#5A83DB" style={{ width: '100px' }}>
-                        Back
-                    </Button>
-                </Box>
             </Box>
-        </Flex>
+        </Box>
     );
 };
 

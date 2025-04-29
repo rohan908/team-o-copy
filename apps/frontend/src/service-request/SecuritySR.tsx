@@ -72,7 +72,7 @@ function Security({ onBack }: { onBack: () => void }) {
             formLabel="Security Request"
             onBack={onBack}
         >
-            {(form) => <SecuritySelect required {...form.getInputProps('security')} />}
+            {(form) => <SecuritySelect {...form.getInputProps('security')} />}
         </RequestForm>
     );
 }
