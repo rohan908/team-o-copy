@@ -24,7 +24,8 @@ export const adminNavItems: NavItem[] = [
 export const loginItems: NavItem[] = [{ name: 'Log In', link: '/log-in-page' }];
 
 export function NavBar() {
-    const { isSignedIn } = useUser();
+    const { isSignedIn, user } = useUser();
+    const role = user?.publicMetadata?.role;
 
     return (
         <>
@@ -117,9 +118,27 @@ export function NavBar() {
                                                 </SignInButton>
                                             </MantineProvider>
                                         ))}
-
+                                    {/* Log Out Button (for staff) */}
+                                    {isSignedIn && role === 'staff' && (
+                                        <MantineProvider theme={{ activeClassName: '' }}>
+                                            <SignOutButton>
+                                                <Button
+                                                    variant="filled"
+                                                    color="baseBlue.6"
+                                                    className="LoggoutButton"
+                                                    justify="flex-end"
+                                                    component={Link}
+                                                    to="/"
+                                                    size="sm"
+                                                    style={{ borderRadius: '8px' }}
+                                                >
+                                                    Log Out
+                                                </Button>
+                                            </SignOutButton>
+                                        </MantineProvider>
+                                    )}
                                     {/* Admin Buttons and Log Out (only when logged in) */}
-                                    {isSignedIn && (
+                                    {isSignedIn && role === 'admin' && (
                                         <>
                                             {adminNavItems.map((item, index) => (
                                                 <MantineProvider
