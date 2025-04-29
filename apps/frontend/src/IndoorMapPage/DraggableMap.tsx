@@ -19,6 +19,7 @@ import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
+import { element } from 'prop-types';
 
 export function DraggableMap() {
     /*
@@ -211,13 +212,21 @@ export function DraggableMap() {
     // TODO: Search for nodes with type parking lot, allow user to select which parking lot they parked in
     const findParkingLot = (): number | null => {
         if (selectedHospitalName === '20 Patriot Pl' || selectedHospitalName === '22 Patriot Pl') {
-            return 1; // Node 1 for Patriot Place
+            return allNodes.find(element =>
+                element.nodeType == 'parking-lot' && element.mapId == 1
+            )?.id;
         } else if (selectedHospitalName === 'Chestnut Hill') {
-            return 117; // Node 100 for Chestnut Hill
+            return allNodes.find(element =>
+                element.nodeType == 'parking-lot' && element.mapId == 2
+            )?.id;
         } else if (selectedHospitalName === 'Faulkner Hospital') {
-            return 145;
+            return allNodes.find(element =>
+                element.nodeType == 'parking-lot' && element.mapId == 3
+            )?.id;
         } else if (selectedHospitalName === 'BWH Campus') {
-            return 220;
+            return allNodes.find(element =>
+                element.nodeType == 'parking-lot' && element.mapId == 4
+            )?.id;
         }
         return null;
     };
