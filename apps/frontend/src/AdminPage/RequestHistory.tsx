@@ -10,10 +10,14 @@ import {
     Center,
     Transition,
     Flex,
+    Button,
+    Paper,
 } from '@mantine/core';
+import { IconFilter } from '@tabler/icons-react';
 
 // Type-safe interface for request data
 interface RequestProps {
+    employeeName: string;
     RequestID: number;
     requestType: string;
     createdAt: string;
@@ -107,52 +111,51 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     if (error) return <Text color="red">{error}</Text>;
     if (!data.length) return <Text>No request form data found.</Text>;
 
-    const summaryColumns = ['requestID', 'requestType', 'createdAt'];
+    const summaryColumns = ['employeeName', 'requestID', 'requestType', 'createdAt'];
 
     return (
-        <Box p="md" w="100%" h="90vh" opacity="0.95" bd="lg" flex="column" bga="blur(5px)">
-            <Title
-                order={1}
-                mb="sm"
-                mt="50px"
-                c="black"
-                ta="center"
-                fw={700}
-                fz={{ sm: 'xl', md: 'xxxl' }}
-            >
+        <Box p="xl" bg="primaryBlues.1" w="100%" h="100%" bd="lg" flex="column">
+            <Title order={1} mb="sm" c="secondaryBlues.7" ta="left" fz="xl">
                 {requestType} Service Requests
             </Title>
-            <Text c="black" ta="center" mb="sm" fw={500} fz={{ sm: 'xxs', md: 'xs' }}>
+            <Text c="secondaryBlues.7" ta="left" mb="xl" fz="xxs">
                 Click on a row to find out more information
             </Text>
-            <ScrollArea
-                type="scroll"
-                offsetScrollbars
-                scrollbarSize={6}
-                style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden' }}
+            <Button
+                leftSection={<IconFilter />}
+                radius="md"
+                bg="yellowAccent.4"
+                fw="400"
+                m="xs"
+                c="secondaryBlues.7"
             >
+                Filters
+            </Button>
+
+            <ScrollArea type="scroll" offsetScrollbars scrollbarSize={6}>
                 <Table
                     c="black"
-                    borderColor="black"
+                    borderColor="greys.3"
                     withTableBorder={true}
                     withRowBorders={true}
-                    withColumnBorders={true}
                     highlightOnHover={true}
-                    highlightOnHoverColor={'#CBD2DF'}
+                    highlightOnHoverColor={'greys.1'}
                     width="100%"
                     layout="auto"
                 >
-                    <Table.Thead c="black" bg="#1C43A7">
-                        <Table.Tr c="black">
-                            {/* Replace this arra y with hardcoded columns */}
-                            <Table.Th p="12px" tt="capitalize" ta="left">
+                    <Table.Thead bg="primaryBlues.8">
+                        <Table.Tr c="white">
+                            {/* hardcoded these columns to use the requestType */}
+                            <Table.Th p="12px" tt="capitalize" ta="center" fw="400">
+                                Employee Name
+                            </Table.Th>
+                            <Table.Th p="12px" tt="capitalize" ta="center" fw="400">
                                 Request ID
                             </Table.Th>
-                            <Table.Th p="12px" tt="capitalize" ta="left">
+                            <Table.Th p="12px" tt="capitalize" ta="center" fw="400">
                                 {requestType}
-                            </Table.Th>{' '}
-                            {/* << FIXED */}
-                            <Table.Th p="12px" tt="capitalize" ta="left">
+                            </Table.Th>
+                            <Table.Th p="12px" tt="capitalize" ta="center" fw="400">
                                 Submitted
                             </Table.Th>
                         </Table.Tr>
@@ -164,15 +167,18 @@ export function RequestHistory({ requestType }: { requestType: string }) {
                                     onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
                                     style={{ cursor: 'pointer', borderRadius: '12px' }}
                                 >
-                                    <Table.Td p="12px" fw="500">
+                                    <Table.Td ta="center" p="12px">
+                                        {row.employeeName}
+                                    </Table.Td>
+                                    <Table.Td ta="center" p="12px">
                                         {row.requestID}
                                     </Table.Td>
 
-                                    <Table.Td p="12px" fw="500">
+                                    <Table.Td ta="center" p="12px">
                                         {getRequestTypeValue(row)}
                                     </Table.Td>
 
-                                    <Table.Td p="12px" fw="500">
+                                    <Table.Td ta="center" p="12px">
                                         {timeAgo(row.createdAt)}
                                     </Table.Td>
                                 </Table.Tr>

@@ -95,7 +95,7 @@ export const SidebarButton: React.FC<ColorChangingButtonProps> = ({
     icon,
     ...props
 }) => {
-    const firstColor = 'primaryBlues.4';
+    const firstColor = 'primaryBlues.9';
     const secondColor = 'secondaryBlues.7';
     return (
         <UnstyledButton

@@ -5,7 +5,6 @@ import { CSVTable } from './CSVTable';
 import {
     Collapse,
     Button,
-    Divider,
     Center,
     Flex,
     Title,
@@ -15,22 +14,15 @@ import {
     Transition,
     Modal,
     useMantineTheme,
-    Group,
 } from '@mantine/core';
-import LanguageRequestHistory from './LanguageRequestHistory.tsx';
-import { SegmentedControl } from '@mantine/core';
-import SecurityRequestHistory from './SecurityRequestHistory.tsx';
-import SanitationRequestHistory from './SanitationRequestHistory.tsx';
-import MaintenanceRequestHistory from './MaintenanceHistory.tsx';
+
 import CSVControlsComponent from './CSVControlsComponent.tsx';
 import {
     IconChevronDown,
     IconChevronUp,
     IconFileBroken,
     IconMap2,
-    IconArrowBadgeLeftFilled,
     IconLanguage,
-    IconExclamationCircleFilled,
     IconShieldHalf,
     IconTrash,
     IconBellExclamation,
@@ -43,12 +35,7 @@ import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
 import RequestHistory from './RequestHistory.tsx';
 
-function Home(props: { size: number }) {
-    return null;
-}
-
 export function AdminPageV2() {
-    const [sidebarOpen, { toggle }] = useDisclosure(true);
     const [formInfoOpen, { open, close }] = useDisclosure(true);
     const [otherToolsOpen, setOtherToolsOpen] = useState(true);
     const [CSVManipOpen, setCSVManipOpen] = useState(false);
@@ -62,10 +49,6 @@ export function AdminPageV2() {
         //   setDisplayTableNumber(num);
         // }
         setDisplayTableNumber(num);
-    }
-
-    function toggleOtherTools() {
-        setOtherToolsOpen(!otherToolsOpen);
     }
 
     return (
