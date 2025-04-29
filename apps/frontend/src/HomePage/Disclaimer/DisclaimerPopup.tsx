@@ -43,9 +43,9 @@ export function DisclaimerPopup() {
                             >
                                 <Card.Section>
                                     <Image
-                                        src="DisclaimerImages/waitWaitWait.gif"
+                                        src="DisclaimerImages/WPI_IMAGE_RED.png"
                                         height={160}
-                                        alt="Brigham Women's Hospital Picture!!!"
+                                        alt="✅ WPI L🔥G🔥 PICTURE (🔥FFICIAL) ✅"
                                     />
                                 </Card.Section>
 
