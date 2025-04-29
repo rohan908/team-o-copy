@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
 import {
+    IconLanguage,
+    IconExclamationCircleFilled,
+    IconShieldHalf,
+    IconTrash,
+    IconBellExclamation,
+} from '@tabler/icons-react';
+import {
     Collapse,
     Button,
     Divider,
@@ -13,6 +20,8 @@ import {
     ActionIcon,
     Transition,
     Modal,
+    useMantineTheme,
+    Group,
 } from '@mantine/core';
 import LanguageRequestHistory from './LanguageRequestHistory.tsx';
 import { SegmentedControl } from '@mantine/core';
@@ -29,8 +38,13 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import { Link } from 'react-router-dom';
-import { ColorChangingButton } from '../common-compoents/commonButtons.tsx';
+import { ColorChangingButton, SidebarButton } from '../common-compoents/commonButtons.tsx';
 import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
+import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
+
+function Home(props: { size: number }) {
+    return null;
+}
 
 export function AdminPageV2() {
     const [sidebarOpen, { toggle }] = useDisclosure(true);
@@ -38,6 +52,7 @@ export function AdminPageV2() {
     const [otherToolsOpen, setOtherToolsOpen] = useState(true);
     const [CSVManipOpen, setCSVManipOpen] = useState(false);
     const [displayTableNumber, setDisplayTableNumber] = useState(5);
+    const theme = useMantineTheme();
 
     function displayNumToggle(num: number) {
         // if (num == displayTableNumber) {
@@ -73,16 +88,15 @@ export function AdminPageV2() {
                                                 justify="center"
                                                 gap="sm"
                                             >
-                                                <Title c={"#285CC6"}>Toolbar</Title>
-                                                <ActionIcon
-                                                    bg={'#EBF2FF'}
-                                                    top="10%"
-                                                    size="input-sm"
-                                                    onClick={toggle}
-                                                    aria-label="ActionIcon the same size as inputs"
-                                                >
-                                                    <IconArrowBadgeDownFilled color={"#1C43A7"} />
-                                                </ActionIcon>
+                                                <HoverUnderline>
+                                                    <Title
+                                                        order={2}
+                                                        c="secondaryBlues.7"
+                                                        w={'auto'}
+                                                    >
+                                                        Admin Page
+                                                    </Title>
+                                                </HoverUnderline>
                                             </Flex>
                                             <Flex
                                                 direction="column"
@@ -96,7 +110,9 @@ export function AdminPageV2() {
                                                     justify="center"
                                                     gap="sm"
                                                 >
-                                                    <Title c={"#285CC6"}>Service Requests</Title>
+                                                    <Title c="secondaryBlues.7">
+                                                        Service Requests
+                                                    </Title>
                                                     <Collapse
                                                         in={formInfoOpen}
                                                         transitionDuration={0}
@@ -110,7 +126,7 @@ export function AdminPageV2() {
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
                                                             <IconArrowBadgeDownFilled
-                                                              color={"#1C43A7"}
+                                                                color={'#1C43A7'}
                                                             />
                                                         </ActionIcon>
                                                     </Collapse>
@@ -122,7 +138,7 @@ export function AdminPageV2() {
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
                                                             <IconArrowBadgeLeftFilled
-                                                              color={"#1C43A7"}
+                                                                color={'#1C43A7'}
                                                             />
                                                         </ActionIcon>
                                                     )}
@@ -137,22 +153,21 @@ export function AdminPageV2() {
                                                         justify="center"
                                                         gap="xs"
                                                     >
-                                                        <ColorChangingButton
-                                                            w="100%"
-                                                            borderRadius={"8px"}
+                                                        <SidebarButton
                                                             ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={"5"}
+                                                            ValueForTrigger={'0'}
                                                             firstColor="primaryBlues.8"
                                                             secondColor="secondaryBlues.4"
-                                                            onClick={() => displayNumToggle(5)}
+                                                            onClick={() => displayNumToggle(0)}
+                                                            icon={<IconLanguage />}
                                                         >
-                                                            Service Request Input
-                                                        </ColorChangingButton>
+                                                            Language Requests
+                                                        </SidebarButton>
                                                         <ColorChangingButton
-                                                            borderRadius={"8px"}
+                                                            borderRadius={'8px'}
                                                             w="100%"
                                                             ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={"0"}
+                                                            ValueForTrigger={'0'}
                                                             firstColor="primaryBlues.8"
                                                             secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(0)}
@@ -161,9 +176,9 @@ export function AdminPageV2() {
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
                                                             w="100%"
-                                                            borderRadius={"8px"}
+                                                            borderRadius={'8px'}
                                                             ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={"2"}
+                                                            ValueForTrigger={'2'}
                                                             firstColor="primaryBlues.8"
                                                             secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(2)}
@@ -172,9 +187,9 @@ export function AdminPageV2() {
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
                                                             w="100%"
-                                                            borderRadius={"8px"}
+                                                            borderRadius={'8px'}
                                                             ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={"3"}
+                                                            ValueForTrigger={'3'}
                                                             firstColor="primaryBlues.8"
                                                             secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(3)}
@@ -183,9 +198,9 @@ export function AdminPageV2() {
                                                         </ColorChangingButton>
                                                         <ColorChangingButton
                                                             w="100%"
-                                                            borderRadius={"8px"}
+                                                            borderRadius={'8px'}
                                                             ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={"1"}
+                                                            ValueForTrigger={'1'}
                                                             firstColor="primaryBlues.8"
                                                             secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(1)}
@@ -200,7 +215,7 @@ export function AdminPageV2() {
                                                     justify="center"
                                                     gap="sm"
                                                 >
-                                                    <Title c={"#285CC6"}>Other Tools</Title>
+                                                    <Title c={'#285CC6'}>Other Tools</Title>
                                                     <Collapse
                                                         in={otherToolsOpen}
                                                         transitionDuration={0}
@@ -214,7 +229,7 @@ export function AdminPageV2() {
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
                                                             <IconArrowBadgeDownFilled
-                                                              color={"#1C43A7"}
+                                                                color={'#1C43A7'}
                                                             />
                                                         </ActionIcon>
                                                     </Collapse>
@@ -226,7 +241,7 @@ export function AdminPageV2() {
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
                                                             <IconArrowBadgeLeftFilled
-                                                              color={"#1C43A7"}
+                                                                color={'#1C43A7'}
                                                             />
                                                         </ActionIcon>
                                                     )}
@@ -243,9 +258,9 @@ export function AdminPageV2() {
                                                     >
                                                         <ColorChangingButton
                                                             w="100%"
-                                                            borderRadius={"8px"}
+                                                            borderRadius={'8px'}
                                                             ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={"4"}
+                                                            ValueForTrigger={'4'}
                                                             firstColor="primaryBlues.8"
                                                             secondColor="secondaryBlues.4"
                                                             onClick={() => setCSVManipOpen(true)}
@@ -286,7 +301,7 @@ export function AdminPageV2() {
                                             ml={'-10px'}
                                             aria-label="ActionIcon the same size as inputs"
                                         >
-                                            <IconArrowBadgeLeftFilled color={"#1C43A7"} />
+                                            <IconArrowBadgeLeftFilled color={'#1C43A7'} />
                                         </ActionIcon>
                                     </Box>
                                 </div>
@@ -415,7 +430,15 @@ export function AdminPageV2() {
                                             borderRadius: '15px',
                                         }}
                                     >
-                                        <ServiceRequestPage width={"100%"} marginRight={"0%"} height={"80vh"} cols={3} hSpacing={30} vSpacing={10} buttonHeight={220}/>
+                                        <ServiceRequestPage
+                                            width={'100%'}
+                                            marginRight={'0%'}
+                                            height={'80vh'}
+                                            cols={3}
+                                            hSpacing={30}
+                                            vSpacing={10}
+                                            buttonHeight={220}
+                                        />
                                     </Box>
                                 </Collapse>
                             </Flex>
