@@ -96,7 +96,7 @@ export function DraggableMap() {
             setSceneIndexState(0);
             setFloorState(1);
         }
-    }, []);
+    }, [selectedHospital]);
 
     // shows or hides a floor
     const floorVisibility = (floor: number, visible: boolean) => {
