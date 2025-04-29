@@ -56,7 +56,7 @@ const TimelineContext = createContext<TimelineContextType>({
     setDepartment: () => {},
     directoryOptions: [],
     setDirectoryOptions: () => {},
-    selectedAlgorithm: '',
+    selectedAlgorithm: 'A*',
     setSelectedAlgorithm: () => {},
     selectedService: '',
     setSelectedService: () => {},
@@ -119,5 +119,6 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
 
 export function useTimeline() {
     const context = useContext(TimelineContext);
+    context.setSelectedAlgorithm("A*");
     return context;
 }

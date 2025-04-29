@@ -1,22 +1,22 @@
-import {Navigate} from 'react-router-dom';
-import {useLogin} from './LoginContext.tsx'
+import { Navigate } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
 
 interface Props {
-  Route: JSX.Element;
+    Route: JSX.Element;
 }
 
 const ProtectedRoute = (props: Props) => {
-  const {Route} = props;
-  const { isLoggedIn, loading } = useLogin();
+    const { Route } = props;
+    const { isSignedIn, isLoaded } = useUser();
 
-  if (loading) {
-    return null;
-  }
+    if (!isLoaded) {
+        return null;
+    }
 
-  if (!isLoggedIn) {
-    return <Navigate to="/" replace />;  // Redirect depending on weather logged in or not
-  }
-  return Route;
-}
+    if (!isSignedIn) {
+        return <Navigate to="/" replace />; // Redirect depending on weather logged in or not
+    }
+    return Route;
+};
 
 export default ProtectedRoute;

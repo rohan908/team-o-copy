@@ -2,14 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './styles.css';
-import { LoginProvider } from './home-page/components/LoginContext';
+import { ClerkProvider } from '@clerk/clerk-react';
+import { BrowserRouter } from 'react-router-dom';
 
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+if (!PUBLISHABLE_KEY) {
+    throw new Error('Missing Publishable Key');
+}
 
 // Entry point where root component is rendered into the DOM
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <LoginProvider>
-            <App />
-        </LoginProvider>
+        <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </ClerkProvider>
     </React.StrictMode>
 );
