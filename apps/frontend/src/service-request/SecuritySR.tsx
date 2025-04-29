@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Modal } from '@mantine/core';
 import RequestForm, { RequestData } from './RequestForm.tsx';
 import SecuritySelect from './components/SecuritySelect';
 import Display from './Display.tsx';
@@ -36,9 +36,8 @@ function Security({ onBack }: { onBack: () => void }) {
 
             if (response.ok) {
                 const displayData = [
-                    // need title for nicer looking display page
                     { title: 'Name', value: requestData.employeeName },
-                    { title: 'Security', value: requestData.security },
+                    { title: 'Security Type', value: requestData.security },
                     { title: 'Hospital', value: requestData.hospital },
                     { title: 'Department', value: requestData.department },
                     { title: 'Date', value: requestData.date },
@@ -53,8 +52,29 @@ function Security({ onBack }: { onBack: () => void }) {
             console.error('Request failed:', error);
         }
     };
+
     if (submittedData) {
-        return <Display data={submittedData} onBack={() => setSubmittedData(null)} />;
+        return (
+            <Modal
+                opened={true}
+                onClose={() => {
+                    setSubmittedData(null);
+                    onBack();
+                }}
+                size="md"
+                title="Request Submitted"
+                centered
+                withCloseButton={false}
+            >
+                <Display
+                    data={submittedData}
+                    onBack={() => {
+                        setSubmittedData(null);
+                        onBack();
+                    }}
+                />
+            </Modal>
+        );
     }
 
     return (
