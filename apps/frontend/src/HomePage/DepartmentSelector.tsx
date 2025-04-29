@@ -8,21 +8,18 @@ import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 export function DepartmentSelector() {
     const theme = useMantineTheme();
 
-    const { directoryOptions, selectedHospital, setDepartment, selectedAlgorithm, department } =
-        useTimeline();
+    const { directoryOptions, selectedHospital, setDepartment, department } = useTimeline();
     const NavSelection = useNavSelectionContext();
 
     const setSelectedDepartment = (department: string | null) => {
         setDepartment(department);
-        if (selectedAlgorithm) {
-            NavSelection.dispatch({
-                type: 'SET_NAV_REQUEST',
-                data: {
-                    HospitalName: selectedHospital,
-                    Department: department,
-                } as NavSelectionItem,
-            });
-        }
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: selectedHospital,
+                Department: department,
+            } as NavSelectionItem,
+        });
     };
 
     return (

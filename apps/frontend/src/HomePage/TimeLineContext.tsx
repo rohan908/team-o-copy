@@ -32,9 +32,6 @@ interface TimelineContextType {
     directoryOptions: { value: string; label: string }[];
     setDirectoryOptions: (directoryOptions: { value: string; label: string }[]) => void;
 
-    selectedAlgorithm: string | null;
-    setSelectedAlgorithm: (algorithm: string | null) => void;
-
     // Serv Req
     selectedService: string;
     setSelectedService: (service: string) => void;
@@ -56,8 +53,6 @@ const TimelineContext = createContext<TimelineContextType>({
     setDepartment: () => {},
     directoryOptions: [],
     setDirectoryOptions: () => {},
-    selectedAlgorithm: '',
-    setSelectedAlgorithm: () => {},
     selectedService: '',
     setSelectedService: () => {},
     isGmapsLoaded: false,
@@ -84,8 +79,6 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
         []
     );
 
-    const [selectedAlgorithm, setSelectedAlgorithm] = useState<string | null>(null);
-
     // Serv Req
     const [selectedService, setSelectedService] = useState<string>('');
 
@@ -104,8 +97,6 @@ export function TimelineProvider({ children }: { children: ReactNode }) {
         setDepartment,
         directoryOptions,
         setDirectoryOptions,
-        selectedAlgorithm,
-        setSelectedAlgorithm,
         selectedService,
         setSelectedService,
         isGmapsLoaded,
