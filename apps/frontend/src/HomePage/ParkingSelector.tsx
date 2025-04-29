@@ -1,5 +1,5 @@
 import {Select, useMantineTheme } from '@mantine/core';
-import { IconBuilding, IconChevronDown } from '@tabler/icons-react';
+import {IconBuilding, IconBuildings, IconChevronDown} from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
 import { hospitalOptions } from './GmapsDestinationSelector.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
@@ -12,7 +12,12 @@ import {
 } from '../contexts/DirectoryContext.tsx';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 
-export function ParkingSelector() {
+interface ParkingSelectorProps {
+  hasIcon: boolean
+  w: string
+}
+
+export function ParkingSelector(props:ParkingSelectorProps) {
     const {
         setSelectedHospital,
         setDirectoryOptions,
@@ -69,14 +74,16 @@ export function ParkingSelector() {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={<IconBuilding size="16" style={{ color: theme.colors.primaryBlues[8] }} />}
+            leftSection={!props.hasIcon ? null :
+              <IconBuildings size="16" style={{ color: theme.colors.primaryBlues[8]}} />
+            }
             data={hospitalOptions}
             value={selectedHospital ?? ''}
             onChange={setHospitalLocation}
             radius="sm"
             mb="sm"
             size="xs"
-            w={'100%'}
+            w={props.w}
         />
     );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, createContext, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
-import { Box, Flex } from '@mantine/core';
+import { Box, Flex, Collapse, useMantineTheme } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
@@ -9,23 +9,24 @@ import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import PopupTooltip from './Components/PopupTooltip';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
-import { useLogin } from '../home-page/components/LoginContext.tsx';
+import { useUser } from '@clerk/clerk-react';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { IconCurrentLocation } from '@tabler/icons-react';
-
 import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
 import { map } from 'leaflet';
+import FloorConnectionBox from './Components/FloorConnectionBox.tsx';
+import { Navigate } from 'react-router-dom';
 
 const MouseImages = {
     MoveNone: 'MapImages/MouseCursors/MoveNoSelected.png',
     MoveClick: 'MapImages/MouseCursors/MoveSelected.png',
     AddNode: 'MapImages/MouseCursors/AddNode.png',
     AddEdge: 'MapImages/MouseCursors/AddEdge.png',
-}
+};
 
 export interface MapEditorProps {
     selectedTool: string;
@@ -46,7 +47,17 @@ export function MapEditor() {
     const [floorState, setFloorState] = useState(1);
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer');
-    const [mapTool, setMapTool] = useState('pan');
+    const [mapTool, setMapTool] = useState('');
+    const [objToReselect, setObjToReselect] = useState<THREE.Object3D>();
+
+    // clerk const's
+    const { user, isSignedIn } = useUser();
+
+    // check role
+    const role = user?.publicMetadata?.role;
+    if (!isSignedIn || role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
 
     const mapProps: MapEditorProps = {
         selectedTool: mapTool,
@@ -55,7 +66,6 @@ export function MapEditor() {
         setCurrentNodeData: setCurrentNodeData,
     };
 
-    const { isLoggedIn } = useLogin();
     const selectedObjects = useRef<THREE.Object3D[]>([]);
     const objectsRef = useRef<THREE.Object3D[]>([]);
     const dragControlsRef = useRef<DragControls | null>(null);
@@ -153,9 +163,11 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-                selectedObjects.current.forEach((object) => {
-                  deselectObject(object);
-                });
+                if (currentNodeData?.nodeType != 'staircase') {
+                    selectedObjects.current.forEach((object) => {
+                        deselectObject(object);
+                    });
+                }
             }, 200); // Fade-in duration
         }, 200); // Fade-out duration
     };
@@ -351,6 +363,9 @@ export function MapEditor() {
         ) {
             selectedObject.material.color.set(selectedNodeColor);
             selectedObject.material.needsUpdate = true;
+            selectedObjects.current.forEach((object) => {
+                deselectObject(object);
+            });
             selectedObjects.current.push(selectedObject);
 
             // changes mouse on selected object
@@ -364,6 +379,28 @@ export function MapEditor() {
             updateDragControls();
         }
     };
+
+    const selectMultiObjects = (selectedObject: THREE.Object3D) => {
+      if (
+        selectedObject instanceof THREE.Mesh &&
+        selectedObject.material instanceof THREE.MeshBasicMaterial
+      ) {
+        selectedObject.material.color.set(selectedNodeColor);
+        selectedObject.material.needsUpdate = true;
+        selectedObjects.current.push(selectedObject);
+
+        // changes mouse on selected object
+        setCursorStyle(`url(${MouseImages.MoveClick}),auto`);
+
+        setCurrentNodeData(
+          nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
+        );
+
+        render(); // render to show color changes
+        updateDragControls();
+      }
+    };
+
     const deselectObject = (selectedObject: THREE.Object3D) => {
         if (
             selectedObject instanceof THREE.Mesh &&
@@ -378,7 +415,7 @@ export function MapEditor() {
             if (selectedObjects.current.length === 0) {
                 setCurrentNodeData(null);
 
-                if(cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
+                if (cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
                     // changes mouse on no selected objects
                     setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
                 }
@@ -400,6 +437,9 @@ export function MapEditor() {
 
     // switches the type of cursor depending on the tool
     useEffect(() => {
+        selectedObjects.current.forEach((object) => {
+            deselectObject(object);
+        });
         switch (mapTool) {
             case 'pan':
                 setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
@@ -476,7 +516,11 @@ export function MapEditor() {
                 deselectObject(selectedObject);
                 console.log('Deselected:', selectedObject);
             } else {
-                selectObject(selectedObject);
+                if(event.ctrlKey) {
+                  selectMultiObjects(selectedObject)
+                } else {
+                  selectObject(selectedObject);
+                }
 
                 console.log('set data');
                 console.log('Selected:', selectedObject);
@@ -524,14 +568,14 @@ export function MapEditor() {
         // new node positon
         if (intersects.length == 0) {
             const point = raycaster.intersectObjects(
-                scenesRef.current[sceneIndexState].children,
+                scenesRef.current[sceneIndexRef.current].children,
                 true
             );
 
             const posX = point[0].point.x;
             const posY = point[0].point.y;
 
-            const { floor, mapID } = getFloorAndMapIDFromSceneIndex(sceneIndexState);
+            const { floor, mapID } = getFloorAndMapIDFromSceneIndex(sceneIndexRef.current);
 
             const newNode: DirectoryNodeItem = {
                 id: getUnusedNodeId(),
@@ -620,8 +664,12 @@ export function MapEditor() {
                 selectedObject.material.color.set(selectedNodeColor);
                 selectedObject.material.needsUpdate = true;
                 selectedObjects.current.push(selectedObject);
-                render();
 
+                setCurrentNodeData(
+                    nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
+                );
+
+                render();
             } else if (selectedObjects.current.length == 1) {
                 const firstNode = nodeRef.current.find(
                     (element) => element.id === selectedObjects.current[0].userData.nodeId
@@ -633,53 +681,62 @@ export function MapEditor() {
 
                 if (firstNode != null && secondNode != null) {
                     if (
-                        firstNode.connectingNodes.includes(secondNode.id) ||
-                        secondNode.connectingNodes.includes(firstNode.id)
+                        firstNode.floor == secondNode.floor ||
+                        (firstNode.floor != secondNode.floor &&
+                            firstNode.nodeType == 'staircase' &&
+                            secondNode.nodeType == 'staircase')
                     ) {
-                        const removeFirstToSecondEdgeIndex = edgeMeshesRef.current.findIndex(
-                            (element) =>
-                                element.startNodeId === firstNode.id &&
-                                element.endNodeId === secondNode.id
-                        );
-                        const removeSecondToFirstEdgeIndex = edgeMeshesRef.current.findIndex(
-                            (element) =>
-                                element.endNodeId === firstNode.id &&
-                                element.startNodeId === secondNode.id
-                        );
+                        if (
+                            firstNode.connectingNodes.includes(secondNode.id) ||
+                            secondNode.connectingNodes.includes(firstNode.id)
+                        ) {
+                            const removeFirstToSecondEdgeIndex = edgeMeshesRef.current.findIndex(
+                                (element) =>
+                                    element.startNodeId === firstNode.id &&
+                                    element.endNodeId === secondNode.id
+                            );
+                            const removeSecondToFirstEdgeIndex = edgeMeshesRef.current.findIndex(
+                                (element) =>
+                                    element.endNodeId === firstNode.id &&
+                                    element.startNodeId === secondNode.id
+                            );
 
-                        const removeFirstEdge = edgeMeshesRef.current.at(
-                            removeFirstToSecondEdgeIndex
-                        );
-                        const removeSecondEdge = edgeMeshesRef.current.at(
-                            removeSecondToFirstEdgeIndex
-                        );
+                            const removeFirstEdge = edgeMeshesRef.current.at(
+                                removeFirstToSecondEdgeIndex
+                            );
+                            const removeSecondEdge = edgeMeshesRef.current.at(
+                                removeSecondToFirstEdgeIndex
+                            );
 
-                        if (removeFirstToSecondEdgeIndex != -1) {
-                            removeFirstEdge.mesh.visible = false;
-                            removeFirstEdge.mesh.geometry.dispose();
-                            edgeMeshesRef.current.splice(removeFirstToSecondEdgeIndex, 1);
+                            if (removeFirstToSecondEdgeIndex != -1) {
+                                removeFirstEdge.mesh.visible = false;
+                                removeFirstEdge.mesh.geometry.dispose();
+                                edgeMeshesRef.current.splice(removeFirstToSecondEdgeIndex, 1);
+                            }
+
+                            if (removeSecondToFirstEdgeIndex != -1) {
+                                removeSecondEdge.mesh.visible = false;
+                                removeSecondEdge.mesh.geometry.dispose();
+                                edgeMeshesRef.current.splice(removeSecondToFirstEdgeIndex, 1);
+                            }
+
+                            firstNode.connectingNodes.splice(
+                                firstNode.connectingNodes.indexOf(secondNode.id),
+                                1
+                            );
+                            secondNode.connectingNodes.splice(
+                                secondNode.connectingNodes.indexOf(firstNode.id),
+                                1
+                            );
+                        } else {
+                            createEdge(firstNode, secondNode);
+
+                            firstNode.connectingNodes.push(secondNode.id);
+                            secondNode.connectingNodes.push(firstNode.id);
                         }
-
-                        if (removeSecondToFirstEdgeIndex != -1) {
-                            removeSecondEdge.mesh.visible = false;
-                            removeSecondEdge.mesh.geometry.dispose();
-                            edgeMeshesRef.current.splice(removeSecondToFirstEdgeIndex, 1);
-                        }
-
-                        firstNode.connectingNodes.splice(
-                            firstNode.connectingNodes.indexOf(secondNode.id),
-                            1
-                        );
-                        secondNode.connectingNodes.splice(
-                            secondNode.connectingNodes.indexOf(firstNode.id),
-                            1
-                        );
-                    } else {
-                        createEdge(firstNode, secondNode);
-
-                        firstNode.connectingNodes.push(secondNode.id);
-                        secondNode.connectingNodes.push(firstNode.id);
                     }
+
+                    setObjToReselect(selectedObjects.current[0]);
 
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
@@ -691,6 +748,24 @@ export function MapEditor() {
             }
         }
     };
+
+    useEffect(() => {
+        if(objToReselect instanceof THREE.Mesh &&
+            objToReselect.material instanceof THREE.MeshBasicMaterial) {
+            if (selectedObjects.current.length == 0) {
+                objToReselect.material.color.set(selectedNodeColor);
+                objToReselect.material.needsUpdate = true;
+                selectedObjects.current.push(objToReselect);
+
+                setCurrentNodeData(
+                    nodeRef.current.find((element) => element.id === objToReselect.userData.nodeId)
+                );
+
+                render();
+            }
+        }
+        setObjToReselect(undefined);
+    }, [objToReselect]);
 
     const deleteCascadingEdges = (objectToRemove: THREE.Object3D<Object3DEventMap>) => {
         // remove all edges where this is the startID
@@ -801,19 +876,22 @@ export function MapEditor() {
             render();
         };
 
-        window.addEventListener('keydown', ({ key }) => {
-            if (key === 'Backspace' || key === 'Delete') {
+        window.addEventListener('contextmenu', (event) => {
+            if (event.ctrlKey) {
                 deleteSelected();
             }
         });
 
         return () => {
-            window.removeEventListener('keydown', deleteSelected);
+            window.removeEventListener('contextmenu', deleteSelected);
         };
     }, [allNodes]);
 
     // This is for one-time initializations and handlers
     useEffect(() => {
+        // sets the map tool on startup
+        setMapTool('pan');
+
         // make sure map movement is re-enabled for some edge cases
         const handleMouseUp = () => {
             setTimeout(() => {
@@ -876,11 +954,19 @@ export function MapEditor() {
     return (
         <Box w="100vw" h="100vh">
             <PopupTooltip />
-            <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
 
             <Box ref={hoverRef}>
                 <MapContext.Provider value={mapProps}>
+                    <FloorSwitchBox
+                        floor={floorState}
+                        setFloor={handleFloorChange}
+                        building={'admin'}
+                    />
+
                     <MapEditorBox />
+                    <Box pos="fixed" top={'13%'} right={20} style={{ zIndex: 999 }}>
+                        <NodeInfoBox />
+                    </Box>
                 </MapContext.Provider>
             </Box>
 

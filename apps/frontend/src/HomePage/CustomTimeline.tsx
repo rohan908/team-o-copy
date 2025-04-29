@@ -7,28 +7,26 @@ import {
     Text,
     Timeline,
     Title,
-    Transition,
     useMantineTheme,
 } from '@mantine/core';
-import React, { useState } from 'react';
+import React from 'react';
 import { IconArrowZigZag, IconMap2, IconFileInfo } from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
 import { GmapsStartSelector } from './GmapsStartSelector.tsx';
 import { GmapsDestinationSelector } from './GmapsDestinationSelector.tsx';
-import { useForm } from '@mantine/form';
 import { ParkingSelector } from './ParkingSelector.tsx';
 import { DepartmentSelector } from './DepartmentSelector.tsx';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ModeOfTravelSelector } from './ModeOfTravelSelector.tsx';
 import { AlgorithmSelector } from './AlgorithmSelector.tsx';
-import { useLogin } from '../home-page/components/LoginContext.js';
+import { useUser } from '@clerk/clerk-react';
 import { useMemo } from 'react';
 import {TravelSelectorButtons} from "../common-compoents/TravelSelectorButtons.tsx";
 
 export const CustomTimeline = () => {
     const theme = useMantineTheme();
     const { activeSection: originalActiveSection, setActiveSection } = useTimeline();
-    const { isLoggedIn } = useLogin();
+    const { isSignedIn } = useUser();
 
     //FILL IN CONTENT HERE FOR EACH SUBSECTION
 
@@ -56,9 +54,11 @@ export const CustomTimeline = () => {
             case 1: //Indoor Nav
                 return (
                     <Stack gap={2}>
-                        <ParkingSelector />
-                        <DepartmentSelector />
-                        <AlgorithmSelector />
+                        <Flex direction="column" justify="center" align="center">
+                          <ParkingSelector hasIcon={true} w={"100%"}/>
+                          <DepartmentSelector hasIcon={true} w={"100%"}/>
+                          {/*<AlgorithmSelector  hasIcon={true} w={"100%"}/>*/}
+                        </Flex>
                         <Flex justify={'end'}>
                             <Link to="IndoorMapPage">
                                 <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>
@@ -82,16 +82,16 @@ export const CustomTimeline = () => {
     ];
 
     const titlesInfo = useMemo(() => {
-        return isLoggedIn ? allTitlesInfo : allTitlesInfo.slice(0, 2);
-    }, [isLoggedIn]);
+        return isSignedIn ? allTitlesInfo : allTitlesInfo.slice(0, 2);
+    }, [isSignedIn]);
 
     const activeSection = useMemo(() => {
-        if (!isLoggedIn && originalActiveSection === 2) {
+        if (!isSignedIn && originalActiveSection === 2) {
             setActiveSection(0);
             return 0;
         }
         return originalActiveSection;
-    }, [isLoggedIn, originalActiveSection, setActiveSection]);
+    }, [isSignedIn, originalActiveSection, setActiveSection]);
 
     const handleClickChangeButton = (i: number) => {
         if (i !== activeSection) setActiveSection(i);
