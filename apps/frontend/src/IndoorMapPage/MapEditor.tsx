@@ -88,6 +88,7 @@ export function MapEditor() {
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
     const selectedNodeColor = 0x56effa;
+    const nodeStaircaseColor = 0xfcb024;
     const startColor = 0x2a68f7;
     const endColor = 0xfcbe45;
     const edgeColor = 0x2a68f7;
@@ -408,7 +409,11 @@ export function MapEditor() {
             selectedObject instanceof THREE.Mesh &&
             selectedObject.material instanceof THREE.MeshBasicMaterial
         )
+          if(selectedObject.userData.nodeType == 'staircase') {
+            selectedObject.material.color.set(nodeStaircaseColor);
+          } else {
             selectedObject.material.color.set(nodeColor);
+          }
 
         selectedObject.material.needsUpdate = true;
         selectedObjects.current = selectedObjects.current.filter(

@@ -122,6 +122,7 @@ export const createNode = (
     if (threeDNode) {
         threeDNode.userData.nodeId = node.id;
         threeDNode.userData.floor = node.floor;
+        threeDNode.userData.nodeType = node.nodeType;
         const nodeFloor = node.floor;
         // check if the floor is within bounds
         if (nodeFloor >= 1 && nodeFloor <= 5) {
