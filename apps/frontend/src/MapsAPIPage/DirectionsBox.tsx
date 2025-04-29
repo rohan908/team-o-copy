@@ -91,7 +91,7 @@ return (
             </Box>
             <Box ta='center' mt="md">
               <Button component={Link} to="/IndoorMapPage" color="#F8D261" size='compact-sm'>
-                I've Arrived
+                See Hospital Map
               </Button>
             </Box>
           </div>)}
