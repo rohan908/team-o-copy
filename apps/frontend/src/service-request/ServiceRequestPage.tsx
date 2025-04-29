@@ -62,7 +62,7 @@ export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
     };
 
     return (
-        <Box pb="xl">
+        <Box pb="xl" bg="#ebf2ff" h="100vh">
             <Flex
                 w={props.width}
                 ml={props.marginRight}
@@ -96,10 +96,16 @@ export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
                 opened={opened}
                 onClose={() => setOpened(false)}
                 size="xl"
-                title="Service Request"
-                overlayProps={{ blur: 3 }}
+                overlayProps={{ blur: 5 }}
                 centered
-                closeOnClickOutside={false}
+                closeOnClickOutside={true}
+                withCloseButton={true}
+                styles={{
+                    content: {
+                        marginTop: '100px',
+                        marginBottom: '30px',
+                    },
+                }}
             >
                 {activeForm}
             </Modal>

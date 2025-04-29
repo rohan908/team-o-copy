@@ -109,16 +109,16 @@ const RequestForm: React.FC<RequestDetails> = ({
                     }}
                 >
                     <Flex direction="column" ta="center" justify="center">
-                        <Box mr="auto" mb="lg">
-                            <Button
-                                radius="md"
-                                onClick={onBack}
-                                bg="#5A83DB"
-                                style={{ width: '100px' }}
-                            >
-                                Back
-                            </Button>
-                        </Box>
+                        {/*<Box mr="auto" mb="lg">*/}
+                        {/*    <Button*/}
+                        {/*        radius="md"*/}
+                        {/*        onClick={onBack}*/}
+                        {/*        bg="#5A83DB"*/}
+                        {/*        style={{ width: '100px' }}*/}
+                        {/*    >*/}
+                        {/*        Back*/}
+                        {/*    </Button>*/}
+                        {/*</Box>*/}
                         <Title order={2} ta="center" mb="md" fz="xl" c={'#285CC6'}>
                             {formLabel}
                         </Title>
