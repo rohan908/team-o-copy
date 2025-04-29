@@ -77,7 +77,7 @@ const MapEditorBox = () => {
                                 onClick={() => mapProps.setSelectedTool('pan')}
                             >
                                 <IconHandMove size={32} color={
-                                    mapProps.selectedTool == 'pan' && !openedHelp
+                                    mapProps.selectedTool == 'pan'
                                         ? '#f8d56b'
                                         : 'white'}/>
                             </ActionIcon>
@@ -97,7 +97,7 @@ const MapEditorBox = () => {
                                 onClick={() => mapProps.setSelectedTool('add-node')}
                             >
                                 <IconCirclePlus size={32} color={
-                                    mapProps.selectedTool == 'add-node' && !openedHelp
+                                    mapProps.selectedTool == 'add-node'
                                         ? '#f8d56b'
                                         : 'white'}/>
                             </ActionIcon>
@@ -117,7 +117,7 @@ const MapEditorBox = () => {
                                 onClick={() => mapProps.setSelectedTool('add-edge')}
                             >
                                 <IconVectorBezier2 size={32} color={
-                                    mapProps.selectedTool == 'add-edge' && !openedHelp
+                                    mapProps.selectedTool == 'add-edge'
                                         ? '#f8d56b'
                                         : 'white'}/>
                             </ActionIcon>
@@ -177,7 +177,7 @@ const MapEditorBox = () => {
                                     p="sm"
                                     w="auto"
                                     miw="200px"
-                                    maw="250px"
+                                    maw="400px"
                                     bg="primaryBlues.0"
                                     style={{
                                         borderRadius: 20,
@@ -198,7 +198,7 @@ const MapEditorBox = () => {
                                     </Text>
                                     <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'} mb={'xs'}>
                                         To move a node, click on the node you wish to move and drag
-                                        it.
+                                        it. To select multiple, use ctrl + click.
                                     </Text>
                                     <Divider
                                         w={'100%'}
@@ -226,6 +226,21 @@ const MapEditorBox = () => {
                                     <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
                                         Click on the starting node and the ending node to add or
                                         remove an edge between them.
+                                    </Text>
+                                    <Divider
+                                        w={'100%'}
+                                        mt={'xs'}
+                                        mb={'xs'}
+                                        color={'yellowAccent.4'}
+                                        size={'xs'}
+                                    />
+                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
+                                        Edges Between Floors: <br />
+                                    </Text>
+                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
+                                        Click a staircase, change floors and click
+                                        another staircase to create a between-floor edge.
+                                        The visual indicates floor connections.
                                     </Text>
                                 </Stack>
                             </div>

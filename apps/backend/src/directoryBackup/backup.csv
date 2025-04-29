@@ -11,7 +11,7 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 11,-38,-32,1,1,Pharmacy,Prescription pickup,department,9
 12,115,14,1,1,North Tower Hallway,Access to specialty clinics,hallway,"2,175"
 14,92,-15,1,1,Stairwell A,Main staircase,staircase,"15,175"
-15,94,-15,2,1,Stairwell B,Secondary staircase,staircase,"14,16,25"
+15,94,-15,2,1,Stairwell C,Secondary staircase,staircase,"14,16,25"
 16,86,-19,2,1,Specialty Care Hallway,Access to outpatient services,hallway,"15,17,19"
 17,80,-20,2,1,Vascular Services Hallway,Approach to vascular services,hallway,"16,18,177,176,178"
 18,78,-12,2,1,Vein Care Services,department,department,17

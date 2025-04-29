@@ -162,7 +162,7 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-                if(currentNodeData?.nodeType != 'staircase') {
+                if (currentNodeData?.nodeType != 'staircase') {
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
                     });
@@ -362,6 +362,9 @@ export function MapEditor() {
         ) {
             selectedObject.material.color.set(selectedNodeColor);
             selectedObject.material.needsUpdate = true;
+            selectedObjects.current.forEach((object) => {
+                deselectObject(object);
+            });
             selectedObjects.current.push(selectedObject);
 
             // changes mouse on selected object
@@ -375,6 +378,28 @@ export function MapEditor() {
             updateDragControls();
         }
     };
+
+    const selectMultiObjects = (selectedObject: THREE.Object3D) => {
+      if (
+        selectedObject instanceof THREE.Mesh &&
+        selectedObject.material instanceof THREE.MeshBasicMaterial
+      ) {
+        selectedObject.material.color.set(selectedNodeColor);
+        selectedObject.material.needsUpdate = true;
+        selectedObjects.current.push(selectedObject);
+
+        // changes mouse on selected object
+        setCursorStyle(`url(${MouseImages.MoveClick}),auto`);
+
+        setCurrentNodeData(
+          nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
+        );
+
+        render(); // render to show color changes
+        updateDragControls();
+      }
+    };
+
     const deselectObject = (selectedObject: THREE.Object3D) => {
         if (
             selectedObject instanceof THREE.Mesh &&
@@ -490,7 +515,11 @@ export function MapEditor() {
                 deselectObject(selectedObject);
                 console.log('Deselected:', selectedObject);
             } else {
-                selectObject(selectedObject);
+                if(event.ctrlKey) {
+                  selectMultiObjects(selectedObject)
+                } else {
+                  selectObject(selectedObject);
+                }
 
                 console.log('set data');
                 console.log('Selected:', selectedObject);
@@ -640,7 +669,6 @@ export function MapEditor() {
                 );
 
                 render();
-
             } else if (selectedObjects.current.length == 1) {
                 const firstNode = nodeRef.current.find(
                     (element) => element.id === selectedObjects.current[0].userData.nodeId
@@ -652,56 +680,63 @@ export function MapEditor() {
 
                 if (firstNode != null && secondNode != null) {
                     if (
-                        firstNode.connectingNodes.includes(secondNode.id) ||
-                        secondNode.connectingNodes.includes(firstNode.id)
+                        firstNode.floor == secondNode.floor ||
+                        (firstNode.floor != secondNode.floor &&
+                            firstNode.nodeType == 'staircase' &&
+                            secondNode.nodeType == 'staircase')
                     ) {
-                        const removeFirstToSecondEdgeIndex = edgeMeshesRef.current.findIndex(
-                            (element) =>
-                                element.startNodeId === firstNode.id &&
-                                element.endNodeId === secondNode.id
-                        );
-                        const removeSecondToFirstEdgeIndex = edgeMeshesRef.current.findIndex(
-                            (element) =>
-                                element.endNodeId === firstNode.id &&
-                                element.startNodeId === secondNode.id
-                        );
+                        if (
+                            firstNode.connectingNodes.includes(secondNode.id) ||
+                            secondNode.connectingNodes.includes(firstNode.id)
+                        ) {
+                            const removeFirstToSecondEdgeIndex = edgeMeshesRef.current.findIndex(
+                                (element) =>
+                                    element.startNodeId === firstNode.id &&
+                                    element.endNodeId === secondNode.id
+                            );
+                            const removeSecondToFirstEdgeIndex = edgeMeshesRef.current.findIndex(
+                                (element) =>
+                                    element.endNodeId === firstNode.id &&
+                                    element.startNodeId === secondNode.id
+                            );
 
-                        const removeFirstEdge = edgeMeshesRef.current.at(
-                            removeFirstToSecondEdgeIndex
-                        );
-                        const removeSecondEdge = edgeMeshesRef.current.at(
-                            removeSecondToFirstEdgeIndex
-                        );
+                            const removeFirstEdge = edgeMeshesRef.current.at(
+                                removeFirstToSecondEdgeIndex
+                            );
+                            const removeSecondEdge = edgeMeshesRef.current.at(
+                                removeSecondToFirstEdgeIndex
+                            );
 
-                        if (removeFirstToSecondEdgeIndex != -1) {
-                            removeFirstEdge.mesh.visible = false;
-                            removeFirstEdge.mesh.geometry.dispose();
-                            edgeMeshesRef.current.splice(removeFirstToSecondEdgeIndex, 1);
+                            if (removeFirstToSecondEdgeIndex != -1) {
+                                removeFirstEdge.mesh.visible = false;
+                                removeFirstEdge.mesh.geometry.dispose();
+                                edgeMeshesRef.current.splice(removeFirstToSecondEdgeIndex, 1);
+                            }
+
+                            if (removeSecondToFirstEdgeIndex != -1) {
+                                removeSecondEdge.mesh.visible = false;
+                                removeSecondEdge.mesh.geometry.dispose();
+                                edgeMeshesRef.current.splice(removeSecondToFirstEdgeIndex, 1);
+                            }
+
+                            firstNode.connectingNodes.splice(
+                                firstNode.connectingNodes.indexOf(secondNode.id),
+                                1
+                            );
+                            secondNode.connectingNodes.splice(
+                                secondNode.connectingNodes.indexOf(firstNode.id),
+                                1
+                            );
+                        } else {
+                            createEdge(firstNode, secondNode);
+
+                            firstNode.connectingNodes.push(secondNode.id);
+                            secondNode.connectingNodes.push(firstNode.id);
                         }
-
-                        if (removeSecondToFirstEdgeIndex != -1) {
-                            removeSecondEdge.mesh.visible = false;
-                            removeSecondEdge.mesh.geometry.dispose();
-                            edgeMeshesRef.current.splice(removeSecondToFirstEdgeIndex, 1);
-                        }
-
-                        firstNode.connectingNodes.splice(
-                            firstNode.connectingNodes.indexOf(secondNode.id),
-                            1
-                        );
-                        secondNode.connectingNodes.splice(
-                            secondNode.connectingNodes.indexOf(firstNode.id),
-                            1
-                        );
-                    } else {
-                        createEdge(firstNode, secondNode);
-
-                        firstNode.connectingNodes.push(secondNode.id);
-                        secondNode.connectingNodes.push(firstNode.id);
                     }
 
                     selectedObjects.current.forEach((object) => {
-                      deselectObject(object);
+                        deselectObject(object);
                     });
 
                     render();
@@ -901,11 +936,15 @@ export function MapEditor() {
 
             <Box ref={hoverRef}>
                 <MapContext.Provider value={mapProps}>
-                    <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
+                    <FloorSwitchBox
+                        floor={floorState}
+                        setFloor={handleFloorChange}
+                        building={'admin'}
+                    />
 
                     <MapEditorBox />
-                    <Box pos="fixed" top={"13%"} right={20} style={{zIndex: 999}}>
-                        <NodeInfoBox/>
+                    <Box pos="fixed" top={'13%'} right={20} style={{ zIndex: 999 }}>
+                        <NodeInfoBox />
                     </Box>
                 </MapContext.Provider>
             </Box>
