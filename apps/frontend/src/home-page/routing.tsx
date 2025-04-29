@@ -14,6 +14,7 @@ import { IndoorMapsPage } from '../IndoorMapPage/IndoorMapsPage.tsx';
 import CreditPage from '../CreditPage/CreditPage.tsx';
 import AboutPage from '../AboutPage/Aboutpage.tsx';
 import CombinedPage from '../CreditPage/InfoPage.tsx';
+import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
@@ -37,6 +38,24 @@ export function Routing() {
                                 <MapAPIPage
                                     onSelectHospital={setSelectedHospitalName}
                                     onDepartmentSelect={setSelectedDepartment}
+                                />
+                            }
+                        />
+                        <Route
+                            path="/service-request"
+                            element={
+                                <ProtectedRoute
+                                    Route={
+                                        <ServiceRequestPage
+                                            width={'100%'}
+                                            marginRight={'0%'}
+                                            height={'80vh'}
+                                            cols={3}
+                                            hSpacing={30}
+                                            vSpacing={10}
+                                            buttonHeight={220}
+                                        />
+                                    }
                                 />
                             }
                         />
