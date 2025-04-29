@@ -17,7 +17,7 @@ interface ColorChangingButtonProps extends React.HTMLAttributes<HTMLButtonElemen
     firstColor?: string;
     secondColor?: string;
     ValueToCheck: string;
-    ValueForTrigger: string;
+    ValueForTrigger?: string;
     borderRadius?: string;
     size?: string;
     icon?: React.ReactNode;

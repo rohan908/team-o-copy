@@ -27,10 +27,8 @@ import {
     IconChevronDown,
     IconChevronUp,
     IconFileBroken,
-    IconArrowBadgeDown,
-    IconArrowBadgeDownFilled,
+    IconMap2,
     IconArrowBadgeLeftFilled,
-    IconArrowBadgeRightFilled,
     IconLanguage,
     IconExclamationCircleFilled,
     IconShieldHalf,
@@ -73,215 +71,127 @@ export function AdminPageV2() {
         <Box mih="100vh" w="full" pt={'5px'} bg="#EAF1FF">
             <Grid align="top">
                 <Grid.Col span={'content'}>
-                    <Transition
-                        mounted={sidebarOpen}
-                        transition="slide-right"
-                        duration={400}
-                        timingFunction="linear"
-                    >
-                        {(styles) => (
-                            <div style={styles}>
-                                <Flex direction="column" justify="center">
-                                    <Box w="20vw" mih="100vh" pt="75px" p="lg" mt="-8px">
-                                        <Flex direction="column" justify="center" gap="sm">
-                                            <Flex
-                                                direction="row"
-                                                align="center"
-                                                justify="center"
-                                                gap="sm"
-                                                mb="xl"
-                                            >
-                                                <HoverUnderline>
-                                                    <Title
-                                                        order={2}
-                                                        c="secondaryBlues.7"
-                                                        w={'auto'}
-                                                    >
-                                                        Admin Page
-                                                    </Title>
-                                                </HoverUnderline>
-                                            </Flex>
-                                            <Flex
-                                                direction="column"
-                                                align="left"
-                                                justify="left"
-                                                gap="sm"
-                                                p="sm"
-                                            >
-                                                <Flex direction="row" align="center" gap="0px">
-                                                    <Title c="secondaryBlues.7">
-                                                        Service Requests
-                                                    </Title>
-                                                    <Collapse
-                                                        in={formInfoOpen}
-                                                        transitionDuration={0}
-                                                        transitionTimingFunction="linear"
-                                                    >
-                                                        <ActionIcon
-                                                            bg={'#EBF2FF'}
-                                                            top="10%"
-                                                            size="input-sm"
-                                                            onClick={close}
-                                                            aria-label="ActionIcon the same size as inputs"
-                                                        >
-                                                            <IconChevronUp color={'#1C43A7'} />
-                                                        </ActionIcon>
-                                                    </Collapse>
-                                                    {!formInfoOpen && (
-                                                        <ActionIcon
-                                                            bg={'#EBF2FF'}
-                                                            size="input-sm"
-                                                            onClick={open}
-                                                            aria-label="ActionIcon the same size as inputs"
-                                                        >
-                                                            <IconChevronDown color={'#1C43A7'} />
-                                                        </ActionIcon>
-                                                    )}
-                                                </Flex>
-                                                <Collapse
-                                                    in={formInfoOpen}
-                                                    transitionDuration={300}
-                                                    transitionTimingFunction="linear"
-                                                >
-                                                    <Flex
-                                                        direction="column"
-                                                        justify="center"
-                                                        gap="xs"
-                                                        ml="sm"
-                                                        w="100%"
-                                                    >
-                                                        <SidebarButton
-                                                            ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={'0'}
-                                                            onClick={() => displayNumToggle(0)}
-                                                            icon={<IconLanguage size="40" />}
-                                                        >
-                                                            Language Requests
-                                                        </SidebarButton>
-
-                                                        <SidebarButton
-                                                            ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={'2'}
-                                                            onClick={() => displayNumToggle(2)}
-                                                            icon={<IconTrash size="40" />}
-                                                        >
-                                                            Sanitation Requests
-                                                        </SidebarButton>
-
-                                                        <SidebarButton
-                                                            ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={'3'}
-                                                            onClick={() => displayNumToggle(3)}
-                                                            icon={<IconBellExclamation size="40" />}
-                                                        >
-                                                            Maintenance Requests
-                                                        </SidebarButton>
-                                                        <SidebarButton
-                                                            ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={'1'}
-                                                            onClick={() => displayNumToggle(1)}
-                                                            icon={<IconShieldHalf size="40" />}
-                                                        >
-                                                            Security Requests
-                                                        </SidebarButton>
-                                                    </Flex>
-                                                </Collapse>
-                                                <Flex
-                                                    direction="row"
-                                                    align="center"
-                                                    justify="center"
-                                                    gap="sm"
-                                                >
-                                                    <Title c={'#285CC6'}>Other Tools</Title>
-                                                    <Collapse
-                                                        in={otherToolsOpen}
-                                                        transitionDuration={0}
-                                                        transitionTimingFunction="linear"
-                                                    >
-                                                        <ActionIcon
-                                                            bg={'#EBF2FF'}
-                                                            top="10%"
-                                                            size="input-sm"
-                                                            onClick={toggleOtherTools}
-                                                            aria-label="ActionIcon the same size as inputs"
-                                                        >
-                                                            <IconArrowBadgeDownFilled
-                                                                color={'#1C43A7'}
-                                                            />
-                                                        </ActionIcon>
-                                                    </Collapse>
-                                                    {!otherToolsOpen && (
-                                                        <ActionIcon
-                                                            bg={'#EBF2FF'}
-                                                            size="input-sm"
-                                                            onClick={toggleOtherTools}
-                                                            aria-label="ActionIcon the same size as inputs"
-                                                        >
-                                                            <IconArrowBadgeLeftFilled
-                                                                color={'#1C43A7'}
-                                                            />
-                                                        </ActionIcon>
-                                                    )}
-                                                </Flex>
-                                                <Collapse
-                                                    in={otherToolsOpen}
-                                                    transitionDuration={300}
-                                                    transitionTimingFunction="linear"
-                                                >
-                                                    <Flex
-                                                        direction="column"
-                                                        justify="center"
-                                                        gap="xs"
-                                                    >
-                                                        <SidebarButton
-                                                            ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={'4'}
-                                                            onClick={() => setCSVManipOpen(true)}
-                                                            icon={<IconFileBroken size="40" />}
-                                                        >
-                                                            CSV Manipulator
-                                                        </SidebarButton>
-                                                        <Button
-                                                            bg={'secondaryBlues.4'}
-                                                            component={Link}
-                                                            to={'/map-editor'}
-                                                            size="sm"
-                                                            ff="Inter"
-                                                            fw="400"
-                                                            style={{
-                                                                borderRadius: '8px',
-                                                            }}
-                                                        >
-                                                            Map Editor Tools
-                                                        </Button>
-                                                    </Flex>
-                                                </Collapse>
-                                            </Flex>
-                                        </Flex>
-                                    </Box>
+                    <Flex direction="column" justify="center">
+                        <Box w="20vw" mih="100vh" pt="75px" p="lg" mt="-8px">
+                            <Flex direction="column" justify="center" gap="sm">
+                                <Flex
+                                    direction="row"
+                                    align="center"
+                                    justify="center"
+                                    gap="sm"
+                                    mb="lg"
+                                >
+                                    <HoverUnderline>
+                                        <Title order={2} c="secondaryBlues.7" w={'auto'} mt="md">
+                                            Admin Page
+                                        </Title>
+                                    </HoverUnderline>
                                 </Flex>
-                            </div>
-                        )}
-                    </Transition>
-                    {!sidebarOpen && (
-                        <Transition mounted={!sidebarOpen} transition="slide-left" duration={400}>
-                            {(styles) => (
-                                <div style={styles}>
-                                    <Box w="45px" h="100vh" p="lg" pt="75px" mt="-8px">
-                                        <ActionIcon
-                                            bg="#EBF2FF"
-                                            size="input-sm"
-                                            onClick={toggle}
-                                            ml={'-10px'}
-                                            aria-label="ActionIcon the same size as inputs"
+                                <Flex
+                                    direction="column"
+                                    align="left"
+                                    justify="left"
+                                    gap="sm"
+                                    p="sm"
+                                >
+                                    <Flex direction="row" align="center" gap="0px">
+                                        <Title c="secondaryBlues.7">Service Request History</Title>
+                                        <Collapse
+                                            in={formInfoOpen}
+                                            transitionDuration={0}
+                                            transitionTimingFunction="linear"
                                         >
-                                            <IconArrowBadgeLeftFilled color={'#1C43A7'} />
-                                        </ActionIcon>
-                                    </Box>
-                                </div>
-                            )}
-                        </Transition>
-                    )}
+                                            <ActionIcon
+                                                bg={'#EBF2FF'}
+                                                top="10%"
+                                                size="input-sm"
+                                                onClick={close}
+                                                aria-label="ActionIcon the same size as inputs"
+                                            >
+                                                <IconChevronUp color={'#1C43A7'} />
+                                            </ActionIcon>
+                                        </Collapse>
+                                        {!formInfoOpen && (
+                                            <ActionIcon
+                                                bg={'#EBF2FF'}
+                                                size="input-sm"
+                                                onClick={open}
+                                                aria-label="ActionIcon the same size as inputs"
+                                            >
+                                                <IconChevronDown color={'#1C43A7'} />
+                                            </ActionIcon>
+                                        )}
+                                    </Flex>
+                                    <Collapse
+                                        in={formInfoOpen}
+                                        transitionDuration={400}
+                                        transitionTimingFunction="linear"
+                                    >
+                                        <Flex
+                                            direction="column"
+                                            justify="center"
+                                            gap="md"
+                                            ml="sm"
+                                            w="100%"
+                                        >
+                                            <SidebarButton
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'0'}
+                                                onClick={() => displayNumToggle(0)}
+                                                icon={<IconLanguage size="40" />}
+                                            >
+                                                Language Requests
+                                            </SidebarButton>
+
+                                            <SidebarButton
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'2'}
+                                                onClick={() => displayNumToggle(2)}
+                                                icon={<IconTrash size="40" />}
+                                            >
+                                                Sanitation Requests
+                                            </SidebarButton>
+
+                                            <SidebarButton
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'3'}
+                                                onClick={() => displayNumToggle(3)}
+                                                icon={<IconBellExclamation size="40" />}
+                                            >
+                                                Maintenance Requests
+                                            </SidebarButton>
+                                            <SidebarButton
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'1'}
+                                                onClick={() => displayNumToggle(1)}
+                                                icon={<IconShieldHalf size="40" />}
+                                            >
+                                                Security Requests
+                                            </SidebarButton>
+                                        </Flex>
+                                    </Collapse>
+
+                                    <Flex direction="column" justify="center" gap="md">
+                                        <SidebarButton
+                                            ValueToCheck={displayTableNumber.toString()}
+                                            onClick={() => setCSVManipOpen(true)}
+                                            icon={<IconFileBroken size="40" />}
+                                        >
+                                            CSV Manipulator
+                                        </SidebarButton>
+                                        <SidebarButton
+                                            ValueToCheck={displayTableNumber.toString()}
+                                            component={Link}
+                                            to={'/map-editor'}
+                                            icon={<IconMap2 size="40" />}
+                                        >
+                                            Map Editor
+                                        </SidebarButton>
+                                    </Flex>
+                                </Flex>
+                            </Flex>
+                        </Box>
+                    </Flex>
                 </Grid.Col>
                 <Grid.Col span={'auto'}>
                     <Box maw="100%" mx="auto">
