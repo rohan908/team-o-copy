@@ -19,7 +19,9 @@ import AdminPageV2 from '../AdminPage/AdminPageNewUI.tsx';
 import { TimelineProvider } from '../HomePage/TimeLineContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { IndoorMapsPage } from '../IndoorMapPage/IndoorMapsPage.tsx';
+import CreditPage from '../CreditPage/CreditPage.tsx';
 import AboutPage from '../AboutPage/Aboutpage.tsx';
+import CombinedPage from '../CreditPage/InfoPage.tsx';
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
@@ -86,6 +88,7 @@ export function Routing() {
                             path="/language-request-history"
                             element={<ProtectedRoute Route={<LanguageRequestHistory />} />}
                         />
+                        <Route path="/Info-page" element={<CombinedPage />} />
                     </Route>
                 </Routes>
             </TimelineProvider>

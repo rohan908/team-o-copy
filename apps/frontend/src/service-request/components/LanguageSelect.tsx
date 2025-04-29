@@ -1,5 +1,8 @@
-import { useMantineTheme, Select, SelectProps } from '@mantine/core';
+import { Flex, Box, Select, SelectProps } from '@mantine/core';
 import ISO6391 from 'iso-639-1';
+import React from 'react';
+import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
 const languageOptions = [
     { value: 'asl', label: 'ASL (American Sign Language)' },
@@ -9,19 +12,43 @@ const languageOptions = [
     })),
 ];
 
-const LanguageSelect: React.FC<SelectProps> = (props) => {
+interface LanguageSelectProps extends SelectProps {
+  value: string | null;
+  onChange: (value: string | null, option?: { value: string; label: string }) => void;
+}
+
+
+const LanguageSelect: React.FC<LanguageSelectProps> = ({value, onChange, ...props }) => {
+    const handleSpeechResult = (text: string) => {
+        const matchedLanguage = languageOptions.find((option) =>
+            option.label.toLowerCase().includes(text.toLowerCase())
+        );
+        if (matchedLanguage) {
+            onChange(matchedLanguage.value);
+        } else {
+          notifications.show({
+            title: 'Speech Error',
+            message: 'No Matching Language Found',
+            color: 'red',
+          });        }
+    };
     return (
-        <Select
+      <Flex align="center" gap="sm">
+
+      <Select
             label="Choose the Language Needed"
             placeholder="Select a Language"
-            searchable
             data={languageOptions}
+            value={value}
+            onChange={(val, option) => onChange(val, option)}
             nothingFoundMessage="Language not found"
             radius="sm"
             mb="md"
             size="xs"
             required
-            c={"#285CC6"}
+            w="240px"
+
+            c={'#285CC6'}
             {...props}
             styles={{
                 label: {
@@ -30,6 +57,10 @@ const LanguageSelect: React.FC<SelectProps> = (props) => {
                 },
             }}
         />
+        <Box mt={14}>
+          <SpeechToText OnResult={handleSpeechResult} />
+        </Box>
+      </Flex>
     );
 };
 

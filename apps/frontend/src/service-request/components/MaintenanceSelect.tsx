@@ -1,24 +1,51 @@
-import { Select, SelectProps } from '@mantine/core';
+import { Select, SelectProps, Flex, Box } from '@mantine/core';
+import React from 'react';
+import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
-const MaintenanceSelect: React.FC<SelectProps> = (props) => {
+const maintenanceOptions = [
+  'Elevator',
+  'HVAC',
+  'Medical Equipment',
+  'Plumbing',
+  'Electrical',
+  'Building Structure',
+];
+
+interface MaintenanceSelectProps extends SelectProps {
+  value: string;
+  onChange: (value: string | null, option?: { value: string; label: string }) => void;
+}
+const MaintenanceSelect: React.FC<MaintenanceSelectProps> = ({ value, onChange, ...props }) => {
+  const handleSpeechResult = (text: string) => {
+    const matchedMaintenance = maintenanceOptions.find(option =>
+      option.toLowerCase().includes(text.toLowerCase())
+    );
+    if (matchedMaintenance) {
+      onChange(matchedMaintenance, { value: matchedMaintenance, label: matchedMaintenance });
+    } else {
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Cleanup Found',
+        color: 'red',
+      });    }
+  };
     return (
-        <Select
-            label="Choose the Maintenance Needed"
-            placeholder="Select Maintenance Issue"
-            data={[
-                'Elevator',
-                'HVAC',
-                'Medical Equipment',
-                'Plumbing',
-                'Electrical',
-                'Building Structure',
-            ]}
-            nothingFoundMessage="Maintenance Type not found"
+      <Flex align="center" gap="sm">
+
+      <Select
+            label="Choose the Maintenance Type"
+            placeholder="Select a Cleanup Type"
+            data={maintenanceOptions}
+            value={value}
+            onChange={(val, option) => onChange(val, option)}
+            nothingFoundMessage="Cleanup Type not found"
             radius="sm"
             mb="md"
             size="xs"
             required
             c={"#285CC6"}
+            w="240px"
             {...props}
             styles={{
                 label: {
@@ -27,6 +54,10 @@ const MaintenanceSelect: React.FC<SelectProps> = (props) => {
                 },
             }}
         />
+        <Box mt={14}>
+          <SpeechToText OnResult={handleSpeechResult} />
+        </Box>
+      </Flex>
     );
 };
 
