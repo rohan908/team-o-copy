@@ -95,7 +95,7 @@ export function Routing() {
                                 path="/language-request-history"
                                 element={<ProtectedRoute Route={<LanguageRequestHistory />} />}
                             />
-                            <Route path="/credit" element={<CreditPage />} />
+                            <Route path="/Credit-page" element={<CreditPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
