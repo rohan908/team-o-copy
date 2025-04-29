@@ -35,9 +35,16 @@ const slugs = [
     'figma',
     'discord',
 ];
-function IconCloudDemo() {
-    const images = slugs.map((slug) => `https://cdn.simpleicons.org/${slug}/${slug}`);
 
+const customImages = [
+  "./public/Pholicious-Logo-white-wo-bottom-1.png",
+];
+
+function IconCloudDemo() {
+  const images = [
+    ...slugs.map((slug) => `https://cdn.simpleicons.org/${slug}/${slug}`),
+    ...customImages,
+  ];
     return (
         <div
             className="relative flex items-center justify-center overflow-hidden"
@@ -62,19 +69,17 @@ export function CreditPage() {
     const nodeImage = `https://cdn.simpleicons.org/nodedotjs/nodedotjs`;
     const typescriptImage = `https://cdn.simpleicons.org/typescript/typescript`;
     const prismaImage = `https://cdn.simpleicons.org/prisma/prisma`;
-    const phoImage = './public/Pholicious-Logo-white-wo-bottom-1.png';
 
     return (
         <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py="md">
             <Container size="lg" py="xl">
                 <Stack align="center" gap="lg">
-                    <Text ta="center" fz="xl" fw="bold" c={theme.colors.secondaryBlues[7]}>
+                    <Text ta="center" fz="xl" c={theme.colors.secondaryBlues[7]}>
                         Onyx Onis' Software Credits
                     </Text>
                     <Box bg={theme.colors.yellowAccent[3]} w="100%" h="2px" mb="md" />
 
                     <Group align="flex-start" justify="center" mt="md" gap="xl" wrap="nowrap">
-                        {/* Left side - Text content */}
                         <Stack gap={5} align="center" w={600}>
                             <Text c={theme.colors.secondaryBlues[7]} fz="lg">
                                 This project fundamentally relies on the PERN stack:
@@ -328,26 +333,6 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                             </Group>
-                            <Tooltip label="PhoLicious">
-                                <Link to="https://pholiciousholden.com/">
-                                    <ActionIcon
-                                        size="xl"
-                                        variant="transparent"
-                                        style={{
-                                            width: 60,
-                                            height: 60,
-                                            borderRadius: 50,
-                                            padding: 0,
-                                        }}
-                                    >
-                                        <img
-                                            src={phoImage}
-                                            alt="Pho"
-                                            style={{ objectFit: 'contain' }}
-                                        />
-                                    </ActionIcon>
-                                </Link>
-                            </Tooltip>
                         </Stack>
 
                         <Stack align="center" gap="sm">
@@ -366,11 +351,20 @@ export function CreditPage() {
                     >
                         Click an icon to learn more about the technology used in this project.
                     </Text>
-                    <Box bg={theme.colors.yellowAccent[3]} w="100%" h="2px" mt="lg" />
+                  <Text
+                    ta="center"
+                    mt="xs"
+                    size="sm"
+                    c={theme.colors.secondaryBlues[7]}
+                    maw={600}
+                  >
+                    Scroll down to learn more about our awesome team! ↓
+                  </Text>
                 </Stack>
             </Container>
         </Box>
     );
+
 }
 
 export default CreditPage;

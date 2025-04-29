@@ -1,17 +1,18 @@
 import { Outlet, Link } from 'react-router-dom';
 import { Button, Flex, Box, Group, MantineProvider } from '@mantine/core';
 import { useUser, SignOutButton, SignInButton } from '@clerk/clerk-react';
+import { IconInfoCircle } from '@tabler/icons-react';
 import '../home-style.css';
+import { ReactNode } from 'react';
 
 type NavItem = {
-    name: string;
+    name: ReactNode;
     link: string;
 };
 
 export const navItems: NavItem[] = [
     // { name: 'Navigation', link: '/map-API' },
-  { name: 'Credits', link: '/Credit-page' },
-    { name: 'About', link: '/About-page' },
+    { name: <IconInfoCircle size={35} />, link: '/Info-page' },
 
 ];
 

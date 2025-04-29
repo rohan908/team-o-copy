@@ -21,6 +21,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { IndoorMapsPage } from '../IndoorMapPage/IndoorMapsPage.tsx';
 import CreditPage from '../CreditPage/CreditPage.tsx';
 import AboutPage from '../AboutPage/Aboutpage.tsx';
+import CombinedPage from "../InfoPage.tsx";
 
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
@@ -88,7 +89,7 @@ export function Routing() {
                                 path="/language-request-history"
                                 element={<ProtectedRoute Route={<LanguageRequestHistory />} />}
                             />
-                            <Route path="/Credit-page" element={<CreditPage />} />
+                            <Route path="/Info-page" element={<CombinedPage />} />
                         </Route>
                     </Routes>
             </TimelineProvider>
