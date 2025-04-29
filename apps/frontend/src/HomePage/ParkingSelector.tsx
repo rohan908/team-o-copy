@@ -80,8 +80,8 @@ export function ParkingSelector(props:ParkingSelectorProps) {
             data={hospitalOptions}
             value={selectedHospital ?? ''}
             onChange={setHospitalLocation}
-            radius="sm"
             mb="sm"
+            radius="md"
             size="xs"
             w={props.w}
         />

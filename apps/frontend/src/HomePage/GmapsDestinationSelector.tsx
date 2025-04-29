@@ -70,7 +70,7 @@ export function GmapsDestinationSelector(props:GmapsDestinationSelectorProps) {
             }
             data={hospitalOptions}
             onChange={setHospitalLocation}
-            radius="sm"
+            radius="md"
             mb="sm"
             size="xs"
             w={props.w}

@@ -44,7 +44,7 @@ export function DepartmentSelector(props:DepartmentSelectorProps) {
             data={directoryOptions}
             onChange={setSelectedDepartment}
             value={department ?? ''}
-            radius="sm"
+            radius="md"
             mb="sm"
             size="xs"
             disabled={!selectedHospital && directoryOptions.length === 0}

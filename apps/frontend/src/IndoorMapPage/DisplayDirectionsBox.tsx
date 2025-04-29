@@ -70,10 +70,7 @@ export function DisplayDirectionsBox() {
         }}>
             <Accordion
                 multiple
-                styles={{
-                    item: { marginBottom: '0px' },
-                }}
-                defaultValue={Object.keys(directionsByFloor).map((floor) => `floor-${floor}`)}
+                defaultValue={["floor-1", "floor-2", "floor-3", "floor-4", "floor-5", "floor-6", "floor-7"]}
             >
                 {Object.entries(directionsByFloor).map(([floor, direction]) => {
                     const floorTTS = direction.map((step) => {
@@ -89,13 +86,14 @@ export function DisplayDirectionsBox() {
                                     <Text fw={700} size="md" c="blue.7">
                                         {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
                                         {/* Changing for Faulkner and Chestnut*/}
-                                        {Number(floor) === 1
-                                            ? 'Floor 1'
-                                            : Number(floor) === 4
-                                              ? 'Chestnut'
-                                              : Number(floor) === 5
-                                                ? 'Faulkner'
-                                                : `Floor ${Number(floor) + 1}`}
+                                        {Number(floor) === 1 ? 'Floor 1' : ""}
+                                        {Number(floor) === 2 ? 'Floor 3' : ""}
+                                        {Number(floor) === 3 ? 'Floor 4' : ""}
+                                        {Number(floor) === 4 ? 'Chestnut Hill' : ""}
+                                        {Number(floor) === 5 ? 'Faulkner' : ""}
+                                        {Number(floor) === 6 ? 'BWH' : ""}
+                                        {Number(floor) === 7 ? 'BWH' : ""}
+
                                     </Text>
                                     <TTSButton text={floorTTS} />
                                 </Group>

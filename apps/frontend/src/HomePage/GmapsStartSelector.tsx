@@ -53,7 +53,7 @@ export function GmapsStartSelector(props:GmapsStartSelectorProps) {
             }
             ref={input}
             onChange={(value) => setUserStart(value)}
-            radius="sm"
+            radius="md"
             mb="sm"
             size="xs"
             w={props.w}
