@@ -1,6 +1,7 @@
 import { Select, SelectProps, Flex, Box } from '@mantine/core';
 import React from 'react';
-import SpeechToText from '../../Buttons/SpeechToText.tsx'; // Adjust the path
+import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
 const statusOptions = ['Unassigned', 'Assigned', 'Working', 'Done'];
 
@@ -17,8 +18,11 @@ const StatusSelect: React.FC<StatusSelectProps> = ({ value, onChange }) => {
     if (matchedStatus) {
       onChange(matchedStatus);
     } else {
-      alert('No matching status found');
-    }
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Status Found',
+        color: 'red',
+      });     }
   };
 
     return (

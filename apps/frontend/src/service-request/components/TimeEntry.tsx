@@ -4,6 +4,8 @@ import { IconClock } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import * as chrono from 'chrono-node';
+import { notifications } from '@mantine/notifications';
+
 
 const TimeEntry: React.FC<TimeInputProps> = (props) => {
   const [value, setValue] = useState<string>('');
@@ -20,8 +22,11 @@ const TimeEntry: React.FC<TimeInputProps> = (props) => {
       const minutes = parsedTime.getMinutes().toString().padStart(2, '0');
       setValue(`${hours}:${minutes}`);
     } else {
-      alert('Could not recognize a valid time');
-    }
+      notifications.show({
+        title: 'Speech Error',
+        message: 'Could not Recognized a Valid Time',
+        color: 'red',
+      });    }
   };
     return (
       <Flex align="center" gap="sm">

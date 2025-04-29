@@ -3,6 +3,7 @@ import { Flex, Box } from '@mantine/core';
 import React,  { useState }  from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import * as chrono from 'chrono-node';
+import { notifications } from '@mantine/notifications';
 
 
 
@@ -12,10 +13,13 @@ const DateEntry: React.FC<DateInputProps> = (props) => {
   const handleSpeechResult = (text: string) => {
     const parsedDate = chrono.parseDate(text); // Parse the spoken text
     if (parsedDate) {
-      setValue(parsedDate); // Only set if it's a valid date
+      props.onChange?.(parsedDate); // Only set if it's a valid date
     } else {
-      alert('Could not recognize a valid date');
-    }
+      notifications.show({
+        title: 'Speech Error',
+        message: 'Could not recognize a valid date',
+        color: 'red',
+      });    }
   };
   return (
     <Flex align="center" gap="sm">

@@ -1,6 +1,7 @@
 import { Flex, Box, Select, SelectProps } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
 const sanitationOptions = [
   'Biohazard Cleanup',
@@ -25,8 +26,11 @@ const SanitationSelect: React.FC<SanitationSelectProps> = ({ value, onChange }) 
     if (matched) {
       onChange(matched);
     } else {
-      alert('No matching cleanup type found');
-    }
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Cleanup Type Found',
+        color: 'red',
+      });    }
   };
   return (
     <Flex align="center" gap="sm">

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import { ActionIcon, Loader } from '@mantine/core';
 import { IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react';
 
@@ -52,7 +52,13 @@ const SpeechToText: React.FC<SpechToTextProps> = (props: SpechToTextProps) => {
       recognition.start();
     }
   }
-
+  useEffect(() => { //use effect to stop recording when user presses "back"
+    return () => {
+      if (recognitionRef.current && isSpeaking) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, [isSpeaking]);
   return (
     <ActionIcon
       variant='outlined'

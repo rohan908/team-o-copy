@@ -1,6 +1,7 @@
 import { Select, SelectProps, Flex, Box } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
 interface DepartmentSelectProps extends SelectProps {
     departments: string[]; // Just titles
@@ -16,8 +17,11 @@ const DepartmentSelect: React.FC<DepartmentSelectProps> = ({ departments, value,
     if (matchedDepartment) {
       onChange(matchedDepartment);
     } else {
-      alert('No matching department found');
-    }
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Department Found',
+        color: 'red',
+      });    }
   };
     return (
       <Flex align="center" gap="sm">

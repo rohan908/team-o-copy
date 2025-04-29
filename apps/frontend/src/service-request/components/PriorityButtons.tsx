@@ -1,6 +1,8 @@
 import { Select, SelectProps, Flex, Box } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
+
 
 const priorityOptions = ['Emergency', 'High', 'Medium', 'Low'];
 
@@ -18,8 +20,11 @@ const PrioritySelect: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
       onChange(matched)
     }
     else {
-      alert('No matching priority found');
-    }
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Priority Found',
+        color: 'red',
+      });    }
   };
     return (
       <Flex align="center" gap="sm">

@@ -1,6 +1,7 @@
 import { Select, SelectProps, Flex, Box } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
 interface HospitalSelectProps extends SelectProps {
     value: string;
@@ -16,8 +17,11 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
     if (matchedHospital) {
       onChange(matchedHospital);
     } else {
-      alert('No matching hospital found');
-    }
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Hospital Found',
+        color: 'red',
+      });    }
   };
     return (
       <Flex align="center" gap="sm">

@@ -1,6 +1,8 @@
 import { Flex, Box, Select, SelectProps } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
+
 
 const securityOptions = ['Escort Service', 'Safety Hazard', 'Building Security', 'Surveillance'];
 interface SecuritySelectProps {
@@ -15,8 +17,11 @@ const SecuritySelect: React.FC<SecuritySelectProps> = ({ value, onChange }) => {
     if (matched) {
       onChange(matched);
     } else {
-      alert('No matching concern found');
-    }
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Security Found',
+        color: 'red',
+      });     }
   };
     return (
       <Flex align="center" gap="sm">

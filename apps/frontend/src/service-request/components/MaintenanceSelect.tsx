@@ -1,6 +1,7 @@
 import { Select, SelectProps, Flex, Box } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
 const maintenanceOptions = [
   'Elevator',
@@ -23,8 +24,11 @@ const MaintenanceSelect: React.FC<MaintenanceSelectProps> = ({ value, onChange, 
     if (matchedMaintenance) {
       onChange(matchedMaintenance, { value: matchedMaintenance, label: matchedMaintenance });
     } else {
-      alert('No matching maintenance type found');
-    }
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Cleanup Found',
+        color: 'red',
+      });    }
   };
     return (
       <Flex align="center" gap="sm">

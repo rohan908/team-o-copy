@@ -262,7 +262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.23.8, @babel/runtime@npm:^7.26.0":
+"@babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.23.8, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.27.0
   resolution: "@babel/runtime@npm:7.27.0"
   dependencies:
@@ -810,6 +810,30 @@ __metadata:
   peerDependencies:
     react: ^18.x || ^19.x
   checksum: 10c0/e0ef1b5a53fa6a1d0be73590221422a45de715f8debc518af3f858272b108e4bcee13399a8129ab475db7af322f563f30b3ba6f839081538dda7fb11b572d8b4
+  languageName: node
+  linkType: hard
+
+"@mantine/notifications@npm:^7.17.5":
+  version: 7.17.5
+  resolution: "@mantine/notifications@npm:7.17.5"
+  dependencies:
+    "@mantine/store": "npm:7.17.5"
+    react-transition-group: "npm:4.4.5"
+  peerDependencies:
+    "@mantine/core": 7.17.5
+    "@mantine/hooks": 7.17.5
+    react: ^18.x || ^19.x
+    react-dom: ^18.x || ^19.x
+  checksum: 10c0/7d620f4972cbb6ffdb9766c5fdd64695b1da97e619fe23eac9b2a3e5bcf5bf6f8b9e38f8eaa34eb45ed6b74446d04cf048fe9380691601971e96570c882ee5f0
+  languageName: node
+  linkType: hard
+
+"@mantine/store@npm:7.17.5":
+  version: 7.17.5
+  resolution: "@mantine/store@npm:7.17.5"
+  peerDependencies:
+    react: ^18.x || ^19.x
+  checksum: 10c0/f584af75cdcc5853ae2619f616a9082d88f4283db89caf291014c088972426b8f55c8781f70ad4dfaa24ea001e7dce24106b506ccf244a79ee9e8c6ee03a2325
   languageName: node
   linkType: hard
 
@@ -3587,6 +3611,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dom-helpers@npm:^5.0.1":
+  version: 5.2.1
+  resolution: "dom-helpers@npm:5.2.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.8.7"
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/f735074d66dd759b36b158fa26e9d00c9388ee0e8c9b16af941c38f014a37fc80782de83afefd621681b19ac0501034b4f1c4a3bff5caa1b8667f0212b5e124c
+  languageName: node
+  linkType: hard
+
 "dotenv-cli@npm:^7.4.4":
   version: 7.4.4
   resolution: "dotenv-cli@npm:7.4.4"
@@ -4416,6 +4450,7 @@ __metadata:
     "@mantine/dates": "npm:7.17.4"
     "@mantine/form": "npm:^7.17.4"
     "@mantine/hooks": "npm:7.17.4"
+    "@mantine/notifications": "npm:^7.17.5"
     "@react-google-maps/api": "npm:^2.20.6"
     "@react-three/drei": "npm:9.122.0"
     "@react-three/fiber": "npm:^8.0.0"
@@ -6560,7 +6595,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.7.2":
+"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -6855,6 +6890,21 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 10c0/3a924db59259a6e3b834dcddc12a8661b43dcdaa1b43c41c732e0548bb2761e9a53dbc6db4e0d9e237728b4869e42c25e5417408b0391aec290c90874733a09f
+  languageName: node
+  linkType: hard
+
+"react-transition-group@npm:4.4.5":
+  version: 4.4.5
+  resolution: "react-transition-group@npm:4.4.5"
+  dependencies:
+    "@babel/runtime": "npm:^7.5.5"
+    dom-helpers: "npm:^5.0.1"
+    loose-envify: "npm:^1.4.0"
+    prop-types: "npm:^15.6.2"
+  peerDependencies:
+    react: ">=16.6.0"
+    react-dom: ">=16.6.0"
+  checksum: 10c0/2ba754ba748faefa15f87c96dfa700d5525054a0141de8c75763aae6734af0740e77e11261a1e8f4ffc08fd9ab78510122e05c21c2d79066c38bb6861a886c82
   languageName: node
   linkType: hard
 

@@ -2,6 +2,7 @@ import { Flex, Box, Select, SelectProps } from '@mantine/core';
 import ISO6391 from 'iso-639-1';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
 const languageOptions = [
     { value: 'asl', label: 'ASL (American Sign Language)' },
@@ -25,8 +26,11 @@ const LanguageSelect: React.FC<LanguageSelectProps> = ({value, onChange, ...prop
         if (matchedLanguage) {
             onChange(matchedLanguage.value);
         } else {
-            alert('No matching language found');
-        }
+          notifications.show({
+            title: 'Speech Error',
+            message: 'No Matching Language Found',
+            color: 'red',
+          });        }
     };
     return (
       <Flex align="center" gap="sm">
