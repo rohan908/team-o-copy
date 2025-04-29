@@ -43,7 +43,7 @@ return (
       w="100%"
       bg="#EFF4FE"
       p="sm"
-      style={{borderRadius: "10px", boxShadow: steps && steps.length > 0 ? "0px -4px 4px 0px #AAAAAA" : "0px 0px 0px 0px #ebf2ff"}}
+      style={{borderRadius: "10px", boxShadow: steps && steps.length > 0 ? "0px 0px 4px 0px #AAAAAA" : "0px 0px 0px 0px #ebf2ff"}}
     >
       <Transition
         mounted={steps && steps.length > 0}
@@ -64,15 +64,16 @@ return (
                       <Text w="100%" size="xs" my='xs' color="#1C43A7" ta="left">
                         {parseHTMLtoText(step.instruction)}
                       </Text>
-                      <Divider label={`${step.distance}`}
-                               labelPosition="center"
-                               w="215px"
-                               my="xs"
-                               color="#F6D161" // Line color
-                               styles={{
-                                 label: {
-                                   color: '#000000'} //text colot
-                               }}/>
+                      <Divider
+                        label={`${step.distance}`}
+                        labelPosition="center"
+                        w="215px"
+                        my="xs"
+                        color="#F6D161" // Line color
+                        styles={{
+                          label: {
+                            color: '#000000'} //text colot
+                        }}/>
                     </List.Item>
                   ))}
                 </List>
@@ -83,13 +84,13 @@ return (
                 onClick={handleToggle}
                 color={isSpeaking ? 'red' : 'blue'}
                 variant="light"
-                size='sm'
+                size='compact-sm'
               >
                 {isSpeaking ? 'Stop' : 'Play Directions'}
               </Button>
             </Box>
             <Box ta='center' mt="md">
-              <Button component={Link} to="/IndoorMapPage" color="#F8D261">
+              <Button component={Link} to="/IndoorMapPage" color="#F8D261" size='compact-sm'>
                 I've Arrived
               </Button>
             </Box>

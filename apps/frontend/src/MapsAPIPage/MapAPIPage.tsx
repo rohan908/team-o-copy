@@ -12,7 +12,7 @@ import {GmapsDestinationSelector} from "../HomePage/GmapsDestinationSelector.tsx
 import {TravelSelectorButtons} from "../common-compoents/TravelSelectorButtons.tsx";
 import {DepartmentSelector} from "../HomePage/DepartmentSelector.tsx";
 import {ParkingSelector} from "../HomePage/ParkingSelector.tsx";
-import {IconBuildings, IconDotsVertical, IconHome, IconMapPin} from '@tabler/icons-react';
+import {IconBuildings, IconDotsVertical, IconHome, IconHomeFilled, IconMapPin} from '@tabler/icons-react';
 
 export const MapAPIPage = () => {
     const {
@@ -35,46 +35,49 @@ export const MapAPIPage = () => {
         return <div>Loading Google Maps...</div>; //debugmap
     }
     return (
-        <Box w="100%" h="100%" bg="primaryBlues.0">
-          <Grid w="100%">
-            <Grid.Col span={"content"}>
-              <Flex direction="row" align={"center"} justify={"center"} mt={"15%"}>
-                <Stack gap={2} w="250px" pl="3%" pt="8%" align="center">
-                  <Title order={1} fz={'lg'} pt={'8px'} ta={'center'} c={'#0E3B99'}>
+      <Box w="100%" bg="primaryBlues.0">
+        <Box w="99.3%" h="100%" mih="100vh" bg="primaryBlues.0">
+          <Grid>
+            <Grid.Col span="content">
+              <Flex direction="row" align="center" justify="center" mt="15%">
+                <Stack gap={2} w="250px" ml="5%" mt="8%" align="center">
+                  <Title order={1} fz='lg' mt='8px' ta='center' c='#0E3B99'>
                     Navigate to Hospital
                   </Title>
-                  <Divider color={"yellowAccent.4"} w="100%" size={"xs"} mt={"xs"} mb={"xs"}/>
-                  <Flex direction="row" gap={"xs"}>
-                    <IconHome size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
-                    <GmapsStartSelector hasIcon={false} w={"100%"}/>
+                  <Divider color="yellowAccent.4" w="100%" size="xs" mt="xs" mb="xs"/>
+                  <Flex direction="row" gap="xs">
+                    <IconHomeFilled size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
+                    <GmapsStartSelector hasIcon={false} w="100%"/>
                   </Flex>
-                  <Flex w="100%" justify={"left"}>
+                  <Flex w="100%" justify="left">
                     <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "-1px"}}  />
                   </Flex>
-                  <Flex direction="row" gap={"xs"}>
+                  <Flex direction="row" gap="xs">
                     <IconBuildings size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
-                    <GmapsDestinationSelector hasIcon={false} w={"100%"}/>
+                    <GmapsDestinationSelector hasIcon={false} w="100%"/>
                   </Flex>
-                  <Flex w="100%" justify={"left"}>
+                  <Flex w="100%" justify="left">
                     <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "-1px"}}  />
                   </Flex>
-                  <Flex direction="row" gap={"xs"}>
+                  <Flex direction="row" gap="xs">
                     <IconMapPin size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
                     <DepartmentSelector hasIcon={false} w={"100%"}/>
                   </Flex>
-                  <TravelSelectorButtons w={"35px"} h={"35px"}/>
+                  <TravelSelectorButtons w="35px" h="35px"/>
                   <DirectionsBox steps={steps} />
                 </Stack>
               </Flex>
             </Grid.Col>
-            <Grid.Col span={"auto"}>
+            <Grid.Col span="auto">
               <Box
-                w="99%"
-                h="99%"
+                w="100%"
+                h="95.7vh"
                 mt="5px"
                 miw="550px"
                 mih="550px"
+                bg="primaryBlues.0"
                 style={{
+                  border: "3px solid #ebf2ff",
                   borderRadius: '8px',
                   overflow: 'hidden',
                 }}>
@@ -82,8 +85,8 @@ export const MapAPIPage = () => {
               </Box>
             </Grid.Col>
           </Grid>
-            {/*<SelectBox />*/}
         </Box>
+      </Box>
     );
 };
 
