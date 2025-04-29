@@ -43,9 +43,9 @@ export const CustomTimeline = ({
             case 0: //Go To Hospital (GMAPS)
                 return (
                     <Stack gap={2} w="100%">
-                        <GmapsStartSelector />
-                        <GmapsDestinationSelector />
-                        <TravelSelectorButtons w={'50px'} h={'50px'} />
+                        <GmapsStartSelector hasIcon={true} w={"100%"}/>
+                        <GmapsDestinationSelector hasIcon={true} w={"100%"}/>
+                        <TravelSelectorButtons w={"50px"} h={"50px"}/>
                         <Flex justify={'end'}>
                             <Button
                                 bg={theme.colors.secondaryBlues[7]}
