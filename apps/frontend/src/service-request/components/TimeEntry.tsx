@@ -21,6 +21,7 @@ const TimeEntry: React.FC<TimeInputProps> = (props) => {
       const minutes = parsedTime.getMinutes().toString().padStart(2, '0');
       const formattedTime = `${hours}:${minutes}`;
       props.onChange?.(formattedTime);
+    }else{
       notifications.show({
         title: 'Speech Error',
         message: 'Could not Recognized a Valid Time',
