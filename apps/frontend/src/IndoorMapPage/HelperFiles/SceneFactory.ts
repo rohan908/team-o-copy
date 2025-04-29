@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 // function for simplifying creating new scenes (floors)
-function createMapScene(texturePath: string) {
+export function createMapScene(texturePath: string) {
     const scene = new THREE.Scene();
     const mapTexture = new THREE.TextureLoader().load(texturePath);
     mapTexture.colorSpace = THREE.SRGBColorSpace;

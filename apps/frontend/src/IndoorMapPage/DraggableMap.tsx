@@ -66,6 +66,7 @@ export function DraggableMap() {
             setFloorState(1);
         }
     };
+
     //stupid fix for adams hard coding bruh, need to switch the scene depending on the selected hopsital going to the indoor map page
     useEffect(() => {
         if (selectedHospital === '20 Patriot Pl' || selectedHospital === '22 Patriot Pl') {

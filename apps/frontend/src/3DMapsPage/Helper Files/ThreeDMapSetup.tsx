@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createAllScenes } from './SceneFactory.ts';
 import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
+import { createMapScene } from '../../IndoorMapPage/HelperFiles/SceneFactory.ts';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 interface MapConfig {
@@ -66,7 +67,7 @@ export function mapSetup(config: MapConfig) {
         renderer.setPixelRatio(window.devicePixelRatio);
         rendererRef.current = renderer;
 
-        sceneRef.current = new THREE.Scene();
+        sceneRef.current = createMapScene('MapImages/Patriot Place 1.png');
 
         // initialize camera controls
         const controls = new OrbitControls(camera, renderer.domElement);
@@ -83,7 +84,7 @@ export function mapSetup(config: MapConfig) {
 
         // set min and max zoom
         controls.minDistance = 10;
-        controls.maxDistance = 300;
+        controls.maxDistance = 400;
 
         // store initial target
         initialTargetRef.current.copy(controls.target);

@@ -3,6 +3,9 @@ import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { Box } from '@mantine/core';
 import { mapSetup } from './Helper Files/ThreeDMapSetup.tsx';
+import { findPath } from '../IndoorMapPage/HelperFiles/FindPathRouting.ts';
+import { getNode } from '../IndoorMapPage/HelperFiles/MapSetup.tsx';
+import { createNode } from '../IndoorMapPage/HelperFiles/NodeFactory.ts';
 
 export function ThreeDMap() {
     // Set up map with better camera defaults for a large model
@@ -16,7 +19,7 @@ export function ThreeDMap() {
         },
     });
 
-    const addObject = (src: string, zIndex: number) => {
+    const addObject = (src: string, zIndex: number, objectType: string) => {
         // Load the 3D model
         const loader = new OBJLoader();
 
@@ -25,56 +28,34 @@ export function ThreeDMap() {
             function (object) {
                 console.log('Model loaded successfully', object);
 
-                // CRITICAL: Reset position to origin first
-                object.position.set(0, 0, -zIndex * 2);
-
-                // Calculate size and scale properly
-                const box = new THREE.Box3().setFromObject(object);
-                const size = box.getSize(new THREE.Vector3());
-
-                // Normalize to a reasonable size (max dimension of 5 units)
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 10 / maxDim;
-
+                //set position to origin
+                //object.position.set(0, 0, 0);
+                const scale = 2.3;
                 object.scale.set(scale, scale, scale);
-                console.log(
-                    `Model scaled to size: ${scale * size.x}, ${scale * size.y}, ${scale * size.z}`
-                );
+                object.position.x = 6.5;
+                object.position.y = -47.5;
+                object.position.z = zIndex * 10.5;
 
-                // Now center properly AFTER scaling
-                box.setFromObject(object); // Recalculate bounding box after scaling
-                const center = box.getCenter(new THREE.Vector3());
-                object.position.x = -center.x;
-                object.position.y = -center.y;
-                object.position.z = -center.z;
-
-                console.log('Model positioned at:', object.position);
-
-                // Force material visibility in case materials aren't loading
-                object.traverse(function (child) {
-                    if (child instanceof THREE.Mesh) {
+                // different colors for floors and walls
+                if (objectType == 'floor') {
+                    object.traverse(function (child: { material: THREE.MeshStandardMaterial }) {
                         // Create a new standard material for better lighting
                         child.material = new THREE.MeshStandardMaterial({
-                            color: 0xa0a8b3,
-                            roughness: 0.7,
-                            metalness: 0,
+                            color: 0xffffff,
                         });
-                    }
-                });
+                    });
+                } else if (objectType == 'walls') {
+                    object.traverse(function (child: { material: THREE.MeshStandardMaterial }) {
+                        // Create a new standard material for better lighting
+                        child.material = new THREE.MeshStandardMaterial({
+                            color: 0xa2c2f7,
+                        });
+                    });
+                } else {
+                    console.error('objectType not found');
+                }
 
-                sceneRef.current.background = new THREE.Color().setHex(0xeef4fe);
-
-                // Add the model to the scene
                 sceneRef.current.add(object);
-
-                // Position camera to view the model
-                cameraRef.current.position.set(0, -30, 25);
-                cameraRef.current.lookAt(0, 0, 0);
-
-                // Force a render
-                rendererRef.current.render(sceneRef.current, cameraRef.current);
-
-                console.log('Initial render completed');
             },
             function (xhr) {
                 console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
@@ -85,6 +66,44 @@ export function ThreeDMap() {
         );
     };
 
+    const handlePath = (firstNodeId: number, lastNodeId: number, algo: string) => {
+        const path = findPath(firstNodeId, lastNodeId, algo).then(async (pathres) => {
+            const ids = pathres.result.pathIDs;
+            // Add dispatch for navSelection
+            navSelection.dispatch({
+                type: 'SET_PATH_REQUEST',
+                data: { NodeIds: ids },
+            });
+            // For each node id in the path
+
+            for (const id of ids) {
+                // Get the full node from the ID
+                const node = getNode(id, allNodes);
+                if (node) {
+                    createNode(node, scenesRef.current); //Create the node from its data
+                } else {
+                    console.error('Node id not found: ', id);
+                }
+                const connectedNodeIds = node?.connectingNodes; // list of the connected nodes "connections" data including the IDs and Weights
+                if (connectedNodeIds) {
+                    for (const connectedNodeId of connectedNodeIds) {
+                        // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
+                        const connectedNode = getNode(connectedNodeId, allNodes);
+                        if (connectedNode) {
+                            // If the connected node is in the path
+                            // TODO: Add another check that makes it so duplicate edge objects aren't created
+                            if (ids.includes(connectedNode.id)) {
+                                createEdge(node, connectedNode);
+                            }
+                        } else {
+                            console.error('Node id not found: ', connectedNodeId);
+                        }
+                    }
+                }
+            }
+        });
+    };
+
     // Load 3D model
     useEffect(() => {
         if (!sceneRef.current || !cameraRef.current || !rendererRef.current) {
@@ -92,13 +111,29 @@ export function ThreeDMap() {
             return;
         }
 
-        addObject('../../public/PatriotModel.obj', 1);
-        addObject('../../public/PatriotOther.obj', 2);
-        addObject('../../public/PatriotOther.obj', 3);
-        addObject('../../public/PatriotOther.obj', 4);
+        sceneRef.current.background = new THREE.Color().setHex(0xeef4fe);
 
-        // Add basic lighting
-        const ambientLight = new THREE.AmbientLight(0x285cc6, 0.5);
+        // Floors and walls are separate objects so they can be colored separately
+        addObject('../../public/Models/Floor 1 Floor.obj', 0, 'floor');
+        addObject('../../public/Models/Floor 1 Walls.obj', 0, 'walls');
+        addObject('../../public/Models/Floor 2 Floor.obj', 1, 'floor');
+        addObject('../../public/Models/Floor 2 Walls.obj', 1, 'walls');
+        addObject('../../public/Models/Floor 3 Floor.obj', 2, 'floor');
+        addObject('../../public/Models/Floor 3 Walls.obj', 2, 'walls');
+        addObject('../../public/Models/Floor 4 Floor.obj', 3, 'floor');
+        addObject('../../public/Models/Floor 4 Walls.obj', 3, 'walls');
+
+        // position camera to view the model
+        cameraRef.current.position.set(0, 0, 500);
+        cameraRef.current.lookAt(0, 0, 0);
+
+        // force a render
+        rendererRef.current.render(sceneRef.current, cameraRef.current);
+
+        console.log('Initial render completed');
+
+        // lighting
+        const ambientLight = new THREE.AmbientLight(0xebf2ff, 0.5);
         sceneRef.current.add(ambientLight);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
