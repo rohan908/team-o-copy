@@ -69,10 +69,10 @@ export function CreditPage() {
     const prismaImage = `https://cdn.simpleicons.org/prisma/prisma`;
 
     return (
-        <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py="md">
+        <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py={0}>
             <Container size="lg" py="xl">
                 <Stack align="center" gap="lg">
-                    <Text ta="center" fz="xl" c={theme.colors.secondaryBlues[7]}>
+                    <Text ta="center" mt = {0} fz="xl" c={theme.colors.secondaryBlues[7]}>
                         Onyx Onis' Software Credits
                     </Text>
                     <Box bg={theme.colors.yellowAccent[3]} w="100%" h="2px" mb="md" />
@@ -345,7 +345,7 @@ export function CreditPage() {
 
                     <Text
                         ta="center"
-                        mt="lg"
+                        mt="xl"
                         size="sm"
                         c={theme.colors.secondaryBlues[7]}
                         maw={600}
