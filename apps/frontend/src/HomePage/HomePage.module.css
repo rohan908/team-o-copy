@@ -1,0 +1,45 @@
+
+
+.container {
+  transition: all 2000ms ease;
+  width: 100%;
+}
+
+.leftColumn {
+  transition: all 2000ms ease;
+}
+
+.rightColumn {
+  transition: all 2000ms ease;
+}
+
+.expanded {
+  transition: all 2000ms ease;
+}
+
+.expanded .leftColumn {
+  width: 0;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.expanded .rightColumn {
+  width: 100%;
+  padding-left: var(--mantine-spacing-xl);
+  padding-right: var(--mantine-spacing-xl);
+}
+
+.notExpanded {
+    transition: all 2000ms ease;
+}
+
+.notExpanded .leftColumn {
+  width: 20%;
+  opacity: 1;
+}
+
+.notExpanded .rightColumn {
+  width: 50%;
+}

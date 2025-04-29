@@ -8,11 +8,14 @@ import { useJsApiLoader } from '@react-google-maps/api';
 import { DisclaimerPopup } from './Disclaimer/DisclaimerPopup.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
-
+import styles from './HomePage.module.css';
+import { useNavigate } from 'react-router-dom';
 export function HomePage() {
     const theme = useMantineTheme();
 
     const NavSelection = useNavSelectionContext();
+
+    const navigate = useNavigate();
 
     const {
         setActiveSection,
@@ -23,6 +26,16 @@ export function HomePage() {
         setSelectedService,
         setSelectedAlgorithm,
     } = useTimeline();
+
+    const [isExpanding, setIsExpanding] = useState(false);
+
+    const handleExpand = (state: boolean, route: string): void => {
+        setIsExpanding(state);
+
+        setTimeout(() => {
+            navigate(route);
+        }, 2000);
+    };
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -67,12 +80,19 @@ export function HomePage() {
             }}
             h="100%"
             w="100%"
+            mih={'100vh'}
             p="xl"
         >
             <DisclaimerPopup />
-            <Grid gutter="md" h="100%" mt={'2%'}>
+            <Grid
+                gutter="md"
+                h="100%"
+                mt={'2%'}
+                className={`${styles.container} ${isExpanding ? styles.expanded : styles.notExpanded}`}
+                grow
+            >
                 {/* Left Context */}
-                <Grid.Col span={6} pl="5%" p="xl">
+                <Grid.Col className={styles.leftColumn} pl="5%" p="xl" span={isExpanding ? 0 : 6}>
                     <Stack justify="flex-start" h="100%" align="flex-start">
                         <HoverUnderline>
                             <Title
@@ -84,18 +104,12 @@ export function HomePage() {
                                 How Can We Help?
                             </Title>
                         </HoverUnderline>
-                        <CustomTimeline />
+                        <CustomTimeline onExpand={handleExpand} />
                     </Stack>
                 </Grid.Col>
                 {/* Right Content */}
-                <Grid.Col span={5}>
-                    <Flex
-                        h="100%"
-                        w={'100%'}
-                        align="center"
-                        justify="center"
-                        pt="6%"
-                    >
+                <Grid.Col className={styles.rightColumn} span={isExpanding ? 10 : 6}>
+                    <Flex h="100%" w={'100%'} align="center" justify="center" pt="6%">
                         <ContentSwitcher />
                     </Flex>
                 </Grid.Col>

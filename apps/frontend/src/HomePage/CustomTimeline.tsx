@@ -21,16 +21,23 @@ import { ModeOfTravelSelector } from './ModeOfTravelSelector.tsx';
 import { AlgorithmSelector } from './AlgorithmSelector.tsx';
 import { useUser } from '@clerk/clerk-react';
 import { useMemo } from 'react';
-import {TravelSelectorButtons} from "../common-compoents/TravelSelectorButtons.tsx";
+import { TravelSelectorButtons } from '../common-compoents/TravelSelectorButtons.tsx';
 
-export const CustomTimeline = () => {
+export const CustomTimeline = ({
+    onExpand,
+}: {
+    onExpand: (state: boolean, route: string) => void;
+}) => {
     const theme = useMantineTheme();
     const { activeSection: originalActiveSection, setActiveSection } = useTimeline();
     const { isSignedIn } = useUser();
 
+    const handleExpand = (route: string) => {
+        onExpand(true, route);
+    };
+
     //FILL IN CONTENT HERE FOR EACH SUBSECTION
 
-    // TODO: redo the form so instead it passes the necessary context to each component and then those components have a onChange{(value) => set...(value | '')}
     const getCurrTabContent = (i: number) => {
         switch (i) {
             case 0: //Go To Hospital (GMAPS)
@@ -38,13 +45,15 @@ export const CustomTimeline = () => {
                     <Stack gap={2} w="100%">
                         <GmapsStartSelector />
                         <GmapsDestinationSelector />
-                        <TravelSelectorButtons w={"50px"} h={"50px"}/>
+                        <TravelSelectorButtons w={'50px'} h={'50px'} />
                         <Flex justify={'end'}>
-                            <Link to="map-API">
-                                <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>
-                                    Expand Directions
-                                </Button>
-                            </Link>
+                            <Button
+                                bg={theme.colors.secondaryBlues[7]}
+                                fw={'300'}
+                                onClick={() => handleExpand('map-API')}
+                            >
+                                Expand Directions
+                            </Button>
                         </Flex>
                         {/*<Link to="log-in-page">
                             <Button>Temp nav to old login page</Button>
@@ -55,16 +64,18 @@ export const CustomTimeline = () => {
                 return (
                     <Stack gap={2}>
                         <Flex direction="column" justify="center" align="center">
-                          <ParkingSelector hasIcon={true} w={"100%"}/>
-                          <DepartmentSelector hasIcon={true} w={"100%"}/>
-                          {/*<AlgorithmSelector  hasIcon={true} w={"100%"}/>*/}
+                            <ParkingSelector hasIcon={true} w={'100%'} />
+                            <DepartmentSelector hasIcon={true} w={'100%'} />
+                            {/*<AlgorithmSelector  hasIcon={true} w={"100%"}/>*/}
                         </Flex>
                         <Flex justify={'end'}>
-                            <Link to="IndoorMapPage">
-                                <Button bg={theme.colors.secondaryBlues[7]} fw={'300'}>
-                                    Expand Directions
-                                </Button>
-                            </Link>
+                            <Button
+                                bg={theme.colors.secondaryBlues[7]}
+                                fw={'300'}
+                                onClick={() => handleExpand('IndoorMapPage')}
+                            >
+                                Expand Directions
+                            </Button>
                         </Flex>
                     </Stack>
                 );
