@@ -36,15 +36,15 @@ export const MapAPIPage = () => {
     }
     return (
       <Box w="100%" bg="primaryBlues.0">
-        <Box w="99.3%" h="100%" mih="100vh" bg="primaryBlues.0">
+        <Box w="99.3%" h="100%" mih="101.2vh" bg="primaryBlues.0">
           <Grid>
             <Grid.Col span="content">
               <Flex direction="row" align="center" justify="center" mt="15%">
-                <Stack gap={2} w="250px" ml="5%" mt="8%" align="center">
-                  <Title order={1} fz='lg' mt='8px' ta='center' c='#0E3B99'>
-                    Navigate to Hospital
-                  </Title>
-                  <Divider color="yellowAccent.4" w="100%" size="xs" mt="xs" mb="xs"/>
+                <Stack gap={2} w="250px" ml="5%" mt="15%" align="center">
+                  {/*<Title order={1} fz='lg' ta='center' c='#0E3B99'>*/}
+                  {/*  Navigate to Hospital*/}
+                  {/*</Title>*/}
+                  {/*<Divider color="yellowAccent.4" w="100%" size="xs" mt="xs" mb="xs"/>*/}
                   <Flex direction="row" gap="xs">
                     <IconHomeFilled size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
                     <GmapsStartSelector hasIcon={false} w="100%"/>

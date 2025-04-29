@@ -37,12 +37,12 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
               h={props.h}
               ValueToCheck={travelMode.toString()}
               ValueForTrigger={google.maps.TravelMode.DRIVING.toString()}
-              firstColor="primaryBlues.9"
-              secondColor="secondaryBlues.5"
+              firstColor="primaryBlues.3"
+              secondColor="primaryBlues.0"
               borderRadius="30px"
               size="compact-xs"
               onClick={() => setTravelMode(google.maps.TravelMode.DRIVING)}>
-              <IconCar size={24}/>
+              <IconCar size={24} color="#1d45ad"/>
             </ColorChangingButton>
           </Box>
         </Tooltip>
@@ -53,12 +53,12 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
               h={props.h}
               ValueToCheck={travelMode.toString()}
               ValueForTrigger={google.maps.TravelMode.WALKING.toString()}
-              firstColor="primaryBlues.9"
-              secondColor="secondaryBlues.5"
+              firstColor="primaryBlues.3"
+              secondColor="primaryBlues.0"
               borderRadius="30px"
               size="compact-xs"
               onClick={() => setTravelMode(google.maps.TravelMode.WALKING)}>
-              <IconWalk size={24} />
+              <IconWalk size={24} color="#1d45ad"/>
             </ColorChangingButton>
           </Box>
         </Tooltip>
@@ -69,12 +69,12 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
               h={props.h}
               ValueToCheck={travelMode.toString()}
               ValueForTrigger={google.maps.TravelMode.TRANSIT.toString()}
-              firstColor="primaryBlues.9"
-              secondColor="secondaryBlues.5"
+              firstColor="primaryBlues.3"
+              secondColor="primaryBlues.0"
               size="compact-xs"
               onClick={() => setTravelMode(google.maps.TravelMode.TRANSIT)}
               borderRadius="30px">
-              <IconTrain size={24} />
+              <IconTrain size={24} color="#1d45ad"/>
             </ColorChangingButton>
           </Box>
         </Tooltip>
@@ -85,12 +85,12 @@ export const TravelSelectorButtons: React.FC<TravelSelectorButtonProps> = (props
               h={props.h}
               ValueToCheck={travelMode.toString()}
               ValueForTrigger={google.maps.TravelMode.BICYCLING.toString()}
-              firstColor="primaryBlues.9"
-              secondColor="secondaryBlues.5"
+              firstColor="primaryBlues.3"
+              secondColor="primaryBlues.0"
               size="compact-xs"
               onClick={() => setTravelMode(google.maps.TravelMode.BICYCLING)}
               borderRadius="30px">
-              <IconBike size={24} />
+              <IconBike size={24} color="#1d45ad"/>
             </ColorChangingButton>
           </Box>
         </Tooltip>
