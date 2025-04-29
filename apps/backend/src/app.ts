@@ -14,7 +14,7 @@ import { API_ROUTES } from 'common/src/constants';
 import UpdateLoginsRoute from './routes/UpdateLoginsRoute.ts';
 const cors = require('cors');
 const app: Express = express(); // Setup the backend
-
+import employeeRoute from './routes/EmployeeRoute.ts';
 // Setup generic middlewear
 app.use(
     logger('dev', {
@@ -30,6 +30,7 @@ app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
 app.use('/api', UpdateLoginsRoute);
+app.use('/api/employees', employeeRoute);
 /*
   Setup routers. ALL ROUTERS MUST use /api as a start point, or they
   won't be reached by the default proxy and prod setup.
