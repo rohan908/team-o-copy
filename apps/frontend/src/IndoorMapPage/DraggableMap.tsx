@@ -49,27 +49,31 @@ export function DraggableMap() {
     const floorHeight = 10.5;
 
     // set up map
-    const { cameraRef, rendererRef, scenesRef } = mapSetup({
+    const { cameraRef, rendererRef, scenesRef, controlRef } = mapSetup({
         canvasId: 'insideMapCanvas',
     });
 
     const handleHospitalChange = (hospitalName: string) => {
         if (hospitalName === '20 Patriot Pl' || hospitalName === '22 Patriot Pl') {
             if (sceneIndexState !== 0) {
+                // handle default state
                 clearSceneObjects(scenesRef.current);
                 handleThreeDHospitalChange();
                 setSceneIndexState(0);
             }
         } else if (hospitalName === 'Chestnut Hill') {
             clearSceneObjects(scenesRef.current);
+            handleTwoDHospitalChange();
             setSceneIndexState(3);
             setFloorState(1); // Assuming Chestnut Hill starts at floor 1
         } else if (hospitalName === 'Faulkner Hospital') {
             clearSceneObjects(scenesRef.current);
+            handleTwoDHospitalChange();
             setSceneIndexState(4);
             setFloorState(1);
         } else if (hospitalName === 'BWH Campus') {
             clearSceneObjects(scenesRef.current);
+            handleTwoDHospitalChange();
             setSceneIndexState(5);
             setFloorState(1);
         }
@@ -243,8 +247,15 @@ export function DraggableMap() {
         directionalLight.position.set(20, 20, 20);
         scenesRef.current[0].add(directionalLight);
 
-        // camera
-        //controlRef.current.enableRotate = false;
+        // enable orbiting
+        controlRef.current.enableRotate = true;
+    };
+
+    const handleTwoDHospitalChange = () => {
+        controlRef.current.enableRotate = false;
+        // reset the camera position
+        cameraRef.current.position.set(0, 0, 330);
+        cameraRef.current?.lookAt(0, 0, 0);
     };
 
     // handles changes to the hospital from the navSelection context
@@ -320,20 +331,20 @@ export function DraggableMap() {
     // gets id of parking lot node -> hardcoded for now
     const findParkingLot = (): number | null => {
         if (selectedHospitalName === '20 Patriot Pl' || selectedHospitalName === '22 Patriot Pl') {
-            return allNodes.find(element =>
-                element.nodeType == 'parking-lot' && element.mapId == 1
+            return allNodes.find(
+                (element) => element.nodeType == 'parking-lot' && element.mapId == 1
             )?.id;
         } else if (selectedHospitalName === 'Chestnut Hill') {
-            return allNodes.find(element =>
-                element.nodeType == 'parking-lot' && element.mapId == 2
+            return allNodes.find(
+                (element) => element.nodeType == 'parking-lot' && element.mapId == 2
             )?.id;
         } else if (selectedHospitalName === 'Faulkner Hospital') {
-            return allNodes.find(element =>
-                element.nodeType == 'parking-lot' && element.mapId == 3
+            return allNodes.find(
+                (element) => element.nodeType == 'parking-lot' && element.mapId == 3
             )?.id;
         } else if (selectedHospitalName === 'BWH Campus') {
-            return allNodes.find(element =>
-                element.nodeType == 'parking-lot' && element.mapId == 4
+            return allNodes.find(
+                (element) => element.nodeType == 'parking-lot' && element.mapId == 4
             )?.id;
         }
         return null;

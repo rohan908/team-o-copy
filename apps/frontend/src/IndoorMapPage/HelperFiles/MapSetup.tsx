@@ -64,6 +64,7 @@ export function mapSetup(config: MapConfig) {
         renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         rendererRef.current = renderer;
+        renderer.setClearColor(new THREE.Color(0xebf2ff)); // set background color
 
         // create scenes
         scenesRef.current = createAllScenes();

@@ -81,7 +81,6 @@ export function MapEditor() {
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const sceneIndexRef = useRef(sceneIndexState);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
 
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
