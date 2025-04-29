@@ -59,18 +59,18 @@ export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
             icon: <IconBellExclamation stroke={2} size={120} />,
             form: () => <MaintenanceSR onBack={() => setActiveFormIndex(null)} />,
         },
-        {
-            labelOne: 'Type 5',
-            labelTwo: '',
-            icon: <IconExclamationCircleFilled size={120} />,
-            disabled: true,
-        },
-        {
-            labelOne: 'Type 6',
-            labelTwo: '',
-            icon: <IconExclamationCircleFilled size={120} />,
-            disabled: true,
-        },
+        // {
+        //     labelOne: 'Type 5',
+        //     labelTwo: '',
+        //     icon: <IconExclamationCircleFilled size={120} />,
+        //     disabled: true,
+        // },
+        // {
+        //     labelOne: 'Type 6',
+        //     labelTwo: '',
+        //     icon: <IconExclamationCircleFilled size={120} />,
+        //     disabled: true,
+        // },
     ];
     // rendering the form to replace the page
     if (activeFormIndex !== null) {

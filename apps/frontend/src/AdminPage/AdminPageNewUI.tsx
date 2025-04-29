@@ -415,7 +415,7 @@ export function AdminPageV2() {
                                             borderRadius: '15px',
                                         }}
                                     >
-                                        <ServiceRequestPage width={"100%"} marginRight={"0%"} height={"80vh"} cols={3} hSpacing={30} vSpacing={10} buttonHeight={220}/>
+                                        <ServiceRequestPage width={"100%"} marginRight={"0%"} height={"80vh"} cols={2} hSpacing={50} vSpacing={50} buttonHeight={220}/>
                                     </Box>
                                 </Collapse>
                             </Flex>
