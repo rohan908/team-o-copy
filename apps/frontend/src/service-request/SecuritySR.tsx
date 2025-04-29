@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Modal } from '@mantine/core';
 import RequestForm, { RequestData } from './RequestForm.tsx';
 import SecuritySelect from './components/SecuritySelect';
 import Display from './Display.tsx';
@@ -55,25 +54,13 @@ function Security({ onBack }: { onBack: () => void }) {
 
     if (submittedData) {
         return (
-            <Modal
-                opened={true}
-                onClose={() => {
+            <Display
+                data={submittedData}
+                onBack={() => {
                     setSubmittedData(null);
                     onBack();
                 }}
-                size="md"
-                title="Request Submitted"
-                centered
-                withCloseButton={false}
-            >
-                <Display
-                    data={submittedData}
-                    onBack={() => {
-                        setSubmittedData(null);
-                        onBack();
-                    }}
-                />
-            </Modal>
+            />
         );
     }
 
