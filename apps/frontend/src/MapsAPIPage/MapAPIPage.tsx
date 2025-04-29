@@ -16,6 +16,7 @@ import {IconBuildings, IconDotsVertical, IconHome, IconHomeFilled, IconMapPin} f
 
 export const MapAPIPage = () => {
     const {
+        userStart,
         userCoordinates,
         travelMode,
         selectedHospital,
@@ -64,7 +65,7 @@ export const MapAPIPage = () => {
                     <DepartmentSelector hasIcon={false} w={"100%"}/>
                   </Flex>
                   <TravelSelectorButtons w="35px" h="35px"/>
-                  <DirectionsBox steps={steps} />
+                  {userCoordinates && selectedHospital ? <DirectionsBox steps={steps} /> : <DirectionsBox steps={[]} />}
                 </Stack>
               </Flex>
             </Grid.Col>

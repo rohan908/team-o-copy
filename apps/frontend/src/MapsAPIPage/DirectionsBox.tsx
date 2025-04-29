@@ -73,7 +73,7 @@ return (
                   <TTSButton text={[speechText]}/>
                 </Box>
               </Flex>
-              <ScrollArea h={200} w="100%">
+              <ScrollArea h={235} w="100%">
                 <List type="ordered" mt="sm" w="100%">
                   {steps.map((step, index) => {
                     const text = parseHTMLtoText(step.instruction);

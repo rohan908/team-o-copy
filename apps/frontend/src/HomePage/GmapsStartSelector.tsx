@@ -14,9 +14,10 @@ export function GmapsStartSelector(props:GmapsStartSelectorProps) {
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
     const { setUserCoordinates, setUserStart, userStart } = useTimeline();
     const input = useRef<HTMLInputElement>(null);
+
     //initialize only when the box is not collapsed or has input
     useEffect(() => {
-        if (!input.current) return;
+        if (!input.current) setUserCoordinates(null);
 
         //if previous instance of autocompleteRef exits, then clear it for re initialization
         if (autocompleteRef.current) {

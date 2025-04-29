@@ -26,7 +26,7 @@ export const hospitalOptions = [
 ];
 
 export function GmapsDestinationSelector(props:GmapsDestinationSelectorProps) {
-    const { setSelectedHospital, setDirectoryOptions } = useTimeline();
+    const { setSelectedHospital, setDepartment, setDirectoryOptions } = useTimeline();
 
     const theme = useMantineTheme();
 
@@ -45,6 +45,7 @@ export function GmapsDestinationSelector(props:GmapsDestinationSelectorProps) {
 
     const setHospitalLocation = (hospital: string | null) => {
         setSelectedHospital(hospital);
+        setDepartment(null);
         if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
             setDirectoryOptions(MapDepartment(Patriot));
         } else if (hospital == 'Chestnut Hill') {
