@@ -14,7 +14,7 @@ export function ThreeDMap() {
         cameraConfig: {
             fov: 45,
             near: 0.1,
-            far: 10000, // Increased far plane for large models
+            far: 10000,
             position: { x: 0, y: 0, z: 10 }, // Start further back
         },
     });
@@ -64,44 +64,6 @@ export function ThreeDMap() {
                 console.error('Error loading 3D model:', error);
             }
         );
-    };
-
-    const handlePath = (firstNodeId: number, lastNodeId: number, algo: string) => {
-        const path = findPath(firstNodeId, lastNodeId, algo).then(async (pathres) => {
-            const ids = pathres.result.pathIDs;
-            // Add dispatch for navSelection
-            navSelection.dispatch({
-                type: 'SET_PATH_REQUEST',
-                data: { NodeIds: ids },
-            });
-            // For each node id in the path
-
-            for (const id of ids) {
-                // Get the full node from the ID
-                const node = getNode(id, allNodes);
-                if (node) {
-                    createNode(node, scenesRef.current); //Create the node from its data
-                } else {
-                    console.error('Node id not found: ', id);
-                }
-                const connectedNodeIds = node?.connectingNodes; // list of the connected nodes "connections" data including the IDs and Weights
-                if (connectedNodeIds) {
-                    for (const connectedNodeId of connectedNodeIds) {
-                        // iterate over each connected node. This could probably be simplified because this is a path and we are guarenteed either 1 or 2 connections
-                        const connectedNode = getNode(connectedNodeId, allNodes);
-                        if (connectedNode) {
-                            // If the connected node is in the path
-                            // TODO: Add another check that makes it so duplicate edge objects aren't created
-                            if (ids.includes(connectedNode.id)) {
-                                createEdge(node, connectedNode);
-                            }
-                        } else {
-                            console.error('Node id not found: ', connectedNodeId);
-                        }
-                    }
-                }
-            }
-        });
     };
 
     // Load 3D model

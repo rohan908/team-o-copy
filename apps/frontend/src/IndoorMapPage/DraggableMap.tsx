@@ -14,11 +14,12 @@ import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { PathPickerBox } from './Components/PathPickerBox.tsx';
 import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
-import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
+import { clearSceneObjects, clearPathObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 export function DraggableMap() {
     /*
@@ -51,8 +52,29 @@ export function DraggableMap() {
         canvasId: 'insideMapCanvas',
     });
 
+    const handleThreeDHospitalChange = () => {
+        addObject('../../public/Models/Floor 1 Floor.obj', 0, 'floor');
+        addObject('../../public/Models/Floor 1 Walls.obj', 0, 'walls');
+        addObject('../../public/Models/Floor 2 Floor.obj', 1, 'floor');
+        addObject('../../public/Models/Floor 2 Walls.obj', 1, 'walls');
+        addObject('../../public/Models/Floor 3 Floor.obj', 2, 'floor');
+        addObject('../../public/Models/Floor 3 Walls.obj', 2, 'walls');
+        addObject('../../public/Models/Floor 4 Floor.obj', 3, 'floor');
+        addObject('../../public/Models/Floor 4 Walls.obj', 3, 'walls');
+
+        // lighting
+        const ambientLight = new THREE.AmbientLight(0xebf2ff, 0.5);
+        scenesRef.current[0].add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(20, 20, 20);
+        scenesRef.current[0].add(directionalLight);
+    };
+
     const handleHospitalChange = (hospitalName: string) => {
+        clearSceneObjects(scenesRef.current);
         if (hospitalName === '20 Patriot Pl' || hospitalName === '22 Patriot Pl') {
+            handleThreeDHospitalChange();
             setSceneIndexState(0);
             setFloorState(1);
         } else if (hospitalName === 'Chestnut Hill') {
@@ -149,6 +171,49 @@ export function DraggableMap() {
         });
     };
 
+    // handles adding 3D models to a scene
+    const addObject = (src: string, zIndex: number, objectType: string) => {
+        const loader = new OBJLoader();
+
+        loader.load(
+            src,
+            function (object) {
+                console.log('Model loaded successfully', object);
+
+                const scale = 2.3;
+                object.scale.set(scale, scale, scale);
+                object.position.x = 6.5;
+                object.position.y = -47.5;
+                object.position.z = zIndex * 10.5;
+
+                // different colors for floors and walls
+                if (objectType == 'floor') {
+                    object.traverse(function (child: { material: THREE.MeshStandardMaterial }) {
+                        child.material = new THREE.MeshStandardMaterial({
+                            color: 0xffffff,
+                        });
+                    });
+                } else if (objectType == 'walls') {
+                    object.traverse(function (child: { material: THREE.MeshStandardMaterial }) {
+                        child.material = new THREE.MeshStandardMaterial({
+                            color: 0xa2c2f7,
+                        });
+                    });
+                } else {
+                    console.error('objectType not found');
+                }
+
+                scenesRef.current[0].add(object);
+            },
+            function (xhr) {
+                console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
+            },
+            function (error) {
+                console.error('Error loading 3D model:', error);
+            }
+        );
+    };
+
     // handles changes to the hospital from the navSelection context
     useEffect(() => {
         handleHospitalChange(selectedHospitalName!);
@@ -160,7 +225,7 @@ export function DraggableMap() {
         const lastNodeId = getLastNodeId(); // destination node
 
         // clear previous path
-        clearSceneObjects(scenesRef.current);
+        clearPathObjects(scenesRef.current);
 
         console.log('finding path:', firstNodeId, lastNodeId);
         let algorithm = 'BFS'; // default to BFS if not selected
@@ -172,6 +237,7 @@ export function DraggableMap() {
         }
     }, [selectedDepartment, selectedAlgorithm]);
 
+    // this useEffect runs only on mount and initializes some things.
     useEffect(() => {
         // Initialize path animation
         animationRef.current = new FlowingTubeAnimation({
@@ -180,6 +246,8 @@ export function DraggableMap() {
             flowSpeed: 2,
             pulseFrequency: 0.5,
         });
+        // Patriot Place is the default so we have to load all the 3D mapping stuff on init
+        handleThreeDHospitalChange();
     }, []);
 
     // gets Id for destination node

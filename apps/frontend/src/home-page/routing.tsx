@@ -74,23 +74,21 @@ export function Routing() {
 
                         <Route path="/IndoorMapPage" element={<IndoorMapsPage />} />
 
-                            <Route
-                                path="/map-editor"
-                                element={<ProtectedRoute Route={<MapEditor />} />}
-                            />
-                            <Route
-                                path="/admin-page"
-                                element={<ProtectedRoute Route={<AdminPageV2 />} />}
-                            />
-                            <Route path="/HomePage/HomePage" element={<HomePage />} />
-                            <Route
-                                path="/language-request-history"
-                                element={<ProtectedRoute Route={<LanguageRequestHistory />} />}
-                            />
-                            <Route path="/ThreeDMap" element={<ThreeDMap />} />
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
+                        <Route
+                            path="/map-editor"
+                            element={<ProtectedRoute Route={<MapEditor />} />}
+                        />
+                        <Route
+                            path="/admin-page"
+                            element={<ProtectedRoute Route={<AdminPageV2 />} />}
+                        />
+                        <Route path="/HomePage/HomePage" element={<HomePage />} />
+                        <Route
+                            path="/language-request-history"
+                            element={<ProtectedRoute Route={<LanguageRequestHistory />} />}
+                        />
+                    </Route>
+                </Routes>
             </TimelineProvider>
         </>
     );
