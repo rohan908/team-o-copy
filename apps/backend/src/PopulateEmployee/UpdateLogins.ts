@@ -37,6 +37,7 @@ async function UpdateLogins() {
 }
 export default UpdateLogins;
 
+/*
 // run UpdateLogins w/ error detection
 UpdateLogins()
     .catch((e) => {
@@ -46,3 +47,4 @@ UpdateLogins()
     .finally(async () => {
         await prisma.$disconnect();
     });
+*/
