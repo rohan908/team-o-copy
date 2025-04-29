@@ -48,6 +48,7 @@ export function MapEditor() {
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer');
     const [mapTool, setMapTool] = useState('');
+    const [objToReselect, setObjToReselect] = useState<THREE.Object3D>();
 
     // clerk const's
     const { user, isSignedIn } = useUser();
@@ -567,14 +568,14 @@ export function MapEditor() {
         // new node positon
         if (intersects.length == 0) {
             const point = raycaster.intersectObjects(
-                scenesRef.current[sceneIndexState].children,
+                scenesRef.current[sceneIndexRef.current].children,
                 true
             );
 
             const posX = point[0].point.x;
             const posY = point[0].point.y;
 
-            const { floor, mapID } = getFloorAndMapIDFromSceneIndex(sceneIndexState);
+            const { floor, mapID } = getFloorAndMapIDFromSceneIndex(sceneIndexRef.current);
 
             const newNode: DirectoryNodeItem = {
                 id: getUnusedNodeId(),
@@ -735,6 +736,8 @@ export function MapEditor() {
                         }
                     }
 
+                    setObjToReselect(selectedObjects.current[0]);
+
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
                     });
@@ -745,6 +748,24 @@ export function MapEditor() {
             }
         }
     };
+
+    useEffect(() => {
+        if(objToReselect instanceof THREE.Mesh &&
+            objToReselect.material instanceof THREE.MeshBasicMaterial) {
+            if (selectedObjects.current.length == 0) {
+                objToReselect.material.color.set(selectedNodeColor);
+                objToReselect.material.needsUpdate = true;
+                selectedObjects.current.push(objToReselect);
+
+                setCurrentNodeData(
+                    nodeRef.current.find((element) => element.id === objToReselect.userData.nodeId)
+                );
+
+                render();
+            }
+        }
+        setObjToReselect(undefined);
+    }, [objToReselect]);
 
     const deleteCascadingEdges = (objectToRemove: THREE.Object3D<Object3DEventMap>) => {
         // remove all edges where this is the startID

@@ -50,6 +50,7 @@ const FloorConnectionBox = () => {
 
     useEffect(() => {
         floorEntryData();
+        console.log(mapProps.currentNode)
     }, [mapProps.currentNode]);
 
     const floorEntryData = () => {
@@ -94,10 +95,10 @@ const FloorConnectionBox = () => {
         return (
             <Box
                 p="sm"
+                miw='300px'
+                bg='#ebf2ff'
                 style={{
                     width: 'fit-content',
-                    minWidth: '300px',
-                    backgroundColor: '#ebf2ff',
                     boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
                     borderRadius: 24,
                     zIndex: 999,
@@ -132,10 +133,10 @@ const FloorConnectionBox = () => {
         return (
             <Box
                 p="sm"
+                miw='300px'
+                bg='#ebf2ff'
                 style={{
                     width: 'fit-content',
-                    minWidth: '300px',
-                    backgroundColor: '#ebf2ff',
                     boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
                     borderRadius: 24,
                     zIndex: 999,

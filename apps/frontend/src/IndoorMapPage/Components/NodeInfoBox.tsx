@@ -27,34 +27,16 @@ const NodeInfoBox = () => {
 
     const [nodeInfoOpen, setNodeInfoOpen] = useState(false);
     const [expandInfo, setExpandInfo] = useState(false);
-    const [isFloorEdge, setIsFloorEdge] = useState(false);
 
     const toggleMoreInfo = () => {
-        if (expandInfo) {
-            setExpandInfo(false);
-        } else {
-            setExpandInfo(true);
-        }
-    };
-
-    const checkNodeType = () => {
-        if (
-            mapProps.currentNode?.nodeType == 'staircase' ||
-            mapProps.currentNode?.nodeType == 'elevator'
-        ) {
-            setIsFloorEdge(true);
-        } else {
-            setIsFloorEdge(false);
-        }
+        setExpandInfo(!expandInfo);
     };
 
     useEffect(() => {
-        checkNodeType();
         if (mapProps.currentNode) {
             setNodeInfoOpen(true);
         } else {
             setNodeInfoOpen(false);
-            setExpandInfo(false);
         }
     }, [mapProps.currentNode]);
 
@@ -219,7 +201,7 @@ const NodeInfoBox = () => {
                     </Box>
                 </Collapse>
                 <Collapse
-                    in={expandInfo}
+                    in={expandInfo && nodeInfoOpen}
                     transitionDuration={250}
                     transitionTimingFunction="linear"
                 >
