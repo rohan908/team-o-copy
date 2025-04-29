@@ -97,7 +97,6 @@ export function NavBar() {
 
                                     {/* Log In Button (only when logged out) */}
                                     {!isSignedIn &&
-                                        role === 'admin' &&
                                         loginItems.map((item, index) => (
                                             <MantineProvider
                                                 key={index}
@@ -117,7 +116,25 @@ export function NavBar() {
                                                 </SignInButton>
                                             </MantineProvider>
                                         ))}
-
+                                    {/* Log Out Button (for staff) */}
+                                    {isSignedIn && role === 'staff' && (
+                                        <MantineProvider theme={{ activeClassName: '' }}>
+                                            <SignOutButton>
+                                                <Button
+                                                    variant="filled"
+                                                    color="baseBlue.6"
+                                                    className="LoggoutButton"
+                                                    justify="flex-end"
+                                                    component={Link}
+                                                    to="/"
+                                                    size="sm"
+                                                    style={{ borderRadius: '8px' }}
+                                                >
+                                                    Log Out
+                                                </Button>
+                                            </SignOutButton>
+                                        </MantineProvider>
+                                    )}
                                     {/* Admin Buttons and Log Out (only when logged in) */}
                                     {isSignedIn && role === 'admin' && (
                                         <>
