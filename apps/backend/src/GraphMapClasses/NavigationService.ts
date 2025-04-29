@@ -25,7 +25,7 @@ export class NavigationService {
         const databaseNodes = await PrismaClient.node.findMany({});
         const databaseEdges = await PrismaClient.edge.findMany({});
         const path = await this.getAlgo();
-        if (path) this.pathFindAlgo = path!.algoID;
+        if (path) this.pathFindAlgo = path.algoID;
 
         this.graph.nodes.forEach((node) => {
             this.graph.removeNode(node.data);
@@ -50,7 +50,7 @@ export class NavigationService {
         const databaseNodes = await PrismaClient.node.findMany({});
         const databaseEdges = await PrismaClient.edge.findMany({});
         const path = await this.getAlgo();
-        if (path) this.pathFindAlgo = path!.algoID;
+        if (path) this.pathFindAlgo = path.algoID;
 
         databaseNodes.forEach((databaseNode) => {
             this.executeGraphCommand('nodeAdd', databaseNode);
@@ -67,7 +67,8 @@ export class NavigationService {
 
     public setPathFinderAlgo() {
         const pathAlgo: string = ALGORITHM[this.pathFindAlgo];
-
+        console.log('this.pathFindAlgo', this.pathFindAlgo);
+        console.log('in setPathFinerAlgo and the algo is: ', pathAlgo);
         if (
             (pathAlgo === 'BFS' && this.pathFinder instanceof BFSPathFinder) ||
             (pathAlgo === 'AStar' && this.pathFinder instanceof AStarPathFinder) ||
@@ -147,6 +148,7 @@ export class NavigationService {
                 algoID: pathAlgoID,
             },
         });
+        const update = await this.reinitialize();
         return;
     }
 
