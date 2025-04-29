@@ -13,7 +13,7 @@ import {
     Button,
     Paper,
 } from '@mantine/core';
-import { IconFilter } from '@tabler/icons-react';
+import Filter from './Filter.tsx';
 
 // Type-safe interface for request data
 interface RequestProps {
@@ -121,16 +121,7 @@ export function RequestHistory({ requestType }: { requestType: string }) {
             <Text c="secondaryBlues.7" ta="left" mb="xl" fz="xxs">
                 Click on a row to find out more information
             </Text>
-            <Button
-                leftSection={<IconFilter />}
-                radius="md"
-                bg="yellowAccent.4"
-                fw="400"
-                m="xs"
-                c="secondaryBlues.7"
-            >
-                Filters
-            </Button>
+            <Filter />
 
             <ScrollArea type="scroll" offsetScrollbars scrollbarSize={6}>
                 <Table
