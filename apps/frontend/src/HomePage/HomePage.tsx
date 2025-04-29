@@ -34,7 +34,7 @@ export function HomePage() {
 
         setTimeout(() => {
             navigate(route);
-        }, 2000);
+        }, 1000);
     };
 
     const { isLoaded } = useJsApiLoader({

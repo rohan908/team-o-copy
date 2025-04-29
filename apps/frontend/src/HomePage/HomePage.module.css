@@ -1,20 +1,20 @@
 
 
 .container {
-  transition: all 2000ms ease;
+  transition: all 1000ms ease;
   width: 100%;
 }
 
 .leftColumn {
-  transition: all 2000ms ease;
+  transition: all 1000ms ease;
 }
 
 .rightColumn {
-  transition: all 2000ms ease;
+  transition: all 1000ms ease;
 }
 
 .expanded {
-  transition: all 2000ms ease;
+  transition: all 1000ms ease;
 }
 
 .expanded .leftColumn {
@@ -32,7 +32,7 @@
 }
 
 .notExpanded {
-    transition: all 2000ms ease;
+    transition: all 1000ms ease;
 }
 
 .notExpanded .leftColumn {
