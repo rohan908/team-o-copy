@@ -3,6 +3,15 @@ import { Box, ScrollArea, Text, List, Button, Divider, Transition, Flex } from '
 import { Step } from './Steps';
 import { Link } from 'react-router-dom';
 import TTSButton from "../Buttons/TTSButton.tsx"; //use ive arrived button to direct to indoor
+import {
+  IconArrowBearRight,
+  IconArrowLeft,
+  IconArrowMerge,
+  IconArrowRight,
+  IconArrowUp,
+  IconQuestionMark,
+  IconStairs,
+} from '@tabler/icons-react';
 
 interface Props {
     steps: Step[];
@@ -66,23 +75,43 @@ return (
               </Flex>
               <ScrollArea h={200} w="100%">
                 <List type="ordered" mt="sm" w="100%">
-                  {steps.map((step, index) => (
+                  {steps.map((step, index) => {
+                    const text = parseHTMLtoText(step.instruction);
+                    const icon = text.toLowerCase().includes('continue') ? (
+                      <IconArrowUp size={20} color="#0E3B99"/>
+                    ) : text.toLowerCase().includes('head') ? (
+                      <IconArrowUp size={20} color="#0E3B99"/>
+                    ) : text.toLowerCase().includes('merge') ? (
+                      <IconArrowMerge size={20} color="#0E3B99"/>
+                    ) : text.toLowerCase().includes('take') ? (
+                      <IconArrowBearRight size={20} color="#0E3B99"/>
+                    ) : text.toLowerCase().includes('left') ? (
+                      <IconArrowLeft size={20} color="#0E3B99"/>
+                    ) : text.toLowerCase().includes('right') ? (
+                      <IconArrowRight size={20} color="#0E3B99"/>
+                    ) : (<IconQuestionMark size={20} color="#0E3B99"/>);
+
+                    return (
                     <List.Item key={index} w="100%">
-                      <Text w="100%" size="xs" my='3px' color="#1C43A7" ta="left">
-                        {parseHTMLtoText(step.instruction)}
-                      </Text>
+                      <Flex direction="row" gap="sm" align="center">
+                        {icon}
+                        <Text w="100%" size="xs" my='3px' c="secondaryBlues.5" ta="left">
+                          {text}
+                        </Text>
+                      </Flex>
                       <Divider
                         label={`${step.distance}`}
                         labelPosition="center"
                         w="215px"
                         my="3px"
-                        color="#F6D161" // Line color
+                        color="yellowAccent.4" // Line color
                         styles={{
                           label: {
-                            color: '#000000'} //text color
+                            color: '#000000'
+                          } //text color
                         }}/>
                     </List.Item>
-                  ))}
+                    )})}
                 </List>
               </ScrollArea>
             </Box>
@@ -97,7 +126,7 @@ return (
             {/*  </Button>*/}
             {/*</Box>*/}
             <Box ta='center' mt="md">
-              <Button component={Link} to="/IndoorMapPage" color="#F8D261" size='compact-sm'>
+              <Button component={Link} to="/IndoorMapPage" color="secondaryBlues.5" size='compact-sm'>
                 See Hospital Map
               </Button>
             </Box>

@@ -90,7 +90,7 @@ export function DisplayDirectionsBox() {
     directionsByFloor[direction.Floor].push(direction);
   });
   return (
-    <Box w="80%" h="400px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: nodeIds && nodeIds.length > 1 ? "0px -4px 4px 0px #AAAAAA" : "0px 0px 0px 0px #FFFFFF" }}>
+    <Box w="80%" h="400px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: nodeIds && nodeIds.length > 1 ? "0px 0px 4px 0px #AAAAAA" : "0px 0px 0px 0px #FFFFFF" }}>
       <Box
         style={{overflowY: 'auto'}}
       >
@@ -158,7 +158,7 @@ export function DisplayDirectionsBox() {
                         <Group align="center">
                           <Flex direction="row" gap="sm" align="center">
                             {icon}
-                            <Text size="sm" fw={500} c="blue">
+                            <Text size="sm" fw={500} c="secondaryBlues.5">
                               {label}
                             </Text>
                           </Flex>
