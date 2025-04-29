@@ -1,9 +1,31 @@
-import { TextInputProps, TextInput, Flex, Box } from '@mantine/core';
-import React, { useState } from 'react';
-import SpeechToText from '../../Buttons/SpeechToText.tsx'
+import { Autocomplete, TextInputProps, Flex, Box } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import SpeechToText from '../../Buttons/SpeechToText.tsx';
+
+// add employee type
+type Employee = {
+    name: string;
+};
 
 const NameEntry: React.FC<TextInputProps> = (props) => {
-  const [value, setValue] = useState('');
+    const [value, setValue] = useState('');
+    // adding fetching of names from backend
+    const [data, setData] = useState<string[]>([]);
+
+    // add use effect to fetch
+    useEffect(() => {
+        const fetchNames = async () => {
+            try {
+                console.log('Fetching names...');
+                const response = await fetch('/api/employees');
+                const names: Employee[] = await response.json();
+                setData(names.map((emp) => emp.name));
+            } catch (error) {
+                console.error('Error fetching names.', error);
+            }
+        };
+        fetchNames();
+    }, []);
 
   const handleSpeechResult = (text: string) => {
     setValue(text);
