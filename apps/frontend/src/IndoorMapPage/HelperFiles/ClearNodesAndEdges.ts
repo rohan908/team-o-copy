@@ -7,7 +7,7 @@ export const clearPathObjects = (scenes: THREE.Scene[]) => {
 
         // identify path objects
         scene.traverse((object) => {
-            if (object.userData && object.userData.isPathObject === true) {
+            if (object.userData && object.userData.objectType === 'path') {
                 objectsToRemove.push(object);
             }
         });

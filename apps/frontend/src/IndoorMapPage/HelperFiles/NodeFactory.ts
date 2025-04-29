@@ -25,7 +25,7 @@ export const createNode = (
     sphere.userData.nodeId = node.id;
     sphere.userData.floor = node.floor;
     // This is used so all the path objects can be cleared without clearing 3D models
-    sphere.userData.isPathObject = true;
+    sphere.userData.objectType = 'Path';
     const nodeFloor = node.floor;
     if (nodeFloor === 1) {
         sceneArr[0].add(sphere);

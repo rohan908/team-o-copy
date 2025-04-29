@@ -4,20 +4,18 @@ import { Box } from '@mantine/core';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import { FlowingTubeAnimation } from './Edge.tsx';
 import {
-    usePatriotContext,
+    useAllNodesContext,
+    useBwhCampusContext,
     useChestnutHillContext,
     useFaulknerHospitalContext,
-    useBwhCampusContext,
-    useAllNodesContext,
+    usePatriotContext,
 } from '../contexts/DirectoryContext.js';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
-import { PathPickerBox } from './Components/PathPickerBox.tsx';
 import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
-import { clearSceneObjects, clearPathObjects } from './HelperFiles/ClearNodesAndEdges.ts';
+import { clearPathObjects, clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { createNode } from './HelperFiles/NodeFactory.ts';
-import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
-import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
+import { getNode, mapSetup } from './HelperFiles/MapSetup.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
@@ -43,40 +41,20 @@ export function DraggableMap() {
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
-    const [floorState, setFloorState] = useState(1);
+    const [floorState, setFloorState] = useState(4);
     const [sceneIndexState, setSceneIndexState] = useState(0);
-    const [isFading, setIsFading] = useState(false);
 
     // set up map
     const { cameraRef, rendererRef, scenesRef } = mapSetup({
         canvasId: 'insideMapCanvas',
     });
 
-    const handleThreeDHospitalChange = () => {
-        addObject('../../public/Models/Floor 1 Floor.obj', 0, 'floor');
-        addObject('../../public/Models/Floor 1 Walls.obj', 0, 'walls');
-        addObject('../../public/Models/Floor 2 Floor.obj', 1, 'floor');
-        addObject('../../public/Models/Floor 2 Walls.obj', 1, 'walls');
-        addObject('../../public/Models/Floor 3 Floor.obj', 2, 'floor');
-        addObject('../../public/Models/Floor 3 Walls.obj', 2, 'walls');
-        addObject('../../public/Models/Floor 4 Floor.obj', 3, 'floor');
-        addObject('../../public/Models/Floor 4 Walls.obj', 3, 'walls');
-
-        // lighting
-        const ambientLight = new THREE.AmbientLight(0xebf2ff, 0.5);
-        scenesRef.current[0].add(ambientLight);
-
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(20, 20, 20);
-        scenesRef.current[0].add(directionalLight);
-    };
-
     const handleHospitalChange = (hospitalName: string) => {
         clearSceneObjects(scenesRef.current);
         if (hospitalName === '20 Patriot Pl' || hospitalName === '22 Patriot Pl') {
             handleThreeDHospitalChange();
             setSceneIndexState(0);
-            setFloorState(1);
+            setFloorState(4);
         } else if (hospitalName === 'Chestnut Hill') {
             setSceneIndexState(3);
             setFloorState(1); // Assuming Chestnut Hill starts at floor 1
@@ -93,7 +71,6 @@ export function DraggableMap() {
     useEffect(() => {
         if (selectedHospital === '20 Patriot Pl' || selectedHospital === '22 Patriot Pl') {
             setSceneIndexState(0);
-            setFloorState(1);
         } else if (selectedHospital === 'Chestnut Hill') {
             setSceneIndexState(3);
             setFloorState(1); // Assuming Chestnut Hill starts at floor 1
@@ -115,22 +92,40 @@ export function DraggableMap() {
         if (selectedHospitalName === 'Faulkner Hospital') return 4;
         if (selectedHospitalName === 'BWH Campus') return 5;
         if (floor === 1) return 0;
-        if (floor === 3) return 1;
-        if (floor === 4) return 2;
+        if (floor === 3) return 0;
+        if (floor === 4) return 0;
         return 0;
+    };
+
+    // helper function for showing or hiding a floor
+    const floorVisibility = (floor: number, visible: boolean) => {
+        scenesRef.current[sceneIndexState].traverse((object) => {
+            if (
+                object.userData &&
+                object.userData.objectType === 'Floor' &&
+                object.userData.floor === floor
+            ) {
+                object.visible = visible;
+            }
+        });
     };
 
     // Handle switching to other floors
     const handleFloorChange = (newFloor: number) => {
         if (newFloor === floorState) return;
-        setIsFading(true);
+        else if (floorState < newFloor) {
+            // show floors above
+            for (let i = floorState + 1; i <= newFloor; i++) {
+                floorVisibility(i, true);
+            }
+        } else {
+            // hide floors above
+            for (let i = newFloor + 1; i <= floorState; i++) {
+                floorVisibility(i, false);
+            }
+        }
         setFloorState(newFloor);
-        setTimeout(() => {
-            setTimeout(() => {
-                setSceneIndexState(getSceneIndexFromFloor(newFloor));
-                setIsFading(false);
-            }, 300); // Fade-in duration
-        }, 300); // Fade-out duration
+        setSceneIndexState(getSceneIndexFromFloor(newFloor));
     };
 
     const handlePath = (firstNodeId: number, lastNodeId: number, algo: string) => {
@@ -185,6 +180,8 @@ export function DraggableMap() {
                 object.position.x = 6.5;
                 object.position.y = -47.5;
                 object.position.z = zIndex * 10.5;
+                object.userData.objectType = 'Floor';
+                object.userData.floor = zIndex + 1;
 
                 // different colors for floors and walls
                 if (objectType == 'floor') {
@@ -214,6 +211,27 @@ export function DraggableMap() {
         );
     };
 
+    const handleThreeDHospitalChange = () => {
+        addObject('../../public/Models/Floor 1 Floor.obj', 0, 'floor');
+        addObject('../../public/Models/Floor 1 Walls.obj', 0, 'walls');
+        addObject('../../public/Models/Floor 2 Floor.obj', 1, 'floor');
+        addObject('../../public/Models/Floor 2 Walls.obj', 1, 'walls');
+        addObject('../../public/Models/Floor 3 Floor.obj', 2, 'floor');
+        addObject('../../public/Models/Floor 3 Walls.obj', 2, 'walls');
+        addObject('../../public/Models/Floor 4 Floor.obj', 3, 'floor');
+        addObject('../../public/Models/Floor 4 Walls.obj', 3, 'walls');
+
+        handleFloorChange(4);
+
+        // lighting
+        const ambientLight = new THREE.AmbientLight(0xebf2ff, 0.5);
+        scenesRef.current[0].add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(20, 20, 20);
+        scenesRef.current[0].add(directionalLight);
+    };
+
     // handles changes to the hospital from the navSelection context
     useEffect(() => {
         handleHospitalChange(selectedHospitalName!);
@@ -226,6 +244,8 @@ export function DraggableMap() {
 
         // clear previous path
         clearPathObjects(scenesRef.current);
+
+        handleFloorChange(1);
 
         console.log('finding path:', firstNodeId, lastNodeId);
         let algorithm = 'BFS'; // default to BFS if not selected
@@ -246,8 +266,9 @@ export function DraggableMap() {
             flowSpeed: 2,
             pulseFrequency: 0.5,
         });
-        // Patriot Place is the default so we have to load all the 3D mapping stuff on init
+        // Patriot Place is the default so we have to load all the 3D mapping stuff on mount
         handleThreeDHospitalChange();
+        handleFloorChange(4);
     }, []);
 
     // gets Id for destination node
@@ -379,20 +400,6 @@ export function DraggableMap() {
             <canvas
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'relative' }}
-            />
-            <div //fade in and out transition
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: '#EBF2FF',
-                    opacity: isFading ? 1 : 0,
-                    transition: 'opacity 0.3s ease-in-out',
-                    pointerEvents: 'none',
-                    zIndex: 10,
-                }}
             />
         </Box>
     );

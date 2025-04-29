@@ -40,6 +40,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, buildi
                         data={[
                             { label: 'F4', value: '4' },
                             { label: 'F3', value: '3' },
+                            { label: 'F2', value: '2' },
                             { label: 'F1', value: '1' },
                         ]}
                         styles={{

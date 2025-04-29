@@ -116,7 +116,7 @@ export class FlowingTubeAnimation {
 
         const tube = new THREE.Mesh(geometry, flowingMaterial);
         // This is used so all the path objects can be cleared without clearing 3D models
-        tube.userData.isPathObject = true;
+        tube.userData.objectType = 'path';
         this.tubes.push(tube);
 
         return tube;
