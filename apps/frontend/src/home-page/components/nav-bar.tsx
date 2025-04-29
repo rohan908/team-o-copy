@@ -1,7 +1,6 @@
 import { Outlet, Link } from 'react-router-dom';
 import { Button, Flex, Box, Group, MantineProvider } from '@mantine/core';
-import { useLogin } from './LoginContext'; // adjust path if needed
-import { useState, useEffect } from 'react';
+import { useUser, SignOutButton, SignInButton } from '@clerk/clerk-react';
 import '../home-style.css';
 
 type NavItem = {
@@ -12,6 +11,7 @@ type NavItem = {
 export const navItems: NavItem[] = [
     // { name: 'Navigation', link: '/map-API' },
   { name: 'Credits', link: '/Credit-page' },
+    { name: 'About', link: '/About-page' },
 
 ];
 
@@ -24,7 +24,7 @@ export const adminNavItems: NavItem[] = [
 export const loginItems: NavItem[] = [{ name: 'Log In', link: '/log-in-page' }];
 
 export function NavBar() {
-    const { isLoggedIn, logout } = useLogin();
+    const { isSignedIn } = useUser();
 
     return (
         <>
@@ -77,9 +77,11 @@ export function NavBar() {
                                 <Box m="3px" bg="#1C43A7" style={{ borderRadius: '20px' }}>
                                     {/* Navigation Items */}
                                     {navItems.map((item, index) => (
-                                        <MantineProvider theme={{ activeClassName: '' }}>
+                                        <MantineProvider
+                                            key={index}
+                                            theme={{ activeClassName: '' }}
+                                        >
                                             <Button
-                                                key={index}
                                                 variant="filled"
                                                 color="baseBlue.6"
                                                 className="navButton"
@@ -95,32 +97,36 @@ export function NavBar() {
                                     ))}
 
                                     {/* Log In Button (only when logged out) */}
-                                    {!isLoggedIn &&
+                                    {!isSignedIn &&
                                         loginItems.map((item, index) => (
-                                            <MantineProvider theme={{ activeClassName: '' }}>
-                                                <Button
-                                                    key={index}
-                                                    variant="filled"
-                                                    color="baseBlue.6"
-                                                    className="navButton"
-                                                    justify="flex-end"
-                                                    component={Link}
-                                                    to={item.link}
-                                                    size="sm"
-                                                    style={{ borderRadius: '8px' }}
-                                                >
-                                                    {item.name}
-                                                </Button>
+                                            <MantineProvider
+                                                key={index}
+                                                theme={{ activeClassName: '' }}
+                                            >
+                                                <SignInButton mode="modal">
+                                                    <Button
+                                                        variant="filled"
+                                                        color="baseBlue.6"
+                                                        className="navButton"
+                                                        justify="flex-end"
+                                                        size="sm"
+                                                        style={{ borderRadius: '8px' }}
+                                                    >
+                                                        {item.name}
+                                                    </Button>
+                                                </SignInButton>
                                             </MantineProvider>
                                         ))}
 
                                     {/* Admin Buttons and Log Out (only when logged in) */}
-                                    {isLoggedIn && (
+                                    {isSignedIn && (
                                         <>
                                             {adminNavItems.map((item, index) => (
-                                                <MantineProvider theme={{ activeClassName: '' }}>
+                                                <MantineProvider
+                                                    key={index}
+                                                    theme={{ activeClassName: '' }}
+                                                >
                                                     <Button
-                                                        key={index}
                                                         variant="filled"
                                                         color="baseBlue.6"
                                                         className="navButton"
@@ -135,19 +141,20 @@ export function NavBar() {
                                                 </MantineProvider>
                                             ))}
                                             <MantineProvider theme={{ activeClassName: '' }}>
-                                                <Button
-                                                    variant="filled"
-                                                    color="baseBlue.6"
-                                                    className="LoggoutButton"
-                                                    justify="flex-end"
-                                                    onClick={logout}
-                                                    component={Link}
-                                                    to="/"
-                                                    size="sm"
-                                                    style={{ borderRadius: '8px' }}
-                                                >
-                                                    Log Out
-                                                </Button>
+                                                <SignOutButton>
+                                                    <Button
+                                                        variant="filled"
+                                                        color="baseBlue.6"
+                                                        className="LoggoutButton"
+                                                        justify="flex-end"
+                                                        component={Link}
+                                                        to="/"
+                                                        size="sm"
+                                                        style={{ borderRadius: '8px' }}
+                                                    >
+                                                        Log Out
+                                                    </Button>
+                                                </SignOutButton>
                                             </MantineProvider>
                                         </>
                                     )}
