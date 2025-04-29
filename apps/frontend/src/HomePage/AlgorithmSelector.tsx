@@ -17,7 +17,12 @@ const algoOptions = [
     { value: ALGORITHM.DFS.toString(), label: 'Depth First Search' },
 ];
 
-export function AlgorithmSelector() {
+interface AlgorithmSelectorProps {
+  hasIcon: boolean
+  w: string
+}
+
+export function AlgorithmSelector(props: AlgorithmSelectorProps) {
     const theme = useMantineTheme();
     const { selectedHospital, department } = useTimeline();
     const NavSelection = useNavSelectionContext();
@@ -33,8 +38,8 @@ export function AlgorithmSelector() {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={
-                <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            leftSection={!props.hasIcon ? null :
+                <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8]}} />
             }
             data={algoOptions}
             radius="sm"
@@ -43,7 +48,7 @@ export function AlgorithmSelector() {
             value={''}
             onChange={setSelectedAlgo}
             disabled={!selectedHospital || !department}
-            w={{ xl: '350px', lg: '300px', sm: '100%' }}
+            w={props.w}
         />
     );
 }

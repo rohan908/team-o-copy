@@ -19,7 +19,7 @@ interface TimelineContextType {
     setUserStart: (start: string | null) => void;
     userStart: string | null;
     travelMode: google.maps.TravelMode | null; //type travel mode must be googles enum, not just any string
-    setTravelMode: (mode: google.maps.TravelMode | null) => void;
+    setTravelMode: (mode: google.maps.TravelMode) => void;
     isGmapsLoaded: boolean;
     setIsGmapsLoaded: (loaded: boolean) => void;
     mapRef: { current: google.maps.Map | null };

@@ -11,7 +11,7 @@ import maintenanceServiceRequestRouter from './routes/MaintenanceServiceRequest.
 import securityServiceRequestRouter from './routes/SecurityServiceRequest.ts';
 import exportRoute from './routes/ExportRoute.ts';
 import { API_ROUTES } from 'common/src/constants';
-
+import UpdateLoginsRoute from './routes/UpdateLoginsRoute.ts';
 const cors = require('cors');
 const app: Express = express(); // Setup the backend
 
@@ -29,7 +29,7 @@ app.use(cors());
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
-
+app.use('/api', UpdateLoginsRoute);
 /*
   Setup routers. ALL ROUTERS MUST use /api as a start point, or they
   won't be reached by the default proxy and prod setup.

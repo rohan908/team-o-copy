@@ -2,8 +2,8 @@ import app from '../app.ts';
 import http from 'http';
 import { AddressInfo } from 'net';
 import { createHttpTerminator } from 'http-terminator';
-import { exportToCSV } from '../directoryBackup/ExportToCSV.ts';
-
+import { exportToCSV, exportToJSON } from '../directoryBackup/ExportToCSV.ts';
+import UpdateLogins from '../PopulateEmployee/UpdateLogins.ts';
 // Attempt a database connection
 console.info('Connecting to database...');
 try {
@@ -12,7 +12,7 @@ try {
 
     // backs up Directory database into 'backup.csv'
     exportToCSV();
-
+    exportToJSON();
     console.log('Successfully connected to the database');
 } catch (error) {
     // Log any errors

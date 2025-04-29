@@ -43,7 +43,7 @@ export function DisclaimerPopup() {
                             >
                                 <Card.Section>
                                     <Image
-                                        src="../../../public/DisclaimerImages/waitWaitWait.gif"
+                                        src="DisclaimerImages/waitWaitWait.gif"
                                         height={160}
                                         alt="Brigham Women's Hospital Picture!!!"
                                     />

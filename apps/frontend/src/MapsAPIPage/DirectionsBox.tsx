@@ -1,23 +1,21 @@
-import React, {useState, useRef} from 'react'
-import {Box, ScrollArea, Text, List, Button, Divider } from '@mantine/core';
-import {Step} from './Steps'
-import { Link } from "react-router-dom"; //use ive arrived button to direct to indoor
-
+import React, { useState, useRef } from 'react';
+import { Box, ScrollArea, Text, List, Button, Divider } from '@mantine/core';
+import { Step } from './Steps';
+import { Link } from 'react-router-dom'; //use ive arrived button to direct to indoor
 
 interface Props {
-  steps: Step[];
+    steps: Step[];
 }
 
 const DirectionsBox = (props: Props) => {
-  const steps = props.steps;
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const steps = props.steps;
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  //helper function that transforms html into string
-  const parseHTMLtoText = (htmlString: string) => {
-    return htmlString.replace(/<[^>]+>/g, '').replace(/\//g, ' ');    // replace slashes with spaces
-
-  };
+    //helper function that transforms html into string
+    const parseHTMLtoText = (htmlString: string) => {
+        return htmlString.replace(/<[^>]+>/g, '').replace(/\//g, ' '); // replace slashes with spaces
+    };
 
   //transform directions info from google, from html to string
   const speechText = steps.map((step) =>
