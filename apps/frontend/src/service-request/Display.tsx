@@ -9,14 +9,7 @@ interface DisplayProps {
 const Display: React.FC<DisplayProps> = ({ data, onBack }) => {
     return (
         <Box p="xl" bg="#ebf2ff">
-            <Text
-                size="xl"
-                fw={700}
-                mb="lg"
-                c="#2658bd"
-                ta="center"
-                style={{ borderBottom: '1px solid #2658bd', paddingBottom: '8px' }}
-            >
+            <Text size="xl" fw={700} mb="lg" c="#2658bd" ta="center">
                 Service Request Submitted
             </Text>
 
