@@ -10,7 +10,6 @@ import {
 } from '@mantine/core';
 import  IconCloud  from "./IconCloudComponent.tsx"
 import { Link } from 'react-router-dom';
-import {useNavSelectionContext} from "../contexts/NavigationContext.tsx";
 
 
 const slugs = [
@@ -51,7 +50,6 @@ export function CreditPage() {
     const theme = useMantineTheme();
     const jiraImage = `https://cdn.simpleicons.org/jira/jira`;
     const figmaImage = `https://cdn.simpleicons.org/figma/figma`;
-    const discordImage = `https://cdn.simpleicons.org/discord/discord`;
     const githubImage = `https://cdn.simpleicons.org/github/github`;
     const webstormImage = `https://cdn.simpleicons.org/webstorm/webstorm`;
     const mantineImage = `https://cdn.simpleicons.org/mantine/mantine`;
@@ -62,10 +60,11 @@ export function CreditPage() {
     const nodeImage = `https://cdn.simpleicons.org/nodedotjs/nodedotjs`;
     const typescriptImage = `https://cdn.simpleicons.org/typescript/typescript`;
     const prismaImage = `https://cdn.simpleicons.org/prisma/prisma`;
+    const phoImage = "./public/Pholicious-Logo-white-wo-bottom-1.png";
 
 
     return (
-        <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py="xl">
+        <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py="md">
             <Container size="lg" py="xl">
                 <Stack align="center" gap="lg">
                     <Text ta="center" fz="xl" fw="bold" c={theme.colors.secondaryBlues[7]}>
@@ -81,7 +80,7 @@ export function CreditPage() {
                             </Text>
                             <Group justify = "center" style={{zIndex: 10 }}>
                                 <Tooltip label="PostgreSQL">
-                                    <Link to="">
+                                    <Link to="https://www.postgresql.org/">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -97,7 +96,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="Express">
-                                    <Link to="">
+                                    <Link to="https://expressjs.com/">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -129,7 +128,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="Node.js">
-                                    <Link to="">
+                                    <Link to="https://nodejs.org/">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -148,7 +147,7 @@ export function CreditPage() {
                             <Text c={theme.colors.secondaryBlues[7]} fz="lg">But this project wouldn't be what it is without:</Text>
                             <Group justify = "center" style={{zIndex: 10 }}>
                             <Tooltip label="Mantine">
-                                <Link to="">
+                                <Link to="https://mantine.dev/">
                                     <ActionIcon
                                         size="xl"
                                         variant="transparent"
@@ -164,7 +163,7 @@ export function CreditPage() {
                                 </Link>
                             </Tooltip>
                             <Tooltip label="Figma">
-                                <Link to="">
+                                <Link to="https://www.figma.com/">
                                     <ActionIcon
                                         size="xl"
                                         variant="transparent"
@@ -180,7 +179,7 @@ export function CreditPage() {
                                 </Link>
                             </Tooltip>
                             <Tooltip label="Jira">
-                                <Link to="">
+                                <Link to="https://www.atlassian.com/software/jira">
                                     <ActionIcon
                                         size="xl"
                                         variant="transparent"
@@ -196,7 +195,7 @@ export function CreditPage() {
                                 </Link>
                             </Tooltip>
                             <Tooltip label="Github">
-                                <Link to="">
+                                <Link to="https://github.com/">
                                     <ActionIcon
                                         size="xl"
                                         variant="transparent"
@@ -214,7 +213,7 @@ export function CreditPage() {
                             </Group>
                             <Group justify = "center" style={{zIndex: 10 }}>
                             <Tooltip label="Webstorm">
-                                <Link to="">
+                                <Link to="https://www.jetbrains.com/webstorm/">
                                     <ActionIcon
                                         size="xl"
                                         variant="transparent"
@@ -230,7 +229,7 @@ export function CreditPage() {
                                 </Link>
                             </Tooltip>
                             <Tooltip label="Vite">
-                                <Link to="">
+                                <Link to="https://vitejs.dev/">
                                     <ActionIcon
                                         size="xl"
                                         variant="transparent"
@@ -246,7 +245,7 @@ export function CreditPage() {
                                 </Link>
                             </Tooltip>
                             <Tooltip label="Typescript">
-                                <Link to="">
+                                <Link to="https://www.typescriptlang.org/">
                                     <ActionIcon
                                         size="xl"
                                         variant="transparent"
@@ -262,7 +261,7 @@ export function CreditPage() {
                                 </Link>
                             </Tooltip>
                             <Tooltip label="PrismaORM">
-                                <Link to="">
+                                <Link to="https://www.prisma.io/">
                                     <ActionIcon
                                         size="xl"
                                         variant="transparent"
@@ -278,6 +277,22 @@ export function CreditPage() {
                                 </Link>
                             </Tooltip>
                             </Group>
+                            <Tooltip label="PhoLicious">
+                                <Link to="https://pholiciousholden.com/">
+                                    <ActionIcon
+                                        size="xl"
+                                        variant="transparent"
+                                        style={{
+                                            width: 60,
+                                            height: 60,
+                                            borderRadius: 50,
+                                            padding: 0
+                                        }}
+                                    >
+                                        <img src={phoImage} alt="Pho" style={{objectFit: "contain"}}/>
+                                    </ActionIcon>
+                                </Link>
+                            </Tooltip>
                         </Stack>
 
                         <Stack align="center" gap="sm">
@@ -290,13 +305,14 @@ export function CreditPage() {
 
                     <Text
                         ta="center"
-                        mt="xl"
+                        mt="lg"
                         size="sm"
                         c={theme.colors.secondaryBlues[7]}
-                        maw={500}
+                        maw={600}
                     >
-                        Click an Icon to learn more about the technology used in this project.
+                        Click an icon to learn more about the technology used in this project.
                     </Text>
+                    <Box bg={theme.colors.yellowAccent[3]} w="100%" h="2px" mt="lg" />
                 </Stack>
             </Container>
         </Box>
