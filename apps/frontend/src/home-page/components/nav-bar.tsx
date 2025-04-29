@@ -11,7 +11,7 @@ type NavItem = {
 };
 
 export const navItems: NavItem[] = [
-    // { name: 'Navigation', link: '/map-API' },
+     { name: 'Navigation', link: '/map-API' },
     // { name: <IconInfoCircle size={35} />, link: '/Info-page' },
     { name: 'Info', link: '/Info-page' },
 ];
