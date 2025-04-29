@@ -46,7 +46,7 @@ export function MapEditor() {
     const [floorState, setFloorState] = useState(1);
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer');
-    const [mapTool, setMapTool] = useState('pan');
+    const [mapTool, setMapTool] = useState('');
 
     const mapProps: MapEditorProps = {
         selectedTool: mapTool,
@@ -153,7 +153,7 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-                if(mapTool != 'add-edge') {
+                if(currentNodeData?.nodeType != 'staircase') {
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
                     });
@@ -689,7 +689,7 @@ export function MapEditor() {
                     }
 
                     selectedObjects.current.forEach((object) => {
-                        deselectObject(object);
+                      deselectObject(object);
                     });
 
                     render();
@@ -821,6 +821,9 @@ export function MapEditor() {
 
     // This is for one-time initializations and handlers
     useEffect(() => {
+        // sets the map tool on startup
+        setMapTool('pan');
+
         // make sure map movement is re-enabled for some edge cases
         const handleMouseUp = () => {
             setTimeout(() => {
@@ -883,17 +886,15 @@ export function MapEditor() {
     return (
         <Box w="100vw" h="100vh">
             <PopupTooltip />
-            <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
 
             <Box ref={hoverRef}>
                 <MapContext.Provider value={mapProps}>
+                    <FloorSwitchBox floor={floorState} setFloor={handleFloorChange} building={'admin'} />
+
                     <MapEditorBox />
                     <Box pos="fixed" top={"10%"} right={20} style={{zIndex: 999}}>
                         <NodeInfoBox/>
                     </Box>
-                    <Collapse in={mapTool == 'add-edge' && currentNodeData != null} transitionDuration={250} transitionTimingFunction="linear">
-                        <FloorConnectionBox />
-                    </Collapse>
                 </MapContext.Provider>
             </Box>
 

@@ -94,9 +94,6 @@ const FloorConnectionBox = () => {
         return (
             <Box
                 p="sm"
-                pos="fixed"
-                top={'10%'}
-                left={20}
                 style={{
                     width: 'fit-content',
                     minWidth: '300px',
@@ -131,9 +128,6 @@ const FloorConnectionBox = () => {
         return (
             <Box
                 p="sm"
-                pos="fixed"
-                top={'10%'}
-                left={20}
                 style={{
                     width: 'fit-content',
                     minWidth: '300px',
