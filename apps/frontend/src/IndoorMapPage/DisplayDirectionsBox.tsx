@@ -27,11 +27,6 @@ import TTSButton from '../Buttons/TTSButton.tsx';
  *
  */
 function getPathNodes(nodeIds: number[], allNodes: NodeDataType[]): NodeDataType[] {
-  const {
-    department,
-    selectedAlgorithm,
-    selectedHospital,
-  } = useTimeline();
 
   const pathNodes: NodeDataType[] = [];
 
@@ -46,6 +41,11 @@ function getPathNodes(nodeIds: number[], allNodes: NodeDataType[]): NodeDataType
 }
 
 export function DisplayDirectionsBox() {
+  const {
+    department,
+    selectedAlgorithm,
+    selectedHospital,
+  } = useTimeline();
   const pathNodes = usePathContext();
   const navSelection = useNavSelectionContext();
   const nodeIds = pathNodes.state.pathSelectRequest?.NodeIds;
@@ -80,6 +80,7 @@ export function DisplayDirectionsBox() {
     return [];
   }, [nodeIds, allNodes]);
   // group directions by floor so they can be displayed separately
+
   const directionsByFloor: {
     [floor: number]: { Direction: string; Distance: number; Floor: number }[];
   } = {};
@@ -89,8 +90,32 @@ export function DisplayDirectionsBox() {
     }
     directionsByFloor[direction.Floor].push(direction);
   });
+  if (!department || !selectedAlgorithm || !selectedHospital) {
+    return (
+      <Box w="80%" h="400px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: nodeIds && nodeIds.length > 1 && department && selectedAlgorithm && selectedHospital ? "0px 0px 4px 0px #AAAAAA" : "0px 0px 0px 0px #FFFFFF" }}>
+        <Box
+          style={{overflowY: 'auto'}}
+        >
+          <Accordion
+            multiple
+            styles={{
+              root: {
+                height: "450px",
+                overflowY: "auto",
+              },
+              item: {
+                marginBottom: '0px',
+              },
+            }}
+            defaultValue={["floor-1", "floor-2", "floor-3", "floor-4", "floor-5","floor-6", "floor-7"]}
+          >
+          </Accordion>
+        </Box>
+      </Box>
+    )
+  }
   return (
-    <Box w="80%" h="400px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: nodeIds && nodeIds.length > 1 ? "0px 0px 4px 0px #AAAAAA" : "0px 0px 0px 0px #FFFFFF" }}>
+    <Box w="80%" h="400px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: nodeIds && nodeIds.length > 1 && department && selectedAlgorithm && selectedHospital ? "0px 0px 4px 0px #AAAAAA" : "0px 0px 0px 0px #FFFFFF" }}>
       <Box
         style={{overflowY: 'auto'}}
       >
