@@ -2,6 +2,7 @@ import React from 'react';
 import { Routing } from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
 import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
 import { RequestProvider } from './contexts/RequestContext.tsx';
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
@@ -19,6 +20,7 @@ import {
     MantineRadiusValues,
 } from '@mantine/core';
 import { TimelineProvider } from './HomePage/TimeLineContext.tsx';
+import { Notifications } from '@mantine/notifications';
 const themeGold: MantineColorsTuple = [
     '#FFF8EB',
     '#FDF0D5',
@@ -192,6 +194,7 @@ const theme = createTheme({
 function App() {
     return (
         <MantineProvider theme={theme}>
+          <Notifications/>
             <DirectoryProvider>
                 <RequestProvider>
                     <NavigationProvider>

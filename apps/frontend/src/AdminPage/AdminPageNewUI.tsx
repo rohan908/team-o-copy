@@ -213,7 +213,7 @@ export function AdminPageV2() {
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
                                                             <IconArrowBadgeDownFilled
-                                                                color={'#1C43A7'}
+                                                              color={"#1C43A7"}
                                                             />
                                                         </ActionIcon>
                                                     </Collapse>
@@ -304,7 +304,7 @@ export function AdminPageV2() {
                                 justify="center"
                                 align="center"
                                 w="100%"
-                                bg="#D6E0F8"
+                                bg="  "
                                 style={{
                                     boxShadow: 'inset -5px 8px 5px -5px rgba(0,0,255,0.1)',
                                     borderRadius: '8px',
@@ -418,9 +418,9 @@ export function AdminPageV2() {
                                             width={'100%'}
                                             marginRight={'0%'}
                                             height={'80vh'}
-                                            cols={2}
-                                            hSpacing={50}
-                                            vSpacing={50}
+                                            cols={3}
+                                            hSpacing={30}
+                                            vSpacing={10}
                                             buttonHeight={220}
                                         />
                                     </Box>
