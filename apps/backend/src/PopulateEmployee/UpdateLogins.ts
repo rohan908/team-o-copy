@@ -19,7 +19,12 @@ async function UpdateLogins() {
         // Insert employee record into db
         await prisma.employee.upsert({
             where: { clerkId: user.id },
-            update: {},
+            update: {
+                name: String(user.fullName),
+                email: email,
+                role: role,
+                clerkId: user.id,
+            },
             create: {
                 name: String(user.fullName),
                 email: email,
