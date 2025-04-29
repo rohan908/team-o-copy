@@ -22,7 +22,8 @@ export const adminNavItems: NavItem[] = [
 export const loginItems: NavItem[] = [{ name: 'Log In', link: '/log-in-page' }];
 
 export function NavBar() {
-    const { isSignedIn } = useUser();
+    const { isSignedIn, user } = useUser();
+    const role = user?.publicMetadata?.role;
 
     return (
         <>
@@ -96,6 +97,7 @@ export function NavBar() {
 
                                     {/* Log In Button (only when logged out) */}
                                     {!isSignedIn &&
+                                        role === 'admin' &&
                                         loginItems.map((item, index) => (
                                             <MantineProvider
                                                 key={index}
@@ -117,7 +119,7 @@ export function NavBar() {
                                         ))}
 
                                     {/* Admin Buttons and Log Out (only when logged in) */}
-                                    {isSignedIn && (
+                                    {isSignedIn && role === 'admin' && (
                                         <>
                                             {adminNavItems.map((item, index) => (
                                                 <MantineProvider
