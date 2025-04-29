@@ -9,8 +9,6 @@ export function createMapScene(texturePath: string) {
     const mapPlane = new THREE.Mesh(mapGeo, mapMaterial);
     mapPlane.position.set(0, 0, 0);
     scene.add(mapPlane);
-    for (const colorElement of (scene.background = new THREE.Color('#D8DFEB'))) {
-    }
 
     return scene;
 }

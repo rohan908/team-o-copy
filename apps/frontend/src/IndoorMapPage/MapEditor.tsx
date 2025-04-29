@@ -253,7 +253,7 @@ export function MapEditor() {
         clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
         for (const node of allNodes) {
-            createNode(node, scenesRef.current, objectsRef, nodeRadius, {
+            createNode(node, scenesRef.current, undefined, objectsRef, nodeRadius, {
                 color: nodeColor,
             }); //Create the nodes
             for (const connectingNodeId of node.connectingNodes) {
@@ -555,7 +555,7 @@ export function MapEditor() {
 
             nodeRef.current.push(newNode);
 
-            createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
+            createNode(newNode, scenesRef.current, undefined, objectsRef, nodeRadius, {
                 color: nodeColor,
             }); //Create the nodes
         }

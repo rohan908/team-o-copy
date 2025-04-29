@@ -93,14 +93,6 @@ export function DraggableMap() {
         }
     }, []);
 
-    // associated floors with scenes
-    const getSceneIndexFromFloor = (floor: number): number => {
-        if (selectedHospitalName === 'Chestnut Hill') return 3;
-        if (selectedHospitalName === 'Faulkner Hospital') return 4;
-        if (selectedHospitalName === 'BWH Campus') return 5;
-        return 0;
-    };
-
     // shows or hides a floor
     const floorVisibility = (floor: number, visible: boolean) => {
         scenesRef.current[sceneIndexState].traverse((object) => {
@@ -161,7 +153,7 @@ export function DraggableMap() {
                 // Get the full node from the ID
                 const node = getNode(id, allNodes);
                 if (node) {
-                    createNode(node, scenesRef.current); //Create the node from its data
+                    createNode(node, scenesRef.current, floorHeight); //Create the node from its data
                 } else {
                     console.error('Node id not found: ', id);
                 }
@@ -249,6 +241,9 @@ export function DraggableMap() {
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(20, 20, 20);
         scenesRef.current[0].add(directionalLight);
+
+        // camera
+        //controlRef.current.enableRotate = false;
     };
 
     // handles changes to the hospital from the navSelection context
@@ -345,11 +340,12 @@ export function DraggableMap() {
         }
         // Only create edges on the same floor
         if (node1.floor === node2.floor) {
+            // This cursed bit of code is necessary because our node data skips floor 2 which is kept in the 3D map
             let zIndex = node1.floor - 1;
             if (node1.floor == 2 || node1.floor == 3) {
                 zIndex = zIndex + 1;
             }
-            const z = 0.1 + zIndex * 10.5;
+            const z = 0.1 + zIndex * floorHeight;
             if (node1.floor === 1) {
                 scenesRef.current[0].add(
                     animationRef.current.createEdge(

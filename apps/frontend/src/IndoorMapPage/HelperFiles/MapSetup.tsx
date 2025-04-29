@@ -70,7 +70,7 @@ export function mapSetup(config: MapConfig) {
 
         // initialize camera controls
         const controls = new OrbitControls(camera, renderer.domElement);
-        //controls.enableRotate = false;
+        controls.enableRotate = false;
         controls.mouseButtons = {
             LEFT: THREE.MOUSE.PAN,
             MIDDLE: THREE.MOUSE.DOLLY,
