@@ -9,7 +9,7 @@ interface HospitalSelectProps extends SelectProps {
 }
 
 const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...props }) => {
-  const hospitalData = ['20 Patriot Place', '22 Patriot Place', 'Chestnut Hill', 'Falkner Hospital'];
+  const hospitalData = ['20 Patriot Place', '22 Patriot Place', 'Chestnut Hill', 'Falkner Hospital', 'Brigham Hospital'];
   const handleSpeechResult = (text: string) => {
     const matchedHospital = hospitalData.find(hospital =>
       hospital.toLowerCase().includes(text.toLowerCase())
