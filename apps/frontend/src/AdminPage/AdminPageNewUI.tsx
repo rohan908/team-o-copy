@@ -41,6 +41,7 @@ import { Link } from 'react-router-dom';
 import { ColorChangingButton, SidebarButton } from '../common-compoents/commonButtons.tsx';
 import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
+import RequestHistory from './RequestHistory.tsx';
 
 function Home(props: { size: number }) {
     return null;
@@ -234,7 +235,7 @@ export function AdminPageV2() {
                                             borderRadius: '15px',
                                         }}
                                     >
-                                        <LanguageRequestHistory />
+                                        <RequestHistory requestType="Language" />
                                     </Box>
                                 </Collapse>
                                 <Collapse
@@ -250,7 +251,7 @@ export function AdminPageV2() {
                                             borderRadius: '15px',
                                         }}
                                     >
-                                        <SecurityRequestHistory />
+                                        <RequestHistory requestType="Security" />
                                     </Box>
                                 </Collapse>
                                 <Collapse
@@ -266,7 +267,7 @@ export function AdminPageV2() {
                                             borderRadius: '15px',
                                         }}
                                     >
-                                        <SanitationRequestHistory />
+                                        <RequestHistory requestType="Sanitation" />
                                     </Box>
                                 </Collapse>
                                 <Collapse
@@ -282,7 +283,7 @@ export function AdminPageV2() {
                                             borderRadius: '15px',
                                         }}
                                     >
-                                        <MaintenanceRequestHistory />
+                                        <RequestHistory requestType="Maintenance" />
                                     </Box>
                                 </Collapse>
                                 <Box
