@@ -85,7 +85,7 @@ export function DraggableMap() {
             setSceneIndexState(0);
             setFloorState(1);
         }
-    }, []);
+    }, [selectedHospital]);
 
     // associated floors with scenes
     const getSceneIndexFromFloor = (floor: number): number => {
