@@ -50,14 +50,14 @@ export const MapAPIPage = () => {
                     <GmapsStartSelector hasIcon={false} w="100%"/>
                   </Flex>
                   <Flex w="100%" justify="left">
-                    <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "-1px"}}  />
+                    <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "-0.4%"}}  />
                   </Flex>
                   <Flex direction="row" gap="xs">
                     <IconBuildings size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
                     <GmapsDestinationSelector hasIcon={false} w="100%"/>
                   </Flex>
                   <Flex w="100%" justify="left">
-                    <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "-1px"}}  />
+                    <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "-0.4%"}}  />
                   </Flex>
                   <Flex direction="row" gap="xs">
                     <IconMapPin size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
