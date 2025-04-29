@@ -71,13 +71,13 @@ const NodeInfoBox = () => {
                         style={{
                             width: 'auto',
                             minWidth: '300px',
-                            backgroundColor: '#285CC6',
-                            border: '2px solid #1C43A7',
+                            backgroundColor: '#ebf2ff',
+                            boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
                             borderRadius: 24,
                         }}
                     >
                         <Flex direction="row" gap={'xs'}>
-                            <Text color={'white'}>Edit Properties</Text>
+                            <Text color={'secondaryBlues.7'} style={{fontWeight: 500}}>Edit Properties</Text>
                         </Flex>
 
                         <Flex direction="row" gap={'xs'}>
@@ -86,14 +86,22 @@ const NodeInfoBox = () => {
                                     label={'Node Type'}
                                     styles={{
                                         label: {
-                                            fontWeight: 600,
+                                            fontWeight: 400,
                                             textSize: '14px',
                                             textAlign: 'center',
-                                            color: 'white',
+                                            color: '#3568d4',
+                                        },
+                                        input: {
+                                            backgroundColor: 'white',
+                                            color: '#3568d4',
+                                            fontWeight: 400,
+                                            textSize: theme.fontSizes.xxs,
                                         },
                                     }}
-                                    size="sm"
-                                    w={160}
+                                    mb="sm"
+                                    size="xs"
+                                    radius={"8px"}
+                                    w={144}
                                     value={mapProps.currentNode?.nodeType || ''}
                                     onChange={(event) =>
                                         mapProps.setCurrentNodeData({
@@ -120,10 +128,11 @@ const NodeInfoBox = () => {
                                 />
                                 <Button
                                     variant="filled"
-                                    color="baseBlue.6"
+                                    color="secondaryBlues.7"
                                     onClick={() => toggleMoreInfo()}
-                                    size="sm"
-                                    radius="xl"
+                                    mb="sm"
+                                    size="xs"
+                                    radius="8px"
                                     className="navButton"
                                     leftSection={
                                         expandInfo ? <IconArrowBadgeLeft /> : <IconArrowBadgeDown />
@@ -137,14 +146,22 @@ const NodeInfoBox = () => {
                                     label={'Node Name'}
                                     styles={{
                                         label: {
-                                            fontWeight: 600,
+                                            fontWeight: 400,
                                             textSize: '14px',
                                             textAlign: 'center',
-                                            color: 'white',
+                                            color: '#3568d4',
+                                        },
+                                        input: {
+                                            backgroundColor: 'white',
+                                            color: '#3568d4',
+                                            fontWeight: 400,
+                                            textSize: theme.fontSizes.xxs,
                                         },
                                     }}
-                                    size="sm"
-                                    radius="xl"
+                                    mb="sm"
+                                    size="xs"
+                                    radius="8px"
+                                    w={144}
                                     value={`${mapProps.currentNode?.name || ''}`}
                                     variant="filled"
                                     onChange={(event) =>
@@ -165,14 +182,22 @@ const NodeInfoBox = () => {
                                     label={'Node Description'}
                                     styles={{
                                         label: {
-                                            fontWeight: 600,
+                                            fontWeight: 400,
                                             textSize: '14px',
                                             textAlign: 'center',
-                                            color: 'white',
+                                            color: '#3568d4',
+                                        },
+                                        input: {
+                                            backgroundColor: 'white',
+                                            color: '#3568d4',
+                                            fontWeight: 400,
+                                            textSize: theme.fontSizes.xxs,
                                         },
                                     }}
-                                    size="sm"
-                                    radius="xl"
+                                    mb="sm"
+                                    size="xs"
+                                    radius="8px"
+                                    w={144}
                                     value={`${mapProps.currentNode?.description || ''}`}
                                     variant="filled"
                                     onChange={(event) =>
@@ -203,42 +228,63 @@ const NodeInfoBox = () => {
                         style={{
                             width: 'auto',
                             minWidth: '300px',
-                            backgroundColor: '#285CC6',
-                            border: '2px solid #1C43A7',
+                            backgroundColor: '#ebf2ff',
+                            boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
                             borderRadius: 24,
                         }}
                     >
-                        <Text color={'white'}>View-Only Properties</Text>
+                        <Text color={'#3568d4'} style={{fontWeight: 500}}>View-Only Properties</Text>
                         <Flex direction="row" gap="xs">
                             <TextInput
                                 variant="filled"
                                 readOnly
                                 value={`ID: ${mapProps.currentNode?.id || 0}`}
-                                size="sm"
-                                radius="xl"
+                                mb="sm"
+                                size="xs"
+                                radius="8px"
                                 w={80}
                                 styles={{
                                     input: {
-                                        color: 'black',
+                                        backgroundColor: 'white',
+                                        color: '#3568d4',
                                         fontWeight: 400,
+                                        textSize: theme.fontSizes.xxs,
                                     },
                                 }}
                             />
                             <Input
-                                size="sm"
-                                radius="xl"
+                                mb="sm"
+                                size="xs"
+                                radius="8px"
                                 w={80}
                                 value={`X: ${Math.round(mapProps.currentNode?.x * 10) / 10 || 0}`}
                                 readOnly
                                 variant="filled"
+                                styles={{
+                                    input: {
+                                        backgroundColor: 'white',
+                                        color: '#3568d4',
+                                        fontWeight: 400,
+                                        textSize: theme.fontSizes.xxs,
+                                    },
+                                }}
                             ></Input>
                             <Input
-                                size="sm"
-                                radius="xl"
+                                mb="sm"
+                                size="xs"
+                                radius="8px"
                                 w={80}
                                 value={`Y: ${Math.round(mapProps.currentNode?.x * 10) / 10 || 0}`}
                                 readOnly
                                 variant="filled"
+                                styles={{
+                                    input: {
+                                        backgroundColor: 'white',
+                                        color: '#3568d4',
+                                        fontWeight: 400,
+                                        textSize: theme.fontSizes.xxs,
+                                    },
+                                }}
                             ></Input>
                         </Flex>
                         <TextInput
@@ -246,14 +292,21 @@ const NodeInfoBox = () => {
                             readOnly
                             styles={{
                                 label: {
-                                    fontWeight: 600,
+                                    fontWeight: 400,
                                     textSize: '14px',
                                     textAlign: 'center',
-                                    color: 'white',
+                                    color: '#3568d4',
+                                },
+                                input: {
+                                    backgroundColor: 'white',
+                                    textSize: theme.fontSizes.xxs,
+                                    color: '#3568d4',
+                                    fontWeight: 400,
                                 },
                             }}
-                            size="sm"
-                            radius="xl"
+                            mb="sm"
+                            size="xs"
+                            radius="8px"
                             value={`${mapProps.currentNode?.connectingNodes || ''}`}
                             variant="filled"
                         ></TextInput>

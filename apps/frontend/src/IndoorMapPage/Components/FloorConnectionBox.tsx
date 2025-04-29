@@ -97,16 +97,20 @@ const FloorConnectionBox = () => {
                 style={{
                     width: 'fit-content',
                     minWidth: '300px',
-                    backgroundColor: '#285CC6',
-                    border: '2px solid #1C43A7',
+                    backgroundColor: '#ebf2ff',
+                    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
                     borderRadius: 24,
                     zIndex: 999,
                 }}
             >
                 <Timeline
+                    active={3}
                     styles={{
                         itemTitle: {
-                            color: 'white',
+                            color: '#3568d4',
+                        },
+                        itemBody: {
+                          color: '#3568d4',
                         },
                     }}
                 >
@@ -131,8 +135,8 @@ const FloorConnectionBox = () => {
                 style={{
                     width: 'fit-content',
                     minWidth: '300px',
-                    backgroundColor: '#285CC6',
-                    border: '2px solid #1C43A7',
+                    backgroundColor: '#ebf2ff',
+                    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.7)',
                     borderRadius: 24,
                     zIndex: 999,
                 }}
