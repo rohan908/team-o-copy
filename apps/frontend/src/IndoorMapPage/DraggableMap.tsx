@@ -152,6 +152,10 @@ export function DraggableMap() {
         clearSceneObjects(scenesRef.current);
 
         console.log('finding path:', firstNodeId, lastNodeId);
+
+        if (firstNodeId && lastNodeId) {
+            handlePath(firstNodeId, lastNodeId);
+        }
     }, [selectedDepartment]);
 
     useEffect(() => {
