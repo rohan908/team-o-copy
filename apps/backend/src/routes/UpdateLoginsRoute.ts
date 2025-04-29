@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/UpdateLogins', async (req, res) => {
     try {
         await UpdateLogins();
-        res.status(200).json({ message: 'Successfully connected to the database' });
+        res.status(200).json({ message: 'Successfully populated Employee Database from Clerk' });
     } catch (error) {
         console.error(`Unable to establish database connection:`, error);
         res.status(500).json({ message: 'Unable to establish database connection' });
