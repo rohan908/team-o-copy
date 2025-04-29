@@ -82,18 +82,18 @@ export function HomePage() {
             h="100%"
             w="100%"
             mih={'100vh'}
-            p="xl"
+            p={isExpanding ? '5px' : 'xl'}
         >
             <DisclaimerPopup />
             <Grid
                 gutter="md"
                 h="100%"
-                mt={'2%'}
+                mt={isExpanding ? '0' : '2%'}
                 className={`${styles.container} ${isExpanding ? styles.expanded : styles.notExpanded}`}
                 grow
             >
                 {/* Left Context */}
-                <Grid.Col className={styles.leftColumn} pl="5%" p="xl" span={isExpanding ? 0 : 6}>
+                <Grid.Col className={styles.leftColumn} pl="5%" p="xl" span={isExpanding ? 1 : 6}>
                     <Stack justify="flex-start" h="100%" align="flex-start">
                         <HoverUnderline>
                             <Title
@@ -109,8 +109,15 @@ export function HomePage() {
                     </Stack>
                 </Grid.Col>
                 {/* Right Content */}
-                <Grid.Col className={styles.rightColumn} span={isExpanding ? 10 : 6}>
-                    <Flex h="100%" w={'100%'} align="center" justify="center" pt="6%">
+                <Grid.Col className={styles.rightColumn} span={isExpanding ? 9 : 6}>
+                    <Flex
+                        h="100%"
+                        mah="95vh"
+                        w={'100%'}
+                        align="center"
+                        justify="center"
+                        pt={isExpanding ? '0px' : '6%'}
+                    >
                         <ContentSwitcher />
                     </Flex>
                 </Grid.Col>
