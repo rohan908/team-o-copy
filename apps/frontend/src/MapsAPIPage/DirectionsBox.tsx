@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Box, ScrollArea, Text, List, Button, Divider } from '@mantine/core';
+import {Box, ScrollArea, Text, List, Button, Divider, Transition} from '@mantine/core';
 import { Step } from './Steps';
 import { Link } from 'react-router-dom'; //use ive arrived button to direct to indoor
 
@@ -39,58 +39,63 @@ const DirectionsBox = (props: Props) => {
     }
   };
 return (
-      <Box //custom box for directions
-        pos="absolute"
-        bottom="4rem"
-        left="0.5rem"
-        maw={225}
-        bg="#EFF4FE"
-        p="sm"
-        radius="md"
-        shadow="md"
-        bd ="1px solid white"
-        style={{borderRadius: "10px"}}
+    <Box //custom box for directions
+      w="100%"
+      bg="#EFF4FE"
+      p="sm"
+      style={{borderRadius: "10px", boxShadow: steps && steps.length > 0 ? "0px -4px 4px 0px #AAAAAA" : "0px 0px 0px 0px #ebf2ff"}}
+    >
+      <Transition
+        mounted={steps && steps.length > 0}
+        transition="slide-right"
+        duration={400}
+        timingFunction="linear"
       >
-        <Box mx="auto" ta='left'>
-          <Text fw={700} size="md" color="black" mb="xs" ta="left">
-            Directions:
-          </Text>
-          <ScrollArea h={200}>
-            <List type="ordered"mt="sm">
-            {steps.map((step, index) => (
-              <List.Item key={index}>
-                <Text size="xs" my='xs' color="#1C43A7" ta="left">
-                  {parseHTMLtoText(step.instruction)}
-                </Text>
-                <Divider label={`${step.distance}`}
-                         labelPosition="center"
-                         my="xs"
-                         color="#F6D161" // Line color
-                         styles={{
-                           label: {
-                             color: '#000000'} //text colot
-                         }}/>
-              </List.Item>
-            ))}
-          </List>
-        </ScrollArea>
-        </Box>
-        <Box mt="sm" ta='center'>
-          <Button
-            onClick={handleToggle}
-            color={isSpeaking ? 'red' : 'blue'}
-            variant="light"
-            size='sm'
-          >
-            {isSpeaking ? 'Stop' : 'Play Directions'}
-          </Button>
-        </Box>
-        <Box ta='center' mt="md">
-          <Button component={Link} to="/IndoorMapPage" color="#F8D261">
-            I've Arrived
-          </Button>
-        </Box>
-      </Box>
+        {(styles) => (
+          <div style={styles}>
+            <Box mx="auto" ta='left'>
+              <Text fw={700} size="md" color="black" mb="xs" ta="left">
+                Directions:
+              </Text>
+              <ScrollArea h={180} w="100%">
+                <List type="ordered" mt="sm" w="100%">
+                  {steps.map((step, index) => (
+                    <List.Item key={index} w="100%">
+                      <Text w="100%" size="xs" my='xs' color="#1C43A7" ta="left">
+                        {parseHTMLtoText(step.instruction)}
+                      </Text>
+                      <Divider label={`${step.distance}`}
+                               labelPosition="center"
+                               w="220px"
+                               my="xs"
+                               color="#F6D161" // Line color
+                               styles={{
+                                 label: {
+                                   color: '#000000'} //text colot
+                               }}/>
+                    </List.Item>
+                  ))}
+                </List>
+              </ScrollArea>
+            </Box>
+            <Box mt="sm" ta='center'>
+              <Button
+                onClick={handleToggle}
+                color={isSpeaking ? 'red' : 'blue'}
+                variant="light"
+                size='sm'
+              >
+                {isSpeaking ? 'Stop' : 'Play Directions'}
+              </Button>
+            </Box>
+            <Box ta='center' mt="md">
+              <Button component={Link} to="/IndoorMapPage" color="#F8D261">
+                I've Arrived
+              </Button>
+            </Box>
+          </div>)}
+      </Transition>
+    </Box>
 )
 }
 export default DirectionsBox;

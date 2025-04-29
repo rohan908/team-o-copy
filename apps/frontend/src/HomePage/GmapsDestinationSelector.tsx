@@ -68,7 +68,7 @@ export function GmapsDestinationSelector() {
             radius="sm"
             mb="sm"
             size="xs"
-            w={{ xl: '350px', lg: '300px', sm: '100%' }}
+            w={"100%"}
         />
     );
 }
