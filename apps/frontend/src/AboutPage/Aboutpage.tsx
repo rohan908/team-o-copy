@@ -94,7 +94,7 @@ export function AboutPage() {
         <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py="xl">
             <Container size="lg" py={0} px={0}>
                 <Stack align="center" gap="lg">
-                    <Text ta="center" fz="xl" c={theme.colors.secondaryBlues[7]}>
+                    <Text mt="xl" ta="center" fz="xl" c={theme.colors.secondaryBlues[7]}>
                         Thank you to Brigham and Women's Hospital and their representative, Andrew
                         Shinn!
                     </Text>

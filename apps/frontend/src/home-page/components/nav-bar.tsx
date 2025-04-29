@@ -12,14 +12,13 @@ type NavItem = {
 
 export const navItems: NavItem[] = [
     // { name: 'Navigation', link: '/map-API' },
-    { name: <IconInfoCircle size={35} />, link: '/Info-page' },
-
+    // { name: <IconInfoCircle size={35} />, link: '/Info-page' },
+    { name: 'Info', link: '/Info-page' },
 ];
 
 export const adminNavItems: NavItem[] = [
     //{ name: 'Service Request', link: '/service-request-page' },
     { name: 'Admin Page', link: '/admin-page' },
-    //{ name: 'Map Editor', link: '/map-editor' },
 ];
 
 export const loginItems: NavItem[] = [{ name: 'Log In', link: '/log-in-page' }];

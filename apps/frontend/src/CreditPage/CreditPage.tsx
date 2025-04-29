@@ -36,15 +36,13 @@ const slugs = [
     'discord',
 ];
 
-const customImages = [
-  "./public/Pholicious-Logo-white-wo-bottom-1.png",
-];
+const customImages = ['./public/Pholicious-Logo-white-wo-bottom-1.png'];
 
 function IconCloudDemo() {
-  const images = [
-    ...slugs.map((slug) => `https://cdn.simpleicons.org/${slug}/${slug}`),
-    ...customImages,
-  ];
+    const images = [
+        ...slugs.map((slug) => `https://cdn.simpleicons.org/${slug}/${slug}`),
+        ...customImages,
+    ];
     return (
         <div
             className="relative flex items-center justify-center overflow-hidden"
@@ -86,7 +84,7 @@ export function CreditPage() {
                             </Text>
                             <Group justify="center" style={{ zIndex: 10 }}>
                                 <Tooltip label="PostgreSQL">
-                                    <Link to="https://www.postgresql.org/">
+                                    <Link to="https://www.postgresql.org/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -106,7 +104,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="Express">
-                                    <Link to="https://expressjs.com/">
+                                    <Link to="https://expressjs.com/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -126,7 +124,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="React">
-                                    <Link to="https://react.dev/">
+                                    <Link to="https://react.dev/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -146,7 +144,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="Node.js">
-                                    <Link to="https://nodejs.org/">
+                                    <Link to="https://nodejs.org/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -171,7 +169,7 @@ export function CreditPage() {
                             </Text>
                             <Group justify="center" style={{ zIndex: 10 }}>
                                 <Tooltip label="Mantine">
-                                    <Link to="https://mantine.dev/">
+                                    <Link to="https://mantine.dev/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -191,7 +189,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="Figma">
-                                    <Link to="https://www.figma.com/">
+                                    <Link to="https://www.figma.com/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -211,7 +209,10 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="Jira">
-                                    <Link to="https://www.atlassian.com/software/jira">
+                                    <Link
+                                        to="https://www.atlassian.com/software/jira"
+                                        target="_blank"
+                                    >
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -231,7 +232,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="Github">
-                                    <Link to="https://github.com/">
+                                    <Link to="https://github.com/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -253,7 +254,7 @@ export function CreditPage() {
                             </Group>
                             <Group justify="center" style={{ zIndex: 10 }}>
                                 <Tooltip label="Webstorm">
-                                    <Link to="https://www.jetbrains.com/webstorm/">
+                                    <Link to="https://www.jetbrains.com/webstorm/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -273,7 +274,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="Vite">
-                                    <Link to="https://vitejs.dev/">
+                                    <Link to="https://vitejs.dev/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -293,7 +294,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="Typescript">
-                                    <Link to="https://www.typescriptlang.org/">
+                                    <Link to="https://www.typescriptlang.org/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -313,7 +314,7 @@ export function CreditPage() {
                                     </Link>
                                 </Tooltip>
                                 <Tooltip label="PrismaORM">
-                                    <Link to="https://www.prisma.io/">
+                                    <Link to="https://www.prisma.io/" target="_blank">
                                         <ActionIcon
                                             size="xl"
                                             variant="transparent"
@@ -351,20 +352,10 @@ export function CreditPage() {
                     >
                         Click an icon to learn more about the technology used in this project.
                     </Text>
-                  <Text
-                    ta="center"
-                    mt="xs"
-                    size="sm"
-                    c={theme.colors.secondaryBlues[7]}
-                    maw={600}
-                  >
-                    Scroll down to learn more about our awesome team! ↓
-                  </Text>
                 </Stack>
             </Container>
         </Box>
     );
-
 }
 
 export default CreditPage;
