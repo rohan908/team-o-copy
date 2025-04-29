@@ -69,13 +69,14 @@ export const CustomTimeline = ({
                             {/*<AlgorithmSelector  hasIcon={true} w={"100%"}/>*/}
                         </Flex>
                         <Flex justify={'end'}>
+                            <Link to="IndoorMapPage">
                             <Button
                                 bg={theme.colors.secondaryBlues[7]}
                                 fw={'300'}
-                                onClick={() => handleExpand('IndoorMapPage')}
                             >
                                 Expand Directions
                             </Button>
+                            </Link>
                         </Flex>
                     </Stack>
                 );
