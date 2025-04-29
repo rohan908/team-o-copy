@@ -20,14 +20,14 @@ export function IndoorMapsPage() {
                     <Flex direction="column" justify="center" align="center">
                       <Flex direction="row" gap={"xs"}>
                         <IconBuildings size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
-                        <ParkingSelector hasIcon={false} w={"80%"}/>
+                        <ParkingSelector hasIcon={false} w={"100%"}/>
                       </Flex>
                       <Flex w="100%" justify={"left"}>
                         <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "17.5px"}}  />
                       </Flex>
                       <Flex direction="row" gap={"xs"}>
                         <IconCheckupList size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
-                        <DepartmentSelector hasIcon={false} w={"80%"}/>
+                        <DepartmentSelector hasIcon={false} w={"100%"}/>
                       </Flex>
                       {/*<Flex w="100%" justify={"left"}>*/}
                       {/*  <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "17.5px"}}  />*/}

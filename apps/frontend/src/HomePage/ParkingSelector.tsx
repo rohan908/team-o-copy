@@ -21,6 +21,7 @@ export function ParkingSelector(props:ParkingSelectorProps) {
     const {
         setSelectedHospital,
         setDirectoryOptions,
+        setDepartment,
         department,
         selectedAlgorithm,
         selectedHospital,
@@ -43,6 +44,8 @@ export function ParkingSelector(props:ParkingSelectorProps) {
 
     const setHospitalLocation = (hospital: string | null) => {
         setSelectedHospital(hospital);
+        setDepartment(null);
+
         if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
             setDirectoryOptions(MapDepartment(Patriot));
         } else if (hospital == 'Chestnut Hill') {
@@ -54,12 +57,12 @@ export function ParkingSelector(props:ParkingSelectorProps) {
         } else {
             setDirectoryOptions([]);
         }
-        if (department && selectedAlgorithm) {
+        if (selectedAlgorithm) {
             NavSelection.dispatch({
                 type: 'SET_NAV_REQUEST',
                 data: {
                     HospitalName: hospital,
-                    Department: department,
+                    Department: null,
                     AlgorithmName: selectedAlgorithm,
                 } as NavSelectionItem,
             });
@@ -80,8 +83,8 @@ export function ParkingSelector(props:ParkingSelectorProps) {
             data={hospitalOptions}
             value={selectedHospital ?? ''}
             onChange={setHospitalLocation}
-            radius="sm"
             mb="sm"
+            radius="md"
             size="xs"
             w={props.w}
         />
