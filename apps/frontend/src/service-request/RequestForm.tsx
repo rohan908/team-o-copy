@@ -18,6 +18,7 @@ import NameEntry from './components/NameEntry.tsx';
 // } from '../directory/components/directorydata';
 import { useForm } from '@mantine/form';
 import {
+    useBwhCampusContext,
     useChestnutHillContext,
     useFaulknerHospitalContext,
     usePatriotContext,
@@ -66,6 +67,7 @@ const RequestForm: React.FC<RequestDetails> = ({
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
     const Faulkner = useFaulknerHospitalContext();
+    const BWHCampus = useBwhCampusContext();
 
     const mapDepartment = (department: DirectoryNodeItem[]) =>
         department.map((department) => department.name);
@@ -85,7 +87,10 @@ const RequestForm: React.FC<RequestDetails> = ({
                 setDepartmentOptions(mapDepartment(Patriot));
                 break;
             case 'Falkner Hospital':
-                setDepartmentOptions(mapDepartment(Faulkner)); // do faulkner when we can
+                setDepartmentOptions(mapDepartment(Faulkner));
+                break;
+            case 'BWH Campus':
+                setDepartmentOptions(mapDepartment(BWHCampus));
                 break;
             default:
                 setDepartmentOptions([]);
