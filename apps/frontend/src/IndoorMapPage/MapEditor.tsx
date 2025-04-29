@@ -9,7 +9,7 @@ import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import PopupTooltip from './Components/PopupTooltip';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
-import { useLogin } from '../home-page/components/LoginContext.tsx';
+import { useUser } from '@clerk/clerk-react';
 import { createNode } from './HelperFiles/NodeFactory.ts';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
@@ -19,13 +19,13 @@ import { bool } from 'prop-types';
 import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
 import { map } from 'leaflet';
-
+import { Navigate } from 'react-router-dom';
 const MouseImages = {
     MoveNone: 'MapImages/MouseCursors/MoveNoSelected.png',
     MoveClick: 'MapImages/MouseCursors/MoveSelected.png',
     AddNode: 'MapImages/MouseCursors/AddNode.png',
     AddEdge: 'MapImages/MouseCursors/AddEdge.png',
-}
+};
 
 export interface MapEditorProps {
     selectedTool: string;
@@ -48,6 +48,15 @@ export function MapEditor() {
     const [cursorStyle, setCursorStyle] = useState('pointer');
     const [mapTool, setMapTool] = useState('pan');
 
+    // clerk const's
+    const { user, isSignedIn } = useUser();
+
+    // check role
+    const role = user?.publicMetadata?.role;
+    if (!isSignedIn || role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
+
     const mapProps: MapEditorProps = {
         selectedTool: mapTool,
         setSelectedTool: setMapTool,
@@ -55,7 +64,6 @@ export function MapEditor() {
         setCurrentNodeData: setCurrentNodeData,
     };
 
-    const { isLoggedIn } = useLogin();
     const selectedObjects = useRef<THREE.Object3D[]>([]);
     const objectsRef = useRef<THREE.Object3D[]>([]);
     const dragControlsRef = useRef<DragControls | null>(null);
@@ -154,7 +162,7 @@ export function MapEditor() {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
                 selectedObjects.current.forEach((object) => {
-                  deselectObject(object);
+                    deselectObject(object);
                 });
             }, 200); // Fade-in duration
         }, 200); // Fade-out duration
@@ -378,7 +386,7 @@ export function MapEditor() {
             if (selectedObjects.current.length === 0) {
                 setCurrentNodeData(null);
 
-                if(cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
+                if (cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
                     // changes mouse on no selected objects
                     setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
                 }
@@ -621,7 +629,6 @@ export function MapEditor() {
                 selectedObject.material.needsUpdate = true;
                 selectedObjects.current.push(selectedObject);
                 render();
-
             } else if (selectedObjects.current.length == 1) {
                 const firstNode = nodeRef.current.find(
                     (element) => element.id === selectedObjects.current[0].userData.nodeId

@@ -7,14 +7,16 @@ import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 //need to change this to actual api call autocomplete later
 const algoOptions = [
     { value: 'BFS', label: 'Breadth First Search' },
-    {
-        value: 'A*',
-        label: 'A Star',
-    },
+    { value: 'A*', label: 'A Star' },
     { value: 'DFS', label: 'Depth First Search' },
 ];
 
-export function AlgorithmSelector() {
+interface AlgorithmSelectorProps {
+  hasIcon: boolean
+  w: string
+}
+
+export function AlgorithmSelector(props: AlgorithmSelectorProps) {
     const theme = useMantineTheme();
     const { setSelectedAlgorithm, selectedHospital, department, selectedAlgorithm } = useTimeline();
     const NavSelection = useNavSelectionContext();
@@ -36,8 +38,8 @@ export function AlgorithmSelector() {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={
-                <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            leftSection={!props.hasIcon ? null :
+                <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8]}} />
             }
             data={algoOptions}
             radius="sm"
@@ -46,7 +48,7 @@ export function AlgorithmSelector() {
             value={selectedAlgorithm ?? ''}
             onChange={setSelectedAlgo}
             disabled={!selectedHospital || !department}
-            w={{ xl: '350px', lg: '300px', sm: '100%' }}
+            w={props.w}
         />
     );
 }

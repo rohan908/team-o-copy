@@ -1,11 +1,16 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
-import { IconBuilding, IconChevronDown, IconHospital } from '@tabler/icons-react';
+import {IconBuilding, IconCheckupList, IconChevronDown, IconHospital} from '@tabler/icons-react';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { useTimeline } from './TimeLineContext.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 
-export function DepartmentSelector() {
+interface DepartmentSelectorProps {
+  hasIcon: boolean
+  w: string
+}
+
+export function DepartmentSelector(props:DepartmentSelectorProps) {
     const theme = useMantineTheme();
 
     const { directoryOptions, selectedHospital, setDepartment, selectedAlgorithm, department } =
@@ -33,7 +38,9 @@ export function DepartmentSelector() {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={<IconHospital size="16" style={{ color: theme.colors.primaryBlues[8] }} />}
+            leftSection={!props.hasIcon ? null :
+              <IconCheckupList size="16" style={{ color: theme.colors.primaryBlues[8]}} />
+            }
             data={directoryOptions}
             onChange={setSelectedDepartment}
             value={department ?? ''}
@@ -41,7 +48,7 @@ export function DepartmentSelector() {
             mb="sm"
             size="xs"
             disabled={!selectedHospital && directoryOptions.length === 0}
-            w={'100%'}
+            w={props.w}
         />
     );
 }
