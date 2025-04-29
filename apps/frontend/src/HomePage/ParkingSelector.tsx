@@ -21,6 +21,7 @@ export function ParkingSelector(props:ParkingSelectorProps) {
     const {
         setSelectedHospital,
         setDirectoryOptions,
+        setDepartment,
         department,
         selectedAlgorithm,
         selectedHospital,
@@ -45,14 +46,19 @@ export function ParkingSelector(props:ParkingSelectorProps) {
         setSelectedHospital(hospital);
         if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
             setDirectoryOptions(MapDepartment(Patriot));
+            setDepartment("");
         } else if (hospital == 'Chestnut Hill') {
             setDirectoryOptions(MapDepartment(Chestnut));
+            setDepartment("");
         } else if (hospital == 'Faulkner Hospital') {
             setDirectoryOptions(MapDepartment(Faulkner));
+            setDepartment("");
         } else if (hospital == 'BWH Campus') {
             setDirectoryOptions(MapDepartment(BWH));
+            setDepartment("");
         } else {
             setDirectoryOptions([]);
+            setDepartment("");
         }
         if (department && selectedAlgorithm) {
             NavSelection.dispatch({

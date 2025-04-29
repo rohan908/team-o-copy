@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import {Box, ScrollArea, Text, List, Button, Divider, Transition} from '@mantine/core';
+import { Box, ScrollArea, Text, List, Button, Divider, Transition, Flex } from '@mantine/core';
 import { Step } from './Steps';
-import { Link } from 'react-router-dom'; //use ive arrived button to direct to indoor
+import { Link } from 'react-router-dom';
+import TTSButton from "../Buttons/TTSButton.tsx"; //use ive arrived button to direct to indoor
 
 interface Props {
     steps: Step[];
@@ -10,6 +11,7 @@ interface Props {
 const DirectionsBox = (props: Props) => {
     const steps = props.steps;
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [stepStrings, setStepStrings] = useState<string[]>([]);
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
     //helper function that transforms html into string
@@ -54,9 +56,14 @@ return (
         {(styles) => (
           <div style={styles}>
             <Box mx="auto" ta='left'>
-              <Text fw={700} size="md" color="black" mb="xs" ta="left">
-                Directions:
-              </Text>
+              <Flex direction="row" gap="md" align={"top"}>
+                <Text fw={700} size="md" color="black" mt="5px" mb="xs" ta="left">
+                  Directions:
+                </Text>
+                <Box ta='center'>
+                  <TTSButton text={[speechText]}/>
+                </Box>
+              </Flex>
               <ScrollArea h={200} w="100%">
                 <List type="ordered" mt="sm" w="100%">
                   {steps.map((step, index) => (
@@ -72,23 +79,23 @@ return (
                         color="#F6D161" // Line color
                         styles={{
                           label: {
-                            color: '#000000'} //text colot
+                            color: '#000000'} //text color
                         }}/>
                     </List.Item>
                   ))}
                 </List>
               </ScrollArea>
             </Box>
-            <Box mt="sm" ta='center'>
-              <Button
-                onClick={handleToggle}
-                color={isSpeaking ? 'red' : 'blue'}
-                variant="light"
-                size='compact-sm'
-              >
-                {isSpeaking ? 'Stop' : 'Play Directions'}
-              </Button>
-            </Box>
+            {/*<Box mt="sm" ta='center'>*/}
+            {/*  <Button*/}
+            {/*    onClick={handleToggle}*/}
+            {/*    color={isSpeaking ? 'red' : 'blue'}*/}
+            {/*    variant="light"*/}
+            {/*    size='sm'*/}
+            {/*  >*/}
+            {/*    {isSpeaking ? 'Stop' : 'Play Directions'}*/}
+            {/*  </Button>*/}
+            {/*</Box>*/}
             <Box ta='center' mt="md">
               <Button component={Link} to="/IndoorMapPage" color="#F8D261" size='compact-sm'>
                 I've Arrived
