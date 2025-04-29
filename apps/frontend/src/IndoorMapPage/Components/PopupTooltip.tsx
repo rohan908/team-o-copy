@@ -32,7 +32,7 @@ export function PopupTooltip() {
                                 style={transitionStyle}
                             >
                                 <Text size="sm" c="#EBF2FF">
-                                    Tip: Use backspace to delete nodes
+                                    Tip: Use ctrl + right-click to delete nodes
                                 </Text>
                             </Card>
                         </Container>
