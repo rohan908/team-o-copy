@@ -209,7 +209,6 @@ export function DraggableMap() {
     };
 
     // gets id of parking lot node -> hardcoded for now
-    // TODO: Search for nodes with type parking lot, allow user to select which parking lot they parked in
     const findParkingLot = (): number | null => {
         if (selectedHospitalName === '20 Patriot Pl' || selectedHospitalName === '22 Patriot Pl') {
             return allNodes.find(element =>
