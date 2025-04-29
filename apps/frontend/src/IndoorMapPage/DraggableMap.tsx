@@ -141,6 +141,18 @@ export function DraggableMap() {
         }
         pathVisibility(floorState, false); // hide path on current floor
         pathVisibility(newFloor, true); // show path on new floor
+
+        if (newFloor > 1) {
+            cameraRef.current.position.set(0, 0, 330);
+            cameraRef.current.rotation.set(0, 0, 0);
+            cameraRef.current.quaternion.set(0, 0, 0, 1);
+            cameraRef.current.lookAt(0, 0, 0);
+        } else if (newFloor == 1) {
+            cameraRef.current.position.set(100, 300, 300);
+            cameraRef.current.rotation.set(0, 0, 0);
+            cameraRef.current.lookAt(0, 0, 0);
+        }
+        controlRef.current.update();
         setFloorState(newFloor);
     };
 
@@ -183,21 +195,22 @@ export function DraggableMap() {
     };
 
     // handles adding 3D models to a scene
-    const addObject = (src: string, zIndex: number, objectType: string) => {
-        const loader = new OBJLoader();
+    const loadObjectAsync = (src, zIndex, objectType) => {
+        return new Promise((resolve) => {
+            const loader = new OBJLoader();
 
-        loader.load(
-            src,
-            function (object) {
-                console.log('Model loaded successfully', object);
-
+            loader.load(src, function (object) {
                 const scale = 2.3;
                 object.scale.set(scale, scale, scale);
                 object.position.x = 6.5;
                 object.position.y = -47.5;
                 object.position.z = -0.5 + zIndex * floorHeight;
                 object.userData.objectType = 'Floor';
-                object.userData.floor = zIndex + 1;
+                const floor = zIndex + 1;
+                object.userData.floor = floor;
+                if (floor > floorState) {
+                    object.visible = false;
+                }
 
                 // different colors for floors and walls
                 if (objectType == 'floor') {
@@ -217,28 +230,21 @@ export function DraggableMap() {
                 }
 
                 scenesRef.current[0].add(object);
-            },
-            function (xhr) {
-                console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
-            },
-            function (error) {
-                console.error('Error loading 3D model:', error);
-            }
-        );
+                resolve();
+            });
+        });
     };
 
     const handleThreeDHospitalChange = () => {
-        addObject('../../public/Models/Floor 1 Floor.obj', 0, 'floor');
-        addObject('../../public/Models/Floor 1 Walls.obj', 0, 'walls');
-        addObject('../../public/Models/Floor 2 Floor.obj', 1, 'floor');
-        addObject('../../public/Models/Floor 2 Walls.obj', 1, 'walls');
-        addObject('../../public/Models/Floor 3 Floor.obj', 2, 'floor');
-        addObject('../../public/Models/Floor 3 Walls.obj', 2, 'walls');
-        addObject('../../public/Models/Floor 4 Floor.obj', 3, 'floor');
-        addObject('../../public/Models/Floor 4 Walls.obj', 3, 'walls');
-
-        handleFloorChange(4);
-
+        const loadPromises = [];
+        loadPromises.push(loadObjectAsync('../../public/Models/Floor 1 Floor.obj', 0, 'floor'));
+        loadPromises.push(loadObjectAsync('../../public/Models/Floor 1 Walls.obj', 0, 'walls'));
+        loadPromises.push(loadObjectAsync('../../public/Models/Floor 2 Floor.obj', 1, 'floor'));
+        loadPromises.push(loadObjectAsync('../../public/Models/Floor 2 Walls.obj', 1, 'walls'));
+        loadPromises.push(loadObjectAsync('../../public/Models/Floor 3 Floor.obj', 2, 'floor'));
+        loadPromises.push(loadObjectAsync('../../public/Models/Floor 3 Walls.obj', 2, 'walls'));
+        loadPromises.push(loadObjectAsync('../../public/Models/Floor 4 Floor.obj', 3, 'floor'));
+        loadPromises.push(loadObjectAsync('../../public/Models/Floor 4 Walls.obj', 3, 'walls'));
         // lighting
         const ambientLight = new THREE.AmbientLight(0xebf2ff, 0.5);
         scenesRef.current[0].add(ambientLight);
@@ -248,14 +254,23 @@ export function DraggableMap() {
         scenesRef.current[0].add(directionalLight);
 
         // enable orbiting
+        cameraRef.current.position.set(100, 300, 300);
+        cameraRef.current.rotation.set(0, 0, 0);
+        cameraRef.current.lookAt(0, 0, 0);
         controlRef.current.enableRotate = true;
+        controlRef.current.update();
+
+        return Promise.all(loadPromises);
     };
 
     const handleTwoDHospitalChange = () => {
-        controlRef.current.enableRotate = false;
         // reset the camera position
         cameraRef.current.position.set(0, 0, 330);
-        cameraRef.current?.lookAt(0, 0, 0);
+        cameraRef.current.rotation.set(0, 0, 0);
+        cameraRef.current.quaternion.set(0, 0, 0, 1);
+        cameraRef.current.lookAt(0, 0, 0);
+        controlRef.current.enableRotate = false;
+        controlRef.current.update();
     };
 
     // handles changes to the hospital from the navSelection context
@@ -263,7 +278,7 @@ export function DraggableMap() {
         handleHospitalChange(selectedHospitalName!);
     }, [selectedHospitalName]);
 
-    // handles changes to the department or pathAlgo from the navSelection context
+    // handles changes to the department from the navSelection context
     useEffect(() => {
         const firstNodeId = findParkingLot(); // start node
         const lastNodeId = getLastNodeId(); // destination node
@@ -285,7 +300,6 @@ export function DraggableMap() {
         } else {
             handleFloorChange(1);
         }
-        handleFloorChange(1);
     }, [selectedDepartment, selectedAlgorithm]);
 
     // this useEffect runs only on mount and initializes some things.
@@ -298,8 +312,20 @@ export function DraggableMap() {
             pulseFrequency: 0.5,
         });
         // Patriot Place is the default so we have to load all the 3D mapping stuff on mount
-        handleThreeDHospitalChange();
-        setFloorState(4);
+        if (
+            selectedHospitalName == 'Chestnut Hill' ||
+            selectedHospitalName == 'Faulkner Hospital' ||
+            selectedHospitalName == 'BWH Campus'
+        ) {
+            handleTwoDHospitalChange();
+        } else {
+            handleThreeDHospitalChange().then(() => {
+                if (selectedDepartment) {
+                    // if a department has already been selected start with only floor 1
+                    handleFloorChange(1);
+                }
+            });
+        }
     }, []);
 
     // gets Id for destination node

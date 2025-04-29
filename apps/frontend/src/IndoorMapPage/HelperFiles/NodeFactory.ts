@@ -23,7 +23,7 @@ export const createNode = (
     const sphere = new THREE.Mesh(geometry, material);
     sphere.position.x = node.x;
     sphere.position.y = node.y;
-    if (floorHeight !== undefined) {
+    if (floorHeight !== undefined && node.floor < 4) {
         // floorHeight should only be passed when displaying on a 3D map path.
         let zIndex = node.floor - 1;
         if (node.floor == 2 || node.floor == 3) {

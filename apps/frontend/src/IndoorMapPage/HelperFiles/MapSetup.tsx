@@ -52,6 +52,7 @@ export function mapSetup(config: MapConfig) {
         );
         camera.lookAt(0, 0, 0);
         cameraRef.current = camera;
+        cameraRef.current.up.set(0, 0, 1);
 
         // store initial camera position
         initialCameraPositionRef.current.copy(camera.position);
@@ -80,7 +81,9 @@ export function mapSetup(config: MapConfig) {
 
         // set min and max zoom
         controls.minDistance = 100;
-        controls.maxDistance = 330;
+        controls.maxDistance = 400;
+
+        //controls.rotateSpeed = -1;
 
         // store initial target
         initialTargetRef.current.copy(controls.target);
