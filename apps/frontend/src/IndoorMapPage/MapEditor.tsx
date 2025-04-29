@@ -876,14 +876,14 @@ export function MapEditor() {
             render();
         };
 
-        window.addEventListener('keydown', ({ key }) => {
-            if (key === 'Backspace' || key === 'Delete') {
+        window.addEventListener('contextmenu', (event) => {
+            if (event.ctrlKey) {
                 deleteSelected();
             }
         });
 
         return () => {
-            window.removeEventListener('keydown', deleteSelected);
+            window.removeEventListener('contextmenu', deleteSelected);
         };
     }, [allNodes]);
 

@@ -198,7 +198,7 @@ const MapEditorBox = () => {
                                     </Text>
                                     <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'} mb={'xs'}>
                                         To move a node, click on the node you wish to move and drag
-                                        it. To select multiple, use ctrl + click.
+                                        it. To select multiple, use ctrl + click. To delete, use ctrl + right-click.
                                     </Text>
                                     <Divider
                                         w={'100%'}
