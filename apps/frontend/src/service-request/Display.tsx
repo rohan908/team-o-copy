@@ -19,7 +19,7 @@ const Display: React.FC<DisplayProps> = ({ data, onBack }) => {
                 p="xl"
                 w="100%"
                 maw="600px"
-                bg="#D6E0F8"
+                bg="#ebf2ff"
                 /*Border Radius is only possible through style prop afaik -Connor*/
             >
                 {data.map((item, idx) => (

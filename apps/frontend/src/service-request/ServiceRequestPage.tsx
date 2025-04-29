@@ -70,6 +70,7 @@ export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
                 h={props.height}
                 justify="center"
                 align="center"
+                c="#ebf2ff"
             >
                 <Stack>
                     <SimpleGrid
@@ -94,6 +95,7 @@ export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
 
             <Modal
                 opened={opened}
+                c="#ebf2ff"
                 onClose={() => setOpened(false)}
                 size="xl"
                 overlayProps={{ blur: 5 }}
@@ -104,6 +106,12 @@ export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
                     content: {
                         marginTop: '100px',
                         marginBottom: '30px',
+                    },
+                    header: {
+                        backgroundColor: '#ebf2ff',
+                    },
+                    body: {
+                        backgroundColor: '#ebf2ff',
                     },
                 }}
             >
