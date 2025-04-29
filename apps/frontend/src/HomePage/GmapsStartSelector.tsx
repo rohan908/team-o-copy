@@ -5,7 +5,12 @@ import { useNavSelectionContext } from '../contexts/NavigationContext';
 import { useTimeline } from './TimeLineContext.tsx';
 import { useEffect, useRef } from 'react';
 
-export function GmapsStartSelector() {
+interface GmapsStartSelectorProps {
+  hasIcon: boolean
+  w: string
+}
+
+export function GmapsStartSelector(props:GmapsStartSelectorProps) {
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
     const { setUserCoordinates, setUserStart, userStart } = useTimeline();
     const input = useRef<HTMLInputElement>(null);
@@ -43,15 +48,15 @@ export function GmapsStartSelector() {
     return (
         <TextInput
             placeholder="Starting Location"
-            leftSection={
-                <IconHomeFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            leftSection={!props.hasIcon ? null :
+              <IconHomeFilled size="16" style={{ color: theme.colors.primaryBlues[8]}} />
             }
             ref={input}
             onChange={(value) => setUserStart(value)}
             radius="sm"
             mb="sm"
             size="xs"
-            w={"100%"}
+            w={props.w}
         />
     );
 }

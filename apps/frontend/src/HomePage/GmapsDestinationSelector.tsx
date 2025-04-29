@@ -1,5 +1,5 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
-import { IconChevronDown, IconMapPinFilled } from '@tabler/icons-react';
+import {IconBuildings, IconChevronDown, IconMapPinFilled} from '@tabler/icons-react';
 import { useState } from 'react';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
@@ -12,6 +12,11 @@ import {
     useBwhCampusContext,
 } from '../contexts/DirectoryContext.tsx';
 
+interface GmapsDestinationSelectorProps {
+  hasIcon: boolean
+  w: string
+}
+
 export const hospitalOptions = [
     { value: '20 Patriot Pl', label: '20 Patriot Pl' },
     { value: '22 Patriot Pl', label: '22 Patriot Pl' },
@@ -20,7 +25,7 @@ export const hospitalOptions = [
     { value: 'BWH Campus', label: 'BWH Campus' },
 ];
 
-export function GmapsDestinationSelector() {
+export function GmapsDestinationSelector(props:GmapsDestinationSelectorProps) {
     const { setSelectedHospital, setDirectoryOptions } = useTimeline();
 
     const theme = useMantineTheme();
@@ -60,15 +65,15 @@ export function GmapsDestinationSelector() {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={
-                <IconMapPinFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            leftSection={!props.hasIcon ? null :
+              <IconBuildings size="16" style={{ color: theme.colors.primaryBlues[8]}} />
             }
             data={hospitalOptions}
             onChange={setHospitalLocation}
             radius="sm"
             mb="sm"
             size="xs"
-            w={"100%"}
+            w={props.w}
         />
     );
 }

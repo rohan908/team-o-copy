@@ -57,7 +57,7 @@ return (
               <Text fw={700} size="md" color="black" mb="xs" ta="left">
                 Directions:
               </Text>
-              <ScrollArea h={180} w="100%">
+              <ScrollArea h={160} w="100%">
                 <List type="ordered" mt="sm" w="100%">
                   {steps.map((step, index) => (
                     <List.Item key={index} w="100%">
@@ -66,7 +66,7 @@ return (
                       </Text>
                       <Divider label={`${step.distance}`}
                                labelPosition="center"
-                               w="220px"
+                               w="215px"
                                my="xs"
                                color="#F6D161" // Line color
                                styles={{
