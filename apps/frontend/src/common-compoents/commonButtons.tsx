@@ -14,8 +14,8 @@ interface ColorChangingButtonProps extends React.HTMLAttributes<HTMLButtonElemen
     onClick?: () => void;
     w?: string;
     disabled?: boolean;
-    firstColor: string;
-    secondColor: string;
+    firstColor?: string;
+    secondColor?: string;
     ValueToCheck: string;
     ValueForTrigger: string;
     borderRadius?: string;
@@ -94,18 +94,22 @@ export const SidebarButton: React.FC<ColorChangingButtonProps> = ({
     onClick,
     icon,
     ...props
-}) => (
-    <UnstyledButton
-        c={props.ValueToCheck === props.ValueForTrigger ? props.firstColor : props.secondColor}
-        onClick={onClick}
-        style={{
-            transition: 'all 0.4s ease',
-        }}
-        {...props}
-    >
-        <Group gap="xs">
-            {icon}
-            <Title>{children}</Title>
-        </Group>
-    </UnstyledButton>
-);
+}) => {
+    const firstColor = 'primaryBlues.4';
+    const secondColor = 'secondaryBlues.7';
+    return (
+        <UnstyledButton
+            c={props.ValueToCheck === props.ValueForTrigger ? firstColor : secondColor}
+            onClick={onClick}
+            style={{
+                transition: 'all 0.4s ease',
+            }}
+            {...props}
+        >
+            <Group gap="xs">
+                {icon}
+                <Title>{children}</Title>
+            </Group>
+        </UnstyledButton>
+    );
+};

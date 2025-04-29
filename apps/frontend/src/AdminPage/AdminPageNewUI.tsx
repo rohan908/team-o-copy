@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DatabaseController } from './DatabaseController';
 import { CSVTable } from './CSVTable';
-import {
-    IconLanguage,
-    IconExclamationCircleFilled,
-    IconShieldHalf,
-    IconTrash,
-    IconBellExclamation,
-} from '@tabler/icons-react';
+
 import {
     Collapse,
     Button,
@@ -30,10 +24,18 @@ import SanitationRequestHistory from './SanitationRequestHistory.tsx';
 import MaintenanceRequestHistory from './MaintenanceHistory.tsx';
 import CSVControlsComponent from './CSVControlsComponent.tsx';
 import {
+    IconChevronDown,
+    IconChevronUp,
+    IconFileBroken,
     IconArrowBadgeDown,
     IconArrowBadgeDownFilled,
     IconArrowBadgeLeftFilled,
     IconArrowBadgeRightFilled,
+    IconLanguage,
+    IconExclamationCircleFilled,
+    IconShieldHalf,
+    IconTrash,
+    IconBellExclamation,
 } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
@@ -87,6 +89,7 @@ export function AdminPageV2() {
                                                 align="center"
                                                 justify="center"
                                                 gap="sm"
+                                                mb="xl"
                                             >
                                                 <HoverUnderline>
                                                     <Title
@@ -100,16 +103,12 @@ export function AdminPageV2() {
                                             </Flex>
                                             <Flex
                                                 direction="column"
-                                                align="center"
-                                                justify="center"
+                                                align="left"
+                                                justify="left"
                                                 gap="sm"
+                                                p="sm"
                                             >
-                                                <Flex
-                                                    direction="row"
-                                                    align="center"
-                                                    justify="center"
-                                                    gap="sm"
-                                                >
+                                                <Flex direction="row" align="center" gap="0px">
                                                     <Title c="secondaryBlues.7">
                                                         Service Requests
                                                     </Title>
@@ -125,9 +124,7 @@ export function AdminPageV2() {
                                                             onClick={close}
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
-                                                            <IconArrowBadgeDownFilled
-                                                                color={'#1C43A7'}
-                                                            />
+                                                            <IconChevronUp color={'#1C43A7'} />
                                                         </ActionIcon>
                                                     </Collapse>
                                                     {!formInfoOpen && (
@@ -137,9 +134,7 @@ export function AdminPageV2() {
                                                             onClick={open}
                                                             aria-label="ActionIcon the same size as inputs"
                                                         >
-                                                            <IconArrowBadgeLeftFilled
-                                                                color={'#1C43A7'}
-                                                            />
+                                                            <IconChevronDown color={'#1C43A7'} />
                                                         </ActionIcon>
                                                     )}
                                                 </Flex>
@@ -152,61 +147,43 @@ export function AdminPageV2() {
                                                         direction="column"
                                                         justify="center"
                                                         gap="xs"
+                                                        ml="sm"
+                                                        w="100%"
                                                     >
                                                         <SidebarButton
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={'0'}
-                                                            firstColor="primaryBlues.8"
-                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(0)}
-                                                            icon={<IconLanguage />}
+                                                            icon={<IconLanguage size="40" />}
                                                         >
                                                             Language Requests
                                                         </SidebarButton>
-                                                        <ColorChangingButton
-                                                            borderRadius={'8px'}
-                                                            w="100%"
-                                                            ValueToCheck={displayTableNumber.toString()}
-                                                            ValueForTrigger={'0'}
-                                                            firstColor="primaryBlues.8"
-                                                            secondColor="secondaryBlues.4"
-                                                            onClick={() => displayNumToggle(0)}
-                                                        >
-                                                            Language Requests
-                                                        </ColorChangingButton>
-                                                        <ColorChangingButton
-                                                            w="100%"
-                                                            borderRadius={'8px'}
+
+                                                        <SidebarButton
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={'2'}
-                                                            firstColor="primaryBlues.8"
-                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(2)}
+                                                            icon={<IconTrash size="40" />}
                                                         >
                                                             Sanitation Requests
-                                                        </ColorChangingButton>
-                                                        <ColorChangingButton
-                                                            w="100%"
-                                                            borderRadius={'8px'}
+                                                        </SidebarButton>
+
+                                                        <SidebarButton
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={'3'}
-                                                            firstColor="primaryBlues.8"
-                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(3)}
+                                                            icon={<IconBellExclamation size="40" />}
                                                         >
                                                             Maintenance Requests
-                                                        </ColorChangingButton>
-                                                        <ColorChangingButton
-                                                            w="100%"
-                                                            borderRadius={'8px'}
+                                                        </SidebarButton>
+                                                        <SidebarButton
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={'1'}
-                                                            firstColor="primaryBlues.8"
-                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => displayNumToggle(1)}
+                                                            icon={<IconShieldHalf size="40" />}
                                                         >
                                                             Security Requests
-                                                        </ColorChangingButton>
+                                                        </SidebarButton>
                                                     </Flex>
                                                 </Collapse>
                                                 <Flex
@@ -256,17 +233,14 @@ export function AdminPageV2() {
                                                         justify="center"
                                                         gap="xs"
                                                     >
-                                                        <ColorChangingButton
-                                                            w="100%"
-                                                            borderRadius={'8px'}
+                                                        <SidebarButton
                                                             ValueToCheck={displayTableNumber.toString()}
                                                             ValueForTrigger={'4'}
-                                                            firstColor="primaryBlues.8"
-                                                            secondColor="secondaryBlues.4"
                                                             onClick={() => setCSVManipOpen(true)}
+                                                            icon={<IconFileBroken size="40" />}
                                                         >
                                                             CSV Manipulator
-                                                        </ColorChangingButton>
+                                                        </SidebarButton>
                                                         <Button
                                                             bg={'secondaryBlues.4'}
                                                             component={Link}
