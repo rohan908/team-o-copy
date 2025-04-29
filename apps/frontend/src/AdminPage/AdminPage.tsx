@@ -7,11 +7,21 @@ import { SegmentedControl } from '@mantine/core';
 import SecurityRequestHistory from './SecurityRequestHistory.tsx';
 import SanitationRequestHistory from './SanitationRequestHistory.tsx';
 import MaintenanceRequestHistory from './MaintenanceHistory.tsx';
+import { useUser } from '@clerk/clerk-react';
+import { Navigate } from 'react-router-dom';
 
 export function AdminPage() {
     const [showPreview, setShowPreview] = useState(false); // state to control the collapsible section
     const [displayTableNumber, setDisplayTableNumber] = useState(-1);
     const [stringDisplayNum, setStringDisplayNum] = useState('');
+    // clerk const's
+    const { user, isSignedIn } = useUser();
+
+    // check role
+    const role = user?.publicMetadata?.role;
+    if (!isSignedIn || role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
 
     useEffect(() => {
         switch (stringDisplayNum) {
@@ -55,14 +65,14 @@ export function AdminPage() {
             }}
         >
             <Box
-              maw="60%"
-              mx="auto"
-              bg="themeGold.1"
-              p="2.5%"
-              style={{
-                borderRadius: "15px",
-                boxShadow: 'var(--shadow-lg)',
-              }}
+                maw="60%"
+                mx="auto"
+                bg="themeGold.1"
+                p="2.5%"
+                style={{
+                    borderRadius: '15px',
+                    boxShadow: 'var(--shadow-lg)',
+                }}
             >
                 <Title order={2} mb="4px" ta="center" fw={600}>
                     Admin Page
@@ -103,55 +113,55 @@ export function AdminPage() {
                                     border: 'none',
                                 },
                                 active: {
-                                    backgroundColor: "themeGold.2",
+                                    backgroundColor: 'themeGold.2',
                                     boxShadow: theme.shadows.sm,
                                 },
                             })}
                         ></SegmentedControl>
                         <Collapse in={displayTableNumber == 0}>
-                          <Box
-                            bg="themeGold.0"
-                            p="10px"
-                            mt="10px"
-                            style={{
-                              borderRadius: "15px"
-                            }}
-                          >
+                            <Box
+                                bg="themeGold.0"
+                                p="10px"
+                                mt="10px"
+                                style={{
+                                    borderRadius: '15px',
+                                }}
+                            >
                                 <LanguageRequestHistory />
                             </Box>
                         </Collapse>
                         <Collapse in={displayTableNumber == 1}>
-                          <Box
-                            bg="themeGold.0"
-                            p="10px"
-                            mt="10px"
-                            style={{
-                              borderRadius: "15px"
-                            }}
-                          >
+                            <Box
+                                bg="themeGold.0"
+                                p="10px"
+                                mt="10px"
+                                style={{
+                                    borderRadius: '15px',
+                                }}
+                            >
                                 <SecurityRequestHistory />
                             </Box>
                         </Collapse>
                         <Collapse in={displayTableNumber == 2}>
                             <Box
-                              bg="themeGold.0"
-                              p="10px"
-                              mt="10px"
-                              style={{
-                                borderRadius: "15px"
-                              }}
+                                bg="themeGold.0"
+                                p="10px"
+                                mt="10px"
+                                style={{
+                                    borderRadius: '15px',
+                                }}
                             >
                                 <SanitationRequestHistory />
                             </Box>
                         </Collapse>
                         <Collapse in={displayTableNumber == 3}>
                             <Box
-                              bg="themeGold.0"
-                              p="10px"
-                              mt="10px"
-                              style={{
-                                borderRadius: "15px"
-                              }}
+                                bg="themeGold.0"
+                                p="10px"
+                                mt="10px"
+                                style={{
+                                    borderRadius: '15px',
+                                }}
                             >
                                 <MaintenanceRequestHistory />
                             </Box>
@@ -171,10 +181,7 @@ export function AdminPage() {
                 <DatabaseController table="directory" />
 
                 {/* Toggle Button */}
-                <Flex
-                  justify="center"
-                  mt="10px"
-                >
+                <Flex justify="center" mt="10px">
                     <Button
                         color="#153A90"
                         variant="outline"

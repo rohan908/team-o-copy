@@ -1,18 +1,45 @@
-import { Select, SelectProps } from '@mantine/core';
+import { Select, SelectProps, Flex, Box } from '@mantine/core';
+import React from 'react';
+import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
-const StatusSelect: React.FC<SelectProps> = (props) => {
+const statusOptions = ['Unassigned', 'Assigned', 'Working', 'Done'];
+
+interface StatusSelectProps {
+  value: string | null;
+  onChange: (value: string | null) => void;
+}
+
+const StatusSelect: React.FC<StatusSelectProps> = ({ value, onChange }) => {
+  const handleSpeechResult = (text: string) => {
+    const matchedStatus = statusOptions.find((option) =>
+      option.toLowerCase().includes(text.toLowerCase())
+    );
+    if (matchedStatus) {
+      onChange(matchedStatus);
+    } else {
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Status Found',
+        color: 'red',
+      });     }
+  };
+
     return (
-        <Select
+      <Flex align="center" gap="sm">
+      <Select
             label="What is the Status "
             placeholder="Select a Status"
-            data={['Unassigned', 'Assigned', 'Working', 'Done']}
+            data={statusOptions}
+            value={value}
+            onChange={(val) => onChange(val)}
             nothingFoundMessage="Hospital not found"
             radius="sm"
             mb="md"
             size="xs"
             required
             c={"#285CC6"}
-            {...props}
+            w="240px"
             styles={{
                 label: {
                     fontSize: '18px',
@@ -20,6 +47,10 @@ const StatusSelect: React.FC<SelectProps> = (props) => {
                 },
             }}
         />
+  <Box mt={14}>
+    <SpeechToText OnResult={handleSpeechResult} />
+  </Box>
+</Flex>
     );
 };
 

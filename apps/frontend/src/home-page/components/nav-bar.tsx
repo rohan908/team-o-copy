@@ -1,28 +1,31 @@
 import { Outlet, Link } from 'react-router-dom';
 import { Button, Flex, Box, Group, MantineProvider } from '@mantine/core';
 import { useUser, SignOutButton, SignInButton } from '@clerk/clerk-react';
+import { IconInfoCircle } from '@tabler/icons-react';
 import '../home-style.css';
+import { ReactNode } from 'react';
 
 type NavItem = {
-    name: string;
+    name: ReactNode;
     link: string;
 };
 
 export const navItems: NavItem[] = [
-    { name: 'Navigation', link: '/map-API' },
-    { name: 'About', link: '/About-page' },
+     { name: 'Navigation', link: '/map-API' },
+    // { name: <IconInfoCircle size={35} />, link: '/Info-page' },
+    { name: 'Info', link: '/Info-page' },
 ];
 
 export const adminNavItems: NavItem[] = [
     //{ name: 'Service Request', link: '/service-request-page' },
     { name: 'Admin Page', link: '/admin-page' },
-    //{ name: 'Map Editor', link: '/map-editor' },
 ];
 
 export const loginItems: NavItem[] = [{ name: 'Log In', link: '/log-in-page' }];
 
 export function NavBar() {
-    const { isSignedIn } = useUser();
+    const { isSignedIn, user } = useUser();
+    const role = user?.publicMetadata?.role;
 
     return (
         <>
@@ -115,9 +118,27 @@ export function NavBar() {
                                                 </SignInButton>
                                             </MantineProvider>
                                         ))}
-
+                                    {/* Log Out Button (for staff) */}
+                                    {isSignedIn && role === 'staff' && (
+                                        <MantineProvider theme={{ activeClassName: '' }}>
+                                            <SignOutButton>
+                                                <Button
+                                                    variant="filled"
+                                                    color="baseBlue.6"
+                                                    className="LoggoutButton"
+                                                    justify="flex-end"
+                                                    component={Link}
+                                                    to="/"
+                                                    size="sm"
+                                                    style={{ borderRadius: '8px' }}
+                                                >
+                                                    Log Out
+                                                </Button>
+                                            </SignOutButton>
+                                        </MantineProvider>
+                                    )}
                                     {/* Admin Buttons and Log Out (only when logged in) */}
-                                    {isSignedIn && (
+                                    {isSignedIn && role === 'admin' && (
                                         <>
                                             {adminNavItems.map((item, index) => (
                                                 <MantineProvider

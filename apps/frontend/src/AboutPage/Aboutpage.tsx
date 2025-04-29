@@ -92,15 +92,15 @@ export function AboutPage() {
 
     return (
         <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py="xl">
-            <Container size="lg" py="xl" px={0}>
+            <Container size="lg" py={0} px={0}>
                 <Stack align="center" gap="lg">
-                    <Text ta="center" fz="xl" fw="bold" c={theme.colors.secondaryBlues[7]}>
+                    <Text mt="xl" ta="center" fz="xl" c={theme.colors.secondaryBlues[7]}>
                         Thank you to Brigham and Women's Hospital and their representative, Andrew
                         Shinn!
                     </Text>
 
                     {/* Golden separating line */}
-                    <Box w="100%" style={{ borderBottom: '2px solid gold' }} />
+                    <Box w="100%" bg={theme.colors.yellowAccent[3]} h="2px" />
 
                     <Group align="center" justify="center" mt="md" gap="xl" wrap="nowrap" px="md">
                         {/* Left side - Text content */}
@@ -183,9 +183,9 @@ export function AboutPage() {
                     </Group>
 
                     {/* Golden separating line */}
-                    <Box w="100%" style={{ borderTop: '2px solid gold' }} />
+                  <Box w="100%" bg={theme.colors.yellowAccent[3]} h="2px" />
 
-                    <Text ta="center" mt="xl" size="sm" c={theme.colors.secondaryBlues[7]} px="md">
+                    <Text ta="center" mt="md" size="sm" c={theme.colors.secondaryBlues[7]} px="md">
                         The Brigham & Women's Hospital maps and data used in this application are
                         copyrighted and provided for the sole use of educational purposes.
                     </Text>
