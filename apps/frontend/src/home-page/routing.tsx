@@ -91,7 +91,6 @@ export function Routing() {
                             <Route path="/Credit-page" element={<CreditPage />} />
                         </Route>
                     </Routes>
-                </BrowserRouter>
             </TimelineProvider>
         </>
     );
