@@ -77,13 +77,22 @@ export function DisplayDirectionsBox() {
         directionsByFloor[direction.Floor].push(direction);
     });
     return (
-        <Box w="100%" h="335px" style={{ overflowY: 'auto' }}>
+        <Box w="80%" h="400px" style={{overflow: 'hidden', borderRadius: "8px", boxShadow: nodeIds && nodeIds.length > 1 ? "0px -4px 4px 0px #AAAAAA" : "0px 0px 0px 0px #FFFFFF" }}>
+          <Box
+            style={{overflowY: 'auto'}}
+          >
             <Accordion
-                multiple
-                styles={{
-                    item: { marginBottom: '0px' },
-                }}
-                defaultValue={Object.keys(directionsByFloor).map((floor) => `floor-${floor}`)}
+              multiple
+              styles={{
+                root: {
+                  height: "450px",
+                  overflowY: "auto",
+                },
+                item: {
+                  marginBottom: '0px',
+                },
+              }}
+              defaultValue={Object.keys(directionsByFloor).map((floor) => `floor-${floor}`)}
             >
                 {Object.entries(directionsByFloor).map(([floor, direction]) => {
                     const floorTTS = direction.map((step) => {
@@ -99,15 +108,12 @@ export function DisplayDirectionsBox() {
                                     <Text fw={700} size="md" c="blue.7">
                                         {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
                                         {/* Changing for Faulkner and Chestnut*/}
-                                        {Number(floor) === 1
-                                            ? 'Floor 1'
-                                            : Number(floor) === 4
-                                              ? 'Chestnut'
-                                              : Number(floor) === 5
-                                                ? 'Faulkner'
-                                                : `Floor ${Number(floor) + 1}`
-                                                  ? 'BWH'
-                                                  : `Floor ${Number(floor) + 2}`}
+                                        {Number(floor) === 1 ? 'Floor 1' : ""}
+                                        {Number(floor) === 2 ? 'Floor 3' : ""}
+                                        {Number(floor) === 3 ? 'Floor 4' : ""}
+                                        {Number(floor) === 4 ? 'Chestnut' : ""}
+                                        {Number(floor) === 5 ? 'Faulkner' : ""}
+                                        {Number(floor) === 6 ? 'BWH' : ""}
                                     </Text>
                                     <TTSButton text={floorTTS} />
                                 </Group>
@@ -128,29 +134,30 @@ export function DisplayDirectionsBox() {
                                         <IconArrowRight size={20} color="#0E3B99" />
                                     );
 
-                                    const label = step.Direction.startsWith('Take')
-                                        ? step.Direction
-                                        : step.Direction === 'Straight'
-                                          ? `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`
-                                          : `Turn ${step.Direction.toLowerCase()}`;
+                        const label = step.Direction.startsWith('Take')
+                          ? step.Direction
+                          : step.Direction === 'Straight'
+                            ? `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`
+                            : `Turn ${step.Direction.toLowerCase()}`;
 
-                                    return (
-                                        <Box key={idx} mb="xs">
-                                            <Group align="center">
-                                                {icon}
-                                                <Text size="sm" fw={500} c="blue">
-                                                    {label}
-                                                </Text>
-                                            </Group>
-                                            <Divider my="xs" />
-                                        </Box>
-                                    );
-                                })}
-                            </Accordion.Panel>
-                        </Accordion.Item>
-                    );
-                })}
+                        return (
+                          <Box key={idx} mb="xs">
+                            <Group align="center">
+                              {icon}
+                              <Text size="sm" fw={500} c="blue">
+                                {label}
+                              </Text>
+                            </Group>
+                            <Divider color="yellowAccent.4" my="xs" />
+                          </Box>
+                        );
+                      })}
+                    </Accordion.Panel>
+                  </Accordion.Item>
+                );
+              })}
             </Accordion>
+          </Box>
         </Box>
     );
 }
