@@ -50,7 +50,7 @@ const FloorConnectionBox = () => {
 
     useEffect(() => {
         floorEntryData();
-        console.log(mapProps.currentNode)
+        getAllStairs();
     }, [mapProps.currentNode]);
 
     const floorEntryData = () => {
