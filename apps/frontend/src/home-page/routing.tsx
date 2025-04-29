@@ -3,7 +3,6 @@ import { NavBar } from './components/nav-bar.tsx';
 import { MapPage } from '../MapPage/MapPage.tsx';
 import { MapAPIPage } from '../MapsAPIPage/MapAPIPage.tsx';
 import { useState } from 'react';
-import LanguageRequestHistory from '../AdminPage/LanguageRequestHistory.tsx';
 import { HomePage } from '../HomePage/HomePage.tsx';
 import { LogInPage } from './log-in-page.tsx';
 import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
@@ -52,10 +51,6 @@ export function Routing() {
                             element={<ProtectedRoute Route={<AdminPageV2 />} />}
                         />
                         <Route path="/HomePage/HomePage" element={<HomePage />} />
-                        <Route
-                            path="/language-request-history"
-                            element={<ProtectedRoute Route={<LanguageRequestHistory />} />}
-                        />
                     </Route>
                 </Routes>
             </TimelineProvider>
