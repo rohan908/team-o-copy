@@ -44,24 +44,31 @@ export function DraggableMap() {
     const [floorState, setFloorState] = useState(4);
     const [sceneIndexState, setSceneIndexState] = useState(0);
 
+    // used to space apart floors and nodes and edges on those floors
+    const floorHeight = 10.5;
+
     // set up map
     const { cameraRef, rendererRef, scenesRef } = mapSetup({
         canvasId: 'insideMapCanvas',
     });
 
     const handleHospitalChange = (hospitalName: string) => {
-        clearSceneObjects(scenesRef.current);
         if (hospitalName === '20 Patriot Pl' || hospitalName === '22 Patriot Pl') {
-            handleThreeDHospitalChange();
-            setSceneIndexState(0);
-            setFloorState(4);
+            if (sceneIndexState !== 0) {
+                clearSceneObjects(scenesRef.current);
+                handleThreeDHospitalChange();
+                setSceneIndexState(0);
+            }
         } else if (hospitalName === 'Chestnut Hill') {
+            clearSceneObjects(scenesRef.current);
             setSceneIndexState(3);
             setFloorState(1); // Assuming Chestnut Hill starts at floor 1
         } else if (hospitalName === 'Faulkner Hospital') {
+            clearSceneObjects(scenesRef.current);
             setSceneIndexState(4);
             setFloorState(1);
         } else if (hospitalName === 'BWH Campus') {
+            clearSceneObjects(scenesRef.current);
             setSceneIndexState(5);
             setFloorState(1);
         }
@@ -91,18 +98,28 @@ export function DraggableMap() {
         if (selectedHospitalName === 'Chestnut Hill') return 3;
         if (selectedHospitalName === 'Faulkner Hospital') return 4;
         if (selectedHospitalName === 'BWH Campus') return 5;
-        if (floor === 1) return 0;
-        if (floor === 3) return 0;
-        if (floor === 4) return 0;
         return 0;
     };
 
-    // helper function for showing or hiding a floor
+    // shows or hides a floor
     const floorVisibility = (floor: number, visible: boolean) => {
         scenesRef.current[sceneIndexState].traverse((object) => {
             if (
                 object.userData &&
-                object.userData.objectType === 'Floor' &&
+                object.userData.objectType == 'Floor' &&
+                object.userData.floor === floor
+            ) {
+                object.visible = visible;
+            }
+        });
+    };
+
+    // shows or hides all path objects on a floor
+    const pathVisibility = (floor: number, visible: boolean) => {
+        scenesRef.current[sceneIndexState].traverse((object) => {
+            if (
+                object.userData &&
+                object.userData.objectType == 'path' &&
                 object.userData.floor === floor
             ) {
                 object.visible = visible;
@@ -112,24 +129,26 @@ export function DraggableMap() {
 
     // Handle switching to other floors
     const handleFloorChange = (newFloor: number) => {
-        if (newFloor === floorState) return;
-        else if (floorState < newFloor) {
-            // show floors above
+        if (newFloor === floorState) {
+            return;
+        } else if (floorState < newFloor) {
+            // show floors and path above
             for (let i = floorState + 1; i <= newFloor; i++) {
                 floorVisibility(i, true);
             }
         } else {
-            // hide floors above
+            // hide floors and path above
             for (let i = newFloor + 1; i <= floorState; i++) {
                 floorVisibility(i, false);
             }
         }
+        pathVisibility(floorState, false); // hide path on current floor
+        pathVisibility(newFloor, true); // show path on new floor
         setFloorState(newFloor);
-        setSceneIndexState(getSceneIndexFromFloor(newFloor));
     };
 
     const handlePath = (firstNodeId: number, lastNodeId: number, algo: string) => {
-        const path = findPath(firstNodeId, lastNodeId, algo).then(async (pathres) => {
+        return findPath(firstNodeId, lastNodeId, algo).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
             // Add dispatch for navSelection
             navSelection.dispatch({
@@ -179,7 +198,7 @@ export function DraggableMap() {
                 object.scale.set(scale, scale, scale);
                 object.position.x = 6.5;
                 object.position.y = -47.5;
-                object.position.z = zIndex * 10.5;
+                object.position.z = -0.5 + zIndex * floorHeight;
                 object.userData.objectType = 'Floor';
                 object.userData.floor = zIndex + 1;
 
@@ -245,16 +264,21 @@ export function DraggableMap() {
         // clear previous path
         clearPathObjects(scenesRef.current);
 
-        handleFloorChange(1);
-
         console.log('finding path:', firstNodeId, lastNodeId);
         let algorithm = 'BFS'; // default to BFS if not selected
         if (selectedAlgorithm) {
             algorithm = selectedAlgorithm;
         }
         if (firstNodeId && lastNodeId) {
-            handlePath(firstNodeId, lastNodeId, algorithm);
+            const pathPromise = handlePath(firstNodeId, lastNodeId, algorithm);
+            // switch floor after path is created so the path on above floors is hidden properly
+            pathPromise.then(() => {
+                handleFloorChange(1);
+            });
+        } else {
+            handleFloorChange(1);
         }
+        handleFloorChange(1);
     }, [selectedDepartment, selectedAlgorithm]);
 
     // this useEffect runs only on mount and initializes some things.
@@ -268,7 +292,7 @@ export function DraggableMap() {
         });
         // Patriot Place is the default so we have to load all the 3D mapping stuff on mount
         handleThreeDHospitalChange();
-        handleFloorChange(4);
+        setFloorState(4);
     }, []);
 
     // gets Id for destination node
@@ -319,50 +343,56 @@ export function DraggableMap() {
             console.error('Animation reference not initialized');
             return;
         }
-
         // Only create edges on the same floor
-        if (node1.floor === node2.floor && node1.floor === 1) {
-            scenesRef.current[0].add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
-        } else if (node1.floor === node2.floor && node1.floor === 2) {
-            scenesRef.current[1].add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
-        } else if (node1.floor === node2.floor && node1.floor === 3) {
-            scenesRef.current[2].add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
-        } else if (node1.floor === node2.floor && node1.floor === 4) {
-            scenesRef.current[3].add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
-        } else if (node1.floor === node2.floor && node1.floor === 5) {
-            scenesRef.current[4].add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
-        } else if (node1.floor === node2.floor && node1.floor === 6) {
-            scenesRef.current[5].add(
-                animationRef.current.createEdge(
-                    { x: node1.x, y: node1.y },
-                    { x: node2.x, y: node2.y }
-                )
-            );
+        if (node1.floor === node2.floor) {
+            let zIndex = node1.floor - 1;
+            if (node1.floor == 2 || node1.floor == 3) {
+                zIndex = zIndex + 1;
+            }
+            const z = 0.1 + zIndex * 10.5;
+            if (node1.floor === 1) {
+                scenesRef.current[0].add(
+                    animationRef.current.createEdge(
+                        { x: node1.x, y: node1.y, z: z, floor: node1.floor },
+                        { x: node2.x, y: node2.y, z: z, floor: node2.floor }
+                    )
+                );
+            } else if (node1.floor === 2) {
+                const edge = animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y, z: z, floor: node1.floor + 1 },
+                    { x: node2.x, y: node2.y, z: z, floor: node2.floor + 1 }
+                );
+                edge.visible = false;
+                scenesRef.current[0].add(edge);
+            } else if (node1.floor === 3) {
+                const edge = animationRef.current.createEdge(
+                    { x: node1.x, y: node1.y, z: z, floor: node1.floor + 1 },
+                    { x: node2.x, y: node2.y, z: z, floor: node2.floor + 1 }
+                );
+                edge.visible = false;
+                scenesRef.current[0].add(edge);
+            } else if (node1.floor === 4) {
+                scenesRef.current[3].add(
+                    animationRef.current.createEdge(
+                        { x: node1.x, y: node1.y },
+                        { x: node2.x, y: node2.y }
+                    )
+                );
+            } else if (node1.floor === 5) {
+                scenesRef.current[4].add(
+                    animationRef.current.createEdge(
+                        { x: node1.x, y: node1.y },
+                        { x: node2.x, y: node2.y }
+                    )
+                );
+            } else if (node1.floor === 6) {
+                scenesRef.current[5].add(
+                    animationRef.current.createEdge(
+                        { x: node1.x, y: node1.y },
+                        { x: node2.x, y: node2.y }
+                    )
+                );
+            }
         }
     };
 
