@@ -1,7 +1,17 @@
 import { Popover, Button, TextInput, Title } from '@mantine/core';
 import { IconFilter } from '@tabler/icons-react';
+import NameEntry from '../service-request/components/NameEntry.tsx';
+import React from 'react';
+
+interface FilterState {
+    name: string;
+}
 
 function Filter() {
+    const [name, setName] = React.useState<string>('');
+
+    const handleFilterState = () => {};
+
     return (
         <Popover
             width={300}
@@ -25,8 +35,7 @@ function Filter() {
             </Popover.Target>
             <Popover.Dropdown>
                 <Title>Need to add functionality</Title>
-                <TextInput label="Name" placeholder="Name" size="xs" />
-                <TextInput label="Email" placeholder="john@doe.com" size="xs" mt="xs" />
+                <NameEntry value={name} onChange={(e) => setName(e.target.value)} />
             </Popover.Dropdown>
         </Popover>
     );

@@ -21,6 +21,7 @@ import {
 } from '@mantine/core';
 import { TimelineProvider } from './HomePage/TimeLineContext.tsx';
 import { Notifications } from '@mantine/notifications';
+import { FilterProvider } from './contexts/FilterContext.tsx';
 const themeGold: MantineColorsTuple = [
     '#FFF8EB',
     '#FDF0D5',
@@ -194,12 +195,14 @@ const theme = createTheme({
 function App() {
     return (
         <MantineProvider theme={theme}>
-          <Notifications/>
+            <Notifications />
             <DirectoryProvider>
                 <RequestProvider>
                     <NavigationProvider>
                         <TimelineProvider>
-                            <Routing />
+                            <FilterProvider>
+                                <Routing />
+                            </FilterProvider>
                         </TimelineProvider>
                     </NavigationProvider>
                 </RequestProvider>
