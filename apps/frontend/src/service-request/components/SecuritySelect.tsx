@@ -1,20 +1,44 @@
-import { useMantineTheme, Select, SelectProps } from '@mantine/core';
-import ISO6391 from 'iso-639-1';
+import { Flex, Box, Select, SelectProps } from '@mantine/core';
+import React from 'react';
+import SpeechToText from '../../Buttons/SpeechToText.tsx';
+import { notifications } from '@mantine/notifications';
 
-const SecuritySelect: React.FC<SelectProps> = (props) => {
+
+const securityOptions = ['Escort Service', 'Safety Hazard', 'Building Security', 'Surveillance'];
+interface SecuritySelectProps {
+  value: string | null;
+  onChange: (value: string | null) => void;
+}
+const SecuritySelect: React.FC<SecuritySelectProps> = ({ value, onChange }) => {
+  const handleSpeechResult = (text: string) => {
+    const matched = securityOptions.find((option) =>
+      option.toLowerCase().includes(text.toLowerCase())
+    );
+    if (matched) {
+      onChange(matched);
+    } else {
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Security Found',
+        color: 'red',
+      });     }
+  };
     return (
-        <Select
-            label="Choose Your Security Concern"
+      <Flex align="center" gap="sm">
+
+      <Select
+            label="Choose your Security Concern"
             placeholder="Select a Concern"
-            searchable
-            data={['Escort Service', 'Safety Hazard', 'Building Security', 'Surveillance']}
+            data={securityOptions}
+            value={value}
+            onChange={(val) => onChange(val)}
             nothingFoundMessage="Service not Offered"
             radius="sm"
             mb="md"
+            w="240px"
             size="xs"
             required
             c={"#285CC6"}
-            {...props}
             styles={{
                 label: {
                     fontSize: '18px',
@@ -22,6 +46,10 @@ const SecuritySelect: React.FC<SelectProps> = (props) => {
                 },
             }}
         />
+        <Box mt={14}>
+          <SpeechToText OnResult={handleSpeechResult} />
+        </Box>
+      </Flex>
     );
 };
 

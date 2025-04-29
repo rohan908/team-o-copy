@@ -1,5 +1,3 @@
-// This is your Prisma schema file, learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider   = "prisma-client-js"
   output     = "../.prisma/client"
@@ -11,32 +9,28 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-// creates the employee table
 model Employee {
-  employeeid  Int    @id @default(autoincrement())
-  name        String
-  address     String
-  phoneNumber Int
-  email       String
-  position    String
+  name       String
+  email      String
+  employeeid Int    @id @default(autoincrement())
+  clerkId    String @unique
+  role       String
 }
 
-// creates the langauageServiceRequest table (strong entity)
 model langaugeServiceRequest {
   requestID    Int      @id @default(autoincrement())
-  employeeName String
-  department   String
   createdAt    DateTime @default(now())
   date         String
   time         String
+  language     String
+  description  String?
+  department   String
+  employeeName String
+  hospital     String
   priority     String
   status       String
-  language     String
-  hospital     String
-  description  String?
 }
 
-// creates the langauageServiceRequest table (strong entity)
 model sanitationServiceRequest {
   requestID    Int      @id @default(autoincrement())
   employeeName String
@@ -51,7 +45,6 @@ model sanitationServiceRequest {
   description  String?
 }
 
-// creates the maintenanceServiceRequest table (strong entity)
 model maintenanceServiceRequest {
   requestID       Int      @id @default(autoincrement())
   employeeName    String
@@ -66,7 +59,6 @@ model maintenanceServiceRequest {
   description     String?
 }
 
-// creates the securityServiceRequest table (strong entity)
 model securityServiceRequest {
   requestID    Int      @id @default(autoincrement())
   employeeName String
@@ -81,9 +73,6 @@ model securityServiceRequest {
   description  String
 }
 
-//added hospital^^
-
-// creates the directory table (strong entity)
 model directory {
   dName          String
   building       String
@@ -96,8 +85,8 @@ model directory {
 model FloorMap {
   id    Int    @id @default(autoincrement())
   name  String
-  nodes Node[]
   edges Edge[]
+  nodes Node[]
 }
 
 model Node {
@@ -105,18 +94,18 @@ model Node {
   x               Int
   y               Int
   floor           Int
-  map             FloorMap @relation(fields: [mapId], references: [id])
   mapId           Int
   name            String
   description     String
   nodeType        String
-  connectingNodes Int[] // ids of all edges containing this node
+  connectingNodes Int[]
+  map             FloorMap @relation(fields: [mapId], references: [id])
 }
 
 model Edge {
   id     Int      @id @default(autoincrement())
   weight Float
-  map    FloorMap @relation(fields: [mapId], references: [id])
   mapId  Int
-  nodes  Int[] // ids of both nodes in this edge
+  nodes  Int[]
+  map    FloorMap @relation(fields: [mapId], references: [id])
 }
