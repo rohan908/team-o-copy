@@ -16,7 +16,7 @@ const Display: React.FC<DisplayProps> = ({ data, onBack }) => {
             <Box mb="xl">
                 {data.map((item, idx) => (
                     <Flex key={idx} mb="sm" gap="sm">
-                        <Text fw={600} c="#2658bd" style={{ minWidth: '140px' }}>
+                        <Text fw={600} c="#2658bd" style={{ miw: '140px' }}>
                             {item.title}:
                         </Text>
                         <Text c="#2658bd">{item.value || 'Not specified'}</Text>

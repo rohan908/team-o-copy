@@ -10,12 +10,6 @@ import StatusSelect from './components/StatusSelect.tsx';
 import DepartmentSelect from './components/DepartmentSelect.tsx';
 import NameEntry from './components/NameEntry.tsx';
 
-// import {
-//     ChestnutHill,
-//     Patriot20,
-//     Patriot22,
-//     HospitalDepartment,
-// } from '../directory/components/directorydata';
 import { useForm } from '@mantine/form';
 import {
     useBwhCampusContext,
@@ -43,7 +37,6 @@ export interface RequestData {
 interface RequestDetails {
     handleSubmit: (values: RequestData) => void;
     children?: (form: ReturnType<typeof useForm<RequestData>>) => React.ReactNode;
-    //pass in arbitrary amount of components needed but i dont know how to do that
     newInitialValues: RequestData;
     contributors?: string;
     formLabel: string;
@@ -99,6 +92,11 @@ const RequestForm: React.FC<RequestDetails> = ({
         form.setFieldValue('department', '');
     };
 
+    const handleReset = () => {
+        form.reset();
+        setDepartmentOptions([]);
+    };
+
     return (
         <Flex justify="center" align="center" p="xxl">
             <Box p="xl">
@@ -109,16 +107,6 @@ const RequestForm: React.FC<RequestDetails> = ({
                     }}
                 >
                     <Flex direction="column" ta="center" justify="center">
-                        {/*<Box mr="auto" mb="lg">*/}
-                        {/*    <Button*/}
-                        {/*        radius="md"*/}
-                        {/*        onClick={onBack}*/}
-                        {/*        bg="#5A83DB"*/}
-                        {/*        style={{ width: '100px' }}*/}
-                        {/*    >*/}
-                        {/*        Back*/}
-                        {/*    </Button>*/}
-                        {/*</Box>*/}
                         <Title order={2} ta="center" mb="md" fz="xl" c={'#285CC6'}>
                             {formLabel}
                         </Title>
@@ -129,8 +117,6 @@ const RequestForm: React.FC<RequestDetails> = ({
 
                     <Flex align="stretch" gap="xl" wrap="wrap" mb="md">
                         <Box flex="1" miw="275">
-                            {/*< column 1!!!*/}
-
                             <NameEntry {...form.getInputProps('employeeName')} />
                             <HospitalSelect
                                 value={form.values.hospital}
@@ -141,11 +127,9 @@ const RequestForm: React.FC<RequestDetails> = ({
                                 {...form.getInputProps('department')}
                             />
                             {children?.(form)}
-                            {/*this is where I want any unique components to go*/}
                         </Box>
 
                         <Box flex="1" miw="275">
-                            {/* column 2!!!*/}
                             <DateInputForm {...form.getInputProps('date')} />
                             <TimeEntry {...form.getInputProps('time')} />
                             <PriorityButtons {...form.getInputProps('priority')} />
@@ -161,13 +145,13 @@ const RequestForm: React.FC<RequestDetails> = ({
                             variant="outline"
                             color="#5A83DB"
                             radius="md"
-                            style={{ width: '200px' }}
-                            onClick={() => form.reset()}
+                            w="200px"
+                            onClick={handleReset}
                         >
                             Clear Form
                         </Button>
 
-                        <Button radius="md" type="submit" bg="#5A83DB" style={{ width: '200px' }}>
+                        <Button radius="md" type="submit" bg="#5A83DB" w="100%">
                             Submit
                         </Button>
                     </Flex>
