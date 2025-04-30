@@ -44,7 +44,7 @@ export function IndoorMapsPage() {
             </Box>
             {/* Map */}
             <Box style={{ flexGrow: 1, minWidth: 0, position: 'relative' }}>
-                <DraggableMap />
+                <DraggableMap onHomePage={false} />
             </Box>
         </Flex>
     );

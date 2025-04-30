@@ -22,7 +22,11 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { useLocation } from 'react-router-dom';
 import { element } from 'prop-types';
 
-export function DraggableMap() {
+interface DraggableMapProps {
+  onHomePage:boolean
+}
+
+export function DraggableMap(props:DraggableMapProps) {
     /*
       References that exist outside renders, changeable floor state, and properties like theme
      */
@@ -143,13 +147,13 @@ export function DraggableMap() {
             cameraRef.current.updateProjectionMatrix();
             controlRef.current.enableRotate = false;
         } else {
-            cameraRef.current.position.set(0, 0, 200);
+            cameraRef.current.position.set(0, 0, 100);
             cameraRef.current.up.set(0, 0, 1);
             cameraRef.current.rotation.set(0, 0, 0);
             cameraRef.current.quaternion.identity();
             controlRef.current.target.set(0, 0, 0);
             cameraRef.current.lookAt(0, 0, 0);
-            cameraRef.current.zoom = 1;
+            cameraRef.current.zoom = 1.5;
             cameraRef.current.updateMatrixWorld(true);
             cameraRef.current.updateProjectionMatrix();
             controlRef.current.enableRotate = false;
@@ -163,7 +167,11 @@ export function DraggableMap() {
         cameraRef.current.quaternion.identity();
         controlRef.current.target.set(0, 0, 0);
         cameraRef.current.lookAt(0, 0, 0);
-        cameraRef.current.zoom = 1.5;
+        if (props.onHomePage){
+          cameraRef.current.zoom = 1;
+        } else {
+          cameraRef.current.zoom = 1.2;
+        }
         cameraRef.current.updateMatrixWorld(true);
         cameraRef.current.updateProjectionMatrix();
         controlRef.current.enableRotate = true;
@@ -321,11 +329,16 @@ export function DraggableMap() {
         cameraRef.current.rotation.set(0, 0, 0);
         cameraRef.current.quaternion.set(0, 0, 0, 1);
         cameraRef.current.lookAt(0, 0, 0);
-        cameraRef.current.zoom = 1;
+        if (props.onHomePage){
+          cameraRef.current.zoom = 1;
+        } else {
+          cameraRef.current.zoom = 1.25;
+        }
         cameraRef.current.updateProjectionMatrix();
         controlRef.current.enableRotate = false;
         controlRef.current.update();
     };
+
 
     // handles changes to the hospital from the navSelection context
     useEffect(() => {
