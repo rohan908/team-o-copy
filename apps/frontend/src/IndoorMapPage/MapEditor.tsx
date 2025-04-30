@@ -83,7 +83,6 @@ export function MapEditor() {
     const [sceneIndexState, setSceneIndexState] = useState<number>(0);
     const sceneIndexRef = useRef(sceneIndexState);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const draggableObjectsRef = useRef<THREE.Object3D[]>([]);
 
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
@@ -260,9 +259,19 @@ export function MapEditor() {
         clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
         for (const node of allNodes) {
-            createNode(node, scenesRef.current, node.nodeType, 0, 0, objectsRef, nodeRadius, {
-                color: nodeColor,
-            }); //Create the nodes
+            createNode(
+                node,
+                scenesRef.current,
+                node.nodeType,
+                undefined,
+                0,
+                0,
+                objectsRef,
+                nodeRadius,
+                {
+                    color: nodeColor,
+                }
+            ); //Create the nodes
             for (const connectingNodeId of node.connectingNodes) {
                 // iterate over each connected node.
                 const connectedNode = getNode(connectingNodeId, allNodes);
@@ -439,6 +448,11 @@ export function MapEditor() {
                         selectedObjects.current[selectedObjects.current.length - 1].userData.nodeId
                 )
             );
+            console.log(selectedObject.userData.nodeId);
+            console.log(
+                'Current node data set to:',
+                nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
+            );
         }
 
         render(); // render to show color changes
@@ -511,7 +525,6 @@ export function MapEditor() {
 
         // ray from the camera position to the pointer
         raycaster.setFromCamera(pointer, cameraRef.current);
-
         const intersects = raycaster.intersectObjects(
             objectsRef.current.filter(
                 (value) =>
@@ -522,6 +535,7 @@ export function MapEditor() {
 
         if (intersects.length > 0) {
             const selectedObject = intersects[0].object;
+            console.log(selectedObject.userData.floor);
             if (selectedObjects.current.includes(selectedObject)) {
                 deselectObject(selectedObject);
                 console.log('Deselected:', selectedObject);
@@ -600,10 +614,19 @@ export function MapEditor() {
             };
 
             nodeRef.current.push(newNode);
-
-            createNode(newNode, scenesRef.current, newNode.nodeType, 0, 0, objectsRef, nodeRadius, {
-                color: nodeColor,
-            }); //Create the nodes
+            createNode(
+                newNode,
+                scenesRef.current,
+                newNode.nodeType,
+                undefined,
+                0,
+                0,
+                objectsRef,
+                nodeRadius,
+                {
+                    color: nodeColor,
+                }
+            ); //Create the nodes
         }
     };
 

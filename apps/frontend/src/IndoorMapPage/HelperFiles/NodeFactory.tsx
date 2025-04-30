@@ -9,6 +9,7 @@ export const createNode = (
     node: DirectoryNodeItem,
     sceneArr: THREE.Scene[],
     nodeType: string,
+    floorHeight?: number,
     startId?: number,
     endId?: number,
     objectsRef?: React.MutableRefObject<THREE.Object3D[]>,
@@ -105,32 +106,92 @@ export const createNode = (
     let threeDNode;
     if (nodeType == 'department') {
         threeDNode = new THREE.Mesh(departmentNodeGeometry, material);
-        threeDNode.position.set(node.x, node.y, 0);
     } else if (nodeType == 'parking-lot') {
         threeDNode = new THREE.Mesh(parkingNodeGeometry, material);
-        threeDNode.position.set(node.x, node.y, 0);
     } else if (nodeType == 'staircase') {
         threeDNode = new THREE.Mesh(staircaseNodeGeometry, material);
-        threeDNode.position.set(node.x, node.y, 0);
     } else if (nodeType == 'elevator') {
         threeDNode = new THREE.Mesh(elevatorNodeGeometry, material);
-        threeDNode.position.set(node.x, node.y, 0);
     } else {
         threeDNode = new THREE.Mesh(hallWayNodeGeometry, material);
-        threeDNode.position.set(node.x, node.y, 0);
     }
 
     if (threeDNode) {
+        threeDNode.position.x = node.x;
+        threeDNode.position.y = node.y;
         threeDNode.userData.nodeId = node.id;
-        threeDNode.userData.floor = node.floor;
+        if (floorHeight !== undefined && node.floor < 4) {
+            // floorHeight should only be passed when displaying on a 3D map path.
+            let zIndex = node.floor - 1;
+            if (node.floor == 2 || node.floor == 3) {
+                zIndex = zIndex + 1;
+            }
+            threeDNode.position.z = -0.1 + zIndex * floorHeight;
+            // This is used to hide the path on higher floors
+            if (node.floor == 2 || node.floor == 3) {
+                threeDNode.userData.floor = node.floor + 1;
+            } else {
+                threeDNode.userData.floor = node.floor;
+            }
+        }
         threeDNode.userData.nodeType = node.nodeType;
         threeDNode.userData.color = nodeColor;
+        // This is used so all the path objects can be cleared without clearing 3D models
+        threeDNode.userData.objectType = 'path';
         const nodeFloor = node.floor;
-        // check if the floor is within bounds
-        if (nodeFloor >= 1 && nodeFloor <= 6) {
-            // add to corresponding scene array (arrays are 0-indexed but floors start at 1)
-            sceneArr[nodeFloor - 1].add(threeDNode);
+        if (nodeFloor === 1) {
+            sceneArr[0].add(threeDNode);
             if (objectsRef) {
+                if (floorHeight == undefined) {
+                    threeDNode.userData.floor = nodeFloor;
+                }
+                objectsRef.current.push(threeDNode);
+            }
+        } else if (nodeFloor === 2) {
+            if (floorHeight !== undefined) {
+                sceneArr[0].add(threeDNode);
+                threeDNode.visible = false;
+                if (objectsRef) {
+                    // hide path objects not on the first floor be default
+                    objectsRef.current.push(threeDNode);
+                }
+            } else {
+                sceneArr[1].add(threeDNode);
+                if (objectsRef) {
+                    threeDNode.userData.floor = nodeFloor;
+                    objectsRef.current.push(threeDNode);
+                }
+            }
+        } else if (nodeFloor === 3) {
+            if (floorHeight !== undefined) {
+                sceneArr[0].add(threeDNode);
+                threeDNode.visible = false;
+                if (objectsRef) {
+                    objectsRef.current.push(threeDNode);
+                }
+            } else {
+                sceneArr[2].add(threeDNode);
+                if (objectsRef) {
+                    threeDNode.userData.floor = nodeFloor;
+                    objectsRef.current.push(threeDNode);
+                }
+            }
+        } else if (nodeFloor === 4) {
+            sceneArr[3].add(threeDNode);
+            if (objectsRef) {
+                threeDNode.userData.floor = nodeFloor;
+                objectsRef.current.push(threeDNode);
+            }
+        } else if (nodeFloor === 5) {
+            sceneArr[4].add(threeDNode);
+            if (objectsRef) {
+                threeDNode.userData.floor = nodeFloor;
+                objectsRef.current.push(threeDNode);
+            }
+        } else if (nodeFloor === 6) {
+            sceneArr[5].add(threeDNode);
+            if (objectsRef) {
+                threeDNode.userData.floor = nodeFloor;
                 objectsRef.current.push(threeDNode);
             }
         } else {
@@ -139,10 +200,14 @@ export const createNode = (
     }
 };
 
-export const updateNodeGeometry = (objectsRef: React.MutableRefObject<THREE.Object3D[]>, node: DirectoryNodeItem, nodeRadius: number) => {
+export const updateNodeGeometry = (
+    objectsRef: React.MutableRefObject<THREE.Object3D[]>,
+    node: DirectoryNodeItem,
+    nodeRadius: number
+) => {
     const objNode = objectsRef.current.find((obj) => obj.userData.nodeId === node.id);
 
-    if(objNode != undefined) {
+    if (objNode != undefined) {
         // @ts-ignore
         objNode.geometry.dispose();
 
@@ -185,4 +250,4 @@ export const updateNodeGeometry = (objectsRef: React.MutableRefObject<THREE.Obje
 
         objNode.userData.nodeType = node.nodeType;
     }
-}
+};
