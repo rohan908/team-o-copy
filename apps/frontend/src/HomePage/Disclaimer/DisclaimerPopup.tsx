@@ -70,7 +70,7 @@ export function DisclaimerPopup() {
                                 <Text size="sm" c="dimmed">
                                   This website is a term project exercise for WPI CS 3733
                                   Software Engineering (Prof. Wong) and is not to be confused
-                                  with the actual Brigham & Women’s Hospital website.”
+                                  with the actual Brigham & Women’s Hospital website.
                                 </Text>
                             </Card>
                         </Container>
