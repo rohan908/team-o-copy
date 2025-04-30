@@ -69,7 +69,7 @@ export function IndoorMapsPage() {
                                         }}
                                     />
                                 </Flex>
-                                <Flex mt="md" direction="row" gap={'xs'}>
+                                <Flex direction="row" gap={'xs'}>
                                     <IconRouteSquare
                                         size="20"
                                         style={{

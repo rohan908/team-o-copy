@@ -43,18 +43,8 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
 
     const setSelectedAlgo = (algo: string | null) => {
         setAlgoStr(algo!);
-        setAlgo(+algo!);
-        console.log('selector algo just changed to: ', algo);
-
-        // setDepartment(department);
-        // NavSelection.dispatch({
-        //     type: 'SET_NAV_REQUEST',
-        //     data: {
-        //         HospitalName: selectedHospital,
-        //         Department: department,
-        //         AlgorithmChange: true,
-        //     } as NavSelectionItem,
-        // });
+        // setAlgo(+algo!);
+        // console.log('selector algo just changed to: ', algo);
     };
 
     return (
