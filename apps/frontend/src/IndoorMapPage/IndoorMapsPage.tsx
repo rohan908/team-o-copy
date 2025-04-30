@@ -23,7 +23,7 @@ export function IndoorMapsPage() {
                         <ParkingSelector hasIcon={false} w={"100%"}/>
                       </Flex>
                       <Flex w="100%" justify={"left"}>
-                        <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "17.5px"}}  />
+                        <IconDotsVertical size="20" style={{ color: theme.colors.primaryBlues[8], marginTop:"-10px", marginLeft: "4.7%"}}  />
                       </Flex>
                       <Flex direction="row" gap={"xs"}>
                         <IconCheckupList size="20" style={{ color: theme.colors.primaryBlues[8], marginTop: "7px"}} />
@@ -44,7 +44,7 @@ export function IndoorMapsPage() {
             </Box>
             {/* Map */}
             <Box style={{ flexGrow: 1, minWidth: 0, position: 'relative' }}>
-                <DraggableMap />
+                <DraggableMap onHomePage={false} />
             </Box>
         </Flex>
     );
