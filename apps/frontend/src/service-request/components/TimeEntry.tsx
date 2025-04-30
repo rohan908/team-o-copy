@@ -8,7 +8,6 @@ import { notifications } from '@mantine/notifications';
 
 
 const TimeEntry: React.FC<TimeInputProps> = (props) => {
-  const [value, setValue] = useState<string>('');
   const ref = useRef<HTMLInputElement>(null);
   const pickerControl = (
     <ActionIcon variant="subtle" color="gray" onClick={() => ref.current?.showPicker()}>
@@ -20,8 +19,9 @@ const TimeEntry: React.FC<TimeInputProps> = (props) => {
     if (parsedTime) {
       const hours = parsedTime.getHours().toString().padStart(2, '0');
       const minutes = parsedTime.getMinutes().toString().padStart(2, '0');
-      setValue(`${hours}:${minutes}`);
-    } else {
+      const formattedTime = `${hours}:${minutes}`;
+      props.onChange?.(formattedTime);
+    }else{
       notifications.show({
         title: 'Speech Error',
         message: 'Could not Recognized a Valid Time',
@@ -35,8 +35,10 @@ const TimeEntry: React.FC<TimeInputProps> = (props) => {
             {...props}
             label="Enter Time"
             radius="sm"
-            value={value}
-            onChange={(e) => setValue(e.currentTarget.value)}
+            value={props.value}
+            onChange={(val) => {
+              props.onChange?.(val);
+            }}
             w="240px"
             ref={ref}
             mb="md"

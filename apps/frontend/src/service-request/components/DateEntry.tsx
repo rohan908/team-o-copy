@@ -9,7 +9,6 @@ import { notifications } from '@mantine/notifications';
 
 
 const DateEntry: React.FC<DateInputProps> = (props) => {
-  const [value, setValue] = useState<Date | null>(null);
   const handleSpeechResult = (text: string) => {
     const parsedDate = chrono.parseDate(text); // Parse the spoken text
     if (parsedDate) {
@@ -33,8 +32,6 @@ const DateEntry: React.FC<DateInputProps> = (props) => {
             size="xs"
             required
             c={"#285CC6"}
-            value={value}
-            onChange={setValue}
             w="240px"
             styles={{
                 label: {
