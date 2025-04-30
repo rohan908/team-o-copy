@@ -10,7 +10,7 @@ import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import PopupTooltip from './Components/PopupTooltip';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { useUser } from '@clerk/clerk-react';
-import { createNode } from './HelperFiles/NodeFactory.ts';
+import { createNode, updateNodeGeometry } from './HelperFiles/NodeFactory.tsx';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { IconCurrentLocation } from '@tabler/icons-react';
@@ -37,7 +37,7 @@ export interface MapEditorProps {
     updateNodePosition?: (x: number, y: number, floor: number) => void;
 }
 
-export const MapContext = createContext<MapEditorProps>({});
+export const MapContext = createContext<MapEditorProps>();
 
 export function MapEditor() {
     const allNodes = useAllNodesContext();
@@ -88,6 +88,9 @@ export function MapEditor() {
     // Parameters for THREEjs objects and path display
     const nodeColor = 0xeafeff;
     const selectedNodeColor = 0x56effa;
+    const nodeStaircaseColor = 0xfcb024;
+    const startColor = 0x2a68f7;
+    const endColor = 0xfcbe45;
     const edgeColor = 0x2a68f7;
     const nodeRadius = 1.5;
     const edgeRad = 0.75;
@@ -163,7 +166,7 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-                if (currentNodeData?.nodeType != 'staircase') {
+                if (currentNodeData?.nodeType != 'staircase' || mapTool != 'add-edge') {
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
                     });
@@ -257,7 +260,7 @@ export function MapEditor() {
         clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
         for (const node of allNodes) {
-            createNode(node, scenesRef.current, objectsRef, nodeRadius, {
+            createNode(node, scenesRef.current, node.nodeType, 0, 0, objectsRef, nodeRadius, {
                 color: nodeColor,
             }); //Create the nodes
             for (const connectingNodeId of node.connectingNodes) {
@@ -349,6 +352,10 @@ export function MapEditor() {
                 nodeToUpdate.nodeType = currentNodeData.nodeType;
                 nodeToUpdate.connectingNodes = currentNodeData.connectingNodes;
             }
+            if (nodeToUpdate != null && currentNodeData != null) {
+                updateNodeGeometry(objectsRef, nodeToUpdate, nodeRadius);
+                updateDragControls();
+            }
         }
     }, [currentNodeData]);
 
@@ -381,58 +388,61 @@ export function MapEditor() {
     };
 
     const selectMultiObjects = (selectedObject: THREE.Object3D) => {
-      if (
-        selectedObject instanceof THREE.Mesh &&
-        selectedObject.material instanceof THREE.MeshBasicMaterial
-      ) {
-        selectedObject.material.color.set(selectedNodeColor);
-        selectedObject.material.needsUpdate = true;
-        selectedObjects.current.push(selectedObject);
+        if (
+            selectedObject instanceof THREE.Mesh &&
+            selectedObject.material instanceof THREE.MeshBasicMaterial
+        ) {
+            selectedObject.material.color.set(selectedNodeColor);
+            selectedObject.material.needsUpdate = true;
+            selectedObjects.current.push(selectedObject);
 
-        // changes mouse on selected object
-        setCursorStyle(`url(${MouseImages.MoveClick}),auto`);
+            // changes mouse on selected object
+            setCursorStyle(`url(${MouseImages.MoveClick}),auto`);
 
-        setCurrentNodeData(
-          nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
-        );
+            setCurrentNodeData(
+                nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
+            );
 
-        render(); // render to show color changes
-        updateDragControls();
-      }
+            render(); // render to show color changes
+            updateDragControls();
+        }
     };
 
     const deselectObject = (selectedObject: THREE.Object3D) => {
         if (
             selectedObject instanceof THREE.Mesh &&
             selectedObject.material instanceof THREE.MeshBasicMaterial
-        ) {
-            selectedObject.material.color.set(nodeColor);
-            selectedObject.material.needsUpdate = true;
-            selectedObjects.current = selectedObjects.current.filter(
-                (object) => object !== selectedObject
-            );
-
-            if (selectedObjects.current.length === 0) {
-                setCurrentNodeData(null);
-
-                if (cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
-                    // changes mouse on no selected objects
-                    setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
-                }
-            } else if (selectedObjects.current.length > 0) {
-                setCurrentNodeData(
-                    nodeRef.current.find(
-                        (element) =>
-                            element.id ===
-                            selectedObjects.current[selectedObjects.current.length - 1].userData
-                                .nodeId
-                    )
-                );
+        )
+            if (selectedObject.userData.nodeType == 'staircase') {
+                selectedObject.material.color.set(nodeStaircaseColor);
+            } else {
+                selectedObject.material.color.set(nodeColor);
             }
 
-            render(); // render to show color changes
-            updateDragControls();
+        selectedObject.material.needsUpdate = true;
+        selectedObjects.current = selectedObjects.current.filter(
+            (object) => object !== selectedObject
+        );
+
+        if (selectedObjects.current.length === 0) {
+            setCurrentNodeData(null);
+
+            if (cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
+                // changes mouse on no selected objects
+                setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
+            }
+        } else if (selectedObjects.current.length > 0) {
+            setCurrentNodeData(
+                nodeRef.current.find(
+                    (element) =>
+                        element.id ===
+                        selectedObjects.current[selectedObjects.current.length - 1].userData.nodeId
+                )
+            );
         }
+
+        render(); // render to show color changes
+        updateDragControls();
     };
 
     // switches the type of cursor depending on the tool
@@ -516,10 +526,10 @@ export function MapEditor() {
                 deselectObject(selectedObject);
                 console.log('Deselected:', selectedObject);
             } else {
-                if(event.ctrlKey) {
-                  selectMultiObjects(selectedObject)
+                if (event.ctrlKey) {
+                    selectMultiObjects(selectedObject);
                 } else {
-                  selectObject(selectedObject);
+                    selectObject(selectedObject);
                 }
 
                 console.log('set data');
@@ -591,7 +601,7 @@ export function MapEditor() {
 
             nodeRef.current.push(newNode);
 
-            createNode(newNode, scenesRef.current, objectsRef, nodeRadius, {
+            createNode(newNode, scenesRef.current, newNode.nodeType, 0, 0, objectsRef, nodeRadius, {
                 color: nodeColor,
             }); //Create the nodes
         }
@@ -750,8 +760,10 @@ export function MapEditor() {
     };
 
     useEffect(() => {
-        if(objToReselect instanceof THREE.Mesh &&
-            objToReselect.material instanceof THREE.MeshBasicMaterial) {
+        if (
+            objToReselect instanceof THREE.Mesh &&
+            objToReselect.material instanceof THREE.MeshBasicMaterial
+        ) {
             if (selectedObjects.current.length == 0) {
                 objToReselect.material.color.set(selectedNodeColor);
                 objToReselect.material.needsUpdate = true;

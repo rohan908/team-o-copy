@@ -63,7 +63,7 @@ function Sanitation({ onBack }: { onBack: () => void }) {
             formLabel="Sanitation Request"
             onBack={onBack}
         >
-            {(form) => <SanitationSelect {...form.getInputProps('security')} />}
+            {(form) => <SanitationSelect {...form.getInputProps('cleanupType')} />}
         </RequestForm>
     );
 }

@@ -1,4 +1,4 @@
-import { Autocomplete, TextInputProps, Flex, Box } from '@mantine/core';
+import { Autocomplete, TextInputProps, TextInput, Flex, Box } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 
@@ -29,6 +29,8 @@ const NameEntry: React.FC<TextInputProps> = ({ ...props }) => {
 
     const handleSpeechResult = (text: string) => {
         setValue(text);
+
+        props.onChange?.(text);
     };
     return (
         <Flex align="center" gap="sm">

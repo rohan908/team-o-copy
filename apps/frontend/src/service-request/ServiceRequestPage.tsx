@@ -1,11 +1,5 @@
-import { Box, Button, Flex, SimpleGrid, Title, Stack } from '@mantine/core';
-import {
-    IconLanguage,
-    IconExclamationCircleFilled,
-    IconShieldHalf,
-    IconTrash,
-    IconBellExclamation,
-} from '@tabler/icons-react';
+import { Box, Flex, SimpleGrid, Stack, Modal } from '@mantine/core';
+import { IconLanguage, IconShieldHalf, IconTrash, IconBellExclamation } from '@tabler/icons-react';
 import HoverButton from './components/HoverButton.tsx';
 import React, { useState } from 'react';
 import LanguageInterpreterSR from './LanguageInterpreterSR.tsx';
@@ -17,100 +11,114 @@ type ServiceRequestItem = {
     labelOne: string;
     labelTwo: string;
     icon: React.ReactNode;
-    form?: () => React.ReactNode;
-    disabled?: boolean | true;
+    form?: React.ReactNode;
+    disabled?: boolean;
 };
 
 interface ServiceRequestPageProps {
-  width: string;
-  marginRight: string;
-  height: string;
-  cols: number;
-  vSpacing: number;
-  hSpacing: number;
-  buttonHeight: number;
+    width: string;
+    marginRight: string;
+    height: string;
+    cols: number;
+    vSpacing: number;
+    hSpacing: number;
+    buttonHeight: number;
 }
 
 export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
-    const [activeFormIndex, setActiveFormIndex] = useState<number | null>(null);
+    const [opened, setOpened] = useState(false);
+    const [activeForm, setActiveForm] = useState<React.ReactNode | null>(null);
 
     const ServiceRequestItems: ServiceRequestItem[] = [
         {
             labelOne: 'Interpreter',
             labelTwo: 'Request',
             icon: <IconLanguage size={120} />,
-            form: () => <LanguageInterpreterSR onBack={() => setActiveFormIndex(null)} />,
+            form: <LanguageInterpreterSR onBack={() => setOpened(false)} />,
         },
         {
             labelOne: 'Security',
             labelTwo: 'Request',
             icon: <IconShieldHalf size={120} />,
-            form: () => <SecuritySR onBack={() => setActiveFormIndex(null)} />,
+            form: <SecuritySR onBack={() => setOpened(false)} />,
         },
         {
             labelOne: 'Sanitation',
             labelTwo: 'Request',
             icon: <IconTrash stroke={2} size={120} />,
-            form: () => <SanitationSR onBack={() => setActiveFormIndex(null)} />,
+            form: <SanitationSR onBack={() => setOpened(false)} />,
         },
         {
             labelOne: 'Maintenance',
             labelTwo: 'Request',
             icon: <IconBellExclamation stroke={2} size={120} />,
-            form: () => <MaintenanceSR onBack={() => setActiveFormIndex(null)} />,
+            form: <MaintenanceSR onBack={() => setOpened(false)} />,
         },
-        // {
-        //     labelOne: 'Type 5',
-        //     labelTwo: '',
-        //     icon: <IconExclamationCircleFilled size={120} />,
-        //     disabled: true,
-        // },
-        // {
-        //     labelOne: 'Type 6',
-        //     labelTwo: '',
-        //     icon: <IconExclamationCircleFilled size={120} />,
-        //     disabled: true,
-        // },
     ];
-    // rendering the form to replace the page
-    if (activeFormIndex !== null) {
-        const item = ServiceRequestItems[activeFormIndex];
-        if (item?.form) {
-            const FormComponent = item.form;
-            return <>{FormComponent()}</>;
-        }
-    }
-    return (
-        <div>
-            <Box pb="xl">
-                <Flex w={props.width} ml = {props.marginRight} mr={props.marginRight} h={props.height} justify="center" align="center">
-                    <Stack>
-                        {/*<Title order={2} ta="left" c={'#001D4D'} mb="lg">*/}
-                        {/*    Select Request Type:*/}
-                        {/*</Title>*/}
-                        {/* basic grid for button layout*/}
-                        <SimpleGrid
 
-                          cols={{base:1, md: props.cols, xxl: 3}}
-                          spacing={{base:30, md: props.hSpacing, xxl: 30}}
-                          verticalSpacing={{base:20, md: props.vSpacing, xxl: 30}}
-                        >
-                            {ServiceRequestItems.map((item, index) => (
-                                <HoverButton
-                                    key={index}
-                                    icon={item.icon}
-                                    labelOne={item.labelOne}
-                                    labelTwo={item.labelTwo}
-                                    onClick={() => setActiveFormIndex(index)}
-                                    disabled={item.disabled}
-                                    buttonHeight={props.buttonHeight}
-                                />
-                            ))}
-                        </SimpleGrid>
-                    </Stack>
-                </Flex>
-            </Box>
-        </div>
+    const handleButtonClick = (form: React.ReactNode) => {
+        setActiveForm(form);
+        setOpened(true);
+    };
+
+    return (
+        <Box pb="xl" bg="#ebf2ff" h="100vh">
+            <Flex
+                w={props.width}
+                ml={props.marginRight}
+                mr={props.marginRight}
+                h={props.height}
+                justify="center"
+                align="center"
+                c="#ebf2ff"
+            >
+                <Stack>
+                    <SimpleGrid
+                        cols={{ base: 1, md: props.cols, xxl: 3 }}
+                        spacing={{ base: 30, md: props.hSpacing, xxl: 30 }}
+                        verticalSpacing={{ base: 20, md: props.vSpacing, xxl: 30 }}
+                    >
+                        {ServiceRequestItems.map((item, index) => (
+                            <HoverButton
+                                key={index}
+                                icon={item.icon}
+                                labelOne={item.labelOne}
+                                labelTwo={item.labelTwo}
+                                onClick={() => item.form && handleButtonClick(item.form)}
+                                disabled={item.disabled}
+                                buttonHeight={props.buttonHeight}
+                            />
+                        ))}
+                    </SimpleGrid>
+                </Stack>
+            </Flex>
+
+            <Modal
+                opened={opened}
+                c="#ebf2ff"
+                onClose={() => setOpened(false)}
+                size="xl"
+                overlayProps={{ blur: 5 }}
+                centered
+                closeOnClickOutside={true}
+                withCloseButton={true}
+                styles={{
+                    content: {
+                        marginTop: '100px',
+                        marginBottom: '30px',
+                    },
+                    header: {
+                        backgroundColor: '#ebf2ff',
+                    },
+                    body: {
+                        backgroundColor: '#ebf2ff',
+                    },
+                }}
+            >
+                {activeForm}
+            </Modal>
+        </Box>
     );
-}
+};
+
 export default ServiceRequestPage;

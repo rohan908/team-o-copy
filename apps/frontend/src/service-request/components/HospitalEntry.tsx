@@ -16,21 +16,38 @@ const HospitalSelect: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
         'Falkner Hospital',
         'BWH Campus',
     ];
-    const handleSpeechResult = (text: string) => {
-        const matchedHospital = hospitalData.find((hospital) =>
-            hospital.toLowerCase().includes(text.toLowerCase())
-        );
-        if (matchedHospital) {
-            onChange(matchedHospital);
-        } else {
-            notifications.show({
-                title: 'Speech Error',
-                message: 'No Matching Hospital Found',
-                color: 'red',
-            });
-        }
+  const handleSpeechResult = (text: string) => {
+    const spoken = text.toLowerCase().trim();
+
+    const keywordMap: Record<string, string> = {
+      '20 patriot place': '20 Patriot Place',
+      '22 patriot place': '22 Patriot Place',
+      'chestnut': 'Chestnut Hill',
+      'falkner': 'Falkner Hospital',
+      'faulkner': 'Falkner Hospital',
+      'faulkner hospital': 'Falkner Hospital',
+      'falkner hospital': 'Falkner Hospital',
+      'bwh': 'BWH Campus',
+      'brigham': 'BWH Campus',
+      'brigham hospital': 'BWH Campus',
     };
-    return (
+
+    const matchedEntry = Object.entries(keywordMap).find(([key]) =>
+      spoken.includes(key)
+    );
+
+    if (matchedEntry) {
+      onChange(matchedEntry[1]);
+    } else {
+      notifications.show({
+        title: 'Speech Error',
+        message: 'No Matching Hospital Found',
+        color: 'red',
+      });
+    }
+  };
+
+  return (
         <Flex align="center" gap="sm">
             <Select
                 label="Choose the Hospital Needed"
