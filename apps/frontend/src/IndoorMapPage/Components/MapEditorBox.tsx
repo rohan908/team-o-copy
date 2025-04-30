@@ -48,12 +48,12 @@ const MapEditorBox = () => {
 
     function toggleHelp() {
         setOpenedHelp(!openedHelp);
-        setOpenedAlgoSwitcher(false);
+        setTimeout(() => setOpenedAlgoSwitcher(false), 200);
     }
 
     function toggleAlgoSwitcher() {
-      setOpenedAlgoSwitcher(!openedAlgoSwitcher);
-      setOpenedHelp(false);
+        setOpenedAlgoSwitcher(!openedAlgoSwitcher);
+        setTimeout(() => setOpenedHelp(false), 200);
     }
 
     function roundCoordsToTwoPlaces(input: number) {
@@ -196,7 +196,7 @@ const MapEditorBox = () => {
                     </Stack>
                   <Flex direction={"column"}>
                     <Transition
-                      enterDelay={openedAlgoSwitcher ? 0 : 600}
+                      enterDelay={openedAlgoSwitcher ? 600 : 0}
                       mounted={openedHelp}
                       transition="slide-right"
                       duration={400}
@@ -281,7 +281,7 @@ const MapEditorBox = () => {
                       )}
                     </Transition>
                     <Transition
-                      enterDelay={openedHelp ? 0 : 600}
+                      enterDelay={openedHelp ? 600 : 0}
                       mounted={openedAlgoSwitcher}
                       transition="slide-right"
                       duration={400}
