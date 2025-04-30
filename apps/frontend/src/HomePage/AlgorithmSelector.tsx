@@ -41,10 +41,7 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
 
     const setSelectedAlgo = (algo: string | null) => {
         setAlgoStr(algo!);
-        // setDropdownDisabled(true);
         const result = setAlgo(+algo!);
-        // console.log('ran request and got a result of: ', result);
-        // setDropdownDisabled(false);
     };
 
     return (

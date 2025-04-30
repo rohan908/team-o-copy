@@ -255,7 +255,7 @@ router.post('/getNode', getNodeHandler);
 router.post('/setAlgo', async (req: any, res: any) => {
     try {
         const { pathAlgo } = req.body;
-        console.log('made it to Graph. getAlgoHandelr and got pathAlgo: ', pathAlgo);
+        // console.log('made it to Graph. getAlgoHandelr and got pathAlgo: ', pathAlgo);
         // Validate input
         if ([pathAlgo].some((param) => param === undefined)) {
             res.status(400).json({

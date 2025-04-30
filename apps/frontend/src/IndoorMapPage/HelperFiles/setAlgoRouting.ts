@@ -7,14 +7,6 @@ export async function setAlgo(algo: number) {
         });
         console.log('got response back', response);
         return response;
-        /* this error handler is buggin
-    if (!data.success) {
-        throw new Error(data.error || 'Failed to find path');
-    }
-
-    // Return just the path array from the result
-    return data.result.path;
-    */
     } catch (error) {
         console.error('Error finding path:', error);
         throw error;
