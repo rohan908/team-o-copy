@@ -40,6 +40,7 @@ export function DisclaimerPopup() {
                                 radius="md"
                                 withBorder
                                 style={transitionStyle}
+                                color="#b7cfd3"
                             >
                                 <Card.Section>
                                     <Image
@@ -51,7 +52,7 @@ export function DisclaimerPopup() {
 
                                 <Group justify="space-between" mt="md" mb="xs">
                                     <Text fw={500}>Disclaimer</Text>
-                                    <Badge color="yellow">IMPORTANT</Badge>
+                                    <Badge color="#af0022">IMPORTANT</Badge>
                                 </Group>
 
                                 <Text size="sm" c="dimmed">
