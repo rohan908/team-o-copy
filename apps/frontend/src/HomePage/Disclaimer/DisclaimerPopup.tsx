@@ -33,7 +33,7 @@ export function DisclaimerPopup() {
             <Transition
                 mounted={visible}
                 transition="fade"
-                duration={500}
+                duration={350}
                 exitDelay={1}
                 timingFunction="ease"
             >
