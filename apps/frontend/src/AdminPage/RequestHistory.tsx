@@ -9,11 +9,11 @@ import {
     Loader,
     Center,
     Transition,
-    Flex,
-    Button,
-    Paper,
 } from '@mantine/core';
 import Filter from './Filter.tsx';
+
+// filter context addition
+import { useFilterContext } from '../contexts/FilterContext';
 
 // Type-safe interface for request data
 interface RequestProps {
@@ -50,6 +50,8 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
+    // get current filters
+    const { filterNames } = useFilterContext();
 
     // helper function to dispay correct feild
     const getRequestTypeValue = (row: RequestProps) => {
@@ -111,6 +113,11 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     if (error) return <Text color="red">{error}</Text>;
     if (!data.length) return <Text>No request form data found.</Text>;
 
+    // make filter array from context
+    const rows = filterNames.length
+        ? data.filter((row) => filterNames.includes(row.employeeName))
+        : data;
+
     const summaryColumns = ['employeeName', 'requestID', 'requestType', 'createdAt'];
 
     return (
@@ -152,7 +159,7 @@ export function RequestHistory({ requestType }: { requestType: string }) {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {data.map((row, idx) => (
+                        {rows.map((row, idx) => (
                             <React.Fragment key={idx}>
                                 <Table.Tr
                                     onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
