@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import {
     Collapse,
-    Button,
     Center,
     Flex,
     Title,
@@ -25,17 +24,26 @@ import {
     IconBellExclamation,
 } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { SidebarButton } from '../common-compoents/commonButtons.tsx';
 import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
 import RequestHistory from './RequestHistory.tsx';
+import { useUser } from '@clerk/clerk-react';
 
 export function AdminPage() {
     const [formInfoOpen, { open, close }] = useDisclosure(true);
     const [CSVManipOpen, setCSVManipOpen] = useState(false);
     const [displayTableNumber, setDisplayTableNumber] = useState(0);
     const theme = useMantineTheme();
+    // clerk const's
+    const { user, isSignedIn } = useUser();
+
+    // check role
+    const role = user?.publicMetadata?.role;
+    if (!isSignedIn || role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
 
     function displayNumToggle(num: number) {
         // if (num == displayTableNumber) {
