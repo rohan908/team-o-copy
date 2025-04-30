@@ -9,7 +9,7 @@ import PriorityFilter from '../common-compoents/PriorityFilter.tsx';
 function Filter() {
     const [filter, setFilter] = React.useState('');
     // initializa consts for context
-    const { currentFilters, addFilter, removeFilter } = useFilterContext();
+    const { filterNames, addName, removeName } = useFilterContext();
 
     const handleAddName = (val: string) => {
         if (val.trim() && !currentFilters.includes(val)) {

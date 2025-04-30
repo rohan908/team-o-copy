@@ -11,6 +11,7 @@ import {
     Transition,
     CloseButton,
     Badge,
+    Group,
 } from '@mantine/core';
 import Filter from './Filter.tsx';
 
@@ -133,8 +134,11 @@ export function RequestHistory({ requestType }: { requestType: string }) {
             </Text>
             <Filter />
             {currentFilters.map((n) => (
-                <Badge key={n} mr="xs" bg="primaryBlues.5">
-                    {n} <CloseButton size="xs" onClick={() => removeFilter(n)} />
+                <Badge key={n} p="xs" m="xs" bg="primaryBlues.5" fw="400">
+                    <Group gap="0px">
+                        {n}
+                        <CloseButton size="xs" onClick={() => removeFilter(n)} />
+                    </Group>
                 </Badge>
             ))}
 
