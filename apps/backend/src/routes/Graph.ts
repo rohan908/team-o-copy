@@ -254,9 +254,10 @@ router.post('/getNode', getNodeHandler);
 
 router.post('/setAlgo', setAlgoHandelr);
 
-router.get('/getAlgo', (req: any, res: any) => {
-    const algo = navigationService.getAlgo();
-    console.log('ran files and got:', algo);
+router.get('/getAlgo', async (req: any, res: any) => {
+    const algoDb = await navigationService.getAlgo();
+    const algo: number = algoDb!.algoID;
+    console.log('ran filealgoDbs and got:', algo);
     res.json(algo);
 });
 

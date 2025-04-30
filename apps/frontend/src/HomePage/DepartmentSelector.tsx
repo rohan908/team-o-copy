@@ -1,53 +1,55 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
-import {IconBuilding, IconCheckupList, IconChevronDown, IconHospital} from '@tabler/icons-react';
+import { IconBuilding, IconCheckupList, IconChevronDown, IconHospital } from '@tabler/icons-react';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { useTimeline } from './TimeLineContext.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from 'react';
 
 interface DepartmentSelectorProps {
-  hasIcon: boolean
-  w: string
+    hasIcon: boolean;
+    w: string;
 }
 
-export function DepartmentSelector(props:DepartmentSelectorProps) {
-  const theme = useMantineTheme();
-  const [dummyState, setDummyState] = useState(0)
-  const [realDept, setRealDept] = useState<string>("");
+export function DepartmentSelector(props: DepartmentSelectorProps) {
+    const theme = useMantineTheme();
+    const [dummyState, setDummyState] = useState(0);
+    const [realDept, setRealDept] = useState<string>('');
 
-  const { directoryOptions, selectedHospital, setDepartment, department } = useTimeline();
-  const NavSelection = useNavSelectionContext();
+    const { directoryOptions, selectedHospital, setDepartment, department } = useTimeline();
+    const NavSelection = useNavSelectionContext();
 
-  const setSelectedDepartment = (department: string | null) => {
-    setDepartment(department);
-    NavSelection.dispatch({
-      type: 'SET_NAV_REQUEST',
-      data: {
-        HospitalName: selectedHospital,
-        Department: department,
-      } as NavSelectionItem,
-    });
-  };
+    const setSelectedDepartment = (department: string | null) => {
+        setDepartment(department);
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: selectedHospital,
+                Department: department,
+            } as NavSelectionItem,
+        });
+    };
 
-  return (
-    <Select
-      searchable
-      placeholder="Select a Department"
-      rightSection={
-        <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
-      }
-      leftSection={!props.hasIcon ? null :
-        <IconCheckupList size="16" style={{ color: theme.colors.primaryBlues[8]}} />
-      }
-      data={directoryOptions}
-      onChange={setSelectedDepartment}
-      value={department}
-      radius="sm"
-      mb="sm"
-      size="xs"
-      disabled={!selectedHospital && directoryOptions.length === 0}
-      w={props.w}
-    />
-  );
+    return (
+        <Select
+            searchable
+            placeholder="Select a Department"
+            rightSection={
+                <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            }
+            leftSection={
+                !props.hasIcon ? null : (
+                    <IconCheckupList size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+                )
+            }
+            data={directoryOptions}
+            onChange={setSelectedDepartment}
+            value={department}
+            mb="sm"
+            radius="md"
+            size="xs"
+            disabled={!selectedHospital && directoryOptions.length === 0}
+            w={props.w}
+        />
+    );
 }

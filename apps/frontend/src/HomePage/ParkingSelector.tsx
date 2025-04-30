@@ -1,5 +1,5 @@
-import {Select, useMantineTheme } from '@mantine/core';
-import {IconBuilding, IconBuildings, IconChevronDown} from '@tabler/icons-react';
+import { Select, useMantineTheme } from '@mantine/core';
+import { IconBuilding, IconBuildings, IconChevronDown } from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
 import { hospitalOptions } from './GmapsDestinationSelector.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
@@ -13,17 +13,16 @@ import {
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 
 interface ParkingSelectorProps {
-  hasIcon: boolean
-  w: string
+    hasIcon: boolean;
+    w: string;
 }
 
-export function ParkingSelector(props:ParkingSelectorProps) {
+export function ParkingSelector(props: ParkingSelectorProps) {
     const {
         setSelectedHospital,
         setDirectoryOptions,
         setDepartment,
         department,
-        selectedAlgorithm,
         selectedHospital,
     } = useTimeline();
 
@@ -57,16 +56,13 @@ export function ParkingSelector(props:ParkingSelectorProps) {
         } else {
             setDirectoryOptions([]);
         }
-        if (selectedAlgorithm) {
-            NavSelection.dispatch({
-                type: 'SET_NAV_REQUEST',
-                data: {
-                    HospitalName: hospital,
-                    Department: null,
-                    AlgorithmName: selectedAlgorithm,
-                } as NavSelectionItem,
-            });
-        }
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: hospital,
+                Department: null,
+            } as NavSelectionItem,
+        });
         //setSelectedHospitalName(hospital);
         //setSelectedDepartment(null);
     };
@@ -77,8 +73,10 @@ export function ParkingSelector(props:ParkingSelectorProps) {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={!props.hasIcon ? null :
-              <IconBuildings size="16" style={{ color: theme.colors.primaryBlues[8]}} />
+            leftSection={
+                !props.hasIcon ? null : (
+                    <IconBuildings size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+                )
             }
             data={hospitalOptions}
             value={selectedHospital ?? ''}

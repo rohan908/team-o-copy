@@ -5,7 +5,8 @@ import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { ALGORITHM } from 'common/src/constants.ts';
 import axios from 'axios';
-import { setAlgo } from './setAlgoRouting.ts';
+import { getAlgoId, setAlgo } from '../IndoorMapPage/HelperFiles/setAlgoRouting.ts';
+import { useEffect, useState } from 'react';
 
 //need to change this to actual api call autocomplete later
 const algoOptions = [
@@ -18,18 +19,42 @@ const algoOptions = [
 ];
 
 interface AlgorithmSelectorProps {
-  hasIcon: boolean
-  w: string
+    hasIcon: boolean;
+    w: string;
 }
 
 export function AlgorithmSelector(props: AlgorithmSelectorProps) {
     const theme = useMantineTheme();
-    const { selectedHospital, department } = useTimeline();
+
+    const [algoStr, setAlgoStr] = useState<string>(''); // default empty string
+    //need useEffect because its an async call to get the world selected algo
+    useEffect(() => {
+        const fetchAlgoStr = async () => {
+            const algoId: number = await getAlgoId(); // make sure getAlgoId returns Promise<number>
+
+            setAlgoStr(algoId.toString()); // update state after fetching
+        };
+
+        fetchAlgoStr(); // call the async function
+    }, []);
+
+    const { selectedHospital, department, setDepartment } = useTimeline();
     const NavSelection = useNavSelectionContext();
 
     const setSelectedAlgo = (algo: string | null) => {
+        setAlgoStr(algo!);
         setAlgo(+algo!);
         console.log('selector algo just changed to: ', algo);
+
+        setDepartment(department);
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: selectedHospital,
+                Department: department,
+                AlgorithmChange: true,
+            } as NavSelectionItem,
+        });
     };
 
     return (
@@ -38,16 +63,17 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={!props.hasIcon ? null :
-                <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8]}} />
+            leftSection={
+                !props.hasIcon ? null : (
+                    <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+                )
             }
             data={algoOptions}
-            radius="md"
             mb="sm"
+            radius="md"
             size="xs"
-            value={''}
+            value={algoStr ?? ''}
             onChange={setSelectedAlgo}
-            disabled={!selectedHospital || !department}
             w={props.w}
         />
     );
