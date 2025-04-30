@@ -123,6 +123,7 @@ export const createNode = (
         threeDNode.userData.nodeId = node.id;
         threeDNode.userData.floor = node.floor;
         threeDNode.userData.nodeType = node.nodeType;
+        threeDNode.userData.color = nodeColor;
         const nodeFloor = node.floor;
         // check if the floor is within bounds
         if (nodeFloor >= 1 && nodeFloor <= 5) {
@@ -136,3 +137,47 @@ export const createNode = (
         }
     }
 };
+
+export const updateNodeMesh = (objectsRef: React.MutableRefObject<THREE.Object3D[]>, node: DirectoryNodeItem) => {
+    const objNode = objectsRef.current.find((obj) => obj.userData.nodeId === node.id);
+
+    if(objNode != undefined) {
+ //       objNode.geometry.dispose();
+
+        const nodeRadius = 1.5;
+
+        const departmentNodeGeometry = new THREE.SphereGeometry(
+            nodeRadius * 1.5,
+            Math.round(2 * 12), // Vibe based adaptive segmentation
+            Math.round(2 * 6)
+        );
+        const parkingNodeGeometry = new THREE.SphereGeometry(
+            nodeRadius * 1.5,
+            Math.round(2 * 12), // Vibe based adaptive segmentation
+            Math.round(2 * 6)
+        );
+        const hallWayNodeGeometry = new THREE.SphereGeometry(
+            nodeRadius,
+            Math.round(nodeRadius * 12), // Vibe based adaptive segmentation
+            Math.round(nodeRadius * 6)
+        );
+        const staircaseNodeGeometry = new THREE.OctahedronGeometry(2, 0);
+        const elevatorNodeGeometry = new THREE.OctahedronGeometry(2, 0);
+        const material = new THREE.MeshBasicMaterial(objNode.userData.color);
+/*
+        if (node.nodeType == 'department') {
+            objNode.geometry = new THREE.Mesh(departmentNodeGeometry, material);
+        } else if (node.nodeType == 'parking-lot') {
+            objNode.geometry = new THREE.Mesh(parkingNodeGeometry, material);
+        } else if (node.nodeType == 'staircase') {
+            objNode.geometry = new THREE.Mesh(staircaseNodeGeometry, material);
+        } else if (node.nodeType == 'elevator') {
+            objNode.geometry = new THREE.Mesh(elevatorNodeGeometry, material);
+        } else {
+            objNode.geometry = new THREE.Mesh(hallWayNodeGeometry, material);
+        }
+
+ */
+        console.log(objNode);
+    }
+}

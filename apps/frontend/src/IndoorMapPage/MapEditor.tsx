@@ -10,7 +10,7 @@ import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import PopupTooltip from './Components/PopupTooltip';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { useUser } from '@clerk/clerk-react';
-import { createNode } from './HelperFiles/NodeFactory.tsx';
+import { createNode, updateNodeMesh } from './HelperFiles/NodeFactory.tsx';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { IconCurrentLocation } from '@tabler/icons-react';
@@ -352,6 +352,11 @@ export function MapEditor() {
                 nodeToUpdate.nodeType = currentNodeData.nodeType;
                 nodeToUpdate.connectingNodes = currentNodeData.connectingNodes;
             }
+            if(nodeToUpdate != null && currentNodeData != null) {
+              //updateNodeMesh(objectsRef, nodeToUpdate);
+              updateDragControls();
+            }
+
         }
     }, [currentNodeData]);
 
