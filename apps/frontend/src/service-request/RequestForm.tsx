@@ -166,7 +166,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                         <Button
                             type="button"
                             variant="outline"
-                            color="#5A83DB"
+                            color="#325ed8"
                             radius="md"
                             w="200px"
                             onClick={handleReset}
@@ -174,7 +174,7 @@ const RequestForm: React.FC<RequestDetails> = ({
                             Clear Form
                         </Button>
 
-                        <Button radius="md" type="submit" bg="#5A83DB" w="100%">
+                        <Button radius="md" type="submit" bg="#325ed8" w="100%">
                             Submit
                         </Button>
                     </Flex>

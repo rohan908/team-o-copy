@@ -63,7 +63,7 @@ const SpeechToText: React.FC<SpechToTextProps> = (props: SpechToTextProps) => {
     return (
         <ActionIcon
             variant="outlined"
-            color={isSpeaking ? 'red' : '#5A83DB'}
+            color={isSpeaking ? 'red' : '#325ed8'}
             onClick={handleToggle}
         >
             {isSpeaking ? <Loader size="xs" /> : <IconMicrophone size={16} />}
