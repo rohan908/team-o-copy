@@ -1,6 +1,6 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
 import {IconBuildings, IconChevronDown, IconMapPinFilled} from '@tabler/icons-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
@@ -26,8 +26,8 @@ export const hospitalOptions = [
 ];
 
 export function GmapsDestinationSelector(props:GmapsDestinationSelectorProps) {
-    const { setSelectedHospital, setDepartment, setDirectoryOptions } = useTimeline();
-
+    const { setSelectedHospital, setDepartment, setDirectoryOptions, selectedHospital } = useTimeline();
+    const [localValue, setLocalValue] = useState<string | null>(null);
     const theme = useMantineTheme();
 
     const Patriot = usePatriotContext();
@@ -42,6 +42,10 @@ export function GmapsDestinationSelector(props:GmapsDestinationSelectorProps) {
             value: department.name,
             label: department.name,
         }));
+
+    useEffect(() => {
+        setLocalValue(selectedHospital);
+    }, [selectedHospital]);
 
     const setHospitalLocation = (hospital: string | null) => {
         setSelectedHospital(hospital);
@@ -70,7 +74,8 @@ export function GmapsDestinationSelector(props:GmapsDestinationSelectorProps) {
               <IconBuildings size="16" style={{ color: theme.colors.primaryBlues[8]}} />
             }
             data={hospitalOptions}
-            onChange={setHospitalLocation}
+            value = {localValue}
+            onChange={(value) => setHospitalLocation(value)}
             radius="md"
             mb="sm"
             size="xs"
