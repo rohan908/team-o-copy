@@ -166,7 +166,7 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-                if (currentNodeData?.nodeType != 'staircase') {
+                if (currentNodeData?.nodeType != 'staircase' || mapTool != 'add-edge') {
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
                     });
