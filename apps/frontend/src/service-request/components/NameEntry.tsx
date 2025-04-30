@@ -31,9 +31,7 @@ const NameEntry: React.FC<TextInputProps> = (props) => {
         setValue(text);
 
         //skechy code, might delete
-        props.onChange?.({
-          currentTarget: { value: text }
-        } as any);
+        props.onChange?.(text);
     };
     return (
         <Flex align="center" gap="sm">
