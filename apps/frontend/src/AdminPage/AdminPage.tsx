@@ -1,203 +1,316 @@
-import React, { useState, useEffect } from 'react';
-import { DatabaseController } from './DatabaseController';
-import { CSVTable } from './CSVTable';
-import { Collapse, Button, Divider, Center, Flex, Title, Box } from '@mantine/core';
-import LanguageRequestHistory from './LanguageRequestHistory.tsx';
-import { SegmentedControl } from '@mantine/core';
-import SecurityRequestHistory from './SecurityRequestHistory.tsx';
-import SanitationRequestHistory from './SanitationRequestHistory.tsx';
-import MaintenanceRequestHistory from './MaintenanceHistory.tsx';
-import { useUser } from '@clerk/clerk-react';
-import { Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
+
+import {
+    Collapse,
+    Button,
+    Center,
+    Flex,
+    Title,
+    Box,
+    Grid,
+    ActionIcon,
+    Modal,
+    useMantineTheme,
+} from '@mantine/core';
+
+import CSVControlsComponent from './CSVControlsComponent.tsx';
+import {
+    IconChevronDown,
+    IconChevronUp,
+    IconFileBroken,
+    IconMap2,
+    IconLanguage,
+    IconShieldHalf,
+    IconTrash,
+    IconBellExclamation,
+} from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
+import { Link } from 'react-router-dom';
+import { SidebarButton } from '../common-compoents/commonButtons.tsx';
+import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
+import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
+import RequestHistory from './RequestHistory.tsx';
 
 export function AdminPage() {
-    const [showPreview, setShowPreview] = useState(false); // state to control the collapsible section
-    const [displayTableNumber, setDisplayTableNumber] = useState(-1);
-    const [stringDisplayNum, setStringDisplayNum] = useState('');
-    // clerk const's
-    const { user, isSignedIn } = useUser();
+    const [formInfoOpen, { open, close }] = useDisclosure(true);
+    const [CSVManipOpen, setCSVManipOpen] = useState(false);
+    const [displayTableNumber, setDisplayTableNumber] = useState(0);
+    const theme = useMantineTheme();
 
-    // check role
-    const role = user?.publicMetadata?.role;
-    if (!isSignedIn || role !== 'admin') {
-        return <Navigate to="/" replace />;
+    function displayNumToggle(num: number) {
+        // if (num == displayTableNumber) {
+        //   setDisplayTableNumber(-1);
+        // } else {x`
+        //   setDisplayTableNumber(num);
+        // }
+        setDisplayTableNumber(num);
     }
 
-    useEffect(() => {
-        switch (stringDisplayNum) {
-            case '0':
-                if (displayTableNumber != 0) {
-                    setDisplayTableNumber(0);
-                } else {
-                    setDisplayTableNumber(-1);
-                }
-                break;
-            case '1':
-                if (displayTableNumber != 1) {
-                    setDisplayTableNumber(1);
-                } else {
-                    setDisplayTableNumber(-1);
-                }
-                break;
-            case '2':
-                if (displayTableNumber != 2) {
-                    setDisplayTableNumber(2);
-                } else {
-                    setDisplayTableNumber(-1);
-                }
-                break;
-            case '3':
-                if (displayTableNumber != 3) {
-                    setDisplayTableNumber(3);
-                } else {
-                    setDisplayTableNumber(-1);
-                }
-                break;
-        }
-    }, [stringDisplayNum]);
-
     return (
-        <Box
-            className="min-h-screen w-full"
-            style={{
-                background: 'linear-gradient(160deg, #aaf7fc 0%, #aaf7fc 100%)',
-                padding: '2rem',
-            }}
-        >
-            <Box
-                maw="60%"
-                mx="auto"
-                bg="themeGold.1"
-                p="2.5%"
-                style={{
-                    borderRadius: '15px',
-                    boxShadow: 'var(--shadow-lg)',
-                }}
-            >
-                <Title order={2} mb="4px" ta="center" fw={600}>
-                    Admin Page
-                </Title>
-                <Center>
-                    <Flex direction="column" justify="center" align="center">
-                        <Title
-                            order={3}
-                            mb="md"
-                            c="#153A90"
-                            ta="center"
-                            fw={700}
-                            fz={{ sm: 'xl', md: 'xl' }}
-                        >
-                            Select Request Form Type to View
-                        </Title>
-                        <SegmentedControl
-                            value={stringDisplayNum}
-                            onChange={setStringDisplayNum}
-                            data={[
-                                { label: 'LanguageRequest', value: '0' },
-                                { label: 'SecurityRequest', value: '1' },
-                                { label: 'SanitationRequest', value: '2' },
-                                { label: 'MaintenanceRequest', value: '3' },
-                            ]}
-                            onClick={() => setStringDisplayNum('-1')}
-                            styles={(theme) => ({
-                                root: {
-                                    backgroundColor: 'themeGold.1',
-                                    padding: 4,
-                                    borderRadius: theme.radius.md,
-                                },
-                                label: {
-                                    color: theme.colors.dark[9],
-                                    fontWeight: 600,
-                                },
-                                control: {
-                                    border: 'none',
-                                },
-                                active: {
-                                    backgroundColor: 'themeGold.2',
-                                    boxShadow: theme.shadows.sm,
-                                },
-                            })}
-                        ></SegmentedControl>
-                        <Collapse in={displayTableNumber == 0}>
-                            <Box
-                                bg="themeGold.0"
-                                p="10px"
-                                mt="10px"
-                                style={{
-                                    borderRadius: '15px',
-                                }}
-                            >
-                                <LanguageRequestHistory />
-                            </Box>
-                        </Collapse>
-                        <Collapse in={displayTableNumber == 1}>
-                            <Box
-                                bg="themeGold.0"
-                                p="10px"
-                                mt="10px"
-                                style={{
-                                    borderRadius: '15px',
-                                }}
-                            >
-                                <SecurityRequestHistory />
-                            </Box>
-                        </Collapse>
-                        <Collapse in={displayTableNumber == 2}>
-                            <Box
-                                bg="themeGold.0"
-                                p="10px"
-                                mt="10px"
-                                style={{
-                                    borderRadius: '15px',
-                                }}
-                            >
-                                <SanitationRequestHistory />
-                            </Box>
-                        </Collapse>
-                        <Collapse in={displayTableNumber == 3}>
-                            <Box
-                                bg="themeGold.0"
-                                p="10px"
-                                mt="10px"
-                                style={{
-                                    borderRadius: '15px',
-                                }}
-                            >
-                                <MaintenanceRequestHistory />
-                            </Box>
-                        </Collapse>
+        <Box mih="100vh" w="full" pt={'5px'} bg="#EAF1FF">
+            <Grid align="top">
+                <Grid.Col span={'content'}>
+                    <Flex direction="column" justify="center">
+                        <Box w="20vw" mih="100vh" pt="75px" p="lg" mt="-8px">
+                            <Flex direction="column" justify="center" gap="sm">
+                                <Flex
+                                    direction="row"
+                                    align="center"
+                                    justify="center"
+                                    gap="sm"
+                                    mb="lg"
+                                >
+                                    <HoverUnderline>
+                                        <Title order={2} c="secondaryBlues.5" w={'auto'} mt="md">
+                                            Admin Page
+                                        </Title>
+                                    </HoverUnderline>
+                                </Flex>
+                                <Flex
+                                    direction="column"
+                                    align="left"
+                                    justify="left"
+                                    gap="sm"
+                                    p="sm"
+                                >
+                                    <Flex direction="row" align="center" gap="0px">
+                                        <Title c="secondaryBlues.7">Service Request History</Title>
+                                        <Collapse
+                                            in={formInfoOpen}
+                                            transitionDuration={0}
+                                            transitionTimingFunction="linear"
+                                        >
+                                            <ActionIcon
+                                                bg={'#EBF2FF'}
+                                                top="10%"
+                                                size="input-sm"
+                                                onClick={close}
+                                                aria-label="ActionIcon the same size as inputs"
+                                            >
+                                                <IconChevronUp color={'#1C43A7'} />
+                                            </ActionIcon>
+                                        </Collapse>
+                                        {!formInfoOpen && (
+                                            <ActionIcon
+                                                bg={'#EBF2FF'}
+                                                size="input-sm"
+                                                onClick={open}
+                                                aria-label="ActionIcon the same size as inputs"
+                                            >
+                                                <IconChevronDown color={'#1C43A7'} />
+                                            </ActionIcon>
+                                        )}
+                                    </Flex>
+                                    <Collapse
+                                        in={formInfoOpen}
+                                        transitionDuration={400}
+                                        transitionTimingFunction="linear"
+                                    >
+                                        <Flex
+                                            direction="column"
+                                            justify="center"
+                                            gap="md"
+                                            ml="sm"
+                                            w="100%"
+                                        >
+                                            <SidebarButton
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'0'}
+                                                onClick={() => displayNumToggle(0)}
+                                                icon={<IconLanguage size="40" />}
+                                            >
+                                                Language Requests
+                                            </SidebarButton>
+
+                                            <SidebarButton
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'2'}
+                                                onClick={() => displayNumToggle(2)}
+                                                icon={<IconTrash size="40" />}
+                                            >
+                                                Sanitation Requests
+                                            </SidebarButton>
+
+                                            <SidebarButton
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'3'}
+                                                onClick={() => displayNumToggle(3)}
+                                                icon={<IconBellExclamation size="40" />}
+                                            >
+                                                Maintenance Requests
+                                            </SidebarButton>
+                                            <SidebarButton
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'1'}
+                                                onClick={() => displayNumToggle(1)}
+                                                icon={<IconShieldHalf size="40" />}
+                                            >
+                                                Security Requests
+                                            </SidebarButton>
+                                        </Flex>
+                                    </Collapse>
+
+                                    <Flex direction="column" justify="center" gap="md">
+                                        <SidebarButton
+                                            ValueToCheck={displayTableNumber.toString()}
+                                            onClick={() => setCSVManipOpen(true)}
+                                            icon={<IconFileBroken size="40" />}
+                                        >
+                                            CSV Manipulator
+                                        </SidebarButton>
+                                        <SidebarButton
+                                            ValueToCheck={displayTableNumber.toString()}
+                                            component={Link}
+                                            to={'/map-editor'}
+                                            icon={<IconMap2 size="40" />}
+                                        >
+                                            Map Editor
+                                        </SidebarButton>
+                                    </Flex>
+                                </Flex>
+                            </Flex>
+                        </Box>
                     </Flex>
-                </Center>
-                <br />
-                <Divider
-                    my="md"
-                    size="sm"
-                    style={{
-                        borderTop: '4px dotted #FCCD6F',
-                    }}
-                />
-                <br />
-                {/* CSV Import/Export Controls */}
-                <DatabaseController table="directory" />
-
-                {/* Toggle Button */}
-                <Flex justify="center" mt="10px">
-                    <Button
-                        color="#153A90"
-                        variant="outline"
-                        onClick={() => setShowPreview((prev) => !prev)}
-                    >
-                        {showPreview ? 'Hide Directory Preview' : 'Preview Directory'}
-                    </Button>
-                </Flex>
-
-                {/* Collapsible CSV Table */}
-                <Collapse in={showPreview} transitionDuration={200}>
-                    <div className="mt-4">
-                        <CSVTable table="directory" />
-                    </div>
-                </Collapse>
-            </Box>
+                </Grid.Col>
+                <Grid.Col span={'auto'}>
+                    <Box maw="100%" mx="auto">
+                        {/*<Title ff="Inter" fz="30px" mb="4px" ta="center" fw={600}>*/}
+                        {/*  Admin Page*/}
+                        {/*</Title>*/}
+                        <Center pr="10px">
+                            <Flex
+                                direction="column"
+                                justify="center"
+                                align="center"
+                                w="100%"
+                                bg="#D6E0F8"
+                                style={{
+                                    boxShadow: 'inset -5px 8px 5px -5px rgba(0,0,255,0.1)',
+                                    borderRadius: '8px',
+                                    margin: '80px',
+                                }}
+                            >
+                                {/*CHANGE THIS IF WE WANT A DEFAULT LANDING PAGE INSTEAD OF LANGUAGE INTERPRETER TABLE*/}
+                                {/*JUST HAVE TO CHANGE THE USESTATE NUMBER AT THE TOP TO -1IF YOU DO THIS*/}
+                                {/*<Collapse*/}
+                                {/*    in={displayTableNumber == -1}*/}
+                                {/*    transitionDuration={300}*/}
+                                {/*    transitionTimingFunction="linear"*/}
+                                {/*>*/}
+                                {/*    <Title order={3} mt="100px" mb="100px" ta="center" fw={600}>*/}
+                                {/*        Select a tool from the sidebar*/}
+                                {/*    </Title>*/}
+                                {/*</Collapse>*/}
+                                <Collapse
+                                    w="100%"
+                                    in={displayTableNumber == 0}
+                                    transitionDuration={300}
+                                    transitionTimingFunction="linear"
+                                >
+                                    <Box
+                                        p="10px"
+                                        mt="10px"
+                                        w="100%"
+                                        style={{
+                                            borderRadius: '15px',
+                                        }}
+                                    >
+                                        <RequestHistory requestType="Language" />
+                                    </Box>
+                                </Collapse>
+                                <Collapse
+                                    w="100%"
+                                    in={displayTableNumber == 1}
+                                    transitionDuration={300}
+                                    transitionTimingFunction="linear"
+                                >
+                                    <Box
+                                        p="10px"
+                                        mt="10px"
+                                        style={{
+                                            borderRadius: '15px',
+                                        }}
+                                    >
+                                        <RequestHistory requestType="Security" />
+                                    </Box>
+                                </Collapse>
+                                <Collapse
+                                    w="100%"
+                                    in={displayTableNumber == 2}
+                                    transitionDuration={300}
+                                    transitionTimingFunction="linear"
+                                >
+                                    <Box
+                                        p="10px"
+                                        mt="10px"
+                                        style={{
+                                            borderRadius: '15px',
+                                        }}
+                                    >
+                                        <RequestHistory requestType="Sanitation" />
+                                    </Box>
+                                </Collapse>
+                                <Collapse
+                                    w="100%"
+                                    in={displayTableNumber == 3}
+                                    transitionDuration={300}
+                                    transitionTimingFunction="linear"
+                                >
+                                    <Box
+                                        p="10px"
+                                        mt="10px"
+                                        style={{
+                                            borderRadius: '15px',
+                                        }}
+                                    >
+                                        <RequestHistory requestType="Maintenance" />
+                                    </Box>
+                                </Collapse>
+                                <Box
+                                    p="10px"
+                                    mt="10px"
+                                    style={{
+                                        borderRadius: '15px',
+                                    }}
+                                >
+                                    <Modal
+                                        opened={CSVManipOpen}
+                                        onClose={() => setCSVManipOpen(false)}
+                                        title="CSV Manipulator"
+                                        size="auto"
+                                        centered
+                                    >
+                                        <CSVControlsComponent />
+                                    </Modal>
+                                </Box>
+                                <Collapse
+                                    in={displayTableNumber == 5}
+                                    transitionDuration={300}
+                                    transitionTimingFunction="linear"
+                                >
+                                    <Box
+                                        p="10px"
+                                        mt="10px"
+                                        style={{
+                                            borderRadius: '15px',
+                                        }}
+                                    >
+                                        <ServiceRequestPage
+                                            width={'100%'}
+                                            marginRight={'0%'}
+                                            height={'80vh'}
+                                            cols={3}
+                                            hSpacing={30}
+                                            vSpacing={10}
+                                            buttonHeight={220}
+                                        />
+                                    </Box>
+                                </Collapse>
+                            </Flex>
+                        </Center>
+                    </Box>
+                </Grid.Col>
+            </Grid>
         </Box>
     );
 }
