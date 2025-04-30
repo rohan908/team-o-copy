@@ -14,8 +14,9 @@ import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearPathObjects, clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
-import { createNode } from './HelperFiles/NodeFactory.ts';
+import { createNode } from './HelperFiles/NodeFactory.tsx';
 import { getNode, mapSetup } from './HelperFiles/MapSetup.tsx';
+import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { useLocation } from 'react-router-dom';
@@ -218,7 +219,7 @@ export function DraggableMap() {
                 // Get the full node from the ID
                 const node = getNode(id, allNodes);
                 if (node) {
-                    createNode(node, scenesRef.current, floorHeight); //Create the node from its data
+                    createNode(node, scenesRef.current, floorHeight, node.nodeType, firstNodeId, lastNodeId); //Create the node from its data
                 } else {
                     console.error('Node id not found: ', id);
                 }
