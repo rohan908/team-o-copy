@@ -27,6 +27,7 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
     const theme = useMantineTheme();
 
     const [algoStr, setAlgoStr] = useState<string>(''); // default empty string
+    const [dropdownDisabled, setDropdownDisabled] = useState<boolean>(false);
     //need useEffect because its an async call to get the world selected algo
     useEffect(() => {
         const fetchAlgoStr = async () => {
@@ -38,13 +39,12 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
         fetchAlgoStr(); // call the async function
     }, []);
 
-    const { selectedHospital, department, setDepartment } = useTimeline();
-    const NavSelection = useNavSelectionContext();
-
     const setSelectedAlgo = (algo: string | null) => {
         setAlgoStr(algo!);
-        // setAlgo(+algo!);
-        // console.log('selector algo just changed to: ', algo);
+        // setDropdownDisabled(true);
+        const result = setAlgo(+algo!);
+        // console.log('ran request and got a result of: ', result);
+        // setDropdownDisabled(false);
     };
 
     return (
@@ -62,6 +62,7 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
             mb="sm"
             radius="md"
             size="xs"
+            disabled={dropdownDisabled}
             value={algoStr ?? ''}
             onChange={setSelectedAlgo}
             w={props.w}

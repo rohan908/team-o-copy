@@ -150,7 +150,7 @@ export class NavigationService {
             },
         });
         // const update = await this.reinitialize();
-        return;
+        return updateAlgo;
     }
 
     public async getAlgo() {
