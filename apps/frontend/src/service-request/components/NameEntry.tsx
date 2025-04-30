@@ -1,4 +1,4 @@
-import { Autocomplete, TextInputProps, TextInput, Flex, Box } from '@mantine/core';
+import { Autocomplete, AutocompleteProps, Flex, Box } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 
@@ -7,8 +7,7 @@ type Employee = {
     name: string;
 };
 
-const NameEntry: React.FC<TextInputProps> = (props) => {
-    const [value, setValue] = useState('');
+const NameEntry: React.FC<AutocompleteProps> = (props) => {
     // adding fetching of names from backend
     const [data, setData] = useState<string[]>([]);
 
@@ -28,13 +27,12 @@ const NameEntry: React.FC<TextInputProps> = (props) => {
     }, []);
 
     const handleSpeechResult = (text: string) => {
-        setValue(text);
-
         props.onChange?.(text);
     };
     return (
         <Flex align="center" gap="sm">
             <Autocomplete
+                {...props}
                 data={data}
                 label="Enter Employee Name"
                 placeholder="Enter Name"
@@ -42,8 +40,6 @@ const NameEntry: React.FC<TextInputProps> = (props) => {
                 mb="md"
                 size="xs"
                 required
-                value={value}
-                onChange={setValue}
                 c="#285CC6"
                 w="240px"
                 styles={{

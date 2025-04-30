@@ -48,7 +48,6 @@ const RequestForm: React.FC<RequestDetails> = ({
     newInitialValues,
     contributors,
     formLabel,
-    onBack,
 }) => {
     const [departmentOptions, setDepartmentOptions] = useState<string[]>([]);
     const [resetKey, setResetKey] = useState(0); // Key to force remount
@@ -124,7 +123,8 @@ const RequestForm: React.FC<RequestDetails> = ({
                     <Flex align="stretch" gap="xl" wrap="wrap" mb="md">
                         <Box flex="1" miw="275">
                             <NameEntry
-                                {...form.getInputProps('employeeName')}
+                                value={form.values.employeeName}
+                                onChange={(val: string) => form.setFieldValue('employeeName', val)}
                                 key={`name-${resetKey}`}
                             />
                             <HospitalSelect
