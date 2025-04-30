@@ -1,5 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Card, Image, Text, Badge, Box, Container, Group, Portal, Transition } from '@mantine/core';
+import {
+    Card,
+    Image,
+    Text,
+    Badge,
+    Box,
+    Container,
+    Group,
+    Portal,
+    Divider,
+    Transition,
+} from '@mantine/core';
 
 /*
   yo this code is 🔥🔥
@@ -29,7 +40,7 @@ export function DisclaimerPopup() {
                 {(transitionStyle) => (
                     <Box
                         pos="fixed"
-                        top={20}
+                        top={50}
                         left="50%"
                         style={{ transform: 'translateX(-50%)', zIndex: '10000' }}
                     >
@@ -40,7 +51,6 @@ export function DisclaimerPopup() {
                                 radius="md"
                                 withBorder
                                 style={transitionStyle}
-                                color="#b7cfd3"
                             >
                                 <Card.Section>
                                     <Image
@@ -49,6 +59,7 @@ export function DisclaimerPopup() {
                                         alt="✅ WPI L🔥G🔥 PICTURE (🔥FFICIAL) ✅"
                                     />
                                 </Card.Section>
+                                <Divider my="md" color="#af0022" /*"#9bafb3"*/ />
 
                                 <Group justify="space-between" mt="md" mb="xs">
                                     <Text fw={500}>Disclaimer</Text>
