@@ -31,6 +31,7 @@ const SpeechToText: React.FC<SpechToTextProps> = (props: SpechToTextProps) => {
         .map((result) => result[0].transcript)
         .join("");
       OnResult(transcript);
+      SpeechRecognition.stop(); //ad this line to stop recording once there is a result
     };
 
     SpeechRecognition.onend = () => {
