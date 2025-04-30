@@ -53,6 +53,25 @@ export function Routing() {
                             path="/admin-page"
                             element={<ProtectedRoute Route={<AdminPage />} />}
                         />
+                        <Route
+                            path="/service-request"
+                            element={
+                                <ProtectedRoute
+                                    Route={
+                                        <ServiceRequestPage
+                                            width={'100%'}
+                                            marginRight={'0%'}
+                                            height={'100vh'}
+                                            cols={3}
+                                            hSpacing={30}
+                                            vSpacing={10}
+                                            buttonHeight={220}
+                                            onHomePage={false}
+                                        />
+                                    }
+                                />
+                            }
+                        />
                         <Route path="/HomePage/HomePage" element={<HomePage />} />
                         <Route path="/Info-page" element={<CombinedPage />} />
                     </Route>

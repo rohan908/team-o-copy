@@ -1,4 +1,4 @@
-import { Box, Flex, SimpleGrid, Stack, Modal } from '@mantine/core';
+import { Box, Flex, SimpleGrid, Stack, Modal, useMantineTheme } from '@mantine/core';
 import { IconLanguage, IconShieldHalf, IconTrash, IconBellExclamation } from '@tabler/icons-react';
 import HoverButton from './components/HoverButton.tsx';
 import React, { useState } from 'react';
@@ -6,6 +6,7 @@ import LanguageInterpreterSR from './LanguageInterpreterSR.tsx';
 import SecuritySR from './SecuritySR.tsx';
 import SanitationSR from './SanitationSR.tsx';
 import MaintenanceSR from './MaintenanceSR.tsx';
+import { Link } from 'react-router-dom';
 
 type ServiceRequestItem = {
     labelOne: string;
@@ -23,11 +24,13 @@ interface ServiceRequestPageProps {
     vSpacing: number;
     hSpacing: number;
     buttonHeight: number;
+    onHomePage: boolean;
 }
 
 export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
     const [opened, setOpened] = useState(false);
     const [activeForm, setActiveForm] = useState<React.ReactNode | null>(null);
+    const theme = useMantineTheme();
 
     const ServiceRequestItems: ServiceRequestItem[] = [
         {
@@ -78,17 +81,37 @@ export const ServiceRequestPage = (props: ServiceRequestPageProps) => {
                         spacing={{ base: 30, md: props.hSpacing, xxl: 30 }}
                         verticalSpacing={{ base: 20, md: props.vSpacing, xxl: 30 }}
                     >
-                        {ServiceRequestItems.map((item, index) => (
-                            <HoverButton
-                                key={index}
-                                icon={item.icon}
-                                labelOne={item.labelOne}
-                                labelTwo={item.labelTwo}
-                                onClick={() => item.form && handleButtonClick(item.form)}
-                                disabled={item.disabled}
-                                buttonHeight={props.buttonHeight}
-                            />
-                        ))}
+                        {ServiceRequestItems.map((item, index) =>
+                            props.onHomePage ? (
+                                /*
+                              If on home page, link to service-request page
+                             */
+                                <Link to="service-request">
+                                    <HoverButton
+                                        key={index}
+                                        icon={item.icon}
+                                        labelOne={item.labelOne}
+                                        labelTwo={item.labelTwo}
+                                        onClick={() => item.form && handleButtonClick(item.form)}
+                                        disabled={item.disabled}
+                                        buttonHeight={props.buttonHeight}
+                                    />
+                                </Link>
+                            ) : (
+                                /*
+                              If NOT on home page, don't link
+                             */
+                                <HoverButton
+                                    key={index}
+                                    icon={item.icon}
+                                    labelOne={item.labelOne}
+                                    labelTwo={item.labelTwo}
+                                    onClick={() => item.form && handleButtonClick(item.form)}
+                                    disabled={item.disabled}
+                                    buttonHeight={props.buttonHeight}
+                                />
+                            )
+                        )}
                     </SimpleGrid>
                 </Stack>
             </Flex>
