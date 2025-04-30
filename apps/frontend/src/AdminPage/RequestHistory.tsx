@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import {
-  useMantineTheme,
-  Table,
-  Title,
-  ScrollArea,
-  Text,
-  Box,
-  Loader,
-  Center,
-  Transition, Flex,
+    useMantineTheme,
+    Table,
+    Title,
+    ScrollArea,
+    Text,
+    Box,
+    Loader,
+    Center,
+    Transition,
+    CloseButton,
+    Badge,
 } from '@mantine/core';
+import Filter from './Filter.tsx';
+
+// filter context addition
+import { useFilterContext } from '../contexts/FilterContext';
 
 // Type-safe interface for request data
-interface LanguageRequest {
+interface RequestProps {
+    employeeName: string;
     RequestID: number;
-    language: string;
+    requestType: string;
     createdAt: string;
     [key: string]: unknown;
 }
@@ -38,18 +45,53 @@ function timeAgo(dateString: string): string {
     return `${diffDay}d ago`;
 }
 
-export function LanguageRequestHistory() {
+export function RequestHistory({ requestType }: { requestType: string }) {
     const theme = useMantineTheme();
 
-    const [data, setData] = useState<LanguageRequest[]>([]);
+    const [data, setData] = useState<RequestProps[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
+    // get current filters
+    const { filterNames, addName, removeName } = useFilterContext();
+
+    // helper function to dispay correct feild
+    const getRequestTypeValue = (row: RequestProps) => {
+        switch (requestType) {
+            case 'Language':
+                return row.language ?? 'N/A';
+            case 'Maintenance':
+                return row.maintenanceType ?? 'N/A';
+            case 'Security':
+                return row.security ?? 'N/A';
+            case 'Sanitation':
+                return row.cleanupType ?? 'N/A';
+            default:
+                return 'N/A';
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`/api/languageSR`);
+                let res: Response;
+                switch (requestType) {
+                    case 'Language':
+                        res = await fetch(`/api/languageSR`);
+                        break;
+                    case 'Maintenance':
+                        res = await fetch(`/api/maintenanceSR`);
+                        break;
+                    case 'Security':
+                        res = await fetch(`/api/SecuritySR`);
+                        break;
+                    case 'Sanitation':
+                        res = await fetch(`/api/sanitationSR`);
+                        break;
+                    default:
+                        throw new Error('Invalid request type');
+                }
+
                 if (!res.ok) throw new Error(`HTTP error!: ${res.status}`);
                 const json = await res.json();
                 setData(json);
@@ -62,7 +104,7 @@ export function LanguageRequestHistory() {
         };
 
         fetchData();
-    }, []);
+    }, [requestType]);
 
     if (loading)
         return (
@@ -73,78 +115,79 @@ export function LanguageRequestHistory() {
     if (error) return <Text color="red">{error}</Text>;
     if (!data.length) return <Text>No request form data found.</Text>;
 
-    const summaryColumns = ['requestID', 'language', 'createdAt'];
+    // make filter array from context
+    const rows = filterNames.length
+        ? data.filter((row) => filterNames.includes(row.employeeName))
+        : data;
+
+    const summaryColumns = ['employeeName', 'requestID', 'requestType', 'createdAt'];
 
     return (
-        <Box
-            p="md"
-            w="100%"
-            h="90vh"
-            opacity="0.95"
-            bd="lg"
-            flex="column"
-            bga='blur(5px)'
-        >
-            <Title order={1} mb="sm" mt="50px" c="black" ta="center" fw={700} fz={{ sm: 'xl', md: 'xxxl' }}>
-                Language Service Requests
+        <Box p="xl" bg="primaryBlues.1" w="100%" h="100%" bd="lg" flex="column">
+            <Title order={1} mb="sm" c="primaryBlues.5" ta="left" fz="xl">
+                {requestType} Service Requests
             </Title>
-            <Text c="black" ta="center" mb="sm" fw={500} fz={{ sm: 'xxs', md: 'xs' }}>
+            <Text c="primaryBlues.5" ta="left" mb="xl" fz="xxs">
                 Click on a row to find out more information
             </Text>
-            <ScrollArea
-                type="scroll"
-                offsetScrollbars
-                scrollbarSize={6}
-                style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden' }}
-            >
-                <Table c="black" borderColor="black" withTableBorder={true} withRowBorders={true} withColumnBorders={true}
-                    highlightOnHover={true} highlightOnHoverColor={"#CBD2DF"}
+            <Filter />
+            {filterNames.map((n) => (
+                <Badge key={n} mr="xs" bg="primaryBlues.5">
+                    {n} <CloseButton size="xs" onClick={() => removeName(n)} />
+                </Badge>
+            ))}
+
+            <ScrollArea type="scroll" offsetScrollbars scrollbarSize={6}>
+                <Table
+                    c="black"
+                    borderColor="greys.3"
+                    withTableBorder={true}
+                    withRowBorders={true}
+                    highlightOnHover={true}
+                    highlightOnHoverColor={'greys.1'}
                     width="100%"
-                    layout='auto'
+                    layout="auto"
                 >
-                    <Table.Thead c="black">
-                        <Table.Tr
-                          c="black"
-                        >
-                            {summaryColumns.map((col) => (
-                                <Table.Th
-                                    key={col}
-                                    p="12px"
-                                    tt="capitalize"
-                                    ta={"left"}
-                                >
-                                    {col === 'createdAt'
-                                        ? 'Submitted'
-                                        : col === 'RequestID'
-                                          ? 'Request ID'
-                                          : col.charAt(0).toUpperCase() + col.slice(1)}
-                                </Table.Th>
-                            ))}
+                    <Table.Thead bg="primaryBlues.8">
+                        <Table.Tr c="white">
+                            {/* hardcoded these columns to use the requestType */}
+                            <Table.Th p="12px" tt="capitalize" ta="center" fw="400">
+                                Employee Name
+                            </Table.Th>
+                            <Table.Th p="12px" tt="capitalize" ta="center" fw="400">
+                                Request ID
+                            </Table.Th>
+                            <Table.Th p="12px" tt="capitalize" ta="center" fw="400">
+                                {requestType}
+                            </Table.Th>
+                            <Table.Th p="12px" tt="capitalize" ta="center" fw="400">
+                                Submitted
+                            </Table.Th>
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {data.map((row, idx) => (
+                        {rows.map((row, idx) => (
                             <React.Fragment key={idx}>
                                 <Table.Tr
                                     onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
-                                    //Cursor and Border Radius are only possible through style={}
-                                    style={{
-                                        cursor: 'pointer',
-                                        borderRadius: '12px',
-                                    }}
+                                    style={{ cursor: 'pointer', borderRadius: '12px' }}
                                 >
-                                    {summaryColumns.map((col) => (
-                                        <Table.Td
-                                            key={col}
-                                            p="12px"
-                                            fw="500"
-                                        >
-                                            {col === 'createdAt'
-                                                ? timeAgo(row[col] as string)
-                                                : String(row[col] ?? 'N/A')}
-                                        </Table.Td>
-                                    ))}
+                                    <Table.Td c="primaryBlues.5" ta="center" p="12px">
+                                        {row.employeeName}
+                                    </Table.Td>
+                                    <Table.Td c="primaryBlues.5" ta="center" p="12px">
+                                        {row.requestID}
+                                    </Table.Td>
+
+                                    <Table.Td c="primaryBlues.5" ta="center" p="12px">
+                                        {getRequestTypeValue(row)}
+                                    </Table.Td>
+
+                                    <Table.Td c="primaryBlues.5" ta="center" p="12px">
+                                        {timeAgo(row.createdAt)}
+                                    </Table.Td>
                                 </Table.Tr>
+
                                 <Table.Tr>
                                     <Table.Td colSpan={summaryColumns.length} p="0px">
                                         <Transition
@@ -193,4 +236,4 @@ export function LanguageRequestHistory() {
     );
 }
 
-export default LanguageRequestHistory;
+export default RequestHistory;

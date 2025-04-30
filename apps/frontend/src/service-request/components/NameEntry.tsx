@@ -7,6 +7,7 @@ type Employee = {
     name: string;
 };
 
+
 const NameEntry: React.FC<AutocompleteProps> = (props) => {
     // adding fetching of names from backend
     const [data, setData] = useState<string[]>([]);
@@ -34,8 +35,8 @@ const NameEntry: React.FC<AutocompleteProps> = (props) => {
             <Autocomplete
                 {...props}
                 data={data}
-                label="Enter Employee Name"
-                placeholder="Enter Name"
+                label="Choose Employee"
+                placeholder="Choose Employee"
                 radius="sm"
                 mb="md"
                 size="xs"
