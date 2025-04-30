@@ -57,6 +57,7 @@ export function DisclaimerPopup() {
                                         src="DisclaimerImages/WPI_IMAGE_RED.png"
                                         height={160}
                                         alt="✅ WPI L🔥G🔥 PICTURE (🔥FFICIAL) ✅"
+                                        style={{ paddingLeft: '15%', paddingRight: '15%' }}
                                     />
                                 </Card.Section>
                                 <Divider my="md" color="#af0022" /*"#9bafb3"*/ />
