@@ -29,14 +29,16 @@ const NameEntry: React.FC<TextInputProps> = (props) => {
 
     const handleSpeechResult = (text: string) => {
         setValue(text);
+
+        //skechy code, might delete
         props.onChange?.({
-            currentTarget: { value: text },
+          currentTarget: { value: text }
         } as any);
     };
     return (
         <Flex align="center" gap="sm">
-            <TextInput
-                {...props}
+            <Autocomplete
+                data={data}
                 label="Enter Employee Name"
                 placeholder="Enter Name"
                 radius="sm"
@@ -44,10 +46,7 @@ const NameEntry: React.FC<TextInputProps> = (props) => {
                 size="xs"
                 required
                 value={value}
-                onChange={(e) => {
-                    setValue(e.currentTarget.value);
-                    props.onChange?.(e);
-                }}
+                onChange={setValue}
                 c="#285CC6"
                 w="240px"
                 styles={{
