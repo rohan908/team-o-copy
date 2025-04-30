@@ -50,7 +50,6 @@ export function PathPickerBox() {
             data: {
                 HospitalName: hospital,
                 Department: null,
-                AlgorithmName: algo,
             } as NavSelectionItem,
         });
         //setSelectedHospitalName(hospital);
@@ -64,7 +63,6 @@ export function PathPickerBox() {
             data: {
                 HospitalName: hospital,
                 Department: department,
-                AlgorithmName: algo,
             } as NavSelectionItem,
         });
     };
@@ -76,7 +74,6 @@ export function PathPickerBox() {
             data: {
                 HospitalName: hospital,
                 Department: department,
-                AlgorithmName: algo,
             } as NavSelectionItem,
         });
     };

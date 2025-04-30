@@ -21,3 +21,9 @@ export const BACKUP_PATHS = {
     directoryBackup: './src/directoryBackup/backup.csv',
     directoryBackupJSON: './src/directoryBackup/nodeBackup.json',
 };
+
+export enum ALGORITHM {
+    BFS,
+    DFS,
+    AStar,
+}

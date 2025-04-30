@@ -31,6 +31,16 @@ export async function populate() {
         skipDuplicates: true,
     });
 
+    const Algorithm = await PrismaClient.algorithm.upsert({
+        //what da hell boi
+        where: { id: 0 },
+        update: {},
+        create: {
+            id: 0,
+            algoID: 0,
+        },
+    });
+
     // adds all node data from /SeedData.ts
     const addDefaultNodes = await PrismaClient.node.createManyAndReturn({
         data: getNodeData(),

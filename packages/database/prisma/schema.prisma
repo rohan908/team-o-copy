@@ -109,3 +109,8 @@ model Edge {
   nodes  Int[]
   map    FloorMap @relation(fields: [mapId], references: [id])
 }
+
+model Algorithm {
+  id Int @id
+  algoID  Int
+}

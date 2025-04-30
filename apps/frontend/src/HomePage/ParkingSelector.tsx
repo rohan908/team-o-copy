@@ -24,7 +24,6 @@ export function ParkingSelector(props: ParkingSelectorProps) {
         setDirectoryOptions,
         setDepartment,
         department,
-        selectedAlgorithm,
         selectedHospital,
     } = useTimeline();
 
@@ -64,16 +63,13 @@ export function ParkingSelector(props: ParkingSelectorProps) {
         } else {
             setDirectoryOptions([]);
         }
-        if (selectedAlgorithm) {
-            NavSelection.dispatch({
-                type: 'SET_NAV_REQUEST',
-                data: {
-                    HospitalName: hospital,
-                    Department: null,
-                    AlgorithmName: selectedAlgorithm,
-                } as NavSelectionItem,
-            });
-        }
+        NavSelection.dispatch({
+            type: 'SET_NAV_REQUEST',
+            data: {
+                HospitalName: hospital,
+                Department: null,
+            } as NavSelectionItem,
+        });
         //setSelectedHospitalName(hospital);
         //setSelectedDepartment(null);
     };

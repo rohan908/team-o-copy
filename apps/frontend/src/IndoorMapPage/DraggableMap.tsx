@@ -39,7 +39,6 @@ export function DraggableMap(props: DraggableMapProps) {
     const navSelection = useNavSelectionContext();
     const selectedHospitalName = navSelection.state.navSelectRequest?.HospitalName;
     const selectedDepartment = navSelection.state.navSelectRequest?.Department;
-    const selectedAlgorithm = navSelection.state.navSelectRequest?.AlgorithmName;
 
     // Declares context for start and end node information
     const patriotNodes = usePatriotContext();
@@ -225,8 +224,8 @@ export function DraggableMap(props: DraggableMapProps) {
         setFloorState(newFloor);
     };
 
-    const handlePath = (firstNodeId: number, lastNodeId: number, algo: string) => {
-        return findPath(firstNodeId, lastNodeId, algo).then(async (pathres) => {
+    const handlePath = (firstNodeId: number, lastNodeId: number) => {
+        return findPath(firstNodeId, lastNodeId).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
             // Add dispatch for navSelection
             navSelection.dispatch({
@@ -234,7 +233,6 @@ export function DraggableMap(props: DraggableMapProps) {
                 data: { NodeIds: ids },
             });
             // For each node id in the path
-
             for (const id of ids) {
                 // Get the full node from the ID
                 const node = getNode(id, allNodes);
@@ -377,12 +375,10 @@ export function DraggableMap(props: DraggableMapProps) {
         clearPathObjects(scenesRef.current);
 
         console.log('finding path:', firstNodeId, lastNodeId);
-        let algorithm = 'BFS'; // default to BFS if not selected
-        if (selectedAlgorithm) {
-            algorithm = selectedAlgorithm;
-        }
+
         if (firstNodeId && lastNodeId) {
-            const pathPromise = handlePath(firstNodeId, lastNodeId, algorithm);
+            handlePath(firstNodeId, lastNodeId);
+            const pathPromise = handlePath(firstNodeId, lastNodeId);
             // switch floor after path is created so the path on above floors is hidden properly
             pathPromise.then(() => {
                 handleFloorChange(1);
@@ -390,7 +386,7 @@ export function DraggableMap(props: DraggableMapProps) {
         } else {
             handleFloorChange(1);
         }
-    }, [selectedDepartment, selectedAlgorithm]);
+    }, [selectedDepartment]);
 
     // this useEffect runs only on mount and initializes some things.
     useEffect(() => {

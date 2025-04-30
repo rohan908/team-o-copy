@@ -21,7 +21,6 @@ export function HomePage() {
         setTravelMode,
         setDepartment,
         setSelectedService,
-        setSelectedAlgorithm,
     } = useTimeline();
 
     const { isLoaded } = useJsApiLoader({
@@ -36,7 +35,6 @@ export function HomePage() {
             data: {
                 HospitalName: null,
                 Department: null,
-                AlgorithmName: null,
             } as NavSelectionItem,
         });
     };
@@ -50,7 +48,6 @@ export function HomePage() {
         else setTravelMode(null);
         setSelectedService('');
         setDepartment(null);
-        setSelectedAlgorithm(null);
         clearNavMap();
     }, []);
 
@@ -90,13 +87,7 @@ export function HomePage() {
                 </Grid.Col>
                 {/* Right Content */}
                 <Grid.Col span={5}>
-                    <Flex
-                        h="100%"
-                        w={'100%'}
-                        align="center"
-                        justify="center"
-                        pt="6%"
-                    >
+                    <Flex h="100%" w={'100%'} align="center" justify="center" pt="6%">
                         <ContentSwitcher />
                     </Flex>
                 </Grid.Col>
