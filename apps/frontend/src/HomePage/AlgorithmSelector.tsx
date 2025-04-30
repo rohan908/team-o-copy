@@ -46,15 +46,15 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
         setAlgo(+algo!);
         console.log('selector algo just changed to: ', algo);
 
-        setDepartment(department);
-        NavSelection.dispatch({
-            type: 'SET_NAV_REQUEST',
-            data: {
-                HospitalName: selectedHospital,
-                Department: department,
-                AlgorithmChange: true,
-            } as NavSelectionItem,
-        });
+        // setDepartment(department);
+        // NavSelection.dispatch({
+        //     type: 'SET_NAV_REQUEST',
+        //     data: {
+        //         HospitalName: selectedHospital,
+        //         Department: department,
+        //         AlgorithmChange: true,
+        //     } as NavSelectionItem,
+        // });
     };
 
     return (
