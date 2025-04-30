@@ -191,3 +191,96 @@ export function getNode(id: number, allNodes: DirectoryNodeItem[]): DirectoryNod
     }
     return null;
 }
+
+export function createNewCamera(canvasElement: HTMLElement): THREE.OrthographicCamera {
+    const aspect = canvasElement.clientWidth / canvasElement.clientHeight;
+
+    const frustumSize = 400;
+    const frustumHalfHeight = frustumSize / 2;
+    const frustumHalfWidth = frustumHalfHeight * aspect;
+
+    const camera = new THREE.OrthographicCamera(
+        -frustumHalfWidth,
+        frustumHalfWidth,
+        frustumHalfHeight,
+        -frustumHalfHeight,
+        0.1,
+        1000
+    );
+
+    camera.position.set(0, 0, 330);
+    camera.up.set(0, 0, 1);
+    camera.lookAt(0, 0, 0);
+    camera.zoom = 1;
+    camera.updateProjectionMatrix();
+
+    return camera;
+}
+
+export function createNewOrbitControls(
+    camera: THREE.OrthographicCamera,
+    domElement: HTMLElement,
+    mode: '2D' | '3D' = '3D'
+): OrbitControls {
+    const controls = new OrbitControls(camera, domElement);
+
+    if (mode === '2D') {
+        controls.enableRotate = false;
+    } else {
+        controls.enableRotate = true;
+    }
+
+    controls.target.set(0, 0, 0);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.mouseButtons = {
+        LEFT: THREE.MOUSE.PAN,
+        MIDDLE: THREE.MOUSE.DOLLY,
+        RIGHT: THREE.MOUSE.ROTATE,
+    };
+
+    controls.minZoom = 1;
+    controls.maxZoom = 5;
+
+    // Set up pan boundaries - crucial part that was missing
+    const aspect = domElement.clientWidth / domElement.clientHeight;
+    const frustumSize = 400;
+    const frustumHalfHeight = frustumSize / 2;
+    const frustumHalfWidth = frustumHalfHeight * aspect;
+
+    const maxPanX = frustumHalfWidth * 2;
+    const maxPanY = frustumHalfHeight * 2;
+
+    const initialTarget = new THREE.Vector3(0, 0, 0);
+    const vTarget = new THREE.Vector3();
+
+    const enforceBoundaries = () => {
+        const zoomRatio = (camera.zoom - controls.minZoom) / (controls.maxZoom - controls.minZoom);
+
+        const allowedPanX = maxPanX * zoomRatio;
+        const allowedPanY = maxPanY * zoomRatio;
+
+        vTarget.copy(controls.target);
+
+        controls.target.x = Math.max(
+            initialTarget.x - allowedPanX,
+            Math.min(initialTarget.x + allowedPanX, controls.target.x)
+        );
+        controls.target.y = Math.max(
+            initialTarget.y - allowedPanY,
+            Math.min(initialTarget.y + allowedPanY, controls.target.y)
+        );
+
+        vTarget.x = vTarget.x - controls.target.x;
+        vTarget.y = vTarget.y - controls.target.y;
+
+        camera.position.x -= vTarget.x;
+        camera.position.y -= vTarget.y;
+    };
+
+    controls.addEventListener('change', enforceBoundaries);
+
+    controls.update();
+
+    return controls;
+}
