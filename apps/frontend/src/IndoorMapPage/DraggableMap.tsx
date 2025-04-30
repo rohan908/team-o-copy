@@ -252,7 +252,7 @@ export function DraggableMap() {
                 } else if (objectType == 'walls') {
                     object.traverse(function (child: { material: THREE.MeshStandardMaterial }) {
                         child.material = new THREE.MeshStandardMaterial({
-                            color: 0xa2c2f7,
+                            color: 0x0e3b99,
                         });
                     });
                 } else {
@@ -276,10 +276,10 @@ export function DraggableMap() {
         loadPromises.push(loadObjectAsync('../../public/Models/Floor 4 Floor.obj', 3, 'floor'));
         loadPromises.push(loadObjectAsync('../../public/Models/Floor 4 Walls.obj', 3, 'walls'));
         // lighting
-        const ambientLight = new THREE.AmbientLight(0xebf2ff, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1);
         scenesRef.current[0].add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
         directionalLight.position.set(20, 20, 20);
         scenesRef.current[0].add(directionalLight);
 
