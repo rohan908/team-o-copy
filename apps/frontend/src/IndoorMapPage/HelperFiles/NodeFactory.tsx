@@ -127,7 +127,7 @@ export const createNode = (
         threeDNode.userData.color = nodeColor;
         const nodeFloor = node.floor;
         // check if the floor is within bounds
-        if (nodeFloor >= 1 && nodeFloor <= 5) {
+        if (nodeFloor >= 1 && nodeFloor <= 6) {
             // add to corresponding scene array (arrays are 0-indexed but floors start at 1)
             sceneArr[nodeFloor - 1].add(threeDNode);
             if (objectsRef) {
