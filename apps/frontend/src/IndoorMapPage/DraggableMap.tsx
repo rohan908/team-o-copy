@@ -18,6 +18,7 @@ import { createNode } from './HelperFiles/NodeFactory.ts';
 import { getNode, mapSetup } from './HelperFiles/MapSetup.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { useLocation } from 'react-router-dom';
 import { element } from 'prop-types';
 
 export function DraggableMap() {
@@ -47,6 +48,10 @@ export function DraggableMap() {
 
     // used to space apart floors and nodes and edges on those floors
     const floorHeight = 10.5;
+
+    // route to make the floor select box not show up on the home page
+    const location = useLocation();
+    const isIndoorMapPage = location.pathname.includes('IndoorMapPage');
 
     // set up map
     const { cameraRef, rendererRef, scenesRef, controlRef } = mapSetup({
@@ -125,16 +130,29 @@ export function DraggableMap() {
     };
 
     const setTwoDView = () => {
-        cameraRef.current.position.set(0, -50, 200);
-        cameraRef.current.up.set(0, 0, 1);
-        cameraRef.current.rotation.set(0, 0, 0);
-        cameraRef.current.quaternion.identity();
-        controlRef.current.target.set(0, -50, 0);
-        cameraRef.current.lookAt(0, -50, 0);
-        cameraRef.current.zoom = 1.5;
-        cameraRef.current.updateMatrixWorld(true);
-        cameraRef.current.updateProjectionMatrix();
-        controlRef.current.enableRotate = false;
+        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
+            cameraRef.current.position.set(0, -50, 200);
+            cameraRef.current.up.set(0, 0, 1);
+            cameraRef.current.rotation.set(0, 0, 0);
+            cameraRef.current.quaternion.identity();
+            controlRef.current.target.set(0, -50, 0);
+            cameraRef.current.lookAt(0, -50, 0);
+            cameraRef.current.zoom = 1.5;
+            cameraRef.current.updateMatrixWorld(true);
+            cameraRef.current.updateProjectionMatrix();
+            controlRef.current.enableRotate = false;
+        } else {
+            cameraRef.current.position.set(0, 0, 200);
+            cameraRef.current.up.set(0, 0, 1);
+            cameraRef.current.rotation.set(0, 0, 0);
+            cameraRef.current.quaternion.identity();
+            controlRef.current.target.set(0, 0, 0);
+            cameraRef.current.lookAt(0, 0, 0);
+            cameraRef.current.zoom = 1;
+            cameraRef.current.updateMatrixWorld(true);
+            cameraRef.current.updateProjectionMatrix();
+            controlRef.current.enableRotate = false;
+        }
     };
 
     const setThreeDView = () => {
@@ -252,7 +270,7 @@ export function DraggableMap() {
                 } else if (objectType == 'walls') {
                     object.traverse(function (child: { material: THREE.MeshStandardMaterial }) {
                         child.material = new THREE.MeshStandardMaterial({
-                            color: 0x0e3b99,
+                            color: 0x1c43a7,
                         });
                     });
                 } else {
@@ -492,12 +510,14 @@ export function DraggableMap() {
 
     return (
         <Box w="100%" h="100%" p={0} pos={'relative'}>
-            <FloorSwitchBox
-                floor={floorState}
-                onCollapseChange={() => true}
-                setFloor={handleFloorChange}
-                building={selectedHospitalName || ''}
-            />
+            {isIndoorMapPage && (
+                <FloorSwitchBox
+                    floor={floorState}
+                    onCollapseChange={() => true}
+                    setFloor={handleFloorChange}
+                    building={selectedHospitalName || ''}
+                />
+            )}
             <canvas
                 id="insideMapCanvas"
                 style={{ width: '100%', height: '100%', position: 'relative' }}

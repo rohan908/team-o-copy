@@ -1,5 +1,5 @@
-import {Select, useMantineTheme } from '@mantine/core';
-import {IconBuilding, IconBuildings, IconChevronDown} from '@tabler/icons-react';
+import { Select, useMantineTheme } from '@mantine/core';
+import { IconBuilding, IconBuildings, IconChevronDown } from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
 import { hospitalOptions } from './GmapsDestinationSelector.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
@@ -11,13 +11,14 @@ import {
     usePatriotContext,
 } from '../contexts/DirectoryContext.tsx';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
+import { useEffect, useState } from 'react';
 
 interface ParkingSelectorProps {
-  hasIcon: boolean
-  w: string
+    hasIcon: boolean;
+    w: string;
 }
 
-export function ParkingSelector(props:ParkingSelectorProps) {
+export function ParkingSelector(props: ParkingSelectorProps) {
     const {
         setSelectedHospital,
         setDirectoryOptions,
@@ -26,6 +27,11 @@ export function ParkingSelector(props:ParkingSelectorProps) {
         selectedAlgorithm,
         selectedHospital,
     } = useTimeline();
+
+    const [localValue, setLocalValue] = useState<string | null>(null);
+    useEffect(() => {
+        setLocalValue(selectedHospital);
+    }, [selectedHospital]);
 
     const theme = useMantineTheme();
 
@@ -43,6 +49,7 @@ export function ParkingSelector(props:ParkingSelectorProps) {
         }));
 
     const setHospitalLocation = (hospital: string | null) => {
+        setLocalValue(hospital);
         setSelectedHospital(hospital);
         setDepartment(null);
 
@@ -77,11 +84,13 @@ export function ParkingSelector(props:ParkingSelectorProps) {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={!props.hasIcon ? null :
-              <IconBuildings size="16" style={{ color: theme.colors.primaryBlues[8]}} />
+            leftSection={
+                !props.hasIcon ? null : (
+                    <IconBuildings size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+                )
             }
             data={hospitalOptions}
-            value={selectedHospital ?? ''}
+            value={localValue}
             onChange={setHospitalLocation}
             mb="sm"
             radius="md"
