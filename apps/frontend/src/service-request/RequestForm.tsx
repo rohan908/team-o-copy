@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Flex, Title, Paper, Box } from '@mantine/core';
+import { Button, Flex, Title, Box } from '@mantine/core';
+import { useForm } from '@mantine/form';
 
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
@@ -9,14 +10,6 @@ import PriorityButtons from './components/PriorityButtons.tsx';
 import StatusSelect from './components/StatusSelect.tsx';
 import DepartmentSelect from './components/DepartmentSelect.tsx';
 import NameEntry from './components/NameEntry.tsx';
-
-// import {
-//     ChestnutHill,
-//     Patriot20,
-//     Patriot22,
-//     HospitalDepartment,
-// } from '../directory/components/directorydata';
-import { useForm } from '@mantine/form';
 import {
     useBwhCampusContext,
     useChestnutHillContext,
@@ -43,7 +36,6 @@ export interface RequestData {
 interface RequestDetails {
     handleSubmit: (values: RequestData) => void;
     children?: (form: ReturnType<typeof useForm<RequestData>>) => React.ReactNode;
-    //pass in arbitrary amount of components needed but i dont know how to do that
     newInitialValues: RequestData;
     contributors?: string;
     formLabel: string;
@@ -56,9 +48,9 @@ const RequestForm: React.FC<RequestDetails> = ({
     newInitialValues,
     contributors,
     formLabel,
-    onBack,
 }) => {
     const [departmentOptions, setDepartmentOptions] = useState<string[]>([]);
+    const [resetKey, setResetKey] = useState(0); // Key to force remount
 
     const form = useForm<RequestData>({
         initialValues: newInitialValues,
@@ -72,7 +64,6 @@ const RequestForm: React.FC<RequestDetails> = ({
     const mapDepartment = (department: DirectoryNodeItem[]) =>
         department.map((department) => department.name);
 
-    // logic for dependant department selection
     const handleHospitalChange = (hospital: string | null) => {
         form.setFieldValue('hospital', hospital || '');
 
@@ -99,26 +90,28 @@ const RequestForm: React.FC<RequestDetails> = ({
         form.setFieldValue('department', '');
     };
 
+    const handleReset = () => {
+        const freshValues = { ...newInitialValues };
+
+        form.setValues(freshValues);
+        form.reset();
+
+        setDepartmentOptions([]);
+
+        setResetKey((prev) => prev + 1);
+    };
+
     return (
-        <Flex justify="center" align="center" p="xxl">
+        <Flex justify="center" align="center" p="xxl" key={`form-container-${resetKey}`}>
             <Box p="xl">
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
                         form.onSubmit(handleSubmit)();
                     }}
+                    key={`form-${resetKey}`}
                 >
                     <Flex direction="column" ta="center" justify="center">
-                        <Box mr="auto" mb="lg">
-                            <Button
-                                radius="md"
-                                onClick={onBack}
-                                bg="#5A83DB"
-                                style={{ width: '100px' }}
-                            >
-                                Back
-                            </Button>
-                        </Box>
                         <Title order={2} ta="center" mb="md" fz="xl" c={'#285CC6'}>
                             {formLabel}
                         </Title>
@@ -129,45 +122,59 @@ const RequestForm: React.FC<RequestDetails> = ({
 
                     <Flex align="stretch" gap="xl" wrap="wrap" mb="md">
                         <Box flex="1" miw="275">
-                            {/*< column 1!!!*/}
-
-                            <NameEntry {...form.getInputProps('employeeName')} />
+                            <NameEntry
+                                value={form.values.employeeName}
+                                onChange={(val: string) => form.setFieldValue('employeeName', val)}
+                                key={`name-${resetKey}`}
+                            />
                             <HospitalSelect
                                 value={form.values.hospital}
                                 onChange={handleHospitalChange}
+                                key={`hospital-${resetKey}`}
                             />
                             <DepartmentSelect
                                 departments={departmentOptions}
                                 {...form.getInputProps('department')}
+                                key={`department-${resetKey}`}
                             />
                             {children?.(form)}
-                            {/*this is where I want any unique components to go*/}
                         </Box>
 
                         <Box flex="1" miw="275">
-                            {/* column 2!!!*/}
-                            <DateInputForm {...form.getInputProps('date')} />
-                            <TimeEntry {...form.getInputProps('time')} />
-                            <PriorityButtons {...form.getInputProps('priority')} />
-                            <StatusSelect {...form.getInputProps('status')} />
+                            <DateInputForm
+                                {...form.getInputProps('date')}
+                                key={`date-${resetKey}`}
+                            />
+                            <TimeEntry {...form.getInputProps('time')} key={`time-${resetKey}`} />
+                            <PriorityButtons
+                                {...form.getInputProps('priority')}
+                                key={`priority-${resetKey}`}
+                            />
+                            <StatusSelect
+                                {...form.getInputProps('status')}
+                                key={`status-${resetKey}`}
+                            />
                         </Box>
                     </Flex>
                     <Box mt="md">
-                        <RequestDescription {...form.getInputProps('description')} />
+                        <RequestDescription
+                            {...form.getInputProps('description')}
+                            key={`description-${resetKey}`}
+                        />
                     </Box>
                     <Flex mt="xl" justify="left" gap="md">
                         <Button
                             type="button"
                             variant="outline"
-                            color="#5A83DB"
+                            color="#325ed8"
                             radius="md"
-                            style={{ width: '200px' }}
-                            onClick={() => form.reset()}
+                            w="200px"
+                            onClick={handleReset}
                         >
                             Clear Form
                         </Button>
 
-                        <Button radius="md" type="submit" bg="#5A83DB" style={{ width: '200px' }}>
+                        <Button radius="md" type="submit" bg="#325ed8" w="100%">
                             Submit
                         </Button>
                     </Flex>

@@ -41,7 +41,7 @@ const TTSButton: React.FC<TTSButtonProps> = ({ text }) => {
                 e.stopPropagation();
                 handleToggle();
             }}
-            color={isSpeaking ? 'red' : 'blue'}
+            color={isSpeaking ? 'red' : '#325ed8'}
             variant="light"
             size="sm"
         >

@@ -11,6 +11,7 @@ import {
     usePatriotContext,
 } from '../contexts/DirectoryContext.tsx';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
+import { useEffect, useState } from 'react';
 
 interface ParkingSelectorProps {
     hasIcon: boolean;
@@ -25,6 +26,11 @@ export function ParkingSelector(props: ParkingSelectorProps) {
         department,
         selectedHospital,
     } = useTimeline();
+
+    const [localValue, setLocalValue] = useState<string | null>(null);
+    useEffect(() => {
+        setLocalValue(selectedHospital);
+    }, [selectedHospital]);
 
     const theme = useMantineTheme();
 
@@ -42,6 +48,7 @@ export function ParkingSelector(props: ParkingSelectorProps) {
         }));
 
     const setHospitalLocation = (hospital: string | null) => {
+        setLocalValue(hospital);
         setSelectedHospital(hospital);
         setDepartment(null);
 
@@ -79,7 +86,7 @@ export function ParkingSelector(props: ParkingSelectorProps) {
                 )
             }
             data={hospitalOptions}
-            value={selectedHospital ?? ''}
+            value={localValue}
             onChange={setHospitalLocation}
             mb="sm"
             radius="md"

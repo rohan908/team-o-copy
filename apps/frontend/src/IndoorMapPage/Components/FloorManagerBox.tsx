@@ -41,8 +41,10 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, buildi
                         value={floor.toString()}
                         onChange={(value) => setFloor(parseInt(value))}
                         data={[
+                            { label: '3D', value: '5' },
                             { label: 'F4', value: '4' },
                             { label: 'F3', value: '3' },
+                            { label: 'F2', value: '2' },
                             { label: 'F1', value: '1' },
                         ]}
                         styles={{
@@ -75,9 +77,12 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, buildi
                     transition: 'all 0.4s ease-in-out',
                 }}
             >
-                <Flex direction="row" align={"flex-end"}>
+                <Flex direction="row" align={'flex-end'}>
                     <Collapse
-                        in={mapProps.selectedTool == 'add-edge' && mapProps.currentNode?.nodeType == 'staircase'}
+                        in={
+                            mapProps.selectedTool == 'add-edge' &&
+                            mapProps.currentNode?.nodeType == 'staircase'
+                        }
                         transitionDuration={250}
                         transitionTimingFunction="linear"
                     >

@@ -59,16 +59,16 @@ export function IndoorMapsPage() {
                                 {/*    Change Pathfinding Algorithm*/}
                                 {/*</Title>*/}
 
-                                {/*<Flex w="100%" justify={'left'}>*/}
-                                {/*    <IconDotsVertical*/}
-                                {/*        size="20"*/}
-                                {/*        style={{*/}
-                                {/*            color: theme.colors.primaryBlues[8],*/}
-                                {/*            marginTop: '-10px',*/}
-                                {/*            marginLeft: '17.5px',*/}
-                                {/*        }}*/}
-                                {/*    />*/}
-                                {/*</Flex>*/}
+                                <Flex w="100%" justify={'left'}>
+                                    <IconDotsVertical
+                                        size="20"
+                                        style={{
+                                            color: theme.colors.primaryBlues[8],
+                                            marginTop: '-10px',
+                                            marginLeft: '17.5px',
+                                        }}
+                                    />
+                                </Flex>
                                 <Flex mt="md" direction="row" gap={'xs'}>
                                     <IconRouteSquare
                                         size="20"
@@ -77,7 +77,7 @@ export function IndoorMapsPage() {
                                             marginTop: '7px',
                                         }}
                                     />
-                                    <AlgorithmSelector hasIcon={true} w={'100%'} />
+                                    <AlgorithmSelector hasIcon={false} w={'100%'} />
                                 </Flex>
                             </>
                         )}

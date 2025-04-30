@@ -29,9 +29,19 @@ export class FlowingTubeAnimation {
     }
 
     // Creates a tube between two nodes
-    createEdge(node1: { x: number; y: number }, node2: { x: number; y: number }) {
-        const startPoint = new THREE.Vector3(node1.x, node1.y, 0);
-        const endPoint = new THREE.Vector3(node2.x, node2.y, 0);
+    createEdge(
+        node1: { x: number; y: number; z?: number; floor?: number },
+        node2: { x: number; y: number; z?: number; floor?: number }
+    ) {
+        let startPoint;
+        let endPoint;
+        if (node1.z && node2.z) {
+            startPoint = new THREE.Vector3(node1.x, node1.y, node1.z);
+            endPoint = new THREE.Vector3(node2.x, node2.y, node2.z);
+        } else {
+            startPoint = new THREE.Vector3(node1.x, node1.y, 0);
+            endPoint = new THREE.Vector3(node2.x, node2.y, 0);
+        }
 
         // represent the tube as a vector
         const tubeVector = new THREE.Vector3().subVectors(startPoint, endPoint);
@@ -115,6 +125,12 @@ export class FlowingTubeAnimation {
         const geometry = new TubeGeometry(path, tubeSegments, 0.5, 8, false);
 
         const tube = new THREE.Mesh(geometry, flowingMaterial);
+        // This is used so all the path objects can be cleared without clearing 3D models
+        tube.userData.objectType = 'path';
+        if (node1.floor && node2.floor && node1.floor == node2.floor) {
+            tube.userData.floor = node1.floor;
+        }
+
         this.tubes.push(tube);
 
         return tube;

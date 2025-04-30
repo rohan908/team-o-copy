@@ -64,7 +64,7 @@ function Maintenance({ onBack }: { onBack: () => void }) {
             formLabel="Maintenance Request"
             onBack={onBack}
         >
-            {(form) => <MaintenanceSelect {...form.getInputProps('security')} />}
+            {(form) => <MaintenanceSelect {...form.getInputProps('maintenanceType')} />}
         </RequestForm>
     );
 }

@@ -76,10 +76,10 @@ const MapEditorBox = () => {
                                 }}
                                 onClick={() => mapProps.setSelectedTool('pan')}
                             >
-                                <IconHandMove size={32} color={
-                                    mapProps.selectedTool == 'pan'
-                                        ? '#f8d56b'
-                                        : 'white'}/>
+                                <IconHandMove
+                                    size={32}
+                                    color={mapProps.selectedTool == 'pan' ? '#f8d56b' : 'white'}
+                                />
                             </ActionIcon>
                         </Tooltip>
 
@@ -96,10 +96,12 @@ const MapEditorBox = () => {
                                 }}
                                 onClick={() => mapProps.setSelectedTool('add-node')}
                             >
-                                <IconCirclePlus size={32} color={
-                                    mapProps.selectedTool == 'add-node'
-                                        ? '#f8d56b'
-                                        : 'white'}/>
+                                <IconCirclePlus
+                                    size={32}
+                                    color={
+                                        mapProps.selectedTool == 'add-node' ? '#f8d56b' : 'white'
+                                    }
+                                />
                             </ActionIcon>
                         </Tooltip>
 
@@ -116,10 +118,12 @@ const MapEditorBox = () => {
                                 }}
                                 onClick={() => mapProps.setSelectedTool('add-edge')}
                             >
-                                <IconVectorBezier2 size={32} color={
-                                    mapProps.selectedTool == 'add-edge'
-                                        ? '#f8d56b'
-                                        : 'white'}/>
+                                <IconVectorBezier2
+                                    size={32}
+                                    color={
+                                        mapProps.selectedTool == 'add-edge' ? '#f8d56b' : 'white'
+                                    }
+                                />
                             </ActionIcon>
                         </Tooltip>
 
@@ -157,10 +161,10 @@ const MapEditorBox = () => {
                                 }}
                                 onClick={() => toggleHelp()}
                             >
-                                <IconQuestionMark size={32} color={
-                                    openedHelp
-                                        ? '#f8d56b'
-                                        : 'white'}/>
+                                <IconQuestionMark
+                                    size={32}
+                                    color={openedHelp ? '#f8d56b' : 'white'}
+                                />
                             </ActionIcon>
                         </Tooltip>
                     </Stack>
@@ -177,7 +181,7 @@ const MapEditorBox = () => {
                                     p="sm"
                                     w="auto"
                                     miw="200px"
-                                    maw="400px"
+                                    maw="520px"
                                     bg="primaryBlues.0"
                                     style={{
                                         borderRadius: 20,
@@ -196,9 +200,11 @@ const MapEditorBox = () => {
                                     <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
                                         Move Tool:
                                     </Text>
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'} mb={'xs'}>
+                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
                                         To move a node, click on the node you wish to move and drag
-                                        it. To select multiple, use ctrl + click. To delete, use ctrl + right-click.
+                                        it. <br></br>
+                                        To select multiple nodes, use ctrl + click. <br></br>
+                                        To delete selected nodes, use ctrl + right-click.
                                     </Text>
                                     <Divider
                                         w={'100%'}
@@ -210,7 +216,7 @@ const MapEditorBox = () => {
                                     <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
                                         Add Node:
                                     </Text>
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'} mb={'xs'}>
+                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
                                         Click where you would like to place a new node.
                                     </Text>
                                     <Divider
@@ -238,9 +244,9 @@ const MapEditorBox = () => {
                                         Edges Between Floors: <br />
                                     </Text>
                                     <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
-                                        Click a staircase, change floors and click
-                                        another staircase to create a between-floor edge.
-                                        The visual indicates floor connections.
+                                        Click a staircase, change floors and click another staircase
+                                        to create a between-floor edge. A sub-menu will appear to display
+                                        what other floors this node connects to.
                                     </Text>
                                 </Stack>
                             </div>
