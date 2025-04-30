@@ -117,7 +117,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'0'}
                                                 onClick={() => displayNumToggle(0)}
-                                                icon={<IconLanguage size="40" />}
+                                                icon={<IconLanguage size="35" />}
                                             >
                                                 Language Requests
                                             </SidebarButton>
@@ -126,7 +126,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'2'}
                                                 onClick={() => displayNumToggle(2)}
-                                                icon={<IconTrash size="40" />}
+                                                icon={<IconTrash size="35" />}
                                             >
                                                 Sanitation Requests
                                             </SidebarButton>
@@ -135,7 +135,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'3'}
                                                 onClick={() => displayNumToggle(3)}
-                                                icon={<IconBellExclamation size="40" />}
+                                                icon={<IconBellExclamation size="35" />}
                                             >
                                                 Maintenance Requests
                                             </SidebarButton>
@@ -143,7 +143,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'1'}
                                                 onClick={() => displayNumToggle(1)}
-                                                icon={<IconShieldHalf size="40" />}
+                                                icon={<IconShieldHalf size="35" />}
                                             >
                                                 Security Requests
                                             </SidebarButton>
@@ -154,7 +154,7 @@ export function AdminPage() {
                                         <SidebarButton
                                             ValueToCheck={displayTableNumber.toString()}
                                             onClick={() => setCSVManipOpen(true)}
-                                            icon={<IconFileBroken size="40" />}
+                                            icon={<IconFileBroken size="35" />}
                                         >
                                             CSV Manipulator
                                         </SidebarButton>
@@ -162,7 +162,7 @@ export function AdminPage() {
                                             ValueToCheck={displayTableNumber.toString()}
                                             component={Link}
                                             to={'/map-editor'}
-                                            icon={<IconMap2 size="40" />}
+                                            icon={<IconMap2 size="35"  />}
                                         >
                                             Map Editor
                                         </SidebarButton>
