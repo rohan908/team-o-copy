@@ -6,18 +6,11 @@ import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
 
 interface MapConfig {
     canvasId: string;
-    cameraConfig?: {
-        fov?: number;
-        near?: number;
-        far?: number;
-        position?: { x: number; y: number; z: number };
-    };
-    orbitControls?: Partial<OrbitControls>;
 }
 
 // common hook for threejs map setup
 export function mapSetup(config: MapConfig) {
-    const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+    const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
     const scenesRef = useRef<THREE.Scene[]>([]);
     const controlRef = useRef<OrbitControls | null>(null);
@@ -38,18 +31,23 @@ export function mapSetup(config: MapConfig) {
             return;
         }
 
+        const aspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
+
+        // orthographic frustum
+        const frustumSize = 400; // Initial frustum size - can be adjusted as needed
+        const frustumHalfHeight = frustumSize / 2;
+        const frustumHalfWidth = frustumHalfHeight * aspect;
+
         // initialize camera
-        const camera = new THREE.PerspectiveCamera(
-            config.cameraConfig?.fov ?? 50,
-            canvasRef.current.clientWidth / canvasRef.current.clientHeight,
-            config.cameraConfig?.near ?? 50,
-            config.cameraConfig?.far ?? 1000
+        const camera = new THREE.OrthographicCamera(
+            -frustumHalfWidth,
+            frustumHalfWidth,
+            frustumHalfHeight,
+            -frustumHalfHeight,
+            0.1,
+            1000
         );
-        camera.position.set(
-            config.cameraConfig?.position?.x ?? 0,
-            config.cameraConfig?.position?.y ?? 0,
-            config.cameraConfig?.position?.z ?? 330
-        );
+        camera.position.set(0, 0, 330);
         camera.lookAt(0, 0, 0);
         cameraRef.current = camera;
         cameraRef.current.up.set(0, 0, 1);
@@ -80,21 +78,15 @@ export function mapSetup(config: MapConfig) {
         };
 
         // set min and max zoom
-        controls.minDistance = 100;
-        controls.maxDistance = 400;
-
-        //controls.rotateSpeed = -1;
+        controls.minZoom = 1;
+        controls.maxZoom = 5;
 
         // store initial target
         initialTargetRef.current.copy(controls.target);
 
-        // initial visible boundaries
-        const fov = camera.fov * (Math.PI / 180); // fov in radians
-        const maxVisibleHeight = Math.tan(fov / 2) * controls.maxDistance; // height at max zoom
-        const maxVisibleWidth = maxVisibleHeight * camera.aspect;
         // This sets it so you cannot pan past the visible area at max zoom even when you zoom in
-        const maxPanX = maxVisibleWidth / 2;
-        const maxPanY = maxVisibleHeight / 2;
+        const maxPanX = frustumHalfWidth * 2;
+        const maxPanY = frustumHalfHeight * 2;
 
         // initialize camera target vector
         const vTarget = new THREE.Vector3();
@@ -103,10 +95,8 @@ export function mapSetup(config: MapConfig) {
         const enforceBoundaries = () => {
             if (!camera || !controls) return;
 
-            // Calculate zoom ratio (0 at max zoom out, 1 at max zoom in)
-            const zoomRange = controls.maxDistance - controls.minDistance;
-            const currentZoomDist = camera.position.distanceTo(controls.target);
-            const zoomRatio = (controls.maxDistance - currentZoomDist) / zoomRange;
+            const zoomRatio =
+                (camera.zoom - controls.minZoom) / (controls.maxZoom - controls.minZoom);
 
             // pan distance based on zoom ratio
             // if zoomRatio = 0, no panning allowed
@@ -144,7 +134,16 @@ export function mapSetup(config: MapConfig) {
             if (!canvasRef.current || !camera || !renderer) return;
 
             // update aspect ratio
-            camera.aspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
+            const newAspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
+
+            const newFrustumHeight = frustumSize / camera.zoom;
+            const newFrustumWidth = newFrustumHeight * newAspect;
+
+            camera.left = -newFrustumWidth / 2;
+            camera.right = newFrustumWidth / 2;
+            camera.top = newFrustumHeight / 2;
+            camera.bottom = -newFrustumHeight / 2;
+
             camera.updateProjectionMatrix();
 
             // update renderer size

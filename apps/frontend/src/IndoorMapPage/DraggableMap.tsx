@@ -124,6 +124,32 @@ export function DraggableMap() {
         });
     };
 
+    const setTwoDView = () => {
+        cameraRef.current.position.set(0, -50, 200);
+        cameraRef.current.up.set(0, 0, 1);
+        cameraRef.current.rotation.set(0, 0, 0);
+        cameraRef.current.quaternion.identity();
+        controlRef.current.target.set(0, -50, 0);
+        cameraRef.current.lookAt(0, -50, 0);
+        cameraRef.current.zoom = 1.5;
+        cameraRef.current.updateMatrixWorld(true);
+        cameraRef.current.updateProjectionMatrix();
+        controlRef.current.enableRotate = false;
+    };
+
+    const setThreeDView = () => {
+        cameraRef.current.position.set(100, 200, 200);
+        cameraRef.current.up.set(0, 0, 1);
+        cameraRef.current.rotation.set(0, 0, 0);
+        cameraRef.current.quaternion.identity();
+        controlRef.current.target.set(0, 0, 0);
+        cameraRef.current.lookAt(0, 0, 0);
+        cameraRef.current.zoom = 1.5;
+        cameraRef.current.updateMatrixWorld(true);
+        cameraRef.current.updateProjectionMatrix();
+        controlRef.current.enableRotate = true;
+    };
+
     // Handle switching to other floors
     const handleFloorChange = (newFloor: number) => {
         if (newFloor === floorState) {
@@ -143,14 +169,9 @@ export function DraggableMap() {
         pathVisibility(newFloor, true); // show path on new floor
 
         if (newFloor > 1) {
-            cameraRef.current.position.set(0, 0, 330);
-            cameraRef.current.rotation.set(0, 0, 0);
-            cameraRef.current.quaternion.set(0, 0, 0, 1);
-            cameraRef.current.lookAt(0, 0, 0);
+            setTwoDView();
         } else if (newFloor == 1) {
-            cameraRef.current.position.set(100, 300, 300);
-            cameraRef.current.rotation.set(0, 0, 0);
-            cameraRef.current.lookAt(0, 0, 0);
+            setThreeDView();
         }
         controlRef.current.update();
         setFloorState(newFloor);
@@ -254,11 +275,7 @@ export function DraggableMap() {
         scenesRef.current[0].add(directionalLight);
 
         // enable orbiting
-        cameraRef.current.position.set(100, 300, 300);
-        cameraRef.current.rotation.set(0, 0, 0);
-        cameraRef.current.lookAt(0, 0, 0);
-        controlRef.current.enableRotate = true;
-        controlRef.current.update();
+        setThreeDView();
 
         return Promise.all(loadPromises);
     };
@@ -269,6 +286,8 @@ export function DraggableMap() {
         cameraRef.current.rotation.set(0, 0, 0);
         cameraRef.current.quaternion.set(0, 0, 0, 1);
         cameraRef.current.lookAt(0, 0, 0);
+        cameraRef.current.zoom = 1;
+        cameraRef.current.updateProjectionMatrix();
         controlRef.current.enableRotate = false;
         controlRef.current.update();
     };
