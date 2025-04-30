@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Flex, Title, Paper, Box } from '@mantine/core';
+import { Button, Flex, Title, Box } from '@mantine/core';
+import { useForm } from '@mantine/form';
 
 import TimeEntry from './components/TimeEntry';
 import DateInputForm from './components/DateEntry';
@@ -9,8 +10,6 @@ import PriorityButtons from './components/PriorityButtons.tsx';
 import StatusSelect from './components/StatusSelect.tsx';
 import DepartmentSelect from './components/DepartmentSelect.tsx';
 import NameEntry from './components/NameEntry.tsx';
-
-import { useForm } from '@mantine/form';
 import {
     useBwhCampusContext,
     useChestnutHillContext,
@@ -52,6 +51,7 @@ const RequestForm: React.FC<RequestDetails> = ({
     onBack,
 }) => {
     const [departmentOptions, setDepartmentOptions] = useState<string[]>([]);
+    const [resetKey, setResetKey] = useState(0); // Key to force remount
 
     const form = useForm<RequestData>({
         initialValues: newInitialValues,
@@ -65,7 +65,6 @@ const RequestForm: React.FC<RequestDetails> = ({
     const mapDepartment = (department: DirectoryNodeItem[]) =>
         department.map((department) => department.name);
 
-    // logic for dependant department selection
     const handleHospitalChange = (hospital: string | null) => {
         form.setFieldValue('hospital', hospital || '');
 
@@ -93,18 +92,25 @@ const RequestForm: React.FC<RequestDetails> = ({
     };
 
     const handleReset = () => {
+        const freshValues = { ...newInitialValues };
+
+        form.setValues(freshValues);
         form.reset();
+
         setDepartmentOptions([]);
+
+        setResetKey((prev) => prev + 1);
     };
 
     return (
-        <Flex justify="center" align="center" p="xxl">
+        <Flex justify="center" align="center" p="xxl" key={`form-container-${resetKey}`}>
             <Box p="xl">
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
                         form.onSubmit(handleSubmit)();
                     }}
+                    key={`form-${resetKey}`}
                 >
                     <Flex direction="column" ta="center" justify="center">
                         <Title order={2} ta="center" mb="md" fz="xl" c={'#285CC6'}>
@@ -117,27 +123,44 @@ const RequestForm: React.FC<RequestDetails> = ({
 
                     <Flex align="stretch" gap="xl" wrap="wrap" mb="md">
                         <Box flex="1" miw="275">
-                            <NameEntry {...form.getInputProps('employeeName')} />
+                            <NameEntry
+                                {...form.getInputProps('employeeName')}
+                                key={`name-${resetKey}`}
+                            />
                             <HospitalSelect
                                 value={form.values.hospital}
                                 onChange={handleHospitalChange}
+                                key={`hospital-${resetKey}`}
                             />
                             <DepartmentSelect
                                 departments={departmentOptions}
                                 {...form.getInputProps('department')}
+                                key={`department-${resetKey}`}
                             />
                             {children?.(form)}
                         </Box>
 
                         <Box flex="1" miw="275">
-                            <DateInputForm {...form.getInputProps('date')} />
-                            <TimeEntry {...form.getInputProps('time')} />
-                            <PriorityButtons {...form.getInputProps('priority')} />
-                            <StatusSelect {...form.getInputProps('status')} />
+                            <DateInputForm
+                                {...form.getInputProps('date')}
+                                key={`date-${resetKey}`}
+                            />
+                            <TimeEntry {...form.getInputProps('time')} key={`time-${resetKey}`} />
+                            <PriorityButtons
+                                {...form.getInputProps('priority')}
+                                key={`priority-${resetKey}`}
+                            />
+                            <StatusSelect
+                                {...form.getInputProps('status')}
+                                key={`status-${resetKey}`}
+                            />
                         </Box>
                     </Flex>
                     <Box mt="md">
-                        <RequestDescription {...form.getInputProps('description')} />
+                        <RequestDescription
+                            {...form.getInputProps('description')}
+                            key={`description-${resetKey}`}
+                        />
                     </Box>
                     <Flex mt="xl" justify="left" gap="md">
                         <Button
