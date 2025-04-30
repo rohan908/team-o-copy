@@ -134,50 +134,26 @@ export function DraggableMap() {
     };
 
     const setTwoDView = () => {
-        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
-            const canvasElement = document.getElementById('insideMapCanvas');
-            if (!canvasElement) {
-                console.error('Canvas element not found');
-                return;
-            }
+        const canvasElement = document.getElementById('insideMapCanvas');
+        if (!canvasElement) {
+            console.error('Canvas element not found');
+            return;
+        }
 
-            if (controlRef.current) {
-                controlRef.current.dispose();
-            }
+        if (controlRef.current) {
+            controlRef.current.dispose();
+        }
 
-            const newCamera = createNewCamera(canvasElement);
-            newCamera.position.set(0, -50, 200);
-            newCamera.zoom = 1.5;
-            newCamera.updateProjectionMatrix();
-            cameraRef.current = newCamera;
+        const newCamera = createNewCamera(canvasElement);
+        newCamera.position.set(0, 0, 200);
+        newCamera.zoom = 1.5;
+        newCamera.updateProjectionMatrix();
+        cameraRef.current = newCamera;
 
-            controlRef.current = createNewOrbitControls(newCamera, canvasElement, '2D');
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '2D');
 
-            if (rendererRef.current) {
-                rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
-            }
-        } else {
-            const canvasElement = document.getElementById('insideMapCanvas');
-            if (!canvasElement) {
-                console.error('Canvas element not found');
-                return;
-            }
-
-            if (controlRef.current) {
-                controlRef.current.dispose();
-            }
-
-            const newCamera = createNewCamera(canvasElement);
-            newCamera.position.set(0, 0, 200);
-            newCamera.zoom = 1;
-            newCamera.updateProjectionMatrix();
-            cameraRef.current = newCamera;
-
-            controlRef.current = createNewOrbitControls(newCamera, canvasElement, '2D');
-
-            if (rendererRef.current) {
-                rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
-            }
+        if (rendererRef.current) {
+            rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
         }
     };
 
