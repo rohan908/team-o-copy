@@ -119,6 +119,7 @@ export const createNode = (
         threeDNode = new THREE.Mesh(hallWayNodeGeometry, material);
         threeDNode.position.set(node.x, node.y, 0);
     }
+
     if (threeDNode) {
         threeDNode.userData.nodeId = node.id;
         threeDNode.userData.floor = node.floor;
@@ -138,11 +139,12 @@ export const createNode = (
     }
 };
 
-export const updateNodeMesh = (objectsRef: React.MutableRefObject<THREE.Object3D[]>, node: DirectoryNodeItem) => {
+export const updateNodeGeometry = (objectsRef: React.MutableRefObject<THREE.Object3D[]>, node: DirectoryNodeItem, nodeRadius: number) => {
     const objNode = objectsRef.current.find((obj) => obj.userData.nodeId === node.id);
 
     if(objNode != undefined) {
- //       objNode.geometry.dispose();
+        // @ts-ignore
+        objNode.geometry.dispose();
 
         const nodeRadius = 1.5;
 
@@ -163,21 +165,24 @@ export const updateNodeMesh = (objectsRef: React.MutableRefObject<THREE.Object3D
         );
         const staircaseNodeGeometry = new THREE.OctahedronGeometry(2, 0);
         const elevatorNodeGeometry = new THREE.OctahedronGeometry(2, 0);
-        const material = new THREE.MeshBasicMaterial(objNode.userData.color);
-/*
+
         if (node.nodeType == 'department') {
-            objNode.geometry = new THREE.Mesh(departmentNodeGeometry, material);
+            // @ts-ignore
+            objNode.geometry = departmentNodeGeometry;
         } else if (node.nodeType == 'parking-lot') {
-            objNode.geometry = new THREE.Mesh(parkingNodeGeometry, material);
+            // @ts-ignore
+            objNode.geometry = parkingNodeGeometry;
         } else if (node.nodeType == 'staircase') {
-            objNode.geometry = new THREE.Mesh(staircaseNodeGeometry, material);
+            // @ts-ignore
+            objNode.geometry = staircaseNodeGeometry;
         } else if (node.nodeType == 'elevator') {
-            objNode.geometry = new THREE.Mesh(elevatorNodeGeometry, material);
+            // @ts-ignore
+            objNode.geometry = elevatorNodeGeometry;
         } else {
-            objNode.geometry = new THREE.Mesh(hallWayNodeGeometry, material);
+            // @ts-ignore
+            objNode.geometry = hallWayNodeGeometry;
         }
 
- */
-        console.log(objNode);
+        objNode.userData.nodeType = node.nodeType;
     }
 }

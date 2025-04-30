@@ -10,7 +10,7 @@ import FloorSwitchBox from './Components/FloorManagerBox.tsx';
 import PopupTooltip from './Components/PopupTooltip';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { useUser } from '@clerk/clerk-react';
-import { createNode, updateNodeMesh } from './HelperFiles/NodeFactory.tsx';
+import { createNode, updateNodeGeometry } from './HelperFiles/NodeFactory.tsx';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { IconCurrentLocation } from '@tabler/icons-react';
@@ -261,7 +261,7 @@ export function MapEditor() {
         // populate all nodes and edges
         for (const node of allNodes) {
             createNode(node, scenesRef.current, node.nodeType, 0, 0, objectsRef, nodeRadius, {
-              color: nodeColor,
+                color: nodeColor,
             }); //Create the nodes
             for (const connectingNodeId of node.connectingNodes) {
                 // iterate over each connected node.
@@ -352,11 +352,10 @@ export function MapEditor() {
                 nodeToUpdate.nodeType = currentNodeData.nodeType;
                 nodeToUpdate.connectingNodes = currentNodeData.connectingNodes;
             }
-            if(nodeToUpdate != null && currentNodeData != null) {
-              //updateNodeMesh(objectsRef, nodeToUpdate);
-              updateDragControls();
+            if (nodeToUpdate != null && currentNodeData != null) {
+                updateNodeGeometry(objectsRef, nodeToUpdate, nodeRadius);
+                updateDragControls();
             }
-
         }
     }, [currentNodeData]);
 
@@ -389,24 +388,24 @@ export function MapEditor() {
     };
 
     const selectMultiObjects = (selectedObject: THREE.Object3D) => {
-      if (
-        selectedObject instanceof THREE.Mesh &&
-        selectedObject.material instanceof THREE.MeshBasicMaterial
-      ) {
-        selectedObject.material.color.set(selectedNodeColor);
-        selectedObject.material.needsUpdate = true;
-        selectedObjects.current.push(selectedObject);
+        if (
+            selectedObject instanceof THREE.Mesh &&
+            selectedObject.material instanceof THREE.MeshBasicMaterial
+        ) {
+            selectedObject.material.color.set(selectedNodeColor);
+            selectedObject.material.needsUpdate = true;
+            selectedObjects.current.push(selectedObject);
 
-        // changes mouse on selected object
-        setCursorStyle(`url(${MouseImages.MoveClick}),auto`);
+            // changes mouse on selected object
+            setCursorStyle(`url(${MouseImages.MoveClick}),auto`);
 
-        setCurrentNodeData(
-          nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
-        );
+            setCurrentNodeData(
+                nodeRef.current.find((element) => element.id === selectedObject.userData.nodeId)
+            );
 
-        render(); // render to show color changes
-        updateDragControls();
-      }
+            render(); // render to show color changes
+            updateDragControls();
+        }
     };
 
     const deselectObject = (selectedObject: THREE.Object3D) => {
@@ -414,34 +413,33 @@ export function MapEditor() {
             selectedObject instanceof THREE.Mesh &&
             selectedObject.material instanceof THREE.MeshBasicMaterial
         )
-          if(selectedObject.userData.nodeType == 'staircase') {
-            selectedObject.material.color.set(nodeStaircaseColor);
-          } else {
-            selectedObject.material.color.set(nodeColor);
-          }
+            if (selectedObject.userData.nodeType == 'staircase') {
+                selectedObject.material.color.set(nodeStaircaseColor);
+            } else {
+                selectedObject.material.color.set(nodeColor);
+            }
 
         selectedObject.material.needsUpdate = true;
         selectedObjects.current = selectedObjects.current.filter(
             (object) => object !== selectedObject
         );
 
-            if (selectedObjects.current.length === 0) {
-                setCurrentNodeData(null);
+        if (selectedObjects.current.length === 0) {
+            setCurrentNodeData(null);
 
-                if (cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
-                    // changes mouse on no selected objects
-                    setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
-                }
-            } else if (selectedObjects.current.length > 0) {
-                setCurrentNodeData(
-                    nodeRef.current.find(
-                        (element) =>
-                            element.id ===
-                            selectedObjects.current[selectedObjects.current.length - 1].userData
-                                .nodeId
-                    )
-                );
+            if (cursorStyleRef.current == `url(${MouseImages.MoveClick}),auto`) {
+                // changes mouse on no selected objects
+                setCursorStyle(`url(${MouseImages.MoveNone}),auto`);
             }
+        } else if (selectedObjects.current.length > 0) {
+            setCurrentNodeData(
+                nodeRef.current.find(
+                    (element) =>
+                        element.id ===
+                        selectedObjects.current[selectedObjects.current.length - 1].userData.nodeId
+                )
+            );
+        }
 
         render(); // render to show color changes
         updateDragControls();
@@ -528,10 +526,10 @@ export function MapEditor() {
                 deselectObject(selectedObject);
                 console.log('Deselected:', selectedObject);
             } else {
-                if(event.ctrlKey) {
-                  selectMultiObjects(selectedObject)
+                if (event.ctrlKey) {
+                    selectMultiObjects(selectedObject);
                 } else {
-                  selectObject(selectedObject);
+                    selectObject(selectedObject);
                 }
 
                 console.log('set data');
@@ -603,9 +601,9 @@ export function MapEditor() {
 
             nodeRef.current.push(newNode);
 
-          createNode(newNode, scenesRef.current, newNode.nodeType, 0, 0, objectsRef, nodeRadius, {
-            color: nodeColor,
-          }); //Create the nodes
+            createNode(newNode, scenesRef.current, newNode.nodeType, 0, 0, objectsRef, nodeRadius, {
+                color: nodeColor,
+            }); //Create the nodes
         }
     };
 
@@ -762,8 +760,10 @@ export function MapEditor() {
     };
 
     useEffect(() => {
-        if(objToReselect instanceof THREE.Mesh &&
-            objToReselect.material instanceof THREE.MeshBasicMaterial) {
+        if (
+            objToReselect instanceof THREE.Mesh &&
+            objToReselect.material instanceof THREE.MeshBasicMaterial
+        ) {
             if (selectedObjects.current.length == 0) {
                 objToReselect.material.color.set(selectedNodeColor);
                 objToReselect.material.needsUpdate = true;
