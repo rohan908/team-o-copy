@@ -19,11 +19,11 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
-    IconDeviceFloppy,
-    IconCirclePlus,
-    IconVectorBezier2,
-    IconHandMove,
-    IconQuestionMark,
+  IconDeviceFloppy,
+  IconCirclePlus,
+  IconVectorBezier2,
+  IconHandMove,
+  IconQuestionMark, IconSettings,
 } from '@tabler/icons-react';
 import { MapContext } from '../MapEditor.tsx';
 import { useAllNodesContext } from '../../contexts/DirectoryContext.tsx';
@@ -166,6 +166,25 @@ const MapEditorBox = () => {
                                     color={openedHelp ? '#f8d56b' : 'white'}
                                 />
                             </ActionIcon>
+                        </Tooltip>
+                        <Tooltip label="Algorithm Settings" position="right" disabled={openedHelp}>
+                          <ActionIcon
+                            size="xl"
+                            variant="filled"
+                            color={'secondaryBlues.8'}
+                            style={{
+                              border: '2px solid #1C43A7',
+                              width: 60,
+                              height: 60,
+                              borderRadius: 50,
+                            }}
+                            //onClick={/*Add Functionality here*/}
+                          >
+                            <IconSettings
+                              size={32}
+                              color={openedHelp ? '#f8d56b' : 'white'}
+                            />
+                          </ActionIcon>
                         </Tooltip>
                     </Stack>
                     <Transition
