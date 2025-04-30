@@ -125,10 +125,10 @@ export function RequestHistory({ requestType }: { requestType: string }) {
 
     return (
         <Box p="xl" bg="primaryBlues.1" w="100%" h="100%" bd="lg" flex="column">
-            <Title order={1} mb="sm" c="primaryBlues.5" ta="left" fz="xl">
+            <Title order={1} mb="sm" c="secondaryBlues.7" ta="left" fz="xl">
                 {requestType} Service Requests
             </Title>
-            <Text c="primaryBlues.5" ta="left" mb="xl" fz="xxs">
+            <Text c="secondaryBlues.7" ta="left" mb="xl" fz="xxs">
                 Click on a row to find out more information
             </Text>
             <Filter />
