@@ -11,6 +11,7 @@ import {
     Transition,
     CloseButton,
     Badge,
+    Group,
 } from '@mantine/core';
 import Filter from './Filter.tsx';
 
@@ -132,8 +133,11 @@ export function RequestHistory({ requestType }: { requestType: string }) {
             </Text>
             <Filter />
             {filterNames.map((n) => (
-                <Badge key={n} mr="xs" bg="primaryBlues.5">
-                    {n} <CloseButton size="xs" onClick={() => removeName(n)} />
+                <Badge key={n} p="xs" m="xs" bg="primaryBlues.5" fw="400">
+                    <Group gap="0px">
+                        {n}
+                        <CloseButton size="xs" onClick={() => removeName(n)} />
+                    </Group>
                 </Badge>
             ))}
 
@@ -214,8 +218,17 @@ export function RequestHistory({ requestType }: { requestType: string }) {
                                                         if (summaryColumns.includes(key))
                                                             return null;
                                                         return (
-                                                            <Text key={key} size="sm" mb="xs">
-                                                                <strong>{key}:</strong>{' '}
+                                                            <Text
+                                                                c="primaryBlues.5"
+                                                                key={key}
+                                                                size="sm"
+                                                                mb="xs"
+                                                            >
+                                                                <strong>
+                                                                    {key.charAt(0).toUpperCase() +
+                                                                        key.slice(1)}
+                                                                    :
+                                                                </strong>{' '}
                                                                 {typeof value === 'object'
                                                                     ? JSON.stringify(value)
                                                                     : String(value)}
