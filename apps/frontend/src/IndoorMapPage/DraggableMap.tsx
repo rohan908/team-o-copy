@@ -42,7 +42,7 @@ export function DraggableMap() {
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
-    const [floorState, setFloorState] = useState(4);
+    const [floorState, setFloorState] = useState(5);
     const [sceneIndexState, setSceneIndexState] = useState(0);
 
     // used to space apart floors and nodes and edges on those floors
@@ -165,13 +165,22 @@ export function DraggableMap() {
                 floorVisibility(i, false);
             }
         }
-        pathVisibility(floorState, false); // hide path on current floor
+        // hide all path objects
+        pathVisibility(1, false);
+        pathVisibility(2, false);
+        pathVisibility(3, false);
+        pathVisibility(4, false);
         pathVisibility(newFloor, true); // show path on new floor
 
-        if (newFloor > 1) {
+        if (newFloor < 5) {
             setTwoDView();
-        } else if (newFloor == 1) {
+        } else if (newFloor == 5) {
             setThreeDView();
+            // show all path objects
+            pathVisibility(1, true);
+            pathVisibility(2, true);
+            pathVisibility(3, true);
+            pathVisibility(4, true);
         }
         controlRef.current.update();
         setFloorState(newFloor);
@@ -457,6 +466,7 @@ export function DraggableMap() {
     };
 
     useEffect(() => {
+        let animationFrameId: number;
         const animate = () => {
             // Get delta time for animation
             const deltaTime = clockRef.current.getDelta();
@@ -470,9 +480,10 @@ export function DraggableMap() {
             if (rendererRef.current && cameraRef.current) {
                 rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
             }
-            window.requestAnimationFrame(animate);
+            animationFrameId = window.requestAnimationFrame(animate);
 
             return () => {
+                window.cancelAnimationFrame(animationFrameId);
                 clearSceneObjects(scenesRef.current);
             };
         };
