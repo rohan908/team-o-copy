@@ -30,10 +30,7 @@ const NameEntry: React.FC<TextInputProps> = (props) => {
     const handleSpeechResult = (text: string) => {
         setValue(text);
 
-        //skechy code, might delete
-        props.onChange?.({
-          currentTarget: { value: text }
-        } as any);
+        props.onChange?.(text);
     };
     return (
         <Flex align="center" gap="sm">
