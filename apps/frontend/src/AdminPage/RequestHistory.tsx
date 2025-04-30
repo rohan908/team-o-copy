@@ -16,6 +16,7 @@ import Filter from './Filter.tsx';
 
 // filter context addition
 import { useFilterContext } from '../contexts/FilterContext';
+import PriorityFilter from '../common-compoents/PriorityFilter.tsx';
 
 // Type-safe interface for request data
 interface RequestProps {
@@ -53,7 +54,7 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
     // get current filters
-    const { filterNames, addName, removeName } = useFilterContext();
+    const { currentFilters, removeFilter } = useFilterContext();
 
     // helper function to dispay correct feild
     const getRequestTypeValue = (row: RequestProps) => {
@@ -116,8 +117,8 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     if (!data.length) return <Text>No request form data found.</Text>;
 
     // make filter array from context
-    const rows = filterNames.length
-        ? data.filter((row) => filterNames.includes(row.employeeName))
+    const rows = currentFilters.length
+        ? data.filter((row) => currentFilters.includes(row.employeeName))
         : data;
 
     const summaryColumns = ['employeeName', 'requestID', 'requestType', 'createdAt'];
@@ -131,9 +132,9 @@ export function RequestHistory({ requestType }: { requestType: string }) {
                 Click on a row to find out more information
             </Text>
             <Filter />
-            {filterNames.map((n) => (
+            {currentFilters.map((n) => (
                 <Badge key={n} mr="xs" bg="primaryBlues.5">
-                    {n} <CloseButton size="xs" onClick={() => removeName(n)} />
+                    {n} <CloseButton size="xs" onClick={() => removeFilter(n)} />
                 </Badge>
             ))}
 

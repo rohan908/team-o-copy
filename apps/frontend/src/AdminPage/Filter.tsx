@@ -1,19 +1,20 @@
 import { Popover, Button, Title, Badge, CloseButton } from '@mantine/core';
 import { IconFilter } from '@tabler/icons-react';
-import NameEntrySR from '../service-request/components/NameEntrySR.tsx';
+import NameEntrySR from '../common-compoents/NameEntrySR.tsx';
 import React from 'react';
 // import context
 import { useFilterContext } from '../contexts/FilterContext.tsx';
+import PriorityFilter from '../common-compoents/PriorityFilter.tsx';
 
 function Filter() {
-    const [name, setName] = React.useState('');
+    const [filter, setFilter] = React.useState('');
     // initializa consts for context
-    const { filterNames, addName, removeName } = useFilterContext();
+    const { currentFilters, addFilter, removeFilter } = useFilterContext();
 
     const handleAddName = (val: string) => {
-        if (val.trim() && !filterNames.includes(val)) {
-            addName(val);
-            setName(''); // clear field
+        if (val.trim() && !currentFilters.includes(val)) {
+            addFilter(val);
+            setFilter(''); // clear field
         }
     };
 
@@ -36,6 +37,7 @@ function Filter() {
                     radius="md"
                     bg="yellowAccent.4"
                     fw="400"
+                    fz="xs"
                     m="xs"
                     c="primaryBlues.5"
                 >
@@ -44,7 +46,13 @@ function Filter() {
             </Popover.Target>
             <Popover.Dropdown>
                 <NameEntrySR
-                    value={name}
+                    value={filter}
+                    onChange={(val) => {
+                        handleAddName(val);
+                    }}
+                />
+                <PriorityFilter
+                    value={filter}
                     onChange={(val) => {
                         handleAddName(val);
                     }}

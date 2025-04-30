@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
 
 interface FilterContextType {
-    filterNames: string[];
-    setFilterNames: (names: string[]) => void;
-    addName: (name: string) => void;
-    removeName: (name: string) => void;
+    currentFilters: string[];
+    setFilter: (names: string[]) => void;
+    addFilter: (name: string) => void;
+    removeFilter: (name: string) => void;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -16,21 +16,21 @@ export const useFilterContext = () => {
 };
 
 export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [filterNames, setFilterNames] = useState<string[]>([]);
+    const [currentFilters, setFilter] = useState<string[]>([]);
 
     // this shit buns
-    const addName = (name: string) => {
-        if (!filterNames.includes(name.trim())) {
-            setFilterNames((prev) => [...prev, name.trim()]);
+    const addFilter = (name: string) => {
+        if (!currentFilters.includes(name.trim())) {
+            setFilter((prev) => [...prev, name.trim()]);
         }
     };
     // this shit more buns
-    const removeName = (name: string) => {
-        setFilterNames((prev) => prev.filter((n) => n !== name));
+    const removeFilter = (name: string) => {
+        setFilter((prev) => prev.filter((n) => n !== name));
     };
 
     return (
-        <FilterContext.Provider value={{ filterNames, setFilterNames, addName, removeName }}>
+        <FilterContext.Provider value={{ currentFilters, setFilter, addFilter, removeFilter }}>
             {children}
         </FilterContext.Provider>
     );

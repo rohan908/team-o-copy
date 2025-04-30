@@ -1,15 +1,14 @@
 // NameEntrySR.tsx
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, Flex, Box, Select } from '@mantine/core';
-import SpeechToText from '../../Buttons/SpeechToText';
+import SpeechToText from './../Buttons/SpeechToText';
 
 interface NameEntryProps {
     value: string;
     onChange: (value: string) => void;
-    onItemSelect?: (value: string) => void;
 }
 
-const NameEntrySR: React.FC<NameEntryProps> = ({ value, onChange, onItemSelect }) => {
+const NameEntrySR: React.FC<NameEntryProps> = ({ value, onChange }) => {
     const [data, setData] = useState<string[]>([]);
 
     useEffect(() => {
