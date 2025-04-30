@@ -1,5 +1,5 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
-import { IconChevronDown, IconMapPinFilled } from '@tabler/icons-react';
+import {IconBuildings, IconChevronDown, IconMapPinFilled} from '@tabler/icons-react';
 import { useState } from 'react';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';
@@ -12,6 +12,11 @@ import {
     useBwhCampusContext,
 } from '../contexts/DirectoryContext.tsx';
 
+interface GmapsDestinationSelectorProps {
+  hasIcon: boolean
+  w: string
+}
+
 export const hospitalOptions = [
     { value: '20 Patriot Pl', label: '20 Patriot Pl' },
     { value: '22 Patriot Pl', label: '22 Patriot Pl' },
@@ -20,8 +25,8 @@ export const hospitalOptions = [
     { value: 'BWH Campus', label: 'BWH Campus' },
 ];
 
-export function GmapsDestinationSelector() {
-    const { setSelectedHospital, setDirectoryOptions } = useTimeline();
+export function GmapsDestinationSelector(props:GmapsDestinationSelectorProps) {
+    const { setSelectedHospital, setDepartment, setDirectoryOptions } = useTimeline();
 
     const theme = useMantineTheme();
 
@@ -40,6 +45,7 @@ export function GmapsDestinationSelector() {
 
     const setHospitalLocation = (hospital: string | null) => {
         setSelectedHospital(hospital);
+        setDepartment(null);
         if (hospital == '20 Patriot Pl' || hospital == '22 Patriot Pl') {
             setDirectoryOptions(MapDepartment(Patriot));
         } else if (hospital == 'Chestnut Hill') {
@@ -60,15 +66,15 @@ export function GmapsDestinationSelector() {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={
-                <IconMapPinFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            leftSection={!props.hasIcon ? null :
+              <IconBuildings size="16" style={{ color: theme.colors.primaryBlues[8]}} />
             }
             data={hospitalOptions}
             onChange={setHospitalLocation}
-            radius="sm"
+            radius="md"
             mb="sm"
             size="xs"
-            w={{ xl: '350px', lg: '300px', sm: '100%' }}
+            w={props.w}
         />
     );
 }

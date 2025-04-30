@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { DatabaseController } from './DatabaseController';
-import { CSVTable } from './CSVTable';
+import React, { useState } from 'react';
 import {
     Collapse,
     Button,
-    Divider,
     Center,
     Flex,
     Title,
@@ -15,22 +12,17 @@ import {
     Modal,
 } from '@mantine/core';
 import LanguageRequestHistory from './LanguageRequestHistory.tsx';
-import { SegmentedControl } from '@mantine/core';
 import SecurityRequestHistory from './SecurityRequestHistory.tsx';
 import SanitationRequestHistory from './SanitationRequestHistory.tsx';
 import MaintenanceRequestHistory from './MaintenanceHistory.tsx';
 import CSVControlsComponent from './CSVControlsComponent.tsx';
-import {
-    IconArrowBadgeDown,
-    IconArrowBadgeDownFilled,
-    IconArrowBadgeLeftFilled,
-    IconArrowBadgeRightFilled,
-} from '@tabler/icons-react';
+import { IconArrowBadgeDownFilled, IconArrowBadgeLeftFilled } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { MapEditor } from '../IndoorMapPage/MapEditor.tsx';
 import { Link } from 'react-router-dom';
 import { ColorChangingButton } from '../common-compoents/commonButtons.tsx';
 import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
+import { useUser } from '@clerk/clerk-react';
+import { Navigate } from 'react-router-dom';
 
 export function AdminPageV2() {
     const [sidebarOpen, { toggle }] = useDisclosure(true);
@@ -38,7 +30,14 @@ export function AdminPageV2() {
     const [otherToolsOpen, setOtherToolsOpen] = useState(true);
     const [CSVManipOpen, setCSVManipOpen] = useState(false);
     const [displayTableNumber, setDisplayTableNumber] = useState(5);
+    // clerk const's
+    const { user, isSignedIn } = useUser();
 
+    // check role
+    const role = user?.publicMetadata?.role;
+    if (!isSignedIn || role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
     function displayNumToggle(num: number) {
         // if (num == displayTableNumber) {
         //   setDisplayTableNumber(-1);

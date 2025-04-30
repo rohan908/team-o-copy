@@ -11,40 +11,40 @@ interface DepartmentSelectorProps {
 }
 
 export function DepartmentSelector(props:DepartmentSelectorProps) {
-    const theme = useMantineTheme();
+  const theme = useMantineTheme();
 
-    const { directoryOptions, selectedHospital, setDepartment, department } = useTimeline();
-    const NavSelection = useNavSelectionContext();
+  const { directoryOptions, selectedHospital, setDepartment, department } = useTimeline();
+  const NavSelection = useNavSelectionContext();
 
-    const setSelectedDepartment = (department: string | null) => {
-        setDepartment(department);
-        NavSelection.dispatch({
-            type: 'SET_NAV_REQUEST',
-            data: {
-                HospitalName: selectedHospital,
-                Department: department,
-            } as NavSelectionItem,
-        });
-    };
+  const setSelectedDepartment = (department: string | null) => {
+    setDepartment(department);
+    NavSelection.dispatch({
+      type: 'SET_NAV_REQUEST',
+      data: {
+        HospitalName: selectedHospital,
+        Department: department,
+      } as NavSelectionItem,
+    });
+  };
 
-    return (
-        <Select
-          searchable
-            placeholder="Select a Department"
-            rightSection={
-                <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
-            }
-            leftSection={!props.hasIcon ? null :
-              <IconCheckupList size="16" style={{ color: theme.colors.primaryBlues[8]}} />
-            }
-            data={directoryOptions}
-            onChange={setSelectedDepartment}
-            value={department ?? ''}
-            radius="sm"
-            mb="sm"
-            size="xs"
-            disabled={!selectedHospital && directoryOptions.length === 0}
-            w={props.w}
-        />
-    );
+  return (
+    <Select
+      searchable
+      placeholder="Select a Department"
+      rightSection={
+        <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+      }
+      leftSection={!props.hasIcon ? null :
+        <IconCheckupList size="16" style={{ color: theme.colors.primaryBlues[8]}} />
+      }
+      data={directoryOptions}
+      onChange={setSelectedDepartment}
+      value={department ?? ''}
+      radius="sm"
+      mb="sm"
+      size="xs"
+      disabled={!selectedHospital && directoryOptions.length === 0}
+      w={props.w}
+    />
+  );
 }

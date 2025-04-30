@@ -42,7 +42,7 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
                 <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8]}} />
             }
             data={algoOptions}
-            radius="sm"
+            radius="md"
             mb="sm"
             size="xs"
             value={''}

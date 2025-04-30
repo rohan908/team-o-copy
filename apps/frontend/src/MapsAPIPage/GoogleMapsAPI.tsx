@@ -78,7 +78,7 @@ const GoogleMapsAPI = (props: GoogleMapsAPIProps) => {
     ]);
     return (
         <>
-            <Box pos="relative" w="100%" h="100%">
+            <Box pos="relative" w="100%" h="100%" bg="primaryBlues.0">
                 <GoogleMap
                     mapContainerStyle={{ width: '100%', height: '100%' }}
                     zoom={hospitalCoordinates(selectedHospital) ? 18.6 : 10}

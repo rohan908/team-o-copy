@@ -5,13 +5,19 @@ import { useNavSelectionContext } from '../contexts/NavigationContext';
 import { useTimeline } from './TimeLineContext.tsx';
 import { useEffect, useRef } from 'react';
 
-export function GmapsStartSelector() {
+interface GmapsStartSelectorProps {
+  hasIcon: boolean
+  w: string
+}
+
+export function GmapsStartSelector(props:GmapsStartSelectorProps) {
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
     const { setUserCoordinates, setUserStart, userStart } = useTimeline();
     const input = useRef<HTMLInputElement>(null);
+
     //initialize only when the box is not collapsed or has input
     useEffect(() => {
-        if (!input.current) return;
+        if (!input.current) setUserCoordinates(null);
 
         //if previous instance of autocompleteRef exits, then clear it for re initialization
         if (autocompleteRef.current) {
@@ -43,15 +49,15 @@ export function GmapsStartSelector() {
     return (
         <TextInput
             placeholder="Starting Location"
-            leftSection={
-                <IconHomeFilled size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+            leftSection={!props.hasIcon ? null :
+              <IconHomeFilled size="16" style={{ color: theme.colors.primaryBlues[8]}} />
             }
             ref={input}
             onChange={(value) => setUserStart(value)}
-            radius="sm"
+            radius="md"
             mb="sm"
             size="xs"
-            w={{ xl: '350px', lg: '300px', sm: '100%' }}
+            w={props.w}
         />
     );
 }

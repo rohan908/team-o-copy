@@ -239,6 +239,14 @@ router.get('/debug', (req: any, res: any) => {
     res.json(path);
 });
 
+// Debug endpoint to get test the pathfinding between nodes
+router.post('/debugAlgo', (req: any, res: any) => {
+    // Get the grid dimensions and some sample walkable points
+
+    navigationService.setAlgo(1);
+    console.log('setting algo to new value:');
+});
+
 // Register the handler with the router
 router.post('/findPath', findPathHandler);
 

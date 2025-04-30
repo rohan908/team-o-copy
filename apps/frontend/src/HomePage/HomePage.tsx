@@ -57,6 +57,7 @@ export function HomePage() {
 
     return (
         <Box
+            bg="primaryBlues.0"
             style={{
                 backgroundImage: `radial-gradient(circle at center, white 0%, ${theme.colors.blue[0]} 100%)`,
                 backgroundSize: 'cover',

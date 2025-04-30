@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode, useRef } from 'react';
-import { GoogleMap } from '@react-google-maps/api';
 
 // place holder
 interface LocationCoordinates {

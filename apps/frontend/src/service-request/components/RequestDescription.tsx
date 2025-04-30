@@ -4,8 +4,11 @@ import SpeechToText from '../../Buttons/SpeechToText.tsx';
 
 const RequestDescription: React.FC<TextareaProps> = (props) => {
   const [value, setValue] = useState('');
+
   const handleSpeechResult = (text: string) => {
-    setValue((prev) => (prev ? `${prev} ${text}` : text));
+    const newText = value ? `${value} ${text}` : text;
+    setValue(newText);
+    props.onChange?.(newText);
   };
   return (
     <Flex align="center" gap="sm">
@@ -14,8 +17,6 @@ const RequestDescription: React.FC<TextareaProps> = (props) => {
             {...props}
             label="Additional Details"
             placeholder="Specify additional details here"
-            value={value}
-            onChange={(e) => setValue(e.currentTarget.value)}
             radius="sm"
             autosize
             minRows={2}
@@ -23,6 +24,11 @@ const RequestDescription: React.FC<TextareaProps> = (props) => {
             size="xs"
             c={"#285CC6"}
             flex={1}
+            value={value}
+            onChange={(e) => {
+              setValue(e.currentTarget.value);
+              props.onChange?.(e);
+            }}
             styles={{
                 label: {
                     fontSize: '18px',
