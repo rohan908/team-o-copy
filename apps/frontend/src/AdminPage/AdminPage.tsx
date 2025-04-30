@@ -61,7 +61,7 @@ export function AdminPage() {
                                     mb="lg"
                                 >
                                     <HoverUnderline>
-                                        <Title order={2} c="secondaryBlues.7" w={'auto'} mt="md">
+                                        <Title order={2} c="secondaryBlues.5" w={'auto'} mt="md">
                                             Admin Page
                                         </Title>
                                     </HoverUnderline>

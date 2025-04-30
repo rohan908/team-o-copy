@@ -10,11 +10,10 @@ function Filter() {
     // initializa consts for context
     const { filterNames, addName, removeName } = useFilterContext();
 
-    const handleFilterState = () => {
-        // add name to context
-        if (name.trim()) {
-            addName(name);
-            setName('');
+    const handleAddName = (val: string) => {
+        if (val.trim() && !filterNames.includes(val)) {
+            addName(val);
+            setName(''); // clear field
         }
     };
 
@@ -22,11 +21,13 @@ function Filter() {
         // Change to keep filter open when clicking on autocomplete
         <Popover
             width={300}
-            trapFocus
+            trapFocus={false}
             position="bottom"
             withArrow
             shadow="md"
-            offset={{ mainAxis: 4, crossAxis: 50 }}
+            radius="md"
+            arrowSize={15}
+            offset={{ mainAxis: 10, crossAxis: 50 }}
             closeOnClickOutside={false}
         >
             <Popover.Target>
@@ -36,22 +37,18 @@ function Filter() {
                     bg="yellowAccent.4"
                     fw="400"
                     m="xs"
-                    c="secondaryBlues.7"
+                    c="primaryBlues.5"
                 >
                     Filter
                 </Button>
             </Popover.Target>
             <Popover.Dropdown>
-                <Title>Filter by Employee Name</Title>
-                <NameEntrySR value={name} onChange={(val: string) => setName(val)} />
-                <Button onClick={handleFilterState} mt="sm">
-                    Add
-                </Button>
-                {filterNames.map((n) => (
-                    <Badge key={n} mr="xs">
-                        {n} <CloseButton size="xs" onClick={() => removeName(n)} />
-                    </Badge>
-                ))}
+                <NameEntrySR
+                    value={name}
+                    onChange={(val) => {
+                        handleAddName(val);
+                    }}
+                />
             </Popover.Dropdown>
         </Popover>
     );

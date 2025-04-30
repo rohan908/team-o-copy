@@ -96,7 +96,7 @@ export const SidebarButton: React.FC<ColorChangingButtonProps> = ({
     ...props
 }) => {
     const firstColor = 'primaryBlues.9';
-    const secondColor = 'secondaryBlues.7';
+    const secondColor = 'primaryBlues.6';
     return (
         <UnstyledButton
             c={props.ValueToCheck === props.ValueForTrigger ? firstColor : secondColor}

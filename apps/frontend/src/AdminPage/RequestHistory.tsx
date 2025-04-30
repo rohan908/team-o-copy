@@ -9,6 +9,8 @@ import {
     Loader,
     Center,
     Transition,
+    CloseButton,
+    Badge,
 } from '@mantine/core';
 import Filter from './Filter.tsx';
 
@@ -51,7 +53,7 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
     // get current filters
-    const { filterNames } = useFilterContext();
+    const { filterNames, addName, removeName } = useFilterContext();
 
     // helper function to dispay correct feild
     const getRequestTypeValue = (row: RequestProps) => {
@@ -122,13 +124,18 @@ export function RequestHistory({ requestType }: { requestType: string }) {
 
     return (
         <Box p="xl" bg="primaryBlues.1" w="100%" h="100%" bd="lg" flex="column">
-            <Title order={1} mb="sm" c="secondaryBlues.7" ta="left" fz="xl">
+            <Title order={1} mb="sm" c="primaryBlues.5" ta="left" fz="xl">
                 {requestType} Service Requests
             </Title>
-            <Text c="secondaryBlues.7" ta="left" mb="xl" fz="xxs">
+            <Text c="primaryBlues.5" ta="left" mb="xl" fz="xxs">
                 Click on a row to find out more information
             </Text>
             <Filter />
+            {filterNames.map((n) => (
+                <Badge key={n} mr="xs" bg="primaryBlues.5">
+                    {n} <CloseButton size="xs" onClick={() => removeName(n)} />
+                </Badge>
+            ))}
 
             <ScrollArea type="scroll" offsetScrollbars scrollbarSize={6}>
                 <Table
@@ -165,18 +172,18 @@ export function RequestHistory({ requestType }: { requestType: string }) {
                                     onClick={() => setExpandedRow(expandedRow === idx ? null : idx)}
                                     style={{ cursor: 'pointer', borderRadius: '12px' }}
                                 >
-                                    <Table.Td ta="center" p="12px">
+                                    <Table.Td c="primaryBlues.5" ta="center" p="12px">
                                         {row.employeeName}
                                     </Table.Td>
-                                    <Table.Td ta="center" p="12px">
+                                    <Table.Td c="primaryBlues.5" ta="center" p="12px">
                                         {row.requestID}
                                     </Table.Td>
 
-                                    <Table.Td ta="center" p="12px">
+                                    <Table.Td c="primaryBlues.5" ta="center" p="12px">
                                         {getRequestTypeValue(row)}
                                     </Table.Td>
 
-                                    <Table.Td ta="center" p="12px">
+                                    <Table.Td c="primaryBlues.5" ta="center" p="12px">
                                         {timeAgo(row.createdAt)}
                                     </Table.Td>
                                 </Table.Tr>
