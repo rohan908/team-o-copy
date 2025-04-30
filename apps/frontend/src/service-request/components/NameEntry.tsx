@@ -1,4 +1,4 @@
-import { Autocomplete, TextInputProps, Flex, Box } from '@mantine/core';
+import { Autocomplete, TextInputProps, TextInput, Flex, Box } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 
@@ -27,40 +27,41 @@ const NameEntry: React.FC<TextInputProps> = (props) => {
         fetchNames();
     }, []);
 
-  const handleSpeechResult = (text: string) => {
-    setValue(text);
-    props.onChange?.({
-      currentTarget: { value: text }
-    } as any);
-  };
-  return (
-      <Flex align="center" gap="sm">
-        <TextInput
-          {...props}
-          label="Enter Employee Name"
-          placeholder="Enter Name"
-          radius="sm"
-          mb='md'
-          size="xs"
-          required
-          value={value}
-          onChange={(e) => {setValue(e.currentTarget.value);
-          props.onChange?.(e);
-        }}
-          c="#285CC6"
-          w="240px"
-          styles={{
-            label: {
-              fontSize: '18px',
-              fontWeight: 350,
-            },
-          }}
-        />
-        <Box mt={14}>
-        <SpeechToText OnResult={handleSpeechResult} />
-        </Box>
-      </Flex>
-  );
+    const handleSpeechResult = (text: string) => {
+        setValue(text);
+        props.onChange?.({
+            currentTarget: { value: text },
+        } as any);
+    };
+    return (
+        <Flex align="center" gap="sm">
+            <TextInput
+                {...props}
+                label="Enter Employee Name"
+                placeholder="Enter Name"
+                radius="sm"
+                mb="md"
+                size="xs"
+                required
+                value={value}
+                onChange={(e) => {
+                    setValue(e.currentTarget.value);
+                    props.onChange?.(e);
+                }}
+                c="#285CC6"
+                w="240px"
+                styles={{
+                    label: {
+                        fontSize: '18px',
+                        fontWeight: 350,
+                    },
+                }}
+            />
+            <Box mt={14}>
+                <SpeechToText OnResult={handleSpeechResult} />
+            </Box>
+        </Flex>
+    );
 };
 
 export default NameEntry;
