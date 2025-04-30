@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import {
     Collapse,
-    Button,
     Center,
     Flex,
     Title,
@@ -25,17 +24,26 @@ import {
     IconBellExclamation,
 } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { SidebarButton } from '../common-compoents/commonButtons.tsx';
 import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
 import RequestHistory from './RequestHistory.tsx';
+import { useUser } from '@clerk/clerk-react';
 
 export function AdminPage() {
     const [formInfoOpen, { open, close }] = useDisclosure(true);
     const [CSVManipOpen, setCSVManipOpen] = useState(false);
     const [displayTableNumber, setDisplayTableNumber] = useState(0);
     const theme = useMantineTheme();
+    // clerk const's
+    const { user, isSignedIn } = useUser();
+
+    // check role
+    const role = user?.publicMetadata?.role;
+    if (!isSignedIn || role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
 
     function displayNumToggle(num: number) {
         // if (num == displayTableNumber) {
@@ -61,7 +69,7 @@ export function AdminPage() {
                                     mb="lg"
                                 >
                                     <HoverUnderline>
-                                        <Title order={2} c="secondaryBlues.5" w={'auto'} mt="md">
+                                        <Title order={2} c="secondaryBlues.7" w={'auto'} mt="md">
                                             Admin Page
                                         </Title>
                                     </HoverUnderline>
@@ -117,7 +125,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'0'}
                                                 onClick={() => displayNumToggle(0)}
-                                                icon={<IconLanguage size="40" />}
+                                                icon={<IconLanguage size="35" />}
                                             >
                                                 Language Requests
                                             </SidebarButton>
@@ -126,7 +134,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'2'}
                                                 onClick={() => displayNumToggle(2)}
-                                                icon={<IconTrash size="40" />}
+                                                icon={<IconTrash size="35" />}
                                             >
                                                 Sanitation Requests
                                             </SidebarButton>
@@ -135,7 +143,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'3'}
                                                 onClick={() => displayNumToggle(3)}
-                                                icon={<IconBellExclamation size="40" />}
+                                                icon={<IconBellExclamation size="35" />}
                                             >
                                                 Maintenance Requests
                                             </SidebarButton>
@@ -143,7 +151,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'1'}
                                                 onClick={() => displayNumToggle(1)}
-                                                icon={<IconShieldHalf size="40" />}
+                                                icon={<IconShieldHalf size="35" />}
                                             >
                                                 Security Requests
                                             </SidebarButton>
@@ -154,7 +162,7 @@ export function AdminPage() {
                                         <SidebarButton
                                             ValueToCheck={displayTableNumber.toString()}
                                             onClick={() => setCSVManipOpen(true)}
-                                            icon={<IconFileBroken size="40" />}
+                                            icon={<IconFileBroken size="35" />}
                                         >
                                             CSV Manipulator
                                         </SidebarButton>
@@ -162,7 +170,7 @@ export function AdminPage() {
                                             ValueToCheck={displayTableNumber.toString()}
                                             component={Link}
                                             to={'/map-editor'}
-                                            icon={<IconMap2 size="40" />}
+                                            icon={<IconMap2 size="35"  />}
                                         >
                                             Map Editor
                                         </SidebarButton>

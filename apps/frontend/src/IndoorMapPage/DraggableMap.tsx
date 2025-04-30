@@ -15,14 +15,21 @@ import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearPathObjects, clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { createNode } from './HelperFiles/NodeFactory.tsx';
-import { getNode, mapSetup } from './HelperFiles/MapSetup.tsx';
-import { DisplayDirectionsBox } from './DisplayDirectionsBox.tsx';
+import {
+    createNewCamera,
+    createNewOrbitControls,
+    getNode,
+    mapSetup,
+} from './HelperFiles/MapSetup.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { useLocation } from 'react-router-dom';
-import { element } from 'prop-types';
 
-export function DraggableMap() {
+interface DraggableMapProps {
+    onHomePage: boolean;
+}
+
+export function DraggableMap(props: DraggableMapProps) {
     /*
       References that exist outside renders, changeable floor state, and properties like theme
      */
@@ -130,42 +137,55 @@ export function DraggableMap() {
     };
 
     const setTwoDView = () => {
-        if (selectedHospitalName == '20 Patriot Pl' || selectedHospitalName == '22 Patriot Pl') {
-            cameraRef.current.position.set(0, -50, 200);
-            cameraRef.current.up.set(0, 0, 1);
-            cameraRef.current.rotation.set(0, 0, 0);
-            cameraRef.current.quaternion.identity();
-            controlRef.current.target.set(0, -50, 0);
-            cameraRef.current.lookAt(0, -50, 0);
-            cameraRef.current.zoom = 1.5;
-            cameraRef.current.updateMatrixWorld(true);
-            cameraRef.current.updateProjectionMatrix();
-            controlRef.current.enableRotate = false;
-        } else {
-            cameraRef.current.position.set(0, 0, 200);
-            cameraRef.current.up.set(0, 0, 1);
-            cameraRef.current.rotation.set(0, 0, 0);
-            cameraRef.current.quaternion.identity();
-            controlRef.current.target.set(0, 0, 0);
-            cameraRef.current.lookAt(0, 0, 0);
-            cameraRef.current.zoom = 1;
-            cameraRef.current.updateMatrixWorld(true);
-            cameraRef.current.updateProjectionMatrix();
-            controlRef.current.enableRotate = false;
+        const canvasElement = document.getElementById('insideMapCanvas');
+        if (!canvasElement) {
+            console.error('Canvas element not found');
+            return;
+        }
+
+        if (controlRef.current) {
+            controlRef.current.dispose();
+        }
+
+        const newCamera = createNewCamera(canvasElement);
+        newCamera.position.set(0, 0, 200);
+        newCamera.zoom = 1.5;
+        newCamera.updateProjectionMatrix();
+        cameraRef.current = newCamera;
+
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '2D');
+
+        if (rendererRef.current) {
+            rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
         }
     };
 
     const setThreeDView = () => {
-        cameraRef.current.position.set(100, 200, 200);
-        cameraRef.current.up.set(0, 0, 1);
-        cameraRef.current.rotation.set(0, 0, 0);
-        cameraRef.current.quaternion.identity();
-        controlRef.current.target.set(0, 0, 0);
-        cameraRef.current.lookAt(0, 0, 0);
-        cameraRef.current.zoom = 1.5;
-        cameraRef.current.updateMatrixWorld(true);
-        cameraRef.current.updateProjectionMatrix();
-        controlRef.current.enableRotate = true;
+        const canvasElement = document.getElementById('insideMapCanvas');
+        if (!canvasElement) {
+            console.error('Canvas element not found');
+            return;
+        }
+
+        if (controlRef.current) {
+            controlRef.current.dispose();
+        }
+
+        const newCamera = createNewCamera(canvasElement);
+        newCamera.position.set(100, 200, 200);
+        if (props.onHomePage) {
+            newCamera.zoom = 1;
+        } else {
+            newCamera.zoom = 1.2;
+        }
+        newCamera.updateProjectionMatrix();
+        cameraRef.current = newCamera;
+
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '3D');
+
+        if (rendererRef.current) {
+            rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
+        }
     };
 
     // Handle switching to other floors
@@ -314,15 +334,31 @@ export function DraggableMap() {
     };
 
     const handleTwoDHospitalChange = () => {
-        // reset the camera position
-        cameraRef.current.position.set(0, 0, 330);
-        cameraRef.current.rotation.set(0, 0, 0);
-        cameraRef.current.quaternion.set(0, 0, 0, 1);
-        cameraRef.current.lookAt(0, 0, 0);
-        cameraRef.current.zoom = 1;
-        cameraRef.current.updateProjectionMatrix();
-        controlRef.current.enableRotate = false;
-        controlRef.current.update();
+        const canvasElement = document.getElementById('insideMapCanvas');
+        if (!canvasElement) {
+            console.error('Canvas element not found');
+            return;
+        }
+
+        if (controlRef.current) {
+            controlRef.current.dispose();
+        }
+
+        const newCamera = createNewCamera(canvasElement);
+        newCamera.position.set(0, 0, 330);
+        if (props.onHomePage) {
+            newCamera.zoom = 1;
+        } else {
+            newCamera.zoom = 1.25;
+        }
+        newCamera.updateProjectionMatrix();
+        cameraRef.current = newCamera;
+
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '2D');
+
+        if (rendererRef.current) {
+            rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
+        }
     };
 
     // handles changes to the hospital from the navSelection context

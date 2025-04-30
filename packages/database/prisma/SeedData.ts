@@ -790,17 +790,6 @@ export function getNodeData() {
             connectingNodes: [158, 163, 207],
         },
         {
-            id: 161,
-            x: 0,
-            y: 14,
-            floor: 5,
-            mapId: 3,
-            name: '',
-            description: '',
-            nodeType: '',
-            connectingNodes: [],
-        },
-        {
             id: 163,
             x: -36,
             y: 19,
@@ -1702,7 +1691,7 @@ export function getNodeData() {
             name: '',
             description: '',
             nodeType: '',
-            connectingNodes: [248, 250, 251, 252, 253, 254, 255, 257],
+            connectingNodes: [248, 250, 251, 252, 253, 254, 255, 256, 257],
         },
         {
             id: 250,
@@ -1779,7 +1768,7 @@ export function getNodeData() {
             name: 'Podiatry',
             description: '',
             nodeType: 'department',
-            connectingNodes: [],
+            connectingNodes: [249],
         },
         {
             id: 257,
