@@ -22,6 +22,8 @@ import {
 import { TimelineProvider } from './HomePage/TimeLineContext.tsx';
 import { Notifications } from '@mantine/notifications';
 import { FilterProvider } from './contexts/FilterContext.tsx';
+import { AlgorithmProvider } from './contexts/AlgorithmContext.tsx';
+
 const themeGold: MantineColorsTuple = [
     '#FFF8EB',
     '#FDF0D5',
@@ -201,7 +203,9 @@ function App() {
                     <NavigationProvider>
                         <TimelineProvider>
                             <FilterProvider>
-                                <Routing />
+                                <AlgorithmProvider>
+                                    <Routing />
+                                </AlgorithmProvider>
                             </FilterProvider>
                         </TimelineProvider>
                     </NavigationProvider>

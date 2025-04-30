@@ -21,7 +21,7 @@ import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { useLocation } from 'react-router-dom';
 import { element } from 'prop-types';
-
+import { useAlgorithmContext } from '../contexts/AlgorithmContext.tsx';
 export function DraggableMap() {
     /*
       References that exist outside renders, changeable floor state, and properties like theme
@@ -32,7 +32,8 @@ export function DraggableMap() {
     const navSelection = useNavSelectionContext();
     const selectedHospitalName = navSelection.state.navSelectRequest?.HospitalName;
     const selectedDepartment = navSelection.state.navSelectRequest?.Department;
-    const selectedAlgorithm = navSelection.state.navSelectRequest?.AlgorithmName;
+    // context instead
+    const { algorithm } = useAlgorithmContext();
 
     // Declares context for start and end node information
     const patriotNodes = usePatriotContext();
@@ -336,25 +337,14 @@ export function DraggableMap() {
     useEffect(() => {
         const firstNodeId = findParkingLot(); // start node
         const lastNodeId = getLastNodeId(); // destination node
-
-        // clear previous path
         clearPathObjects(scenesRef.current);
 
-        console.log('finding path:', firstNodeId, lastNodeId);
-        let algorithm = 'BFS'; // default to BFS if not selected
-        if (selectedAlgorithm) {
-            algorithm = selectedAlgorithm;
-        }
         if (firstNodeId && lastNodeId) {
-            const pathPromise = handlePath(firstNodeId, lastNodeId, algorithm);
-            // switch floor after path is created so the path on above floors is hidden properly
-            pathPromise.then(() => {
-                handleFloorChange(1);
-            });
+            handlePath(firstNodeId, lastNodeId, algorithm).then(() => handleFloorChange(1));
         } else {
             handleFloorChange(1);
         }
-    }, [selectedDepartment, selectedAlgorithm]);
+    }, [selectedDepartment, algorithm]);
 
     // this useEffect runs only on mount and initializes some things.
     useEffect(() => {
