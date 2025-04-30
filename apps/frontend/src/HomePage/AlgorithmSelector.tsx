@@ -1,8 +1,7 @@
 import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
 import { IconBuilding, IconChevronDown, IconRouteSquare } from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
-import { NavSelectionItem } from '../contexts/NavigationItem.ts';
-import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
+import { useAlgorithmContext } from '../contexts/AlgorithmContext.tsx';
 
 //need to change this to actual api call autocomplete later
 const algoOptions = [
@@ -12,25 +11,17 @@ const algoOptions = [
 ];
 
 interface AlgorithmSelectorProps {
-  hasIcon: boolean
-  w: string
+    hasIcon: boolean;
+    w: string;
 }
 
 export function AlgorithmSelector(props: AlgorithmSelectorProps) {
     const theme = useMantineTheme();
-    const { setSelectedAlgorithm, selectedHospital, department, selectedAlgorithm } = useTimeline();
-    const NavSelection = useNavSelectionContext();
+    const { selectedHospital, department } = useTimeline();
+    const { algorithm, setAlgorithm } = useAlgorithmContext();
 
     const setSelectedAlgo = (algo: string | null) => {
-        setSelectedAlgorithm(algo);
-        NavSelection.dispatch({
-            type: 'SET_NAV_REQUEST',
-            data: {
-                HospitalName: selectedHospital,
-                Department: department,
-                AlgorithmName: algo,
-            } as NavSelectionItem,
-        });
+        if (algo) setAlgorithm(algo);
     };
     return (
         <Select
@@ -38,14 +29,16 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
             rightSection={
                 <IconChevronDown size="16" style={{ color: theme.colors.primaryBlues[8] }} />
             }
-            leftSection={!props.hasIcon ? null :
-                <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8]}} />
+            leftSection={
+                !props.hasIcon ? null : (
+                    <IconRouteSquare size="16" style={{ color: theme.colors.primaryBlues[8] }} />
+                )
             }
             data={algoOptions}
             radius="md"
             mb="sm"
             size="xs"
-            value={selectedAlgorithm ?? ''}
+            value={algorithm}
             onChange={setSelectedAlgo}
             disabled={!selectedHospital || !department}
             w={props.w}
