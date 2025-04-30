@@ -242,6 +242,44 @@ export function createNewOrbitControls(
     controls.minZoom = 1;
     controls.maxZoom = 5;
 
+    // Set up pan boundaries - crucial part that was missing
+    const aspect = domElement.clientWidth / domElement.clientHeight;
+    const frustumSize = 400;
+    const frustumHalfHeight = frustumSize / 2;
+    const frustumHalfWidth = frustumHalfHeight * aspect;
+
+    const maxPanX = frustumHalfWidth * 2;
+    const maxPanY = frustumHalfHeight * 2;
+
+    const initialTarget = new THREE.Vector3(0, 0, 0);
+    const vTarget = new THREE.Vector3();
+
+    const enforceBoundaries = () => {
+        const zoomRatio = (camera.zoom - controls.minZoom) / (controls.maxZoom - controls.minZoom);
+
+        const allowedPanX = maxPanX * zoomRatio;
+        const allowedPanY = maxPanY * zoomRatio;
+
+        vTarget.copy(controls.target);
+
+        controls.target.x = Math.max(
+            initialTarget.x - allowedPanX,
+            Math.min(initialTarget.x + allowedPanX, controls.target.x)
+        );
+        controls.target.y = Math.max(
+            initialTarget.y - allowedPanY,
+            Math.min(initialTarget.y + allowedPanY, controls.target.y)
+        );
+
+        vTarget.x = vTarget.x - controls.target.x;
+        vTarget.y = vTarget.y - controls.target.y;
+
+        camera.position.x -= vTarget.x;
+        camera.position.y -= vTarget.y;
+    };
+
+    controls.addEventListener('change', enforceBoundaries);
+
     controls.update();
 
     return controls;

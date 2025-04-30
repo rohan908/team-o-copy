@@ -26,10 +26,10 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { useLocation } from 'react-router-dom';
 
 interface DraggableMapProps {
-  onHomePage:boolean
+    onHomePage: boolean;
 }
 
-export function DraggableMap(props:DraggableMapProps) {
+export function DraggableMap(props: DraggableMapProps) {
     /*
       References that exist outside renders, changeable floor state, and properties like theme
      */
@@ -174,11 +174,11 @@ export function DraggableMap(props:DraggableMapProps) {
 
         const newCamera = createNewCamera(canvasElement);
         newCamera.position.set(100, 200, 200);
-        if (props.onHomePage){
-            cameraRef.current.zoom = 1;
-          } else {
-            cameraRef.current.zoom = 1.2;
-          }
+        if (props.onHomePage) {
+            newCamera.zoom = 1;
+        } else {
+            newCamera.zoom = 1.2;
+        }
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
@@ -348,11 +348,11 @@ export function DraggableMap(props:DraggableMapProps) {
 
         const newCamera = createNewCamera(canvasElement);
         newCamera.position.set(0, 0, 330);
-        if (props.onHomePage){
-            cameraRef.current.zoom = 1;
-          } else {
-            cameraRef.current.zoom = 1.25;
-          }
+        if (props.onHomePage) {
+            newCamera.zoom = 1;
+        } else {
+            newCamera.zoom = 1.25;
+        }
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
@@ -362,7 +362,6 @@ export function DraggableMap(props:DraggableMapProps) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
         }
     };
-
 
     // handles changes to the hospital from the navSelection context
     useEffect(() => {
