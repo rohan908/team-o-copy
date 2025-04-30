@@ -34,6 +34,7 @@ const MapEditorBox = () => {
     const allNodes = useAllNodesContext();
     const [saveLabel, setSaveLabel] = useState(false);
     const [openedHelp, setOpenedHelp] = useState(false);
+    const [openedAlgoSwitcher, setOpenedAlgoSwitcher] = useState(false);
 
     const [selectedNodeType, setSelectedNodeType] = useState<string>(
         mapProps.currentNode?.nodeType || ''
@@ -47,6 +48,12 @@ const MapEditorBox = () => {
 
     function toggleHelp() {
         setOpenedHelp(!openedHelp);
+        setOpenedAlgoSwitcher(false);
+    }
+
+    function toggleAlgoSwitcher() {
+      setOpenedAlgoSwitcher(!openedAlgoSwitcher);
+      setOpenedHelp(false);
     }
 
     function roundCoordsToTwoPlaces(input: number) {
@@ -62,7 +69,7 @@ const MapEditorBox = () => {
         <Box pos="fixed" top="60%" left={20} style={{ transform: 'translateY(-50%)', zIndex: 999 }}>
             <Stack>
                 <Flex direction="row" gap={'lg'} align={'center'}>
-                    <Stack spacing="sm">
+                    <Stack gap="sm">
                         <Tooltip label="Move Tool" position="right" disabled={openedHelp}>
                             <ActionIcon
                                 size="xl"
@@ -178,99 +185,128 @@ const MapEditorBox = () => {
                               height: 60,
                               borderRadius: 50,
                             }}
-                            //onClick={/*Add Functionality here*/}
+                            onClick={() => toggleAlgoSwitcher()}
                           >
                             <IconSettings
                               size={32}
-                              color={openedHelp ? '#f8d56b' : 'white'}
+                              color={openedAlgoSwitcher ? '#f8d56b' : 'white'}
                             />
                           </ActionIcon>
                         </Tooltip>
                     </Stack>
+                  <Flex direction={"column"}>
                     <Transition
-                        mounted={openedHelp}
-                        transition="slide-right"
-                        duration={400}
-                        timingFunction="linear"
+                      enterDelay={openedAlgoSwitcher ? 0 : 600}
+                      mounted={openedHelp}
+                      transition="slide-right"
+                      duration={400}
+                      timingFunction="linear"
                     >
-                        {(styles) => (
-                            <div style={styles}>
-                                <Stack
-                                    gap="0px"
-                                    p="sm"
-                                    w="auto"
-                                    miw="200px"
-                                    maw="520px"
-                                    bg="primaryBlues.0"
-                                    style={{
-                                        borderRadius: 20,
-                                    }}
-                                >
-                                    <Title c={'secondaryBlues.7'} fz={'md'} fw={'bold'} mb={'xs'}>
-                                        Map Editor Controls:
-                                    </Title>
-                                    <Divider
-                                        w={'100%'}
-                                        mt={'xs'}
-                                        mb={'xs'}
-                                        color={'yellowAccent.4'}
-                                        size={'xs'}
-                                    />
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
-                                        Move Tool:
-                                    </Text>
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
-                                        To move a node, click on the node you wish to move and drag
-                                        it. <br></br>
-                                        To select multiple nodes, use ctrl + click. <br></br>
-                                        To delete selected nodes, use ctrl + right-click.
-                                    </Text>
-                                    <Divider
-                                        w={'100%'}
-                                        mt={'xs'}
-                                        mb={'xs'}
-                                        color={'yellowAccent.4'}
-                                        size={'xs'}
-                                    />
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
-                                        Add Node:
-                                    </Text>
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
-                                        Click where you would like to place a new node.
-                                    </Text>
-                                    <Divider
-                                        w={'100%'}
-                                        mt={'xs'}
-                                        mb={'xs'}
-                                        color={'yellowAccent.4'}
-                                        size={'xs'}
-                                    />
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
-                                        Add or Remove Edges: <br />
-                                    </Text>
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
-                                        Click on the starting node and the ending node to add or
-                                        remove an edge between them.
-                                    </Text>
-                                    <Divider
-                                        w={'100%'}
-                                        mt={'xs'}
-                                        mb={'xs'}
-                                        color={'yellowAccent.4'}
-                                        size={'xs'}
-                                    />
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
-                                        Edges Between Floors: <br />
-                                    </Text>
-                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
-                                        Click a staircase, change floors and click another staircase
-                                        to create a between-floor edge. A sub-menu will appear to display
-                                        what other floors this node connects to.
-                                    </Text>
-                                </Stack>
-                            </div>
-                        )}
+                      {(styles) => (
+                        <div style={styles}>
+                          <Stack
+                            gap="0px"
+                            p="sm"
+                            w="auto"
+                            miw="200px"
+                            maw="520px"
+                            bg="primaryBlues.0"
+                            style={{
+                              borderRadius: 20,
+                            }}
+                          >
+                            <Title c={'secondaryBlues.7'} fz={'md'} fw={'bold'} mb={'xs'}>
+                              Map Editor Controls:
+                            </Title>
+                            <Divider
+                              w={'100%'}
+                              mt={'xs'}
+                              mb={'xs'}
+                              color={'yellowAccent.4'}
+                              size={'xs'}
+                            />
+                            <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
+                              Move Tool:
+                            </Text>
+                            <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
+                              To move a node, click on the node you wish to move and drag
+                              it. <br></br>
+                              To select multiple nodes, use ctrl + click. <br></br>
+                              To delete selected nodes, use ctrl + right-click.
+                            </Text>
+                            <Divider
+                              w={'100%'}
+                              mt={'xs'}
+                              mb={'xs'}
+                              color={'yellowAccent.4'}
+                              size={'xs'}
+                            />
+                            <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
+                              Add Node:
+                            </Text>
+                            <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
+                              Click where you would like to place a new node.
+                            </Text>
+                            <Divider
+                              w={'100%'}
+                              mt={'xs'}
+                              mb={'xs'}
+                              color={'yellowAccent.4'}
+                              size={'xs'}
+                            />
+                            <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
+                              Add or Remove Edges: <br />
+                            </Text>
+                            <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
+                              Click on the starting node and the ending node to add or
+                              remove an edge between them.
+                            </Text>
+                            <Divider
+                              w={'100%'}
+                              mt={'xs'}
+                              mb={'xs'}
+                              color={'yellowAccent.4'}
+                              size={'xs'}
+                            />
+                            <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
+                              Edges Between Floors: <br />
+                            </Text>
+                            <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
+                              Click a staircase, change floors and click another staircase
+                              to create a between-floor edge. A sub-menu will appear to display
+                              what other floors this node connects to.
+                            </Text>
+                          </Stack>
+                        </div>
+                      )}
                     </Transition>
+                    <Transition
+                      enterDelay={openedHelp ? 0 : 600}
+                      mounted={openedAlgoSwitcher}
+                      transition="slide-right"
+                      duration={400}
+                      timingFunction="linear"
+                    >
+                      {(styles) => (
+                        <div style={styles}>
+                          <Box
+                            p="sm"
+                            w="auto"
+                            miw="200px"
+                            maw="520px"
+                            bg="primaryBlues.0"
+                            style={{
+                              borderRadius: 20,
+                            }}
+                          >
+                            <Text>
+                              This is the Algorithm Switcher
+                            </Text>
+                          </Box>
+                        </div>
+                      )}
+                    </Transition>
+                  </Flex>
                 </Flex>
             </Stack>
         </Box>
