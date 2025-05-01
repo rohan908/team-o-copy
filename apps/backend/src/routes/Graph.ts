@@ -189,7 +189,7 @@ const setAlgoHandelr: RequestHandler<
     {}, // Route parameters
     PathFindingResponse, // Response body
     PathFindingRequestBody // Request body
-> = (req, res) => {
+> = async (req, res) => {
     try {
         const { pathAlgo } = req.body;
         console.log('made it to Graph. getAlgoHandelr and got pathAlgo: ', pathAlgo);
@@ -252,7 +252,37 @@ router.post('/findPath', findPathHandler);
 
 router.post('/getNode', getNodeHandler);
 
-router.post('/setAlgo', setAlgoHandelr);
+router.post('/setAlgo', async (req: any, res: any) => {
+    try {
+        const { pathAlgo } = req.body;
+        // console.log('made it to Graph. getAlgoHandelr and got pathAlgo: ', pathAlgo);
+        // Validate input
+        if ([pathAlgo].some((param) => param === undefined)) {
+            res.status(400).json({
+                success: false,
+                error: 'Missing required parameters',
+            });
+            return; // Return void
+        }
+
+        const algo: number = +pathAlgo;
+
+        const result = await navigationService.setAlgo(algo);
+
+        res.status(200).json({
+            success: true,
+        });
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        console.error('Error finding path:', error);
+
+        res.status(500).json({
+            success: false,
+            error: errorMessage || 'An error occurred while finding the path',
+        });
+        return; // Return void
+    }
+});
 
 router.get('/getAlgo', async (req: any, res: any) => {
     const algoDb = await navigationService.getAlgo();

@@ -5,15 +5,8 @@ export async function setAlgo(algo: number) {
         const response = await axios.post('api/graph/setAlgo', {
             pathAlgo: algo,
         });
-
-        /* this error handler is buggin
-    if (!data.success) {
-        throw new Error(data.error || 'Failed to find path');
-    }
-
-    // Return just the path array from the result
-    return data.result.path;
-    */
+        console.log('got response back', response);
+        return response;
     } catch (error) {
         console.error('Error finding path:', error);
         throw error;
