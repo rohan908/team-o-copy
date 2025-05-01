@@ -39,9 +39,9 @@ export function AlgorithmSelector(props: AlgorithmSelectorProps) {
         fetchAlgoStr(); // call the async function
     }, []);
 
-    const setSelectedAlgo = (algo: string | null) => {
+    const setSelectedAlgo = async (algo: string | null) => {
         setAlgoStr(algo!);
-        const result = setAlgo(+algo!);
+        const result = await setAlgo(+algo!);
     };
 
     return (
