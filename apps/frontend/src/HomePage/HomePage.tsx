@@ -66,6 +66,7 @@ export function HomePage() {
             h="100%"
             w="100%"
             p="xl"
+            mih={'100vh'}
         >
             <DisclaimerPopup />
             <Grid gutter="md" h="100%" mt={'2%'}>
