@@ -10,23 +10,23 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 9,-36,-37,1,1,Pharmacy waiting hallway,Seating area before pharmacy,hallway,"8,11"
 11,-38,-32,1,1,Pharmacy,Prescription pickup,department,9
 12,115,14,1,1,North Tower Hallway,Access to specialty clinics,hallway,"2,175"
-14,92,-15,1,1,Stairwell A,Main staircase,staircase,"15,175"
-15,94,-15,2,1,Stairwell C,Secondary staircase,staircase,"14,16,25"
-16,86,-19,2,1,Specialty Care Hallway,Access to outpatient services,hallway,"15,17,19"
-17,80,-20,2,1,Vascular Services Hallway,Approach to vascular services,hallway,"16,18,177,176,178"
-18,78,-12,2,1,Vein Care Services,department,department,17
-19,85,-23,2,1,West Diagnostic Hallway,Connector to testing areas,hallway,"16,20"
-20,72,-28,2,1,South wing hallway,service corridor,hallway,"19,21"
-21,69,-23,2,1,Health services hallway,approach to health services,hallway,"20,22"
+14,90,-15,1,1,Stairwell A,Main staircase,staircase,"15,175"
+15,90,-16,2,1,Stairwell C,Secondary staircase,staircase,"14,16,25"
+16,86,-20,2,1,Specialty Care Hallway,Access to outpatient services,hallway,"15,17,19"
+17,80,-22,2,1,Vascular Services Hallway,Approach to vascular services,hallway,"16,18,177,176,178"
+18,75,-13,2,1,Vein Care Services,department,department,17
+19,85,-25,2,1,West Diagnostic Hallway,Connector to testing areas,hallway,"16,20"
+20,70,-30,2,1,South wing hallway,service corridor,hallway,"19,21"
+21,67,-24,2,1,Health services hallway,approach to health services,hallway,"20,22"
 22,24,-39,2,1,East Treatment Hallway,Access to treatment room,hallway,"21,23"
-23,29,-54,2,1,Testing Hallway,Specialized testing rooms,hallway,"22,24,179,180,181,183,184,185,186,187,188"
-24,23,-60,2,1,Endocrinology,department,department,23
-25,94,-15,3,1,Stairwell C,Third Staircase,staircase,"15,26"
-26,81,-20,3,1,Primary Care Hallway,Access to general medicine,hallway,"25,27"
-27,75,-20,3,1,Lab service hallway,Approach to blood draw stations,hallway,"26,28"
-28,52,-28,3,1,Phlebotomy Hallway,Blood draw prep area,hallway,"27,29,192"
-29,50,-23,3,1,Patient Services Hallway,Multi-service access hallway,hallway,"28,193"
-30,72,-10,3,1,Phlebotomy/Blood Draw,Combined lab and clinic services,department,194
+23,30,-56,2,1,Testing Hallway,Specialized testing rooms,hallway,"22,24,179,180,181,183,184,185,186,187,188"
+24,27,-61,2,1,Endocrinology,department,department,23
+25,90,-17,3,1,Stairwell C,Third Staircase,staircase,"15,26"
+26,80,-21,3,1,Primary Care Hallway,Access to general medicine,hallway,"25,27"
+27,74,-21,3,1,Lab service hallway,Approach to blood draw stations,hallway,"26,28"
+28,52,-29,3,1,Phlebotomy Hallway,Blood draw prep area,hallway,"27,29,192"
+29,50,-25,3,1,Patient Services Hallway,Multi-service access hallway,hallway,"28,193"
+30,75,-11,3,1,Phlebotomy/Blood Draw,Combined lab and clinic services,department,194
 112,-14,104,4,2,Orthopedic Surgery,department,department,"126,128"
 116,-30,108,4,2,Blood Work,department,department,129
 117,-143,-45,4,2,Chestnut Parking,parking-lot,parking-lot,121
@@ -56,13 +56,13 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 142,72,32,4,2,,,,"141,143,196,195"
 143,68,39,4,2,MRI,department,department,142
 145,-131,32,5,3,Faulkner Parking,parking-lot,parking-lot,146
-146,-106,62,5,3,,,,"145,147,148,276"
+146,-106,62,5,3,,,,"145,147,148"
 147,-100,70,5,3,,,,"146,153"
 148,-89,63,5,3,,,,"146,149"
 149,-67,66,5,3,,,,"148,150"
 150,-42,73,5,3,,,,"149,151"
 151,-25,72,5,3,,,,"150,152"
-152,-7,68,5,3,,,,"151,155,276"
+152,-7,68,5,3,,,,"151,155"
 153,-101,89,5,3,,,,"147,154"
 154,-112,90,5,3,Dialysis,department,department,153
 155,-10,63,5,3,,,,"152,156"
@@ -70,36 +70,35 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 157,-6,47,5,3,,,,"156,158"
 158,-7,31,5,3,,,,"157,159"
 159,-6,19,5,3,,,,"158,163,207"
-161,0,14,5,3,,,,
 163,-36,19,5,3,,,,"159,164"
 164,-41,20,5,3,,,,"163,166,165"
 165,-47,13,5,3,Emergency Check-in,department,department,164
 166,-41,28,5,3,,,,"164,167,203,204,205,206"
 167,-32,31,5,3,Blood-Draw Lab,department,department,166
-168,-48,18,1,1,,,hallway,"5,171"
+168,-48,16,1,1,,,hallway,"5,171"
 169,-88,27,1,1,,,hallway,"171,174"
 171,-61,20,1,1,,,hallway,"168,169,172"
 172,-63,14,1,1,,,hallway,"171,173"
-173,-68,7,1,1,Urgent Care Check-In,Urgent Care,department,172
+173,-64,9,1,1,Urgent Care Check-In,Urgent Care,department,172
 174,-91,16,1,1,Cardio/Urology,,department,169
 175,85,3,1,1,hallway,hallway,hallway,"12,14"
-176,76,-13,2,1,Pulmonary,,department,17
-177,75,-11,2,1,Women's Health,,department,17
-178,73,-13,2,1,Rheumatology,,department,17
-179,24,-58,2,1,Cardiac Arrhythmia,,department,23
-180,26,-57,2,1,Allergy,,department,23
-181,27,-58,2,1,Gastroenterology,,department,23
-183,25,-62,2,1,Neurology,,department,23
-184,25,-58,2,1,Kidney (Renal) Medicine,,department,23
-185,26,-60,2,1,Dermatology,,department,23
-186,25,-60,2,1,Neurosurgery,,department,23
-187,28,-60,2,1,Ophthamology,,department,23
+176,74,-12,2,1,Pulmonary,,department,17
+177,74,-13,2,1,Women's Health,,department,17
+178,74,-13,2,1,Rheumatology,,department,17
+179,26,-61,2,1,Cardiac Arrhythmia,,department,23
+180,27,-61,2,1,Allergy,,department,23
+181,27,-61,2,1,Gastroenterology,,department,23
+183,26,-61,2,1,Neurology,,department,23
+184,27,-61,2,1,Kidney (Renal) Medicine,,department,23
+185,27,-61,2,1,Dermatology,,department,23
+186,26,-61,2,1,Neurosurgery,,department,23
+187,26,-61,2,1,Ophthamology,,department,23
 188,27,-61,2,1,Optometry,,department,23
-189,25,-47,3,1,,,hallway,"191,192"
-191,15,-51,3,1,Primary Care Check-In,,department,189
-192,24,-38,3,1,,,hallway,"189,28"
-193,61,-19,3,1,,,hallway,"29,194"
-194,62,-14,3,1,,,hallway,"193,30"
+189,25,-48,3,1,,,hallway,"191,192"
+191,14,-52,3,1,Primary Care Check-In,,department,189
+192,24,-40,3,1,,,hallway,"189,28"
+193,61,-21,3,1,,,hallway,"29,194"
+194,62,-16,3,1,,,hallway,"193,30"
 195,70,39,4,2,CT,,department,142
 196,72,39,4,2,X-Ray,,department,142
 197,-27,107,4,2,Lab Services,,department,129
@@ -118,11 +117,11 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 211,2,4,5,3,MRI/CT,,department,208
 212,3,5,5,3,Pre-admittance Screening,,department,208
 213,3,6,5,3,Radiology,,department,208
-214,-64,-2,1,1,,,hallway,"216,215"
+214,-64,-3,1,1,,,hallway,"215,276"
 215,-29,-11,1,1,,,hallway,"214,218"
-216,-63,-14,1,1,,,hallway,"214,219"
-218,-25,-12,1,1,,,hallway,"7,215,8"
-219,-63,-19,1,1,Phlebotomy,,department,216
+216,-63,-15,1,1,,,hallway,"219,276"
+218,-25,-11,1,1,,,hallway,"7,215,8"
+219,-64,-18,1,1,Phlebotomy,,department,216
 220,48,31,6,4,,,parking-lot,221
 221,30,38,6,4,,,,"220,222,275"
 222,30,48,6,4,,,,"221,234,228,230,229,224,225,233,231,227,223,226,232,235,258"
@@ -152,14 +151,14 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 246,-102,34,6,4,Breast Imaging,,department,242
 247,-102,34,6,4,Radiation Oncology,,department,242
 248,-96,9,6,4,,,,"241,249"
-249,-96,-12,6,4,,,,"248,250,251,252,253,254,255,257"
+249,-96,-12,6,4,,,,"248,250,251,252,253,254,255,256,257"
 250,-98,-17,6,4,CT and MRI,,department,249
 251,-98,-17,6,4,Shapiro Procedural Check-in,,department,249
 252,-99,-18,6,4,BCMA,,department,249
 253,-97,-17,6,4,Echocardiography Lab,,department,249
 254,-98,-18,6,4,Electrophysiology,,department,249
 255,-98,-18,6,4,Orthopedics,,department,249
-256,-97,-18,6,4,Podiatry,,department,
+256,-97,-18,6,4,Podiatry,,department,249
 257,-98,-18,6,4,Watkins Cardiovascular Clinic,,department,249
 258,43,54,6,4,,,,"259,222"
 259,44,66,6,4,,,,"261,258,260"
@@ -179,4 +178,4 @@ id,x,y,floor,mapId,name,description,nodeType,connectingNodes
 273,-150,1,6,4,,,,"271,274"
 274,25,1,6,4,,,,"273,275"
 275,25,24,6,4,,,,"274,221"
-276,-61,110,5,3,,,,"146,152"
+276,-66,-14,1,1,,,,"214,216"
