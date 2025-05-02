@@ -2180,6 +2180,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-beforeunload@npm:^2.1.5":
+  version: 2.1.5
+  resolution: "@types/react-beforeunload@npm:2.1.5"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/0e6abbc95b2e2343e99f3206e431aa1285bfebee0b6db27c0242389b32a596cdee09cf5ffafc17503ad5798a09a0d81cc06604515d114d53fa63f41cd912fe53
+  languageName: node
+  linkType: hard
+
 "@types/react-dom@npm:^18.0.11":
   version: 18.3.6
   resolution: "@types/react-dom@npm:18.3.6"
@@ -4667,6 +4676,7 @@ __metadata:
     "@types/node": "npm:*"
     "@types/prop-types": "npm:^15.7.5"
     "@types/react": "npm:^18.0.37"
+    "@types/react-beforeunload": "npm:^2.1.5"
     "@types/react-dom": "npm:^18.0.11"
     "@types/react-router-bootstrap": "npm:^0.26.0"
     "@types/react-router-dom": "npm:^5.3.3"
@@ -4696,6 +4706,7 @@ __metadata:
     prettier: "npm:*"
     prettier-config-custom: "workspace:*"
     react: "npm:^18.2.0"
+    react-beforeunload: "npm:^2.6.0"
     react-dom: "npm:^18.2.0"
     react-leaflet: "npm:^4.2.1"
     react-router-bootstrap: "npm:^0.26.2"
@@ -6953,6 +6964,15 @@ __metadata:
   bin:
     rc: ./cli.js
   checksum: 10c0/24a07653150f0d9ac7168e52943cc3cb4b7a22c0e43c7dff3219977c2fdca5a2760a304a029c20811a0e79d351f57d46c9bde216193a0f73978496afc2b85b15
+  languageName: node
+  linkType: hard
+
+"react-beforeunload@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "react-beforeunload@npm:2.6.0"
+  peerDependencies:
+    react: ^16.8.0 || 17 || 18
+  checksum: 10c0/53929df385322828c38ff045ef0071efa4c1e0d34209a475d6681bb017986a9fbabfee950d8cf30bc0180d0e2523d1cc4dc63508ccbe70dec330d8620eea29a8
   languageName: node
   linkType: hard
 

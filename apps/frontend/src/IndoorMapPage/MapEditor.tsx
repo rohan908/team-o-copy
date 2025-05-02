@@ -19,6 +19,7 @@ import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
 import { map } from 'leaflet';
 import FloorConnectionBox from './Components/FloorConnectionBox.tsx';
+import { Beforeunload, useBeforeunload } from 'react-beforeunload';
 import { Navigate } from 'react-router-dom';
 
 const MouseImages = {
@@ -48,10 +49,19 @@ export function MapEditor() {
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer');
     const [mapTool, setMapTool] = useState('');
+    const [unsavedChanges, setUnsavedChanges] = useState(true);
     const [objToReselect, setObjToReselect] = useState<THREE.Object3D>();
 
     // clerk const's
     const { user, isSignedIn } = useUser();
+
+    window.onbeforeunload = function() {
+      return true;
+    };
+
+    function handleBeforeUnload(){
+      return unsavedChanges;
+    }
 
     // check role
     const role = user?.publicMetadata?.role;
@@ -986,8 +996,11 @@ export function MapEditor() {
         };
     }, [sceneIndexState]);
 
+    useBeforeunload(unsavedChanges ? (event) => event.preventDefault() : undefined);
+
     return (
         <Box w="100vw" h="100vh">
+            {/*<Beforeunload onBeforeunload={(event) => event.preventDefault()}/>*/}
             <PopupTooltip />
 
             <Box ref={hoverRef}>
