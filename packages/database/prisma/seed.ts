@@ -41,6 +41,25 @@ export async function populate() {
         },
     });
 
+  /*
+  // defines floor maps for each building floor
+  const securityRequests = await PrismaClient.securityServiceRequest.createMany({
+    data: [
+      { requestID: 15, employeeName: 'Rohan Inmadar',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 16, employeeName: 'Owen Hart',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Patriot-22", description: ""},
+      { requestID: 17, employeeName: 'Hudson Kortus',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Chestnut Hill, description: ""},
+      { requestID: 18, employeeName: 'Ethan Ramoth',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 19, employeeName: 'Camden Brayton',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 20, employeeName: 'Joseph Abata',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 21, employeeName: 'Connor Daly',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 22, employeeName: 'Logan Winters',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 23, employeeName: 'Rohan Inmadar',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 24, employeeName: 'Owen Hart',  department: "Nutrition", createdAt: "04-02-2025T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+
+
+    ],
+  });
+*/
     // adds all node data from /SeedData.ts
     const addDefaultNodes = await PrismaClient.node.createManyAndReturn({
         data: getNodeData(),
