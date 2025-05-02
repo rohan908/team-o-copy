@@ -15,7 +15,6 @@ import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { IconCurrentLocation } from '@tabler/icons-react';
 import { bool } from 'prop-types';
-import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
 import { map } from 'leaflet';
 import FloorConnectionBox from './Components/FloorConnectionBox.tsx';
@@ -27,6 +26,11 @@ const MouseImages = {
     AddNode: 'MapImages/MouseCursors/AddNode.png',
     AddEdge: 'MapImages/MouseCursors/AddEdge.png',
 };
+
+interface undoAction {
+    action: string;
+    node: DirectoryNodeItem;
+}
 
 export interface MapEditorProps {
     selectedTool: string;
@@ -77,6 +81,8 @@ export function MapEditor() {
         }[]
     >([]);
 
+    const undoActionsRef = useRef<undoAction[]>([]);
+    const limitUndoRef = useRef(false);
     const nodeRef = useRef(allNodes);
     const cursorStyleRef = useRef(MouseImages.MoveNone);
 
@@ -85,10 +91,10 @@ export function MapEditor() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     // Parameters for THREEjs objects and path display
-    const nodeColor = 0x9000FF;
+    const nodeColor = 0x9000ff;
     const selectedNodeColor = 0x56effa;
     const nodeStaircaseColor = 0xfcb024;
-    const nodeDepartmentColor = 0x54BF65;
+    const nodeDepartmentColor = 0x54bf65;
     const startColor = 0x2a68f7;
     const endColor = 0xfcbe45;
     const edgeColor = 0x2a68f7;
@@ -262,7 +268,7 @@ export function MapEditor() {
 
         for (const node of allNodes) {
             let color = nodeColor;
-            if(node.nodeType == 'staircase') {
+            if (node.nodeType == 'staircase') {
                 color = nodeStaircaseColor;
             } else if (node.nodeType == 'department') {
                 color = nodeDepartmentColor;
@@ -780,8 +786,8 @@ export function MapEditor() {
                         }
                     }
 
-                    if(firstNode.nodeType == 'staircase') {
-                      setObjToReselect(selectedObjects.current[0]);
+                    if (firstNode.nodeType == 'staircase') {
+                        setObjToReselect(selectedObjects.current[0]);
                     }
 
                     selectedObjects.current.forEach((object) => {
@@ -809,8 +815,8 @@ export function MapEditor() {
                     nodeRef.current.find((element) => element.id === objToReselect.userData.nodeId)
                 );
 
-                setFloorState(objToReselect.userData.floor)
-                handleFloorChange(objToReselect.userData.floor, false)
+                setFloorState(objToReselect.userData.floor);
+                handleFloorChange(objToReselect.userData.floor, false);
 
                 render();
             }
@@ -871,6 +877,15 @@ export function MapEditor() {
     // for deleting selected nodes
     useEffect(() => {
         const deleteSelected = () => {
+            selectedObjects.current.forEach((object) => {
+                const directoryNode = nodeRef.current.find(
+                    (element) => element.id === object.userData.nodeId
+                );
+                if (directoryNode) {
+                    undoActionsRef.current.push({ action: 'delete', node: directoryNode });
+                }
+            });
+
             if (selectedObjects.current.length > 0) {
                 selectedObjects.current.forEach((object) => {
                     const allNodesIndex = nodeRef.current.findIndex(
@@ -943,6 +958,66 @@ export function MapEditor() {
         // sets the map tool on startup
         setMapTool('pan');
 
+        // handles undo actions in order they were added
+        const undoChange = () => {
+            console.log('undo');
+
+            const action = undoActionsRef.current.pop();
+
+            if (action) {
+                switch (action.action) {
+                    case 'delete':
+                        const node = action.node;
+
+                        // adds back this node id to previous nodes' connectingNodes
+                        node.connectingNodes.forEach((nodeId) => {
+                            const connectingNode = nodeRef.current.find(
+                                (element) => element.id === nodeId
+                            );
+                            if (connectingNode) {
+                                connectingNode.connectingNodes.push(action.node.id);
+                            }
+                        });
+
+                        // recreates this node and its edges
+                        let color = nodeColor;
+                        if (node.nodeType == 'staircase') {
+                            color = nodeStaircaseColor;
+                        } else if (node.nodeType == 'department') {
+                            color = nodeDepartmentColor;
+                        }
+
+                        createNode(
+                            node,
+                            scenesRef.current,
+                            node.nodeType,
+                            undefined,
+                            0,
+                            0,
+                            objectsRef,
+                            nodeRadius,
+                            {
+                                color: color,
+                            }
+                        ); //Create the nodes
+                        for (const connectingNodeId of node.connectingNodes) {
+                            // iterate over each connected node.
+                            const connectedNode = getNode(connectingNodeId, allNodes);
+                            // TODO: Add another check that makes it so duplicate edge objects aren't created
+                            if (connectedNode) {
+                                createEdge(node, connectedNode);
+                            }
+                        }
+
+                        nodeRef.current.push(node);
+
+                        break;
+                }
+            }
+
+            render();
+        };
+
         // make sure map movement is re-enabled for some edge cases
         const handleMouseUp = () => {
             setTimeout(() => {
@@ -960,10 +1035,28 @@ export function MapEditor() {
             rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
         }
 
+        window.addEventListener('keydown', (event) => {
+            if (event.key == 'z' && event.ctrlKey) {
+              if(limitUndoRef.current) {
+                return;
+              } else {
+                // prevents undo from firing twice for some reason
+                limitUndoRef.current = true;
+
+                undoChange();
+
+                setTimeout(() => {
+                  limitUndoRef.current = false;
+                }, 10);
+              }
+            }
+        });
+
         return () => {
             //window.removeEventListener('mouseup', handleMouseUp);
             //window.removeEventListener('mouseleave', handleMouseLeave);
             window.removeEventListener('click', clickHandler);
+            window.removeEventListener('keydown', undoChange);
             // clear refs on dismount
             selectedObjects.current = [];
             edgeMeshesRef.current = [];
