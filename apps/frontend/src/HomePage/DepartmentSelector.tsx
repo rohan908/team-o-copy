@@ -6,6 +6,8 @@ import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useEffect, useState } from 'react';
 
+
+
 interface DepartmentSelectorProps {
     hasIcon: boolean;
     w: string;
@@ -15,6 +17,8 @@ export function DepartmentSelector(props: DepartmentSelectorProps) {
     const theme = useMantineTheme();
     const [dummyState, setDummyState] = useState(0);
     const [realDept, setRealDept] = useState<string>('');
+
+
 
     const { directoryOptions, selectedHospital, setDepartment, department } = useTimeline();
     const NavSelection = useNavSelectionContext();
