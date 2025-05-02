@@ -14,6 +14,7 @@ import {
 
 import CSVControlsComponent from './CSVControlsComponent.tsx';
 import {
+    IconChartBar,
     IconChevronDown,
     IconChevronUp,
     IconFileBroken,
@@ -155,6 +156,14 @@ export function AdminPage() {
                                             >
                                                 Security Requests
                                             </SidebarButton>
+                                            <SidebarButton
+                                              ValueToCheck={displayTableNumber.toString()}
+                                              ValueForTrigger={'4'}
+                                              onClick={() => displayNumToggle(4)}
+                                              icon={<IconChartBar size="35" />}
+                                            >
+                                              Graphs and Statistics
+                                            </SidebarButton>
                                         </Flex>
                                     </Collapse>
 
@@ -274,6 +283,22 @@ export function AdminPage() {
                                         <RequestHistory requestType="Maintenance" />
                                     </Box>
                                 </Collapse>
+                              <Collapse
+                                w="100%"
+                                in={displayTableNumber == 4}
+                                transitionDuration={300}
+                                transitionTimingFunction="linear"
+                              >
+                                <Box
+                                  p="10px"
+                                  mt="10px"
+                                  style={{
+                                    borderRadius: '15px',
+                                  }}
+                                >
+                                </Box>
+                              </Collapse>
+
                                 <Box
                                     p="10px"
                                     mt="10px"
