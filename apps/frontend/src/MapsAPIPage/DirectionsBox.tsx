@@ -1,5 +1,15 @@
 import React, { useState, useRef } from 'react';
-import { Box, ScrollArea, Text, List, Button, Divider, Transition, Flex } from '@mantine/core';
+import {
+    Box,
+    ScrollArea,
+    Text,
+    List,
+    Button,
+    Divider,
+    Transition,
+    Flex,
+    SegmentedControl,
+} from '@mantine/core';
 import { Step } from './Steps';
 import { Link } from 'react-router-dom';
 import TTSButton from "../Buttons/TTSButton.tsx"; //use ive arrived button to direct to indoor
@@ -20,7 +30,7 @@ interface Props {
 const DirectionsBox = (props: Props) => {
     const steps = props.steps;
     const [isSpeaking, setIsSpeaking] = useState(false);
-    const [stepStrings, setStepStrings] = useState<string[]>([]);
+    const [distanceType, setDistanceType] = useState("feet");
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
     //helper function that transforms html into string
@@ -31,6 +41,28 @@ const DirectionsBox = (props: Props) => {
   //transform directions info from google, from html to string
   const speechText = steps.map((step) =>
     parseHTMLtoText(step.instruction)).join('....');
+
+  function convertDistanceToMetric(input: string){
+    if (input.includes('ft')) {
+      const lengthOfNum = input.indexOf(" ");
+      const totalFeet = parseFloat(input.substring(0, lengthOfNum));
+      let totalMeters = totalFeet * 0.3048
+      totalMeters = totalMeters * 100;
+      totalMeters = Math.trunc(totalMeters);
+      totalMeters = totalMeters / 100;
+      return totalMeters + " meters"
+    } else if (input.includes('mi')) {
+      const lengthOfNum = input.indexOf(" ");
+      const totalMiles = parseFloat(input.substring(0, lengthOfNum));
+      let totalKM = totalMiles * 1.60934
+      totalKM = totalKM * 100;
+      totalKM = Math.trunc(totalKM);
+      totalKM = totalKM / 100;
+      return totalKM + " km"
+    } else {
+      return "Error, neither feet nor miles";
+    }
+  }
 
   //control play/stop logic
   const handleToggle = () => {
@@ -73,7 +105,7 @@ return (
                   <TTSButton text={[speechText]}/>
                 </Box>
               </Flex>
-              <ScrollArea h={235} w="100%">
+              <ScrollArea h={205} w="100%">
                 <List type="ordered" mt="sm" w="100%">
                   {steps.map((step, index) => {
                     const text = parseHTMLtoText(step.instruction);
@@ -99,17 +131,32 @@ return (
                           {text}
                         </Text>
                       </Flex>
-                      <Divider
-                        label={`${step.distance}`}
-                        labelPosition="center"
-                        w="215px"
-                        my="3px"
-                        color="yellowAccent.4" // Line color
-                        styles={{
-                          label: {
-                            color: '#000000'
-                          } //text color
-                        }}/>
+                      {distanceType === "feet" ?
+                        <Divider
+                          label={`${step.distance}`}
+                          labelPosition="center"
+                          w="215px"
+                          my="3px"
+                          color="yellowAccent.4" // Line color
+                          styles={{
+                            label: {
+                              color: '#000000'
+                            } //text color
+                          }}
+                        /> :
+                        <Divider
+                          label={convertDistanceToMetric(step.distance)}
+                          labelPosition="center"
+                          w="215px"
+                          my="3px"
+                          color="yellowAccent.4" // Line color
+                          styles={{
+                            label: {
+                              color: '#000000'
+                            } //text color
+                          }}
+                        />
+                      }
                     </List.Item>
                     )})}
                 </List>
@@ -125,11 +172,37 @@ return (
             {/*    {isSpeaking ? 'Stop' : 'Play Directions'}*/}
             {/*  </Button>*/}
             {/*</Box>*/}
-            <Box ta='center' mt="md">
+            <Flex direction={"row"} gap="md" ta='center' mt="md" align={"center"}>
               <Button component={Link} to="/IndoorMapPage" color="secondaryBlues.5" size='compact-sm'>
                 See Hospital Map
               </Button>
-            </Box>
+              <SegmentedControl
+                orientation="vertical"
+                bg={"secondaryBlues.5"}
+                c={"white"}
+                color={"secondaryBlues.2"}
+                value={distanceType}
+                onChange={setDistanceType}
+                data={[
+                  { label: 'FT', value: "feet" },
+                  { label: 'M', value: 'meters' },
+                ]}
+                styles={{
+                  root: {
+                    borderRadius: 30,
+                  },
+                  label: {
+                    fontWeight: 600,
+                    textSize: '14px',
+                    textAlign: 'center',
+                    color: 'white',
+                  },
+                  indicator: {
+                    borderRadius: 30,
+                  },
+                }}>
+              </SegmentedControl>
+            </Flex>
           </div>)}
       </Transition>
     </Box>
