@@ -55,7 +55,7 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
     // get current filters
-    const { currentFilters, removeFilter } = useFilterContext();
+    const { nameFilters, priorityFilters } = useFilterContext();
 
     // helper function to dispay correct feild
     const getRequestTypeValue = (row: RequestProps) => {
@@ -118,9 +118,15 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     if (!data.length) return <Text>No request form data found.</Text>;
 
     // make filter array from context
-    const rows = currentFilters.length
-        ? data.filter((row) => currentFilters.includes(row.employeeName))
-        : data;
+    let rows = data;
+
+    if (nameFilters.length > 0) {
+        rows = rows.filter((row) => nameFilters.includes(row.employeeName));
+    }
+
+    if (priorityFilters.length > 0) {
+        rows = rows.filter((row) => priorityFilters.includes(row.priority as string));
+    }
 
     const summaryColumns = ['employeeName', 'requestID', 'requestType', 'createdAt'];
 
@@ -133,14 +139,6 @@ export function RequestHistory({ requestType }: { requestType: string }) {
                 Click on a row to find out more information
             </Text>
             <Filter />
-            {currentFilters.map((n) => (
-                <Badge key={n} p="xs" m="xs" bg="primaryBlues.5" fw="400">
-                    <Group gap="0px">
-                        {n}
-                        <CloseButton size="xs" onClick={() => removeFilter(n)} />
-                    </Group>
-                </Badge>
-            ))}
 
             <ScrollArea type="scroll" offsetScrollbars scrollbarSize={6}>
                 <Table

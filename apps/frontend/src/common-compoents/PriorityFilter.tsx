@@ -35,7 +35,7 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
     return (
         <Flex align="center" gap="sm">
             <Select
-                label="Choose the Priority level"
+                label="Filter by Priority"
                 placeholder="Select a priotriy"
                 data={priorityOptions}
                 value={value}
@@ -43,9 +43,8 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
                 nothingFoundMessage="No Priority selected"
                 radius="sm"
                 w="240px"
-                mb="md"
                 size="xs"
-                required
+                mt="sm"
                 c={'#285CC6'}
                 {...props}
                 styles={{

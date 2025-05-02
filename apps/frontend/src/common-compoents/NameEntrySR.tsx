@@ -41,7 +41,6 @@ const NameEntrySR: React.FC<NameEntryProps> = ({ value, onChange }) => {
                 label="Filter By Name"
                 placeholder="Choose Employee"
                 radius="sm"
-                mb="md"
                 size="xs"
                 value={value}
                 onChange={handleSelection}

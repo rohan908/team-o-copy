@@ -30,8 +30,10 @@ import { SidebarButton } from '../common-compoents/commonButtons.tsx';
 import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
 import RequestHistory from './RequestHistory.tsx';
+import { useFilterContext } from '../contexts/FilterContext.tsx';
 
 export function AdminPage() {
+    const { setOpened } = useFilterContext();
     const [formInfoOpen, { open, close }] = useDisclosure(true);
     const [CSVManipOpen, setCSVManipOpen] = useState(false);
     const [displayTableNumber, setDisplayTableNumber] = useState(0);
@@ -44,7 +46,13 @@ export function AdminPage() {
         //   setDisplayTableNumber(num);
         // }
         setDisplayTableNumber(num);
+        setOpened(false); // side effect type shit
     }
+
+    const handleOpenCSVModal = () => {
+        setCSVManipOpen(true);
+        setOpened(false); // 👈 close filter when opening modal
+    };
 
     return (
         <Box mih="100vh" w="full" pt={'5px'} bg="#EAF1FF">
@@ -153,7 +161,7 @@ export function AdminPage() {
                                     <Flex direction="column" justify="center" gap="md">
                                         <SidebarButton
                                             ValueToCheck={displayTableNumber.toString()}
-                                            onClick={() => setCSVManipOpen(true)}
+                                            onClick={handleOpenCSVModal}
                                             icon={<IconFileBroken size="40" />}
                                         >
                                             CSV Manipulator

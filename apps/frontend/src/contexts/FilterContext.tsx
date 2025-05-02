@@ -1,10 +1,16 @@
 import React, { createContext, useContext, useState } from 'react';
 
 interface FilterContextType {
-    currentFilters: string[];
-    setFilter: (names: string[]) => void;
-    addFilter: (name: string) => void;
-    removeFilter: (name: string) => void;
+    nameFilters: string[];
+    priorityFilters?: string[];
+    setNameFilter: (field: string[]) => void;
+    addNameFilter: (field: string) => void;
+    removeNameFilter: (field: string) => void;
+    setPriorityFilter: (field: string[]) => void;
+    addPriorityFilter: (field: string) => void;
+    removePriorityFilter: (field: string) => void;
+    opened: boolean;
+    setOpened: (opened: boolean) => void;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -16,21 +22,51 @@ export const useFilterContext = () => {
 };
 
 export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [currentFilters, setFilter] = useState<string[]>([]);
+    // Handing the popup open state
+    const [opened, setOpened] = React.useState(false);
 
-    // this shit buns
-    const addFilter = (name: string) => {
-        if (!currentFilters.includes(name.trim())) {
-            setFilter((prev) => [...prev, name.trim()]);
+    // Name Filtering Logic
+    const [nameFilters, setNameFilter] = useState<string[]>([]);
+
+    // adding a name filter to the list
+    const addNameFilter = (name: string) => {
+        if (!nameFilters.includes(name.trim())) {
+            setNameFilter((prev) => [...prev, name.trim()]);
         }
     };
-    // this shit more buns
-    const removeFilter = (name: string) => {
-        setFilter((prev) => prev.filter((n) => n !== name));
+    // removing a name filter
+    const removeNameFilter = (name: string) => {
+        setNameFilter((prev) => prev.filter((n) => n !== name));
+    };
+
+    // Priority Filtering Logic
+    const [priorityFilters, setPriorityFilter] = useState<string[]>([]);
+    // adding a priority filter to the list
+    const addPriorityFilter = (priority: string) => {
+        if (!priorityFilters.includes(priority.trim())) {
+            setPriorityFilter((prev) => [...prev, priority.trim()]);
+        }
+    };
+    // removeing a priority filter to the list
+    const removePriorityFilter = (priority: string) => {
+        setPriorityFilter((prev) => prev.filter((n) => n !== priority));
     };
 
     return (
-        <FilterContext.Provider value={{ currentFilters, setFilter, addFilter, removeFilter }}>
+        <FilterContext.Provider
+            value={{
+                nameFilters,
+                setNameFilter,
+                addNameFilter,
+                removeNameFilter,
+                priorityFilters,
+                setPriorityFilter,
+                addPriorityFilter,
+                removePriorityFilter,
+                opened,
+                setOpened,
+            }}
+        >
             {children}
         </FilterContext.Provider>
     );
