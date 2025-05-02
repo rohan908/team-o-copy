@@ -85,9 +85,10 @@ export function MapEditor() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     // Parameters for THREEjs objects and path display
-    const nodeColor = 0xeafeff;
+    const nodeColor = 0x9000FF;
     const selectedNodeColor = 0x56effa;
     const nodeStaircaseColor = 0xfcb024;
+    const nodeDepartmentColor = 0x54BF65;
     const startColor = 0x2a68f7;
     const endColor = 0xfcbe45;
     const edgeColor = 0x2a68f7;
@@ -258,7 +259,15 @@ export function MapEditor() {
     useEffect(() => {
         clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
+
         for (const node of allNodes) {
+            let color = nodeColor;
+            if(node.nodeType == 'staircase') {
+                color = nodeStaircaseColor;
+            } else if (node.nodeType == 'department') {
+                color = nodeDepartmentColor;
+            }
+
             createNode(
                 node,
                 scenesRef.current,
@@ -269,7 +278,7 @@ export function MapEditor() {
                 objectsRef,
                 nodeRadius,
                 {
-                    color: nodeColor,
+                    color: color,
                 }
             ); //Create the nodes
             for (const connectingNodeId of node.connectingNodes) {
@@ -424,6 +433,8 @@ export function MapEditor() {
         )
             if (selectedObject.userData.nodeType == 'staircase') {
                 selectedObject.material.color.set(nodeStaircaseColor);
+            } else if (selectedObject.userData.nodeType == 'department') {
+                selectedObject.material.color.set(nodeDepartmentColor);
             } else {
                 selectedObject.material.color.set(nodeColor);
             }
