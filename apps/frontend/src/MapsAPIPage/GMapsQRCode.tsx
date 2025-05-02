@@ -1,4 +1,4 @@
-import { Box } from '@mantine/core';
+import { Box, Text } from '@mantine/core';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { hospitalCoordinates } from './GoogleMapsAPI.tsx';
 import QRCode from 'react-qr-code';
@@ -56,17 +56,29 @@ const GMapsQRCode = () => {
 
     return (
         <>
-            <Box>
-                <h1>{googleMapURL}</h1>
+            <Box //custom box for directions
+                w="100%"
+                bg="#EFF4FE"
+                p="sm"
+                style={{
+                    borderRadius: '10px',
+                    boxShadow: '0px 0px 4px 0px #AAAAAA',
+                }}
+            >
+                <h3>{googleMapURL}</h3>
+                <Text w="100%" size="xs" my="3px" c="secondaryBlues.5" ta="left">
+                    Scan For Google Maps Directions
+                </Text>
+                <Box maw="100px" h="auto">
+                    {/*<div style={{ height: 'auto', margin: '0 auto', maxWidth: 64, width: '100%' }}>*/}
+                    <QRCode
+                        size={256}
+                        style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+                        value={googleMapURL}
+                        viewBox={`0 0 256 256`}
+                    />
+                </Box>
             </Box>
-            <div style={{ height: 'auto', margin: '0 auto', maxWidth: 64, width: '100%' }}>
-                <QRCode
-                    size={256}
-                    style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-                    value={googleMapURL}
-                    viewBox={`0 0 256 256`}
-                />
-            </div>
         </>
     );
 };
