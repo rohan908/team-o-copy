@@ -91,10 +91,10 @@ export function MapEditor() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     // Parameters for THREEjs objects and path display
-    const nodeColor = 0x9000ff;
+    const nodeColor = 0xf6924f;
     const selectedNodeColor = 0x56effa;
-    const nodeStaircaseColor = 0xfcb024;
-    const nodeDepartmentColor = 0x54bf65;
+    const nodeStaircaseColor = 0x00cba7;
+    const nodeDepartmentColor = 0xa59aff;
     const startColor = 0x2a68f7;
     const endColor = 0xfcbe45;
     const edgeColor = 0x2a68f7;

@@ -91,6 +91,9 @@ export const createNode = (
         Math.round(nodeRadius * 12), // Vibe based adaptive segmentation
         Math.round(nodeRadius * 6)
     );
+    const borderNodeGeometry = new THREE.TorusGeometry(
+        nodeRadius * 1.2,
+    )
     const staircaseNodeGeometry = new THREE.OctahedronGeometry(2, 0);
     const elevatorNodeGeometry = new THREE.OctahedronGeometry(2, 0);
     const material = new THREE.MeshBasicMaterial(nodeColor);
