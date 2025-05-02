@@ -157,7 +157,7 @@ export function MapEditor() {
     };
 
     // Handle switching to other floors
-    const handleFloorChange = (newFloor: number) => {
+    const handleFloorChange = (newFloor: number, deselectObjects: boolean) => {
         if (newFloor === floorState) return;
         setIsFading(true);
         setFloorState(newFloor);
@@ -165,7 +165,7 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-                if (currentNodeData?.nodeType != 'staircase' || mapTool != 'add-edge') {
+                if (deselectObjects) {
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
                     });
@@ -769,7 +769,9 @@ export function MapEditor() {
                         }
                     }
 
-                    setObjToReselect(selectedObjects.current[0]);
+                    if(firstNode.nodeType == 'staircase') {
+                      setObjToReselect(selectedObjects.current[0]);
+                    }
 
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
@@ -795,6 +797,9 @@ export function MapEditor() {
                 setCurrentNodeData(
                     nodeRef.current.find((element) => element.id === objToReselect.userData.nodeId)
                 );
+
+                setFloorState(objToReselect.userData.floor)
+                handleFloorChange(objToReselect.userData.floor, false)
 
                 render();
             }

@@ -6,7 +6,7 @@ import { MapContext } from '../MapEditor.tsx';
 
 interface FloorSwitchBoxProps {
     floor: number;
-    setFloor: (floor: number) => void;
+    setFloor: (floor: number, deselectObjects: boolean) => void;
     onCollapseChange?: (isCollapsed: boolean) => void;
     building: string;
 }
@@ -39,7 +39,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, buildi
                         m="1px"
                         color="blueBase.6"
                         value={floor.toString()}
-                        onChange={(value) => setFloor(parseInt(value))}
+                        onChange={(value) => setFloor(parseInt(value), mapProps.currentNode?.nodeType != 'staircase')}
                         data={[
                             { label: '3D', value: '5' },
                             { label: 'F4', value: '4' },
@@ -106,7 +106,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, buildi
                             m="1px"
                             color="blueBase.6"
                             value={floor.toString()}
-                            onChange={(value) => setFloor(parseInt(value))}
+                            onChange={(value) => setFloor(parseInt(value), mapProps.currentNode?.nodeType != 'staircase')}
                             data={[
                                 { label: 'BC', value: '7' },
                                 { label: 'FK', value: '6' },
