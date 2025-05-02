@@ -4,13 +4,15 @@
  NOTES: CTRL+F !!! for changes that may need to be made
  I use ({Date}) in comments to manually track myself
  */
-import { Accordion, Box, Text, Group, Divider, Flex } from '@mantine/core';
+import { Accordion, Box, Text, Group, Divider, Flex, SegmentedControl } from '@mantine/core';
 import { GetTextDirections } from './GetTextDirections.tsx';
-import { useMemo } from 'react';
+import {useMemo, useState} from 'react';
 import { usePathContext, useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
+import { useUser, SignOutButton, SignInButton } from '@clerk/clerk-react';
+
 import {
     IconArrowLeft,
     IconArrowRight,
@@ -44,6 +46,9 @@ export function DisplayDirectionsBox() {
     const pathNodes = usePathContext();
     const navSelection = useNavSelectionContext();
     const nodeIds = pathNodes.state.pathSelectRequest?.NodeIds;
+    const [distanceType, setDistanceType] = useState("feet");
+    const { isSignedIn, user } = useUser();
+    const role = user?.publicMetadata?.role;
 
     const allNodes = useAllNodesContext();
 
@@ -65,6 +70,14 @@ export function DisplayDirectionsBox() {
             return 1;
         }
     };
+
+    function convertFeetToMeters(input: number) {
+      if (distanceType === "feet"){
+        return input;
+      } else {
+        return input * 0.3048;
+      }
+    }
 
     // only call GetTextDirections if/when pathNodes change
     const directions = useMemo(() => {
@@ -128,7 +141,7 @@ export function DisplayDirectionsBox() {
     return (
         <Box
             w="80%"
-            h="400px"
+            h={isSignedIn && role === 'admin' ? "340px" : "400px"}
             style={{
                 overflow: 'hidden',
                 borderRadius: '8px',
@@ -138,12 +151,47 @@ export function DisplayDirectionsBox() {
                         : '0px 0px 0px 0px #FFFFFF',
             }}
         >
+          <Flex direction={"column"} justify={"center"}>
+          <SegmentedControl
+            maw={"100px"}
+            mt={"xs"}
+            ml={"30.5%"}
+            orientation="horizontal"
+            bg={"secondaryBlues.5"}
+            c={"white"}
+            color={"secondaryBlues.2"}
+            value={distanceType}
+            onChange={setDistanceType}
+            data={[
+              { label: 'FT', value: "feet" },
+              { label: 'M', value: 'meters' },
+            ]}
+            styles={{
+              root: {
+                borderRadius: 30,
+              },
+              label: {
+                fontWeight: 600,
+                textSize: '14px',
+                textAlign: 'center',
+                color: 'white',
+              },
+              indicator: {
+                borderRadius: 30,
+              },
+            }}/>
             <Box style={{ overflowY: 'auto' }}>
-                <Accordion
+              <Divider
+                w="100%"
+                my="5px"
+                color="greys.2" // Line color
+              />
+              <Accordion
+                    w={"100%"}
+                    h={isSignedIn && role === 'admin' ? "275px" : "335px"}
                     multiple
                     styles={{
                         root: {
-                            height: '450px',
                             overflowY: 'auto',
                         },
                         item: {
@@ -171,17 +219,45 @@ export function DisplayDirectionsBox() {
                             <Accordion.Item key={floor} value={`floor-${floor}`}>
                                 <Accordion.Control>
                                     <Group>
-                                        <Text fw={700} size="md" c="blue.7">
-                                            {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
-                                            {/* Changing for Faulkner and Chestnut*/}
-                                            {Number(floor) === 1 ? 'Floor 1' : ''}
-                                            {Number(floor) === 2 ? 'Floor 3' : ''}
-                                            {Number(floor) === 3 ? 'Floor 4' : ''}
-                                            {Number(floor) === 4 ? 'Chestnut' : ''}
-                                            {Number(floor) === 5 ? 'Faulkner' : ''}
-                                            {Number(floor) === 6 ? 'BWH' : ''}
-                                        </Text>
-                                        <TTSButton text={floorTTS} />
+                                      <Flex direction={"column"} gap="0px" align={"center"}>
+                                      <Text fw={700} size="md" c="blue.7">
+                                        {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
+                                        {/* Changing for Faulkner and Chestnut*/}
+                                        {Number(floor) === 1 ? 'Floor 1' : ''}
+                                        {Number(floor) === 2 ? 'Floor 3' : ''}
+                                        {Number(floor) === 3 ? 'Floor 4' : ''}
+                                        {Number(floor) === 4 ? 'Chestnut' : ''}
+                                        {Number(floor) === 5 ? 'Faulkner' : ''}
+                                        {Number(floor) === 6 ? 'BWH' : ''}
+                                      </Text>
+                                      {/*<SegmentedControl*/}
+                                      {/*  maw={"100px"}*/}
+                                      {/*  orientation="horizontal"*/}
+                                      {/*  bg={"secondaryBlues.5"}*/}
+                                      {/*  c={"white"}*/}
+                                      {/*  color={"secondaryBlues.2"}*/}
+                                      {/*  value={distanceType}*/}
+                                      {/*  onChange={setDistanceType}*/}
+                                      {/*  data={[*/}
+                                      {/*    { label: 'FT', value: "feet" },*/}
+                                      {/*    { label: 'M', value: 'meters' },*/}
+                                      {/*  ]}*/}
+                                      {/*  styles={{*/}
+                                      {/*    root: {*/}
+                                      {/*      borderRadius: 30,*/}
+                                      {/*    },*/}
+                                      {/*    label: {*/}
+                                      {/*      fontWeight: 600,*/}
+                                      {/*      textSize: '14px',*/}
+                                      {/*      textAlign: 'center',*/}
+                                      {/*      color: 'white',*/}
+                                      {/*    },*/}
+                                      {/*    indicator: {*/}
+                                      {/*      borderRadius: 30,*/}
+                                      {/*    },*/}
+                                      {/*  }}/>*/}
+                                      </Flex>
+                                      <TTSButton text={floorTTS} />
                                     </Group>
                                 </Accordion.Control>
                                 <Accordion.Panel>
@@ -203,7 +279,7 @@ export function DisplayDirectionsBox() {
                                         const label = step.Direction.startsWith('Take')
                                             ? step.Direction
                                             : step.Direction === 'Straight'
-                                              ? `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`
+                                              ? `Continue straight for ${convertFeetToMeters(step.Distance * 1.5).toFixed(0)} ${distanceType}.`
                                               : `Turn ${step.Direction.toLowerCase()}`;
 
                                         return (
@@ -230,6 +306,7 @@ export function DisplayDirectionsBox() {
                     })}
                 </Accordion>
             </Box>
+          </Flex>
         </Box>
     );
 }

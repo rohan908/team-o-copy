@@ -45,7 +45,7 @@ const TTSButton: React.FC<TTSButtonProps> = ({ text }) => {
             variant="light"
             size="sm"
         >
-            <Group>
+            <Group gap="3px">
                 {isSpeaking ? <IconPlayerStop size="16" /> : <IconVolume size="16" />}
                 {isSpeaking ? 'Stop' : ''}
             </Group>

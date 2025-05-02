@@ -200,8 +200,7 @@ return (
                   indicator: {
                     borderRadius: 30,
                   },
-                }}>
-              </SegmentedControl>
+                }}/>
             </Flex>
           </div>)}
       </Transition>
