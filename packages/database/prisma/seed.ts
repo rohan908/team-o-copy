@@ -17,6 +17,18 @@ export async function populate() {
     const truncateMaps =
         await PrismaClient.$queryRaw`TRUNCATE TABLE "FloorMap" RESTART IDENTITY CASCADE`;
 
+  const truncateLanguageSR =
+    await PrismaClient.$queryRaw`TRUNCATE TABLE "languageServiceRequest" RESTART IDENTITY CASCADE`;
+
+  const truncateSanitationSR =
+    await PrismaClient.$queryRaw`TRUNCATE TABLE "sanitationServiceRequest" RESTART IDENTITY CASCADE`;
+
+  const truncateSecuritySR =
+    await PrismaClient.$queryRaw`TRUNCATE TABLE "securityServiceRequest" RESTART IDENTITY CASCADE`;
+
+  const truncateMaintenanceSR =
+    await PrismaClient.$queryRaw`TRUNCATE TABLE "maintenanceServiceRequest" RESTART IDENTITY CASCADE`;
+
     // ------------------------------------------- //
     // Example floor map and node set up. Writing a script on the front end so we can paste will be much better
 
