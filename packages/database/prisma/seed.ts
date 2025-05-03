@@ -73,6 +73,22 @@ export async function populate() {
     ],
   });
 
+  // defines sanitation SR data
+  const sanitationRequests = await PrismaClient.sanitationServiceRequest.createMany({
+    data: [
+      { requestID: 35, employeeName: 'Rohan Inmadar',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "Spill Cleanup", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 36, employeeName: 'Owen Hart',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "Biohazard Cleanup", status: "Done", priority: "High", hospital: "Patriot-22", description: ""},
+      { requestID: 37, employeeName: 'Hudson Kortus',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "General Room Cleaning", status: "Done", priority: "High", hospital: "Chestnut Hill", description: ""},
+      { requestID: 38, employeeName: 'Ethan Ramoth',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "Waste Removal", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 39, employeeName: 'Camden Brayton',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "Waste Removal", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 40, employeeName: 'Joseph Abata',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "Floor Cleaning (mop, vacuum, etc.)", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 41, employeeName: 'Connor Daly',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "Floor Cleaning (mop, vacuum, etc.)", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 42, employeeName: 'Logan Winters',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "Restroom Cleaning", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 43, employeeName: 'Rohan Inmadar',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "Restroom Cleaning", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+      { requestID: 44, employeeName: 'Owen Hart',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", cleanupType: "Spill Cleanup", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
+    ],
+  });
+
     // adds all node data from /SeedData.ts
     const addDefaultNodes = await PrismaClient.node.createManyAndReturn({
         data: getNodeData(),
