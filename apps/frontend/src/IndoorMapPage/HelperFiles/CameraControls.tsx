@@ -125,7 +125,8 @@ export function createNewCamera(
 
         const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
-        camera.position.set(0, 0, 500);
+        camera.position.set(100, 300, 300);
+        camera.zoom = 1.2;
         camera.up.set(0, 0, 1);
         camera.lookAt(0, 0, 0);
         camera.updateProjectionMatrix();
@@ -228,7 +229,7 @@ export function moveCamera(
     camera: THREE.PerspectiveCamera | THREE.OrthographicCamera,
     controls: OrbitControls,
     position: THREE.Vector3,
-    duration?: number,
+    duration: number,
     onComplete?: () => void
 ) {
     controls.enablePan = false; // disable controls

@@ -78,6 +78,7 @@ export function DraggableMap(props: DraggableMapProps) {
                 clearSceneObjects(scenesRef.current);
                 handleThreeDHospitalChange();
                 setSceneIndexState(0);
+                setFloorState(5);
             }
         } else if (hospitalName === 'Chestnut Hill') {
             clearSceneObjects(scenesRef.current);
@@ -152,19 +153,28 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasElement, 'orthographic');
-        newCamera.position.set(0, 0, 200);
+        const newCamera = createNewCamera(
+            canvasElement,
+            'orthographic',
+            rendererRef.current,
+            cameraRef.current.position
+        );
         newCamera.zoom = 1.5;
-        newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
         controlRef.current = createNewOrbitControls(newCamera, canvasElement, controlRef.current);
+        tweenRef.current = moveCamera(
+            cameraRef.current,
+            controlRef.current,
+            new THREE.Vector3(0, 0, 200),
+            1000
+        );
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
         }
     };
 
-    const setThreeDView = () => {
+    const setThreeDView = (init?: THREE.Vector3) => {
         if (!canvasElement) {
             console.error('Canvas element not found');
             return;
@@ -174,17 +184,26 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasElement, 'perspective');
-        newCamera.position.set(100, 200, 200);
-        if (props.onHomePage) {
-            newCamera.zoom = 1;
-        } else {
-            newCamera.zoom = 1.2;
+        const newCamera = createNewCamera(
+            canvasElement,
+            'perspective',
+            rendererRef.current,
+            cameraRef.current.position
+        );
+        if (init) {
+            newCamera.position.set(100, 100, 100);
         }
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
         controlRef.current = createNewOrbitControls(newCamera, canvasElement, controlRef.current);
+
+        tweenRef.current = moveCamera(
+            cameraRef.current,
+            controlRef.current,
+            new THREE.Vector3(100, 200, 200),
+            1000
+        );
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
@@ -264,7 +283,11 @@ export function DraggableMap(props: DraggableMapProps) {
         const path = navSelection.state.pathSelectRequest?.NodeIds;
         if (path && path.length > 0) {
             const node = getNode(path[index], allNodes);
-            const pos = new Vector3(node!.x, node!.y, 2);
+            let floor = node.floor;
+            if (floor > 1) {
+                floor += 1;
+            }
+            const pos = new Vector3(node!.x, node!.y, (floor - 1) * floorHeight + 2);
             // recreate the camera after position change because for some reason the event listeners get thrown out when moving the camera
             const fovCallback = () => {
                 tweenRef.current = null;
@@ -387,7 +410,7 @@ export function DraggableMap(props: DraggableMapProps) {
         });
     };
 
-    const handleThreeDHospitalChange = () => {
+    const handleThreeDHospitalChange = (init?: THREE.Vector3) => {
         const loadPromises = [];
         loadPromises.push(loadObjectAsync('../../public/Models/Floor 1 Floor.obj', 0, 'floor'));
         loadPromises.push(loadObjectAsync('../../public/Models/Floor 1 Walls.obj', 0, 'walls'));
@@ -406,7 +429,11 @@ export function DraggableMap(props: DraggableMapProps) {
         scenesRef.current[0].add(directionalLight);
 
         // enable orbiting
-        setThreeDView();
+        if (init) {
+            setThreeDView(init);
+        } else {
+            setThreeDView();
+        }
 
         return Promise.all(loadPromises);
     };
@@ -422,12 +449,7 @@ export function DraggableMap(props: DraggableMapProps) {
         }
 
         const newCamera = createNewCamera(canvasElement, 'orthographic', rendererRef.current);
-        newCamera.position.set(0, 0, 330);
-        if (props.onHomePage) {
-            newCamera.zoom = 1;
-        } else {
-            newCamera.zoom = 1.25;
-        }
+        //newCamera.position.set(0, 0, 330);
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
@@ -457,11 +479,7 @@ export function DraggableMap(props: DraggableMapProps) {
             handlePath(firstNodeId, lastNodeId);
             const pathPromise = handlePath(firstNodeId, lastNodeId);
             // switch floor after path is created so the path on above floors is hidden properly
-            pathPromise.then(() => {
-                handleFloorChange(1);
-            });
-        } else {
-            handleFloorChange(1);
+            pathPromise.then(() => {});
         }
     }, [selectedDepartment]);
 
@@ -482,12 +500,8 @@ export function DraggableMap(props: DraggableMapProps) {
         ) {
             handleTwoDHospitalChange();
         } else {
-            handleThreeDHospitalChange().then(() => {
-                if (selectedDepartment) {
-                    // if a department has already been selected start with only floor 1
-                    handleFloorChange(1);
-                }
-            });
+            handleThreeDHospitalChange(new THREE.Vector3(100, 100, 100));
+            setFloorState(5);
         }
     }, []);
 
