@@ -132,10 +132,7 @@ return (
             {/*</Box>*/}
             <Box ta='center' mt="md">
               <Button onClick={()=> {navigate("/IndoorMapPage")}}
-                      color="secondaryBlues.5" size='compact-sm'
-                      {/*Lazy fix, I know. Currently better than no fix though.
-                      Working on better solutions*/}
-                      disabled = {!department}>
+                      color="secondaryBlues.5" size='compact-sm'>
                 See Hospital Map
               </Button>
             </Box>
