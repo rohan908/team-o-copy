@@ -19,7 +19,7 @@ import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
 import { map } from 'leaflet';
 import FloorConnectionBox from './Components/FloorConnectionBox.tsx';
-import { Beforeunload, useBeforeunload } from 'react-beforeunload';
+import { Beforeunload } from 'react-beforeunload';
 import { Navigate } from 'react-router-dom';
 
 const MouseImages = {
@@ -54,14 +54,6 @@ export function MapEditor() {
 
     // clerk const's
     const { user, isSignedIn } = useUser();
-
-    window.onbeforeunload = function() {
-      return true;
-    };
-
-    function handleBeforeUnload(){
-      return unsavedChanges;
-    }
 
     // check role
     const role = user?.publicMetadata?.role;
@@ -996,11 +988,22 @@ export function MapEditor() {
         };
     }, [sceneIndexState]);
 
-    useBeforeunload(unsavedChanges ? (event) => event.preventDefault() : undefined);
+    function handleBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault();
+      return true;
+    }
+
+    useEffect(() => {
+      if (unsavedChanges){
+        window.addEventListener("beforeunload", handleBeforeUnload, {capture: true})
+      }
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload, {capture: true});
+      }
+    }, [unsavedChanges])
 
     return (
         <Box w="100vw" h="100vh">
-            {/*<Beforeunload onBeforeunload={(event) => event.preventDefault()}/>*/}
             <PopupTooltip />
 
             <Box ref={hoverRef}>
