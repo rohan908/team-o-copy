@@ -91,17 +91,12 @@ export const createNode = (
         Math.round(nodeRadius * 12), // Vibe based adaptive segmentation
         Math.round(nodeRadius * 6)
     );
+    const borderNodeGeometry = new THREE.TorusGeometry(
+        nodeRadius * 1.2,
+    )
     const staircaseNodeGeometry = new THREE.OctahedronGeometry(2, 0);
     const elevatorNodeGeometry = new THREE.OctahedronGeometry(2, 0);
-    let material = new THREE.MeshBasicMaterial(nodeColor);
-    if (
-        node.id == startId ||
-        node.id == endId ||
-        node.nodeType == 'staircase' ||
-        node.nodeType == 'elevator'
-    ) {
-        material = new THREE.MeshBasicMaterial({ color: 0xfcb024 });
-    }
+    const material = new THREE.MeshBasicMaterial(nodeColor);
 
     let threeDNode;
     if (nodeType == 'department') {
