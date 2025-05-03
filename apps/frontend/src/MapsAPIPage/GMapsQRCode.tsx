@@ -56,27 +56,38 @@ const GMapsQRCode = () => {
 
     return (
         <>
-            <Box //custom box for directions
-                w="100%"
-                bg="#EFF4FE"
-                p="sm"
-                style={{
-                    borderRadius: '10px',
-                    boxShadow: '0px 0px 4px 0px #AAAAAA',
-                }}
+            <Box
+                bottom="0"
+                right="0"
+                pb="0"
+                pr="0"
+                m="xs"
+                style={{ position: 'absolute', display: 'inline-block', zIndex: '10' }}
             >
-                <h3>{googleMapURL}</h3>
-                <Text w="100%" size="xs" my="3px" c="secondaryBlues.5" ta="left">
-                    Scan For Google Maps Directions
-                </Text>
-                <Box maw="100px" h="auto">
-                    {/*<div style={{ height: 'auto', margin: '0 auto', maxWidth: 64, width: '100%' }}>*/}
-                    <QRCode
-                        size={256}
-                        style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-                        value={googleMapURL}
-                        viewBox={`0 0 256 256`}
-                    />
+                <Box //custom box for directions
+                    bg="#EFF4FE"
+                    p="xs"
+                    // bottom="0"
+                    // right="0"
+                    style={{
+                        borderRadius: '10px',
+                        boxShadow: '0px 0px 4px 0px #AAAAAA',
+                        display: 'inline-block',
+                    }}
+                >
+                    {/*<h3>{googleMapURL}</h3>*/}
+                    <Text w="100%" size="xs" c="secondaryBlues.5" mb="2px">
+                        Scan For Directions
+                    </Text>
+                    <Box maw="150px" h="auto">
+                        {/*<div style={{ height: 'auto', margin: '0 auto', maxWidth: 64, width: '100%' }}>*/}
+                        <QRCode
+                            size={256}
+                            style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+                            value={googleMapURL}
+                            viewBox={`0 0 256 256`}
+                        />
+                    </Box>
                 </Box>
             </Box>
         </>

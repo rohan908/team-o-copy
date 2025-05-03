@@ -112,11 +112,11 @@ export const MapAPIPage = () => {
                             </Stack>
                         </Flex>
                     </Grid.Col>
-                    <GMapsQRCode />
+
                     <Grid.Col span="auto">
                         <Box
                             w="100%"
-                            h="95.7vh"
+                            h="98vh"
                             mt="5px"
                             miw="550px"
                             mih="550px"
@@ -125,9 +125,11 @@ export const MapAPIPage = () => {
                                 border: '3px solid #ebf2ff',
                                 borderRadius: '8px',
                                 overflow: 'hidden',
+                                position: 'relative',
                             }}
                         >
                             <GoogleMapsAPI onStepsUpdate={setSteps} />
+                            <GMapsQRCode />
                         </Box>
                     </Grid.Col>
                 </Grid>
