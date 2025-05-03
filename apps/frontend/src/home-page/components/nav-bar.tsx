@@ -11,14 +11,14 @@ type NavItem = {
 };
 
 export const navItems: NavItem[] = [
-    { name: 'Navigation', link: '/map-API' },
+    { name: 'Navigation', link: '/IndoorMapPage' },
     // { name: <IconInfoCircle size={35} />, link: '/Info-page' },
-    { name: 'Info', link: '/Info-page' },
+    { name: 'About', link: '/Info-page' },
 ];
 
 export const adminNavItems: NavItem[] = [
     //{ name: 'Service Request', link: '/service-request-page' },
-    { name: 'Admin Page', link: '/admin-page' },
+    { name: 'Admin', link: '/admin-page' },
 ];
 
 export const loginItems: NavItem[] = [{ name: 'Log In', link: '/log-in-page' }];
