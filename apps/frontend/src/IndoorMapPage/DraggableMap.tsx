@@ -147,13 +147,13 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasElement);
+        const newCamera = createNewCamera(canvasElement, 'orthographic');
         newCamera.position.set(0, 0, 200);
         newCamera.zoom = 1.5;
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '2D');
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement);
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
@@ -171,7 +171,7 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasElement);
+        const newCamera = createNewCamera(canvasElement, 'perspective');
         newCamera.position.set(100, 200, 200);
         if (props.onHomePage) {
             newCamera.zoom = 1;
@@ -181,7 +181,7 @@ export function DraggableMap(props: DraggableMapProps) {
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '3D');
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement);
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
@@ -344,7 +344,7 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasElement);
+        const newCamera = createNewCamera(canvasElement, 'orthographic');
         newCamera.position.set(0, 0, 330);
         if (props.onHomePage) {
             newCamera.zoom = 1;
@@ -354,7 +354,7 @@ export function DraggableMap(props: DraggableMapProps) {
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '2D');
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement);
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
