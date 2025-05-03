@@ -229,7 +229,7 @@ export function DraggableMap(props: DraggableMapProps) {
             const path = navSelection.state.pathSelectRequest?.NodeIds;
             if (path && path.length > 0) {
                 setPathIndex(0);
-                const node = getNode(path[pathIndex], allNodes);
+                const node = getNode(path[0], allNodes);
                 const pos = new Vector3(node!.x, node!.y, 2);
                 const fovCC = () => {
                     tweenRef.current = null;
@@ -255,13 +255,11 @@ export function DraggableMap(props: DraggableMapProps) {
         setFloorState(newFloor);
     };
 
-    const incrementPath = () => {
+    const moveCameraAlongPath = (index: number) => {
         const previousCamera = cameraRef.current;
-        setPathIndex((prevIndex) => prevIndex + 1);
         const path = navSelection.state.pathSelectRequest?.NodeIds;
         if (path && path.length > 0) {
-            const nextIndex = pathIndex + 1;
-            const node = getNode(path[nextIndex], allNodes);
+            const node = getNode(path[index], allNodes);
             const pos = new Vector3(node!.x, node!.y, 2);
             // recreate the camera after position change because for some reason the event listeners get thrown out when moving the camera
             const fovCallback = () => {
@@ -286,7 +284,19 @@ export function DraggableMap(props: DraggableMapProps) {
         }
     };
 
-    const decrementPath = () => {};
+    const incrementPath = () => {
+        const path = navSelection.state.pathSelectRequest?.NodeIds;
+        if (!path) return;
+        const nextIndex = Math.min(pathIndex + 1, path.length - 1);
+        setPathIndex(nextIndex);
+        moveCameraAlongPath(nextIndex);
+    };
+
+    const decrementPath = () => {
+        const previousIndex = Math.max(pathIndex - 1, 0);
+        setPathIndex(previousIndex);
+        moveCameraAlongPath(previousIndex);
+    };
 
     const handlePath = (firstNodeId: number, lastNodeId: number) => {
         return findPath(firstNodeId, lastNodeId).then(async (pathres) => {
