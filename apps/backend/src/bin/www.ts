@@ -87,7 +87,7 @@ io.on('connection', (socket) => {
     socket.emit('Hello', 'received');
 });
 
-io.listen(5000);
+io.listen(3002);
 
 // Listen on the provided port, on all interfaces
 server.listen(port);
