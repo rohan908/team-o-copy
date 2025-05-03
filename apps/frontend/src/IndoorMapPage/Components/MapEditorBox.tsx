@@ -204,7 +204,20 @@ const MapEditorBox = () => {
                                         To move a node, click on the node you wish to move and drag
                                         it. <br></br>
                                         To select multiple nodes, use ctrl + click. <br></br>
-                                        To delete selected nodes, use ctrl + right-click.
+                                    </Text>
+                                    <Divider
+                                        w={'100%'}
+                                        mt={'xs'}
+                                        mb={'xs'}
+                                        color={'yellowAccent.4'}
+                                        size={'xs'}
+                                    />
+                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
+                                        Delete Nodes:
+                                    </Text>
+                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
+                                        To delete selected nodes, use ctrl + right-click. <br></br>
+                                        To undo a deletion or edge, press ctrl + z
                                     </Text>
                                     <Divider
                                         w={'100%'}

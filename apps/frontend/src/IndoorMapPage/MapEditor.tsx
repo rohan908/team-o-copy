@@ -30,6 +30,7 @@ const MouseImages = {
 interface undoAction {
     action: string;
     node: DirectoryNodeItem;
+    edgeNode?: DirectoryNodeItem;
 }
 
 export interface MapEditorProps {
@@ -705,7 +706,7 @@ export function MapEditor() {
         }
     };
 
-    const toggleEdge = (selectedObject: THREE.Object3D) => {
+    const toggleEdge = (selectedObject: THREE.Object3D, undoAction?: boolean) => {
         if (
             selectedObject instanceof THREE.Mesh &&
             selectedObject.material instanceof THREE.MeshBasicMaterial
@@ -784,6 +785,10 @@ export function MapEditor() {
                             firstNode.connectingNodes.push(secondNode.id);
                             secondNode.connectingNodes.push(firstNode.id);
                         }
+                    }
+
+                    if(!undoAction) {
+                        undoActionsRef.current.push({action: "toggle-edge", node: firstNode, edgeNode: secondNode});
                     }
 
                     if (firstNode.nodeType == 'staircase') {
@@ -1010,6 +1015,30 @@ export function MapEditor() {
                         }
 
                         nodeRef.current.push(node);
+
+                        break;
+                    case "toggle-edge":
+
+                        selectedObjects.current.forEach((object) => {
+                            deselectObject(object);
+                        });
+
+                        const firstNode = action.node;
+                        const secondNode = action.edgeNode;
+
+                        if(firstNode != null && secondNode != null) {
+                            const firstObjectNode = objectsRef.current.find(
+                                (element) => element.userData.nodeId === firstNode.id
+                            );
+                            const secondObjectNode = objectsRef.current.find(
+                                (element) => element.userData.nodeId === secondNode.id
+                            );
+
+                            if(firstObjectNode != null && secondObjectNode != null) {
+                                toggleEdge(firstObjectNode, true);
+                                toggleEdge(secondObjectNode, true);
+                            }
+                        }
 
                         break;
                 }
