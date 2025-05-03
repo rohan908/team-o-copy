@@ -15,12 +15,8 @@ import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearPathObjects, clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { createNode } from './HelperFiles/NodeFactory.tsx';
-import {
-    createNewCamera,
-    createNewOrbitControls,
-    getNode,
-    mapSetup,
-} from './HelperFiles/MapSetup.tsx';
+import { getNode, mapSetup } from './HelperFiles/MapSetup.tsx';
+import { createNewCamera, createNewOrbitControls } from './HelperFiles/cameraControls.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { useLocation } from 'react-router-dom';
