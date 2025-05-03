@@ -16,10 +16,16 @@ import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearPathObjects, clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { createNode } from './HelperFiles/NodeFactory.tsx';
 import { getNode, mapSetup } from './HelperFiles/MapSetup.tsx';
-import { createNewCamera, createNewOrbitControls } from './HelperFiles/cameraControls.tsx';
+import {
+    createNewCamera,
+    createNewOrbitControls,
+    moveCamera,
+} from './HelperFiles/CameraControls.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { useLocation } from 'react-router-dom';
+import { Vector3 } from 'three';
+import { Tween } from '@tweenjs/tween.js';
 
 interface DraggableMapProps {
     onHomePage: boolean;
@@ -44,6 +50,7 @@ export function DraggableMap(props: DraggableMapProps) {
 
     // Animation related refs
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
+    const tweenRef = useRef<Tween | null>(null);
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
     const [floorState, setFloorState] = useState(5);
@@ -60,6 +67,8 @@ export function DraggableMap(props: DraggableMapProps) {
     const { cameraRef, rendererRef, scenesRef, controlRef } = mapSetup({
         canvasId: 'insideMapCanvas',
     });
+
+    const canvasElement = document.getElementById('insideMapCanvas');
 
     const handleHospitalChange = (hospitalName: string) => {
         if (hospitalName === '20 Patriot Pl' || hospitalName === '22 Patriot Pl') {
@@ -133,7 +142,6 @@ export function DraggableMap(props: DraggableMapProps) {
     };
 
     const setTwoDView = () => {
-        const canvasElement = document.getElementById('insideMapCanvas');
         if (!canvasElement) {
             console.error('Canvas element not found');
             return;
@@ -148,8 +156,7 @@ export function DraggableMap(props: DraggableMapProps) {
         newCamera.zoom = 1.5;
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
-
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement);
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement, controlRef.current);
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
@@ -157,7 +164,6 @@ export function DraggableMap(props: DraggableMapProps) {
     };
 
     const setThreeDView = () => {
-        const canvasElement = document.getElementById('insideMapCanvas');
         if (!canvasElement) {
             console.error('Canvas element not found');
             return;
@@ -177,7 +183,7 @@ export function DraggableMap(props: DraggableMapProps) {
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement);
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement, controlRef.current);
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
@@ -207,6 +213,7 @@ export function DraggableMap(props: DraggableMapProps) {
         pathVisibility(newFloor, true); // show path on new floor
 
         if (newFloor < 5) {
+            // 3D view
             setTwoDView();
         } else if (newFloor == 5) {
             setThreeDView();
@@ -215,6 +222,30 @@ export function DraggableMap(props: DraggableMapProps) {
             pathVisibility(2, true);
             pathVisibility(3, true);
             pathVisibility(4, true);
+        } else if (newFloor == 6) {
+            // fov view
+            const path = navSelection.state.pathSelectRequest?.NodeIds;
+            if (path && path.length > 0) {
+                const node = getNode(path[0], allNodes);
+                const pos = new Vector3(node!.x, node!.y, 10);
+                const fovCC = () => {
+                    tweenRef.current = null;
+                    controlRef.current.enabled = false;
+                    cameraRef.current = createNewCamera(
+                        canvasElement,
+                        'fov',
+                        rendererRef.current,
+                        pos
+                    );
+                };
+                tweenRef.current = moveCamera(
+                    cameraRef.current,
+                    controlRef.current,
+                    pos,
+                    1000,
+                    fovCC
+                );
+            }
         }
         controlRef.current.update();
         setFloorState(newFloor);
@@ -330,7 +361,6 @@ export function DraggableMap(props: DraggableMapProps) {
     };
 
     const handleTwoDHospitalChange = () => {
-        const canvasElement = document.getElementById('insideMapCanvas');
         if (!canvasElement) {
             console.error('Canvas element not found');
             return;
@@ -350,7 +380,7 @@ export function DraggableMap(props: DraggableMapProps) {
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement);
+        controlRef.current = createNewOrbitControls(newCamera, canvasElement, controlRef.current);
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
@@ -535,6 +565,12 @@ export function DraggableMap(props: DraggableMapProps) {
                 rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
             }
             animationFrameId = window.requestAnimationFrame(animate);
+
+            if (tweenRef.current) {
+                tweenRef.current.update();
+                cameraRef.current?.lookAt(0, 0, 0);
+            }
+            controlRef.current.update();
 
             return () => {
                 window.cancelAnimationFrame(animationFrameId);

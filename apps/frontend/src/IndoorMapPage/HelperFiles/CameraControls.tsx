@@ -1,5 +1,6 @@
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import * as THREE from 'three';
+import { Tween, Easing } from '@tweenjs/tween.js';
 
 export function createNewOrbitControls(
     camera: THREE.PerspectiveCamera | THREE.OrthographicCamera,
@@ -12,7 +13,8 @@ export function createNewOrbitControls(
     }
     const controls = new OrbitControls(camera, domElement);
     const isPerspective = camera instanceof THREE.PerspectiveCamera;
-
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
     controls.enableRotate = isPerspective; // enable rotating for perspective cameras
     controls.target.set(0, 0, 0);
     controls.enableDamping = true;
@@ -98,17 +100,18 @@ export function createNewOrbitControls(
             camera.position.x -= vTarget.x;
             camera.position.y -= vTarget.y;
         }
+        controls.addEventListener('change', enforceBoundaries);
+        controls.update();
     };
-
-    controls.addEventListener('change', enforceBoundaries);
-    controls.update();
 
     return controls;
 }
 
 export function createNewCamera(
     canvasElement: HTMLElement,
-    cameraType: 'orthographic' | 'perspective' = 'orthographic'
+    cameraType: 'orthographic' | 'perspective' | 'fov' = 'perspective',
+    renderer: THREE.WebGLRenderer,
+    position?: THREE.Vector3
 ): THREE.OrthographicCamera | THREE.PerspectiveCamera {
     const aspect = canvasElement.clientWidth / canvasElement.clientHeight;
     const frustumSize = 400;
@@ -128,7 +131,7 @@ export function createNewCamera(
         camera.updateProjectionMatrix();
 
         return camera;
-    } else {
+    } else if (cameraType === 'orthographic') {
         const camera = new THREE.OrthographicCamera(
             -frustumHalfWidth,
             frustumHalfWidth,
@@ -145,5 +148,95 @@ export function createNewCamera(
         camera.updateProjectionMatrix();
 
         return camera;
+    } else if (cameraType === 'fov') {
+        const fov = 45; // Field of view in degrees
+        const near = 0.1;
+        const far = 1000;
+
+        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+
+        camera.up.set(0, 0, 1);
+        if (position) {
+            camera.position.copy(position);
+        }
+
+        let isRotating = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        const initialQuaternion = camera.quaternion.clone();
+
+        let rotationX = 0;
+        let rotationY = 0;
+
+        // Set up our own mouse event handlers for first-person rotation
+        renderer.domElement.addEventListener('mousedown', function (event) {
+            if (event.button === 0) {
+                isRotating = true;
+                lastX = event.clientX;
+                lastY = event.clientY;
+
+                if (rotationX === 0 && rotationY === 0) {
+                    initialQuaternion.copy(camera.quaternion);
+                }
+                event.preventDefault();
+            }
+        });
+
+        renderer.domElement.addEventListener('mousemove', function (event) {
+            if (!isRotating) return;
+
+            // mouse movement
+            const deltaX = event.clientX - lastX;
+            const deltaY = event.clientY - lastY;
+            lastX = event.clientX;
+            lastY = event.clientY;
+            const sensitivity = 0.004;
+
+            rotationX -= deltaX * sensitivity;
+            rotationY = Math.max(
+                -Math.PI / 2,
+                Math.min(Math.PI / 2 - 0.01, rotationY - deltaY * sensitivity)
+            );
+
+            const euler = new THREE.Euler(0, 0, 0, 'ZYX');
+            euler.y = rotationX;
+            euler.x = rotationY;
+
+            const rotationQuaternion = new THREE.Quaternion().setFromEuler(euler);
+
+            // rotation relative to initial orientation
+            camera.quaternion.copy(initialQuaternion).multiply(rotationQuaternion);
+        });
+
+        // handle mouse leave to stop rotation
+        const stopRotation = function () {
+            isRotating = false;
+        };
+
+        renderer.domElement.addEventListener('mouseup', stopRotation);
+        renderer.domElement.addEventListener('mouseleave', stopRotation);
+
+        camera.zoom = 1;
+        camera.updateProjectionMatrix();
+
+        return camera;
     }
+}
+
+export function moveCamera(
+    camera: THREE.PerspectiveCamera | THREE.OrthographicCamera,
+    controls: OrbitControls,
+    position: THREE.Vector3,
+    duration?: number,
+    onComplete?: () => void
+) {
+    controls.enablePan = false; // disable controls
+    const tween = new Tween(camera.position);
+    tween.easing(Easing.Quadratic.Out);
+    tween.to(position, duration);
+    tween.onComplete(onComplete);
+    tween.start();
+
+    return tween;
 }

@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createAllScenes } from './SceneFactory.ts';
 import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
-import { createNewOrbitControls, createNewCamera } from './cameraControls.tsx';
+import { createNewOrbitControls, createNewCamera } from './CameraControls.tsx';
 
 interface MapConfig {
     canvasId: string;
