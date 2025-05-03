@@ -58,7 +58,7 @@ export async function populate() {
   });
 
   // defines language  SR data
-  const languageRequests = await PrismaClient.langaugeServiceRequest.createMany({
+  const languageRequests = await PrismaClient.languageServiceRequest.createMany({
     data: [
       { requestID: 25, employeeName: 'Rohan Inmadar',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", language: "English", status: "Done", priority: "High", hospital: "Patriot-20", description: ""},
       { requestID: 26, employeeName: 'Owen Hart',  department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "02:39:AM", language: "German", status: "Done", priority: "High", hospital: "Patriot-22", description: ""},

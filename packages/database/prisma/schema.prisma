@@ -17,7 +17,7 @@ model Employee {
   role       String
 }
 
-model langaugeServiceRequest {
+model languageServiceRequest {
   requestID    Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
   date         String
@@ -111,6 +111,6 @@ model Edge {
 }
 
 model Algorithm {
-  id Int @id
-  algoID  Int
+  id     Int @id
+  algoID Int
 }
