@@ -43,7 +43,6 @@ function Filter() {
             width={300}
             trapFocus={false}
             opened={opened}
-            onChange={setOpened}
             position="bottom"
             withArrow
             shadow="md"
@@ -51,6 +50,7 @@ function Filter() {
             arrowSize={15}
             offset={{ mainAxis: 10, crossAxis: 50 }}
             closeOnClickOutside={false}
+            withinPortal={false}
         >
             <Popover.Target>
                 <Button

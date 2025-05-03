@@ -35,7 +35,7 @@ const NameEntrySR: React.FC<NameEntryProps> = ({ value, onChange }) => {
     };
 
     return (
-        <Flex align="center" gap="sm">
+        <Flex align="center" gap="xs">
             <Select
                 data={data}
                 label="Filter By Name"
@@ -55,7 +55,7 @@ const NameEntrySR: React.FC<NameEntryProps> = ({ value, onChange }) => {
                     },
                 }}
             />
-            <Box mt={14}>
+            <Box mt="25">
                 <SpeechToText OnResult={handleSpeechResult} />
             </Box>
         </Flex>

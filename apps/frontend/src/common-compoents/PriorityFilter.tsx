@@ -52,9 +52,12 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
                         fontSize: '18px',
                         fontWeight: 350,
                     },
+                    dropdown: {
+                        borderRadius: '8px',
+                    },
                 }}
             />
-            <Box mt={14}>
+            <Box mt={40}>
                 <SpeechToText OnResult={handleSpeechResult} />
             </Box>
         </Flex>
