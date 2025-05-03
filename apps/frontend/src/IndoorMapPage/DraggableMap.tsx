@@ -224,6 +224,10 @@ export function DraggableMap(props: DraggableMapProps) {
             pathVisibility(3, true);
             pathVisibility(4, true);
         } else if (newFloor == 6) {
+            pathVisibility(1, true);
+            pathVisibility(2, true);
+            pathVisibility(3, true);
+            pathVisibility(4, true);
             // fov view
             const previousCamera = cameraRef.current;
             const path = navSelection.state.pathSelectRequest?.NodeIds;

@@ -151,7 +151,7 @@ export function createNewCamera(
     }
     // orbit controls don't work for rotating around the camera's position so had to make a controller for fov controls and just disable orbit controls.
     else if (cameraType === 'fov') {
-        const fov = 45; // Field of view in degrees
+        const fov = 100; // Field of view in degrees
         const near = 0.1;
         const far = 1000;
 
