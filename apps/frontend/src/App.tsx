@@ -200,6 +200,10 @@ function App() {
     console.log(socket.id);
   });
 
+  socket.on("Hello", (msg) => {
+    console.log(msg);
+  });
+
 
     return (
         <MantineProvider theme={theme}>
