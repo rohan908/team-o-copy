@@ -8,19 +8,19 @@ router.get('/', async (req: Request, res: Response) => {
     const query = req.query.by as string;
     try {
         const lang = await PrismaClient.langaugeServiceRequest.groupBy({
-            by: [query],
+            by: [query as any],
             _count: { [query]: true },
         });
         const sanitation = await PrismaClient.sanitationServiceRequest.groupBy({
-            by: [query],
+            by: [query as any],
             _count: { [query]: true },
         });
         const maintenance = await PrismaClient.maintenanceServiceRequest.groupBy({
-            by: [query],
+            by: [query as any],
             _count: { [query]: true },
         });
         const security = await PrismaClient.securityServiceRequest.groupBy({
-            by: [query],
+            by: [query as any],
             _count: { [query]: true },
         });
         const summary = MergeForms([lang, sanitation, maintenance, security], query);

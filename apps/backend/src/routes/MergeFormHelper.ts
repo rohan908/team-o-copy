@@ -1,16 +1,21 @@
-export function MergeForms(groupedArrays, groupField) {
-    const counts = {};
+// src/routes/MergeFormHelper.ts
+
+export function MergeForms(
+    groupedArrays: Array<Array<{ [key: string]: any; _count: { [key: string]: number } }>>,
+    groupField: string
+): { [key: string]: string | number }[] {
+    const counts: Record<string, number> = {};
 
     groupedArrays.flat().forEach((item) => {
         const key = item[groupField];
-
-        // this assumes count = 1 per row, which might not be correct
         const count = item._count[groupField];
         counts[key] = (counts[key] || 0) + count;
     });
 
-    return Object.entries(counts).map(([key, count]) => ({
-        [groupField]: key,
-        count,
-    }));
+    return Object.entries(counts)
+        .map(([key, count]) => ({
+            [groupField]: key,
+            count,
+        }))
+        .sort((a, b) => b.count - a.count);
 }

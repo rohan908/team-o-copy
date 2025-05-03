@@ -31,6 +31,8 @@ import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
 import RequestHistory from './RequestHistory.tsx';
 import { useUser } from '@clerk/clerk-react';
+import StatsChart from '../service-request/GraphsStatistics.tsx';
+
 
 export function AdminPage() {
     const [formInfoOpen, { open, close }] = useDisclosure(true);
@@ -296,6 +298,7 @@ export function AdminPage() {
                                     borderRadius: '15px',
                                   }}
                                 >
+                                  <StatsChart/>
                                 </Box>
                               </Collapse>
 
