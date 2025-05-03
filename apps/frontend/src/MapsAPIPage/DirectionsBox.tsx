@@ -96,6 +96,8 @@ return (
                       <IconBus size={20} color="#0E3B99"/>
                     ) : text.toLowerCase().includes('train') ? (
                       <IconTrain size={20} color="#0E3B99"/>
+                    ) : text.toLowerCase().includes('subway') ? (
+                      <IconTrain size={20} color="#0E3B99"/>
                     ) : (<IconQuestionMark size={20} color="#0E3B99"/>);
 
                     return (
