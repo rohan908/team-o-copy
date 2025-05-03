@@ -253,6 +253,9 @@ export function AboutPage() {
                                         </Text>
                                         <Text size="sm" c={theme.colors.secondaryBlues[7]}>
                                             {member.role}
+                                            <Text size="sm" c={theme.colors.secondaryBlues[7]}>
+                                                {member.quote}
+                                            </Text>
                                         </Text>
                                     </Stack>
                                 </motion.div>
