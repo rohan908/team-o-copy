@@ -17,62 +17,74 @@ type Member = {
     name: string;
     role: string;
     image: string;
+    quote: string;
 };
 
 const teamMembers: Member[] = [
     {
         name: "Liam O'Driscoll",
         role: 'Project Manager',
+        quote: '',
         image: 'public/TeamPhotos/liam.png',
     },
     {
         name: 'Logan Winters',
         role: 'Project Owner',
+        quote: '',
         image: 'public/TeamPhotos/Logan.png',
     },
     {
         name: 'Hudson Kortus',
         role: 'Lead Software Engineer',
+        quote: '',
         image: 'public/TeamPhotos/Hudson.png',
     },
     {
         name: 'Rohan Inamdar',
         role: 'Assistant Lead Software Engineer',
+        quote: '',
         image: 'public/TeamPhotos/Rohan.png',
     },
     {
         name: 'Owen Hart',
         role: 'Assistant Lead Software Engineer',
+        quote: '',
         image: 'public/TeamPhotos/Owen.png',
     },
     {
         name: 'Yanding Mario',
         role: 'Assistant Lead Software Engineer',
+        quote: '',
         image: 'public/TeamPhotos/Yanding.png',
     },
     {
         name: 'Camden Brayton',
         role: 'Full-Time Software Engineer',
+        quote: '',
         image: 'public/TeamPhotos/Camden.png',
     },
     {
         name: 'Joseph Abata',
         role: 'Full-Time Software Engineer',
+        quote: '',
         image: 'public/TeamPhotos/Joe.png',
     },
     {
         name: 'Conner Daly',
         role: 'Full-Time Software Engineer',
+        quote: '',
         image: 'public/TeamPhotos/conner.png',
     },
     {
         name: 'Adam Blanchard',
         role: 'Scrum Master',
+        quote: '',
         image: 'public/TeamPhotos/Adam.png',
     },
     {
         name: 'Ethan Ramoth',
         role: 'Documentation',
+        quote: '',
         image: 'public/TeamPhotos/Ethan.png',
     },
 ];
