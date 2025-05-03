@@ -1,19 +1,29 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Box, useMantineTheme, SegmentedControl, Flex, Collapse } from '@mantine/core';
+import { Box, useMantineTheme, SegmentedControl, Flex, Collapse, Button } from '@mantine/core';
 import { MantineProvider } from '@mantine/core';
 import FloorConnectionBox from './FloorConnectionBox.tsx';
 import { MapContext } from '../MapEditor.tsx';
+import { IconArrowBadgeUpFilled, IconArrowBadgeDownFilled } from '@tabler/icons-react';
 
 interface FloorSwitchBoxProps {
     floor: number;
     setFloor: (floor: number) => void;
+    incrementPath?: () => void;
+    decrementPath?: () => void;
     onCollapseChange?: (isCollapsed: boolean) => void;
     building: string;
 }
 
-const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, building }) => {
+const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
+    floor,
+    setFloor,
+    incrementPath,
+    decrementPath,
+    building,
+}) => {
     const theme = useMantineTheme();
     const mapProps = useContext(MapContext);
+    const opened = floor == 6;
 
     // TODO: In the future these should re-suse a react component.
     if (building === '22 Patriot Pl' || building == '20 Patriot Pl') {
@@ -62,6 +72,16 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, buildi
                             },
                         }}
                     />
+                    <Collapse in={opened}>
+                        <Flex direction="column">
+                            <Button onClick={incrementPath}>
+                                <IconArrowBadgeUpFilled size={32} />
+                            </Button>
+                            <Button onClick={decrementPath}>
+                                <IconArrowBadgeDownFilled size={32} />
+                            </Button>
+                        </Flex>
+                    </Collapse>
                 </Box>
             </Box>
         );

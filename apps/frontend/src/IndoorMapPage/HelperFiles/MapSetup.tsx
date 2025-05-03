@@ -27,7 +27,7 @@ export function mapSetup(config: MapConfig) {
         }
 
         // initialize a perspective camera
-        const camera = createNewCamera(canvasRef.current, 'perspective');
+        const camera = createNewCamera(canvasRef.current, 'perspective', rendererRef.current);
         cameraRef.current = camera;
 
         // initialize renderer

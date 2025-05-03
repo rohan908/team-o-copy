@@ -55,6 +55,7 @@ export function DraggableMap(props: DraggableMapProps) {
 
     const [floorState, setFloorState] = useState(5);
     const [sceneIndexState, setSceneIndexState] = useState(0);
+    const [pathIndex, setPathIndex] = useState(0);
 
     // used to space apart floors and nodes and edges on those floors
     const floorHeight = 10.5;
@@ -224,10 +225,12 @@ export function DraggableMap(props: DraggableMapProps) {
             pathVisibility(4, true);
         } else if (newFloor == 6) {
             // fov view
+            const previousCamera = cameraRef.current;
             const path = navSelection.state.pathSelectRequest?.NodeIds;
             if (path && path.length > 0) {
-                const node = getNode(path[0], allNodes);
-                const pos = new Vector3(node!.x, node!.y, 10);
+                setPathIndex(0);
+                const node = getNode(path[pathIndex], allNodes);
+                const pos = new Vector3(node!.x, node!.y, 2);
                 const fovCC = () => {
                     tweenRef.current = null;
                     controlRef.current.enabled = false;
@@ -235,7 +238,8 @@ export function DraggableMap(props: DraggableMapProps) {
                         canvasElement,
                         'fov',
                         rendererRef.current,
-                        pos
+                        pos,
+                        previousCamera
                     );
                 };
                 tweenRef.current = moveCamera(
@@ -250,6 +254,39 @@ export function DraggableMap(props: DraggableMapProps) {
         controlRef.current.update();
         setFloorState(newFloor);
     };
+
+    const incrementPath = () => {
+        const previousCamera = cameraRef.current;
+        setPathIndex((prevIndex) => prevIndex + 1);
+        const path = navSelection.state.pathSelectRequest?.NodeIds;
+        if (path && path.length > 0) {
+            const nextIndex = pathIndex + 1;
+            const node = getNode(path[nextIndex], allNodes);
+            const pos = new Vector3(node!.x, node!.y, 2);
+            // recreate the camera after position change because for some reason the event listeners get thrown out when moving the camera
+            const fovCallback = () => {
+                tweenRef.current = null;
+                controlRef.current.enabled = false;
+
+                cameraRef.current = createNewCamera(
+                    canvasElement,
+                    'fov',
+                    rendererRef.current,
+                    pos,
+                    previousCamera
+                );
+            };
+            tweenRef.current = moveCamera(
+                cameraRef.current,
+                controlRef.current,
+                pos,
+                1000,
+                fovCallback
+            );
+        }
+    };
+
+    const decrementPath = () => {};
 
     const handlePath = (firstNodeId: number, lastNodeId: number) => {
         return findPath(firstNodeId, lastNodeId).then(async (pathres) => {
@@ -370,7 +407,7 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasElement, 'orthographic');
+        const newCamera = createNewCamera(canvasElement, 'orthographic', rendererRef.current);
         newCamera.position.set(0, 0, 330);
         if (props.onHomePage) {
             newCamera.zoom = 1;
@@ -568,7 +605,6 @@ export function DraggableMap(props: DraggableMapProps) {
 
             if (tweenRef.current) {
                 tweenRef.current.update();
-                cameraRef.current?.lookAt(0, 0, 0);
             }
             controlRef.current.update();
 
@@ -587,6 +623,8 @@ export function DraggableMap(props: DraggableMapProps) {
                     floor={floorState}
                     onCollapseChange={() => true}
                     setFloor={handleFloorChange}
+                    incrementPath={incrementPath}
+                    decrementPath={decrementPath}
                     building={selectedHospitalName || ''}
                 />
             )}

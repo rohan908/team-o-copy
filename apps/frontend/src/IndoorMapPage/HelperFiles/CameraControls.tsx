@@ -1,7 +1,6 @@
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import * as THREE from 'three';
 import { Tween, Easing } from '@tweenjs/tween.js';
-
 export function createNewOrbitControls(
     camera: THREE.PerspectiveCamera | THREE.OrthographicCamera,
     domElement: HTMLElement,
@@ -111,7 +110,8 @@ export function createNewCamera(
     canvasElement: HTMLElement,
     cameraType: 'orthographic' | 'perspective' | 'fov' = 'perspective',
     renderer: THREE.WebGLRenderer,
-    position?: THREE.Vector3
+    position?: THREE.Vector3,
+    previousCamera?: THREE.OrthographicCamera | THREE.PerspectiveCamera
 ): THREE.OrthographicCamera | THREE.PerspectiveCamera {
     const aspect = canvasElement.clientWidth / canvasElement.clientHeight;
     const frustumSize = 400;
@@ -148,12 +148,19 @@ export function createNewCamera(
         camera.updateProjectionMatrix();
 
         return camera;
-    } else if (cameraType === 'fov') {
+    }
+    // orbit controls don't work for rotating around the camera's position so had to make a controller for fov controls and just disable orbit controls.
+    else if (cameraType === 'fov') {
         const fov = 45; // Field of view in degrees
         const near = 0.1;
         const far = 1000;
 
         const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        const initialQuaternion = new THREE.Quaternion();
+        if (previousCamera) {
+            initialQuaternion.copy(previousCamera.quaternion.clone());
+        }
+        camera.quaternion.copy(initialQuaternion);
 
         camera.up.set(0, 0, 1);
         if (position) {
@@ -164,21 +171,14 @@ export function createNewCamera(
         let lastX = 0;
         let lastY = 0;
 
-        const initialQuaternion = camera.quaternion.clone();
-
         let rotationX = 0;
         let rotationY = 0;
 
-        // Set up our own mouse event handlers for first-person rotation
         renderer.domElement.addEventListener('mousedown', function (event) {
             if (event.button === 0) {
                 isRotating = true;
                 lastX = event.clientX;
                 lastY = event.clientY;
-
-                if (rotationX === 0 && rotationY === 0) {
-                    initialQuaternion.copy(camera.quaternion);
-                }
                 event.preventDefault();
             }
         });
