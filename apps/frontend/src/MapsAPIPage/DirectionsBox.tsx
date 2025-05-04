@@ -98,7 +98,7 @@ return (
           <div style={styles}>
             <Box mx="auto" ta='left'>
               <Flex direction="row" gap="md" align={"top"}>
-                <Text fw={700} size="md" color="black" mt="5px" mb="xs" ta="left">
+                <Text fw={700} size="md" c="secondaryBlues.5" mt="5px" mb="xs" ta="left">
                   Directions:
                 </Text>
                 <Box ta='center'>

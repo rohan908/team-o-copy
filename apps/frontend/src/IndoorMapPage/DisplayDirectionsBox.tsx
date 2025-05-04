@@ -188,7 +188,7 @@ export function DisplayDirectionsBox() {
                                 <Accordion.Control>
                                     <Group>
                                       <Flex direction={"column"} gap="0px" align={"center"}>
-                                      <Text fw={700} size="md" c="blue.7">
+                                      <Text fw={700} size="md" c="secondaryBlues.5">
                                         {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
                                         {/* Changing for Faulkner and Chestnut*/}
                                         {Number(floor) === 1 ? 'Floor 1' : ''}
