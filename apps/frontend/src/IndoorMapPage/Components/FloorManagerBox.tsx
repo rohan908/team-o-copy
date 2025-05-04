@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useContext } from 'react';
 import { Box, useMantineTheme, SegmentedControl, Flex, Collapse, Button } from '@mantine/core';
-import { MantineProvider } from '@mantine/core';
 import FloorConnectionBox from './FloorConnectionBox.tsx';
 import { MapContext } from '../MapEditor.tsx';
 import { IconArrowBadgeUpFilled, IconArrowBadgeDownFilled } from '@tabler/icons-react';
