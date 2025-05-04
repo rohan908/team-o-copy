@@ -25,7 +25,7 @@ const teamMembers: Member[] = [
     {
         name: "Liam O'Driscoll",
         role: 'Project Manager',
-        quote: 'How much of his voice would we need to make the tts him?',
+        quote: '"How much of his voice would we need to make the tts him?"',
         image: 'public/TeamPhotos/liam.png',
     },
     {
@@ -37,13 +37,13 @@ const teamMembers: Member[] = [
     {
         name: 'Hudson Kortus',
         role: 'Lead Software Engineer',
-        quote: 'rm fr ./*',
+        quote: '"rm fr ./*"',
         image: 'public/TeamPhotos/Hudson.png',
     },
     {
         name: 'Rohan Inamdar',
         role: 'Assistant Lead Software Engineer',
-        quote: 'I never recovered from the JD Honey ',
+        quote: '"I never recovered from the JD Honey"',
         image: 'public/TeamPhotos/Rohan.png',
     },
     {
@@ -61,7 +61,7 @@ const teamMembers: Member[] = [
     {
         name: 'Camden Brayton',
         role: 'Full-Time Software Engineer',
-        quote: '',
+        quote: '"In the beginning the Universe was created. This has made a lot of people very angry and been widely regarded as a bad move."',
         image: 'public/TeamPhotos/Camden.png',
     },
     {
