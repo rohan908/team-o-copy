@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createAllScenes } from './SceneFactory.ts';
@@ -6,7 +6,7 @@ import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
 import { createNewOrbitControls, createNewCamera } from './CameraControls.tsx';
 
 interface MapConfig {
-    canvasId: string;
+    canvasRef: React.RefObject<HTMLCanvasElement>;
 }
 
 // common hook for threejs map setup
@@ -15,27 +15,26 @@ export function mapSetup(config: MapConfig) {
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
     const scenesRef = useRef<THREE.Scene[]>([]);
     const controlRef = useRef<OrbitControls | null>(null);
-    const canvasRef = useRef<HTMLElement | null>(null);
 
     // this only runs once to initialize things
     useEffect(() => {
         // initialize canvas
-        canvasRef.current = document.getElementById(config.canvasId);
-        if (!canvasRef.current) {
-            console.error(`Canvas with ID ${config.canvasId} not found`);
+        const canvas = config.canvasRef.current;
+        if (!canvas) {
+            console.error('Canvas element not available');
             return;
         }
 
         // initialize a perspective camera
-        const camera = createNewCamera(canvasRef.current, 'perspective', rendererRef.current);
+        const camera = createNewCamera(canvas, 'perspective', rendererRef.current);
         cameraRef.current = camera;
 
         // initialize renderer
         const renderer = new THREE.WebGLRenderer({
-            canvas: canvasRef.current as HTMLCanvasElement,
+            canvas: canvas as HTMLCanvasElement,
             antialias: true,
         });
-        renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         rendererRef.current = renderer;
         renderer.setClearColor(new THREE.Color(0xebf2ff)); // set background color
@@ -49,12 +48,12 @@ export function mapSetup(config: MapConfig) {
 
         // handle window resize
         const handleResize = () => {
-            if (!canvasRef.current || !camera || !renderer) return;
+            if (!canvas || !camera || !renderer) return;
 
             const frustumSize = 400;
 
             // update aspect ratio
-            const newAspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
+            const newAspect = canvas.clientWidth / canvas.clientHeight;
 
             if (camera instanceof THREE.OrthographicCamera) {
                 const newFrustumHeight = frustumSize / camera.zoom;
@@ -71,7 +70,7 @@ export function mapSetup(config: MapConfig) {
             camera.updateProjectionMatrix();
 
             // update renderer size
-            renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         };
 
         window.addEventListener('resize', handleResize);
@@ -94,7 +93,6 @@ export function mapSetup(config: MapConfig) {
         rendererRef,
         scenesRef,
         controlRef,
-        canvasRef,
     };
 }
 

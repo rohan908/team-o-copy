@@ -64,12 +64,12 @@ export function DraggableMap(props: DraggableMapProps) {
     const location = useLocation();
     const isIndoorMapPage = location.pathname.includes('IndoorMapPage');
 
+    const canvasRef = useRef(null);
+
     // set up map
     const { cameraRef, rendererRef, scenesRef, controlRef } = mapSetup({
-        canvasId: 'insideMapCanvas',
+        canvasRef: canvasRef,
     });
-
-    const canvasElement = document.getElementById('insideMapCanvas');
 
     const handleHospitalChange = (hospitalName: string) => {
         if (hospitalName === '20 Patriot Pl' || hospitalName === '22 Patriot Pl') {
@@ -144,7 +144,7 @@ export function DraggableMap(props: DraggableMapProps) {
     };
 
     const setTwoDView = () => {
-        if (!canvasElement) {
+        if (!canvasRef.current) {
             console.error('Canvas element not found');
             return;
         }
@@ -154,14 +154,18 @@ export function DraggableMap(props: DraggableMapProps) {
         }
 
         const newCamera = createNewCamera(
-            canvasElement,
+            canvasRef.current,
             'orthographic',
             rendererRef.current,
             cameraRef.current.position
         );
         newCamera.zoom = 1.5;
         cameraRef.current = newCamera;
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement, controlRef.current);
+        controlRef.current = createNewOrbitControls(
+            newCamera,
+            canvasRef.current,
+            controlRef.current
+        );
         tweenRef.current = moveCamera(
             cameraRef.current,
             controlRef.current,
@@ -174,8 +178,8 @@ export function DraggableMap(props: DraggableMapProps) {
         }
     };
 
-    const setThreeDView = (init?: THREE.Vector3) => {
-        if (!canvasElement) {
+    const setThreeDView = () => {
+        if (!canvasRef.current) {
             console.error('Canvas element not found');
             return;
         }
@@ -183,30 +187,31 @@ export function DraggableMap(props: DraggableMapProps) {
         if (controlRef.current) {
             controlRef.current.dispose();
         }
+        console.log(cameraRef.current);
+        if (rendererRef.current && cameraRef.current && controlRef.current) {
+            const newCamera = createNewCamera(
+                canvasRef.current,
+                'perspective',
+                rendererRef.current
+            );
+            //newCamera.updateProjectionMatrix();
+            cameraRef.current = newCamera;
 
-        const newCamera = createNewCamera(
-            canvasElement,
-            'perspective',
-            rendererRef.current,
-            cameraRef.current.position
-        );
-        if (init) {
-            newCamera.position.set(100, 100, 100);
+            controlRef.current = createNewOrbitControls(
+                newCamera,
+                canvasRef.current,
+                controlRef.current
+            );
+            tweenRef.current = moveCamera(
+                cameraRef.current,
+                controlRef.current,
+                new THREE.Vector3(100, 200, 200),
+                1000
+            );
         }
-        newCamera.updateProjectionMatrix();
-        cameraRef.current = newCamera;
-
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement, controlRef.current);
-
-        tweenRef.current = moveCamera(
-            cameraRef.current,
-            controlRef.current,
-            new THREE.Vector3(100, 200, 200),
-            1000
-        );
 
         if (rendererRef.current) {
-            rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
+            rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
         }
     };
 
@@ -258,7 +263,7 @@ export function DraggableMap(props: DraggableMapProps) {
                     tweenRef.current = null;
                     controlRef.current.enabled = false;
                     cameraRef.current = createNewCamera(
-                        canvasElement,
+                        canvasRef.current,
                         'fov',
                         rendererRef.current,
                         pos,
@@ -294,7 +299,7 @@ export function DraggableMap(props: DraggableMapProps) {
                 controlRef.current.enabled = false;
 
                 cameraRef.current = createNewCamera(
-                    canvasElement,
+                    canvasRef.current,
                     'fov',
                     rendererRef.current,
                     pos,
@@ -429,17 +434,13 @@ export function DraggableMap(props: DraggableMapProps) {
         scenesRef.current[0].add(directionalLight);
 
         // enable orbiting
-        if (init) {
-            setThreeDView(init);
-        } else {
-            setThreeDView();
-        }
+        setThreeDView();
 
         return Promise.all(loadPromises);
     };
 
     const handleTwoDHospitalChange = () => {
-        if (!canvasElement) {
+        if (!canvasRef.current) {
             console.error('Canvas element not found');
             return;
         }
@@ -448,12 +449,16 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasElement, 'orthographic', rendererRef.current);
+        const newCamera = createNewCamera(canvasRef.current, 'orthographic', rendererRef.current);
         //newCamera.position.set(0, 0, 330);
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement, controlRef.current);
+        controlRef.current = createNewOrbitControls(
+            newCamera,
+            canvasRef.current,
+            controlRef.current
+        );
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
@@ -500,7 +505,7 @@ export function DraggableMap(props: DraggableMapProps) {
         ) {
             handleTwoDHospitalChange();
         } else {
-            handleThreeDHospitalChange(new THREE.Vector3(100, 100, 100));
+            handleThreeDHospitalChange();
             setFloorState(5);
         }
     }, []);
@@ -658,6 +663,7 @@ export function DraggableMap(props: DraggableMapProps) {
             )}
             <canvas
                 id="insideMapCanvas"
+                ref={canvasRef}
                 style={{ width: '100%', height: '100%', position: 'relative' }}
             />
         </Box>

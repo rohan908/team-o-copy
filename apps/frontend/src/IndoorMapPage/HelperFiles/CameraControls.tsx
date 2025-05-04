@@ -107,7 +107,7 @@ export function createNewOrbitControls(
 }
 
 export function createNewCamera(
-    canvasElement: HTMLElement,
+    canvasElement: HTMLCanvasElement,
     cameraType: 'orthographic' | 'perspective' | 'fov' = 'perspective',
     renderer: THREE.WebGLRenderer,
     position?: THREE.Vector3,
