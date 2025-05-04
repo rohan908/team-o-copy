@@ -55,7 +55,7 @@ const teamMembers: Member[] = [
     {
         name: 'Yanding Mario',
         role: 'Assistant Lead Software Engineer',
-        quote: '',
+        quote: '"Yanding-Submit-Bug"',
         image: 'public/TeamPhotos/Yanding.png',
     },
     {
@@ -79,7 +79,7 @@ const teamMembers: Member[] = [
     {
         name: 'Adam Blanchard',
         role: 'Scrum Master',
-        quote: '',
+        quote: '"Give me empty quotes, I don\'t say anything"',
         image: 'public/TeamPhotos/Adam.png',
     },
     {
