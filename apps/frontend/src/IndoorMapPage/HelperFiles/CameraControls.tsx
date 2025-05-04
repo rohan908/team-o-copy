@@ -129,6 +129,10 @@ export function createNewCamera(
         camera.zoom = 1.2;
         camera.up.set(0, 0, 1);
         camera.lookAt(0, 0, 0);
+
+        // this is used to maintain orientation when switching to the fov camera
+        camera.userData = { fovAngles: { phi: 0, theta: 0 } };
+
         camera.updateProjectionMatrix();
 
         return camera;
@@ -146,34 +150,62 @@ export function createNewCamera(
         camera.up.set(0, 0, 1);
         camera.lookAt(0, 0, 0);
         camera.zoom = 1;
+
+        // this is used to maintain orientation when switching to the fov camera
+        camera.userData = { fovAngles: { phi: 0, theta: 0 } };
+
         camera.updateProjectionMatrix();
 
         return camera;
     }
     // orbit controls don't work for rotating around the camera's position so had to make a controller for fov controls and just disable orbit controls.
+    // I'm a monke and couldn't figure out how to directly rotate the camera's euler angles with quaternions without causing strange gimble lock issues
+    // so this is probably mega inefficient, but better than the ship sinking.
     else if (cameraType === 'fov') {
         const fov = 100; // Field of view in degrees
         const near = 0.1;
         const far = 1000;
 
         const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-        const initialQuaternion = new THREE.Quaternion();
-        if (previousCamera) {
-            initialQuaternion.copy(previousCamera.quaternion.clone());
-        }
-        camera.quaternion.copy(initialQuaternion);
 
         camera.up.set(0, 0, 1);
+
         if (position) {
             camera.position.copy(position);
         }
 
+        let phi = 0; // yaw
+        let theta = 0; // pitch
+
+        if (previousCamera && previousCamera.userData && previousCamera.userData.fovAngles) {
+            phi = previousCamera.userData.fovAngles.phi;
+            theta = previousCamera.userData.fovAngles.theta;
+        }
+
+        camera.userData.fovAngles = { phi, theta };
+
+        const updateCamera = () => {
+            theta = Math.max(-Math.PI / 2, Math.min(Math.PI / 2 - 0.01, theta)); // limits pitch
+
+            // spherical coords
+            const targetX = camera.position.x + Math.sin(phi) * Math.cos(theta);
+            const targetY = camera.position.y + Math.cos(phi) * Math.cos(theta);
+            const targetZ = camera.position.z + Math.sin(theta);
+
+            // point camera at target
+            camera.lookAt(targetX, targetY, targetZ);
+
+            camera.userData.fovAngles.phi = phi;
+            camera.userData.fovAngles.theta = theta;
+        };
+
+        updateCamera();
+
+        camera.userData.updateCamera = updateCamera;
+
         let isRotating = false;
         let lastX = 0;
         let lastY = 0;
-
-        let rotationX = 0;
-        let rotationY = 0;
 
         renderer.domElement.addEventListener('mousedown', function (event) {
             if (event.button === 0) {
@@ -187,30 +219,19 @@ export function createNewCamera(
         renderer.domElement.addEventListener('mousemove', function (event) {
             if (!isRotating) return;
 
-            // mouse movement
             const deltaX = event.clientX - lastX;
             const deltaY = event.clientY - lastY;
             lastX = event.clientX;
             lastY = event.clientY;
+
             const sensitivity = 0.004;
 
-            rotationX -= deltaX * sensitivity;
-            rotationY = Math.max(
-                -Math.PI / 2,
-                Math.min(Math.PI / 2 - 0.01, rotationY - deltaY * sensitivity)
-            );
+            phi += deltaX * sensitivity;
+            theta -= deltaY * sensitivity;
 
-            const euler = new THREE.Euler(0, 0, 0, 'ZYX');
-            euler.y = rotationX;
-            euler.x = rotationY;
-
-            const rotationQuaternion = new THREE.Quaternion().setFromEuler(euler);
-
-            // rotation relative to initial orientation
-            camera.quaternion.copy(initialQuaternion).multiply(rotationQuaternion);
+            updateCamera();
         });
 
-        // handle mouse leave to stop rotation
         const stopRotation = function () {
             isRotating = false;
         };

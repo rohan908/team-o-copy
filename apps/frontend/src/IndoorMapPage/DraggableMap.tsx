@@ -248,12 +248,17 @@ export function DraggableMap(props: DraggableMapProps) {
             pathVisibility(3, true);
             pathVisibility(4, true);
         } else if (newFloor == 6) {
+            // fov view
             pathVisibility(1, true);
             pathVisibility(2, true);
             pathVisibility(3, true);
             pathVisibility(4, true);
-            // fov view
+            // record the orientation of the previous location and pass it to the fov camera.
             const previousCamera = cameraRef.current;
+            const direction = new THREE.Vector3();
+            previousCamera.userData.fovAngles.phi =
+                Math.atan2(direction.x, direction.y) - Math.PI / 1.25; // this factor could be calculated based on the angle from the parking lot to the origin of the canvas to horizontal but vibe coding this works given we only have one parking lot location
+            previousCamera.userData.fovAngles.theta = Math.asin(direction.z);
             const path = navSelection.state.pathSelectRequest?.NodeIds;
             if (path && path.length > 0) {
                 setPathIndex(0);
