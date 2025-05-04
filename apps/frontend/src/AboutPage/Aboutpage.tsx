@@ -49,7 +49,7 @@ const teamMembers: Member[] = [
     {
         name: 'Owen Hart',
         role: 'Assistant Lead Software Engineer',
-        quote: '',
+        quote: '"you\'re on the wong page"',
         image: 'public/TeamPhotos/Owen.png',
     },
     {
