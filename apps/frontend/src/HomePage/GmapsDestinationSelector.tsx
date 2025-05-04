@@ -18,8 +18,7 @@ interface GmapsDestinationSelectorProps {
 }
 
 export const hospitalOptions = [
-    { value: '20 Patriot Pl', label: '20 Patriot Pl' },
-    { value: '22 Patriot Pl', label: '22 Patriot Pl' },
+    { value: '22 Patriot Pl', label: 'Patriot Place' },
     { value: 'Chestnut Hill', label: 'Chestnut Hill' },
     { value: 'Faulkner Hospital', label: 'Faulkner Hospital' },
     { value: 'BWH Campus', label: 'BWH Campus' },

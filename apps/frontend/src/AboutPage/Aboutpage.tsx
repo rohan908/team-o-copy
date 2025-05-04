@@ -11,6 +11,7 @@ import {
     useMantineTheme,
 } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type Member = {
     name: string;
@@ -76,6 +77,10 @@ const teamMembers: Member[] = [
     },
 ];
 
+const randomRotateY = () => {
+    return Math.floor(Math.random() * 21) - 10;
+};
+
 export function AboutPage() {
     const theme = useMantineTheme();
     const [active, setActive] = useState(0);
@@ -89,6 +94,10 @@ export function AboutPage() {
     };
 
     const member = teamMembers[active];
+
+    const isActive = (index: number) => {
+        return index === active;
+    };
 
     return (
         <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py="xl">
@@ -140,16 +149,51 @@ export function AboutPage() {
                                     style={{ transform: 'rotate(-5deg)', zIndex: 2 }}
                                 />
 
-                                {/* Active Member image */}
-                                <Image
-                                    src={member.image}
-                                    alt={member.name}
-                                    radius="lg"
-                                    width={250}
-                                    height={250}
-                                    fit="cover"
-                                    style={{ position: 'relative', zIndex: 3 }}
-                                />
+                                {/* Animated Member images */}
+                                <AnimatePresence>
+                                    {teamMembers.map((member, index) => (
+                                        <motion.div
+                                            key={member.image}
+                                            initial={{
+                                                opacity: 0,
+                                                scale: 0.9,
+                                                z: -100,
+                                                rotate: randomRotateY(),
+                                            }}
+                                            animate={{
+                                                opacity: isActive(index) ? 1 : 0,
+                                                scale: isActive(index) ? 1 : 0.95,
+                                                z: isActive(index) ? 0 : -100,
+                                                rotate: isActive(index) ? 0 : randomRotateY(),
+                                                zIndex: isActive(index)
+                                                    ? 40
+                                                    : teamMembers.length + 2 - index,
+                                            }}
+                                            exit={{
+                                                opacity: 0,
+                                                scale: 0.9,
+                                                z: 100,
+                                                rotate: randomRotateY(),
+                                            }}
+                                            transition={{
+                                                duration: 0.4,
+                                                ease: 'easeInOut',
+                                            }}
+                                            className="absolute inset-0 origin-bottom"
+                                            style={{ zIndex: isActive(index) ? 3 : 0 }}
+                                        >
+                                            <Image
+                                                src={member.image}
+                                                alt={member.name}
+                                                radius="lg"
+                                                width={250}
+                                                height={250}
+                                                fit="cover"
+                                                style={{ position: 'relative' }}
+                                            />
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
                             </Box>
 
                             <Group justify="center" mt="sm">
@@ -171,19 +215,41 @@ export function AboutPage() {
                                 </Button>
                             </Group>
 
-                            <Stack gap={0} align="center" mt="sm">
-                                <Text size="lg" fw={500} c={theme.colors.secondaryBlues[7]}>
-                                    {member.name}
-                                </Text>
-                                <Text size="sm" c={theme.colors.secondaryBlues[7]}>
-                                    {member.role}
-                                </Text>
-                            </Stack>
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={active}
+                                    initial={{
+                                        y: 20,
+                                        opacity: 0,
+                                    }}
+                                    animate={{
+                                        y: 0,
+                                        opacity: 1,
+                                    }}
+                                    exit={{
+                                        y: -20,
+                                        opacity: 0,
+                                    }}
+                                    transition={{
+                                        duration: 0.2,
+                                        ease: 'easeInOut',
+                                    }}
+                                >
+                                    <Stack gap={0} align="center" mt="sm">
+                                        <Text size="lg" fw={500} c={theme.colors.secondaryBlues[7]}>
+                                            {member.name}
+                                        </Text>
+                                        <Text size="sm" c={theme.colors.secondaryBlues[7]}>
+                                            {member.role}
+                                        </Text>
+                                    </Stack>
+                                </motion.div>
+                            </AnimatePresence>
                         </Stack>
                     </Group>
 
                     {/* Golden separating line */}
-                  <Box w="100%" bg={theme.colors.yellowAccent[3]} h="2px" />
+                    <Box w="100%" bg={theme.colors.yellowAccent[3]} h="2px" />
 
                     <Text ta="center" mt="md" size="sm" c={theme.colors.secondaryBlues[7]} px="md">
                         The Brigham & Women's Hospital maps and data used in this application are

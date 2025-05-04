@@ -25,9 +25,19 @@ export function ContentSwitcher() {
                 }
                 return <GoogleMapsAPI onStepsUpdate={setSteps} />;
             case 1: //Indoor Nav
-                return <DraggableMap onHomePage={true}/>;
+                return <DraggableMap onHomePage={true} />;
             case 2: //Service Request
-                return <ServiceRequestPage width={"80%"} marginRight={"10%"} height={"80vh"} cols={2} vSpacing={10} hSpacing={30} buttonHeight={220}/>;
+                return (
+                    <ServiceRequestPage
+                        width={'80%'}
+                        marginRight={'10%'}
+                        height={'80vh'}
+                        cols={2}
+                        vSpacing={10}
+                        hSpacing={30}
+                        buttonHeight={220}
+                    />
+                );
         }
     };
     return (

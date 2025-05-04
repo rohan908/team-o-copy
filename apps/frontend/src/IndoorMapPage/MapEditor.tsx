@@ -15,10 +15,10 @@ import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { IconCurrentLocation } from '@tabler/icons-react';
 import { bool } from 'prop-types';
-import { a } from 'vitest/dist/chunks/suite.d.FvehnV49';
 import { Object3DEventMap } from 'three';
 import { map } from 'leaflet';
 import FloorConnectionBox from './Components/FloorConnectionBox.tsx';
+import { Beforeunload } from 'react-beforeunload';
 import { Navigate } from 'react-router-dom';
 
 const MouseImages = {
@@ -27,6 +27,12 @@ const MouseImages = {
     AddNode: 'MapImages/MouseCursors/AddNode.png',
     AddEdge: 'MapImages/MouseCursors/AddEdge.png',
 };
+
+interface undoAction {
+    action: string;
+    node: DirectoryNodeItem;
+    edgeNode?: DirectoryNodeItem;
+}
 
 export interface MapEditorProps {
     selectedTool: string;
@@ -48,6 +54,7 @@ export function MapEditor() {
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer');
     const [mapTool, setMapTool] = useState('');
+    const [unsavedChanges, setUnsavedChanges] = useState(true);
     const [objToReselect, setObjToReselect] = useState<THREE.Object3D>();
 
     // clerk const's
@@ -77,6 +84,8 @@ export function MapEditor() {
         }[]
     >([]);
 
+    const undoActionsRef = useRef<undoAction[]>([]);
+    const limitUndoRef = useRef(false);
     const nodeRef = useRef(allNodes);
     const cursorStyleRef = useRef(MouseImages.MoveNone);
 
@@ -85,9 +94,10 @@ export function MapEditor() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     // Parameters for THREEjs objects and path display
-    const nodeColor = 0xeafeff;
+    const nodeColor = 0xf6924f;
     const selectedNodeColor = 0x56effa;
-    const nodeStaircaseColor = 0xfcb024;
+    const nodeStaircaseColor = 0x00cba7;
+    const nodeDepartmentColor = 0xa59aff;
     const startColor = 0x2a68f7;
     const endColor = 0xfcbe45;
     const edgeColor = 0x2a68f7;
@@ -157,7 +167,7 @@ export function MapEditor() {
     };
 
     // Handle switching to other floors
-    const handleFloorChange = (newFloor: number) => {
+    const handleFloorChange = (newFloor: number, deselectObjects: boolean) => {
         if (newFloor === floorState) return;
         setIsFading(true);
         setFloorState(newFloor);
@@ -165,7 +175,7 @@ export function MapEditor() {
             setTimeout(() => {
                 setSceneIndexState(getSceneIndexFromFloor(newFloor));
                 setIsFading(false);
-                if (currentNodeData?.nodeType != 'staircase' || mapTool != 'add-edge') {
+                if (deselectObjects) {
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
                     });
@@ -258,7 +268,15 @@ export function MapEditor() {
     useEffect(() => {
         clearSceneObjects(scenesRef.current); // clear all nodes and edges
         // populate all nodes and edges
+
         for (const node of allNodes) {
+            let color = nodeColor;
+            if (node.nodeType == 'staircase') {
+                color = nodeStaircaseColor;
+            } else if (node.nodeType == 'department') {
+                color = nodeDepartmentColor;
+            }
+
             createNode(
                 node,
                 scenesRef.current,
@@ -269,7 +287,7 @@ export function MapEditor() {
                 objectsRef,
                 nodeRadius,
                 {
-                    color: nodeColor,
+                    color: color,
                 }
             ); //Create the nodes
             for (const connectingNodeId of node.connectingNodes) {
@@ -424,6 +442,8 @@ export function MapEditor() {
         )
             if (selectedObject.userData.nodeType == 'staircase') {
                 selectedObject.material.color.set(nodeStaircaseColor);
+            } else if (selectedObject.userData.nodeType == 'department') {
+                selectedObject.material.color.set(nodeDepartmentColor);
             } else {
                 selectedObject.material.color.set(nodeColor);
             }
@@ -688,7 +708,7 @@ export function MapEditor() {
         }
     };
 
-    const toggleEdge = (selectedObject: THREE.Object3D) => {
+    const toggleEdge = (selectedObject: THREE.Object3D, undoAction?: boolean) => {
         if (
             selectedObject instanceof THREE.Mesh &&
             selectedObject.material instanceof THREE.MeshBasicMaterial
@@ -769,7 +789,13 @@ export function MapEditor() {
                         }
                     }
 
-                    setObjToReselect(selectedObjects.current[0]);
+                    if(!undoAction) {
+                        undoActionsRef.current.push({action: "toggle-edge", node: firstNode, edgeNode: secondNode});
+                    }
+
+                    if (firstNode.nodeType == 'staircase') {
+                        setObjToReselect(selectedObjects.current[0]);
+                    }
 
                     selectedObjects.current.forEach((object) => {
                         deselectObject(object);
@@ -795,6 +821,9 @@ export function MapEditor() {
                 setCurrentNodeData(
                     nodeRef.current.find((element) => element.id === objToReselect.userData.nodeId)
                 );
+
+                setFloorState(objToReselect.userData.floor);
+                handleFloorChange(objToReselect.userData.floor, false);
 
                 render();
             }
@@ -855,6 +884,15 @@ export function MapEditor() {
     // for deleting selected nodes
     useEffect(() => {
         const deleteSelected = () => {
+            selectedObjects.current.forEach((object) => {
+                const directoryNode = nodeRef.current.find(
+                    (element) => element.id === object.userData.nodeId
+                );
+                if (directoryNode) {
+                    undoActionsRef.current.push({ action: 'delete', node: directoryNode });
+                }
+            });
+
             if (selectedObjects.current.length > 0) {
                 selectedObjects.current.forEach((object) => {
                     const allNodesIndex = nodeRef.current.findIndex(
@@ -927,6 +965,90 @@ export function MapEditor() {
         // sets the map tool on startup
         setMapTool('pan');
 
+        // handles undo actions in order they were added
+        const undoChange = () => {
+            console.log('undo');
+
+            const action = undoActionsRef.current.pop();
+
+            if (action) {
+                switch (action.action) {
+                    case 'delete':
+                        const node = action.node;
+
+                        // adds back this node id to previous nodes' connectingNodes
+                        node.connectingNodes.forEach((nodeId) => {
+                            const connectingNode = nodeRef.current.find(
+                                (element) => element.id === nodeId
+                            );
+                            if (connectingNode) {
+                                connectingNode.connectingNodes.push(action.node.id);
+                            }
+                        });
+
+                        // recreates this node and its edges
+                        let color = nodeColor;
+                        if (node.nodeType == 'staircase') {
+                            color = nodeStaircaseColor;
+                        } else if (node.nodeType == 'department') {
+                            color = nodeDepartmentColor;
+                        }
+
+                        createNode(
+                            node,
+                            scenesRef.current,
+                            node.nodeType,
+                            undefined,
+                            0,
+                            0,
+                            objectsRef,
+                            nodeRadius,
+                            {
+                                color: color,
+                            }
+                        ); //Create the nodes
+                        for (const connectingNodeId of node.connectingNodes) {
+                            // iterate over each connected node.
+                            const connectedNode = getNode(connectingNodeId, allNodes);
+                            // TODO: Add another check that makes it so duplicate edge objects aren't created
+                            if (connectedNode) {
+                                createEdge(node, connectedNode);
+                            }
+                        }
+
+                        nodeRef.current.push(node);
+
+                        break;
+                    case "toggle-edge":
+
+                        selectedObjects.current.forEach((object) => {
+                            deselectObject(object);
+                        });
+
+                        const firstNode = action.node;
+                        const secondNode = action.edgeNode;
+
+                        if(firstNode != null && secondNode != null) {
+                            const firstObjectNode = objectsRef.current.find(
+                                (element) => element.userData.nodeId === firstNode.id
+                            );
+                            const secondObjectNode = objectsRef.current.find(
+                                (element) => element.userData.nodeId === secondNode.id
+                            );
+
+                            if(firstObjectNode != null && secondObjectNode != null) {
+                                toggleEdge(firstObjectNode, true);
+                                toggleEdge(secondObjectNode, true);
+                            }
+                        }
+
+                        break;
+                }
+            }
+
+            render();
+        };
+
         // make sure map movement is re-enabled for some edge cases
         const handleMouseUp = () => {
             setTimeout(() => {
@@ -944,10 +1066,28 @@ export function MapEditor() {
             rendererRef.current.domElement.addEventListener('mouseleave', handleMouseLeave);
         }
 
+        window.addEventListener('keydown', (event) => {
+            if (event.key == 'z' && event.ctrlKey) {
+              if(limitUndoRef.current) {
+                return;
+              } else {
+                // prevents undo from firing twice for some reason
+                limitUndoRef.current = true;
+
+                undoChange();
+
+                setTimeout(() => {
+                  limitUndoRef.current = false;
+                }, 10);
+              }
+            }
+        });
+
         return () => {
             //window.removeEventListener('mouseup', handleMouseUp);
             //window.removeEventListener('mouseleave', handleMouseLeave);
             window.removeEventListener('click', clickHandler);
+            window.removeEventListener('keydown', undoChange);
             // clear refs on dismount
             selectedObjects.current = [];
             edgeMeshesRef.current = [];
@@ -985,6 +1125,20 @@ export function MapEditor() {
             }
         };
     }, [sceneIndexState]);
+
+    function handleBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault();
+      return true;
+    }
+
+    useEffect(() => {
+      if (unsavedChanges){
+        window.addEventListener("beforeunload", handleBeforeUnload, {capture: true})
+      }
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload, {capture: true});
+      }
+    }, [unsavedChanges])
 
     return (
         <Box w="100vw" h="100vh">

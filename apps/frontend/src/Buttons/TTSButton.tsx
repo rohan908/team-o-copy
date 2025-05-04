@@ -4,7 +4,7 @@
  NOTES: This was all copied from yanding's
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button, Group } from '@mantine/core';
 import { IconVolume, IconPlayerStop } from '@tabler/icons-react';
 interface TTSButtonProps {
@@ -33,6 +33,12 @@ const TTSButton: React.FC<TTSButtonProps> = ({ text }) => {
             setIsSpeaking(true);
         }
     };
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+  }, [text]);
     // disable closing of according
     // Used: https://stackoverflow.com/questions/69358781/material-ui-expand-accordion-by-clicking-the-icon-only*/
     return (
