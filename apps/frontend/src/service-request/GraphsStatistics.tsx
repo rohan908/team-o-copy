@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BarChart, PieChart } from '@mantine/charts';
 import { SegmentedControl, Loader, Center, Title, Box } from '@mantine/core';
 import FilterGraph from "../Buttons/FilterGraph.tsx";
+import GroupByEntry  from "../Buttons/GroupByEntry.tsx";
 
 interface ChartData {
   [key: string]: string | number;
@@ -13,22 +14,32 @@ const StatsChart: React.FC = () => {
   const [type, setType] = useState<'bar' | 'pie'>('bar');
   const [data, setData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(false);
+  const sortedData = [...data].sort((a, b) => Number(b.count) - Number(a.count));
+
+
+  const groupByTitleMap: Record<typeof groupBy, string> = {
+    priority: 'Requests by Priority Level:',
+    hospital: 'Requests by Hospital Location:',
+    employeeName: 'Requests by Employee:',
+  };
+
 
   const blueShades = [
-    '#74c0fc',
-    '#5caffc',
-    '#4dabf7',
-    '#3e9ef2',
-    '#339af0',
-    '#2b8ae6',
-    '#228be6',
-    '#1f7cd6',
-    '#1c7ed6',
-    '#1971c2',
-    '#1563a8',
-    '#124f8f',
     '#0f3d75',
+    '#124f8f',
+    '#1563a8',
+    '#1971c2',
+    '#1c7ed6',
+    '#1f7cd6',
+    '#228be6',
+    '#2b8ae6',
+    '#339af0',
+    '#3e9ef2',
+    '#4dabf7',
+    '#5caffc',
+    '#74c0fc',
   ];
+
 
 
 
@@ -57,7 +68,7 @@ const StatsChart: React.FC = () => {
         Service Requests Statistics
       </Title>
       <Box mb = 'md'>
-      <FilterGraph value={groupBy} onChange={setGroupBy}/>
+      <GroupByEntry value={groupBy} onChange={setGroupBy}/>
       </Box>
       <SegmentedControl
         fullWidth
@@ -69,7 +80,9 @@ const StatsChart: React.FC = () => {
           { label: 'Pie Chart', value: 'pie' },
         ]}
       />
-
+      <Title order={2} mb="lg" mt ='lg' c="secondaryBlues.7">
+        {groupByTitleMap[groupBy]}
+      </Title>
       {loading ? (
         <Center h={200}>
           <Loader />
@@ -78,19 +91,19 @@ const StatsChart: React.FC = () => {
         <Box w="100%" style={{ display: 'flex', justifyContent: 'center', }}>
         <PieChart
           h={200}
-          size={300}
-          data={data.map((item, index) => ({
+          size={500}
+          data={sortedData.map((item, index) => ({
             name: String(item[groupBy]),
             value: Number(item.count),
             color: blueShades[index % blueShades.length],
           }))}
           strokeWidth={2}
-          tooltipDataSource="segment"
           labelsPosition="outside"
-          labelsType="value"
+          labelsType="percent"
           withLabels
           withLabelsLine={false}
           withTooltip
+          labelColor="black"
         />
         </Box>
       ) : (
@@ -99,7 +112,7 @@ const StatsChart: React.FC = () => {
           data={data}
           yAxisLabel="Amount"
           dataKey={groupBy}
-          series={[{ name: 'count', color: 'blue' }]}
+          series={[{ name: 'count', color: 'blue', label:"Requests" }]}
           withTooltip
         />
       )}

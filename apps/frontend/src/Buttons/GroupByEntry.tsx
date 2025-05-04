@@ -1,5 +1,6 @@
 import React from 'react';
-import { Select, Flex } from '@mantine/core';
+import { Select, Flex, Box } from '@mantine/core';
+import { IconChartCandle } from '@tabler/icons-react';
 
 interface Option {
   value: string;
@@ -27,6 +28,7 @@ const GroupByEntry: React.FC<GroupByEntryProps> = ({ value, onChange }) => {
   return (
     <Flex align="center" gap="sm">
       <Select
+          leftSection={<IconChartCandle />}
         value={value}
         onChange={handleChange}
         data={options}
@@ -34,8 +36,22 @@ const GroupByEntry: React.FC<GroupByEntryProps> = ({ value, onChange }) => {
         radius="sm"
         size="xs"
         required
-        style={{ width: 240, color: '#285CC6' }}
-      />
+          style={{ width: 220}}
+
+          styles={{
+            input: {
+              backgroundColor: '#FFD43B',
+              color: '#285CC6',
+              fontWeight: 500,
+            },
+            section: {
+              color: '#285CC6',
+            },
+            dropdown: {
+              backgroundColor: '#fff',
+              borderRadius: 6,
+            },
+          }}/>
     </Flex>
   );
 };
