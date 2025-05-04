@@ -49,7 +49,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
                         m="1px"
                         color="blueBase.6"
                         value={floor.toString()}
-                        onChange={(value) => setFloor(parseInt(value))}
+                        onChange={(value) => setFloor(parseInt(value), mapProps.currentNode?.nodeType != 'staircase' || mapProps.selectedTool != 'add-edge')}
                         data={[
                             { label: 'FP', value: '6' },
                             { label: '3D', value: '5' },
@@ -127,7 +127,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
                             m="1px"
                             color="blueBase.6"
                             value={floor.toString()}
-                            onChange={(value) => setFloor(parseInt(value))}
+                            onChange={(value) => setFloor(parseInt(value), mapProps.currentNode?.nodeType != 'staircase' || mapProps.selectedTool != 'add-edge')}
                             data={[
                                 { label: 'BC', value: '7' },
                                 { label: 'FK', value: '6' },

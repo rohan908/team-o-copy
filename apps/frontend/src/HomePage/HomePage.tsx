@@ -71,7 +71,7 @@ export function HomePage() {
             <DisclaimerPopup />
             <Grid gutter="md" h="100%" mt={'2%'}>
                 {/* Left Context */}
-                <Grid.Col span={6} pl="5%" p="xl">
+                <Grid.Col span={6} pl="5%" p="lg">
                     <Stack justify="flex-start" h="100%" align="flex-start">
                         <HoverUnderline>
                             <Title
@@ -87,8 +87,18 @@ export function HomePage() {
                     </Stack>
                 </Grid.Col>
                 {/* Right Content */}
-                <Grid.Col span={5}>
-                    <Flex h="100%" w={'100%'} align="center" justify="center" pt="6%">
+                <Grid.Col span={6}>
+                    <Flex
+                        h="100%"
+                        w={'100%'}
+                        align="center"
+                        justify="center"
+                        // mt="10px"
+                        style={{
+                            overflow: 'hidden',
+                            borderRadius: '8px',
+                        }}
+                    >
                         <ContentSwitcher />
                     </Flex>
                 </Grid.Col>
