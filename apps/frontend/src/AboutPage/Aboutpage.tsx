@@ -141,7 +141,7 @@ const AnimatedTooltip = ({ children, member, theme }: AnimatedTooltipProps) => {
                             rotate: rotate,
                             backgroundColor: bubbleColor,
                         }}
-                        className="absolute left-full top-1/2 z-50 flex flex-col items-center justify-center rounded-full px-5 py-3 shadow-xl ml-3 min-w-[180px] max-w-[220px]"
+                        className="absolute left-full top-1/2 z-50 flex flex-col items-center justify-center rounded-xl px-5 py-3 shadow-xl ml-3 min-w-[180px] max-w-[220px]"
                     >
                         <div
                             className="absolute -left-1.5 top-1/2 w-3 h-3 transform -translate-y-1/2 rotate-45"
