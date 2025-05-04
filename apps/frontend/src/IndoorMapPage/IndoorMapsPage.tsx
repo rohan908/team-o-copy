@@ -20,7 +20,7 @@ export function IndoorMapsPage() {
     const role = user?.publicMetadata?.role;
 
     return (
-        <Flex direction="row" h="100vh" w="100vw" bg="#EBF2FF">
+        <Flex direction="row" h="100%" mih="100vh" w="100vw" bg="#EBF2FF">
             <Box w={320} mt={60} bg="#EBF2FF">
                 {/* Sidebar Panel */}
                 <Title order={1} fz={'xl'} pt={'8px'} mb={'sm'} ta={'center'} c={'#0E3B99'}>
