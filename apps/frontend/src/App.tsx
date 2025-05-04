@@ -3,6 +3,7 @@ import { Routing } from './home-page/routing.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/charts/styles.css';
 import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
 import { RequestProvider } from './contexts/RequestContext.tsx';
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
