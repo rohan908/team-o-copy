@@ -1,5 +1,3 @@
-// src/routes/MergeFormHelper.ts
-
 export function MergeForms(
     groupedArrays: Array<Array<{ [key: string]: any; _count: { [key: string]: number } }>>,
     groupField: string
