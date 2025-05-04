@@ -131,7 +131,12 @@ export function createNewCamera(
 
         const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
-        camera.position.set(100, 300, 300);
+        console.log(position);
+        if (position) {
+            camera.position.set(position.x, position.y, position.z);
+        } else {
+            camera.position.set(0, 0, 330);
+        }
         camera.zoom = 1.2;
         camera.up.set(0, 0, 1);
         camera.lookAt(0, 0, 0);

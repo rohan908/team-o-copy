@@ -27,11 +27,7 @@ import { useLocation } from 'react-router-dom';
 import { Vector3 } from 'three';
 import { Tween } from '@tweenjs/tween.js';
 
-interface DraggableMapProps {
-    onHomePage: boolean;
-}
-
-export function DraggableMap(props: DraggableMapProps) {
+export function DraggableMap() {
     /*
       References that exist outside renders, changeable floor state, and properties like theme
      */
