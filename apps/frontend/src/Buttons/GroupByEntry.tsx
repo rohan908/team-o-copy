@@ -13,7 +13,7 @@ interface GroupByEntryProps {
 
 const options: Option[] = [
   { value: 'priority', label: 'Priority Level' },
-  { value: 'hospital', label: 'Hospital Name' },
+  { value: 'hospital', label: 'Hospital Location' },
   { value: 'employeeName', label: 'Employee Name' },
 ];
 

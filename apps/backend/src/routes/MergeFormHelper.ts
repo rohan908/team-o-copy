@@ -9,6 +9,7 @@ export function MergeForms(
     groupedArrays.flat().forEach((item) => {
         const key = item[groupField];
         const count = item._count[groupField];
+        if (key === '' || key == null) return;
         counts[key] = (counts[key] || 0) + count;
     });
 

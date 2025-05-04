@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, PieChart } from '@mantine/charts';
-import { SegmentedControl, Stack, Loader, Center, Title, Box } from '@mantine/core';
+import { SegmentedControl, Loader, Center, Title, Box } from '@mantine/core';
 import FilterGraph from "../Buttons/FilterGraph.tsx";
 interface ChartData {
   [key: string]: string | number;
@@ -54,6 +54,8 @@ const StatsChart: React.FC = () => {
           <Loader />
         </Center>
       ) : type === 'pie' ? (
+        <Box w="100%" style={{ display: 'flex', justifyContent: 'center', }}>
+
         <PieChart
           h={300}
           data={data.map((item) => ({
@@ -63,6 +65,7 @@ const StatsChart: React.FC = () => {
           }))}
           withTooltip
         />
+        </Box>
       ) : (
         <BarChart
           h={300}
