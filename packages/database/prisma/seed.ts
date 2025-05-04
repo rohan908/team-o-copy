@@ -53,7 +53,10 @@ export async function populate() {
         },
     });
 
-  // defines security SR data
+  /*
+    defines security SR data
+    Do not alter the naming even if slightly strange, needs to match employee table
+   */
   const securityRequests = await PrismaClient.securityServiceRequest.createMany({
     data: [
       { requestID: 15, employeeName: 'Rohan Inamdar', department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "07:16:PM", security: "Building Security", status: "Done", priority: "Medium", hospital: "20 Patriot Place", description: "" },
@@ -69,7 +72,10 @@ export async function populate() {
     ],
   });
 
-  // defines language SR data
+  /*
+    defines language SR data
+    Do not alter the naming even if slightly strange, needs to match employee table
+   */
   const languageRequests = await PrismaClient.languageServiceRequest.createMany({
     data: [
       { requestID: 25, employeeName: 'Rohan Inamdar', department: "Gastroenterology and Hepatology", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "01:11:AM", language: "English", status: "Done", priority: "Low", hospital: "BWH Campus", description: "" },
@@ -85,7 +91,10 @@ export async function populate() {
     ],
   });
 
-  // defines sanitation SR data
+  /*
+    defines sanitation SR data
+    Do not alter the naming even if slightly strange, needs to match employee table
+   */
   const sanitationRequests = await PrismaClient.sanitationServiceRequest.createMany({
     data: [
       { requestID: 35, employeeName: 'Rohan Inamdar', department: "Endocrinology", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "07:27:PM", cleanupType: "Spill Cleanup", status: "Done", priority: "High", hospital: "20 Patriot Place", description: "" },
@@ -102,7 +111,10 @@ export async function populate() {
   });
 
 
-  // defines security SR data
+  /*
+    defines security SR data
+    Do not alter the naming even if slightly strange, needs to match employee table
+   */
   const maintenanceRequests = await PrismaClient.maintenanceServiceRequest.createMany({
     data: [
       { requestID: 45, employeeName: 'Rohan Inamdar', department: "Pulmonary", createdAt: "2025-04-02T02:39:00Z", date: "May 3, 2025", time: "08:24:PM", maintenanceType: "Medical Equipment", status: "Done", priority: "Low", hospital: "22 Patriot Place", description: "" },
