@@ -35,7 +35,7 @@ const StatsChart: React.FC = () => {
   return (
     <Box p="xl" bg="primaryBlues.1" w="100%" h="100%" bd="lg" flex="column">
       <Title order={1} mb="sm" c="secondaryBlues.7" ta="left" fz="xl">
-        Group Data by:
+        Service Requests Statistics
       </Title>
       <FilterGraph value={groupBy} onChange={setGroupBy} />
       <SegmentedControl
@@ -55,14 +55,20 @@ const StatsChart: React.FC = () => {
         </Center>
       ) : type === 'pie' ? (
         <Box w="100%" style={{ display: 'flex', justifyContent: 'center', }}>
-
         <PieChart
-          h={300}
+          h={200}
+          size={300}
           data={data.map((item) => ({
             name: String(item[groupBy]),
             value: Number(item.count),
             color: 'blue',
           }))}
+          strokeWidth={2}
+          withLabelsLine
+          tooltipDataSource="segment"
+          labelsPosition="outside"
+          labelsType="value"
+          withLabels
           withTooltip
         />
         </Box>
