@@ -12,6 +12,7 @@ interface FloorSwitchBoxProps {
     incrementPath?: () => void;
     decrementPath?: () => void;
     onCollapseChange?: (isCollapsed: boolean) => void;
+    pathFloors?: number[];
     building: string;
 }
 
@@ -20,6 +21,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
     setFloor,
     incrementPath,
     decrementPath,
+    pathFloors,
     building,
 }) => {
     const theme = useMantineTheme();
@@ -81,7 +83,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
                             { label: 'F3', value: '3' },
                             { label: 'F2', value: '2' },
                             { label: 'F1', value: '1' },
-                        ]}
+                        ].filter((item) => pathFloors.includes(parseInt(item.value)))} // filter out floors without path
                         styles={{
                             root: {
                                 borderRadius: 30,

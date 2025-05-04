@@ -56,6 +56,7 @@ export function DraggableMap(props: DraggableMapProps) {
     const [floorState, setFloorState] = useState(5);
     const [sceneIndexState, setSceneIndexState] = useState(0);
     const [pathIndex, setPathIndex] = useState(0);
+    const [pathFloors, setPathFloors] = useState<number[]>([5]);
 
     // used to space apart floors and nodes and edges on those floors
     const floorHeight = 10.5;
@@ -338,6 +339,7 @@ export function DraggableMap(props: DraggableMapProps) {
     const handlePath = (firstNodeId: number, lastNodeId: number) => {
         return findPath(firstNodeId, lastNodeId).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
+            const floors: number[] = [5];
             // Add dispatch for navSelection
             navSelection.dispatch({
                 type: 'SET_PATH_REQUEST',
@@ -356,6 +358,14 @@ export function DraggableMap(props: DraggableMapProps) {
                         firstNodeId,
                         lastNodeId
                     ); //Create the node from its data
+                    // this is used to filter out floor switcher options based on the floors in the path
+                    let floor = node.floor;
+                    if (floor == 2 || floor == 3) {
+                        floor += floor;
+                    }
+                    if (!floors.includes(floor)) {
+                        floors.push(floor);
+                    }
                 } else {
                     console.error('Node id not found: ', id);
                 }
@@ -376,6 +386,8 @@ export function DraggableMap(props: DraggableMapProps) {
                     }
                 }
             }
+            floors.push(6); // add fov mode option if a path exists
+            setPathFloors(floors);
         });
     };
 
@@ -479,6 +491,8 @@ export function DraggableMap(props: DraggableMapProps) {
 
         // clear previous path
         clearPathObjects(scenesRef.current);
+        // clear floor options
+        setPathFloors([5]);
 
         console.log('finding path:', firstNodeId, lastNodeId);
 
@@ -662,6 +676,7 @@ export function DraggableMap(props: DraggableMapProps) {
                     setFloor={handleFloorChange}
                     incrementPath={incrementPath}
                     decrementPath={decrementPath}
+                    pathFloors={pathFloors}
                     building={selectedHospitalName || ''}
                 />
             )}
