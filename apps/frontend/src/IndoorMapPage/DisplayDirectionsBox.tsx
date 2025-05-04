@@ -4,13 +4,15 @@
  NOTES: CTRL+F !!! for changes that may need to be made
  I use ({Date}) in comments to manually track myself
  */
-import { Accordion, Box, Text, Group, Divider, Flex } from '@mantine/core';
+import {Accordion, Box, Text, Group, Divider, Flex, SegmentedControl, Button} from '@mantine/core';
 import { GetTextDirections } from './GetTextDirections.tsx';
-import { useMemo } from 'react';
+import {useMemo, useState} from 'react';
 import { usePathContext, useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
+import { useUser, SignOutButton, SignInButton } from '@clerk/clerk-react';
+
 import {
     IconArrowLeft,
     IconArrowRight,
@@ -19,6 +21,7 @@ import {
     IconArrowUp,
 } from '@tabler/icons-react';
 import TTSButton from '../Buttons/TTSButton.tsx';
+import {Link} from "react-router-dom";
 
 /**
  *
@@ -40,10 +43,17 @@ function getPathNodes(nodeIds: number[], allNodes: NodeDataType[]): NodeDataType
 }
 
 export function DisplayDirectionsBox() {
-    const { department, selectedHospital } = useTimeline();
+    const { department, selectedHospital, setDepartment} = useTimeline();
     const pathNodes = usePathContext();
     const navSelection = useNavSelectionContext();
     const nodeIds = pathNodes.state.pathSelectRequest?.NodeIds;
+    const [distanceType, setDistanceType] = useState("ft");
+    // const [turnLeft, setTurnLeft] = useState(false);
+    // const [turnRight, setTurnRight] = useState(false);
+    let turnLeft = false;
+    let turnRight = false;
+    const { isSignedIn, user } = useUser();
+    const role = user?.publicMetadata?.role;
 
     const allNodes = useAllNodesContext();
 
@@ -65,6 +75,20 @@ export function DisplayDirectionsBox() {
             return 1;
         }
     };
+
+    function convertFeetToMeters(input: number) {
+      if (distanceType === "ft"){
+        if (input == 0){
+          return 9;
+        }
+        return input;
+      } else {
+        if (input == 0){
+          return 2.74;
+        }
+        return input * 0.3048;
+      }
+    }
 
     // only call GetTextDirections if/when pathNodes change
     const directions = useMemo(() => {
@@ -128,7 +152,7 @@ export function DisplayDirectionsBox() {
     return (
         <Box
             w="80%"
-            h="400px"
+            h={isSignedIn && role === 'admin' ? "340px" : "400px"}
             style={{
                 overflow: 'hidden',
                 borderRadius: '8px',
@@ -138,12 +162,14 @@ export function DisplayDirectionsBox() {
                         : '0px 0px 0px 0px #FFFFFF',
             }}
         >
+          <Flex direction={"column"} justify={"center"}>
             <Box style={{ overflowY: 'auto' }}>
-                <Accordion
+              <Accordion
+                    w={"100%"}
+                    h={isSignedIn && role === 'admin' ? "275px" : "335px"}
                     multiple
                     styles={{
                         root: {
-                            height: '450px',
                             overflowY: 'auto',
                         },
                         item: {
@@ -164,48 +190,91 @@ export function DisplayDirectionsBox() {
                         const floorTTS = direction.map((step) => {
                             if (step.Direction.startsWith('Take')) return step.Direction;
                             if (step.Direction === 'Straight')
-                                return `Continue straight for ${(step.Distance * getScaleFactor()).toFixed(0)} feet.`;
+                                return `Continue straight for ${convertFeetToMeters(step.Distance * 1.5).toFixed(0)} ${distanceType}.`;
                             return `Turn ${step.Direction.toLowerCase()}`;
                         });
                         return (
                             <Accordion.Item key={floor} value={`floor-${floor}`}>
                                 <Accordion.Control>
                                     <Group>
-                                        <Text fw={700} size="md" c="blue.7">
-                                            {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
-                                            {/* Changing for Faulkner and Chestnut*/}
-                                            {Number(floor) === 1 ? 'Floor 1' : ''}
-                                            {Number(floor) === 2 ? 'Floor 3' : ''}
-                                            {Number(floor) === 3 ? 'Floor 4' : ''}
-                                            {Number(floor) === 4 ? 'Chestnut' : ''}
-                                            {Number(floor) === 5 ? 'Faulkner' : ''}
-                                            {Number(floor) === 6 ? 'BWH' : ''}
-                                        </Text>
-                                        <TTSButton text={floorTTS} />
+                                      <Flex direction={"column"} gap="0px" align={"center"}>
+                                      <Text fw={700} size="md" c="secondaryBlues.5">
+                                        {/* Stupid ass logic to change the floor bc we didn't do it right the first time*/}
+                                        {/* Changing for Faulkner and Chestnut*/}
+                                        {Number(floor) === 1 ? 'Floor 1' : ''}
+                                        {Number(floor) === 2 ? 'Floor 3' : ''}
+                                        {Number(floor) === 3 ? 'Floor 4' : ''}
+                                        {Number(floor) === 4 ? 'Chestnut' : ''}
+                                        {Number(floor) === 5 ? 'Faulkner' : ''}
+                                        {Number(floor) === 6 ? 'BWH' : ''}
+                                      </Text>
+                                      {/*<SegmentedControl*/}
+                                      {/*  maw={"100px"}*/}
+                                      {/*  orientation="horizontal"*/}
+                                      {/*  bg={"secondaryBlues.5"}*/}
+                                      {/*  c={"white"}*/}
+                                      {/*  color={"secondaryBlues.2"}*/}
+                                      {/*  value={distanceType}*/}
+                                      {/*  onChange={setDistanceType}*/}
+                                      {/*  data={[*/}
+                                      {/*    { label: 'FT', value: "feet" },*/}
+                                      {/*    { label: 'M', value: 'meters' },*/}
+                                      {/*  ]}*/}
+                                      {/*  styles={{*/}
+                                      {/*    root: {*/}
+                                      {/*      borderRadius: 30,*/}
+                                      {/*    },*/}
+                                      {/*    label: {*/}
+                                      {/*      fontWeight: 600,*/}
+                                      {/*      textSize: '14px',*/}
+                                      {/*      textAlign: 'center',*/}
+                                      {/*      color: 'white',*/}
+                                      {/*    },*/}
+                                      {/*    indicator: {*/}
+                                      {/*      borderRadius: 30,*/}
+                                      {/*    },*/}
+                                      {/*  }}/>*/}
+                                      </Flex>
+                                      <TTSButton text={floorTTS} />
                                     </Group>
                                 </Accordion.Control>
                                 <Accordion.Panel>
                                     {direction.map((step, idx) => {
+                                        if (step.Direction === "Left"){
+                                          turnLeft = true;
+                                          return null;
+                                        }
+                                        else if (step.Direction === "Right"){
+                                          turnRight = true;
+                                          return null;
+                                        }
+
                                         const icon = step.Direction.toLowerCase().includes(
                                             'elevator'
                                         ) ? (
                                             <IconStairs size={20} color="#0E3B99" />
                                         ) : step.Direction.toLowerCase().includes('stairs') ? (
                                             <IconStairs size={20} color="#0E3B99" />
-                                        ) : step.Direction === 'Straight' ? (
-                                            <IconArrowUp size={20} color="#0E3B99" />
-                                        ) : step.Direction === 'Left' ? (
+                                          ) : turnLeft ? (
                                             <IconArrowLeft size={16} color="#0E3B99" />
-                                        ) : (
+                                          ) : turnRight ?  (
                                             <IconArrowRight size={16} color="#0E3B99" />
+                                          ) : (
+                                            <IconArrowUp size={20} color="#0E3B99" />
                                         );
 
                                         const label = step.Direction.startsWith('Take')
                                             ? step.Direction
-                                            : step.Direction === 'Straight'
-                                              ? `Continue straight for ${(step.Distance * 1.5).toFixed(0)} feet.`
-                                              : `Turn ${step.Direction.toLowerCase()}`;
+                                            : turnLeft
+                                              ? `Turn left`
+                                              : turnRight
+                                              ? `Turn right`
+                                              : 'Continue straight';
 
+                                        if (step.Direction === 'Straight'){
+                                          turnLeft = false;
+                                          turnRight = false;
+                                        }
                                         return (
                                             <Box key={idx} mb="xs">
                                                 <Group align="center">
@@ -220,7 +289,7 @@ export function DisplayDirectionsBox() {
                                                         </Text>
                                                     </Flex>
                                                 </Group>
-                                                <Divider color="yellowAccent.4" my="xs" />
+                                                <Divider color="yellowAccent.4" my="xs" label={`${convertFeetToMeters(step.Distance * 1.5).toFixed(0)} ${distanceType}`}/>
                                             </Box>
                                         );
                                     })}
@@ -229,7 +298,46 @@ export function DisplayDirectionsBox() {
                         );
                     })}
                 </Accordion>
+              <Flex w="100%" direction={"row"} gap="md" ta='center' mt="xs" justify="center" align={"center"}>
+                {/*<Button color="secondaryBlues.5" size='xs' onClick={() => setDepartment(null)}>*/}
+                {/*  I've Arrived*/}
+                {/*</Button>*/}
+                <Button component={Link} to="/" color="secondaryBlues.5" fz="14px" size='xs'>
+                  Navigation Complete
+                </Button>
+                <SegmentedControl
+                  orientation="vertical"
+                  bg={"secondaryBlues.5"}
+                  c={"white"}
+                  size={"xs"}
+                  lh={"xs"}
+                  color={"secondaryBlues.2"}
+                  value={distanceType}
+                  onChange={setDistanceType}
+                  data={[
+                    { label: 'FT', value: "ft" },
+                    { label: 'M', value: 'meters' },
+                  ]}
+                  styles={{
+                    root: {
+                      borderRadius: 30,
+                    },
+                    label: {
+                      fontWeight: 600,
+                      fontSize: '12px',
+                      textAlign: 'center',
+                      color: 'white',
+                    },
+                    innerLabel: {
+
+                    },
+                    indicator: {
+                      borderRadius: 30,
+                    },
+                  }}/>
+              </Flex>
             </Box>
+          </Flex>
         </Box>
     );
 }

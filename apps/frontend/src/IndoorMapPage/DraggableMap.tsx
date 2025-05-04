@@ -15,21 +15,19 @@ import { findPath } from './HelperFiles/FindPathRouting.ts';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
 import { clearPathObjects, clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
 import { createNode } from './HelperFiles/NodeFactory.tsx';
+import { getNode, mapSetup } from './HelperFiles/MapSetup.tsx';
 import {
     createNewCamera,
     createNewOrbitControls,
-    getNode,
-    mapSetup,
-} from './HelperFiles/MapSetup.tsx';
+    moveCamera,
+} from './HelperFiles/CameraControls.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { useLocation } from 'react-router-dom';
+import { Vector3 } from 'three';
+import { Tween } from '@tweenjs/tween.js';
 
-interface DraggableMapProps {
-    onHomePage: boolean;
-}
-
-export function DraggableMap(props: DraggableMapProps) {
+export function DraggableMap() {
     /*
       References that exist outside renders, changeable floor state, and properties like theme
      */
@@ -48,10 +46,13 @@ export function DraggableMap(props: DraggableMapProps) {
 
     // Animation related refs
     const animationRef = useRef<FlowingTubeAnimation | null>(null);
+    const tweenRef = useRef<Tween | null>(null);
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
 
     const [floorState, setFloorState] = useState(5);
     const [sceneIndexState, setSceneIndexState] = useState(0);
+    const [pathIndex, setPathIndex] = useState(0);
+    const [pathFloors, setPathFloors] = useState<number[]>([5]);
 
     // used to space apart floors and nodes and edges on those floors
     const floorHeight = 10.5;
@@ -60,9 +61,11 @@ export function DraggableMap(props: DraggableMapProps) {
     const location = useLocation();
     const isIndoorMapPage = location.pathname.includes('IndoorMapPage');
 
+    const canvasRef = useRef(null);
+
     // set up map
     const { cameraRef, rendererRef, scenesRef, controlRef } = mapSetup({
-        canvasId: 'insideMapCanvas',
+        canvasRef: canvasRef,
     });
 
     const handleHospitalChange = (hospitalName: string) => {
@@ -72,6 +75,7 @@ export function DraggableMap(props: DraggableMapProps) {
                 clearSceneObjects(scenesRef.current);
                 handleThreeDHospitalChange();
                 setSceneIndexState(0);
+                setFloorState(5);
             }
         } else if (hospitalName === 'Chestnut Hill') {
             clearSceneObjects(scenesRef.current);
@@ -137,8 +141,7 @@ export function DraggableMap(props: DraggableMapProps) {
     };
 
     const setTwoDView = () => {
-        const canvasElement = document.getElementById('insideMapCanvas');
-        if (!canvasElement) {
+        if (!canvasRef.current) {
             console.error('Canvas element not found');
             return;
         }
@@ -147,13 +150,20 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasElement);
-        newCamera.position.set(0, 0, 200);
+        const newCamera = createNewCamera(
+            canvasRef.current,
+            'orthographic',
+            rendererRef.current,
+            cameraRef.current.position,
+            cameraRef.current
+        );
         newCamera.zoom = 1.5;
-        newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
-
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '2D');
+        controlRef.current = createNewOrbitControls(
+            newCamera,
+            canvasRef.current,
+            controlRef.current
+        );
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
@@ -161,8 +171,7 @@ export function DraggableMap(props: DraggableMapProps) {
     };
 
     const setThreeDView = () => {
-        const canvasElement = document.getElementById('insideMapCanvas');
-        if (!canvasElement) {
+        if (!canvasRef.current) {
             console.error('Canvas element not found');
             return;
         }
@@ -170,21 +179,33 @@ export function DraggableMap(props: DraggableMapProps) {
         if (controlRef.current) {
             controlRef.current.dispose();
         }
+        console.log(cameraRef.current);
+        if (rendererRef.current && cameraRef.current && controlRef.current) {
+            const newCamera = createNewCamera(
+                canvasRef.current,
+                'perspective',
+                rendererRef.current,
+                undefined,
+                cameraRef.current
+            );
+            //newCamera.updateProjectionMatrix();
+            cameraRef.current = newCamera;
 
-        const newCamera = createNewCamera(canvasElement);
-        newCamera.position.set(100, 200, 200);
-        if (props.onHomePage) {
-            newCamera.zoom = 1;
-        } else {
-            newCamera.zoom = 1.2;
+            controlRef.current = createNewOrbitControls(
+                newCamera,
+                canvasRef.current,
+                controlRef.current
+            );
+            tweenRef.current = moveCamera(
+                cameraRef.current,
+                controlRef.current,
+                new THREE.Vector3(100, 200, 200),
+                1000
+            );
         }
-        newCamera.updateProjectionMatrix();
-        cameraRef.current = newCamera;
-
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '3D');
 
         if (rendererRef.current) {
-            rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
+            rendererRef.current.render(scenesRef.current[sceneIndexState], cameraRef.current);
         }
     };
 
@@ -211,6 +232,7 @@ export function DraggableMap(props: DraggableMapProps) {
         pathVisibility(newFloor, true); // show path on new floor
 
         if (newFloor < 5) {
+            // 3D view
             setTwoDView();
         } else if (newFloor == 5) {
             setThreeDView();
@@ -219,14 +241,98 @@ export function DraggableMap(props: DraggableMapProps) {
             pathVisibility(2, true);
             pathVisibility(3, true);
             pathVisibility(4, true);
+        } else if (newFloor == 6) {
+            // fov view
+            pathVisibility(1, true);
+            pathVisibility(2, true);
+            pathVisibility(3, true);
+            pathVisibility(4, true);
+            // record the orientation of the previous location and pass it to the fov camera.
+            const previousCamera = cameraRef.current;
+            const direction = new THREE.Vector3();
+            previousCamera.userData.fovAngles.phi =
+                Math.atan2(direction.x, direction.y) - Math.PI / 1.25; // this factor could be calculated based on the angle from the parking lot to the origin of the canvas to horizontal but vibe coding this works given we only have one parking lot location
+            previousCamera.userData.fovAngles.theta = Math.asin(direction.z);
+            const path = navSelection.state.pathSelectRequest?.NodeIds;
+            if (path && path.length > 0) {
+                setPathIndex(0);
+                const node = getNode(path[0], allNodes);
+                const pos = new Vector3(node!.x, node!.y, 4);
+                const fovCC = () => {
+                    tweenRef.current = null;
+                    controlRef.current.enabled = false;
+                    cameraRef.current = createNewCamera(
+                        canvasRef.current,
+                        'fov',
+                        rendererRef.current,
+                        pos,
+                        previousCamera
+                    );
+                };
+                tweenRef.current = moveCamera(
+                    cameraRef.current,
+                    controlRef.current,
+                    pos,
+                    1000,
+                    fovCC
+                );
+            }
         }
         controlRef.current.update();
         setFloorState(newFloor);
     };
 
+    const moveCameraAlongPath = (index: number) => {
+        const previousCamera = cameraRef.current;
+        const path = navSelection.state.pathSelectRequest?.NodeIds;
+        if (path && path.length > 0) {
+            const node = getNode(path[index], allNodes);
+            let floor = node.floor;
+            if (floor > 1) {
+                floor += 1;
+            }
+            const pos = new Vector3(node!.x, node!.y, (floor - 1) * floorHeight + 4);
+            // recreate the camera after position change because for some reason the event listeners get thrown out when moving the camera
+            const fovCallback = () => {
+                tweenRef.current = null;
+                controlRef.current.enabled = false;
+
+                cameraRef.current = createNewCamera(
+                    canvasRef.current,
+                    'fov',
+                    rendererRef.current,
+                    pos,
+                    previousCamera
+                );
+            };
+            tweenRef.current = moveCamera(
+                cameraRef.current,
+                controlRef.current,
+                pos,
+                1000,
+                fovCallback
+            );
+        }
+    };
+
+    const incrementPath = () => {
+        const path = navSelection.state.pathSelectRequest?.NodeIds;
+        if (!path) return;
+        const nextIndex = Math.min(pathIndex + 1, path.length - 1);
+        setPathIndex(nextIndex);
+        moveCameraAlongPath(nextIndex);
+    };
+
+    const decrementPath = () => {
+        const previousIndex = Math.max(pathIndex - 1, 0);
+        setPathIndex(previousIndex);
+        moveCameraAlongPath(previousIndex);
+    };
+
     const handlePath = (firstNodeId: number, lastNodeId: number) => {
         return findPath(firstNodeId, lastNodeId).then(async (pathres) => {
             const ids = pathres.result.pathIDs;
+            const floors: number[] = [5];
             // Add dispatch for navSelection
             navSelection.dispatch({
                 type: 'SET_PATH_REQUEST',
@@ -245,6 +351,14 @@ export function DraggableMap(props: DraggableMapProps) {
                         firstNodeId,
                         lastNodeId
                     ); //Create the node from its data
+                    // this is used to filter out floor switcher options based on the floors in the path
+                    let floor = node.floor;
+                    if (floor == 2 || floor == 3) {
+                        floor += 1;
+                    }
+                    if (!floors.includes(floor)) {
+                        floors.push(floor);
+                    }
                 } else {
                     console.error('Node id not found: ', id);
                 }
@@ -265,6 +379,8 @@ export function DraggableMap(props: DraggableMapProps) {
                     }
                 }
             }
+            floors.push(6); // add fov mode option if a path exists
+            setPathFloors(floors);
         });
     };
 
@@ -282,9 +398,6 @@ export function DraggableMap(props: DraggableMapProps) {
                 object.userData.objectType = 'Floor';
                 const floor = zIndex + 1;
                 object.userData.floor = floor;
-                if (floor > floorState) {
-                    object.visible = false;
-                }
 
                 // different colors for floors and walls
                 if (objectType == 'floor') {
@@ -309,7 +422,7 @@ export function DraggableMap(props: DraggableMapProps) {
         });
     };
 
-    const handleThreeDHospitalChange = () => {
+    const handleThreeDHospitalChange = (init?: THREE.Vector3) => {
         const loadPromises = [];
         loadPromises.push(loadObjectAsync('../../public/Models/Floor 1 Floor.obj', 0, 'floor'));
         loadPromises.push(loadObjectAsync('../../public/Models/Floor 1 Walls.obj', 0, 'walls'));
@@ -334,8 +447,7 @@ export function DraggableMap(props: DraggableMapProps) {
     };
 
     const handleTwoDHospitalChange = () => {
-        const canvasElement = document.getElementById('insideMapCanvas');
-        if (!canvasElement) {
+        if (!canvasRef.current) {
             console.error('Canvas element not found');
             return;
         }
@@ -344,17 +456,22 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasElement);
-        newCamera.position.set(0, 0, 330);
-        if (props.onHomePage) {
-            newCamera.zoom = 1;
-        } else {
-            newCamera.zoom = 1.25;
-        }
+        const newCamera = createNewCamera(
+            canvasRef.current,
+            'orthographic',
+            rendererRef.current,
+            undefined,
+            cameraRef.current
+        );
+        //newCamera.position.set(0, 0, 330);
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;
 
-        controlRef.current = createNewOrbitControls(newCamera, canvasElement, '2D');
+        controlRef.current = createNewOrbitControls(
+            newCamera,
+            canvasRef.current,
+            controlRef.current
+        );
 
         if (rendererRef.current) {
             rendererRef.current.render(scenesRef.current[sceneIndexState], newCamera);
@@ -373,6 +490,8 @@ export function DraggableMap(props: DraggableMapProps) {
 
         // clear previous path
         clearPathObjects(scenesRef.current);
+        // clear floor options
+        setPathFloors([5]);
 
         console.log('finding path:', firstNodeId, lastNodeId);
 
@@ -380,12 +499,10 @@ export function DraggableMap(props: DraggableMapProps) {
             handlePath(firstNodeId, lastNodeId);
             const pathPromise = handlePath(firstNodeId, lastNodeId);
             // switch floor after path is created so the path on above floors is hidden properly
-            pathPromise.then(() => {
-                handleFloorChange(1);
-            });
-        } else {
-            handleFloorChange(1);
+            pathPromise.then(() => {});
         }
+
+        setPathIndex(0);
     }, [selectedDepartment]);
 
     // this useEffect runs only on mount and initializes some things.
@@ -405,12 +522,8 @@ export function DraggableMap(props: DraggableMapProps) {
         ) {
             handleTwoDHospitalChange();
         } else {
-            handleThreeDHospitalChange().then(() => {
-                if (selectedDepartment) {
-                    // if a department has already been selected start with only floor 1
-                    handleFloorChange(1);
-                }
-            });
+            handleThreeDHospitalChange();
+            setFloorState(5);
         }
     }, []);
 
@@ -540,6 +653,11 @@ export function DraggableMap(props: DraggableMapProps) {
             }
             animationFrameId = window.requestAnimationFrame(animate);
 
+            if (tweenRef.current) {
+                tweenRef.current.update();
+            }
+            controlRef.current.update();
+
             return () => {
                 window.cancelAnimationFrame(animationFrameId);
                 clearSceneObjects(scenesRef.current);
@@ -555,11 +673,15 @@ export function DraggableMap(props: DraggableMapProps) {
                     floor={floorState}
                     onCollapseChange={() => true}
                     setFloor={handleFloorChange}
+                    incrementPath={incrementPath}
+                    decrementPath={decrementPath}
+                    pathFloors={pathFloors}
                     building={selectedHospitalName || ''}
                 />
             )}
             <canvas
                 id="insideMapCanvas"
+                ref={canvasRef}
                 style={{ width: '100%', height: '100%', position: 'relative' }}
             />
         </Box>
