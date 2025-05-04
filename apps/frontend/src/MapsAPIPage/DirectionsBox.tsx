@@ -3,6 +3,9 @@ import { Box, ScrollArea, Text, List, Button, Divider, Transition, Flex } from '
 import { Step } from './Steps';
 import { Link } from 'react-router-dom';
 import TTSButton from "../Buttons/TTSButton.tsx"; //use ive arrived button to direct to indoor
+import { useTimeline } from '../HomePage/TimeLineContext.tsx';
+import { useNavigate } from 'react-router-dom';
+
 import {
   IconArrowBearRight,
   IconArrowLeft,
@@ -23,6 +26,8 @@ const DirectionsBox = (props: Props) => {
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [stepStrings, setStepStrings] = useState<string[]>([]);
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const { department } = useTimeline();
+    const navigate = useNavigate();
 
     //helper function that transforms html into string
     const parseHTMLtoText = (htmlString: string) => {
@@ -135,7 +140,8 @@ return (
             {/*  </Button>*/}
             {/*</Box>*/}
             <Box ta='center' mt="md">
-              <Button component={Link} to="/IndoorMapPage" color="secondaryBlues.5" size='compact-sm'>
+              <Button onClick={()=> {navigate("/IndoorMapPage")}}
+                      color="secondaryBlues.5" size='compact-sm'>
                 See Hospital Map
               </Button>
             </Box>
