@@ -4,7 +4,7 @@
  NOTES: CTRL+F !!! for changes that may need to be made
  I use ({Date}) in comments to manually track myself
  */
-import { Accordion, Box, Text, Group, Divider, Flex, SegmentedControl } from '@mantine/core';
+import {Accordion, Box, Text, Group, Divider, Flex, SegmentedControl, Button} from '@mantine/core';
 import { GetTextDirections } from './GetTextDirections.tsx';
 import {useMemo, useState} from 'react';
 import { usePathContext, useNavSelectionContext } from '../contexts/NavigationContext.tsx';
@@ -21,6 +21,7 @@ import {
     IconArrowUp,
 } from '@tabler/icons-react';
 import TTSButton from '../Buttons/TTSButton.tsx';
+import {Link} from "react-router-dom";
 
 /**
  *
@@ -42,7 +43,7 @@ function getPathNodes(nodeIds: number[], allNodes: NodeDataType[]): NodeDataType
 }
 
 export function DisplayDirectionsBox() {
-    const { department, selectedHospital } = useTimeline();
+    const { department, selectedHospital, setDepartment} = useTimeline();
     const pathNodes = usePathContext();
     const navSelection = useNavSelectionContext();
     const nodeIds = pathNodes.state.pathSelectRequest?.NodeIds;
@@ -152,40 +153,7 @@ export function DisplayDirectionsBox() {
             }}
         >
           <Flex direction={"column"} justify={"center"}>
-          <SegmentedControl
-            maw={"100px"}
-            mt={"xs"}
-            ml={"30.5%"}
-            orientation="horizontal"
-            bg={"secondaryBlues.5"}
-            c={"white"}
-            color={"secondaryBlues.2"}
-            value={distanceType}
-            onChange={setDistanceType}
-            data={[
-              { label: 'FT', value: "feet" },
-              { label: 'M', value: 'meters' },
-            ]}
-            styles={{
-              root: {
-                borderRadius: 30,
-              },
-              label: {
-                fontWeight: 600,
-                textSize: '14px',
-                textAlign: 'center',
-                color: 'white',
-              },
-              indicator: {
-                borderRadius: 30,
-              },
-            }}/>
             <Box style={{ overflowY: 'auto' }}>
-              <Divider
-                w="100%"
-                my="5px"
-                color="greys.2" // Line color
-              />
               <Accordion
                     w={"100%"}
                     h={isSignedIn && role === 'admin' ? "275px" : "335px"}
@@ -305,6 +273,44 @@ export function DisplayDirectionsBox() {
                         );
                     })}
                 </Accordion>
+              <Flex w="100%" direction={"row"} gap="md" ta='center' mt="xs" justify="center" align={"center"}>
+                {/*<Button color="secondaryBlues.5" size='xs' onClick={() => setDepartment(null)}>*/}
+                {/*  I've Arrived*/}
+                {/*</Button>*/}
+                <Button component={Link} to="/" color="secondaryBlues.5" fz="14px" size='xs'>
+                  Navigation Complete
+                </Button>
+                <SegmentedControl
+                  orientation="vertical"
+                  bg={"secondaryBlues.5"}
+                  c={"white"}
+                  size={"xs"}
+                  lh={"xs"}
+                  color={"secondaryBlues.2"}
+                  value={distanceType}
+                  onChange={setDistanceType}
+                  data={[
+                    { label: 'FT', value: "feet" },
+                    { label: 'M', value: 'meters' },
+                  ]}
+                  styles={{
+                    root: {
+                      borderRadius: 30,
+                    },
+                    label: {
+                      fontWeight: 600,
+                      fontSize: '12px',
+                      textAlign: 'center',
+                      color: 'white',
+                    },
+                    innerLabel: {
+
+                    },
+                    indicator: {
+                      borderRadius: 30,
+                    },
+                  }}/>
+              </Flex>
             </Box>
           </Flex>
         </Box>

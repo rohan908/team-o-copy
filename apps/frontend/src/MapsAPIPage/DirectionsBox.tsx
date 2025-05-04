@@ -173,13 +173,15 @@ return (
             {/*  </Button>*/}
             {/*</Box>*/}
             <Flex direction={"row"} gap="md" ta='center' mt="md" align={"center"}>
-              <Button component={Link} to="/IndoorMapPage" color="secondaryBlues.5" size='compact-sm'>
+              <Button component={Link} to="/IndoorMapPage" color="secondaryBlues.5" size='xs'>
                 See Hospital Map
               </Button>
               <SegmentedControl
                 orientation="vertical"
                 bg={"secondaryBlues.5"}
                 c={"white"}
+                size={"xs"}
+                lh={"xs"}
                 color={"secondaryBlues.2"}
                 value={distanceType}
                 onChange={setDistanceType}
@@ -193,9 +195,12 @@ return (
                   },
                   label: {
                     fontWeight: 600,
-                    textSize: '14px',
+                    fontSize: '12px',
                     textAlign: 'center',
                     color: 'white',
+                  },
+                  innerLabel: {
+
                   },
                   indicator: {
                     borderRadius: 30,
