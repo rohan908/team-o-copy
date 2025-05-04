@@ -85,7 +85,7 @@ const teamMembers: Member[] = [
     {
         name: 'Ethan Ramoth',
         role: 'Documentation',
-        quote: '',
+        quote: '"I want to do a cartwheel, but real casual-like. Not make a big deal about it, but I know everybody saw it. One stunning, gorgeous cartwheel."',
         image: 'public/TeamPhotos/Ethan.png',
     },
 ];
