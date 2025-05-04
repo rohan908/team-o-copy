@@ -18,6 +18,7 @@ import { bool } from 'prop-types';
 import { Object3DEventMap } from 'three';
 import { map } from 'leaflet';
 import FloorConnectionBox from './Components/FloorConnectionBox.tsx';
+import { Beforeunload } from 'react-beforeunload';
 import { Navigate } from 'react-router-dom';
 
 const MouseImages = {
@@ -53,6 +54,7 @@ export function MapEditor() {
     const [isFading, setIsFading] = useState(false);
     const [cursorStyle, setCursorStyle] = useState('pointer');
     const [mapTool, setMapTool] = useState('');
+    const [unsavedChanges, setUnsavedChanges] = useState(true);
     const [objToReselect, setObjToReselect] = useState<THREE.Object3D>();
 
     // clerk const's
@@ -1123,6 +1125,20 @@ export function MapEditor() {
             }
         };
     }, [sceneIndexState]);
+
+    function handleBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault();
+      return true;
+    }
+
+    useEffect(() => {
+      if (unsavedChanges){
+        window.addEventListener("beforeunload", handleBeforeUnload, {capture: true})
+      }
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload, {capture: true});
+      }
+    }, [unsavedChanges])
 
     return (
         <Box w="100vw" h="100vh">

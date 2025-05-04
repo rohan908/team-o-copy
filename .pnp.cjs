@@ -3107,6 +3107,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/react-beforeunload", [\
+      ["npm:2.1.5", {\
+        "packageLocation": "./.yarn/cache/@types-react-beforeunload-npm-2.1.5-e2dd985998-0e6abbc95b.zip/node_modules/@types/react-beforeunload/",\
+        "packageDependencies": [\
+          ["@types/react-beforeunload", "npm:2.1.5"],\
+          ["@types/react", "npm:19.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/react-dom", [\
       ["npm:18.3.6", {\
         "packageLocation": "./.yarn/cache/@types-react-dom-npm-18.3.6-49e04423b4-e77ac07609.zip/node_modules/@types/react-dom/",\
@@ -6337,6 +6347,7 @@ const RAW_RUNTIME_STATE =
           ["@types/node", "npm:22.15.3"],\
           ["@types/prop-types", "npm:15.7.14"],\
           ["@types/react", "npm:18.3.20"],\
+          ["@types/react-beforeunload", "npm:2.1.5"],\
           ["@types/react-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:18.3.6"],\
           ["@types/react-router-bootstrap", "npm:0.26.6"],\
           ["@types/react-router-dom", "npm:5.3.3"],\
@@ -6367,6 +6378,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.5.3"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
           ["react", "npm:18.3.1"],\
+          ["react-beforeunload", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.6.0"],\
           ["react-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:18.3.1"],\
           ["react-leaflet", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.2.1"],\
           ["react-native-svg", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:15.11.2"],\
@@ -9034,6 +9046,28 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/react-npm-19.1.0-9804a7da5b-530fb9a622.zip/node_modules/react/",\
         "packageDependencies": [\
           ["react", "npm:19.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-beforeunload", [\
+      ["npm:2.6.0", {\
+        "packageLocation": "./.yarn/cache/react-beforeunload-npm-2.6.0-b57f672101-53929df385.zip/node_modules/react-beforeunload/",\
+        "packageDependencies": [\
+          ["react-beforeunload", "npm:2.6.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.6.0", {\
+        "packageLocation": "./.yarn/__virtual__/react-beforeunload-virtual-9dd1310770/0/cache/react-beforeunload-npm-2.6.0-b57f672101-53929df385.zip/node_modules/react-beforeunload/",\
+        "packageDependencies": [\
+          ["react-beforeunload", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.6.0"],\
+          ["@types/react", "npm:18.3.20"],\
+          ["react", "npm:18.3.1"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
         ],\
         "linkType": "HARD"\
       }]\

@@ -9,8 +9,9 @@ import {
   IconArrowMerge,
   IconArrowRight,
   IconArrowUp,
+  IconBus,
   IconQuestionMark,
-  IconStairs,
+  IconStairs, IconTrain, IconWalk,
 } from '@tabler/icons-react';
 
 interface Props {
@@ -89,6 +90,14 @@ return (
                       <IconArrowLeft size={20} color="#0E3B99"/>
                     ) : text.toLowerCase().includes('right') ? (
                       <IconArrowRight size={20} color="#0E3B99"/>
+                    ) :text.toLowerCase().includes('walk') ? (
+                      <IconWalk size={20} color="#0E3B99"/>
+                    ) : text.toLowerCase().includes('bus') ? (
+                      <IconBus size={20} color="#0E3B99"/>
+                    ) : text.toLowerCase().includes('train') ? (
+                      <IconTrain size={20} color="#0E3B99"/>
+                    ) : text.toLowerCase().includes('subway') ? (
+                      <IconTrain size={20} color="#0E3B99"/>
                     ) : (<IconQuestionMark size={20} color="#0E3B99"/>);
 
                     return (
