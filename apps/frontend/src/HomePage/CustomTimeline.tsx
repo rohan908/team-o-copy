@@ -17,8 +17,6 @@ import { GmapsDestinationSelector } from './GmapsDestinationSelector.tsx';
 import { ParkingSelector } from './ParkingSelector.tsx';
 import { DepartmentSelector } from './DepartmentSelector.tsx';
 import { Link } from 'react-router-dom';
-import { ModeOfTravelSelector } from './ModeOfTravelSelector.tsx';
-import { AlgorithmSelector } from './AlgorithmSelector.tsx';
 import { useUser } from '@clerk/clerk-react';
 import { useMemo } from 'react';
 import {TravelSelectorButtons} from "../common-compoents/TravelSelectorButtons.tsx";
@@ -46,9 +44,6 @@ export const CustomTimeline = () => {
                                 </Button>
                             </Link>
                         </Flex>
-                        {/*<Link to="log-in-page">
-                            <Button>Temp nav to old login page</Button>
-                        </Link>*/}
                     </Stack>
                 );
             case 1: //Indoor Nav

@@ -1,10 +1,6 @@
-import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
-import { IconBuilding, IconChevronDown, IconRouteSquare } from '@tabler/icons-react';
-import { useTimeline } from './TimeLineContext.tsx';
-import { NavSelectionItem } from '../contexts/NavigationItem.ts';
-import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
+import {Select, useMantineTheme } from '@mantine/core';
+import {IconChevronDown, IconRouteSquare } from '@tabler/icons-react';
 import { ALGORITHM } from 'common/src/constants.ts';
-import axios from 'axios';
 import { getAlgoId, setAlgo } from '../IndoorMapPage/HelperFiles/setAlgoRouting.ts';
 import { useEffect, useState } from 'react';
 

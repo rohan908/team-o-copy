@@ -1,8 +1,7 @@
-import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
-import {IconBuildings, IconChevronDown, IconMapPinFilled} from '@tabler/icons-react';
+import {Select, useMantineTheme } from '@mantine/core';
+import {IconBuildings, IconChevronDown} from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
-import { NavSelectionItem } from '../contexts/NavigationItem.ts';
 import { useNavSelectionContext } from '../contexts/NavigationContext.tsx';
 import { useTimeline } from './TimeLineContext.tsx';
 import {
