@@ -388,9 +388,6 @@ export function DraggableMap(props: DraggableMapProps) {
                 object.userData.objectType = 'Floor';
                 const floor = zIndex + 1;
                 object.userData.floor = floor;
-                if (floor > floorState) {
-                    object.visible = false;
-                }
 
                 // different colors for floors and walls
                 if (objectType == 'floor') {
@@ -486,6 +483,8 @@ export function DraggableMap(props: DraggableMapProps) {
             // switch floor after path is created so the path on above floors is hidden properly
             pathPromise.then(() => {});
         }
+
+        setPathIndex(0);
     }, [selectedDepartment]);
 
     // this useEffect runs only on mount and initializes some things.
