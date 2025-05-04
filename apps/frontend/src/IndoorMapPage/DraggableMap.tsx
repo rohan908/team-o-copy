@@ -158,7 +158,8 @@ export function DraggableMap(props: DraggableMapProps) {
             canvasRef.current,
             'orthographic',
             rendererRef.current,
-            cameraRef.current.position
+            cameraRef.current.position,
+            cameraRef.current
         );
         newCamera.zoom = 1.5;
         cameraRef.current = newCamera;
@@ -166,12 +167,6 @@ export function DraggableMap(props: DraggableMapProps) {
             newCamera,
             canvasRef.current,
             controlRef.current
-        );
-        tweenRef.current = moveCamera(
-            cameraRef.current,
-            controlRef.current,
-            new THREE.Vector3(0, 0, 200),
-            1000
         );
 
         if (rendererRef.current) {
@@ -193,7 +188,9 @@ export function DraggableMap(props: DraggableMapProps) {
             const newCamera = createNewCamera(
                 canvasRef.current,
                 'perspective',
-                rendererRef.current
+                rendererRef.current,
+                undefined,
+                cameraRef.current
             );
             //newCamera.updateProjectionMatrix();
             cameraRef.current = newCamera;
@@ -361,7 +358,7 @@ export function DraggableMap(props: DraggableMapProps) {
                     // this is used to filter out floor switcher options based on the floors in the path
                     let floor = node.floor;
                     if (floor == 2 || floor == 3) {
-                        floor += floor;
+                        floor += 1;
                     }
                     if (!floors.includes(floor)) {
                         floors.push(floor);
@@ -463,7 +460,13 @@ export function DraggableMap(props: DraggableMapProps) {
             controlRef.current.dispose();
         }
 
-        const newCamera = createNewCamera(canvasRef.current, 'orthographic', rendererRef.current);
+        const newCamera = createNewCamera(
+            canvasRef.current,
+            'orthographic',
+            rendererRef.current,
+            undefined,
+            cameraRef.current
+        );
         //newCamera.position.set(0, 0, 330);
         newCamera.updateProjectionMatrix();
         cameraRef.current = newCamera;

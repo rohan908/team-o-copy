@@ -99,9 +99,10 @@ export function createNewOrbitControls(
             camera.position.x -= vTarget.x;
             camera.position.y -= vTarget.y;
         }
-        controls.addEventListener('change', enforceBoundaries);
-        controls.update();
     };
+
+    controls.addEventListener('change', enforceBoundaries);
+    controls.update();
 
     return controls;
 }
@@ -122,6 +123,11 @@ export function createNewCamera(
         const fov = 45; // Field of view in degrees
         const near = 0.1;
         const far = 1000;
+
+        // dispose fov camera event listeners if switching from fov
+        if (previousCamera && previousCamera.userData && previousCamera.userData.cleanupListeners) {
+            previousCamera.userData.cleanupListeners();
+        }
 
         const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
@@ -146,10 +152,15 @@ export function createNewCamera(
             1000
         );
 
+        // dispose fov camera event listeners if switching from fov
+        if (previousCamera && previousCamera.userData && previousCamera.userData.cleanupListeners) {
+            previousCamera.userData.cleanupListeners();
+        }
+
         camera.position.set(0, 0, 330);
         camera.up.set(0, 0, 1);
         camera.lookAt(0, 0, 0);
-        camera.zoom = 1;
+        camera.zoom = 1.3;
 
         // this is used to maintain orientation when switching to the fov camera
         camera.userData = { fovAngles: { phi: 0, theta: 0 } };
@@ -207,16 +218,16 @@ export function createNewCamera(
         let lastX = 0;
         let lastY = 0;
 
-        renderer.domElement.addEventListener('mousedown', function (event) {
+        const mouseDownHandler = function (event) {
             if (event.button === 0) {
                 isRotating = true;
                 lastX = event.clientX;
                 lastY = event.clientY;
                 event.preventDefault();
             }
-        });
+        };
 
-        renderer.domElement.addEventListener('mousemove', function (event) {
+        const mouseMoveHandler = function (event) {
             if (!isRotating) return;
 
             const deltaX = event.clientX - lastX;
@@ -230,14 +241,24 @@ export function createNewCamera(
             theta -= deltaY * sensitivity;
 
             updateCamera();
-        });
+        };
 
         const stopRotation = function () {
             isRotating = false;
         };
 
+        renderer.domElement.addEventListener('mousedown', mouseDownHandler);
+        renderer.domElement.addEventListener('mousemove', mouseMoveHandler);
         renderer.domElement.addEventListener('mouseup', stopRotation);
         renderer.domElement.addEventListener('mouseleave', stopRotation);
+
+        // disposal function other cameras can use when switching
+        camera.userData.cleanupListeners = function () {
+            renderer.domElement.removeEventListener('mousedown', mouseDownHandler);
+            renderer.domElement.removeEventListener('mousemove', mouseMoveHandler);
+            renderer.domElement.removeEventListener('mouseup', stopRotation);
+            renderer.domElement.removeEventListener('mouseleave', stopRotation);
+        };
 
         camera.zoom = 1;
         camera.updateProjectionMatrix();
