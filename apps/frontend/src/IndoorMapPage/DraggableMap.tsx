@@ -175,7 +175,6 @@ export function DraggableMap() {
             console.error('Canvas element not found');
             return;
         }
-
         if (controlRef.current) {
             controlRef.current.dispose();
         }
@@ -440,12 +439,25 @@ export function DraggableMap() {
         directionalLight.position.set(20, 20, 20);
         scenesRef.current[0].add(directionalLight);
 
-        const material = new THREE.MeshBasicMaterial({color: 0x56effa, side: THREE.BackSide});
+        const material = new THREE.MeshBasicMaterial({color: 0x87CEEB, side: THREE.BackSide, depthWrite: false});
 
-        const cube = new THREE.BoxGeometry(5000, 5000, 5000)
-        const skybox = new THREE.Mesh(cube, material)
+        const wong = new THREE.TextureLoader().load("/SunnyWong.png")
+        wong.flipY = false;
+
+        const materialArray = [
+          material,
+          material,
+          new THREE.MeshBasicMaterial({map: wong, side: THREE.BackSide, depthWrite: false}),
+          material,
+          material,
+          material,
+          material,
+        ];
+
+        const cube = new THREE.BoxGeometry(4000, 4000, 4000)
+        const skybox = new THREE.Mesh(cube, materialArray);
+
         skybox.position.set(20, 20, 20);
-
         scenesRef.current[0].add(skybox)
 
         // enable orbiting
@@ -459,7 +471,6 @@ export function DraggableMap() {
             console.error('Canvas element not found');
             return;
         }
-
         if (controlRef.current) {
             controlRef.current.dispose();
         }

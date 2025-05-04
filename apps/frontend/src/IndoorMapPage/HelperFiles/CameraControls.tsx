@@ -122,7 +122,7 @@ export function createNewCamera(
     if (cameraType === 'perspective') {
         const fov = 45; // Field of view in degrees
         const near = 0.1;
-        const far = 1000;
+        const far = 5000;
 
         // dispose fov camera event listeners if switching from fov
         if (previousCamera && previousCamera.userData && previousCamera.userData.cleanupListeners) {
@@ -180,7 +180,7 @@ export function createNewCamera(
     else if (cameraType === 'fov') {
         const fov = 100; // Field of view in degrees
         const near = 0.1;
-        const far = 1000;
+        const far = 5000;
 
         const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 

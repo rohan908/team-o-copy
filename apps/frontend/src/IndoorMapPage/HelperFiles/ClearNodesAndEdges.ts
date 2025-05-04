@@ -42,7 +42,13 @@ export const clearSceneObjects = (scenes: THREE.Scene[]) => {
             const obj = s.children.pop();
             if (obj instanceof THREE.Mesh) {
                 obj.geometry.dispose();
-                (obj.material as THREE.Material).dispose();
+                if(Array.isArray(obj.material)) {
+                    obj.material.forEach((mat) => {
+                        mat.dispose();
+                    })
+                } else {
+                    (obj.material as THREE.Material).dispose();
+                }
             }
         }
     });
