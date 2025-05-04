@@ -17,7 +17,7 @@ const StatsChart: React.FC = () => {
     const fetchStats = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/stats?by=${groupBy}`);
+        const res = await fetch(`/api/graphSR?by=${groupBy}`);
         if (!res.ok) {
           throw new Error(`Failed to fetch stats: ${res.status}`);
         }
