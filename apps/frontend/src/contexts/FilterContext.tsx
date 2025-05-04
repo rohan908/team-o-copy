@@ -18,13 +18,11 @@ export const useFilterContext = () => {
 export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [filterNames, setFilterNames] = useState<string[]>([]);
 
-    // this shit buns
     const addName = (name: string) => {
         if (!filterNames.includes(name.trim())) {
             setFilterNames((prev) => [...prev, name.trim()]);
         }
     };
-    // this shit more buns
     const removeName = (name: string) => {
         setFilterNames((prev) => prev.filter((n) => n !== name));
     };
