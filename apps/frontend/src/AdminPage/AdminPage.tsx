@@ -182,7 +182,6 @@ export function AdminPage() {
                 </Grid.Col>
                 <Grid.Col span={'auto'}>
                     <Box maw="100%" mx="auto">
-                        {/*<Title ff="Inter" fz="30px" mb="4px" ta="center" fw={600}>*/}
                         {/*  Admin Page*/}
                         {/*</Title>*/}
                         <Center pr="10px">
