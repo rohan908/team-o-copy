@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, createContext, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
-import { Box, Flex, Collapse, useMantineTheme } from '@mantine/core';
+import { Box} from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 import MapEditorBox from './Components/MapEditorBox.tsx';
@@ -13,14 +13,9 @@ import { useUser } from '@clerk/clerk-react';
 import { createNode, updateNodeGeometry } from './HelperFiles/NodeFactory.tsx';
 import { mapSetup, getNode } from './HelperFiles/MapSetup.tsx';
 import { clearSceneObjects } from './HelperFiles/ClearNodesAndEdges.ts';
-import { IconCurrentLocation } from '@tabler/icons-react';
-import { bool } from 'prop-types';
 import { Object3DEventMap } from 'three';
-import { map } from 'leaflet';
-import FloorConnectionBox from './Components/FloorConnectionBox.tsx';
-import { Beforeunload } from 'react-beforeunload';
 import { Navigate } from 'react-router-dom';
-import { createNewCamera, createNewOrbitControls } from './HelperFiles/CameraControls.tsx';
+
 
 const MouseImages = {
     MoveNone: 'MapImages/MouseCursors/MoveNoSelected.png',

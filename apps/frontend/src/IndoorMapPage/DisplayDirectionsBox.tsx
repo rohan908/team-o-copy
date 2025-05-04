@@ -11,12 +11,11 @@ import { usePathContext, useNavSelectionContext } from '../contexts/NavigationCo
 import { useAllNodesContext } from '../contexts/DirectoryContext.tsx';
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { NodeDataType } from './MapClasses/MapTypes.ts';
-import { useUser, SignOutButton, SignInButton } from '@clerk/clerk-react';
+import { useUser} from '@clerk/clerk-react';
 
 import {
     IconArrowLeft,
     IconArrowRight,
-    IconArrowNarrowUp,
     IconStairs,
     IconArrowUp,
 } from '@tabler/icons-react';
@@ -48,8 +47,6 @@ export function DisplayDirectionsBox() {
     const navSelection = useNavSelectionContext();
     const nodeIds = pathNodes.state.pathSelectRequest?.NodeIds;
     const [distanceType, setDistanceType] = useState("ft");
-    // const [turnLeft, setTurnLeft] = useState(false);
-    // const [turnRight, setTurnRight] = useState(false);
     let turnLeft = false;
     let turnRight = false;
     const { isSignedIn, user } = useUser();
@@ -299,9 +296,6 @@ export function DisplayDirectionsBox() {
                     })}
                 </Accordion>
               <Flex w="100%" direction={"row"} gap="md" ta='center' mt="xs" justify="center" align={"center"}>
-                {/*<Button color="secondaryBlues.5" size='xs' onClick={() => setDepartment(null)}>*/}
-                {/*  I've Arrived*/}
-                {/*</Button>*/}
                 <Button component={Link} to="/" color="secondaryBlues.5" fz="14px" size='xs'>
                   Navigation Complete
                 </Button>
