@@ -1,7 +1,6 @@
 import { Outlet, Link } from 'react-router-dom';
 import { Button, Flex, Box, Group, MantineProvider } from '@mantine/core';
 import { useUser, SignOutButton, SignInButton } from '@clerk/clerk-react';
-import { IconInfoCircle } from '@tabler/icons-react';
 import '../home-style.css';
 import { ReactNode } from 'react';
 
@@ -12,12 +11,10 @@ type NavItem = {
 
 export const navItems: NavItem[] = [
     { name: 'Navigation', link: '/IndoorMapPage' },
-    // { name: <IconInfoCircle size={35} />, link: '/Info-page' },
     { name: 'About', link: '/Info-page' },
 ];
 
 export const adminNavItems: NavItem[] = [
-    //{ name: 'Service Request', link: '/service-request-page' },
     { name: 'Admin', link: '/admin-page' },
 ];
 
