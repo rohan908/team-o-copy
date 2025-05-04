@@ -73,7 +73,7 @@ const teamMembers: Member[] = [
     {
         name: 'Conner Daly',
         role: 'Full-Time Software Engineer',
-        quote: '',
+        quote: '"RIP PR-2447313140: by Mario-Runner, 2024-2024"',
         image: 'public/TeamPhotos/conner.png',
     },
     {
