@@ -64,6 +64,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@clerk/clerk-sdk-node", "npm:5.1.6"],\
           ["@prisma/client", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:6.7.0"],\
+          ["@tweenjs/tween.js", "npm:25.0.0"],\
           ["@types/cors", "npm:2.8.17"],\
           ["@types/google.maps", "npm:3.58.1"],\
           ["@types/multer", "npm:1.4.12"],\
@@ -2724,6 +2725,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@tweenjs-tween.js-npm-23.1.3-54a25ced7d-811b30f5f0.zip/node_modules/@tweenjs/tween.js/",\
         "packageDependencies": [\
           ["@tweenjs/tween.js", "npm:23.1.3"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:25.0.0", {\
+        "packageLocation": "./.yarn/cache/@tweenjs-tween.js-npm-25.0.0-f56533ae35-372a85913a.zip/node_modules/@tweenjs/tween.js/",\
+        "packageDependencies": [\
+          ["@tweenjs/tween.js", "npm:25.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6341,6 +6349,7 @@ const RAW_RUNTIME_STATE =
           ["@react-three/fiber", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.18.0"],\
           ["@tabler/icons-react", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.31.0"],\
           ["@tailwindcss/vite", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.1.4"],\
+          ["@tweenjs/tween.js", "npm:25.0.0"],\
           ["@types/dom-speech-recognition", "npm:0.0.6"],\
           ["@types/leaflet", "npm:1.9.17"],\
           ["@types/leaflet-routing-machine", "npm:3.2.8"],\
@@ -10122,6 +10131,7 @@ const RAW_RUNTIME_STATE =
           ["softeng-startercode-d25", "workspace:."],\
           ["@clerk/clerk-sdk-node", "npm:5.1.6"],\
           ["@prisma/client", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:6.7.0"],\
+          ["@tweenjs/tween.js", "npm:25.0.0"],\
           ["@types/cors", "npm:2.8.17"],\
           ["@types/google.maps", "npm:3.58.1"],\
           ["@types/multer", "npm:1.4.12"],\

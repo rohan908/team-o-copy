@@ -440,6 +440,14 @@ export function DraggableMap() {
         directionalLight.position.set(20, 20, 20);
         scenesRef.current[0].add(directionalLight);
 
+        const material = new THREE.MeshBasicMaterial({color: 0x56effa, side: THREE.BackSide});
+
+        const cube = new THREE.BoxGeometry(5000, 5000, 5000)
+        const skybox = new THREE.Mesh(cube, material)
+        skybox.position.set(20, 20, 20);
+
+        scenesRef.current[0].add(skybox)
+
         // enable orbiting
         setThreeDView();
 
