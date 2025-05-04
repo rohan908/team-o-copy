@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BarChart, PieChart } from '@mantine/charts';
 import { SegmentedControl, Loader, Center, Title, Box } from '@mantine/core';
 import FilterGraph from "../Buttons/FilterGraph.tsx";
+
 interface ChartData {
   [key: string]: string | number;
   count: number;
@@ -13,18 +14,23 @@ const StatsChart: React.FC = () => {
   const [data, setData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const blueShades = [ //hardcoded colors for piechart
-    '#e7f5ff',
-    '#d0ebff',
-    '#a5d8ff',
+  const blueShades = [
     '#74c0fc',
+    '#5caffc',
     '#4dabf7',
+    '#3e9ef2',
     '#339af0',
+    '#2b8ae6',
     '#228be6',
+    '#1f7cd6',
     '#1c7ed6',
     '#1971c2',
-    '#1864ab',
+    '#1563a8',
+    '#124f8f',
+    '#0f3d75',
   ];
+
+
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -50,7 +56,9 @@ const StatsChart: React.FC = () => {
       <Title order={1} mb="sm" c="secondaryBlues.7" ta="left" fz="xl">
         Service Requests Statistics
       </Title>
-      <FilterGraph value={groupBy} onChange={setGroupBy} />
+      <Box mb = 'md'>
+      <FilterGraph value={groupBy} onChange={setGroupBy}/>
+      </Box>
       <SegmentedControl
         fullWidth
         value={type}
@@ -74,14 +82,14 @@ const StatsChart: React.FC = () => {
           data={data.map((item, index) => ({
             name: String(item[groupBy]),
             value: Number(item.count),
-            color: blueShades[blueShades.length % index],
+            color: blueShades[index % blueShades.length],
           }))}
           strokeWidth={2}
-          withLabelsLine
           tooltipDataSource="segment"
           labelsPosition="outside"
           labelsType="value"
           withLabels
+          withLabelsLine={false}
           withTooltip
         />
         </Box>
@@ -89,6 +97,7 @@ const StatsChart: React.FC = () => {
         <BarChart
           h={300}
           data={data}
+          yAxisLabel="Amount"
           dataKey={groupBy}
           series={[{ name: 'count', color: 'blue' }]}
           withTooltip

@@ -3,7 +3,7 @@ import {
   Popover,
   Button,
 } from '@mantine/core';
-import { IconFilter } from '@tabler/icons-react';
+import { IconChartCandle  } from '@tabler/icons-react';
 import GroupByEntry from './GroupByEntry';
 
 interface FilterGraphProps {
@@ -25,7 +25,7 @@ const FilterGraph: React.FC<FilterGraphProps> = ({ value, onChange }) => (
     >
       <Popover.Target>
         <Button
-          leftSection={<IconFilter />}
+          leftSection={<IconChartCandle />}
           radius="md"
           bg="yellowAccent.4"
           fw="400"
@@ -33,7 +33,7 @@ const FilterGraph: React.FC<FilterGraphProps> = ({ value, onChange }) => (
           c="primaryBlues.5"
           w='auto'
         >
-          Filter
+          Select Stat
         </Button>
       </Popover.Target>
 
