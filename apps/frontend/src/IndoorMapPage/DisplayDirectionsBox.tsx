@@ -47,7 +47,11 @@ export function DisplayDirectionsBox() {
     const pathNodes = usePathContext();
     const navSelection = useNavSelectionContext();
     const nodeIds = pathNodes.state.pathSelectRequest?.NodeIds;
-    const [distanceType, setDistanceType] = useState("feet");
+    const [distanceType, setDistanceType] = useState("ft");
+    // const [turnLeft, setTurnLeft] = useState(false);
+    // const [turnRight, setTurnRight] = useState(false);
+    let turnLeft = false;
+    let turnRight = false;
     const { isSignedIn, user } = useUser();
     const role = user?.publicMetadata?.role;
 
@@ -73,9 +77,15 @@ export function DisplayDirectionsBox() {
     };
 
     function convertFeetToMeters(input: number) {
-      if (distanceType === "feet"){
+      if (distanceType === "ft"){
+        if (input == 0){
+          return 9;
+        }
         return input;
       } else {
+        if (input == 0){
+          return 2.74;
+        }
         return input * 0.3048;
       }
     }
@@ -180,7 +190,7 @@ export function DisplayDirectionsBox() {
                         const floorTTS = direction.map((step) => {
                             if (step.Direction.startsWith('Take')) return step.Direction;
                             if (step.Direction === 'Straight')
-                                return `Continue straight for ${(step.Distance * getScaleFactor()).toFixed(0)} feet.`;
+                                return `Continue straight for ${convertFeetToMeters(step.Distance * 1.5).toFixed(0)} ${distanceType}.`;
                             return `Turn ${step.Direction.toLowerCase()}`;
                         });
                         return (
@@ -230,26 +240,41 @@ export function DisplayDirectionsBox() {
                                 </Accordion.Control>
                                 <Accordion.Panel>
                                     {direction.map((step, idx) => {
+                                        if (step.Direction === "Left"){
+                                          turnLeft = true;
+                                          return null;
+                                        }
+                                        else if (step.Direction === "Right"){
+                                          turnRight = true;
+                                          return null;
+                                        }
+
                                         const icon = step.Direction.toLowerCase().includes(
                                             'elevator'
                                         ) ? (
                                             <IconStairs size={20} color="#0E3B99" />
                                         ) : step.Direction.toLowerCase().includes('stairs') ? (
                                             <IconStairs size={20} color="#0E3B99" />
-                                        ) : step.Direction === 'Straight' ? (
-                                            <IconArrowUp size={20} color="#0E3B99" />
-                                        ) : step.Direction === 'Left' ? (
+                                          ) : turnLeft ? (
                                             <IconArrowLeft size={16} color="#0E3B99" />
-                                        ) : (
+                                          ) : turnRight ?  (
                                             <IconArrowRight size={16} color="#0E3B99" />
+                                          ) : (
+                                            <IconArrowUp size={20} color="#0E3B99" />
                                         );
 
                                         const label = step.Direction.startsWith('Take')
                                             ? step.Direction
-                                            : step.Direction === 'Straight'
-                                              ? `Continue straight for ${convertFeetToMeters(step.Distance * 1.5).toFixed(0)} ${distanceType}.`
-                                              : `Turn ${step.Direction.toLowerCase()}`;
+                                            : turnLeft
+                                              ? `Turn left`
+                                              : turnRight
+                                              ? `Turn right`
+                                              : 'Continue straight';
 
+                                        if (step.Direction === 'Straight'){
+                                          turnLeft = false;
+                                          turnRight = false;
+                                        }
                                         return (
                                             <Box key={idx} mb="xs">
                                                 <Group align="center">
@@ -264,7 +289,7 @@ export function DisplayDirectionsBox() {
                                                         </Text>
                                                     </Flex>
                                                 </Group>
-                                                <Divider color="yellowAccent.4" my="xs" />
+                                                <Divider color="yellowAccent.4" my="xs" label={`${convertFeetToMeters(step.Distance * 1.5).toFixed(0)} ${distanceType}`}/>
                                             </Box>
                                         );
                                     })}
@@ -290,7 +315,7 @@ export function DisplayDirectionsBox() {
                   value={distanceType}
                   onChange={setDistanceType}
                   data={[
-                    { label: 'FT', value: "feet" },
+                    { label: 'FT', value: "ft" },
                     { label: 'M', value: 'meters' },
                   ]}
                   styles={{
