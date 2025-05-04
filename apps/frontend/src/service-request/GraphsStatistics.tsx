@@ -13,6 +13,19 @@ const StatsChart: React.FC = () => {
   const [data, setData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const blueShades = [ //hardcoded colors for piechart
+    '#e7f5ff',
+    '#d0ebff',
+    '#a5d8ff',
+    '#74c0fc',
+    '#4dabf7',
+    '#339af0',
+    '#228be6',
+    '#1c7ed6',
+    '#1971c2',
+    '#1864ab',
+  ];
+
   useEffect(() => {
     const fetchStats = async () => {
       setLoading(true);
@@ -58,10 +71,10 @@ const StatsChart: React.FC = () => {
         <PieChart
           h={200}
           size={300}
-          data={data.map((item) => ({
+          data={data.map((item, index) => ({
             name: String(item[groupBy]),
             value: Number(item.count),
-            color: 'blue',
+            color: blueShades[blueShades.length % index],
           }))}
           strokeWidth={2}
           withLabelsLine
