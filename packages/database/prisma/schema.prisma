@@ -10,14 +10,16 @@ datasource db {
 }
 
 model Employee {
-  name       String
-  email      String
-  employeeid Int    @id @default(autoincrement())
-  clerkId    String @unique
-  role       String
+  name          String
+  email         String
+  employeeid    Int             @id @default(autoincrement())
+  clerkId       String          @unique
+  role          String
+  RfidCard      RfidCard[]
+  RfidAccessLog RfidAccessLog[]
 }
 
-model langaugeServiceRequest {
+model languageServiceRequest {
   requestID    Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
   date         String
@@ -110,7 +112,26 @@ model Edge {
   map    FloorMap @relation(fields: [mapId], references: [id])
 }
 
+model RfidCard {
+  uid        String   @id
+  employee   Employee @relation(fields: [employeeId], references: [employeeid])
+  employeeId Int
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model RfidAccessLog {
+  id         Int      @id @default(autoincrement())
+  cardUid    String
+  employee   Employee @relation(fields: [employeeId], references: [employeeid])
+  employeeId Int
+  accessTime DateTime @default(now())
+  accessType String // "granted" or "denied"
+  location   String?
+}
+
 model Algorithm {
-  id Int @id
-  algoID  Int
+  id     Int @id
+  algoID Int
 }

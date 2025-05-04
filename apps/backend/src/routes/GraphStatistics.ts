@@ -7,7 +7,7 @@ const router: Router = express.Router();
 router.get('/', async (req: Request, res: Response) => {
     const query = req.query.by as string;
     try {
-        const lang = await PrismaClient.langaugeServiceRequest.groupBy({
+        const lang = await PrismaClient.languageServiceRequest.groupBy({
             by: [query as any],
             _count: { [query]: true },
         });

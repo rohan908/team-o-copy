@@ -24,7 +24,7 @@ router.post('/', async (req: Request, res: Response) => {
         } = req.body;
 
         // creating request to get data from frontend
-        const request = await PrismaClient.langaugeServiceRequest.create({
+        const request = await PrismaClient.languageServiceRequest.create({
             data: {
                 language,
                 date,
@@ -50,7 +50,7 @@ router.post('/', async (req: Request, res: Response) => {
 // Retrieves all language service request forms
 // this will be for posting on the website
 router.get('/', async (req: Request, res: Response) => {
-    const allServiceRequests = await PrismaClient.langaugeServiceRequest.findMany({});
+    const allServiceRequests = await PrismaClient.languageServiceRequest.findMany({});
 
     res.json(allServiceRequests);
 });
