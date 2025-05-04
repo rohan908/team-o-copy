@@ -25,7 +25,7 @@ ADD CONSTRAINT "Employee_pkey" PRIMARY KEY ("employeeid");
 DROP TABLE "ServiceRequest";
 
 -- CreateTable
-CREATE TABLE "langaugeServiceRequest" (
+CREATE TABLE "languageServiceRequest" (
     "requestID" SERIAL NOT NULL,
     "room" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -34,7 +34,7 @@ CREATE TABLE "langaugeServiceRequest" (
     "language" TEXT NOT NULL,
     "description" TEXT,
 
-    CONSTRAINT "langaugeServiceRequest_pkey" PRIMARY KEY ("requestID")
+    CONSTRAINT "languageServiceRequest_pkey" PRIMARY KEY ("requestID")
 );
 
 -- CreateTable
