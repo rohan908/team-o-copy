@@ -25,7 +25,7 @@ const teamMembers: Member[] = [
     {
         name: "Liam O'Driscoll",
         role: 'Project Manager',
-        quote: "Before this class I didn't smoke cigarettes, but smoking is the perfect way to commit suicide without actually dying.",
+        quote: 'How much of his voice would we need to make the tts him?',
         image: 'public/TeamPhotos/liam.png',
     },
     {
@@ -37,7 +37,7 @@ const teamMembers: Member[] = [
     {
         name: 'Hudson Kortus',
         role: 'Lead Software Engineer',
-        quote: '',
+        quote: 'rm fr ./*',
         image: 'public/TeamPhotos/Hudson.png',
     },
     {
