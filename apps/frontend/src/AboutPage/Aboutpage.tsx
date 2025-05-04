@@ -67,7 +67,7 @@ const teamMembers: Member[] = [
     {
         name: 'Joseph Abata',
         role: 'Full-Time Software Engineer',
-        quote: '',
+        quote: '“Git reset :(“',
         image: 'public/TeamPhotos/Joe.png',
     },
     {
