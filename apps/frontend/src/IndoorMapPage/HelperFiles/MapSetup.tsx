@@ -1,66 +1,40 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createAllScenes } from './SceneFactory.ts';
 import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
+import { createNewOrbitControls, createNewCamera } from './CameraControls.tsx';
 
 interface MapConfig {
-    canvasId: string;
+    canvasRef: React.RefObject<HTMLCanvasElement>;
 }
 
 // common hook for threejs map setup
 export function mapSetup(config: MapConfig) {
-    const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
+    const cameraRef = useRef<THREE.OrthographicCamera | THREE.PerspectiveCamera | null>(null);
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
     const scenesRef = useRef<THREE.Scene[]>([]);
     const controlRef = useRef<OrbitControls | null>(null);
-    const canvasRef = useRef<HTMLElement | null>(null);
-
-    // initial camera position
-    const initialCameraPositionRef = useRef<THREE.Vector3>(new THREE.Vector3());
-
-    // initial camera target position
-    const initialTargetRef = useRef<THREE.Vector3>(new THREE.Vector3());
 
     // this only runs once to initialize things
     useEffect(() => {
         // initialize canvas
-        canvasRef.current = document.getElementById(config.canvasId);
-        if (!canvasRef.current) {
-            console.error(`Canvas with ID ${config.canvasId} not found`);
+        const canvas = config.canvasRef.current;
+        if (!canvas) {
+            console.error('Canvas element not available');
             return;
         }
 
-        const aspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
-
-        // orthographic frustum
-        const frustumSize = 400; // Initial frustum size - can be adjusted as needed
-        const frustumHalfHeight = frustumSize / 2;
-        const frustumHalfWidth = frustumHalfHeight * aspect;
-
-        // initialize camera
-        const camera = new THREE.OrthographicCamera(
-            -frustumHalfWidth,
-            frustumHalfWidth,
-            frustumHalfHeight,
-            -frustumHalfHeight,
-            0.1,
-            1000
-        );
-        camera.position.set(0, 0, 330);
-        camera.lookAt(0, 0, 0);
+        // initialize a perspective camera
+        const camera = createNewCamera(canvas, 'perspective', rendererRef.current);
         cameraRef.current = camera;
-        cameraRef.current.up.set(0, 0, 1);
-
-        // store initial camera position
-        initialCameraPositionRef.current.copy(camera.position);
 
         // initialize renderer
         const renderer = new THREE.WebGLRenderer({
-            canvas: canvasRef.current as HTMLCanvasElement,
+            canvas: canvas as HTMLCanvasElement,
             antialias: true,
         });
-        renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         rendererRef.current = renderer;
         renderer.setClearColor(new THREE.Color(0xebf2ff)); // set background color
@@ -69,96 +43,37 @@ export function mapSetup(config: MapConfig) {
         scenesRef.current = createAllScenes();
 
         // initialize camera controls
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableRotate = false;
-        controls.mouseButtons = {
-            LEFT: THREE.MOUSE.PAN,
-            MIDDLE: THREE.MOUSE.DOLLY,
-            RIGHT: THREE.MOUSE.ROTATE,
-        };
-
-        // set min and max zoom
-        controls.minZoom = 1;
-        controls.maxZoom = 5;
-
-        // store initial target
-        initialTargetRef.current.copy(controls.target);
-
-        // This sets it so you cannot pan past the visible area at max zoom even when you zoom in
-        const maxPanX = frustumHalfWidth * 2;
-        const maxPanY = frustumHalfHeight * 2;
-
-        // initialize camera target vector
-        const vTarget = new THREE.Vector3();
-
-        // Function to enforce pan boundaries based on zoom level
-        const enforceBoundaries = () => {
-            if (!camera || !controls) return;
-
-            const zoomRatio =
-                (camera.zoom - controls.minZoom) / (controls.maxZoom - controls.minZoom);
-
-            // pan distance based on zoom ratio
-            // if zoomRatio = 0, no panning allowed
-            // zoomRatio = 1, maximum panning allowed
-            const allowedPanX = maxPanX * zoomRatio;
-            const allowedPanY = maxPanY * zoomRatio;
-
-            // stores the original camera target
-            vTarget.copy(controls.target);
-
-            // clamps the camera target so it cannot exceed the pan limits
-            controls.target.x = Math.max(
-                initialTargetRef.current.x - allowedPanX,
-                Math.min(initialTargetRef.current.x + allowedPanX, controls.target.x)
-            );
-            controls.target.y = Math.max(
-                initialTargetRef.current.y - allowedPanY,
-                Math.min(initialTargetRef.current.y + allowedPanY, controls.target.y)
-            );
-
-            // difference between the camera's target position and current position
-            vTarget.x = vTarget.x - controls.target.x;
-            vTarget.y = vTarget.y - controls.target.y;
-
-            // apply that difference to the camera so it doesn't stutter when attempting to pan past the limit
-            camera.position.x -= vTarget.x;
-            camera.position.y -= vTarget.y;
-        };
-
-        // apply pan boundaries on control changes
-        controls.addEventListener('change', enforceBoundaries);
+        const controls = createNewOrbitControls(camera, renderer.domElement);
+        controlRef.current = controls;
 
         // handle window resize
         const handleResize = () => {
-            if (!canvasRef.current || !camera || !renderer) return;
+            if (!canvas || !camera || !renderer) return;
+
+            const frustumSize = 400;
 
             // update aspect ratio
-            const newAspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
+            const newAspect = canvas.clientWidth / canvas.clientHeight;
 
-            const newFrustumHeight = frustumSize / camera.zoom;
-            const newFrustumWidth = newFrustumHeight * newAspect;
+            if (camera instanceof THREE.OrthographicCamera) {
+                const newFrustumHeight = frustumSize / camera.zoom;
+                const newFrustumWidth = newFrustumHeight * newAspect;
 
-            camera.left = -newFrustumWidth / 2;
-            camera.right = newFrustumWidth / 2;
-            camera.top = newFrustumHeight / 2;
-            camera.bottom = -newFrustumHeight / 2;
+                camera.left = -newFrustumWidth / 2;
+                camera.right = newFrustumWidth / 2;
+                camera.top = newFrustumHeight / 2;
+                camera.bottom = -newFrustumHeight / 2;
+            } else if (camera instanceof THREE.PerspectiveCamera) {
+                camera.aspect = newAspect;
+            }
 
             camera.updateProjectionMatrix();
 
             // update renderer size
-            renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
-
-            // update boundaries
-            enforceBoundaries();
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         };
 
         window.addEventListener('resize', handleResize);
-
-        // initial boundaries
-        enforceBoundaries();
-
-        controlRef.current = controls;
 
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -168,7 +83,6 @@ export function mapSetup(config: MapConfig) {
             }
 
             if (controlRef.current) {
-                controlRef.current.removeEventListener('change', enforceBoundaries);
                 controlRef.current.dispose();
             }
         };
@@ -179,7 +93,6 @@ export function mapSetup(config: MapConfig) {
         rendererRef,
         scenesRef,
         controlRef,
-        canvasRef,
     };
 }
 
@@ -190,97 +103,4 @@ export function getNode(id: number, allNodes: DirectoryNodeItem[]): DirectoryNod
         }
     }
     return null;
-}
-
-export function createNewCamera(canvasElement: HTMLElement): THREE.OrthographicCamera {
-    const aspect = canvasElement.clientWidth / canvasElement.clientHeight;
-
-    const frustumSize = 400;
-    const frustumHalfHeight = frustumSize / 2;
-    const frustumHalfWidth = frustumHalfHeight * aspect;
-
-    const camera = new THREE.OrthographicCamera(
-        -frustumHalfWidth,
-        frustumHalfWidth,
-        frustumHalfHeight,
-        -frustumHalfHeight,
-        0.1,
-        1000
-    );
-
-    camera.position.set(0, 0, 330);
-    camera.up.set(0, 0, 1);
-    camera.lookAt(0, 0, 0);
-    camera.zoom = 1;
-    camera.updateProjectionMatrix();
-
-    return camera;
-}
-
-export function createNewOrbitControls(
-    camera: THREE.OrthographicCamera,
-    domElement: HTMLElement,
-    mode: '2D' | '3D' = '3D'
-): OrbitControls {
-    const controls = new OrbitControls(camera, domElement);
-
-    if (mode === '2D') {
-        controls.enableRotate = false;
-    } else {
-        controls.enableRotate = true;
-    }
-
-    controls.target.set(0, 0, 0);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-    controls.mouseButtons = {
-        LEFT: THREE.MOUSE.PAN,
-        MIDDLE: THREE.MOUSE.DOLLY,
-        RIGHT: THREE.MOUSE.ROTATE,
-    };
-
-    controls.minZoom = 1;
-    controls.maxZoom = 5;
-
-    // Set up pan boundaries - crucial part that was missing
-    const aspect = domElement.clientWidth / domElement.clientHeight;
-    const frustumSize = 400;
-    const frustumHalfHeight = frustumSize / 2;
-    const frustumHalfWidth = frustumHalfHeight * aspect;
-
-    const maxPanX = frustumHalfWidth * 2;
-    const maxPanY = frustumHalfHeight * 2;
-
-    const initialTarget = new THREE.Vector3(0, 0, 0);
-    const vTarget = new THREE.Vector3();
-
-    const enforceBoundaries = () => {
-        const zoomRatio = (camera.zoom - controls.minZoom) / (controls.maxZoom - controls.minZoom);
-
-        const allowedPanX = maxPanX * zoomRatio;
-        const allowedPanY = maxPanY * zoomRatio;
-
-        vTarget.copy(controls.target);
-
-        controls.target.x = Math.max(
-            initialTarget.x - allowedPanX,
-            Math.min(initialTarget.x + allowedPanX, controls.target.x)
-        );
-        controls.target.y = Math.max(
-            initialTarget.y - allowedPanY,
-            Math.min(initialTarget.y + allowedPanY, controls.target.y)
-        );
-
-        vTarget.x = vTarget.x - controls.target.x;
-        vTarget.y = vTarget.y - controls.target.y;
-
-        camera.position.x -= vTarget.x;
-        camera.position.y -= vTarget.y;
-    };
-
-    controls.addEventListener('change', enforceBoundaries);
-
-    controls.update();
-
-    return controls;
 }

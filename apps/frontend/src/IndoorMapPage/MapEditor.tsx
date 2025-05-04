@@ -20,6 +20,7 @@ import { map } from 'leaflet';
 import FloorConnectionBox from './Components/FloorConnectionBox.tsx';
 import { Beforeunload } from 'react-beforeunload';
 import { Navigate } from 'react-router-dom';
+import { createNewCamera, createNewOrbitControls } from './HelperFiles/CameraControls.tsx';
 
 const MouseImages = {
     MoveNone: 'MapImages/MouseCursors/MoveNoSelected.png',
@@ -113,7 +114,7 @@ export function MapEditor() {
 
     // set up map
     const { cameraRef, rendererRef, scenesRef, controlRef } = mapSetup({
-        canvasId: 'insideMapCanvas',
+        canvasRef: canvasRef,
     });
 
     // basic edge creation
@@ -789,8 +790,12 @@ export function MapEditor() {
                         }
                     }
 
-                    if(!undoAction) {
-                        undoActionsRef.current.push({action: "toggle-edge", node: firstNode, edgeNode: secondNode});
+                    if (!undoAction) {
+                        undoActionsRef.current.push({
+                            action: 'toggle-edge',
+                            node: firstNode,
+                            edgeNode: secondNode,
+                        });
                     }
 
                     if (firstNode.nodeType == 'staircase') {
@@ -965,6 +970,16 @@ export function MapEditor() {
         // sets the map tool on startup
         setMapTool('pan');
 
+        // I have no idea why I have to reset the camera rotation here, but it's rotated 90 degrees otherwise.
+        cameraRef.current.up.set(0, 0, 1);
+        cameraRef.current.rotation.x = 0;
+        cameraRef.current.rotation.y = 0;
+        cameraRef.current.rotation.z = 0;
+
+        cameraRef.current.updateProjectionMatrix();
+
+        controlRef.current.enableRotate = false; // disable rotating for map editor
+
         // handles undo actions in order they were added
         const undoChange = () => {
             console.log('undo');
@@ -1019,8 +1034,7 @@ export function MapEditor() {
                         nodeRef.current.push(node);
 
                         break;
-                    case "toggle-edge":
-
+                    case 'toggle-edge':
                         selectedObjects.current.forEach((object) => {
                             deselectObject(object);
                         });
@@ -1028,7 +1042,7 @@ export function MapEditor() {
                         const firstNode = action.node;
                         const secondNode = action.edgeNode;
 
-                        if(firstNode != null && secondNode != null) {
+                        if (firstNode != null && secondNode != null) {
                             const firstObjectNode = objectsRef.current.find(
                                 (element) => element.userData.nodeId === firstNode.id
                             );
@@ -1036,7 +1050,7 @@ export function MapEditor() {
                                 (element) => element.userData.nodeId === secondNode.id
                             );
 
-                            if(firstObjectNode != null && secondObjectNode != null) {
+                            if (firstObjectNode != null && secondObjectNode != null) {
                                 toggleEdge(firstObjectNode, true);
                                 toggleEdge(secondObjectNode, true);
                             }
@@ -1068,18 +1082,18 @@ export function MapEditor() {
 
         window.addEventListener('keydown', (event) => {
             if (event.key == 'z' && event.ctrlKey) {
-              if(limitUndoRef.current) {
-                return;
-              } else {
-                // prevents undo from firing twice for some reason
-                limitUndoRef.current = true;
+                if (limitUndoRef.current) {
+                    return;
+                } else {
+                    // prevents undo from firing twice for some reason
+                    limitUndoRef.current = true;
 
-                undoChange();
+                    undoChange();
 
-                setTimeout(() => {
-                  limitUndoRef.current = false;
-                }, 10);
-              }
+                    setTimeout(() => {
+                        limitUndoRef.current = false;
+                    }, 10);
+                }
             }
         });
 
