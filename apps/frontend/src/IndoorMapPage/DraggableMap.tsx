@@ -263,7 +263,7 @@ export function DraggableMap(props: DraggableMapProps) {
             if (path && path.length > 0) {
                 setPathIndex(0);
                 const node = getNode(path[0], allNodes);
-                const pos = new Vector3(node!.x, node!.y, 2);
+                const pos = new Vector3(node!.x, node!.y, 4);
                 const fovCC = () => {
                     tweenRef.current = null;
                     controlRef.current.enabled = false;
@@ -297,7 +297,7 @@ export function DraggableMap(props: DraggableMapProps) {
             if (floor > 1) {
                 floor += 1;
             }
-            const pos = new Vector3(node!.x, node!.y, (floor - 1) * floorHeight + 2);
+            const pos = new Vector3(node!.x, node!.y, (floor - 1) * floorHeight + 4);
             // recreate the camera after position change because for some reason the event listeners get thrown out when moving the camera
             const fovCallback = () => {
                 tweenRef.current = null;
