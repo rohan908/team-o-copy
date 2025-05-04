@@ -4,6 +4,7 @@ import { MantineProvider } from '@mantine/core';
 import FloorConnectionBox from './FloorConnectionBox.tsx';
 import { MapContext } from '../MapEditor.tsx';
 import { IconArrowBadgeUpFilled, IconArrowBadgeDownFilled } from '@tabler/icons-react';
+//const theme = useMantineTheme();
 
 interface FloorSwitchBoxProps {
     floor: number;
@@ -42,6 +43,29 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
                 }}
             >
                 <Box m="4px" p="2px" bg="blueBase.6" style={{ borderRadius: '30px' }}>
+                    <Collapse in={opened}>
+                        <Flex direction="column" align="center">
+                            <Button
+                                onClick={incrementPath}
+                                w={55}
+                                mt={10}
+                                bg={theme.colors.primaryBlues[8]}
+                                c={theme.colors.primaryBlues[1]}
+                            >
+                                <IconArrowBadgeUpFilled size={32} />
+                            </Button>
+                            <Button
+                                onClick={decrementPath}
+                                w={55}
+                                mt={2}
+                                mb={5}
+                                bg={theme.colors.primaryBlues[8]}
+                                c={theme.colors.primaryBlues[1]}
+                            >
+                                <IconArrowBadgeDownFilled size={32} />
+                            </Button>
+                        </Flex>
+                    </Collapse>
                     <SegmentedControl
                         orientation="vertical"
                         withItemsBorders={false}
@@ -49,7 +73,7 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
                         m="1px"
                         color="blueBase.6"
                         value={floor.toString()}
-                        onChange={(value) => setFloor(parseInt(value), mapProps.currentNode?.nodeType != 'staircase' || mapProps.selectedTool != 'add-edge')}
+                        onChange={(value) => setFloor(parseInt(value))}
                         data={[
                             { label: 'FP', value: '6' },
                             { label: '3D', value: '5' },
@@ -72,16 +96,6 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
                             },
                         }}
                     />
-                    <Collapse in={opened}>
-                        <Flex direction="column">
-                            <Button onClick={incrementPath}>
-                                <IconArrowBadgeUpFilled size={32} />
-                            </Button>
-                            <Button onClick={decrementPath}>
-                                <IconArrowBadgeDownFilled size={32} />
-                            </Button>
-                        </Flex>
-                    </Collapse>
                 </Box>
             </Box>
         );
@@ -127,7 +141,13 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
                             m="1px"
                             color="blueBase.6"
                             value={floor.toString()}
-                            onChange={(value) => setFloor(parseInt(value), mapProps.currentNode?.nodeType != 'staircase' || mapProps.selectedTool != 'add-edge')}
+                            onChange={(value) =>
+                                setFloor(
+                                    parseInt(value),
+                                    mapProps.currentNode?.nodeType != 'staircase' ||
+                                        mapProps.selectedTool != 'add-edge'
+                                )
+                            }
                             data={[
                                 { label: 'BC', value: '7' },
                                 { label: 'FK', value: '6' },
