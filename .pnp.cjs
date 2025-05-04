@@ -92,6 +92,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:19.1.0"],\
           ["react-dom", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:19.1.0"],\
           ["react-icons", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:5.5.0"],\
+          ["socket.io", "npm:4.8.1"],\
           ["tailwind-merge", "npm:3.2.0"],\
           ["tailwindcss", "npm:4.1.4"],\
           ["three", "npm:0.175.0"],\
@@ -2280,6 +2281,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@socket.io/component-emitter", [\
+      ["npm:3.1.2", {\
+        "packageLocation": "./.yarn/cache/@socket.io-component-emitter-npm-3.1.2-bc4133d33f-c4242bad66.zip/node_modules/@socket.io/component-emitter/",\
+        "packageDependencies": [\
+          ["@socket.io/component-emitter", "npm:3.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@swc/core", [\
       ["npm:1.11.24", {\
         "packageLocation": "./.yarn/unplugged/@swc-core-virtual-5aa0952ef4/node_modules/@swc/core/",\
@@ -4117,6 +4127,7 @@ const RAW_RUNTIME_STATE =
           ["pg", "virtual:9a28949798a912c67218bf8cea1001b3cae21be82aaad0589210650a91ed87ad2b921ce3379d36f5723672b5e5a668da59a3e262568425b08570aa654e7b0112#npm:8.15.6"],\
           ["prettier", "npm:3.5.3"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["socket.io", "npm:4.8.1"],\
           ["supertest", "npm:6.3.4"],\
           ["ts-config-custom", "workspace:configs/ts-config-custom"],\
           ["ts-node", "virtual:9a28949798a912c67218bf8cea1001b3cae21be82aaad0589210650a91ed87ad2b921ce3379d36f5723672b5e5a668da59a3e262568425b08570aa654e7b0112#npm:10.9.2"],\
@@ -4140,6 +4151,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/base64-js-npm-1.5.1-b2f7275641-f23823513b.zip/node_modules/base64-js/",\
         "packageDependencies": [\
           ["base64-js", "npm:1.5.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["base64id", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/base64id-npm-2.0.0-ef4afeee0a-6919efd237.zip/node_modules/base64id/",\
+        "packageDependencies": [\
+          ["base64id", "npm:2.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4959,6 +4979,13 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
+      ["npm:4.3.7", {\
+        "packageLocation": "./.yarn/cache/debug-npm-4.3.7-385645adf9-1471db19c3.zip/node_modules/debug/",\
+        "packageDependencies": [\
+          ["debug", "npm:4.3.7"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
       ["npm:4.4.0", {\
         "packageLocation": "./.yarn/cache/debug-npm-4.4.0-f6efe76023-db94f1a182.zip/node_modules/debug/",\
         "packageDependencies": [\
@@ -4986,6 +5013,20 @@ const RAW_RUNTIME_STATE =
           ["debug", "virtual:e0cd6afa69db469de21c754be1546e018ea723a8653bf7c1fdbb52b3d67b9c4065461f2d7632852c8644c3b36b5304269483ba2eb51ad39f9eae03847036d7a9#npm:2.6.9"],\
           ["@types/supports-color", null],\
           ["ms", "npm:2.0.0"],\
+          ["supports-color", null]\
+        ],\
+        "packagePeers": [\
+          "@types/supports-color",\
+          "supports-color"\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:4.3.7", {\
+        "packageLocation": "./.yarn/__virtual__/debug-virtual-b9133599b0/0/cache/debug-npm-4.3.7-385645adf9-1471db19c3.zip/node_modules/debug/",\
+        "packageDependencies": [\
+          ["debug", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:4.3.7"],\
+          ["@types/supports-color", null],\
+          ["ms", "npm:2.1.3"],\
           ["supports-color", null]\
         ],\
         "packagePeers": [\
@@ -5354,6 +5395,47 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["end-of-stream", "npm:1.4.4"],\
           ["once", "npm:1.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["engine.io", [\
+      ["npm:6.6.4", {\
+        "packageLocation": "./.yarn/cache/engine.io-npm-6.6.4-1d61fc58e3-845761163f.zip/node_modules/engine.io/",\
+        "packageDependencies": [\
+          ["engine.io", "npm:6.6.4"],\
+          ["@types/cors", "npm:2.8.17"],\
+          ["@types/node", "npm:22.15.3"],\
+          ["accepts", "npm:1.3.8"],\
+          ["base64id", "npm:2.0.0"],\
+          ["cookie", "npm:0.7.2"],\
+          ["cors", "npm:2.8.5"],\
+          ["debug", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:4.3.7"],\
+          ["engine.io-parser", "npm:5.2.3"],\
+          ["ws", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:8.17.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["engine.io-client", [\
+      ["npm:6.6.3", {\
+        "packageLocation": "./.yarn/cache/engine.io-client-npm-6.6.3-e8bdcef0cf-ebe0b1da68.zip/node_modules/engine.io-client/",\
+        "packageDependencies": [\
+          ["engine.io-client", "npm:6.6.3"],\
+          ["@socket.io/component-emitter", "npm:3.1.2"],\
+          ["debug", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:4.3.7"],\
+          ["engine.io-parser", "npm:5.2.3"],\
+          ["ws", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:8.17.1"],\
+          ["xmlhttprequest-ssl", "npm:2.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["engine.io-parser", [\
+      ["npm:5.2.3", {\
+        "packageLocation": "./.yarn/cache/engine.io-parser-npm-5.2.3-6dfa36cede-ed4900d8db.zip/node_modules/engine.io-parser/",\
+        "packageDependencies": [\
+          ["engine.io-parser", "npm:5.2.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6292,6 +6374,7 @@ const RAW_RUNTIME_STATE =
           ["react-router-bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.26.3"],\
           ["react-router-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:6.30.0"],\
           ["serve", "npm:14.2.4"],\
+          ["socket.io-client", "npm:4.8.1"],\
           ["tailwindcss", "npm:4.1.4"],\
           ["three", "npm:0.175.0"],\
           ["threejs-compass", "npm:1.1.7"],\
@@ -9924,6 +10007,57 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["socket.io", [\
+      ["npm:4.8.1", {\
+        "packageLocation": "./.yarn/cache/socket.io-npm-4.8.1-26090d3c01-acf931a2bb.zip/node_modules/socket.io/",\
+        "packageDependencies": [\
+          ["socket.io", "npm:4.8.1"],\
+          ["accepts", "npm:1.3.8"],\
+          ["base64id", "npm:2.0.0"],\
+          ["cors", "npm:2.8.5"],\
+          ["debug", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:4.3.7"],\
+          ["engine.io", "npm:6.6.4"],\
+          ["socket.io-adapter", "npm:2.5.5"],\
+          ["socket.io-parser", "npm:4.2.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["socket.io-adapter", [\
+      ["npm:2.5.5", {\
+        "packageLocation": "./.yarn/cache/socket.io-adapter-npm-2.5.5-7a0505537f-04a5a2a9c4.zip/node_modules/socket.io-adapter/",\
+        "packageDependencies": [\
+          ["socket.io-adapter", "npm:2.5.5"],\
+          ["debug", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:4.3.7"],\
+          ["ws", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:8.17.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["socket.io-client", [\
+      ["npm:4.8.1", {\
+        "packageLocation": "./.yarn/cache/socket.io-client-npm-4.8.1-eb1c9f0ea4-544c49cc8c.zip/node_modules/socket.io-client/",\
+        "packageDependencies": [\
+          ["socket.io-client", "npm:4.8.1"],\
+          ["@socket.io/component-emitter", "npm:3.1.2"],\
+          ["debug", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:4.3.7"],\
+          ["engine.io-client", "npm:6.6.3"],\
+          ["socket.io-parser", "npm:4.2.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["socket.io-parser", [\
+      ["npm:4.2.4", {\
+        "packageLocation": "./.yarn/cache/socket.io-parser-npm-4.2.4-bf87f78bcd-9383b30358.zip/node_modules/socket.io-parser/",\
+        "packageDependencies": [\
+          ["socket.io-parser", "npm:4.2.4"],\
+          ["@socket.io/component-emitter", "npm:3.1.2"],\
+          ["debug", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:4.3.7"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["socks", [\
       ["npm:2.8.4", {\
         "packageLocation": "./.yarn/cache/socks-npm-2.8.4-8194b86bd0-00c3271e23.zip/node_modules/socks/",\
@@ -9982,6 +10116,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:19.1.0"],\
           ["react-dom", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:19.1.0"],\
           ["react-icons", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:5.5.0"],\
+          ["socket.io", "npm:4.8.1"],\
           ["tailwind-merge", "npm:3.2.0"],\
           ["tailwindcss", "npm:4.1.4"],\
           ["three", "npm:0.175.0"],\
@@ -11684,6 +11819,41 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/wrappy-npm-1.0.2-916de4d4b3-56fece1a40.zip/node_modules/wrappy/",\
         "packageDependencies": [\
           ["wrappy", "npm:1.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["ws", [\
+      ["npm:8.17.1", {\
+        "packageLocation": "./.yarn/cache/ws-npm-8.17.1-f57fb24a2c-f4a49064af.zip/node_modules/ws/",\
+        "packageDependencies": [\
+          ["ws", "npm:8.17.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:8.17.1", {\
+        "packageLocation": "./.yarn/__virtual__/ws-virtual-4060a826ab/0/cache/ws-npm-8.17.1-f57fb24a2c-f4a49064af.zip/node_modules/ws/",\
+        "packageDependencies": [\
+          ["ws", "virtual:e8bdcef0cf0934194f6c013397211c12e97f7afa25e778315990e5af67273d4a72a5fd876374ee7ab692ddc04df0f6a366086d076f5cf07da179b76448a13afc#npm:8.17.1"],\
+          ["@types/bufferutil", null],\
+          ["@types/utf-8-validate", null],\
+          ["bufferutil", null],\
+          ["utf-8-validate", null]\
+        ],\
+        "packagePeers": [\
+          "@types/bufferutil",\
+          "@types/utf-8-validate",\
+          "bufferutil",\
+          "utf-8-validate"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["xmlhttprequest-ssl", [\
+      ["npm:2.1.2", {\
+        "packageLocation": "./.yarn/cache/xmlhttprequest-ssl-npm-2.1.2-7d8e3817bc-70d6086932.zip/node_modules/xmlhttprequest-ssl/",\
+        "packageDependencies": [\
+          ["xmlhttprequest-ssl", "npm:2.1.2"]\
         ],\
         "linkType": "HARD"\
       }]\

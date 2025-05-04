@@ -19,7 +19,7 @@ model Employee {
   RfidAccessLog RfidAccessLog[]
 }
 
-model langaugeServiceRequest {
+model languageServiceRequest {
   requestID    Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
   date         String
@@ -132,6 +132,6 @@ model RfidAccessLog {
 }
 
 model Algorithm {
-  id Int @id
-  algoID  Int
+  id     Int @id
+  algoID Int
 }
