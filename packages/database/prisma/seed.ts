@@ -56,15 +56,15 @@ export async function populate() {
   // defines security SR data
   const securityRequests = await PrismaClient.securityServiceRequest.createMany({
     data: [
-      { requestID: 15, employeeName: 'Rohan Inmadar', department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "07:16:PM", security: "Building Security", status: "Done", priority: "Medium", hospital: "20 Patriot Place", description: "" },
+      { requestID: 15, employeeName: 'Rohan Inamdar', department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "07:16:PM", security: "Building Security", status: "Done", priority: "Medium", hospital: "20 Patriot Place", description: "" },
       { requestID: 16, employeeName: 'Owen Hart', department: "Vein Care Services", createdAt: "2025-04-02T02:39:00Z", date: "May 4, 2025", time: "11:52:AM", security: "Building Security", status: "Done", priority: "Low", hospital: "20 Patriot Place", description: "" },
-      { requestID: 17, employeeName: 'Hudson Kortus', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "03:27:PM", security: "Escort Service", status: "Done", priority: "Emergency", hospital: "Chestnut Hill", description: "" },
+      { requestID: 17, employeeName: 'Hudson kortus', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "03:27:PM", security: "Escort Service", status: "Done", priority: "Emergency", hospital: "Chestnut Hill", description: "" },
       { requestID: 18, employeeName: 'Ethan Ramoth', department: "Endocrinology", createdAt: "2025-04-02T02:39:00Z", date: "May 3, 2025", time: "02:13:AM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "20 Patriot Place", description: "" },
       { requestID: 19, employeeName: 'Camden Brayton', department: "Ambulatory Care", createdAt: "2025-04-02T02:39:00Z", date: "May 7, 2025", time: "04:44:PM", security: "Safety Hazard", status: "Done", priority: "Medium", hospital: "Chestnut Hill", description: "" },
       { requestID: 20, employeeName: 'Joseph Abata', department: "Primary Care Check-In", createdAt: "2025-04-02T02:39:00Z", date: "May 8, 2025", time: "10:05:AM", security: "Escort Service", status: "Done", priority: "Low", hospital: "22 Patriot Place", description: "" },
       { requestID: 21, employeeName: 'Connor Daly', department: "Admitting", createdAt: "2025-04-02T02:39:00Z", date: "May 9, 2025", time: "09:32:PM", security: "Building Security", status: "Done", priority: "High", hospital: "Faulkner", description: "" },
       { requestID: 22, employeeName: 'Logan Winters', department: "GI Endoscopy", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "12:28:AM", security: "Surveillance", status: "Done", priority: "Medium", hospital: "Faulkner", description: "" },
-      { requestID: 23, employeeName: 'Rohan Inmadar', department: "Weight Management and Metabolic Surgery", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "05:59:AM", security: "Surveillance", status: "Done", priority: "Emergency", hospital: "BWH Campus", description: "" },
+      { requestID: 23, employeeName: 'Rohan Inamdar', department: "Weight Management and Metabolic Surgery", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "05:59:AM", security: "Surveillance", status: "Done", priority: "Emergency", hospital: "BWH Campus", description: "" },
       { requestID: 24, employeeName: 'Owen Hart', department: "Gastroenterology and Hepatology", createdAt: "2025-04-02T02:39:00Z", date: "May 4, 2025", time: "06:25:PM", security: "Safety Hazard", status: "Done", priority: "High", hospital: "BWH Campus", description: "" },
     ],
   });
@@ -72,15 +72,15 @@ export async function populate() {
   // defines language SR data
   const languageRequests = await PrismaClient.languageServiceRequest.createMany({
     data: [
-      { requestID: 25, employeeName: 'Rohan Inmadar', department: "Gastroenterology and Hepatology", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "01:11:AM", language: "English", status: "Done", priority: "Low", hospital: "BWH Campus", description: "" },
+      { requestID: 25, employeeName: 'Rohan Inamdar', department: "Gastroenterology and Hepatology", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "01:11:AM", language: "English", status: "Done", priority: "Low", hospital: "BWH Campus", description: "" },
       { requestID: 26, employeeName: 'Owen Hart', department: "Admitting", createdAt: "2025-04-02T02:39:00Z", date: "May 3, 2025", time: "07:48:PM", language: "German", status: "Done", priority: "Emergency", hospital: "Faulkner", description: "" },
-      { requestID: 27, employeeName: 'Hudson Kortus', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "03:05:PM", language: "French", status: "Done", priority: "High", hospital: "Chestnut Hill", description: "" },
+      { requestID: 27, employeeName: 'Hudson kortus', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "03:05:PM", language: "French", status: "Done", priority: "High", hospital: "Chestnut Hill", description: "" },
       { requestID: 28, employeeName: 'Ethan Ramoth', department: "Endocrinology", createdAt: "2025-04-02T02:39:00Z", date: "May 4, 2025", time: "11:36:AM", language: "Spanish", status: "Done", priority: "Medium", hospital: "20 Patriot Place", description: "" },
       { requestID: 29, employeeName: 'Camden Brayton', department: "Ambulatory Care", createdAt: "2025-04-02T02:39:00Z", date: "May 7, 2025", time: "05:22:PM", language: "Afrikaans", status: "Done", priority: "Low", hospital: "Chestnut Hill", description: "" },
       { requestID: 30, employeeName: 'Joseph Abata', department: "Primary Care Check-In", createdAt: "2025-04-02T02:39:00Z", date: "May 8, 2025", time: "09:01:AM", language: "Portuguese", status: "Done", priority: "High", hospital: "22 Patriot Place", description: "" },
       { requestID: 31, employeeName: 'Connor Daly', department: "GI Endoscopy", createdAt: "2025-04-02T02:39:00Z", date: "May 9, 2025", time: "10:34:AM", language: "Italian", status: "Done", priority: "Emergency", hospital: "Faulkner", description: "" },
       { requestID: 32, employeeName: 'Logan Winters', department: "Weight Management and Metabolic Surgery", createdAt: "2025-04-02T02:39:00Z", date: "May 4, 2025", time: "02:14:PM", language: "Polish", status: "Done", priority: "Medium", hospital: "BWH Campus", description: "" },
-      { requestID: 33, employeeName: 'Rohan Inmadar', department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "04:50:AM", language: "Russian", status: "Done", priority: "Low", hospital: "20 Patriot Place", description: "" },
+      { requestID: 33, employeeName: 'Rohan Inamdar', department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "04:50:AM", language: "Russian", status: "Done", priority: "Low", hospital: "20 Patriot Place", description: "" },
       { requestID: 34, employeeName: 'Owen Hart', department: "Vein Care Services", createdAt: "2025-04-02T02:39:00Z", date: "May 7, 2025", time: "08:02:PM", language: "Japanese", status: "Done", priority: "High", hospital: "20 Patriot Place", description: "" },
     ],
   });
@@ -88,15 +88,15 @@ export async function populate() {
   // defines sanitation SR data
   const sanitationRequests = await PrismaClient.sanitationServiceRequest.createMany({
     data: [
-      { requestID: 35, employeeName: 'Rohan Inmadar', department: "Endocrinology", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "07:27:PM", cleanupType: "Spill Cleanup", status: "Done", priority: "High", hospital: "20 Patriot Place", description: "" },
+      { requestID: 35, employeeName: 'Rohan Inamdar', department: "Endocrinology", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "07:27:PM", cleanupType: "Spill Cleanup", status: "Done", priority: "High", hospital: "20 Patriot Place", description: "" },
       { requestID: 36, employeeName: 'Owen Hart', department: "Primary Care Check-In", createdAt: "2025-04-02T02:39:00Z", date: "May 8, 2025", time: "10:55:AM", cleanupType: "Biohazard Cleanup", status: "Done", priority: "Medium", hospital: "22 Patriot Place", description: "" },
-      { requestID: 37, employeeName: 'Hudson Kortus', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 9, 2025", time: "01:14:PM", cleanupType: "Biohazard Cleanup", status: "Done", priority: "High", hospital: "Chestnut Hill", description: "" },
+      { requestID: 37, employeeName: 'Hudson kortus', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 9, 2025", time: "01:14:PM", cleanupType: "Biohazard Cleanup", status: "Done", priority: "High", hospital: "Chestnut Hill", description: "" },
       { requestID: 38, employeeName: 'Ethan Ramoth', department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "11:27:AM", cleanupType: "Trash Cleanup", status: "Done", priority: "Low", hospital: "Faulkner", description: "" },
       { requestID: 39, employeeName: 'Camden Brayton', department: "GI Endoscopy", createdAt: "2025-04-02T02:39:00Z", date: "May 7, 2025", time: "02:43:PM", cleanupType: "Trash Cleanup", status: "Done", priority: "Medium", hospital: "Faulkner", description: "" },
       { requestID: 40, employeeName: 'Joseph Abata', department: "Vein Care Services", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "09:58:AM", cleanupType: "Trash Cleanup", status: "Done", priority: "Low", hospital: "20 Patriot Place", description: "" },
       { requestID: 41, employeeName: 'Connor Daly', department: "Weight Management and Metabolic Surgery", createdAt: "2025-04-02T02:39:00Z", date: "May 4, 2025", time: "02:06:AM", cleanupType: "Spill Cleanup", status: "Done", priority: "High", hospital: "20 Patriot Place", description: "" },
       { requestID: 42, employeeName: 'Logan Winters', department: "Ambulatory Care", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "11:30:PM", cleanupType: "Biohazard Cleanup", status: "Done", priority: "Medium", hospital: "Chestnut Hill", description: "" },
-      { requestID: 43, employeeName: 'Rohan Inmadar', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 9, 2025", time: "05:12:PM", cleanupType: "Trash Cleanup", status: "Done", priority: "Low", hospital: "BWH Campus", description: "" },
+      { requestID: 43, employeeName: 'Rohan Inamdar', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 9, 2025", time: "05:12:PM", cleanupType: "Trash Cleanup", status: "Done", priority: "Low", hospital: "BWH Campus", description: "" },
       { requestID: 44, employeeName: 'Owen Hart', department: "Ambulatory Care", createdAt: "2025-04-02T02:39:00Z", date: "May 7, 2025", time: "04:55:PM", cleanupType: "Spill Cleanup", status: "Done", priority: "High", hospital: "BWH Campus", description: "" },
     ],
   });
@@ -105,15 +105,15 @@ export async function populate() {
   // defines security SR data
   const maintenanceRequests = await PrismaClient.maintenanceServiceRequest.createMany({
     data: [
-      { requestID: 45, employeeName: 'Rohan Inmadar', department: "Pulmonary", createdAt: "2025-04-02T02:39:00Z", date: "May 3, 2025", time: "08:24:PM", maintenanceType: "Medical Equipment", status: "Done", priority: "Low", hospital: "22 Patriot Place", description: "" },
+      { requestID: 45, employeeName: 'Rohan Inamdar', department: "Pulmonary", createdAt: "2025-04-02T02:39:00Z", date: "May 3, 2025", time: "08:24:PM", maintenanceType: "Medical Equipment", status: "Done", priority: "Low", hospital: "22 Patriot Place", description: "" },
       { requestID: 46, employeeName: 'Owen Hart', department: "Ambulatory Care", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "01:12:AM", maintenanceType: "Plumbing", status: "Done", priority: "Emergency", hospital: "Chestnut Hill", description: "" },
-      { requestID: 47, employeeName: 'Hudson Kortus', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 7, 2025", time: "11:48:PM", maintenanceType: "Electrical", status: "Done", priority: "Medium", hospital: "Chestnut Hill", description: "" },
+      { requestID: 47, employeeName: 'Hudson kortus', department: "Blood Work", createdAt: "2025-04-02T02:39:00Z", date: "May 7, 2025", time: "11:48:PM", maintenanceType: "Electrical", status: "Done", priority: "Medium", hospital: "Chestnut Hill", description: "" },
       { requestID: 48, employeeName: 'Ethan Ramoth', department: "Primary Care Check-In", createdAt: "2025-04-02T02:39:00Z", date: "May 4, 2025", time: "06:35:AM", maintenanceType: "Building Structure", status: "Done", priority: "High", hospital: "22 Patriot Place", description: "" },
       { requestID: 49, employeeName: 'Camden Brayton', department: "Admitting", createdAt: "2025-04-02T02:39:00Z", date: "May 5, 2025", time: "02:19:PM", maintenanceType: "Elevator", status: "Done", priority: "Low", hospital: "Faulkner", description: "" },
       { requestID: 50, employeeName: 'Joseph Abata', department: "Nutrition", createdAt: "2025-04-02T02:39:00Z", date: "May 6, 2025", time: "10:57:AM", maintenanceType: "HVAC", status: "Done", priority: "Medium", hospital: "20 Patriot Place", description: "" },
       { requestID: 51, employeeName: 'Connor Daly', department: "Endocrinology", createdAt: "2025-04-02T02:39:00Z", date: "May 3, 2025", time: "03:08:PM", maintenanceType: "Medical Equipment", status: "Done", priority: "Emergency", hospital: "20 Patriot Place", description: "" },
       { requestID: 52, employeeName: 'Logan Winters', department: "Gastroenterology and Hepatology", createdAt: "2025-04-02T02:39:00Z", date: "May 8, 2025", time: "07:31:AM", maintenanceType: "Plumbing", status: "Done", priority: "High", hospital: "BWH Campus", description: "" },
-      { requestID: 53, employeeName: 'Rohan Inmadar', department: "Weight Management and Metabolic Surgery", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "09:14:PM", maintenanceType: "Electrical", status: "Done", priority: "Medium", hospital: "BWH Campus", description: "" },
+      { requestID: 53, employeeName: 'Rohan Inamdar', department: "Weight Management and Metabolic Surgery", createdAt: "2025-04-02T02:39:00Z", date: "May 2, 2025", time: "09:14:PM", maintenanceType: "Electrical", status: "Done", priority: "Medium", hospital: "BWH Campus", description: "" },
       { requestID: 54, employeeName: 'Owen Hart', department: "Vein Care Services", createdAt: "2025-04-02T02:39:00Z", date: "May 9, 2025", time: "12:02:AM", maintenanceType: "Building Structure", status: "Done", priority: "High", hospital: "20 Patriot Place", description: "" },
     ],
   });
