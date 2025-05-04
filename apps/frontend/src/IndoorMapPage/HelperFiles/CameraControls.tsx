@@ -232,7 +232,6 @@ export function moveCamera(
     duration: number,
     onComplete?: () => void
 ) {
-    controls.enablePan = false; // disable controls
     const tween = new Tween(camera.position);
     tween.easing(Easing.Quadratic.Out);
     tween.to(position, duration);
