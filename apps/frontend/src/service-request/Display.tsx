@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Text, Button } from '@mantine/core';
+import { Box, Flex, Text} from '@mantine/core';
 
 interface DisplayProps {
     data: { title: string; value: string | undefined }[];

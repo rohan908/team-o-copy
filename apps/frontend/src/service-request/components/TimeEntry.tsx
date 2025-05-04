@@ -1,7 +1,7 @@
 import { ActionIcon, Flex, Box } from '@mantine/core';
 import { TimeInput, TimeInputProps } from '@mantine/dates';
 import { IconClock } from '@tabler/icons-react';
-import { useRef, useState } from 'react';
+import { useRef} from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import * as chrono from 'chrono-node';
 import { notifications } from '@mantine/notifications';

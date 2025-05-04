@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Button, Stack, Text, Transition, Overlay, useMantineTheme } from '@mantine/core';
+import React, { useCallback } from 'react';
+import { Button, Stack, Text, Overlay, useMantineTheme } from '@mantine/core';
 import { useHover, useMouse, useMergedRef } from '@mantine/hooks';
 
 interface HoverButtonProps {
