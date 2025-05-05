@@ -55,7 +55,7 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
     // get current filters
-    const { nameFilters, priorityFilters } = useFilterContext();
+    const { filters } = useFilterContext();
 
     // helper function to dispay correct feild
     const getRequestTypeValue = (row: RequestProps) => {
@@ -120,13 +120,13 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     // make filter array from context
     let rows = data;
 
-    if (nameFilters.length > 0) {
-        rows = rows.filter((row) => nameFilters.includes(row.employeeName));
+    if (filters.employeeName?.length > 0) {
+        rows = rows.filter((row) => filters.employeeName.includes(row.employeeName));
     }
 
-    if (priorityFilters.length > 0) {
-        rows = rows.filter((row) => priorityFilters.includes(row.priority as string));
-    }
+    // if (priorityFilters.length > 0) {
+    //     rows = rows.filter((row) => priorityFilters.includes(row.priority as string));
+    // }
 
     const summaryColumns = ['employeeName', 'requestID', 'requestType', 'createdAt'];
 

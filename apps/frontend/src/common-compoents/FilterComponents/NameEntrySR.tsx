@@ -6,14 +6,14 @@ import DisplayBadges from '../DisplayBadges.tsx';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
 
 interface NameEntryProps {
-    value: string;
+    value: string[];
     onChange: (value: string) => void;
 }
 
 const NameEntry: React.FC<NameEntryProps> = ({ value, onChange }) => {
     const [data, setData] = useState<string[]>([]);
     const theme = useMantineTheme();
-    const { nameFilters, removeNameFilter } = useFilterContext();
+    const { addFilter, removeFilter } = useFilterContext();
 
     useEffect(() => {
         const fetchNames = async () => {
@@ -30,7 +30,8 @@ const NameEntry: React.FC<NameEntryProps> = ({ value, onChange }) => {
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
-            onChange(selected); // add to filter
+            onChange(selected); // Now properly calls the parent's onChange
+            addFilter('employeeName', selected); // Fixed filter key
         }
     };
 
@@ -38,12 +39,12 @@ const NameEntry: React.FC<NameEntryProps> = ({ value, onChange }) => {
         <Flex align="center" gap="xs">
             <Select
                 data={data}
-                value={value}
+                value={value.length ? value[0] : null}
                 onChange={handleSelection}
                 placeholder="Employee"
                 radius="0"
                 size="xs"
-                w="240px"
+                w="98%"
                 variant="unstyled"
                 mb="sm"
                 rightSection={<IconChevronDown size="16" />}

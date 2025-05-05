@@ -12,30 +12,22 @@ function Filter() {
     const [priority, setPriority] = React.useState('');
 
     // initializa consts for context
-    const {
-        nameFilters,
-        addNameFilter,
-        removeNameFilter,
-        priorityFilters,
-        removePriorityFilter,
-        addPriorityFilter,
-        opened,
-        setOpened,
-    } = useFilterContext();
+    const { addFilter, removeFilter, clearFilters, filters, opened, setOpened } =
+        useFilterContext();
 
-    const handleAddName = (val: string) => {
-        if (val.trim() && !nameFilters.includes(val)) {
-            addNameFilter(val);
-            setName(''); // clear field
-        }
-    };
-    const handleAddPriority = (val: string) => {
-        if (val.trim() && !priorityFilters.includes(val)) {
-            addPriorityFilter(val);
-            setPriority(''); // clear field
-        }
-    };
-    const allFilters = [...nameFilters, ...priorityFilters];
+    // const handleAddName  = (val: string) => {
+    //     if (val.trim() && !nameFilters.includes(val)) {
+    //         addNameFilter(val);
+    //         setName(''); // clear field
+    //     }
+    // };
+    // const handleAddPriority = (val: string) => {
+    //     if (val.trim() && !priorityFilters.includes(val)) {
+    //         addPriorityFilter(val);
+    //         setPriority(''); // clear field
+    //     }
+    // };
+    // const allFilters = [...nameFilters, ...priorityFilters];
 
     return (
         // Change to keep filter open when clicking on autocomplete
@@ -64,29 +56,29 @@ function Filter() {
                     onClick={() => setOpened((opened) => !opened)}
                 >
                     Filter
-                    {allFilters.length > 0 && (
-                        <Badge size="sm" variant="filled" color="primaryBlues.5" ml="xs">
-                            {allFilters.length}
-                        </Badge>
-                    )}
+                    {/*{allFilters.length > 0 && (*/}
+                    {/*    <Badge size="sm" variant="filled" color="primaryBlues.5" ml="xs">*/}
+                    {/*        {allFilters.length}*/}
+                    {/*    </Badge>*/}
+                    {/*)}*/}
                 </Button>
             </Popover.Target>
             <Popover.Dropdown>
                 <NameEntrySR
-                    value={name}
-                    onChange={(val) => {
-                        handleAddName(val);
-                    }}
+                    value={filters.employeeName || []}
+                    onChange={(val) => val && addFilter('employeeName', val)} // Fixed filter key
                 />
-                <DisplayBadges filterList={nameFilters} onRemove={removeNameFilter} />
-
-                <PriorityFilter
-                    value={priority}
-                    onChange={(val) => {
-                        handleAddPriority(val);
-                    }}
+                <DisplayBadges
+                    filterList={filters.employeeName || []}
+                    onRemove={(val) => removeFilter('employeeName', val)}
                 />
-                <DisplayBadges filterList={priorityFilters} onRemove={removePriorityFilter} />
+                {/*<Priori  tyFilter*/}
+                {/*    value={priority}*/}
+                {/*    onChange={(val) => {*/}
+                {/*        handleAddPriority(val);*/}
+                {/*    }}*/}
+                {/*/>*/}
+                {/*<DisplayBadges filterList={priorityFilters} onRemove={removePriorityFilter} />*/}
             </Popover.Dropdown>
         </Popover>
     );
