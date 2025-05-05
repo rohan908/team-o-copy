@@ -1,8 +1,7 @@
 // NameEntrySR.tsx
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Flex, Group, Select, useMantineTheme } from '@mantine/core';
+import { Select, useMantineTheme } from '@mantine/core';
 import { IconChevronDown, IconSearch } from '@tabler/icons-react';
-import DisplayBadges from '../DisplayBadges.tsx';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
 
 interface NameEntryProps {

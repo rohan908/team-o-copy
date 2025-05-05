@@ -257,8 +257,17 @@ export function RequestHistory({ requestType }: { requestType: string }) {
                                                         if (summaryColumns.includes(key))
                                                             return null;
                                                         return (
-                                                            <Text key={key} size="sm" mb="xs">
-                                                                <strong>{key}:</strong>{' '}
+                                                            <Text
+                                                                c="primaryBlues.5"
+                                                                key={key}
+                                                                size="sm"
+                                                                mb="xs"
+                                                            >
+                                                                <strong>
+                                                                    {key.charAt(0).toUpperCase() +
+                                                                        key.slice(1)}
+                                                                    :
+                                                                </strong>{' '}
                                                                 {typeof value === 'object'
                                                                     ? JSON.stringify(value)
                                                                     : String(value)}
