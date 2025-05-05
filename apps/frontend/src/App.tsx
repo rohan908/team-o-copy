@@ -194,12 +194,8 @@ const theme = createTheme({
     // variantColorResolver: myvariantColorResolver(theme)
 });
 function App() {
-  const socket = io('localhost:5000');
-
   socket.on("connect", () => {
     console.log(socket.id);
-  });
-
   socket.on("Hello", (msg) => {
     console.log(msg);
   });
