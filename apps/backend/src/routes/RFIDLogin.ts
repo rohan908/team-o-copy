@@ -12,7 +12,8 @@ router.get('/:cardID', async (req: Request, res: Response) => {
       const link = "/auto-login?email=softengD25O@gmail.com&password=cs3733D25O&redirectTo=/";
       res.json(link);
     } else if (ID == "3D56CE01") {
-
+      const link = "/auto-login?email=staffD25O@gmail.com&password=cs3733D25O&redirectTo=/";
+        res.json(link);
     }
 });
 
