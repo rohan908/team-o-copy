@@ -403,7 +403,7 @@ export function DraggableMap() {
                 if (objectType == 'floor') {
                     object.traverse(function (child: { material: THREE.MeshStandardMaterial }) {
                         child.material = new THREE.MeshStandardMaterial({
-                            color: 0xffffff,
+                            color: 0xe1e5ee,
                         });
                     });
                 } else if (objectType == 'walls') {
