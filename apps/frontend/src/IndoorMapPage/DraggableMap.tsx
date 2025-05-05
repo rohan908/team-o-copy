@@ -439,7 +439,7 @@ export function DraggableMap() {
         directionalLight.position.set(20, 20, 20);
         scenesRef.current[0].add(directionalLight);
 
-        const material = new THREE.MeshBasicMaterial({color: 0x87CEEB, side: THREE.BackSide, depthWrite: false});
+        const material = new THREE.MeshBasicMaterial({color: 0xd6e0f8, side: THREE.BackSide, depthWrite: false});
 
         const wong = new THREE.TextureLoader().load("/SunnyWong.png")
         wong.flipY = false;
