@@ -1,7 +1,5 @@
 import { Select, SelectProps, Flex, Box, useMantineTheme } from '@mantine/core';
 import React, { useState } from 'react';
-import SpeechToText from '../../Buttons/SpeechToText.tsx';
-import { notifications } from '@mantine/notifications';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
 import { IconChevronDown, IconSearch } from '@tabler/icons-react';
 
