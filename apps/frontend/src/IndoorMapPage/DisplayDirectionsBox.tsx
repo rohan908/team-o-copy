@@ -257,7 +257,7 @@ export function DisplayDirectionsBox() {
                                           ) : turnRight ?  (
                                             <IconArrowRight size={16} color="#0E3B99" />
                                           ) : (
-                                            <IconArrowUp size={20} color="#0E3B99" />
+                                            <IconArrowUp size={16} color="#0E3B99" />
                                         );
 
                                         const label = step.Direction.startsWith('Take')
