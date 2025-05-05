@@ -7,7 +7,6 @@ import '@mantine/charts/styles.css';
 import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
 import { RequestProvider } from './contexts/RequestContext.tsx';
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
-import { io } from 'socket.io-client';
 import {
     createTheme,
     MantineProvider,
