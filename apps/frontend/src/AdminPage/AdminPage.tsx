@@ -14,6 +14,7 @@ import {
 
 import CSVControlsComponent from './CSVControlsComponent.tsx';
 import {
+    IconChartBar,
     IconChevronDown,
     IconChevronUp,
     IconFileBroken,
@@ -30,6 +31,8 @@ import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
 import RequestHistory from './RequestHistory.tsx';
 import { useUser } from '@clerk/clerk-react';
+import StatsChart from '../service-request/GraphsStatistics.tsx';
+
 
 export function AdminPage() {
     const [formInfoOpen, { open, close }] = useDisclosure(true);
@@ -155,6 +158,14 @@ export function AdminPage() {
                                             >
                                                 Security Requests
                                             </SidebarButton>
+                                            <SidebarButton
+                                              ValueToCheck={displayTableNumber.toString()}
+                                              ValueForTrigger={'4'}
+                                              onClick={() => displayNumToggle(4)}
+                                              icon={<IconChartBar size="35" />}
+                                            >
+                                              Graphs and Statistics
+                                            </SidebarButton>
                                         </Flex>
                                     </Collapse>
 
@@ -274,6 +285,23 @@ export function AdminPage() {
                                         <RequestHistory requestType="Maintenance" />
                                     </Box>
                                 </Collapse>
+                              <Collapse
+                                w="100%"
+                                in={displayTableNumber == 4}
+                                transitionDuration={300}
+                                transitionTimingFunction="linear"
+                              >
+                                <Box
+                                  p="10px"
+                                  mt="10px"
+                                  style={{
+                                    borderRadius: '15px',
+                                  }}
+                                >
+                                  <StatsChart/>
+                                </Box>
+                              </Collapse>
+
                                 <Box
                                     p="10px"
                                     mt="10px"
