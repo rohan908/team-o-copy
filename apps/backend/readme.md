@@ -12,7 +12,7 @@
         - [Miscellaneous](#miscellaneous)
     - [Code Structure](#code-structure)
 
-                                                                                                                                                                                                                                                                                                                                      <!-- TOC -->
+                                                                                                                                                                                                                                                                                                                                                <!-- TOC -->
 
 This package defines the backend server, and the RESTful API it
 represents. It also includes the packages used.
