@@ -9,9 +9,11 @@ router.get('/:cardID', async (req: Request, res: Response) => {
     const ID = req.params.cardID;
 
     if(ID == "05682403") {
+      // admin 1 login info
       const link = "/auto-login?email=softengD25O@gmail.com&password=cs3733D25O&redirectTo=/";
       res.json(link);
     } else if (ID == "3D56CE01") {
+      // admin 2 login info
       const link = "/auto-login?email=staffD25O@gmail.com&password=cs3733D25O&redirectTo=/";
         res.json(link);
     }
