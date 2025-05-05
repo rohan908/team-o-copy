@@ -22,8 +22,7 @@ function Filter({ requestType }: FilterProps) {
     const [hovered, setHovered] = useState(false);
 
     // initializa consts for context
-    const { allFilters, addFilter, removeFilter, clearFilters, filters, opened, setOpened } =
-        useFilterContext();
+    const { allFilters, addFilter, removeFilter, filters, opened, setOpened } = useFilterContext();
 
     return (
         // Change to keep filter open when clicking on autocomplete

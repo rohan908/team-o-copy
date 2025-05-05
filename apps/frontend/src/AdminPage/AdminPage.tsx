@@ -56,15 +56,14 @@ export function AdminPage() {
         // } else {x`
         //   setDisplayTableNumber(num);
         // }
-
+        setOpened(false);
         clearFilters();
         setDisplayTableNumber(num);
-        setOpened(false); // side effect type shit
     }
 
     const handleOpenCSVModal = () => {
-        setCSVManipOpen(true);
         setOpened(false); // close the filter when dealing with csv modal
+        setCSVManipOpen(true);
     };
 
     return (
@@ -182,7 +181,7 @@ export function AdminPage() {
                                     <Flex direction="column" justify="center" gap="md">
                                         <SidebarButton
                                             ValueToCheck={displayTableNumber.toString()}
-                                            onClick={() => setCSVManipOpen(true)}
+                                            onClick={() => handleOpenCSVModal()}
                                             icon={<IconFileBroken size="35" />}
                                         >
                                             CSV Manipulator
@@ -318,7 +317,10 @@ export function AdminPage() {
                                 >
                                     <Modal
                                         opened={CSVManipOpen}
-                                        onClose={() => setCSVManipOpen(false)}
+                                        onClose={() => {
+                                            setCSVManipOpen(false);
+                                            setOpened(false);
+                                        }}
                                         title="CSV Manipulator"
                                         size="auto"
                                         centered
