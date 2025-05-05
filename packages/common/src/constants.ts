@@ -15,6 +15,7 @@ export const API_ROUTES = {
     SECURITYSR: '/api/securitySR',
     EXPORTROUTE: '/api/exportRoute',
     RFIDROUTE: '/api/loginRFID',
+    GRAPHSR: '/api/graphSR',
 };
 
 // file paths for backup files

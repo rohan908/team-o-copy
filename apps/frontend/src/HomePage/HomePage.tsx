@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, Stack, Title, useMantineTheme } from '@mantine/core';
 import { CustomTimeline } from './CustomTimeline.tsx';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { ContentSwitcher } from './ContentSwitcher.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.js';
 import { useTimeline } from './TimeLineContext.tsx';

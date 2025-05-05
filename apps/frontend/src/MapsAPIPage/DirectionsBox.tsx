@@ -11,7 +11,6 @@ import {
     SegmentedControl,
 } from '@mantine/core';
 import { Step } from './Steps';
-import { Link } from 'react-router-dom';
 import TTSButton from '../Buttons/TTSButton.tsx'; //use ive arrived button to direct to indoor
 import { useTimeline } from '../HomePage/TimeLineContext.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +23,6 @@ import {
     IconArrowUp,
     IconBus,
     IconQuestionMark,
-    IconStairs,
     IconTrain,
     IconWalk,
 } from '@tabler/icons-react';

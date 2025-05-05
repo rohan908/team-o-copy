@@ -5,7 +5,7 @@ import { ParkingSelector } from '../HomePage/ParkingSelector.tsx';
 import { DepartmentSelector } from '../HomePage/DepartmentSelector.tsx';
 import { AlgorithmSelector } from '../HomePage/AlgorithmSelector.tsx';
 
-import { useUser, SignOutButton, SignInButton } from '@clerk/clerk-react';
+import { useUser} from '@clerk/clerk-react';
 
 import {
     IconBuildings,

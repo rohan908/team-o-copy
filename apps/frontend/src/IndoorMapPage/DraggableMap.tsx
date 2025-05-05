@@ -621,14 +621,12 @@ export function DraggableMap() {
                     { x: node1.x, y: node1.y, z: z, floor: node1.floor + 1 },
                     { x: node2.x, y: node2.y, z: z, floor: node2.floor + 1 }
                 );
-                edge.visible = false;
                 scenesRef.current[0].add(edge);
             } else if (node1.floor === 3) {
                 const edge = animationRef.current.createEdge(
                     { x: node1.x, y: node1.y, z: z, floor: node1.floor + 1 },
                     { x: node2.x, y: node2.y, z: z, floor: node2.floor + 1 }
                 );
-                edge.visible = false;
                 scenesRef.current[0].add(edge);
             } else if (node1.floor === 4) {
                 scenesRef.current[3].add(

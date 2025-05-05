@@ -1,6 +1,6 @@
 // NameEntrySR.tsx
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Flex, Box, Select } from '@mantine/core';
+import {Flex, Box, Select } from '@mantine/core';
 import SpeechToText from '../../Buttons/SpeechToText';
 
 interface NameEntryProps {

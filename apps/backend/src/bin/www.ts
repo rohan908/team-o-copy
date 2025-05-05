@@ -3,9 +3,6 @@ import http from 'http';
 import { AddressInfo } from 'net';
 import { createHttpTerminator } from 'http-terminator';
 import { exportToCSV, exportToJSON } from '../directoryBackup/ExportToCSV.ts';
-import UpdateLogins from '../PopulateEmployee/UpdateLogins.ts';
-import { Server } from 'socket.io';
-import { createServer } from 'http';
 
 // Attempt a database connection
 console.info('Connecting to database...');
@@ -74,20 +71,6 @@ export default server;
         process.exit(0); // Exit normally
     });
 });
-
-const httpServer = createServer();
-const io = new Server(httpServer, {
-    cors: {
-        origin: '*',
-    },
-});
-
-io.on('connection', (socket) => {
-    console.log(socket.id);
-    socket.emit('Hello', 'received');
-});
-
-io.listen(3002);
 
 // Listen on the provided port, on all interfaces
 server.listen(port);

@@ -1,13 +1,11 @@
 import {
     createContext,
     useReducer,
-    useCallback,
-    useEffect,
     useContext,
     PropsWithChildren,
 } from 'react';
 import { NavSelectionItem, PathItem } from './NavigationItem.ts';
-import fetchRequestData from '../DatabaseFetching/GetRequestData.tsx';
+
 
 /*
     What this file does:

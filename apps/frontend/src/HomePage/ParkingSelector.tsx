@@ -1,5 +1,5 @@
 import { Select, useMantineTheme } from '@mantine/core';
-import { IconBuilding, IconBuildings, IconChevronDown } from '@tabler/icons-react';
+import {IconBuildings, IconChevronDown } from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
 import { hospitalOptions } from './GmapsDestinationSelector.tsx';
 import { NavSelectionItem } from '../contexts/NavigationItem.ts';

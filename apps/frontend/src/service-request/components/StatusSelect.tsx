@@ -1,4 +1,4 @@
-import { Select, SelectProps, Flex, Box } from '@mantine/core';
+import { Select, Flex, Box } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
