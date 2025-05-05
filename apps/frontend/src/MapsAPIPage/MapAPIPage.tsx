@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Divider, Flex, Grid, Stack, Title, useMantineTheme } from '@mantine/core';
-import * as L from 'leaflet';
-import SelectBox from './SelectBox.tsx';
+import React, { useState } from 'react';
+import { Box, Flex, Grid, Stack, useMantineTheme } from '@mantine/core';
 import GoogleMapsAPI from './GoogleMapsAPI.tsx';
 import { useJsApiLoader } from '@react-google-maps/api'; //this is better than LoadScript
 import { useTimeline } from '../HomePage/TimeLineContext';
@@ -11,11 +9,9 @@ import { GmapsStartSelector } from '../HomePage/GmapsStartSelector.tsx';
 import { GmapsDestinationSelector } from '../HomePage/GmapsDestinationSelector.tsx';
 import { TravelSelectorButtons } from '../common-compoents/TravelSelectorButtons.tsx';
 import { DepartmentSelector } from '../HomePage/DepartmentSelector.tsx';
-import { ParkingSelector } from '../HomePage/ParkingSelector.tsx';
 import {
     IconBuildings,
     IconDotsVertical,
-    IconHome,
     IconHomeFilled,
     IconMapPin,
 } from '@tabler/icons-react';

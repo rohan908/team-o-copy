@@ -7,7 +7,7 @@ import { useFilterContext } from '../contexts/FilterContext.tsx';
 
 function Filter() {
     const [name, setName] = React.useState('');
-    // initializa consts for context
+    // initializes consts for context
     const { filterNames, addName } = useFilterContext();
 
     const handleAddName = (val: string) => {

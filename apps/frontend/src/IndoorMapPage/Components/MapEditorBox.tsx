@@ -1,23 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     ActionIcon,
     Tooltip,
     Box,
     Stack,
-    Container,
     Flex,
-    Input,
-    TextInput,
-    NativeSelect,
-    Collapse,
     Text,
-    Modal,
     Transition,
     Title,
     Divider,
-    Button,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import {
     IconDeviceFloppy,
     IconCirclePlus,
@@ -28,7 +20,6 @@ import {
 import { MapContext } from '../MapEditor.tsx';
 import { useAllNodesContext } from '../../contexts/DirectoryContext.tsx';
 import axios from 'axios';
-import NodeInfoBox from './NodeInfoBox.tsx';
 const MapEditorBox = () => {
     const mapProps = useContext(MapContext);
     const allNodes = useAllNodesContext();

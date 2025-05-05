@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { Button, Flex, Group, Title, UnstyledButton } from '@mantine/core';
+import React from 'react';
+import { Button, Flex, Title, UnstyledButton } from '@mantine/core';
 
 interface CustomButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     children: string;

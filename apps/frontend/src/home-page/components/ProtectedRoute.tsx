@@ -14,7 +14,7 @@ const ProtectedRoute = (props: Props) => {
     }
 
     if (!isSignedIn) {
-        return <Navigate to="/" replace />; // Redirect depending on weather logged in or not
+        return <Navigate to="/" replace />; // Redirect depending on whether logged in or not
     }
     return Route;
 };

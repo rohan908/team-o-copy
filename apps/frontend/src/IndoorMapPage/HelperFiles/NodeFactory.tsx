@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { getNode } from './MapSetup.tsx';
+
 
 // Function for populating nodes as THREEjs sphere objects
 import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';

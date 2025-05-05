@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import RequestForm, { RequestData } from './RequestForm.tsx';
 import MaintenanceSelect from './components/MaintenanceSelect.tsx';
 import Display from './Display.tsx';

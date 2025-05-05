@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Image, Text, Badge, Box, Container, Group, Portal, Transition } from '@mantine/core';
-import { FaDeleteLeft } from 'react-icons/fa6';
+import { Card,  Text,  Box, Container,  Portal, Transition } from '@mantine/core';
 export function PopupTooltip() {
     const [visible, setVisible] = useState(true);
 

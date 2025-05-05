@@ -1,4 +1,4 @@
-import { Container, Box, Image, Text, Card, Button, Group, Select } from '@mantine/core';
+import {Box} from '@mantine/core';
 import { useTimeline } from './TimeLineContext';
 import { DraggableMap } from '../IndoorMapPage/DraggableMap';
 import { useState } from 'react';

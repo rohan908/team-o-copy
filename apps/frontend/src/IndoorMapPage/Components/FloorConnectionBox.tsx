@@ -2,24 +2,10 @@ import { useContext, useState, useEffect, useRef } from 'react';
 import {
     useMantineTheme,
     Box,
-    Flex,
-    TextInput,
-    Menu,
-    Collapse,
-    NativeSelect,
-    Modal,
-    ActionIcon,
-    Input,
-    Stack,
     Timeline,
     Text,
-    Button,
-    MantineProvider,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { MapContext, MapEditorProps } from '../MapEditor.tsx';
-import { IconArrowBadgeRight, IconArrowBadgeDown } from '@tabler/icons-react';
-import { BlackButton } from '../../common-compoents/commonButtons.tsx';
+import { MapContext} from '../MapEditor.tsx';
 import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
 import { useAllNodesContext } from '../../contexts/DirectoryContext.tsx';
 

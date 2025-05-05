@@ -1,6 +1,6 @@
 import React, { ReactNode, PropsWithChildren } from 'react';
 import { Box, Divider, Flex, Title, Text, useMantineTheme } from '@mantine/core';
-import { reactContent, WithChildren } from './props.tsx';
+import {WithChildren } from './props.tsx';
 
 interface BoxProps extends WithChildren {
   title?: string;

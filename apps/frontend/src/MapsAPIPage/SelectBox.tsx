@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom'; //use ive arrived button to direct to indoor
-import {BlackButton, ColorChangingButton} from '../common-compoents/commonButtons.tsx';
 import { CustomNavigationBox } from '../common-compoents/CustomNavigationBox.tsx';
 import { DirectoryNodeItem } from '../contexts/DirectoryItem.ts';
-import { usePatriotContext, useChestnutHillContext } from '../contexts/DirectoryContext.js';
+import { usePatriotContext, useChestnutHillContext, useBwhCampusContext, useFaulknerHospitalContext  } from '../contexts/DirectoryContext.js';
 import {Box, Text, Select, Collapse, TextInput, Stack, Button, Flex} from '@mantine/core';
 import { useTimeline } from '../HomePage/TimeLineContext';
 import { hospitalCoordinates } from './GoogleMapsAPI.tsx';
 import { hospitalOptions } from '../HomePage/GmapsDestinationSelector.tsx';
-import {IconCar, IconPhoto, IconTrain, IconTrekking} from "@tabler/icons-react";
 import { TravelSelectorButtons } from '../common-compoents/TravelSelectorButtons.tsx';
+
 
 const SelectBox = () => {
     const {
@@ -37,6 +35,8 @@ const SelectBox = () => {
 
     const Patriot = usePatriotContext();
     const Chestnut = useChestnutHillContext();
+    const BWH = useBwhCampusContext();
+    const Faulkner = useFaulknerHospitalContext();
 
     const MapDepartment = (department: DirectoryNodeItem[]) =>
         department.map((department: DirectoryNodeItem) => ({
@@ -75,6 +75,8 @@ const SelectBox = () => {
         setSelectedDepartment(null);
     };
 
+
+
     //use effect to render google autocomplete
     useEffect(() => {
         //initialize only when the box is not collapsed or has input
@@ -108,6 +110,7 @@ const SelectBox = () => {
             setCollapsed(true);
         }
     }, []);
+
 
     return (
         <>

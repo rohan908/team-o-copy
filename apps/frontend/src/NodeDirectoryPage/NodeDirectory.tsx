@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import {
     Accordion,
-    Image,
     Center,
     Flex,
-    useMantineTheme,
     Group,
     Avatar,
     Text,
