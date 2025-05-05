@@ -1,33 +1,37 @@
-import { Select, SelectProps, Flex, Box, useMantineTheme, Autocomplete } from '@mantine/core';
+import { Select, SelectProps, Flex, Box, useMantineTheme } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
-import { IconChevronDown, IconSearch } from '@tabler/icons-react';
-import DisplayBadges from '../DisplayBadges.tsx';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
+import { IconChevronDown, IconSearch } from '@tabler/icons-react';
 
-const priorityOptions = ['Emergency', 'High', 'Medium', 'Low'];
-
-interface PrioritySelectProps extends SelectProps {
-    value: string;
-    onChange: (value: string | null) => void;
+interface HospitalSelectProps extends SelectProps {
+    value: string | null;
+    onChange: (value: string) => void;
 }
 
-const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...props }) => {
+const HospitalFilter: React.FC<HospitalSelectProps> = ({ value, onChange, ...props }) => {
+    const hospitalData = [
+        '20 Patriot Place',
+        '22 Patriot Place',
+        'Chestnut Hill',
+        'Falkner Hospital',
+        'BWH Campus',
+    ];
     const theme = useMantineTheme();
-    const { addFilter } = useFilterContext();
+    const { addFilter, setHovered } = useFilterContext();
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
-            addFilter('priority', selected);
+            addFilter('hospital', selected);
         }
     };
 
     return (
         <Select
-            placeholder="Priotriy"
-            data={priorityOptions}
+            placeholder="Hospital"
+            data={hospitalData}
             value={value}
             onChange={handleSelection}
             nothingFoundMessage="No Priority selected"
@@ -52,4 +56,4 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
     );
 };
 
-export default PriorityFilter;
+export default HospitalFilter;

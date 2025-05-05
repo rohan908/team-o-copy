@@ -6,14 +6,14 @@ import DisplayBadges from '../DisplayBadges.tsx';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
 
 interface NameEntryProps {
-    value: string[];
+    value: string;
     onChange: (value: string) => void;
 }
 
 const NameEntry: React.FC<NameEntryProps> = ({ value, onChange }) => {
     const [data, setData] = useState<string[]>([]);
     const theme = useMantineTheme();
-    const { addFilter, removeFilter } = useFilterContext();
+    const { addFilter } = useFilterContext();
 
     useEffect(() => {
         const fetchNames = async () => {
@@ -30,35 +30,33 @@ const NameEntry: React.FC<NameEntryProps> = ({ value, onChange }) => {
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
-            onChange(selected); // Now properly calls the parent's onChange
-            addFilter('employeeName', selected); // Fixed filter key
+            onChange(selected);
+            addFilter('employeeName', selected);
         }
     };
 
     return (
-        <Flex align="center" gap="xs">
-            <Select
-                data={data}
-                value={value.length ? value[0] : null}
-                onChange={handleSelection}
-                placeholder="Employee"
-                radius="0"
-                size="xs"
-                w="98%"
-                variant="unstyled"
-                mb="sm"
-                rightSection={<IconChevronDown size="16" />}
-                leftSection={<IconSearch size="16" />}
-                styles={{
-                    input: {
-                        boxShadow: `0 2px 1px 0 ${theme.colors.greys[3]}`,
-                    },
-                    dropdown: {
-                        borderRadius: '8px',
-                    },
-                }}
-            />
-        </Flex>
+        <Select
+            data={data}
+            value={value}
+            onChange={handleSelection}
+            placeholder="Employee"
+            radius="0"
+            size="xs"
+            w="100%"
+            variant="unstyled"
+            mb="sm"
+            rightSection={<IconChevronDown size="16" />}
+            leftSection={<IconSearch size="16" />}
+            styles={{
+                input: {
+                    boxShadow: `0 2px 1px 0 ${theme.colors.greys[3]}`,
+                },
+                dropdown: {
+                    borderRadius: '8px',
+                },
+            }}
+        />
     );
 };
 

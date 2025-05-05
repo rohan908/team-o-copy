@@ -1,36 +1,33 @@
-import { Select, SelectProps, Flex, Box, useMantineTheme, Autocomplete } from '@mantine/core';
+import { Flex, Box, Select, SelectProps, useMantineTheme } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
-import { IconChevronDown, IconSearch } from '@tabler/icons-react';
-import DisplayBadges from '../DisplayBadges.tsx';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
+import { IconChevronDown, IconSearch } from '@tabler/icons-react';
 
-const priorityOptions = ['Emergency', 'High', 'Medium', 'Low'];
-
-interface PrioritySelectProps extends SelectProps {
+const securityOptions = ['Escort Service', 'Safety Hazard', 'Building Security', 'Surveillance'];
+interface SecuritySelectProps {
     value: string;
     onChange: (value: string | null) => void;
 }
-
-const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...props }) => {
+const SecurityFilter: React.FC<SecuritySelectProps> = ({ value, onChange }) => {
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
-            addFilter('priority', selected);
+            addFilter('security', selected);
         }
     };
 
     return (
         <Select
-            placeholder="Priotriy"
-            data={priorityOptions}
+            placeholder="Secuirty"
+            data={securityOptions}
             value={value}
             onChange={handleSelection}
-            nothingFoundMessage="No Priority selected"
+            nothingFoundMessage="No Security selected"
             radius="0"
             searchable
             w="100%"
@@ -51,5 +48,4 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
         />
     );
 };
-
-export default PriorityFilter;
+export default SecurityFilter;

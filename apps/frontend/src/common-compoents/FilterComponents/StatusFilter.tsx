@@ -1,36 +1,35 @@
-import { Select, SelectProps, Flex, Box, useMantineTheme, Autocomplete } from '@mantine/core';
+import { Select, SelectProps, Flex, Box, useMantineTheme } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
-import { IconChevronDown, IconSearch } from '@tabler/icons-react';
-import DisplayBadges from '../DisplayBadges.tsx';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
+import { IconChevronDown, IconSearch } from '@tabler/icons-react';
 
-const priorityOptions = ['Emergency', 'High', 'Medium', 'Low'];
+const statusOptions = ['Unassigned', 'Assigned', 'Working', 'Done'];
 
-interface PrioritySelectProps extends SelectProps {
+interface StatusSelectProps {
     value: string;
     onChange: (value: string | null) => void;
 }
 
-const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...props }) => {
+const StatusFilter: React.FC<StatusSelectProps> = ({ value, onChange }) => {
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
-            addFilter('priority', selected);
+            addFilter('status', selected);
         }
     };
 
     return (
         <Select
-            placeholder="Priotriy"
-            data={priorityOptions}
+            placeholder="Status"
+            data={statusOptions}
             value={value}
             onChange={handleSelection}
-            nothingFoundMessage="No Priority selected"
+            nothingFoundMessage="No Status selected"
             radius="0"
             searchable
             w="100%"
@@ -52,4 +51,4 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
     );
 };
 
-export default PriorityFilter;
+export default StatusFilter;

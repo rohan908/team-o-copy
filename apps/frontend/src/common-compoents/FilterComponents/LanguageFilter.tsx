@@ -1,33 +1,33 @@
-import { Select, SelectProps, Flex, Box, useMantineTheme, Autocomplete } from '@mantine/core';
+import { Flex, Box, Select, SelectProps, useMantineTheme } from '@mantine/core';
+import ISO6391 from 'iso-639-1';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
-import { IconChevronDown, IconSearch } from '@tabler/icons-react';
-import DisplayBadges from '../DisplayBadges.tsx';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
+import { IconChevronDown, IconSearch } from '@tabler/icons-react';
 
-const priorityOptions = ['Emergency', 'High', 'Medium', 'Low'];
+const languageOptions = ['ASL (American Sign Language)', ...ISO6391.getAllNames()];
 
-interface PrioritySelectProps extends SelectProps {
-    value: string;
+interface LanguageSelectProps extends SelectProps {
+    label: string;
     onChange: (value: string | null) => void;
 }
 
-const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...props }) => {
+const LanguageFilter: React.FC<LanguageSelectProps> = ({ value, onChange, ...props }) => {
     const theme = useMantineTheme();
-    const { addFilter } = useFilterContext();
+    const { addFilter, setHovered } = useFilterContext();
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
-            addFilter('priority', selected);
+            addFilter('language', selected);
         }
     };
 
     return (
         <Select
-            placeholder="Priotriy"
-            data={priorityOptions}
+            placeholder="Language"
+            data={languageOptions}
             value={value}
             onChange={handleSelection}
             nothingFoundMessage="No Priority selected"
@@ -51,5 +51,4 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
         />
     );
 };
-
-export default PriorityFilter;
+export default LanguageFilter;

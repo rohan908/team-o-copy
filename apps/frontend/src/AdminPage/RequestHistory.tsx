@@ -12,12 +12,12 @@ import {
     CloseButton,
     Badge,
     Group,
+    Button,
 } from '@mantine/core';
 import Filter from './Filter.tsx';
 
 // filter context addition
 import { useFilterContext } from '../contexts/FilterContext';
-import PriorityFilter from '../common-compoents/PriorityFilter.tsx';
 
 // Type-safe interface for request data
 interface RequestProps {
@@ -55,7 +55,7 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
     // get current filters
-    const { filters } = useFilterContext();
+    const { filters, clearFilters } = useFilterContext();
 
     // helper function to dispay correct feild
     const getRequestTypeValue = (row: RequestProps) => {
@@ -121,12 +121,38 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     let rows = data;
 
     if (filters.employeeName?.length > 0) {
-        rows = rows.filter((row) => filters.employeeName.includes(row.employeeName));
+        rows = rows.filter((row) => filters.employeeName?.includes(row.employeeName));
     }
 
-    // if (priorityFilters.length > 0) {
-    //     rows = rows.filter((row) => priorityFilters.includes(row.priority as string));
-    // }
+    if (filters.priority?.length > 0) {
+        rows = rows.filter((row) => filters.priority?.includes(row.priority as string));
+    }
+
+    if (filters.cleanupType?.length > 0) {
+        rows = rows.filter((row) => filters.cleanupType?.includes(row.cleanupType as string));
+    }
+
+    if (filters.language?.length > 0) {
+        rows = rows.filter((row) => filters.language?.includes(row.language as string));
+    }
+
+    if (filters.maintenanceType?.length > 0) {
+        rows = rows.filter((row) =>
+            filters.maintenanceType?.includes(row.maintenanceType as string)
+        );
+    }
+
+    if (filters.security?.length > 0) {
+        rows = rows.filter((row) => filters.security?.includes(row.security as string));
+    }
+
+    if (filters.hospital?.length > 0) {
+        rows = rows.filter((row) => filters.hospital?.includes(row.hospital as string));
+    }
+
+    if (filters.status?.length > 0) {
+        rows = rows.filter((row) => filters.status?.includes(row.status as string));
+    }
 
     const summaryColumns = ['employeeName', 'requestID', 'requestType', 'createdAt'];
 
@@ -138,7 +164,21 @@ export function RequestHistory({ requestType }: { requestType: string }) {
             <Text c="secondaryBlues.7" ta="left" mb="xl" fz="xxs">
                 Click on a row to find out more information
             </Text>
-            <Filter />
+            <Filter requestType={requestType} />
+            <Button
+                radius="md"
+                bg="yellowAccent.4"
+                fw="400"
+                fz="xs"
+                m="xs"
+                c="primaryBlues.5"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    clearFilters();
+                }}
+            >
+                Clear Filters
+            </Button>
 
             <ScrollArea type="scroll" offsetScrollbars scrollbarSize={6}>
                 <Table

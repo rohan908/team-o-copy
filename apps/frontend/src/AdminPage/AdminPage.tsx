@@ -51,7 +51,7 @@ export function AdminPage() {
 
     const handleOpenCSVModal = () => {
         setCSVManipOpen(true);
-        setOpened(false); // 👈 close filter when opening modal
+        setOpened(false); // close the filter when dealing with csv modal
     };
 
     return (
@@ -182,9 +182,6 @@ export function AdminPage() {
                 </Grid.Col>
                 <Grid.Col span={'auto'}>
                     <Box maw="100%" mx="auto">
-                        {/*<Title ff="Inter" fz="30px" mb="4px" ta="center" fw={600}>*/}
-                        {/*  Admin Page*/}
-                        {/*</Title>*/}
                         <Center pr="10px">
                             <Flex
                                 direction="column"

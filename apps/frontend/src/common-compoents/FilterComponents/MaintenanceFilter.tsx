@@ -1,36 +1,41 @@
-import { Select, SelectProps, Flex, Box, useMantineTheme, Autocomplete } from '@mantine/core';
+import { Select, SelectProps, Flex, Box, useMantineTheme } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
-import { IconChevronDown, IconSearch } from '@tabler/icons-react';
-import DisplayBadges from '../DisplayBadges.tsx';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
+import { IconChevronDown, IconSearch } from '@tabler/icons-react';
 
-const priorityOptions = ['Emergency', 'High', 'Medium', 'Low'];
+const maintenanceOptions = [
+    'Elevator',
+    'HVAC',
+    'Medical Equipment',
+    'Plumbing',
+    'Electrical',
+    'Building Structure',
+];
 
-interface PrioritySelectProps extends SelectProps {
+interface MaintenanceSelectProps extends SelectProps {
     value: string;
-    onChange: (value: string | null) => void;
+    onChange: (value: string | null, option?: { value: string; label: string }) => void;
 }
-
-const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...props }) => {
+const MaintenanceFilter: React.FC<MaintenanceSelectProps> = ({ value, onChange, ...props }) => {
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
-            addFilter('priority', selected);
+            addFilter('maintenanceType', selected);
         }
     };
 
     return (
         <Select
-            placeholder="Priotriy"
-            data={priorityOptions}
+            placeholder="Maintenance"
+            data={maintenanceOptions}
             value={value}
             onChange={handleSelection}
-            nothingFoundMessage="No Priority selected"
+            nothingFoundMessage="No Maitenance selected"
             radius="0"
             searchable
             w="100%"
@@ -52,4 +57,4 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
     );
 };
 
-export default PriorityFilter;
+export default MaintenanceFilter;

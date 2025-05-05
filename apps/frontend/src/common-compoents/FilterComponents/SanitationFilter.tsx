@@ -1,33 +1,39 @@
-import { Select, SelectProps, Flex, Box, useMantineTheme, Autocomplete } from '@mantine/core';
+import { Flex, Box, Select, SelectProps, useMantineTheme } from '@mantine/core';
 import React from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
 import { IconChevronDown, IconSearch } from '@tabler/icons-react';
-import DisplayBadges from '../DisplayBadges.tsx';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
 
-const priorityOptions = ['Emergency', 'High', 'Medium', 'Low'];
+const sanitationOptions = [
+    'Biohazard Cleanup',
+    'General Room Cleaning',
+    'Waste Removal',
+    'Floor Cleaning (mop, vacuum, etc.)',
+    'Restroom Cleaning',
+    'Spill Cleanup',
+    'Equipment Cleaning',
+];
 
-interface PrioritySelectProps extends SelectProps {
+interface SanitationSelectProps {
     value: string;
     onChange: (value: string | null) => void;
 }
 
-const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...props }) => {
+const SanitationFilter: React.FC<SanitationSelectProps> = ({ value, onChange }) => {
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
-            addFilter('priority', selected);
+            addFilter('cleanupType', selected);
         }
     };
-
     return (
         <Select
-            placeholder="Priotriy"
-            data={priorityOptions}
+            placeholder="Sanitation"
+            data={sanitationOptions}
             value={value}
             onChange={handleSelection}
             nothingFoundMessage="No Priority selected"
@@ -52,4 +58,4 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
     );
 };
 
-export default PriorityFilter;
+export default SanitationFilter;

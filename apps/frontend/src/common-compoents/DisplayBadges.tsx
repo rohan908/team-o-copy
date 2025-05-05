@@ -25,3 +25,5 @@ export const DisplayBadges = ({ filterList, onRemove }: DisplayBadgesProps) => {
         </Group>
     );
 };
+
+export default DisplayBadges;

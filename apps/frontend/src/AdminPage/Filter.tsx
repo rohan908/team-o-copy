@@ -2,32 +2,28 @@ import { Popover, Button, Title, Badge, CloseButton, Group, Flex } from '@mantin
 import { IconFilter } from '@tabler/icons-react';
 import NameEntrySR from '../common-compoents/FilterComponents/NameEntrySR.tsx';
 import PriorityFilter from '../common-compoents/FilterComponents/PriorityFilter.tsx';
-import React from 'react';
+import React, { useState } from 'react';
 import DisplayBadges from '../common-compoents/DisplayBadges';
 // import context
 import { useFilterContext } from '../contexts/FilterContext.tsx';
+import SanitationFilter from '../common-compoents/FilterComponents/SanitationFilter.tsx';
+import LanguageFilter from '../common-compoents/FilterComponents/LanguageFilter.tsx';
+import MaintenanceFilter from '../common-compoents/FilterComponents/MaintenanceFilter.tsx';
+import SecurityFilter from '../common-compoents/FilterComponents/SecurityFilter.tsx';
+import HospitalFilter from '../common-compoents/FilterComponents/HospitalFilter.tsx';
+import StatusFilter from '../common-compoents/FilterComponents/StatusFilter.tsx';
+import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
 
-function Filter() {
-    const [name, setName] = React.useState('');
-    const [priority, setPriority] = React.useState('');
+interface FilterProps {
+    requestType: string;
+}
+
+function Filter({ requestType }: FilterProps) {
+    const [hovered, setHovered] = useState(false);
 
     // initializa consts for context
-    const { addFilter, removeFilter, clearFilters, filters, opened, setOpened } =
+    const { allFilters, addFilter, removeFilter, clearFilters, filters, opened, setOpened } =
         useFilterContext();
-
-    // const handleAddName  = (val: string) => {
-    //     if (val.trim() && !nameFilters.includes(val)) {
-    //         addNameFilter(val);
-    //         setName(''); // clear field
-    //     }
-    // };
-    // const handleAddPriority = (val: string) => {
-    //     if (val.trim() && !priorityFilters.includes(val)) {
-    //         addPriorityFilter(val);
-    //         setPriority(''); // clear field
-    //     }
-    // };
-    // const allFilters = [...nameFilters, ...priorityFilters];
 
     return (
         // Change to keep filter open when clicking on autocomplete
@@ -53,17 +49,22 @@ function Filter() {
                     fz="xs"
                     m="xs"
                     c="primaryBlues.5"
-                    onClick={() => setOpened((opened) => !opened)}
+                    onClick={(e) => setOpened((opened) => !opened)}
                 >
                     Filter
-                    {/*{allFilters.length > 0 && (*/}
-                    {/*    <Badge size="sm" variant="filled" color="primaryBlues.5" ml="xs">*/}
-                    {/*        {allFilters.length}*/}
-                    {/*    </Badge>*/}
-                    {/*)}*/}
+                    {allFilters.length > 0 && (
+                        <Badge size="sm" variant="filled" color="primaryBlues.5" ml="xs">
+                            {allFilters.length}
+                        </Badge>
+                    )}
                 </Button>
             </Popover.Target>
-            <Popover.Dropdown>
+            <Popover.Dropdown pt="lg">
+                <HoverUnderline mb="sm">
+                    <Title mb="0px" c="secondaryBlues.7">
+                        Filter By:
+                    </Title>
+                </HoverUnderline>
                 <NameEntrySR
                     value={filters.employeeName || []}
                     onChange={(val) => val && addFilter('employeeName', val)} // Fixed filter key
@@ -72,13 +73,78 @@ function Filter() {
                     filterList={filters.employeeName || []}
                     onRemove={(val) => removeFilter('employeeName', val)}
                 />
-                {/*<Priori  tyFilter*/}
-                {/*    value={priority}*/}
-                {/*    onChange={(val) => {*/}
-                {/*        handleAddPriority(val);*/}
-                {/*    }}*/}
-                {/*/>*/}
-                {/*<DisplayBadges filterList={priorityFilters} onRemove={removePriorityFilter} />*/}
+                <PriorityFilter
+                    value={filters.priority || []}
+                    onChange={(val) => val && addFilter('priority', val)} // Fixed filter key
+                />
+                <DisplayBadges
+                    filterList={filters.priority || []}
+                    onRemove={(val) => removeFilter('priority', val)}
+                />
+                <StatusFilter
+                    value={filters.status || []}
+                    onChange={(val) => val && addFilter('status', val)} // Fixed filter key
+                />
+                <DisplayBadges
+                    filterList={filters.status || []}
+                    onRemove={(val) => removeFilter('status', val)}
+                />
+                {requestType === 'Sanitation' && (
+                    <>
+                        <SanitationFilter
+                            value={filters.cleanupType || []}
+                            onChange={(val) => val && addFilter('cleanupType', val)}
+                        />
+                        <DisplayBadges
+                            filterList={filters.cleanupType || []}
+                            onRemove={(val) => removeFilter('cleanupType', val)}
+                        />
+                    </>
+                )}
+                {requestType === 'Language' && (
+                    <>
+                        <LanguageFilter
+                            value={filters.language || []}
+                            onChange={(val) => val && addFilter('language', val)}
+                        />
+                        <DisplayBadges
+                            filterList={filters.language || []}
+                            onRemove={(val) => removeFilter('language', val)}
+                        />
+                    </>
+                )}
+                {requestType === 'Maintenance' && (
+                    <>
+                        <MaintenanceFilter
+                            value={filters.maintenanceType || []}
+                            onChange={(val) => val && addFilter('maintenanceType', val)}
+                        />
+                        <DisplayBadges
+                            filterList={filters.maintenanceType || []}
+                            onRemove={(val) => removeFilter('maintenanceType', val)}
+                        />
+                    </>
+                )}
+                {requestType === `Security` && (
+                    <>
+                        <SecurityFilter
+                            value={filters.security || []}
+                            onChange={(val) => val && addFilter('security', val)}
+                        />
+                        <DisplayBadges
+                            filterList={filters.security || []}
+                            onRemove={(val) => removeFilter('security', val)}
+                        />
+                    </>
+                )}
+                <HospitalFilter
+                    value={filters.hospital || []}
+                    onChange={(val) => val && addFilter('hospital', val)} // Fixed filter key
+                />
+                <DisplayBadges
+                    filterList={filters.hospital || []}
+                    onRemove={(val) => removeFilter('hospital', val)}
+                />
             </Popover.Dropdown>
         </Popover>
     );
