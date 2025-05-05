@@ -4,7 +4,6 @@ import { AddressInfo } from 'net';
 import { createHttpTerminator } from 'http-terminator';
 import { exportToCSV, exportToJSON } from '../directoryBackup/ExportToCSV.ts';
 import UpdateLogins from '../PopulateEmployee/UpdateLogins.ts';
-import { Server } from 'socket.io';
 import { createServer } from 'http';
 
 // Attempt a database connection
