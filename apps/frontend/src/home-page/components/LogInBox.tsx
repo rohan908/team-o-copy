@@ -9,6 +9,7 @@ const LogInBox = () => {
     // change from handlers to clerk
     const { isSignedIn } = useUser();
     const navigate = useNavigate();
+
     return (
         <Flex w="100%" h="100vh" justify="center" align="center" pl={{ md: '20%', sm: '0%' }}>
             <TwoPartInteractiveBox
