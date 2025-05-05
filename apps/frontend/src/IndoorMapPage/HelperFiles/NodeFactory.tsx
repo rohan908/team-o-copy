@@ -91,9 +91,6 @@ export const createNode = (
         Math.round(nodeRadius * 12), // Vibe based adaptive segmentation
         Math.round(nodeRadius * 6)
     );
-    const borderNodeGeometry = new THREE.TorusGeometry(
-        nodeRadius * 1.2,
-    )
     const staircaseNodeGeometry = new THREE.OctahedronGeometry(2, 0);
     const elevatorNodeGeometry = new THREE.OctahedronGeometry(2, 0);
     const material = new THREE.MeshBasicMaterial(nodeColor);
@@ -145,7 +142,6 @@ export const createNode = (
         } else if (nodeFloor === 2) {
             if (floorHeight !== undefined) {
                 sceneArr[0].add(threeDNode);
-                threeDNode.visible = false;
                 if (objectsRef) {
                     // hide path objects not on the first floor be default
                     objectsRef.current.push(threeDNode);
@@ -160,7 +156,6 @@ export const createNode = (
         } else if (nodeFloor === 3) {
             if (floorHeight !== undefined) {
                 sceneArr[0].add(threeDNode);
-                threeDNode.visible = false;
                 if (objectsRef) {
                     objectsRef.current.push(threeDNode);
                 }
