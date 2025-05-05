@@ -194,9 +194,6 @@ const theme = createTheme({
     // variantColorResolver: myvariantColorResolver(theme)
 });
 function App() {
-
-    console.log(msg);
-  });
     return (
         <MantineProvider theme={theme}>
             <Notifications />
