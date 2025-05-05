@@ -1,19 +1,31 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Box, useMantineTheme, SegmentedControl, Flex, Collapse } from '@mantine/core';
-import { MantineProvider } from '@mantine/core';
+import React, {useContext } from 'react';
+import { Box, useMantineTheme, SegmentedControl, Flex, Collapse, Button } from '@mantine/core';
 import FloorConnectionBox from './FloorConnectionBox.tsx';
 import { MapContext } from '../MapEditor.tsx';
+import { IconArrowBadgeUpFilled, IconArrowBadgeDownFilled } from '@tabler/icons-react';
+//const theme = useMantineTheme();
 
 interface FloorSwitchBoxProps {
     floor: number;
     setFloor: (floor: number) => void;
+    incrementPath?: () => void;
+    decrementPath?: () => void;
     onCollapseChange?: (isCollapsed: boolean) => void;
+    pathFloors?: number[];
     building: string;
 }
 
-const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, building }) => {
+const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({
+    floor,
+    setFloor,
+    incrementPath,
+    decrementPath,
+    pathFloors,
+    building,
+}) => {
     const theme = useMantineTheme();
     const mapProps = useContext(MapContext);
+    const opened = floor == 6;
 
     // TODO: In the future these should re-suse a react component.
     if (building === '22 Patriot Pl' || building == '20 Patriot Pl') {
@@ -32,6 +44,29 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, buildi
                 }}
             >
                 <Box m="4px" p="2px" bg="blueBase.6" style={{ borderRadius: '30px' }}>
+                    <Collapse in={opened}>
+                        <Flex direction="column" align="center">
+                            <Button
+                                onClick={incrementPath}
+                                w={55}
+                                mt={10}
+                                bg={theme.colors.primaryBlues[8]}
+                                c={theme.colors.primaryBlues[1]}
+                            >
+                                <IconArrowBadgeUpFilled size={32} />
+                            </Button>
+                            <Button
+                                onClick={decrementPath}
+                                w={55}
+                                mt={2}
+                                mb={5}
+                                bg={theme.colors.primaryBlues[8]}
+                                c={theme.colors.primaryBlues[1]}
+                            >
+                                <IconArrowBadgeDownFilled size={32} />
+                            </Button>
+                        </Flex>
+                    </Collapse>
                     <SegmentedControl
                         orientation="vertical"
                         withItemsBorders={false}
@@ -41,12 +76,13 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, buildi
                         value={floor.toString()}
                         onChange={(value) => setFloor(parseInt(value))}
                         data={[
+                            { label: 'FP', value: '6' },
                             { label: '3D', value: '5' },
                             { label: 'F4', value: '4' },
                             { label: 'F3', value: '3' },
                             { label: 'F2', value: '2' },
                             { label: 'F1', value: '1' },
-                        ]}
+                        ].filter((item) => pathFloors.includes(parseInt(item.value)))} // filter out floors without path
                         styles={{
                             root: {
                                 borderRadius: 30,
@@ -106,7 +142,13 @@ const FloorSwitchBox: React.FC<FloorSwitchBoxProps> = ({ floor, setFloor, buildi
                             m="1px"
                             color="blueBase.6"
                             value={floor.toString()}
-                            onChange={(value) => setFloor(parseInt(value))}
+                            onChange={(value) =>
+                                setFloor(
+                                    parseInt(value),
+                                    mapProps.currentNode?.nodeType != 'staircase' ||
+                                        mapProps.selectedTool != 'add-edge'
+                                )
+                            }
                             data={[
                                 { label: 'BC', value: '7' },
                                 { label: 'FK', value: '6' },

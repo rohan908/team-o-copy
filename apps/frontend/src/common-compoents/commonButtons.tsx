@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { Button, Group, Title, UnstyledButton } from '@mantine/core';
+import React from 'react';
+import { Button, Flex, Title, UnstyledButton } from '@mantine/core';
 
 interface CustomButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     children: string;
@@ -106,10 +106,10 @@ export const SidebarButton: React.FC<ColorChangingButtonProps> = ({
             }}
             {...props}
         >
-            <Group gap="xs">
+            <Flex direction="row" gap="xs" align="center">
                 {icon}
                 <Title>{children}</Title>
-            </Group>
+            </Flex>
         </UnstyledButton>
     );
 };

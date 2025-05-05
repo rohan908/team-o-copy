@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { getNode } from './MapSetup.tsx';
+
 
 // Function for populating nodes as THREEjs sphere objects
 import { DirectoryNodeItem } from '../../contexts/DirectoryItem.ts';
@@ -93,15 +93,7 @@ export const createNode = (
     );
     const staircaseNodeGeometry = new THREE.OctahedronGeometry(2, 0);
     const elevatorNodeGeometry = new THREE.OctahedronGeometry(2, 0);
-    let material = new THREE.MeshBasicMaterial(nodeColor);
-    if (
-        node.id == startId ||
-        node.id == endId ||
-        node.nodeType == 'staircase' ||
-        node.nodeType == 'elevator'
-    ) {
-        material = new THREE.MeshBasicMaterial({ color: 0xfcb024 });
-    }
+    const material = new THREE.MeshBasicMaterial(nodeColor);
 
     let threeDNode;
     if (nodeType == 'department') {
@@ -150,7 +142,6 @@ export const createNode = (
         } else if (nodeFloor === 2) {
             if (floorHeight !== undefined) {
                 sceneArr[0].add(threeDNode);
-                threeDNode.visible = false;
                 if (objectsRef) {
                     // hide path objects not on the first floor be default
                     objectsRef.current.push(threeDNode);
@@ -165,7 +156,6 @@ export const createNode = (
         } else if (nodeFloor === 3) {
             if (floorHeight !== undefined) {
                 sceneArr[0].add(threeDNode);
-                threeDNode.visible = false;
                 if (objectsRef) {
                     objectsRef.current.push(threeDNode);
                 }

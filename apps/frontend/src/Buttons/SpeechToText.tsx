@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ActionIcon, Loader } from '@mantine/core';
-import { IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react';
+import { IconMicrophone} from '@tabler/icons-react';
 
 interface SpechToTextProps {
     OnResult: (text: string) => void;
@@ -31,7 +31,7 @@ const SpeechToText: React.FC<SpechToTextProps> = (props: SpechToTextProps) => {
                 .map((result) => result[0].transcript)
                 .join('');
             OnResult(transcript);
-            SpeechRecognition.stop(); //ad this line to stop recording once there is a result
+            SpeechRecognition.stop(); //add this line to stop recording once there is a result
         };
 
         SpeechRecognition.onend = () => {

@@ -4,22 +4,14 @@ import {
     Box,
     Flex,
     TextInput,
-    Menu,
     Collapse,
     NativeSelect,
-    Modal,
-    ActionIcon,
     Input,
-    Stack,
     Text,
     Button,
-    MantineProvider,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { MapContext, MapEditorProps } from '../MapEditor.tsx';
-import { IconArrowBadgeRight, IconArrowBadgeDown, IconArrowBadgeLeft } from '@tabler/icons-react';
-import { BlackButton } from '../../common-compoents/commonButtons.tsx';
-import FloorEditorBox from './FloorConnectionBox.tsx';
+import { MapContext} from '../MapEditor.tsx';
+import {IconArrowBadgeDown, IconArrowBadgeLeft } from '@tabler/icons-react';
 
 const NodeInfoBox = () => {
     const mapProps = useContext(MapContext);

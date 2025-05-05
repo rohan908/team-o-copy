@@ -1,4 +1,4 @@
-import { Container, Box, Image, Text, Card, Button, Group, Select } from '@mantine/core';
+import {Box} from '@mantine/core';
 import { useTimeline } from './TimeLineContext';
 import { DraggableMap } from '../IndoorMapPage/DraggableMap';
 import { useState } from 'react';
@@ -25,9 +25,19 @@ export function ContentSwitcher() {
                 }
                 return <GoogleMapsAPI onStepsUpdate={setSteps} />;
             case 1: //Indoor Nav
-                return <DraggableMap />;
+                return <DraggableMap onHomePage={true} />;
             case 2: //Service Request
-                return <ServiceRequestPage width={"80%"} marginRight={"10%"} height={"80vh"} cols={2} vSpacing={10} hSpacing={30} buttonHeight={220}/>;
+                return (
+                    <ServiceRequestPage
+                        width={'80%'}
+                        marginRight={'10%'}
+                        height={'80vh'}
+                        cols={2}
+                        vSpacing={10}
+                        hSpacing={30}
+                        buttonHeight={220}
+                    />
+                );
         }
     };
     return (
@@ -35,8 +45,8 @@ export function ContentSwitcher() {
             w="100%"
             h="100%"
             p="xxl"
-            miw="550px"
-            mih="550px"
+            miw="700px"
+            mih="400px"
             style={{
                 borderRadius: '8px',
                 overflow: 'hidden',

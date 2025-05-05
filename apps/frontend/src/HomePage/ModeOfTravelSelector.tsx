@@ -1,5 +1,5 @@
-import { Autocomplete, Select, useMantineTheme } from '@mantine/core';
-import { IconCarFilled, IconChevronDown, IconMapPinFilled } from '@tabler/icons-react';
+import {Select, useMantineTheme } from '@mantine/core';
+import { IconCarFilled, IconChevronDown} from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
 
 export function ModeOfTravelSelector() {

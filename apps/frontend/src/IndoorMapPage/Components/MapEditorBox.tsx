@@ -1,23 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     ActionIcon,
     Tooltip,
     Box,
     Stack,
-    Container,
     Flex,
-    Input,
-    TextInput,
-    NativeSelect,
-    Collapse,
     Text,
-    Modal,
     Transition,
     Title,
     Divider,
-    Button,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import {
     IconDeviceFloppy,
     IconCirclePlus,
@@ -28,7 +20,6 @@ import {
 import { MapContext } from '../MapEditor.tsx';
 import { useAllNodesContext } from '../../contexts/DirectoryContext.tsx';
 import axios from 'axios';
-import NodeInfoBox from './NodeInfoBox.tsx';
 const MapEditorBox = () => {
     const mapProps = useContext(MapContext);
     const allNodes = useAllNodesContext();
@@ -204,7 +195,20 @@ const MapEditorBox = () => {
                                         To move a node, click on the node you wish to move and drag
                                         it. <br></br>
                                         To select multiple nodes, use ctrl + click. <br></br>
-                                        To delete selected nodes, use ctrl + right-click.
+                                    </Text>
+                                    <Divider
+                                        w={'100%'}
+                                        mt={'xs'}
+                                        mb={'xs'}
+                                        color={'yellowAccent.4'}
+                                        size={'xs'}
+                                    />
+                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'bold'}>
+                                        Delete Nodes:
+                                    </Text>
+                                    <Text c={'secondaryBlues.7'} fz={'sm'} fw={'normal'}>
+                                        To delete selected nodes, use ctrl + right-click. <br></br>
+                                        To undo a deletion or edge, press ctrl + z
                                     </Text>
                                     <Divider
                                         w={'100%'}

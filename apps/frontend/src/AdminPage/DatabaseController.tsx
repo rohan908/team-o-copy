@@ -1,17 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
-    Box,
-    TextInput,
     Button,
     FileInput,
-    Group,
-    useMantineTheme,
-    Title,
     Flex,
-    Text,
     Modal,
-    Divider,
 } from '@mantine/core';
 
 type Props = {
@@ -101,7 +94,6 @@ export function DatabaseController({ table }: Props) {
 
     return (
         <div className="w-full max-w-md mx-auto">
-            {/**/}
             {/*Input for import csv*/}
             <Modal
                 opened={opened}

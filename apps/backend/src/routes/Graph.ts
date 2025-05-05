@@ -58,6 +58,23 @@ interface getNodeErrorResponse {
     error: string;
 }
 
+interface getAlgoIdResponse {
+    result: {
+        algoID: number;
+    };
+    success?: boolean;
+}
+
+// interface getAlgoIdResponseBody {
+//     id: number;
+//     algoID: number;
+// }
+
+interface getAlgoIdErrorResponse {
+    success: false;
+    error: string;
+}
+
 type PathFindingResponse = PathFindingSuccessResponse | PathFindingErrorResponse;
 
 type getNodeResponse = getNodeSuccessResponse | getNodeErrorResponse;
@@ -73,10 +90,10 @@ const findPathHandler: RequestHandler<
     PathFindingRequestBody // Request body
 > = (req, res) => {
     try {
-        const { startID, endID, pathAlgo } = req.body;
+        const { startID, endID } = req.body;
 
         // Validate input
-        if ([startID, endID, pathAlgo].some((param) => param === undefined)) {
+        if ([startID, endID].some((param) => param === undefined)) {
             res.status(400).json({
                 success: false,
                 error: 'Missing required parameters',
@@ -86,8 +103,7 @@ const findPathHandler: RequestHandler<
 
         const start = Number(startID);
         const end = Number(endID);
-        const algo = String(pathAlgo);
-        const result: PathFinderResult = navigationService.findPath(start, end, algo);
+        const result: PathFinderResult = navigationService.findPath(start, end);
 
         if (result.distance === 0) {
             res.status(404).json({
@@ -168,17 +184,111 @@ const getNodeHandler: RequestHandler<
     }
 };
 
+// Use RequestHandler with generics for proper typing
+const setAlgoHandelr: RequestHandler<
+    {}, // Route parameters
+    PathFindingResponse, // Response body
+    PathFindingRequestBody // Request body
+> = async (req, res) => {
+    try {
+        const { pathAlgo } = req.body;
+        console.log('made it to Graph. getAlgoHandelr and got pathAlgo: ', pathAlgo);
+        // Validate input
+        if ([pathAlgo].some((param) => param === undefined)) {
+            res.status(400).json({
+                success: false,
+                error: 'Missing required parameters',
+            });
+            return; // Return void
+        }
+
+        const algo: number = +pathAlgo;
+
+        navigationService.setAlgo(algo);
+
+        // const result: PathFinderResult = navigationService.setAlgo(algo);
+
+        //     if (result.distance === 0) {
+        //         res.status(404).json({
+        //             success: false,
+        //             error: 'No path found between the specified points',
+        //         });
+        //         return; // Return void
+        //     }
+        //
+        //     res.send({ result });
+        //
+        //     return; // Return void explicitly
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        console.error('Error finding path:', error);
+
+        res.status(500).json({
+            success: false,
+            error: errorMessage || 'An error occurred while finding the path',
+        });
+        return; // Return void
+    }
+};
+
 // Debug endpoint to get test the pathfinding between nodes
 router.get('/debug', (req: any, res: any) => {
     // Get the grid dimensions and some sample walkable points
-    const path = navigationService.findPath(1, 5, 'DFS');
+    const path = navigationService.findPath(1, 5);
     console.log('ran files and got:', path);
     res.json(path);
+});
+
+// Debug endpoint to get test the pathfinding between nodes
+router.post('/debugAlgo', (req: any, res: any) => {
+    // Get the grid dimensions and some sample walkable points
+
+    navigationService.setAlgo(1);
+    console.log('setting algo to new value:');
 });
 
 // Register the handler with the router
 router.post('/findPath', findPathHandler);
 
 router.post('/getNode', getNodeHandler);
+
+router.post('/setAlgo', async (req: any, res: any) => {
+    try {
+        const { pathAlgo } = req.body;
+        // console.log('made it to Graph. getAlgoHandelr and got pathAlgo: ', pathAlgo);
+        // Validate input
+        if ([pathAlgo].some((param) => param === undefined)) {
+            res.status(400).json({
+                success: false,
+                error: 'Missing required parameters',
+            });
+            return; // Return void
+        }
+
+        const algo: number = +pathAlgo;
+
+        const result = await navigationService.setAlgo(algo);
+
+        res.status(200).json({
+            success: true,
+        });
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        console.error('Error finding path:', error);
+
+        res.status(500).json({
+            success: false,
+            error: errorMessage || 'An error occurred while finding the path',
+        });
+        return; // Return void
+    }
+});
+
+router.get('/getAlgo', async (req: any, res: any) => {
+    const algoDb = await navigationService.getAlgo();
+    const algo: number = algoDb!.algoID;
+    console.log('ran filealgoDbs and got:', algo);
+    res.json(algo);
+});
 
 export default router;

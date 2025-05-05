@@ -7,20 +7,25 @@ import { DFSPathFinder } from './PathFinders/DFSPathFinder.ts';
 
 import PrismaClient from '../bin/prisma-client.ts';
 import graph from '../routes/Graph.ts';
+import { ALGORITHM } from 'common/src/constants.ts';
 
 export class NavigationService {
     protected graph: Graph<NodeDataType>;
     private pathFinder: PathFinder;
+    private pathFindAlgo: ALGORITHM;
 
     constructor() {
         this.graph = new Graph<NodeDataType>(this.nodeComparator);
         const graphRef = () => this.graph;
-        this.pathFinder = new BFSPathFinder(graphRef);
+        this.pathFinder = new BFSPathFinder(graphRef); //kinda wana remove this
+        this.pathFindAlgo = 2;
     }
 
     public async reinitialize(): Promise<void> {
         const databaseNodes = await PrismaClient.node.findMany({});
         const databaseEdges = await PrismaClient.edge.findMany({});
+        const path = await this.getAlgo();
+        if (path) this.pathFindAlgo = path.algoID;
 
         this.graph.nodes.forEach((node) => {
             this.graph.removeNode(node.data);
@@ -44,6 +49,8 @@ export class NavigationService {
     public async initialize(): Promise<void> {
         const databaseNodes = await PrismaClient.node.findMany({});
         const databaseEdges = await PrismaClient.edge.findMany({});
+        const path = await this.getAlgo();
+        if (path) this.pathFindAlgo = path.algoID;
 
         databaseNodes.forEach((databaseNode) => {
             this.executeGraphCommand('nodeAdd', databaseNode);
@@ -58,21 +65,25 @@ export class NavigationService {
         });
     }
 
-    public setPathFinderAlgo(pathAlgo: string) {
+    public setPathFinderAlgo() {
+        const pathAlgo: string = ALGORITHM[this.pathFindAlgo];
+        console.log('this.pathFindAlgo', this.pathFindAlgo);
+        console.log('in setPathFinerAlgo and the algo is: ', pathAlgo);
         if (
             (pathAlgo === 'BFS' && this.pathFinder instanceof BFSPathFinder) ||
-            (pathAlgo === 'A*' && this.pathFinder instanceof AStarPathFinder) ||
+            (pathAlgo === 'AStar' && this.pathFinder instanceof AStarPathFinder) ||
             (pathAlgo === 'DFS' && this.pathFinder instanceof DFSPathFinder)
         ) {
+            console.log('algo already exists so switching to that', pathAlgo);
             return;
-        } //dont want to make new objects for now reason
+        } //dont want to make new objects for no reason
 
         const graphRef = () => this.graph;
         switch (pathAlgo) {
             case 'BFS':
                 this.pathFinder = new BFSPathFinder(graphRef);
                 break;
-            case 'A*':
+            case 'AStar':
                 this.pathFinder = new AStarPathFinder(graphRef);
                 break;
             case 'DFS':
@@ -115,8 +126,8 @@ export class NavigationService {
         }
     }
 
-    public findPath(startNodeId: number, endNodeId: number, pathAlgo: string): PathFinderResult {
-        this.setPathFinderAlgo(pathAlgo);
+    public findPath(startNodeId: number, endNodeId: number): PathFinderResult {
+        this.setPathFinderAlgo();
         return this.pathFinder.findPath(startNodeId, endNodeId);
     }
 
@@ -126,5 +137,30 @@ export class NavigationService {
             node,
             success: node !== undefined,
         };
+    }
+
+    public async setAlgo(pathAlgoID: number) {
+        console.log('adding new value to the database value: ', pathAlgoID);
+        const updateAlgo = await PrismaClient.algorithm.update({
+            where: {
+                id: 0,
+            },
+            data: {
+                algoID: pathAlgoID,
+            },
+        });
+
+        // this.setPathFinderAlgo();
+        this.pathFindAlgo = pathAlgoID;
+        return updateAlgo;
+    }
+
+    public async getAlgo() {
+        const getAlgo = await PrismaClient.algorithm.findUnique({
+            where: {
+                id: 0,
+            },
+        });
+        return getAlgo;
     }
 }

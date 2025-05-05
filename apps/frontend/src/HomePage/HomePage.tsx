@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, Stack, Title, useMantineTheme } from '@mantine/core';
 import { CustomTimeline } from './CustomTimeline.tsx';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { ContentSwitcher } from './ContentSwitcher.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.js';
 import { useTimeline } from './TimeLineContext.tsx';
@@ -21,7 +21,6 @@ export function HomePage() {
         setTravelMode,
         setDepartment,
         setSelectedService,
-        setSelectedAlgorithm,
     } = useTimeline();
 
     const { isLoaded } = useJsApiLoader({
@@ -36,7 +35,6 @@ export function HomePage() {
             data: {
                 HospitalName: null,
                 Department: null,
-                AlgorithmName: null,
             } as NavSelectionItem,
         });
     };
@@ -50,7 +48,6 @@ export function HomePage() {
         else setTravelMode(null);
         setSelectedService('');
         setDepartment(null);
-        setSelectedAlgorithm(null);
         clearNavMap();
     }, []);
 
@@ -69,11 +66,12 @@ export function HomePage() {
             h="100%"
             w="100%"
             p="xl"
+            mih={'100vh'}
         >
             <DisclaimerPopup />
             <Grid gutter="md" h="100%" mt={'2%'}>
                 {/* Left Context */}
-                <Grid.Col span={6} pl="5%" p="xl">
+                <Grid.Col span={6} pl="5%" p="lg">
                     <Stack justify="flex-start" h="100%" align="flex-start">
                         <HoverUnderline>
                             <Title
@@ -89,13 +87,17 @@ export function HomePage() {
                     </Stack>
                 </Grid.Col>
                 {/* Right Content */}
-                <Grid.Col span={5}>
+                <Grid.Col span={6}>
                     <Flex
                         h="100%"
                         w={'100%'}
                         align="center"
                         justify="center"
-                        pt="6%"
+                        // mt="10px"
+                        style={{
+                            overflow: 'hidden',
+                            borderRadius: '8px',
+                        }}
                     >
                         <ContentSwitcher />
                     </Flex>

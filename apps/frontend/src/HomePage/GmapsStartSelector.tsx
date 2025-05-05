@@ -1,9 +1,7 @@
-import { Autocomplete, Select, TextInput, useMantineTheme } from '@mantine/core';
-import { IconChevronDown, IconHomeFilled } from '@tabler/icons-react';
-import { NavSelectionItem } from '../contexts/NavigationItem.ts';
-import { useNavSelectionContext } from '../contexts/NavigationContext';
+import {TextInput, useMantineTheme } from '@mantine/core';
+import {IconHomeFilled } from '@tabler/icons-react';
 import { useTimeline } from './TimeLineContext.tsx';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface GmapsStartSelectorProps {
   hasIcon: boolean
@@ -14,6 +12,15 @@ export function GmapsStartSelector(props:GmapsStartSelectorProps) {
     const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
     const { setUserCoordinates, setUserStart, userStart } = useTimeline();
     const input = useRef<HTMLInputElement>(null);
+    const [localValue, setLocalValue] = useState<string | null>(null);
+
+    useEffect(() => {
+        setLocalValue(userStart);
+    }, [userStart]);
+
+    useEffect(() => {
+        setUserStart(null);
+    }, []);
 
     //initialize only when the box is not collapsed or has input
     useEffect(() => {
@@ -45,6 +52,8 @@ export function GmapsStartSelector(props:GmapsStartSelectorProps) {
         });
     }, []);
 
+
+
     const theme = useMantineTheme();
     return (
         <TextInput
@@ -52,8 +61,9 @@ export function GmapsStartSelector(props:GmapsStartSelectorProps) {
             leftSection={!props.hasIcon ? null :
               <IconHomeFilled size="16" style={{ color: theme.colors.primaryBlues[8]}} />
             }
+            value = {localValue}
             ref={input}
-            onChange={(value) => setUserStart(value)}
+            onChange={(event) => setUserStart(event.currentTarget.value)}
             radius="md"
             mb="sm"
             size="xs"

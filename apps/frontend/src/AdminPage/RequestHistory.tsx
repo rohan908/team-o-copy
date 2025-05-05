@@ -57,7 +57,7 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     // get current filters
     const { filters, clearFilters } = useFilterContext();
 
-    // helper function to dispay correct feild
+    // helper function to display correct field
     const getRequestTypeValue = (row: RequestProps) => {
         switch (requestType) {
             case 'Language':

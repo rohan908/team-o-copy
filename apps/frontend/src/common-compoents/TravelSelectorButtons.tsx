@@ -1,14 +1,11 @@
 import {useTimeline} from "../HomePage/TimeLineContext.tsx";
 import {ColorChangingButton} from "./commonButtons.tsx";
-import { Autocomplete, Box, Flex, Select, Tooltip, useMantineTheme } from '@mantine/core';
+import {Box, Flex, Tooltip, useMantineTheme } from '@mantine/core';
 import {
   IconBike,
   IconCar,
-  IconCarFilled,
-  IconChevronDown,
-  IconMapPinFilled,
   IconTrain,
-  IconTrekking, IconWalk,
+    IconWalk,
 } from '@tabler/icons-react';
 import {useState} from "react";
 

@@ -9,12 +9,14 @@ import languageServiceRequestRouter from './routes/LanguageServiceRequest.ts';
 import sanitationServiceRequestRouter from './routes/SanitationServiceRequest.ts';
 import maintenanceServiceRequestRouter from './routes/MaintenanceServiceRequest.ts';
 import securityServiceRequestRouter from './routes/SecurityServiceRequest.ts';
+import loginRFIDRouter from './routes/RFIDLogin.ts';
 import exportRoute from './routes/ExportRoute.ts';
 import { API_ROUTES } from 'common/src/constants';
 import UpdateLoginsRoute from './routes/UpdateLoginsRoute.ts';
 const cors = require('cors');
 const app: Express = express(); // Setup the backend
 import employeeRoute from './routes/EmployeeRoute.ts';
+import graphStatistics from './routes/GraphStatistics.ts';
 // Setup generic middlewear
 app.use(
     logger('dev', {
@@ -47,6 +49,8 @@ app.use(API_ROUTES.MAINTENANCESR, maintenanceServiceRequestRouter);
 app.use(API_ROUTES.SANITATIONSR, sanitationServiceRequestRouter);
 app.use(API_ROUTES.GRAPH, graphRouter);
 app.use(API_ROUTES.SECURITYSR, securityServiceRequestRouter);
+app.use(API_ROUTES.RFIDROUTE, loginRFIDRouter);
+app.use(API_ROUTES.GRAPHSR, graphStatistics);
 
 // adding route for file exporting
 app.use(API_ROUTES.EXPORTROUTE, exportRoute);

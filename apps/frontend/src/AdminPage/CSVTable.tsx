@@ -1,6 +1,6 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useState} from 'react';
 import { Table, Title, Loader, Center, ScrollArea, Text } from '@mantine/core';
-import {useAllNodesContext, useDirectoryContext} from '../contexts/DirectoryContext.tsx';
+import {useAllNodesContext} from '../contexts/DirectoryContext.tsx';
 
 type Props = {
     table: string;

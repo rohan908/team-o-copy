@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import {
     Collapse,
-    Button,
     Center,
     Flex,
     Title,
@@ -15,6 +14,7 @@ import {
 
 import CSVControlsComponent from './CSVControlsComponent.tsx';
 import {
+    IconChartBar,
     IconChevronDown,
     IconChevronUp,
     IconFileBroken,
@@ -25,12 +25,15 @@ import {
     IconBellExclamation,
 } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { SidebarButton } from '../common-compoents/commonButtons.tsx';
 import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
 import RequestHistory from './RequestHistory.tsx';
 import { useFilterContext } from '../contexts/FilterContext.tsx';
+import { useUser } from '@clerk/clerk-react';
+import StatsChart from '../service-request/GraphsStatistics.tsx';
+
 
 export function AdminPage() {
     const { setOpened } = useFilterContext();
@@ -38,6 +41,14 @@ export function AdminPage() {
     const [CSVManipOpen, setCSVManipOpen] = useState(false);
     const [displayTableNumber, setDisplayTableNumber] = useState(0);
     const theme = useMantineTheme();
+    // clerk const's
+    const { user, isSignedIn } = useUser();
+
+    // check role
+    const role = user?.publicMetadata?.role;
+    if (!isSignedIn || role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
 
     function displayNumToggle(num: number) {
         // if (num == displayTableNumber) {
@@ -125,7 +136,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'0'}
                                                 onClick={() => displayNumToggle(0)}
-                                                icon={<IconLanguage size="40" />}
+                                                icon={<IconLanguage size="35" />}
                                             >
                                                 Language Requests
                                             </SidebarButton>
@@ -134,7 +145,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'2'}
                                                 onClick={() => displayNumToggle(2)}
-                                                icon={<IconTrash size="40" />}
+                                                icon={<IconTrash size="35" />}
                                             >
                                                 Sanitation Requests
                                             </SidebarButton>
@@ -143,7 +154,7 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'3'}
                                                 onClick={() => displayNumToggle(3)}
-                                                icon={<IconBellExclamation size="40" />}
+                                                icon={<IconBellExclamation size="35" />}
                                             >
                                                 Maintenance Requests
                                             </SidebarButton>
@@ -151,9 +162,17 @@ export function AdminPage() {
                                                 ValueToCheck={displayTableNumber.toString()}
                                                 ValueForTrigger={'1'}
                                                 onClick={() => displayNumToggle(1)}
-                                                icon={<IconShieldHalf size="40" />}
+                                                icon={<IconShieldHalf size="35" />}
                                             >
                                                 Security Requests
+                                            </SidebarButton>
+                                            <SidebarButton
+                                              ValueToCheck={displayTableNumber.toString()}
+                                              ValueForTrigger={'4'}
+                                              onClick={() => displayNumToggle(4)}
+                                              icon={<IconChartBar size="35" />}
+                                            >
+                                              Graphs and Statistics
                                             </SidebarButton>
                                         </Flex>
                                     </Collapse>
@@ -161,8 +180,8 @@ export function AdminPage() {
                                     <Flex direction="column" justify="center" gap="md">
                                         <SidebarButton
                                             ValueToCheck={displayTableNumber.toString()}
-                                            onClick={handleOpenCSVModal}
-                                            icon={<IconFileBroken size="40" />}
+                                            onClick={() => setCSVManipOpen(true)}
+                                            icon={<IconFileBroken size="35" />}
                                         >
                                             CSV Manipulator
                                         </SidebarButton>
@@ -170,7 +189,7 @@ export function AdminPage() {
                                             ValueToCheck={displayTableNumber.toString()}
                                             component={Link}
                                             to={'/map-editor'}
-                                            icon={<IconMap2 size="40" />}
+                                            icon={<IconMap2 size="35"  />}
                                         >
                                             Map Editor
                                         </SidebarButton>
@@ -271,6 +290,23 @@ export function AdminPage() {
                                         <RequestHistory requestType="Maintenance" />
                                     </Box>
                                 </Collapse>
+                              <Collapse
+                                w="100%"
+                                in={displayTableNumber == 4}
+                                transitionDuration={300}
+                                transitionTimingFunction="linear"
+                              >
+                                <Box
+                                  p="10px"
+                                  mt="10px"
+                                  style={{
+                                    borderRadius: '15px',
+                                  }}
+                                >
+                                  <StatsChart/>
+                                </Box>
+                              </Collapse>
+
                                 <Box
                                     p="10px"
                                     mt="10px"

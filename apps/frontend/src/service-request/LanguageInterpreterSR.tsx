@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import RequestForm, { RequestData } from './RequestForm.tsx';
 import LanguageSelect from './components/LanguageSelect.tsx';
 import ISO6391 from 'iso-639-1';

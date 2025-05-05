@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, MouseEvent, MouseEventHandler } from 'react';
+import React, { useEffect, useRef, MouseEvent} from 'react';
 import { useState } from 'react';
 import './MapPageStyles.css';
 import { Simulate } from 'react-dom/test-utils';
