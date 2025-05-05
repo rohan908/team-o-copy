@@ -34,7 +34,6 @@ import { useFilterContext } from '../contexts/FilterContext.tsx';
 import { useUser } from '@clerk/clerk-react';
 import StatsChart from '../service-request/GraphsStatistics.tsx';
 
-
 export function AdminPage() {
     const { setOpened } = useFilterContext();
     const [formInfoOpen, { open, close }] = useDisclosure(true);
@@ -43,6 +42,7 @@ export function AdminPage() {
     const theme = useMantineTheme();
     // clerk const's
     const { user, isSignedIn } = useUser();
+    const { clearFilters } = useFilterContext();
 
     // check role
     const role = user?.publicMetadata?.role;
@@ -56,6 +56,8 @@ export function AdminPage() {
         // } else {x`
         //   setDisplayTableNumber(num);
         // }
+
+        clearFilters();
         setDisplayTableNumber(num);
         setOpened(false); // side effect type shit
     }
@@ -167,12 +169,12 @@ export function AdminPage() {
                                                 Security Requests
                                             </SidebarButton>
                                             <SidebarButton
-                                              ValueToCheck={displayTableNumber.toString()}
-                                              ValueForTrigger={'4'}
-                                              onClick={() => displayNumToggle(4)}
-                                              icon={<IconChartBar size="35" />}
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'4'}
+                                                onClick={() => displayNumToggle(4)}
+                                                icon={<IconChartBar size="35" />}
                                             >
-                                              Graphs and Statistics
+                                                Graphs and Statistics
                                             </SidebarButton>
                                         </Flex>
                                     </Collapse>
@@ -189,7 +191,7 @@ export function AdminPage() {
                                             ValueToCheck={displayTableNumber.toString()}
                                             component={Link}
                                             to={'/map-editor'}
-                                            icon={<IconMap2 size="35"  />}
+                                            icon={<IconMap2 size="35" />}
                                         >
                                             Map Editor
                                         </SidebarButton>
@@ -290,22 +292,22 @@ export function AdminPage() {
                                         <RequestHistory requestType="Maintenance" />
                                     </Box>
                                 </Collapse>
-                              <Collapse
-                                w="100%"
-                                in={displayTableNumber == 4}
-                                transitionDuration={300}
-                                transitionTimingFunction="linear"
-                              >
-                                <Box
-                                  p="10px"
-                                  mt="10px"
-                                  style={{
-                                    borderRadius: '15px',
-                                  }}
+                                <Collapse
+                                    w="100%"
+                                    in={displayTableNumber == 4}
+                                    transitionDuration={300}
+                                    transitionTimingFunction="linear"
                                 >
-                                  <StatsChart/>
-                                </Box>
-                              </Collapse>
+                                    <Box
+                                        p="10px"
+                                        mt="10px"
+                                        style={{
+                                            borderRadius: '15px',
+                                        }}
+                                    >
+                                        <StatsChart />
+                                    </Box>
+                                </Collapse>
 
                                 <Box
                                     p="10px"

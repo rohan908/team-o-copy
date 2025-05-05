@@ -167,17 +167,17 @@ export function RequestHistory({ requestType }: { requestType: string }) {
             <Filter requestType={requestType} />
             <Button
                 radius="md"
-                bg="yellowAccent.4"
+                bg="secondaryBlues.4"
                 fw="400"
                 fz="xs"
                 m="xs"
-                c="primaryBlues.5"
+                c="white"
                 onClick={(e) => {
                     e.stopPropagation();
                     clearFilters();
                 }}
             >
-                Clear Filters
+                Clear
             </Button>
 
             <ScrollArea type="scroll" offsetScrollbars scrollbarSize={6}>

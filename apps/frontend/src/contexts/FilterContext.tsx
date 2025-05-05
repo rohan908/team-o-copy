@@ -20,6 +20,7 @@ interface FilterContextType {
     allFilters: string[];
     opened: boolean;
     setOpened: (opened: boolean) => void;
+    clearSanitationFilters: () => void;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -67,6 +68,15 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         ...(filters.maintenanceType || []),
         ...(filters.security || []),
     ];
+
+    const clearSanitationFilters = () => {
+        setFilters((prev) => {
+            const updated = { ...prev };
+            delete updated.cleanupType;
+            return updated;
+        });
+    };
+
     return (
         <FilterContext.Provider
             value={{
@@ -77,6 +87,7 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 allFilters,
                 opened,
                 setOpened,
+                clearSanitationFilters,
             }}
         >
             {children}
