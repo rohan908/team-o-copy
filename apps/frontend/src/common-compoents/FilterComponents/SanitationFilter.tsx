@@ -1,5 +1,5 @@
 import { Flex, Box, Select, SelectProps, useMantineTheme } from '@mantine/core';
-import React from 'react';
+import React, { useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
 import { IconChevronDown, IconSearch } from '@tabler/icons-react';
@@ -23,18 +23,20 @@ interface SanitationSelectProps {
 const SanitationFilter: React.FC<SanitationSelectProps> = ({ value, onChange }) => {
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
+    const [dropdownValue, setDropdownValue] = useState<string>('');
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
             addFilter('cleanupType', selected);
+            setDropdownValue('');
         }
     };
     return (
         <Select
             placeholder="Sanitation"
             data={sanitationOptions}
-            value={value}
+            value={dropdownValue}
             onChange={handleSelection}
             nothingFoundMessage="No Priority selected"
             radius="0"

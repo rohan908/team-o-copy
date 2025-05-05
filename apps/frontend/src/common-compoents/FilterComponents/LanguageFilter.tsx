@@ -1,8 +1,7 @@
 import { Flex, Box, Select, SelectProps, useMantineTheme } from '@mantine/core';
 import ISO6391 from 'iso-639-1';
-import React from 'react';
-import SpeechToText from '../../Buttons/SpeechToText.tsx';
-import { notifications } from '@mantine/notifications';
+import React, { useState } from 'react';
+
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
 import { IconChevronDown, IconSearch } from '@tabler/icons-react';
 
@@ -15,12 +14,14 @@ interface LanguageSelectProps extends SelectProps {
 
 const LanguageFilter: React.FC<LanguageSelectProps> = ({ value, onChange, ...props }) => {
     const theme = useMantineTheme();
-    const { addFilter, setHovered } = useFilterContext();
+    const { addFilter } = useFilterContext();
+    const [dropdownValue, setDropdownValue] = useState<string>('');
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
             addFilter('language', selected);
+            setDropdownValue('');
         }
     };
 
@@ -28,7 +29,7 @@ const LanguageFilter: React.FC<LanguageSelectProps> = ({ value, onChange, ...pro
         <Select
             placeholder="Language"
             data={languageOptions}
-            value={value}
+            value={dropdownValue}
             onChange={handleSelection}
             nothingFoundMessage="No Priority selected"
             radius="0"

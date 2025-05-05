@@ -1,5 +1,5 @@
 import { Select, SelectProps, Flex, Box, useMantineTheme } from '@mantine/core';
-import React from 'react';
+import React, { useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
@@ -19,12 +19,14 @@ const HospitalFilter: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
         'BWH Campus',
     ];
     const theme = useMantineTheme();
-    const { addFilter, setHovered } = useFilterContext();
+    const { addFilter } = useFilterContext();
+    const [dropdownValue, setDropdownValue] = useState<string>('');
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
             addFilter('hospital', selected);
+            setDropdownValue('');
         }
     };
 
@@ -32,7 +34,7 @@ const HospitalFilter: React.FC<HospitalSelectProps> = ({ value, onChange, ...pro
         <Select
             placeholder="Hospital"
             data={hospitalData}
-            value={value}
+            value={dropdownValue}
             onChange={handleSelection}
             nothingFoundMessage="No Priority selected"
             radius="0"

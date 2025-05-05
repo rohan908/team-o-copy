@@ -1,5 +1,5 @@
 import { Flex, Box, Select, SelectProps, useMantineTheme } from '@mantine/core';
-import React from 'react';
+import React, { useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
@@ -13,11 +13,13 @@ interface SecuritySelectProps {
 const SecurityFilter: React.FC<SecuritySelectProps> = ({ value, onChange }) => {
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
+    const [dropdownValue, setDropdownValue] = useState<string>('');
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
             addFilter('security', selected);
+            setDropdownValue('');
         }
     };
 
@@ -25,7 +27,7 @@ const SecurityFilter: React.FC<SecuritySelectProps> = ({ value, onChange }) => {
         <Select
             placeholder="Secuirty"
             data={securityOptions}
-            value={value}
+            value={dropdownValue}
             onChange={handleSelection}
             nothingFoundMessage="No Security selected"
             radius="0"

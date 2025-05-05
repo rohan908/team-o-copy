@@ -14,6 +14,7 @@ const NameEntry: React.FC<NameEntryProps> = ({ value, onChange }) => {
     const [data, setData] = useState<string[]>([]);
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
+    const [dropdownValue, setDropdownValue] = useState<string>('');
 
     useEffect(() => {
         const fetchNames = async () => {
@@ -32,13 +33,14 @@ const NameEntry: React.FC<NameEntryProps> = ({ value, onChange }) => {
         if (selected) {
             onChange(selected);
             addFilter('employeeName', selected);
+            setDropdownValue('');
         }
     };
 
     return (
         <Select
             data={data}
-            value={value}
+            value={dropdownValue}
             onChange={handleSelection}
             placeholder="Employee"
             radius="0"

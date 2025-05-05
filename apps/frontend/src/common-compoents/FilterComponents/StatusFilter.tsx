@@ -1,5 +1,5 @@
 import { Select, SelectProps, Flex, Box, useMantineTheme } from '@mantine/core';
-import React from 'react';
+import React, { useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
@@ -15,11 +15,13 @@ interface StatusSelectProps {
 const StatusFilter: React.FC<StatusSelectProps> = ({ value, onChange }) => {
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
+    const [dropdownValue, setDropdownValue] = useState<string>('');
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
             addFilter('status', selected);
+            setDropdownValue('');
         }
     };
 
@@ -27,7 +29,7 @@ const StatusFilter: React.FC<StatusSelectProps> = ({ value, onChange }) => {
         <Select
             placeholder="Status"
             data={statusOptions}
-            value={value}
+            value={dropdownValue}
             onChange={handleSelection}
             nothingFoundMessage="No Status selected"
             radius="0"

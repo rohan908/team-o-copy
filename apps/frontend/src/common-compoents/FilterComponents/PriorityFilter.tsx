@@ -1,5 +1,5 @@
 import { Select, SelectProps, Flex, Box, useMantineTheme, Autocomplete } from '@mantine/core';
-import React from 'react';
+import React, { useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
 import { IconChevronDown, IconSearch } from '@tabler/icons-react';
@@ -16,11 +16,13 @@ interface PrioritySelectProps extends SelectProps {
 const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...props }) => {
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
+    const [dropdownValue, setDropdownValue] = useState<string>('');
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
             addFilter('priority', selected);
+            setDropdownValue('');
         }
     };
 
@@ -28,7 +30,7 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
         <Select
             placeholder="Priotriy"
             data={priorityOptions}
-            value={value}
+            value={dropdownValue}
             onChange={handleSelection}
             nothingFoundMessage="No Priority selected"
             radius="0"

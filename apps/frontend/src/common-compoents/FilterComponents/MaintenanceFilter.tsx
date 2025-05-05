@@ -1,5 +1,5 @@
 import { Select, SelectProps, Flex, Box, useMantineTheme } from '@mantine/core';
-import React from 'react';
+import React, { useState } from 'react';
 import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
 import { useFilterContext } from '../../contexts/FilterContext.tsx';
@@ -21,11 +21,13 @@ interface MaintenanceSelectProps extends SelectProps {
 const MaintenanceFilter: React.FC<MaintenanceSelectProps> = ({ value, onChange, ...props }) => {
     const theme = useMantineTheme();
     const { addFilter } = useFilterContext();
+    const [dropdownValue, setDropdownValue] = useState<string>('');
 
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected);
             addFilter('maintenanceType', selected);
+            setDropdownValue('');
         }
     };
 
@@ -33,7 +35,7 @@ const MaintenanceFilter: React.FC<MaintenanceSelectProps> = ({ value, onChange, 
         <Select
             placeholder="Maintenance"
             data={maintenanceOptions}
-            value={value}
+            value={dropdownValue}
             onChange={handleSelection}
             nothingFoundMessage="No Maitenance selected"
             radius="0"

@@ -20,8 +20,6 @@ interface FilterContextType {
     allFilters: string[];
     opened: boolean;
     setOpened: (opened: boolean) => void;
-    hovered: boolean;
-    setHovered: (value: boolean) => void;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -33,9 +31,6 @@ export const useFilterContext = () => {
 };
 
 export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // making sure hover on the badge is correct
-    const [hovered, setHovered] = useState(false);
-
     // Handing the popup open state
     const [opened, setOpened] = React.useState(false);
 
@@ -82,8 +77,6 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 allFilters,
                 opened,
                 setOpened,
-                hovered,
-                setHovered,
             }}
         >
             {children}
