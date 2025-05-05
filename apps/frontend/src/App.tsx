@@ -194,13 +194,9 @@ const theme = createTheme({
     // variantColorResolver: myvariantColorResolver(theme)
 });
 function App() {
-  socket.on("connect", () => {
-    console.log(socket.id);
-  socket.on("Hello", (msg) => {
+
     console.log(msg);
   });
-
-
     return (
         <MantineProvider theme={theme}>
             <Notifications />
