@@ -7,7 +7,6 @@ import '@mantine/charts/styles.css';
 import { DirectoryProvider } from './contexts/DirectoryContext.tsx';
 import { RequestProvider } from './contexts/RequestContext.tsx';
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
-import { io } from 'socket.io-client';
 import {
     createTheme,
     MantineProvider,
@@ -195,17 +194,6 @@ const theme = createTheme({
     // variantColorResolver: myvariantColorResolver(theme)
 });
 function App() {
-  const socket = io('localhost:5000');
-
-  socket.on("connect", () => {
-    console.log(socket.id);
-  });
-
-  socket.on("Hello", (msg) => {
-    console.log(msg);
-  });
-
-
     return (
         <MantineProvider theme={theme}>
             <Notifications />
