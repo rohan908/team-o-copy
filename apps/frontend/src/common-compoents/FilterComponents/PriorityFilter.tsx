@@ -1,7 +1,9 @@
-import { Select, SelectProps, Flex, Box } from '@mantine/core';
+import { Select, SelectProps, Flex, Box, useMantineTheme, Autocomplete } from '@mantine/core';
 import React from 'react';
-import SpeechToText from './../Buttons/SpeechToText.tsx';
+import SpeechToText from '../../Buttons/SpeechToText.tsx';
 import { notifications } from '@mantine/notifications';
+import { IconChevronDown, IconSearch } from '@tabler/icons-react';
+import DisplayBadges from '../DisplayBadges.tsx';
 
 const priorityOptions = ['Emergency', 'High', 'Medium', 'Low'];
 
@@ -11,19 +13,11 @@ interface PrioritySelectProps extends SelectProps {
 }
 
 const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...props }) => {
+    const theme = useMantineTheme();
     const handleSpeechResult = (text: string) => {
         const matched = priorityOptions.find((option) =>
             option.toLowerCase().includes(text.toLowerCase())
         );
-        if (matched) {
-            onChange(matched);
-        } else {
-            notifications.show({
-                title: 'Speech Error',
-                message: 'No Matching Priority Found',
-                color: 'red',
-            });
-        }
     };
 
     const handleSelection = (selected: string | null) => {
@@ -35,31 +29,31 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
     return (
         <Flex align="center" gap="sm">
             <Select
-                label="Filter by Priority"
-                placeholder="Select a priotriy"
+                placeholder="Priotriy"
                 data={priorityOptions}
                 value={value}
                 onChange={handleSelection}
                 nothingFoundMessage="No Priority selected"
-                radius="sm"
+                radius="0"
+                searchable
                 w="240px"
                 size="xs"
                 mt="sm"
-                c={'#285CC6'}
-                {...props}
+                mb="sm"
+                variant="unstyled"
+                rightSection={<IconChevronDown size="16" />}
+                leftSection={<IconSearch size="16" />}
                 styles={{
-                    label: {
-                        fontSize: '18px',
-                        fontWeight: 350,
+                    input: {
+                        boxShadow: `0 2px 1px 0 ${theme.colors.greys[3]}`,
+                        // borderBottom: `2px solid ${theme.colors.secondaryBlues[7]}`,
+                        // borderTop: `2px solid ${theme.colors.secondaryBlues[7]}`,
                     },
                     dropdown: {
                         borderRadius: '8px',
                     },
                 }}
             />
-            <Box mt={40}>
-                <SpeechToText OnResult={handleSpeechResult} />
-            </Box>
         </Flex>
     );
 };

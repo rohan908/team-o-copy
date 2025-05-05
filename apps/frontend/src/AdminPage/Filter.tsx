@@ -1,11 +1,11 @@
-import { Popover, Button, Title, Badge, CloseButton, Group } from '@mantine/core';
+import { Popover, Button, Title, Badge, CloseButton, Group, Flex } from '@mantine/core';
 import { IconFilter } from '@tabler/icons-react';
-import NameEntrySR from '../common-compoents/NameEntrySR.tsx';
+import NameEntrySR from '../common-compoents/FilterComponents/NameEntrySR.tsx';
+import PriorityFilter from '../common-compoents/FilterComponents/PriorityFilter.tsx';
 import React from 'react';
 import DisplayBadges from '../common-compoents/DisplayBadges';
 // import context
 import { useFilterContext } from '../contexts/FilterContext.tsx';
-import PriorityFilter from '../common-compoents/PriorityFilter.tsx';
 
 function Filter() {
     const [name, setName] = React.useState('');
@@ -40,8 +40,8 @@ function Filter() {
     return (
         // Change to keep filter open when clicking on autocomplete
         <Popover
-            width={300}
             trapFocus={false}
+            width={320}
             opened={opened}
             position="bottom"
             withArrow

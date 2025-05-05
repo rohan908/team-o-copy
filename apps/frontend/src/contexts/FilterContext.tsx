@@ -1,14 +1,32 @@
 import React, { createContext, useContext, useState } from 'react';
 
+interface Filters {
+    department?: string;
+    hospital?: string;
+    priority?: string;
+    status?: string;
+    language?: string;
+    employeeName?: string;
+}
+
 interface FilterContextType {
+    filters: Filters;
+    setFilter: (key: keyof Filters, value: string) => void;
+    removeFilter: (key: keyof Filters) => void;
+    clearFilters: () => void;
+
     nameFilters: string[];
-    priorityFilters?: string[];
     setNameFilter: (field: string[]) => void;
     addNameFilter: (field: string) => void;
     removeNameFilter: (field: string) => void;
+    priorityFilters: string[];
     setPriorityFilter: (field: string[]) => void;
     addPriorityFilter: (field: string) => void;
     removePriorityFilter: (field: string) => void;
+    statusFilters: string[];
+    setStatusFilter: (field: string[]) => void;
+    addStatusFilter: (field: string) => void;
+    removeStatusFilter: (field: string) => void;
     opened: boolean;
     setOpened: (opened: boolean) => void;
 }
@@ -52,6 +70,19 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setPriorityFilter((prev) => prev.filter((n) => n !== priority));
     };
 
+    // Status Filtering Logic
+    const [statusFilters, setStatusFilter] = useState<string[]>([]);
+    // adding a priority filter to the list
+    const addStatusFilter = (status: string) => {
+        if (!statusFilters.includes(status.trim())) {
+            setStatusFilter((prev) => [...prev, status.trim()]);
+        }
+    };
+    // removeing a priority filter to the list
+    const removeStatusFilter = (status: string) => {
+        setStatusFilter((prev) => prev.filter((n) => n !== status));
+    };
+
     return (
         <FilterContext.Provider
             value={{
@@ -63,6 +94,10 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 setPriorityFilter,
                 addPriorityFilter,
                 removePriorityFilter,
+                statusFilters,
+                setStatusFilter,
+                addStatusFilter,
+                removeStatusFilter,
                 opened,
                 setOpened,
             }}

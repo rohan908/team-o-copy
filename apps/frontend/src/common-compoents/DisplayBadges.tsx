@@ -1,4 +1,4 @@
-import { Badge, CloseButton, Group } from '@mantine/core';
+import { Badge, CloseButton, Flex, Group } from '@mantine/core';
 
 interface DisplayBadgeProps {
     filterList: string[];
@@ -9,7 +9,7 @@ function DisplayBadge({ filterList, onRemove }: DisplayBadgeProps) {
     return (
         <>
             {filterList.map((item) => (
-                <Badge key={item} p="xs" m="xs" bg="primaryBlues.5" fw="400">
+                <Badge key={item} mr="0px" p="xs" bg="primaryBlues.5" fw="400">
                     <Group gap="0px">
                         {item}
                         <CloseButton size="xs" onClick={() => onRemove(item)} />

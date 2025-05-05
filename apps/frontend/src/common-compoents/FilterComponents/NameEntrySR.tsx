@@ -1,15 +1,19 @@
 // NameEntrySR.tsx
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Flex, Box, Select } from '@mantine/core';
-import SpeechToText from './../Buttons/SpeechToText';
+import { Autocomplete, Flex, Group, Select, useMantineTheme } from '@mantine/core';
+import { IconChevronDown, IconSearch } from '@tabler/icons-react';
+import DisplayBadges from '../DisplayBadges.tsx';
+import { useFilterContext } from '../../contexts/FilterContext.tsx';
 
 interface NameEntryProps {
     value: string;
     onChange: (value: string) => void;
 }
 
-const NameEntrySR: React.FC<NameEntryProps> = ({ value, onChange }) => {
+const NameEntry: React.FC<NameEntryProps> = ({ value, onChange }) => {
     const [data, setData] = useState<string[]>([]);
+    const theme = useMantineTheme();
+    const { nameFilters, removeNameFilter } = useFilterContext();
 
     useEffect(() => {
         const fetchNames = async () => {
@@ -24,10 +28,6 @@ const NameEntrySR: React.FC<NameEntryProps> = ({ value, onChange }) => {
         fetchNames();
     }, []);
 
-    const handleSpeechResult = (text: string) => {
-        onChange(text);
-    };
-
     const handleSelection = (selected: string | null) => {
         if (selected) {
             onChange(selected); // add to filter
@@ -38,28 +38,27 @@ const NameEntrySR: React.FC<NameEntryProps> = ({ value, onChange }) => {
         <Flex align="center" gap="xs">
             <Select
                 data={data}
-                label="Filter By Name"
-                placeholder="Choose Employee"
-                radius="sm"
-                size="xs"
                 value={value}
                 onChange={handleSelection}
-                searchable
-                clearable
-                c="#285CC6"
+                placeholder="Employee"
+                radius="0"
+                size="xs"
                 w="240px"
+                variant="unstyled"
+                mb="sm"
+                rightSection={<IconChevronDown size="16" />}
+                leftSection={<IconSearch size="16" />}
                 styles={{
-                    label: { fontSize: '18px', fontWeight: 350 },
+                    input: {
+                        boxShadow: `0 2px 1px 0 ${theme.colors.greys[3]}`,
+                    },
                     dropdown: {
                         borderRadius: '8px',
                     },
                 }}
             />
-            <Box mt="25">
-                <SpeechToText OnResult={handleSpeechResult} />
-            </Box>
         </Flex>
     );
 };
 
-export default NameEntrySR;
+export default NameEntry;
