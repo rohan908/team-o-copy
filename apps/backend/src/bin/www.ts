@@ -74,26 +74,6 @@ export default server;
     });
 });
 
-
-
-/*
-  commented out server side socket setup
- */
-
-// const httpServer = createServer();
-// const io = new Server(httpServer, {
-//     cors: {
-//         origin: '*',
-//     },
-// });
-//
-// io.on('connection', (socket) => {
-//     console.log(socket.id);
-//     socket.emit('Hello', 'received');
-// });
-//
-// io.listen(3002);
-
 // Listen on the provided port, on all interfaces
 server.listen(port);
 server.on('error', onError); // Error handler
