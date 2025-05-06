@@ -28,7 +28,7 @@ const PriorityFilter: React.FC<PrioritySelectProps> = ({ value, onChange, ...pro
 
     return (
         <Select
-            placeholder="Priotriy"
+            placeholder="Priority"
             data={priorityOptions}
             value={dropdownValue}
             onChange={handleSelection}
