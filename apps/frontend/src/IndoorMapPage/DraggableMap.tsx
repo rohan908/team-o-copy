@@ -175,7 +175,6 @@ export function DraggableMap() {
             console.error('Canvas element not found');
             return;
         }
-
         if (controlRef.current) {
             controlRef.current.dispose();
         }
@@ -440,6 +439,27 @@ export function DraggableMap() {
         directionalLight.position.set(20, 20, 20);
         scenesRef.current[0].add(directionalLight);
 
+        const material = new THREE.MeshBasicMaterial({color: 0xd6e0f8, side: THREE.BackSide, depthWrite: false});
+
+        const wong = new THREE.TextureLoader().load("/SunnyWong.png")
+        wong.flipY = false;
+
+        const materialArray = [
+          material,
+          material,
+          new THREE.MeshBasicMaterial({map: wong, side: THREE.BackSide, depthWrite: false}),
+          material,
+          material,
+          material,
+          material,
+        ];
+
+        const cube = new THREE.BoxGeometry(4000, 4000, 4000)
+        const skybox = new THREE.Mesh(cube, materialArray);
+
+        skybox.position.set(20, 20, 20);
+        scenesRef.current[0].add(skybox)
+
         // enable orbiting
         setThreeDView();
 
@@ -451,7 +471,6 @@ export function DraggableMap() {
             console.error('Canvas element not found');
             return;
         }
-
         if (controlRef.current) {
             controlRef.current.dispose();
         }
