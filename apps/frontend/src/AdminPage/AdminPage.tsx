@@ -30,17 +30,19 @@ import { SidebarButton } from '../common-compoents/commonButtons.tsx';
 import ServiceRequestPage from '../service-request/ServiceRequestPage.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.tsx';
 import RequestHistory from './RequestHistory.tsx';
+import { useFilterContext } from '../contexts/FilterContext.tsx';
 import { useUser } from '@clerk/clerk-react';
 import StatsChart from '../service-request/GraphsStatistics.tsx';
 
-
 export function AdminPage() {
+    const { setOpened } = useFilterContext();
     const [formInfoOpen, { open, close }] = useDisclosure(true);
     const [CSVManipOpen, setCSVManipOpen] = useState(false);
     const [displayTableNumber, setDisplayTableNumber] = useState(0);
     const theme = useMantineTheme();
     // clerk const's
     const { user, isSignedIn } = useUser();
+    const { clearFilters } = useFilterContext();
 
     // check role
     const role = user?.publicMetadata?.role;
@@ -54,8 +56,15 @@ export function AdminPage() {
         // } else {x`
         //   setDisplayTableNumber(num);
         // }
+        setOpened(false);
+        clearFilters();
         setDisplayTableNumber(num);
     }
+
+    const handleOpenCSVModal = () => {
+        setOpened(false); // close the filter when dealing with csv modal
+        setCSVManipOpen(true);
+    };
 
     return (
         <Box mih="100vh" w="full" pt={'5px'} bg="#EAF1FF">
@@ -159,12 +168,12 @@ export function AdminPage() {
                                                 Security Requests
                                             </SidebarButton>
                                             <SidebarButton
-                                              ValueToCheck={displayTableNumber.toString()}
-                                              ValueForTrigger={'4'}
-                                              onClick={() => displayNumToggle(4)}
-                                              icon={<IconChartBar size="35" />}
+                                                ValueToCheck={displayTableNumber.toString()}
+                                                ValueForTrigger={'4'}
+                                                onClick={() => displayNumToggle(4)}
+                                                icon={<IconChartBar size="35" />}
                                             >
-                                              Graphs and Statistics
+                                                Graphs and Statistics
                                             </SidebarButton>
                                         </Flex>
                                     </Collapse>
@@ -172,7 +181,7 @@ export function AdminPage() {
                                     <Flex direction="column" justify="center" gap="md">
                                         <SidebarButton
                                             ValueToCheck={displayTableNumber.toString()}
-                                            onClick={() => setCSVManipOpen(true)}
+                                            onClick={() => handleOpenCSVModal()}
                                             icon={<IconFileBroken size="35" />}
                                         >
                                             CSV Manipulator
@@ -181,7 +190,7 @@ export function AdminPage() {
                                             ValueToCheck={displayTableNumber.toString()}
                                             component={Link}
                                             to={'/map-editor'}
-                                            icon={<IconMap2 size="35"  />}
+                                            icon={<IconMap2 size="35" />}
                                         >
                                             Map Editor
                                         </SidebarButton>
@@ -193,8 +202,6 @@ export function AdminPage() {
                 </Grid.Col>
                 <Grid.Col span={'auto'}>
                     <Box maw="100%" mx="auto">
-                        {/*  Admin Page*/}
-                        {/*</Title>*/}
                         <Center pr="10px">
                             <Flex
                                 direction="column"
@@ -284,22 +291,22 @@ export function AdminPage() {
                                         <RequestHistory requestType="Maintenance" />
                                     </Box>
                                 </Collapse>
-                              <Collapse
-                                w="100%"
-                                in={displayTableNumber == 4}
-                                transitionDuration={300}
-                                transitionTimingFunction="linear"
-                              >
-                                <Box
-                                  p="10px"
-                                  mt="10px"
-                                  style={{
-                                    borderRadius: '15px',
-                                  }}
+                                <Collapse
+                                    w="100%"
+                                    in={displayTableNumber == 4}
+                                    transitionDuration={300}
+                                    transitionTimingFunction="linear"
                                 >
-                                  <StatsChart/>
-                                </Box>
-                              </Collapse>
+                                    <Box
+                                        p="10px"
+                                        mt="10px"
+                                        style={{
+                                            borderRadius: '15px',
+                                        }}
+                                    >
+                                        <StatsChart />
+                                    </Box>
+                                </Collapse>
 
                                 <Box
                                     p="10px"
@@ -310,7 +317,10 @@ export function AdminPage() {
                                 >
                                     <Modal
                                         opened={CSVManipOpen}
-                                        onClose={() => setCSVManipOpen(false)}
+                                        onClose={() => {
+                                            setCSVManipOpen(false);
+                                            setOpened(false);
+                                        }}
                                         title="CSV Manipulator"
                                         size="auto"
                                         centered
