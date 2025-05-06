@@ -13,6 +13,7 @@ import { IndoorMapsPage } from '../IndoorMapPage/IndoorMapsPage.tsx';
 import AboutPage from '../AboutPage/Aboutpage.tsx';
 import CombinedPage from '../CreditPage/InfoPage.tsx';
 import AdminPage from '../AdminPage/AdminPage.tsx';
+import { AutoLogin } from './components/AutoLogin.tsx';
 
 // cursed prop passing to get department and hospital data from the MapAPIPage to the draggable map
 // TODO: switch this to a useContext once the router is less bad or pass information through the url
@@ -27,6 +28,7 @@ export function Routing() {
                 <Routes>
                     <Route path="/" element={<NavBar />}>
                         <Route index element={<HomePage />} />
+                        <Route path="auto-login" element={<AutoLogin/>}/>
                         <Route path="log-in-page" element={<LogInPage />} />
                         <Route path="map-page" element={<MapPage />} />
                         <Route path="About-page" element={<AboutPage />} />
