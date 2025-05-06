@@ -1,10 +1,25 @@
 import React, { createContext, useContext, useState } from 'react';
 
+interface Filters {
+    employeeName?: string[];
+    department?: string[];
+    hospital?: string[];
+    priority?: string[];
+    status?: string[];
+    language?: string[];
+    cleanupType?: string[];
+    maintenanceType?: string[];
+    security?: string[];
+}
+
 interface FilterContextType {
-    filterNames: string[];
-    setFilterNames: (names: string[]) => void;
-    addName: (name: string) => void;
-    removeName: (name: string) => void;
+    filters: Filters;
+    addFilter: (item: keyof Filters, value: string) => void;
+    removeFilter: (key: keyof Filters, value: string) => void;
+    clearFilters: () => void;
+    allFilters: string[];
+    opened: boolean;
+    setOpened: (opened: boolean) => void;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -16,19 +31,63 @@ export const useFilterContext = () => {
 };
 
 export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [filterNames, setFilterNames] = useState<string[]>([]);
+    // Handing the popup open state
+    const [opened, setOpened] = React.useState(false);
 
-    const addName = (name: string) => {
-        if (!filterNames.includes(name.trim())) {
-            setFilterNames((prev) => [...prev, name.trim()]);
-        }
+    const [filters, setFilters] = useState<Filters>({});
+    const setFilter = (key: keyof Filters, values: string[]) => {
+        setFilters((prev) => ({ ...prev, [key]: values }));
     };
-    const removeName = (name: string) => {
-        setFilterNames((prev) => prev.filter((n) => n !== name));
+
+    const addFilter = (key: keyof Filters, value: string) => {
+        setFilters((prev) => {
+            const existing = prev[key] || [];
+            if (existing.includes(value)) return prev;
+            return { ...prev, [key]: [...existing, value] };
+        });
+    };
+
+    const removeFilter = (key: keyof Filters, value: string) => {
+        setFilters((prev) => ({
+            ...prev,
+            [key]: (prev[key] || []).filter((v) => v !== value),
+        }));
+    };
+
+    const clearFilters = () => setFilters({});
+
+    const allFilters = [
+        ...(filters.employeeName || []),
+        ...(filters.priority || []),
+        ...(filters.status || []),
+        ...(filters.department || []),
+        ...(filters.hospital || []),
+        ...(filters.language || []),
+        ...(filters.cleanupType || []),
+        ...(filters.maintenanceType || []),
+        ...(filters.security || []),
+    ];
+
+    const clearSanitationFilters = () => {
+        setFilters((prev) => {
+            const updated = { ...prev };
+            delete updated.cleanupType;
+            return updated;
+        });
     };
 
     return (
-        <FilterContext.Provider value={{ filterNames, setFilterNames, addName, removeName }}>
+        <FilterContext.Provider
+            value={{
+                filters,
+                addFilter,
+                removeFilter,
+                clearFilters,
+                allFilters,
+                opened,
+                setOpened,
+            }}
+        >
             {children}
         </FilterContext.Provider>
     );

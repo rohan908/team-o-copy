@@ -12,6 +12,7 @@ import {
     CloseButton,
     Badge,
     Group,
+    Button,
 } from '@mantine/core';
 import Filter from './Filter.tsx';
 
@@ -54,7 +55,7 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
     // get current filters
-    const { filterNames, addName, removeName } = useFilterContext();
+    const { filters, clearFilters } = useFilterContext();
 
     // helper function to display correct field
     const getRequestTypeValue = (row: RequestProps) => {
@@ -117,9 +118,41 @@ export function RequestHistory({ requestType }: { requestType: string }) {
     if (!data.length) return <Text>No request form data found.</Text>;
 
     // make filter array from context
-    const rows = filterNames.length
-        ? data.filter((row) => filterNames.includes(row.employeeName))
-        : data;
+    let rows = data;
+
+    if (filters.employeeName?.length > 0) {
+        rows = rows.filter((row) => filters.employeeName?.includes(row.employeeName));
+    }
+
+    if (filters.priority?.length > 0) {
+        rows = rows.filter((row) => filters.priority?.includes(row.priority as string));
+    }
+
+    if (filters.cleanupType?.length > 0) {
+        rows = rows.filter((row) => filters.cleanupType?.includes(row.cleanupType as string));
+    }
+
+    if (filters.language?.length > 0) {
+        rows = rows.filter((row) => filters.language?.includes(row.language as string));
+    }
+
+    if (filters.maintenanceType?.length > 0) {
+        rows = rows.filter((row) =>
+            filters.maintenanceType?.includes(row.maintenanceType as string)
+        );
+    }
+
+    if (filters.security?.length > 0) {
+        rows = rows.filter((row) => filters.security?.includes(row.security as string));
+    }
+
+    if (filters.hospital?.length > 0) {
+        rows = rows.filter((row) => filters.hospital?.includes(row.hospital as string));
+    }
+
+    if (filters.status?.length > 0) {
+        rows = rows.filter((row) => filters.status?.includes(row.status as string));
+    }
 
     const summaryColumns = ['employeeName', 'requestID', 'requestType', 'createdAt'];
 
@@ -131,15 +164,21 @@ export function RequestHistory({ requestType }: { requestType: string }) {
             <Text c="secondaryBlues.7" ta="left" mb="xl" fz="xxs">
                 Click on a row to find out more information
             </Text>
-            <Filter />
-            {filterNames.map((n) => (
-                <Badge key={n} p="xs" m="xs" bg="primaryBlues.5" fw="400">
-                    <Group gap="0px">
-                        {n}
-                        <CloseButton size="xs" onClick={() => removeName(n)} />
-                    </Group>
-                </Badge>
-            ))}
+            <Filter requestType={requestType} />
+            <Button
+                radius="md"
+                bg="secondaryBlues.4"
+                fw="400"
+                fz="xs"
+                m="xs"
+                c="white"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    clearFilters();
+                }}
+            >
+                Clear
+            </Button>
 
             <ScrollArea type="scroll" offsetScrollbars scrollbarSize={6}>
                 <Table

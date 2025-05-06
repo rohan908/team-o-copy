@@ -31,7 +31,7 @@ const teamMembers: Member[] = [
     {
         name: 'Logan Winters',
         role: 'Product Owner',
-        quote: '"Stay hard "- David Goggins',
+        quote: '"Stay hard"',
         image: 'public/TeamPhotos/Logan.png',
     },
     {
