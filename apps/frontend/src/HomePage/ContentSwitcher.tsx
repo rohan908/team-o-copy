@@ -1,4 +1,4 @@
-import {Box} from '@mantine/core';
+import { Box } from '@mantine/core';
 import { useTimeline } from './TimeLineContext';
 import { DraggableMap } from '../IndoorMapPage/DraggableMap';
 import { useState } from 'react';
@@ -12,7 +12,8 @@ export function ContentSwitcher() {
     const [steps, setSteps] = useState<Step[]>([]);
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        // TODO: Replace with your own google API key
+        googleMapsApiKey: 'CHANGE ME',
         // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
         libraries: ['places'], //required for location autocomplete in textbox
     });

@@ -9,12 +9,7 @@ import { GmapsStartSelector } from '../HomePage/GmapsStartSelector.tsx';
 import { GmapsDestinationSelector } from '../HomePage/GmapsDestinationSelector.tsx';
 import { TravelSelectorButtons } from '../common-compoents/TravelSelectorButtons.tsx';
 import { DepartmentSelector } from '../HomePage/DepartmentSelector.tsx';
-import {
-    IconBuildings,
-    IconDotsVertical,
-    IconHomeFilled,
-    IconMapPin,
-} from '@tabler/icons-react';
+import { IconBuildings, IconDotsVertical, IconHomeFilled, IconMapPin } from '@tabler/icons-react';
 import GMapsQRCode from './GMapsQRCode.tsx';
 
 export const MapAPIPage = () => {
@@ -30,7 +25,8 @@ export const MapAPIPage = () => {
     const theme = useMantineTheme();
     const [steps, setSteps] = useState<Step[]>([]); // Manage steps here
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        // TODO: Replace with your own google API key
+        googleMapsApiKey: 'CHANGE ME',
         // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
         libraries: ['places'], //required for location autocomplete in textbox
     });

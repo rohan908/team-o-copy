@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, Stack, Title, useMantineTheme } from '@mantine/core';
 import { CustomTimeline } from './CustomTimeline.tsx';
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import { ContentSwitcher } from './ContentSwitcher.tsx';
 import { HoverUnderline } from '../common-compoents/HoverUnderline.js';
 import { useTimeline } from './TimeLineContext.tsx';
@@ -24,7 +24,8 @@ export function HomePage() {
     } = useTimeline();
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        // TODO: Replace with your own google API key
+        googleMapsApiKey: 'CHANGE ME',
         // PLEASE EACH PERSON USE PERSONAL KEY, EVERY TIME IT LOADS IT CALLS THE API
         libraries: ['places'], //required for location autocomplete in textbox
     });
