@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, MouseEvent} from 'react';
+import React, { useEffect, useRef, MouseEvent } from 'react';
 import { useState } from 'react';
 import './MapPageStyles.css';
 import { Simulate } from 'react-dom/test-utils';
@@ -383,7 +383,7 @@ const HoverInfoComponent = () => {
             </Box>
             <div className="mapContainer" ref={mapContainerRef}>
                 <img
-                    src="public/MapImages/Whole_Floor_PlanTurqoiseBackground.png"
+                    src="MapImages/Whole_Floor_PlanTurqoiseBackground.png"
                     alt="MainMapImage"
                     className="mainMapImage"
                 />

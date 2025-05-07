@@ -424,14 +424,14 @@ export function DraggableMap() {
 
     const handleThreeDHospitalChange = (init?: THREE.Vector3) => {
         const loadPromises = [];
-        loadPromises.push(loadObjectAsync('../../public/Models/Floor 1 Floor.obj', 0, 'floor'));
-        loadPromises.push(loadObjectAsync('../../public/Models/Floor 1 Walls.obj', 0, 'walls'));
-        loadPromises.push(loadObjectAsync('../../public/Models/Floor 2 Floor.obj', 1, 'floor'));
-        loadPromises.push(loadObjectAsync('../../public/Models/Floor 2 Walls.obj', 1, 'walls'));
-        loadPromises.push(loadObjectAsync('../../public/Models/Floor 3 Floor.obj', 2, 'floor'));
-        loadPromises.push(loadObjectAsync('../../public/Models/Floor 3 Walls.obj', 2, 'walls'));
-        loadPromises.push(loadObjectAsync('../../public/Models/Floor 4 Floor.obj', 3, 'floor'));
-        loadPromises.push(loadObjectAsync('../../public/Models/Floor 4 Walls.obj', 3, 'walls'));
+        loadPromises.push(loadObjectAsync('Models/Floor 1 Floor.obj', 0, 'floor'));
+        loadPromises.push(loadObjectAsync('Models/Floor 1 Walls.obj', 0, 'walls'));
+        loadPromises.push(loadObjectAsync('Models/Floor 2 Floor.obj', 1, 'floor'));
+        loadPromises.push(loadObjectAsync('Models/Floor 2 Walls.obj', 1, 'walls'));
+        loadPromises.push(loadObjectAsync('Models/Floor 3 Floor.obj', 2, 'floor'));
+        loadPromises.push(loadObjectAsync('Models/Floor 3 Walls.obj', 2, 'walls'));
+        loadPromises.push(loadObjectAsync('Models/Floor 4 Floor.obj', 3, 'floor'));
+        loadPromises.push(loadObjectAsync('Models/Floor 4 Walls.obj', 3, 'walls'));
         // lighting
         const ambientLight = new THREE.AmbientLight(0xffffff, 1);
         scenesRef.current[0].add(ambientLight);

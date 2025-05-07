@@ -36,7 +36,7 @@ const slugs = [
     'discord',
 ];
 
-const customImages = ['./public/Pholicious-Logo-white-wo-bottom-1.png'];
+const customImages = ['Pholicious-Logo-white-wo-bottom-1.png'];
 
 function IconCloudDemo() {
     const images = [
@@ -72,7 +72,7 @@ export function CreditPage() {
         <Box bg={theme.colors.primaryBlues[0]} mih="100vh" py={0}>
             <Container size="lg" py="xl">
                 <Stack align="center" gap="lg">
-                    <Text ta="center" mt = {0} fz="xl" c={theme.colors.secondaryBlues[7]}>
+                    <Text ta="center" mt={0} fz="xl" c={theme.colors.secondaryBlues[7]}>
                         Onyx Onis' Software Credits
                     </Text>
                     <Box bg={theme.colors.yellowAccent[3]} w="100%" h="2px" mb="md" />
