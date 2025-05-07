@@ -13,7 +13,9 @@ export POSTGRES_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRE
 echo "POSTGRES_URL: ${POSTGRES_URL}"
 
 # Push schema to DB
-yarn workspace database push
+yarn workspace database run push -- --accept-data-loss
+
+yarn workspace database seed
 
 # Start the backend server in the background
 echo "Starting backend..."
